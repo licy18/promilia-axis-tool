@@ -182,6 +182,25 @@ export function validateOptimizationQualificationCatalog(
       'optimization-qualification-soulessence-star-catalog-invalid'
     );
   }
+  const equipmentCultivation = catalog?.cultivation?.equipment;
+  const normalInstance = equipmentCultivation?.instanceTiers?.find(
+    entry => entry.identity === 'normal'
+  );
+  const starbornInstance = equipmentCultivation?.instanceTiers?.find(
+    entry => entry.identity === 'starborn'
+  );
+  if (
+    equipmentCultivation?.tuningScore?.status !==
+      'source-indexed-instance-runtime-applied' ||
+    Number(equipmentCultivation?.tuningScore?.ordinaryMaximum) !== 100 ||
+    Number(equipmentCultivation?.tuningScore?.starbornMaximum) !== 110 ||
+    normalInstance?.bGoldSide !== false ||
+    Number(normalInstance?.maximum) !== 100 ||
+    starbornInstance?.bGoldSide !== true ||
+    Number(starbornInstance?.maximum) !== 110
+  ) {
+    issues.push('optimization-qualification-equipment-instance-catalog-invalid');
+  }
   if (catalog && typeof catalog === 'object') {
     const copy = structuredClone(catalog);
     delete copy.catalogHash;
@@ -258,7 +277,15 @@ export function resolveOptimizationCultivationProfile(
         actor.soulEssence,
         soulEssenceProfileById.get(Number(teamSlot?.loadout?.soulessenceId))
       ),
-      equipment: structuredClone(actor.equipment),
+      equipment: Object.fromEntries(
+        EQUIPMENT_SLOTS.map(slot => [
+          slot,
+          resolveEquipmentCultivation(
+            actor.equipment[slot],
+            catalog.cultivation.equipment
+          ),
+        ])
+      ),
     };
   });
   const resolved = {
@@ -306,12 +333,19 @@ export function projectResolvedOptimizationCultivationActor(
   );
   const soulEssenceEffectRuntimeApplied =
     resolvedActor.soulEssence?.effectSkill?.runtimeStatus === 'runtime-applied';
+  const levelBreakthroughSkillUnlocksApplied = !resolvedActor.character?.staticSources?.unappliedSkillSources?.some(
+    source => source.kind === 'actor-level-breakthrough-skill-unlock'
+  );
   const appliedDimensions = [
     'character.level',
     'character.starGiftRank',
     'character.starGiftNodeAttributes',
     'character.completedStarGiftAttributes',
     'character.levelBreakthroughLegality',
+    'character.levelBreakthroughAttributes',
+    ...(levelBreakthroughSkillUnlocksApplied
+      ? ['character.levelBreakthroughSkillUnlocks']
+      : []),
     'kibo.level',
     'kibo.talents',
     'kibo.bondLevel',
@@ -324,6 +358,7 @@ export function projectResolvedOptimizationCultivationActor(
       : []),
     'equipment.enhancementLevel',
     'equipment.tuningScore',
+    'equipment.instanceTier',
   ];
   const unresolvedDimensions = [
     ...(resolvedActor.character?.staticSources?.unappliedSkillSources?.some(
@@ -331,27 +366,22 @@ export function projectResolvedOptimizationCultivationActor(
     )
       ? ['character.starGiftNodeSkillLevels']
       : []),
-    ...(resolvedActor.character?.staticSources?.unappliedSkillSources?.some(
-      source => source.kind === 'actor-level-breakthrough-skill-unlock'
-    )
+    ...(!levelBreakthroughSkillUnlocksApplied
       ? ['character.levelBreakthroughSkillUnlocks']
-      : []),
-    ...(resolvedActor.character?.staticSources?.unappliedStaticSources?.some(
-      source => source.kind === 'actor-level-breakthrough-attribute'
-    )
-      ? ['character.levelBreakthroughAttributes']
       : []),
     ...(resolvedActor.soulEssence?.effectSkill &&
     !soulEssenceEffectRuntimeApplied
       ? ['soulEssence.effectSkillRuntime']
       : []),
-    'equipment.instanceTier',
   ];
   return {
     actorConfigPatch: {
       level: Number(resolvedActor.character.level),
       cultivation: {
         starGiftRank: Number(resolvedActor.character.starGiftRank),
+        unlockedSkills: structuredClone(
+          resolvedActor.character.unlockedSkills ?? []
+        ),
         optimizationStaticSources: structuredClone(
           resolvedActor.character.staticSources
         ),
@@ -978,7 +1008,7 @@ function resolveCharacterCultivation(value, sourceProfile) {
       kind: 'actor-level-breakthrough',
       sourceId: `${sourceProfile.characterId}:${row.rank}`,
     }));
-  const unappliedStaticSources = levelBreakthroughSources
+  const levelBreakthroughAttributeSources = levelBreakthroughSources
     .filter(row => row.attributes.length > 0)
     .map(row => ({
       kind: 'actor-level-breakthrough-attribute',
@@ -986,7 +1016,15 @@ function resolveCharacterCultivation(value, sourceProfile) {
       rank: row.rank,
       levelLimit: row.levelLimit,
       attributes: structuredClone(row.attributes),
-      reason: 'actor-level-breakthrough-attribute-runtime-unapplied',
+      sourceIdentity: row.sourceIdentity,
+    }));
+  const unlockedSkills = levelBreakthroughSources
+    .filter(row => row.skillUnlock?.skillId)
+    .map(row => ({
+      kind: 'actor-level-breakthrough-skill-unlock',
+      sourceId: row.sourceId,
+      rank: row.rank,
+      ...structuredClone(row.skillUnlock),
       sourceIdentity: row.sourceIdentity,
     }));
   const unappliedSkillSources = [
@@ -1002,15 +1040,12 @@ function resolveCharacterCultivation(value, sourceProfile) {
         reason: 'star-gift-node-skill-level-runtime-unapplied',
         sourceIdentity: node.sourceIdentity,
       })),
-    ...levelBreakthroughSources
-      .filter(row => row.unlockedSkillId)
-      .map(row => ({
-        kind: 'actor-level-breakthrough-skill-unlock',
-        sourceId: row.sourceId,
-        rank: row.rank,
-        skillId: row.unlockedSkillId,
-        reason: 'actor-level-breakthrough-skill-unlock-runtime-unapplied',
-        sourceIdentity: row.sourceIdentity,
+    ...unlockedSkills
+      .filter(skill => skill.availabilityStatus === 'static-evidence-gap')
+      .map(skill => ({
+        ...structuredClone(skill),
+        reason:
+          skill.reason ?? 'actor-level-breakthrough-skill-unlock-unresolved',
       })),
   ];
   return {
@@ -1031,6 +1066,7 @@ function resolveCharacterCultivation(value, sourceProfile) {
         attributes: structuredClone(node.attributes),
         sourceIdentity: node.sourceIdentity,
       })),
+      levelBreakthroughAttributeSources,
       levelBreakthroughSelection: levelBreakthroughSources
         .filter(
           row => Number(row.rank) === Number(value.levelBreakthroughRank)
@@ -1051,10 +1087,30 @@ function resolveCharacterCultivation(value, sourceProfile) {
         minimumLevel: row.minimumLevel,
         levelLimit: row.levelLimit,
         runtimeApplicationStatus: row.runtimeApplicationStatus,
+        unlockedSkillId: row.unlockedSkillId,
+        skillUnlock: structuredClone(row.skillUnlock ?? null),
         sourceIdentity: row.sourceIdentity,
       })),
-      unappliedStaticSources,
+      unappliedStaticSources: [],
       unappliedSkillSources,
+    },
+    unlockedSkills,
+  };
+}
+
+function resolveEquipmentCultivation(value, equipmentCatalog) {
+  const tier = equipmentCatalog.instanceTiers.find(
+    entry => entry.identity === value.instanceTier
+  );
+  return {
+    ...structuredClone(value),
+    instance: {
+      identity: tier.identity,
+      bGoldSide: tier.bGoldSide,
+      maxValue: Number(value.maxValue),
+      tierMaximum: Number(tier.maximum),
+      maximumRule: tier.maximumRule,
+      sourceIdentity: tier.sourceIdentity,
     },
   };
 }
@@ -1231,6 +1287,45 @@ function validateEquipment(
           'machine-axis-cultivation-equipment-instance-tier-invalid',
           `${itemPath}.instanceTier`,
           { actual: item.instanceTier }
+        )
+      );
+      continue;
+    }
+    const instanceTier = catalog.cultivation.equipment.instanceTiers.find(
+      entry => entry.identity === item.instanceTier
+    );
+    const maxValue = Number(item.maxValue);
+    const validMaxValue =
+      Number.isInteger(maxValue) &&
+      maxValue >= 0 &&
+      (instanceTier?.maximumRule === 'exact'
+        ? maxValue === Number(instanceTier.maximum)
+        : maxValue <= Number(instanceTier?.maximum));
+    if (!validMaxValue) {
+      issues.push(
+        createIssue(
+          'machine-axis-cultivation-equipment-instance-max-invalid',
+          `${itemPath}.maxValue`,
+          {
+            instanceTier: item.instanceTier,
+            bGoldSide: instanceTier?.bGoldSide ?? null,
+            maximumRule: instanceTier?.maximumRule ?? null,
+            expectedMaximum: Number(instanceTier?.maximum) || null,
+            actual: item.maxValue,
+          }
+        )
+      );
+    }
+    if (Number.isInteger(item.tuningScore) && item.tuningScore > maxValue) {
+      issues.push(
+        createIssue(
+          'machine-axis-cultivation-equipment-tuning-score-exceeds-instance-max',
+          `${itemPath}.tuningScore`,
+          {
+            instanceTier: item.instanceTier,
+            maximum: maxValue,
+            actual: item.tuningScore,
+          }
         )
       );
     }

@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "e574c0d8d5c9f335",
-  "manifestsHash": "41d8d2857ee6c699",
-  "gapLedgerHash": "f31dfaa6bed204c3",
-  "bindingMatrixHash": "d21335a454947b3c",
-  "sourceSnapshotHash": "95cac6744423e44b",
+  "rosterHash": "c4c9b57031a11480",
+  "manifestsHash": "d25780b522d3fe58",
+  "gapLedgerHash": "c145dc13ce831692",
+  "bindingMatrixHash": "f9005f89a268a7d4",
+  "sourceSnapshotHash": "9a19ffc89723635d",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -24,10 +24,9 @@
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "fda43d355224f79c"
+      "manifestHash": "31d1df1b10be231f"
     },
     {
       "objectKind": "character",
@@ -37,10 +36,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "075e5b65b2844ded"
+      "manifestHash": "6b569cecc223eeac"
     },
     {
       "objectKind": "character",
@@ -49,10 +47,9 @@
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "d70c4578d0089250"
+      "manifestHash": "658ba717a6d5626d"
     },
     {
       "objectKind": "character",
@@ -62,10 +59,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "d5cedf8650c69bea"
+      "manifestHash": "ebea1bbd8c579f57"
     },
     {
       "objectKind": "character",
@@ -75,10 +71,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "63cf7ecb291bead0"
+      "manifestHash": "00a774693d93b141"
     },
     {
       "objectKind": "character",
@@ -88,10 +83,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "12a03748cfadfa2c"
+      "manifestHash": "d2ad55f14dda8abb"
     },
     {
       "objectKind": "character",
@@ -101,10 +95,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "b8a17c36d735c55a"
+      "manifestHash": "de8fb7fd1a6710f3"
     },
     {
       "objectKind": "character",
@@ -114,10 +107,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "dd7f2f8d2854ceb6"
+      "manifestHash": "ab047f786758d59f"
     },
     {
       "objectKind": "character",
@@ -127,10 +119,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "eb3d9fcc12fc7278"
+      "manifestHash": "030b7e2ec8ea2f7f"
     },
     {
       "objectKind": "character",
@@ -141,9 +132,9 @@
       "blockerCodes": [
         "character-acceptance-not-published",
         "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "level-breakthrough-skill-unlock-source-mismatch"
       ],
-      "manifestHash": "6fe0867064987c82"
+      "manifestHash": "0b34af5d8efeafd9"
     },
     {
       "objectKind": "character",
@@ -154,10 +145,9 @@
       "blockerCodes": [
         "actor-static-profile-missing",
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "6962600a0ccfcce7"
+      "manifestHash": "dbbf27bb089c0700"
     },
     {
       "objectKind": "equipment",
@@ -166,11 +156,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "35dfa215cd973a58"
+      "manifestHash": "d8f23cecf15a3c9d"
     },
     {
       "objectKind": "equipment",
@@ -179,11 +167,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "b96d2a13117ea667"
+      "manifestHash": "12b7ea0d621c45ba"
     },
     {
       "objectKind": "equipment",
@@ -192,11 +178,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "3e7db7ae07685a46"
+      "manifestHash": "e699d4da538fb8bb"
     },
     {
       "objectKind": "equipment",
@@ -205,11 +189,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "bab0995fab1a9be9"
+      "manifestHash": "cafa6c81e30b79c4"
     },
     {
       "objectKind": "equipment",
@@ -218,11 +200,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "7352fec728abd14c"
+      "manifestHash": "70ccc73aef3d46b1"
     },
     {
       "objectKind": "equipment",
@@ -231,11 +211,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "ac67ca5084bf700b"
+      "manifestHash": "9bbd33767e19a8c6"
     },
     {
       "objectKind": "equipment",
@@ -244,11 +222,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "f6a76f5a7138c846"
+      "manifestHash": "12cb4b0507f28ef5"
     },
     {
       "objectKind": "equipment",
@@ -257,11 +233,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c4b2988b7a5c24db"
+      "manifestHash": "7db2cfc73a3c4044"
     },
     {
       "objectKind": "equipment",
@@ -270,11 +244,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "cf2cf14ae920c608"
+      "manifestHash": "f039772d396a0127"
     },
     {
       "objectKind": "equipment",
@@ -283,11 +255,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "62c34bb0f16f6b11"
+      "manifestHash": "525b39390a64d688"
     },
     {
       "objectKind": "equipment",
@@ -296,11 +266,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "4c3067ed0f29e63a"
+      "manifestHash": "b8fb99353d264383"
     },
     {
       "objectKind": "equipment",
@@ -309,11 +277,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "32de51e32c5d0f47"
+      "manifestHash": "10e5503619d5d896"
     },
     {
       "objectKind": "equipment",
@@ -322,11 +288,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "1e15ee8e635f403d"
+      "manifestHash": "87e1f4c8089544e2"
     },
     {
       "objectKind": "equipment",
@@ -335,11 +299,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "42dcd85c5d12b2bc"
+      "manifestHash": "7e9f6b69a98beab7"
     },
     {
       "objectKind": "equipment",
@@ -348,11 +310,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "12430d21ab1db483"
+      "manifestHash": "ba84d4e5378a9450"
     },
     {
       "objectKind": "equipment",
@@ -361,11 +321,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "266849c419598dda"
+      "manifestHash": "c4b2f79de55400cb"
     },
     {
       "objectKind": "equipment",
@@ -374,11 +332,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5cddd02a40617535"
+      "manifestHash": "2465593863007794"
     },
     {
       "objectKind": "equipment",
@@ -387,11 +343,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "6f564ea29406b520"
+      "manifestHash": "c9863bac93581ab1"
     },
     {
       "objectKind": "equipment",
@@ -400,11 +354,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c2b737dfab8b51e2"
+      "manifestHash": "61a9b6c46509e2bb"
     },
     {
       "objectKind": "equipment",
@@ -413,11 +365,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "bca6e2f6a7925e89"
+      "manifestHash": "997691e28dc78dd0"
     },
     {
       "objectKind": "equipment",
@@ -426,11 +376,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "31834d59265e3064"
+      "manifestHash": "0c23f942d38eeb05"
     },
     {
       "objectKind": "equipment",
@@ -439,11 +387,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "6611561e4c988f8f"
+      "manifestHash": "63f92da8be90664e"
     },
     {
       "objectKind": "equipment",
@@ -452,11 +398,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "8f12d3d21e808766"
+      "manifestHash": "caf72d28cb98b857"
     },
     {
       "objectKind": "equipment",
@@ -465,11 +409,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "034b787c0fbdd421"
+      "manifestHash": "210372ecba0cd430"
     },
     {
       "objectKind": "equipment",
@@ -478,11 +420,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "1f3d485a9edaabe0"
+      "manifestHash": "3cb52b759939080b"
     },
     {
       "objectKind": "equipment",
@@ -491,11 +431,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "d3679d25964a13e5"
+      "manifestHash": "dd4eeabb81c9d20a"
     },
     {
       "objectKind": "equipment",
@@ -504,11 +442,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "08cd6f43d1c86782"
+      "manifestHash": "0006fd6b905b95ed"
     },
     {
       "objectKind": "equipment",
@@ -517,11 +453,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "39a90072dea157df"
+      "manifestHash": "e04c141e14bbaa82"
     },
     {
       "objectKind": "equipment",
@@ -530,11 +464,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "08620cdfba423a28"
+      "manifestHash": "767758cf023c233d"
     },
     {
       "objectKind": "equipment",
@@ -543,11 +475,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9958e4d4289c41e1"
+      "manifestHash": "9748060dcc06c73c"
     },
     {
       "objectKind": "equipment",
@@ -556,11 +486,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "994f2498ff3bebaf"
+      "manifestHash": "b48fd4f8814915f0"
     },
     {
       "objectKind": "equipment",
@@ -569,11 +497,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5991fe81e30fed26"
+      "manifestHash": "2b6232488db18625"
     },
     {
       "objectKind": "equipment",
@@ -582,11 +508,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "288950531e7f68ed"
+      "manifestHash": "d6da234a433043d6"
     },
     {
       "objectKind": "equipment",
@@ -595,11 +519,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "ba04672cd7ef53dc"
+      "manifestHash": "38ae8ef5f87c8c09"
     },
     {
       "objectKind": "equipment",
@@ -608,11 +530,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "4bfe583b23d3ab47"
+      "manifestHash": "0c8da5f351e2861a"
     },
     {
       "objectKind": "equipment",
@@ -621,11 +541,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9ee834abd67a455a"
+      "manifestHash": "f33b71b27ece5717"
     },
     {
       "objectKind": "equipment",
@@ -634,11 +552,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "6866513126296c15"
+      "manifestHash": "8b6228cb61bfab88"
     },
     {
       "objectKind": "equipment",
@@ -647,11 +563,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "634fd66c1ea4ec38"
+      "manifestHash": "0587aa0ae5f6e505"
     },
     {
       "objectKind": "equipment",
@@ -660,11 +574,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c76183d7e4b5efec"
+      "manifestHash": "d594864a70377047"
     },
     {
       "objectKind": "equipment",
@@ -673,11 +585,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9bdb8ac67b35cd43"
+      "manifestHash": "ec66c4da8ad9743e"
     },
     {
       "objectKind": "equipment",
@@ -686,11 +596,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "82c84bfe977f79e5"
+      "manifestHash": "1273e5c909eeec26"
     },
     {
       "objectKind": "equipment",
@@ -699,11 +607,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c0f83daf3b3dd10a"
+      "manifestHash": "ae3c4dd961fd4007"
     },
     {
       "objectKind": "equipment",
@@ -712,11 +618,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c7f8c7996ae82d06"
+      "manifestHash": "4f6e26ac0120d1e5"
     },
     {
       "objectKind": "equipment",
@@ -725,11 +629,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "a1e23aa0b0867f49"
+      "manifestHash": "82ef5aff880778fc"
     },
     {
       "objectKind": "equipment",
@@ -738,11 +640,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "e5cc69a78709d186"
+      "manifestHash": "d5edf15ad64ca945"
     },
     {
       "objectKind": "equipment",
@@ -751,11 +651,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "63045e2b314c9a88"
+      "manifestHash": "0a8096f50a801b65"
     },
     {
       "objectKind": "equipment",
@@ -764,11 +662,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "134acecdc0d99b78"
+      "manifestHash": "9dc0319520767689"
     },
     {
       "objectKind": "equipment",
@@ -777,11 +673,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "853566006dfca9a9"
+      "manifestHash": "0f1c85909e1f30b6"
     },
     {
       "objectKind": "equipment",
@@ -790,11 +684,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "11aa233639433811"
+      "manifestHash": "bc9c50bcf0e56fe2"
     },
     {
       "objectKind": "equipment",
@@ -803,11 +695,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "4a52887a4f56029a"
+      "manifestHash": "5553f9ce89633019"
     },
     {
       "objectKind": "equipment",
@@ -816,11 +706,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9d90cef52dc3cd0c"
+      "manifestHash": "7595971ad47b03f1"
     },
     {
       "objectKind": "equipment",
@@ -829,11 +717,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "1bdd72876ec10653"
+      "manifestHash": "f9398fd33bc3efd6"
     },
     {
       "objectKind": "equipment",
@@ -842,11 +728,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "6712abe4a077ffd3"
+      "manifestHash": "6196b6505757fcdc"
     },
     {
       "objectKind": "equipment",
@@ -855,11 +739,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "c4ffaf73259eb61c"
+      "manifestHash": "ae8b7a83f2cc89cd"
     },
     {
       "objectKind": "equipment",
@@ -868,11 +750,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "bc338a756772b4d8"
+      "manifestHash": "a58c19fa1a60af75"
     },
     {
       "objectKind": "equipment",
@@ -881,11 +761,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "e0697fcb5a860ebb"
+      "manifestHash": "fbba0031a1b0e240"
     },
     {
       "objectKind": "equipment",
@@ -894,11 +772,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "b15933423aba4ebf"
+      "manifestHash": "1be3f8ccd234b786"
     },
     {
       "objectKind": "equipment",
@@ -907,11 +783,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "e0f97c1c530f0c84"
+      "manifestHash": "70caef31a15b1fad"
     },
     {
       "objectKind": "equipment",
@@ -920,11 +794,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "26bb43632ccfd411"
+      "manifestHash": "07fc6fed8bc5d690"
     },
     {
       "objectKind": "equipment",
@@ -933,11 +805,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "f5933459624d6b51"
+      "manifestHash": "ecc8559f2a8d1c7e"
     },
     {
       "objectKind": "equipment",
@@ -946,11 +816,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "b5e2664b342225b8"
+      "manifestHash": "2c6f5833dd8c2ce3"
     },
     {
       "objectKind": "equipment",
@@ -959,11 +827,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "f25b9742b67ce236"
+      "manifestHash": "e466b11713595997"
     },
     {
       "objectKind": "equipment",
@@ -972,11 +838,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "0c9cbc802ad82dd9"
+      "manifestHash": "3427652449d5cb32"
     },
     {
       "objectKind": "equipment",
@@ -985,11 +849,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "732eb09260340141"
+      "manifestHash": "46657c0f65f8aef6"
     },
     {
       "objectKind": "equipment",
@@ -998,11 +860,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "b4429dd1200f1512"
+      "manifestHash": "ec0fdac816d745af"
     },
     {
       "objectKind": "equipment",
@@ -1011,11 +871,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "3e9e85a29fc121ec"
+      "manifestHash": "b9b4a0b6aae9897b"
     },
     {
       "objectKind": "equipment",
@@ -1024,11 +882,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "cba11b19041bfb4e"
+      "manifestHash": "435ece1069f23991"
     },
     {
       "objectKind": "equipment",
@@ -1037,11 +893,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "7313c17f5bc9896d"
+      "manifestHash": "5d4e8e8c0f94591a"
     },
     {
       "objectKind": "equipment",
@@ -1050,11 +904,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "b5cd9b51eaddedcf"
+      "manifestHash": "ca9d945c4abced8e"
     },
     {
       "objectKind": "equipment",
@@ -1063,11 +915,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "e20d1b9caff68ce8"
+      "manifestHash": "833e300b337d4c39"
     },
     {
       "objectKind": "equipment",
@@ -1076,11 +926,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "ad09a01a33f7c8b8"
+      "manifestHash": "684a151a03859f23"
     },
     {
       "objectKind": "equipment",
@@ -1089,11 +937,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "2c093f9a67d74f8b"
+      "manifestHash": "cf40f78e27891f76"
     },
     {
       "objectKind": "equipment",
@@ -1102,11 +948,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "4baa9ba12c41979b"
+      "manifestHash": "e04e2eb9f6cacbaa"
     },
     {
       "objectKind": "equipment",
@@ -1115,11 +959,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "3dd814bb6edc4fb4"
+      "manifestHash": "9ce3c62cd15a0023"
     },
     {
       "objectKind": "equipment",
@@ -1128,11 +970,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "fc1d6760cc53a520"
+      "manifestHash": "37f80f315ec29005"
     },
     {
       "objectKind": "equipment",
@@ -1141,11 +981,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "79f8560678393313"
+      "manifestHash": "0f03daafc7bd7772"
     },
     {
       "objectKind": "equipment",
@@ -1154,11 +992,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "04b89649aaf77ef2"
+      "manifestHash": "a8e9ff5aef93803b"
     },
     {
       "objectKind": "equipment",
@@ -1167,11 +1003,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "d379232ba2576fa6"
+      "manifestHash": "6980975f1de8d215"
     },
     {
       "objectKind": "equipment",
@@ -1180,11 +1014,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "1b00440de91de18b"
+      "manifestHash": "21b10081a9cff944"
     },
     {
       "objectKind": "equipment",
@@ -1193,11 +1025,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5d2bfb74ab600bc9"
+      "manifestHash": "f01367ae757ac148"
     },
     {
       "objectKind": "equipment",
@@ -1206,11 +1036,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9c9552f40d22751a"
+      "manifestHash": "378bcb638bd2fe9d"
     },
     {
       "objectKind": "equipment",
@@ -1219,11 +1047,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "163feaa6bac5670a"
+      "manifestHash": "4b522e9c60a59e79"
     },
     {
       "objectKind": "equipment",
@@ -1232,11 +1058,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "a06f4ecaaeee99b5"
+      "manifestHash": "2b80625e030e8200"
     },
     {
       "objectKind": "equipment",
@@ -1245,11 +1069,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "b9f75b4c32a45d6b"
+      "manifestHash": "821e84fa4efefa40"
     },
     {
       "objectKind": "equipment",
@@ -1258,11 +1080,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "00c6d2bcf72b12af"
+      "manifestHash": "bca3d9d70b5e9306"
     },
     {
       "objectKind": "equipment",
@@ -1271,11 +1091,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9220196ba0100bea"
+      "manifestHash": "5d87d578822db3a3"
     },
     {
       "objectKind": "equipment",
@@ -1284,11 +1102,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5fca8707f30fecfd"
+      "manifestHash": "40a937fe90d82094"
     },
     {
       "objectKind": "equipment",
@@ -1297,11 +1113,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "7dcc112a04807836"
+      "manifestHash": "2da3c69d5ff22dcd"
     },
     {
       "objectKind": "equipment",
@@ -1310,11 +1124,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "f77d7bf9f8566601"
+      "manifestHash": "b4c19d726fa17740"
     },
     {
       "objectKind": "equipment",
@@ -1323,11 +1135,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5da0a2c8ae18bc7e"
+      "manifestHash": "11d6eb723144181f"
     },
     {
       "objectKind": "equipment",
@@ -1336,11 +1146,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "ee7a6bdf101e7567"
+      "manifestHash": "be077db9a2d228b4"
     },
     {
       "objectKind": "equipment",
@@ -1349,11 +1157,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "880b73a329d2fc3c"
+      "manifestHash": "d950057c75d8581d"
     },
     {
       "objectKind": "equipment",
@@ -1362,11 +1168,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "ae7f17021caea8b3"
+      "manifestHash": "5155a87708555aea"
     },
     {
       "objectKind": "equipment",
@@ -1375,11 +1179,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "91dc40f9ea0bedd0"
+      "manifestHash": "931ef9980fdc540b"
     },
     {
       "objectKind": "equipment",
@@ -1388,11 +1190,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "e657ab9860bbe727"
+      "manifestHash": "a6e9166dab4f50c6"
     },
     {
       "objectKind": "equipment",
@@ -1401,11 +1201,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "b7ac6af857117740"
+      "manifestHash": "83506198e031e9b1"
     },
     {
       "objectKind": "equipment",
@@ -1414,11 +1212,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "116afbfe8cbcabac"
+      "manifestHash": "a414bc458b13f487"
     },
     {
       "objectKind": "equipment",
@@ -1427,11 +1223,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "f2f3595dcd4900fe"
+      "manifestHash": "4debe3c937af3e97"
     },
     {
       "objectKind": "equipment",
@@ -1440,11 +1234,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "7eb3e0c703191301"
+      "manifestHash": "523529a3339054b0"
     },
     {
       "objectKind": "equipment",
@@ -1453,11 +1245,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "dfe2991771231e16"
+      "manifestHash": "647aaaad4cd66b1b"
     },
     {
       "objectKind": "equipment",
@@ -1466,11 +1256,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "670a1bf92f981c03"
+      "manifestHash": "d94ff25eecaafc20"
     },
     {
       "objectKind": "equipment",
@@ -1479,11 +1267,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "23135907d8394a67"
+      "manifestHash": "89915adc3c04acd4"
     },
     {
       "objectKind": "equipment",
@@ -1492,11 +1278,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "1a3db4755c89f160"
+      "manifestHash": "7744832a712593ab"
     },
     {
       "objectKind": "equipment",
@@ -1505,11 +1289,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "0029adef2adb6056"
+      "manifestHash": "beb5ca838a09d78f"
     },
     {
       "objectKind": "equipment",
@@ -1518,11 +1300,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "0f66d7ca25416381"
+      "manifestHash": "a0cd2808279d54e0"
     },
     {
       "objectKind": "equipment",
@@ -1531,11 +1311,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "57e776726076c155"
+      "manifestHash": "fa56c712d379b7c2"
     },
     {
       "objectKind": "equipment",
@@ -1544,11 +1322,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "05531d2cc39f7c3e"
+      "manifestHash": "5e4c6e808ea0f44b"
     },
     {
       "objectKind": "equipment",
@@ -1557,11 +1333,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "001afbe6cb6fa6c2"
+      "manifestHash": "050882a3a67d0f53"
     },
     {
       "objectKind": "equipment",
@@ -1570,11 +1344,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "70b69c9934ee9cd9"
+      "manifestHash": "7cb9972896e26f3a"
     },
     {
       "objectKind": "equipment",
@@ -1583,11 +1355,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "8bfa592f4cf5834d"
+      "manifestHash": "74b2c09e06492ff8"
     },
     {
       "objectKind": "equipment",
@@ -1596,11 +1366,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "ddc588b5486c264e"
+      "manifestHash": "9fb6b5520ea685ab"
     },
     {
       "objectKind": "equipment",
@@ -1609,11 +1377,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "b63ba3b0049f013f"
+      "manifestHash": "463564a1d24c6e1a"
     },
     {
       "objectKind": "equipment",
@@ -1622,11 +1388,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "3ec1482b6cc8576f"
+      "manifestHash": "26833940c1561220"
     },
     {
       "objectKind": "equipment",
@@ -1635,11 +1399,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "24d30f19f7079a5e"
+      "manifestHash": "d293cf4beb9e75fd"
     },
     {
       "objectKind": "equipment",
@@ -1648,11 +1410,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "4d619dea9319a8c8"
+      "manifestHash": "253391a1d40e6f65"
     },
     {
       "objectKind": "equipment",
@@ -1661,11 +1421,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "a423889caf67f7bf"
+      "manifestHash": "0326e8c117032d6c"
     },
     {
       "objectKind": "equipment",
@@ -1674,11 +1432,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9cdb5d34b5eee7df"
+      "manifestHash": "1c615c8c6b5111a0"
     },
     {
       "objectKind": "equipment",
@@ -1687,11 +1443,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "888abcd56498130c"
+      "manifestHash": "910556028603e77d"
     },
     {
       "objectKind": "equipment",
@@ -1700,11 +1454,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "86ea52719c5e929e"
+      "manifestHash": "ca069000623d4231"
     },
     {
       "objectKind": "equipment",
@@ -1713,11 +1465,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "21bab2d573e58de4"
+      "manifestHash": "c5e787b65f6133eb"
     },
     {
       "objectKind": "equipment",
@@ -1726,11 +1476,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "8da4ac34101e757b"
+      "manifestHash": "48daa6c85a2accd4"
     },
     {
       "objectKind": "equipment",
@@ -1739,11 +1487,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "6f36df716cb02ac1"
+      "manifestHash": "34e3d0185d033cf4"
     },
     {
       "objectKind": "equipment",
@@ -1752,11 +1498,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "ec6638d59ad49996"
+      "manifestHash": "170d6a51f021350b"
     },
     {
       "objectKind": "equipment",
@@ -1765,11 +1509,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "4126b47c198629e6"
+      "manifestHash": "e6f5eeaaf3cf1f9d"
     },
     {
       "objectKind": "equipment",
@@ -1778,11 +1520,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "22f3e39d0799d709"
+      "manifestHash": "ed40c9dde740c8d0"
     },
     {
       "objectKind": "equipment",
@@ -1791,11 +1531,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5d5b35db181bb879"
+      "manifestHash": "e08db7a369e00a04"
     },
     {
       "objectKind": "equipment",
@@ -1804,11 +1542,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "578401c15208bbc2"
+      "manifestHash": "a7425880dcb9877d"
     },
     {
       "objectKind": "equipment",
@@ -1817,11 +1553,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "1e84a0f9305b8a6e"
+      "manifestHash": "d6d36315cc6859c7"
     },
     {
       "objectKind": "equipment",
@@ -1830,11 +1564,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "f589c3e16133aac5"
+      "manifestHash": "af6e0d459bde4368"
     },
     {
       "objectKind": "equipment",
@@ -1843,11 +1575,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "7b187fa4b1514760"
+      "manifestHash": "d9713cc150f1d765"
     },
     {
       "objectKind": "equipment",
@@ -1856,11 +1586,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "d4c4f63da0f999a8"
+      "manifestHash": "7bb7a63612e6f093"
     },
     {
       "objectKind": "equipment",
@@ -1869,11 +1597,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5353ae436f187fd5"
+      "manifestHash": "fa06879f2bfba4b2"
     },
     {
       "objectKind": "equipment",
@@ -1882,11 +1608,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "9d1d72ac79a0a123"
+      "manifestHash": "2898ce3b17c83d66"
     },
     {
       "objectKind": "equipment",
@@ -1895,11 +1619,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "5d6d4872a58e0f58"
+      "manifestHash": "eb1d2237c260523f"
     },
     {
       "objectKind": "equipment",
@@ -1908,11 +1630,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "716301f6b2327688"
+      "manifestHash": "b3a2336527f4c153"
     },
     {
       "objectKind": "equipment",
@@ -1921,11 +1641,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "90b4b39bd1dcee53"
+      "manifestHash": "917484b5eee1ad8a"
     },
     {
       "objectKind": "equipment",
@@ -1934,11 +1652,9 @@
       "maturityState": "extracted",
       "optimizationReady": false,
       "blockerCodes": [
-        "strict-equipment-cultivation-runtime-partial",
-        "equipment-instance-tier-source-evidence-missing",
         "equipment-visual-acceptance-not-published"
       ],
-      "manifestHash": "e0bc8c97acc2ca5d"
+      "manifestHash": "f8ecf39807d9034e"
     },
     {
       "objectKind": "kibo",
@@ -3407,7 +3123,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-01T00:00:00.000Z",
-    "rosterHash": "e574c0d8d5c9f335",
+    "rosterHash": "c4c9b57031a11480",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -25315,11 +25031,53 @@
       "setSkillThresholdQualifiedCount": 0,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "d21335a454947b3c"
+    "bindingMatrixHash": "f9005f89a268a7d4"
   },
   "cultivation": {
     "schemaVersion": 1,
     "contractName": "AzPrOptimizationCultivationCatalog",
+    "fixedOptimizationProfile": {
+      "character": {
+        "level": 80,
+        "starGiftRank": 7,
+        "completedStarGiftAttributeRank": 6,
+        "currentRankNodeSelection": "all",
+        "levelBreakthroughRank": 3
+      },
+      "kibo": {
+        "level": 80,
+        "talentLevelsByAttributeId": {
+          "1": 10,
+          "3": 10,
+          "4": 10,
+          "5": 10
+        },
+        "resolvedTalentValuesByAttributeId": {
+          "1": 120,
+          "3": 120,
+          "4": 120,
+          "5": 120
+        },
+        "bondLevel": 1,
+        "inheritanceBasisPoints": 900,
+        "dnaFactors": []
+      },
+      "soulEssence": {
+        "level": 80,
+        "rank": 6,
+        "star": 1
+      },
+      "equipment": {
+        "rarity": 4,
+        "enhancementLevel": 9,
+        "tuningScore": 110,
+        "instanceTier": "starborn",
+        "bGoldSide": true,
+        "maxValue": 110
+      },
+      "optimizationEnumeratedDimensions": [],
+      "fixedProfileHash": "c432bd0a3f2d6415"
+    },
     "character": {
       "optimizationObjectIds": [
         "101010",
@@ -25351,8 +25109,28 @@
         "sourceIdentity": "NewTable/talent_rank|NewTable/talent_rune"
       },
       "levelBreakthrough": {
-        "status": "source-indexed-legality-applied-attributes-unapplied",
-        "sourceIdentity": "NewTable/hero_rank.rankLevelLimit|attribute|skill"
+        "status": "source-indexed-static-runtime-applied",
+        "levelTemplateIncludesBreakthroughAttributes": false,
+        "applicationMode": "separate-additive-source-per-rank",
+        "skillUnlockMode": "availability-separate-from-runtime-effect",
+        "sourceIdentity": "NewTable/hero_rank.rankLevelLimit|attribute|skill|IL2CPP/Azur.Gameplay.PlayerModule.HeroData.lv|heroRank|RefreshAttributes|RefreshHeroSkill",
+        "runtimeEvidence": {
+          "storedFields": [
+            "lv",
+            "heroRank"
+          ],
+          "refreshMethods": [
+            "RefreshAttributes",
+            "RefreshHeroSkill"
+          ],
+          "rankTableFields": [
+            "rankLevelLimit",
+            "attribute",
+            "skill"
+          ],
+          "levelTemplateIncludesBreakthroughAttributes": false,
+          "applicationMode": "separate-additive-source-per-rank"
+        }
       },
       "profiles": [
         {
@@ -26285,7 +26063,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=31,heroId=101010,rank=0]"
             },
             {
@@ -26315,7 +26093,12 @@
                 }
               ],
               "unlockedSkillId": 10101061,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10101061,
+                "availabilityStatus": "unlocked",
+                "runtimeMechanicsStatus": "runtime-applied"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=32,heroId=101010,rank=1]"
             },
             {
@@ -26341,7 +26124,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=33,heroId=101010,rank=2]"
             },
             {
@@ -26371,7 +26154,14 @@
                 }
               ],
               "unlockedSkillId": 10101062,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10101062,
+                "availabilityStatus": "not-applicable",
+                "runtimeMechanicsStatus": "not-applicable",
+                "reason": "unnamed-secondary-passive-not-implemented-current-client",
+                "productBoundaryIdentity": "actor:101010:skill:10101062:product-boundary"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=34,heroId=101010,rank=3]"
             },
             {
@@ -26401,7 +26191,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=35,heroId=101010,rank=4]"
             },
             {
@@ -26410,7 +26200,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=36,heroId=101010,rank=5]"
             }
           ]
@@ -27376,7 +27166,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=43,heroId=102001,rank=0]"
             },
             {
@@ -27406,7 +27196,12 @@
                 }
               ],
               "unlockedSkillId": 10200161,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10200161,
+                "availabilityStatus": "unlocked",
+                "runtimeMechanicsStatus": "source-indexed-separate-runtime-contract"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=44,heroId=102001,rank=1]"
             },
             {
@@ -27432,7 +27227,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=45,heroId=102001,rank=2]"
             },
             {
@@ -27462,7 +27257,14 @@
                 }
               ],
               "unlockedSkillId": 10200162,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10200162,
+                "availabilityStatus": "not-applicable",
+                "runtimeMechanicsStatus": "not-applicable",
+                "reason": "unnamed-secondary-passive-not-implemented-current-client",
+                "productBoundaryIdentity": "actor:102001:skill:10200162:product-boundary"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=46,heroId=102001,rank=3]"
             },
             {
@@ -27492,7 +27294,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=47,heroId=102001,rank=4]"
             },
             {
@@ -27501,7 +27303,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=48,heroId=102001,rank=5]"
             }
           ]
@@ -28453,7 +28255,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=55,heroId=103002,rank=0]"
             },
             {
@@ -28483,7 +28285,12 @@
                 }
               ],
               "unlockedSkillId": 10300261,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10300261,
+                "availabilityStatus": "unlocked",
+                "runtimeMechanicsStatus": "runtime-applied"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=56,heroId=103002,rank=1]"
             },
             {
@@ -28509,7 +28316,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=57,heroId=103002,rank=2]"
             },
             {
@@ -28539,7 +28346,14 @@
                 }
               ],
               "unlockedSkillId": 10300262,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10300262,
+                "availabilityStatus": "not-applicable",
+                "runtimeMechanicsStatus": "not-applicable",
+                "reason": "unnamed-secondary-passive-not-implemented-current-client",
+                "productBoundaryIdentity": "actor:103002:skill:10300262:product-boundary"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=58,heroId=103002,rank=3]"
             },
             {
@@ -28569,7 +28383,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=59,heroId=103002,rank=4]"
             },
             {
@@ -28578,7 +28392,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=60,heroId=103002,rank=5]"
             }
           ]
@@ -29552,7 +29366,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=67,heroId=107001,rank=0]"
             },
             {
@@ -29582,7 +29396,12 @@
                 }
               ],
               "unlockedSkillId": 10700161,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10700161,
+                "availabilityStatus": "unlocked",
+                "runtimeMechanicsStatus": "source-indexed-separate-runtime-contract"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=68,heroId=107001,rank=1]"
             },
             {
@@ -29608,7 +29427,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=69,heroId=107001,rank=2]"
             },
             {
@@ -29638,7 +29457,14 @@
                 }
               ],
               "unlockedSkillId": 10700162,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10700162,
+                "availabilityStatus": "not-applicable",
+                "runtimeMechanicsStatus": "not-applicable",
+                "reason": "unnamed-secondary-passive-not-implemented-current-client",
+                "productBoundaryIdentity": "actor:107001:skill:10700162:product-boundary"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=70,heroId=107001,rank=3]"
             },
             {
@@ -29668,7 +29494,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=71,heroId=107001,rank=4]"
             },
             {
@@ -29677,7 +29503,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=72,heroId=107001,rank=5]"
             }
           ]
@@ -30655,7 +30481,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=73,heroId=107002,rank=0]"
             },
             {
@@ -30685,7 +30511,12 @@
                 }
               ],
               "unlockedSkillId": 10700261,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10700261,
+                "availabilityStatus": "unlocked",
+                "runtimeMechanicsStatus": "source-indexed-separate-runtime-contract"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=74,heroId=107002,rank=1]"
             },
             {
@@ -30711,7 +30542,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=75,heroId=107002,rank=2]"
             },
             {
@@ -30741,7 +30572,14 @@
                 }
               ],
               "unlockedSkillId": 10700262,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10700262,
+                "availabilityStatus": "not-applicable",
+                "runtimeMechanicsStatus": "not-applicable",
+                "reason": "unnamed-secondary-passive-not-implemented-current-client",
+                "productBoundaryIdentity": "actor:107002:skill:10700262:product-boundary"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=76,heroId=107002,rank=3]"
             },
             {
@@ -30771,7 +30609,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=77,heroId=107002,rank=4]"
             },
             {
@@ -30780,7 +30618,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=78,heroId=107002,rank=5]"
             }
           ]
@@ -31726,7 +31564,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=85,heroId=108001,rank=0]"
             },
             {
@@ -31756,7 +31594,12 @@
                 }
               ],
               "unlockedSkillId": 10800161,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10800161,
+                "availabilityStatus": "unlocked",
+                "runtimeMechanicsStatus": "source-indexed-separate-runtime-contract"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=86,heroId=108001,rank=1]"
             },
             {
@@ -31782,7 +31625,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=87,heroId=108001,rank=2]"
             },
             {
@@ -31812,7 +31655,14 @@
                 }
               ],
               "unlockedSkillId": 10800162,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10800162,
+                "availabilityStatus": "not-applicable",
+                "runtimeMechanicsStatus": "not-applicable",
+                "reason": "unnamed-secondary-passive-not-implemented-current-client",
+                "productBoundaryIdentity": "actor:108001:skill:10800162:product-boundary"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=88,heroId=108001,rank=3]"
             },
             {
@@ -31842,7 +31692,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=89,heroId=108001,rank=4]"
             },
             {
@@ -31851,7 +31701,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=90,heroId=108001,rank=5]"
             }
           ]
@@ -32786,7 +32636,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=97,heroId=108003,rank=0]"
             },
             {
@@ -32816,7 +32666,12 @@
                 }
               ],
               "unlockedSkillId": 10800361,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10800361,
+                "availabilityStatus": "unlocked",
+                "runtimeMechanicsStatus": "source-indexed-separate-runtime-contract"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=98,heroId=108003,rank=1]"
             },
             {
@@ -32842,7 +32697,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=99,heroId=108003,rank=2]"
             },
             {
@@ -32872,7 +32727,14 @@
                 }
               ],
               "unlockedSkillId": 10800362,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10800362,
+                "availabilityStatus": "not-applicable",
+                "runtimeMechanicsStatus": "not-applicable",
+                "reason": "unnamed-secondary-passive-not-implemented-current-client",
+                "productBoundaryIdentity": "actor:108003:skill:10800362:product-boundary"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=100,heroId=108003,rank=3]"
             },
             {
@@ -32902,7 +32764,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=101,heroId=108003,rank=4]"
             },
             {
@@ -32911,7 +32773,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=102,heroId=108003,rank=5]"
             }
           ]
@@ -33830,7 +33692,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=109,heroId=109001,rank=0]"
             },
             {
@@ -33860,7 +33722,12 @@
                 }
               ],
               "unlockedSkillId": 10900161,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10900161,
+                "availabilityStatus": "unlocked",
+                "runtimeMechanicsStatus": "source-indexed-separate-runtime-contract"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=110,heroId=109001,rank=1]"
             },
             {
@@ -33886,7 +33753,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=111,heroId=109001,rank=2]"
             },
             {
@@ -33916,7 +33783,14 @@
                 }
               ],
               "unlockedSkillId": 10900162,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10900162,
+                "availabilityStatus": "not-applicable",
+                "runtimeMechanicsStatus": "not-applicable",
+                "reason": "unnamed-secondary-passive-not-implemented-current-client",
+                "productBoundaryIdentity": "actor:109001:skill:10900162:product-boundary"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=112,heroId=109001,rank=3]"
             },
             {
@@ -33946,7 +33820,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=113,heroId=109001,rank=4]"
             },
             {
@@ -33955,7 +33829,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=114,heroId=109001,rank=5]"
             }
           ]
@@ -34896,7 +34770,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=145,heroId=111001,rank=0]"
             },
             {
@@ -34926,7 +34800,12 @@
                 }
               ],
               "unlockedSkillId": 11100161,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 11100161,
+                "availabilityStatus": "unlocked",
+                "runtimeMechanicsStatus": "source-indexed-separate-runtime-contract"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=146,heroId=111001,rank=1]"
             },
             {
@@ -34952,7 +34831,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=147,heroId=111001,rank=2]"
             },
             {
@@ -34982,7 +34861,14 @@
                 }
               ],
               "unlockedSkillId": 11100162,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 11100162,
+                "availabilityStatus": "not-applicable",
+                "runtimeMechanicsStatus": "not-applicable",
+                "reason": "unnamed-secondary-passive-not-implemented-current-client",
+                "productBoundaryIdentity": "actor:111001:skill:11100162:product-boundary"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=148,heroId=111001,rank=3]"
             },
             {
@@ -35012,7 +34898,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=149,heroId=111001,rank=4]"
             },
             {
@@ -35021,7 +34907,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=150,heroId=111001,rank=5]"
             }
           ]
@@ -35977,7 +35863,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=151,heroId=112001,rank=0]"
             },
             {
@@ -36007,7 +35893,19 @@
                 }
               ],
               "unlockedSkillId": 10300261,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10300261,
+                "availabilityStatus": "static-evidence-gap",
+                "runtimeMechanicsStatus": "static-evidence-gap",
+                "reason": "hero-rank-skill-id-not-in-character-passive-slots",
+                "expectedPassiveSkillIds": [
+                  11200161,
+                  11200162,
+                  19996298,
+                  19996798
+                ]
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=152,heroId=112001,rank=1]"
             },
             {
@@ -36033,7 +35931,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=153,heroId=112001,rank=2]"
             },
             {
@@ -36063,7 +35961,19 @@
                 }
               ],
               "unlockedSkillId": 10300262,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 10300262,
+                "availabilityStatus": "static-evidence-gap",
+                "runtimeMechanicsStatus": "static-evidence-gap",
+                "reason": "hero-rank-skill-id-not-in-character-passive-slots",
+                "expectedPassiveSkillIds": [
+                  11200161,
+                  11200162,
+                  19996298,
+                  19996798
+                ]
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=154,heroId=112001,rank=3]"
             },
             {
@@ -36093,7 +36003,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=155,heroId=112001,rank=4]"
             },
             {
@@ -36102,7 +36012,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=156,heroId=112001,rank=5]"
             }
           ]
@@ -37047,7 +36957,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=127,heroId=199001,rank=0]"
             },
             {
@@ -37077,7 +36987,12 @@
                 }
               ],
               "unlockedSkillId": 19900161,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 19900161,
+                "availabilityStatus": "unlocked",
+                "runtimeMechanicsStatus": "source-indexed-separate-runtime-contract"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=128,heroId=199001,rank=1]"
             },
             {
@@ -37103,7 +37018,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=129,heroId=199001,rank=2]"
             },
             {
@@ -37133,7 +37048,14 @@
                 }
               ],
               "unlockedSkillId": 19900162,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 19900162,
+                "availabilityStatus": "not-applicable",
+                "runtimeMechanicsStatus": "not-applicable",
+                "reason": "unnamed-secondary-passive-not-implemented-current-client",
+                "productBoundaryIdentity": "actor:199001:skill:19900162:product-boundary"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=130,heroId=199001,rank=3]"
             },
             {
@@ -37163,7 +37085,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=131,heroId=199001,rank=4]"
             },
             {
@@ -37172,7 +37094,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=132,heroId=199001,rank=5]"
             }
           ]
@@ -38117,7 +38039,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=133,heroId=199002,rank=0]"
             },
             {
@@ -38147,7 +38069,12 @@
                 }
               ],
               "unlockedSkillId": 19900261,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 19900261,
+                "availabilityStatus": "unlocked",
+                "runtimeMechanicsStatus": "source-indexed-separate-runtime-contract"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=134,heroId=199002,rank=1]"
             },
             {
@@ -38173,7 +38100,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=135,heroId=199002,rank=2]"
             },
             {
@@ -38203,7 +38130,14 @@
                 }
               ],
               "unlockedSkillId": 19900262,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "skillUnlock": {
+                "skillId": 19900262,
+                "availabilityStatus": "not-applicable",
+                "runtimeMechanicsStatus": "not-applicable",
+                "reason": "unnamed-secondary-passive-not-implemented-current-client",
+                "productBoundaryIdentity": "actor:199002:skill:19900262:product-boundary"
+              },
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=136,heroId=199002,rank=3]"
             },
             {
@@ -38233,7 +38167,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=137,heroId=199002,rank=4]"
             },
             {
@@ -38242,7 +38176,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "source-indexed-static-runtime-applied",
               "sourceIdentity": "NewTable/hero_rank.rows[id=138,heroId=199002,rank=5]"
             }
           ]
@@ -44377,10 +44311,10 @@
       "tuningScore": {
         "minimum": 0,
         "maximumFromCurrentTable": 80,
-        "ordinaryMaximum": null,
-        "starbornMaximum": null,
-        "status": "instance-tier-source-evidence-missing",
-        "sourceIdentity": "NewTable/accessory_customed.score|scoreLimit; bGoldSide/maxValue absent from current snapshot"
+        "ordinaryMaximum": 100,
+        "starbornMaximum": 110,
+        "status": "source-indexed-instance-runtime-applied",
+        "sourceIdentity": "IL2CPP/Azur.Gameplay.UI.AccessoryData.score|bGoldSide|maxValue|ResourcesLang/chs/Table/lang_words.json#id=-2424279961521123336"
       },
       "tuningFormula": {
         "status": "source-indexed-static-runtime-applied",
@@ -44393,9 +44327,37 @@
         "expression": "ceil(base*0.85)+ceil(base*0.6*0.0125*(tuningScore-20))",
         "sourceIdentity": "NewTable/game.rows[title=EQUIPMENT_SCORE_FORMULA_PARAM]"
       },
+      "instanceEvidence": {
+        "runtimeFields": {
+          "fields": [
+            "score",
+            "bGoldSide",
+            "maxValue"
+          ],
+          "instanceOwned": true
+        },
+        "productTerms": {
+          "rowId": "-2424279961521123336",
+          "value": "缘星装备固定拥有110的同调评分上限，普通装备上限最多为100",
+          "ordinaryMaximum": 100,
+          "starbornMaximum": 110
+        }
+      },
       "instanceTiers": [
-        "normal",
-        "starborn"
+        {
+          "identity": "normal",
+          "bGoldSide": false,
+          "maximum": 100,
+          "maximumRule": "less-than-or-equal",
+          "sourceIdentity": "IL2CPP/Azur.Gameplay.UI.AccessoryData.bGoldSide|maxValue|ResourcesLang/chs/Table/lang_words.json#id=-2424279961521123336"
+        },
+        {
+          "identity": "starborn",
+          "bGoldSide": true,
+          "maximum": 110,
+          "maximumRule": "exact",
+          "sourceIdentity": "IL2CPP/Azur.Gameplay.UI.AccessoryData.bGoldSide|maxValue|ResourcesLang/chs/Table/lang_words.json#id=-2424279961521123336"
+        }
       ]
     }
   },
@@ -44413,7 +44375,7 @@
       "set-skill": 0
     },
     "optimizationReadyTotal": 0,
-    "gameplayBlockingGapCount": 727,
+    "gameplayBlockingGapCount": 443,
     "bindingQualifiedEdgeCount": 0,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44498,5 +44460,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "9a7300aa8825aba6"
+  "catalogHash": "f430943517426159"
 }

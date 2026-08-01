@@ -185,6 +185,10 @@ export function compileVerifiedStaticActorProperties({
     sources,
     unresolved,
     unapplied,
+    skillAvailability: (cultivation.unlockedSkills ?? []).map(entry => ({
+      ...structuredClone(entry),
+      applied: entry.availabilityStatus === 'unlocked',
+    })),
     sourceIdentity: `verified-static-actor:${characterId}|${mechanicsPackage.packageHash}`,
     complete,
     ready: complete,
@@ -455,6 +459,10 @@ function applyOptimizationCharacterCultivationSources({
   const sourceGroups = [
     ['completedStarGiftAttributeSources', 'star-gift-completed-rank'],
     ['starGiftNodeSources', 'star-gift-node'],
+    [
+      'levelBreakthroughAttributeSources',
+      'actor-level-breakthrough-attribute',
+    ],
   ];
   for (const [field, expectedKind] of sourceGroups) {
     for (const row of contract[field] ?? []) {
@@ -650,6 +658,33 @@ function applyEquipmentSources({
       });
       continue;
     }
+    const equipmentCultivation = loadout?.equipmentCultivation?.[slotKey];
+    const instance = equipmentCultivation?.instance;
+    if (
+      equipmentCultivation &&
+      (!instance ||
+        !['normal', 'starborn'].includes(instance.identity) ||
+        typeof instance.bGoldSide !== 'boolean' ||
+        !Number.isInteger(Number(instance.maxValue)))
+    ) {
+      unresolved.push({
+        kind: 'equipment-instance',
+        sourceId: equipmentId,
+        slotKey,
+        reason: 'equipment-instance-contract-invalid',
+        sourceIdentity: instance?.sourceIdentity ?? null,
+      });
+    } else if (equipmentCultivation) {
+      sources.push({
+        ...createAppliedSource({
+          kind: 'equipment-instance',
+          sourceId: `${equipmentId}:${slotKey}:${instance.identity}:${instance.maxValue}`,
+          sourceIdentity: instance.sourceIdentity,
+          attributes: [],
+        }),
+        instance: structuredClone(instance),
+      });
+    }
     sources.push(
       createAppliedSource({
         kind: 'equipment-main',
@@ -663,7 +698,7 @@ function applyEquipmentSources({
       slotKey,
       sourceKind: 'equipment-tuning-main',
       attributes: level.attributes,
-      cultivation: loadout?.equipmentCultivation?.[slotKey],
+      cultivation: equipmentCultivation,
       sources,
       unresolved,
     });
@@ -692,7 +727,7 @@ function applyEquipmentSources({
           id: entry.id,
           value: entry.value,
         })),
-        cultivation: loadout?.equipmentCultivation?.[slotKey],
+        cultivation: equipmentCultivation,
         sources,
         unresolved,
       });
@@ -751,6 +786,21 @@ function applyEquipmentTuningSource({
       slotKey,
       reason: 'equipment-tuning-score-invalid',
       tuningScore,
+    });
+    return;
+  }
+  if (
+    !Number.isInteger(Number(cultivation.instance?.maxValue)) ||
+    tuningScore > Number(cultivation.instance.maxValue)
+  ) {
+    unresolved.push({
+      kind: sourceKind,
+      sourceId: equipmentId,
+      slotKey,
+      reason: 'equipment-tuning-score-exceeds-instance-max',
+      tuningScore,
+      maximum: cultivation.instance?.maxValue ?? null,
+      sourceIdentity: cultivation.instance?.sourceIdentity ?? null,
     });
     return;
   }

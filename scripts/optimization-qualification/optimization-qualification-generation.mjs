@@ -61,6 +61,10 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346',
   soulEffectControlClosure:
     'fc30b3421db5c04a517a29f81e969c428b33ade9392ef806fad56a29cd1fcdfe',
+  equipmentInstanceTerms:
+    '4b5ddb03534713fcecbbc41c911c88a3eb57c5f6f3d06cc68a7c3f08f39c34b7',
+  il2cppRuntimeContracts:
+    '0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
@@ -117,6 +121,10 @@ export async function createOptimizationQualificationArtifacts({
     'C:/PC2/Codex/AzPr/work/combat-formulas/battle-element-assets.jsonl',
   skillControlRoot =
     'C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList',
+  equipmentInstanceTermsPath =
+    'C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_words.json',
+  il2cppRuntimeContractsPath =
+    'C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs',
 } = {}) {
   if (!projectRoot) throw new TypeError('projectRoot is required');
   const generatedRoot = path.join(projectRoot, 'src', 'data', 'generated');
@@ -154,6 +162,14 @@ export async function createOptimizationQualificationArtifacts({
       projectRoot
     );
   }
+  sources.equipmentInstanceTerms = await readEquipmentInstanceTermsSource(
+    equipmentInstanceTermsPath,
+    projectRoot
+  );
+  sources.il2cppRuntimeContracts = await readIl2CppRuntimeContractsSource(
+    il2cppRuntimeContractsPath,
+    projectRoot
+  );
   const characters = sources.characters.value.items ?? [];
   const kibos = sources.kibos.value.items ?? [];
   const equipment = sources.equipment.value.items ?? [];
@@ -307,6 +323,7 @@ export async function createOptimizationQualificationArtifacts({
 
   const cultivationCatalog = createCultivationCatalog({
     sources,
+    mechanics,
     characterObjects,
     targetKibos,
     publicSoulEssences,
@@ -322,6 +339,7 @@ export async function createOptimizationQualificationArtifacts({
     characterAcceptance: sources.characterAcceptance.value,
     kiboPassives: sources.kiboPassives.value,
     kiboMaturity: sources.kiboMaturity.value,
+    cultivationCatalog,
   });
   const bindingMatrix = createBindingMatrix({
     characterObjects,
@@ -338,7 +356,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-A',
+      phase: 'M12-B3-B',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -448,6 +466,7 @@ function createQualificationManifests({
   characterAcceptance,
   kiboPassives,
   kiboMaturity,
+  cultivationCatalog,
 }) {
   const actorStaticIds = new Set(
     (staticCatalog.actor?.profiles ?? []).map(profile =>
@@ -470,6 +489,12 @@ function createQualificationManifests({
     }
   }
   const records = [];
+  const cultivationCharacterById = new Map(
+    cultivationCatalog.character.profiles.map(profile => [
+      Number(profile.characterId),
+      profile,
+    ])
+  );
   for (const actor of characterObjects) {
     const sourceIds = actor.sourceCharacterIds.map(Number);
     const acceptanceEntries = sourceIds
@@ -506,13 +531,32 @@ function createQualificationManifests({
         )
       );
     }
-    blockers.push(
-      blocker(
-        'strict-character-cultivation-runtime-partial',
-        'not-implemented',
-        'Level and completed star-gift attributes/current-rank nodes are applied. Level-breakthrough legality is enforced, while hero_rank attributes/skill unlocks remain unapplied pending client application evidence.'
+    const skillUnlockGaps = sourceIds.flatMap(characterId =>
+      (
+        cultivationCharacterById.get(characterId)?.levelBreakthroughRanks ?? []
       )
+        .filter(
+          row => row.skillUnlock?.availabilityStatus === 'static-evidence-gap'
+        )
+        .map(row => ({
+          characterId,
+          rank: row.rank,
+          skillId: row.skillUnlock.skillId,
+          expectedPassiveSkillIds:
+            row.skillUnlock.expectedPassiveSkillIds ?? [],
+          sourceIdentity: row.sourceIdentity,
+        }))
     );
+    if (skillUnlockGaps.length) {
+      blockers.push(
+        blocker(
+          'level-breakthrough-skill-unlock-source-mismatch',
+          'evidence-insufficient',
+          'hero_rank unlock skill does not match the character passive slots; attributes remain applicable but the skill identity is not inferred.',
+          { records: skillUnlockGaps }
+        )
+      );
+    }
     records.push(
       qualificationRecord({
         objectKind: 'character',
@@ -639,16 +683,6 @@ function createQualificationManifests({
   for (const item of publicEquipment) {
     const blockers = [
       blocker(
-        'strict-equipment-cultivation-runtime-partial',
-        'not-implemented',
-        'Equipment enhancement and source-backed tuning formula are applied; instance-tier legality remains evidence-blocked.'
-      ),
-      blocker(
-        'equipment-instance-tier-source-evidence-missing',
-        'evidence-insufficient',
-        'The current source snapshot does not contain bGoldSide/maxValue instance evidence required to distinguish normal and starborn tuning caps.'
-      ),
-      blocker(
         'equipment-visual-acceptance-not-published',
         'not-implemented',
         'No product visual acceptance manifest exists for this equipment instance contract.'
@@ -708,6 +742,7 @@ function createQualificationManifests({
 
 function createCultivationCatalog({
   sources,
+  mechanics,
   characterObjects,
   targetKibos,
   publicSoulEssences,
@@ -752,6 +787,25 @@ function createCultivationCatalog({
   const sourceCharacterIds = characterObjects.flatMap(
     item => item.sourceCharacterIds
   );
+  const productBoundaryByOwnerSkillId = new Map(
+    (mechanics.characterCombatProductBoundaries?.entries ?? []).map(entry => [
+      `${Number(entry.ownerId)}:${Number(entry.skillId)}`,
+      entry,
+    ])
+  );
+  const runtimePassiveKeys = new Set(
+    (mechanics.specialResourceCatalog?.passiveEffects ?? [])
+      .filter(entry => entry.applied === true)
+      .map(entry => `${Number(entry.ownerId)}:${Number(entry.skillId)}`)
+  );
+  const characterPassiveSkillIdsById = new Map(
+    (sources.characters.value.items ?? []).map(character => [
+      Number(character.id),
+      (character.skillSlots ?? [])
+        .filter(slot => slot.group === 'passive')
+        .map(slot => Number(slot.skillId)),
+    ])
+  );
   const characterProfiles = sourceCharacterIds.map(characterId => ({
     characterId: Number(characterId),
     starGiftRanks: sources['newTable:talent_rank.json'].value.rows
@@ -776,7 +830,13 @@ function createCultivationCatalog({
     levelBreakthroughRanks: createLevelBreakthroughRanks(
       sources['newTable:hero_rank.json'].value.rows
         .filter(row => Number(row.heroId) === Number(characterId))
-        .sort((left, right) => Number(left.rank) - Number(right.rank))
+        .sort((left, right) => Number(left.rank) - Number(right.rank)),
+      {
+        productBoundaryByOwnerSkillId,
+        runtimePassiveKeys,
+        characterPassiveSkillIds:
+          characterPassiveSkillIdsById.get(Number(characterId)) ?? [],
+      }
     ),
   }));
   const skillLevelsBySkillId = groupBy(
@@ -852,9 +912,40 @@ function createCultivationCatalog({
     .split('|')
     .filter(Boolean)
     .map(Number);
+  const fixedOptimizationProfile = {
+    character: {
+      level: 80,
+      starGiftRank: 7,
+      completedStarGiftAttributeRank: 6,
+      currentRankNodeSelection: 'all',
+      levelBreakthroughRank: 3,
+    },
+    kibo: {
+      level: 80,
+      talentLevelsByAttributeId: { 1: 10, 3: 10, 4: 10, 5: 10 },
+      resolvedTalentValuesByAttributeId: { 1: 120, 3: 120, 4: 120, 5: 120 },
+      bondLevel: 1,
+      inheritanceBasisPoints: 900,
+      dnaFactors: [],
+    },
+    soulEssence: { level: 80, rank: 6, star: 1 },
+    equipment: {
+      rarity: 4,
+      enhancementLevel: 9,
+      tuningScore: 110,
+      instanceTier: 'starborn',
+      bGoldSide: true,
+      maxValue: 110,
+    },
+    optimizationEnumeratedDimensions: [],
+  };
   return {
     schemaVersion: 1,
     contractName: 'AzPrOptimizationCultivationCatalog',
+    fixedOptimizationProfile: {
+      ...fixedOptimizationProfile,
+      fixedProfileHash: hashCanonicalValue(fixedOptimizationProfile),
+    },
     character: {
       optimizationObjectIds: characterObjects.map(
         item => item.optimizationObjectId
@@ -868,8 +959,15 @@ function createCultivationCatalog({
         sourceIdentity: 'NewTable/talent_rank|NewTable/talent_rune',
       },
       levelBreakthrough: {
-        status: 'source-indexed-legality-applied-attributes-unapplied',
-        sourceIdentity: 'NewTable/hero_rank.rankLevelLimit|attribute|skill',
+        status: 'source-indexed-static-runtime-applied',
+        levelTemplateIncludesBreakthroughAttributes: false,
+        applicationMode: 'separate-additive-source-per-rank',
+        skillUnlockMode: 'availability-separate-from-runtime-effect',
+        sourceIdentity:
+          'NewTable/hero_rank.rankLevelLimit|attribute|skill|IL2CPP/Azur.Gameplay.PlayerModule.HeroData.lv|heroRank|RefreshAttributes|RefreshHeroSkill',
+        runtimeEvidence: structuredClone(
+          sources.il2cppRuntimeContracts.value.heroCultivation
+        ),
       },
       profiles: characterProfiles,
     },
@@ -933,11 +1031,11 @@ function createCultivationCatalog({
       tuningScore: {
         minimum: 0,
         maximumFromCurrentTable: 80,
-        ordinaryMaximum: null,
-        starbornMaximum: null,
-        status: 'instance-tier-source-evidence-missing',
+        ordinaryMaximum: 100,
+        starbornMaximum: 110,
+        status: 'source-indexed-instance-runtime-applied',
         sourceIdentity:
-          'NewTable/accessory_customed.score|scoreLimit; bGoldSide/maxValue absent from current snapshot',
+          'IL2CPP/Azur.Gameplay.UI.AccessoryData.score|bGoldSide|maxValue|ResourcesLang/chs/Table/lang_words.json#id=-2424279961521123336',
       },
       tuningFormula: {
         status:
@@ -951,7 +1049,32 @@ function createCultivationCatalog({
         sourceIdentity:
           'NewTable/game.rows[title=EQUIPMENT_SCORE_FORMULA_PARAM]',
       },
-      instanceTiers: ['normal', 'starborn'],
+      instanceEvidence: {
+        runtimeFields: structuredClone(
+          sources.il2cppRuntimeContracts.value.equipmentInstance
+        ),
+        productTerms: structuredClone(
+          sources.equipmentInstanceTerms.value
+        ),
+      },
+      instanceTiers: [
+        {
+          identity: 'normal',
+          bGoldSide: false,
+          maximum: 100,
+          maximumRule: 'less-than-or-equal',
+          sourceIdentity:
+            'IL2CPP/Azur.Gameplay.UI.AccessoryData.bGoldSide|maxValue|ResourcesLang/chs/Table/lang_words.json#id=-2424279961521123336',
+        },
+        {
+          identity: 'starborn',
+          bGoldSide: true,
+          maximum: 110,
+          maximumRule: 'exact',
+          sourceIdentity:
+            'IL2CPP/Azur.Gameplay.UI.AccessoryData.bGoldSide|maxValue|ResourcesLang/chs/Table/lang_words.json#id=-2424279961521123336',
+        },
+      ],
     },
   };
 }
@@ -1160,8 +1283,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-A',
-    status: 'b3-a-r1-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-B',
+    status: 'b3-b-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1176,17 +1299,68 @@ function createSummary({
   };
 }
 
-function createLevelBreakthroughRanks(rows) {
-  return rows.map((row, index) => ({
-    rank: Number(row.rank),
-    minimumLevel: index === 0 ? 1 : Number(rows[index - 1].rankLevelLimit),
-    levelLimit: Number(row.rankLevelLimit),
-    attributes: parseAttributePairs(row.attribute),
-    unlockedSkillId: positiveIntegerOrNull(row.skill),
-    runtimeApplicationStatus:
-      'source-indexed-legality-applied-attributes-unapplied',
-    sourceIdentity: `NewTable/hero_rank.rows[id=${row.id},heroId=${row.heroId},rank=${row.rank}]`,
-  }));
+function createLevelBreakthroughRanks(
+  rows,
+  {
+    productBoundaryByOwnerSkillId,
+    runtimePassiveKeys,
+    characterPassiveSkillIds,
+  }
+) {
+  return rows.map((row, index) => {
+    const unlockedSkillId = positiveIntegerOrNull(row.skill);
+    const ownerId = Number(row.heroId);
+    const skillBelongsToCharacter = unlockedSkillId
+      ? characterPassiveSkillIds.includes(unlockedSkillId)
+      : true;
+    const productBoundary = unlockedSkillId
+      ? productBoundaryByOwnerSkillId.get(`${ownerId}:${unlockedSkillId}`)
+      : null;
+    return {
+      rank: Number(row.rank),
+      minimumLevel: index === 0 ? 1 : Number(rows[index - 1].rankLevelLimit),
+      levelLimit: Number(row.rankLevelLimit),
+      attributes: parseAttributePairs(row.attribute),
+      unlockedSkillId,
+      ...(unlockedSkillId
+        ? {
+            skillUnlock: {
+              skillId: unlockedSkillId,
+              availabilityStatus: !skillBelongsToCharacter
+                ? 'static-evidence-gap'
+                : productBoundary
+                  ? 'not-applicable'
+                  : 'unlocked',
+              runtimeMechanicsStatus: !skillBelongsToCharacter
+                ? 'static-evidence-gap'
+                : productBoundary
+                  ? 'not-applicable'
+                  : runtimePassiveKeys.has(`${ownerId}:${unlockedSkillId}`)
+                    ? 'runtime-applied'
+                    : 'source-indexed-separate-runtime-contract',
+              ...(!skillBelongsToCharacter
+                ? {
+                    reason:
+                      'hero-rank-skill-id-not-in-character-passive-slots',
+                    expectedPassiveSkillIds: [
+                      ...characterPassiveSkillIds,
+                    ],
+                  }
+                : {}),
+              ...(productBoundary
+                ? {
+                    reason: productBoundary.reason,
+                    productBoundaryIdentity:
+                      productBoundary.boundaryIdentity,
+                  }
+                : {}),
+            },
+          }
+        : {}),
+      runtimeApplicationStatus: 'source-indexed-static-runtime-applied',
+      sourceIdentity: `NewTable/hero_rank.rows[id=${row.id},heroId=${row.heroId},rank=${row.rank}]`,
+    };
+  });
 }
 
 function projectCharacterOptimizationObject(character) {
@@ -1408,6 +1582,14 @@ function createImplementationCapabilities({
       ],
     },
     {
+      capabilityIdentity: 'b3-hero-rank-separate-static-runtime',
+      status: 'implemented',
+      evidence: [
+        cultivationCatalog.character.levelBreakthrough.sourceIdentity,
+        'IL2CPP/Azur.Gameplay.PlayerModule.HeroData.lv|heroRank|RefreshAttributes|RefreshHeroSkill',
+      ],
+    },
+    {
       capabilityIdentity: 'b3-kibo-four-talent-source-mapping',
       status: 'implemented',
       evidence: [
@@ -1454,6 +1636,17 @@ function createImplementationCapabilities({
           ? 'implemented'
           : 'evidence-insufficient',
       evidence: [cultivationCatalog.equipment.tuningFormula.sourceIdentity],
+    },
+    {
+      capabilityIdentity: 'b3-equipment-instance-tier-runtime',
+      status:
+        cultivationCatalog.equipment.tuningScore.status ===
+        'source-indexed-instance-runtime-applied'
+          ? 'implemented'
+          : 'evidence-insufficient',
+      evidence: cultivationCatalog.equipment.instanceTiers.map(
+        entry => entry.sourceIdentity
+      ),
     },
     {
       capabilityIdentity: 'b3-duplicate-kibo-species-slot-runtime-binding',
@@ -1518,7 +1711,7 @@ function createSourceSnapshot(sources) {
 function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
-  return `# M12-B3-A Optimization Qualification Baseline\n\n` +
+  return `# M12-B3-B Fixed Cultivation And Static Loadout Closure\n\n` +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1526,7 +1719,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Denominators: characters ${summary.denominators.characterOptimizationObjects}, Kibo ${summary.denominators.kibos}, soul essence ${summary.denominators.soulEssences}, equipment ${summary.denominators.equipment}, set skills ${summary.denominators.setSkills}\n` +
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
-    `- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection plus level-breakthrough legality, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, tuning formula source index, duplicate-Kibo slot identity, and formal whole-stage rejection.\n` +
+    `- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, separately applied hero_rank attributes and skill availability, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, and formal whole-stage rejection.\n` +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     `- Duplicate Kibo species across different actor slots: allowed; runtime owner is \`actorSlotId+kiboId\`.\n` +
     `- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n`;
@@ -1539,6 +1732,72 @@ async function readSource(sourcePath, projectRoot) {
     bytes: bytes.byteLength,
     sha256: createHash('sha256').update(bytes).digest('hex'),
     value: JSON.parse(bytes.toString('utf8')),
+  };
+}
+
+async function readEquipmentInstanceTermsSource(sourcePath, projectRoot) {
+  const bytes = await fs.readFile(sourcePath);
+  const text = bytes.toString('utf8');
+  const sourceId = '-2424279961521123336';
+  const value =
+    '缘星装备固定拥有110的同调评分上限，普通装备上限最多为100';
+  if (!text.includes(`"id": ${sourceId}`) || !text.includes(value)) {
+    throw new Error('optimization-qualification-equipment-instance-terms-missing');
+  }
+  return {
+    path: normalizeSourcePath(sourcePath, projectRoot),
+    bytes: bytes.byteLength,
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+    value: {
+      rowId: sourceId,
+      value,
+      ordinaryMaximum: 100,
+      starbornMaximum: 110,
+    },
+  };
+}
+
+async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
+  const bytes = await fs.readFile(sourcePath);
+  const text = bytes.toString('utf8');
+  const requiredFragments = [
+    'public class HeroData : IStoreData<HeroItemInfo>, IStoreData<HeroAttrInfo>, IStoreData<HeroBattleInfo>',
+    'public int lv;',
+    'public int heroRank;',
+    'private void RefreshAttributes(AttrModuleInfo info, Dictionary<int, AttrInfo> attrDict, bool isBattle = False)',
+    'private void RefreshHeroSkill(AttrModuleInfo info, bool isBattle = False)',
+    'public struct TDHeroRank',
+    'public int rankLevelLimit { get; }',
+    'public string attribute { get; }',
+    'public List<int> skill { get; }',
+    'public class AccessoryData // TypeDefIndex: 16369',
+    'public int score;',
+    'public bool bGoldSide;',
+    'public int maxValue;',
+  ];
+  const missing = requiredFragments.filter(fragment => !text.includes(fragment));
+  if (missing.length) {
+    throw new Error(
+      `optimization-qualification-il2cpp-runtime-contract-missing:${missing.join('|')}`
+    );
+  }
+  return {
+    path: normalizeSourcePath(sourcePath, projectRoot),
+    bytes: bytes.byteLength,
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+    value: {
+      heroCultivation: {
+        storedFields: ['lv', 'heroRank'],
+        refreshMethods: ['RefreshAttributes', 'RefreshHeroSkill'],
+        rankTableFields: ['rankLevelLimit', 'attribute', 'skill'],
+        levelTemplateIncludesBreakthroughAttributes: false,
+        applicationMode: 'separate-additive-source-per-rank',
+      },
+      equipmentInstance: {
+        fields: ['score', 'bGoldSide', 'maxValue'],
+        instanceOwned: true,
+      },
+    },
   };
 }
 

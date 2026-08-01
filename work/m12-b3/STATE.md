@@ -11,6 +11,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - Branch: `feature/m12-b3-optimization-qualification`.
 - Worktree: `C:\Codex\AzPr Axis\.worktrees\promilia-m12-b3`.
 - B3-A-R1 repair baseline: `c16954f79eabc392b9e8667b7faed3fa89de6d06`.
+- B3-A-R1 product acceptance baseline: `f902de10c42c2c4dc750be2316fabe3bc026f8cc`.
 - The B3 contract was selectively synchronized from the dirty main-workspace plan on 2026-08-01; the main workspace was not modified.
 
 ## Frozen Plan Snapshot
@@ -26,23 +27,26 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 ## Current Status
 
 - B2 product acceptance is closed.
-- B3-A-R1 source and denominator recomputation is complete: source `95cac6744423e44b`, roster `e574c0d8d5c9f335`, manifests `41d8d2857ee6c699`, ledger `f31dfaa6bed204c3`, catalog `9a7300aa8825aba6`, binding matrix `d21335a454947b3c`.
+- B3-A-R1 is product-accepted at `f902de10c42c2c4dc750be2316fabe3bc026f8cc`. B3-B implementation and self-verification are complete; this branch is waiting for product review.
+- B3-B source and denominator recomputation is complete: source `9a19ffc89723635d`, roster `c4c9b57031a11480`, manifests `d25780b522d3fe58`, ledger `c145dc13ce831692`, catalog `f430943517426159`, binding matrix `f9005f89a268a7d4`.
 - Generated roster, consolidated manifests, gap ledger, binding matrix, summary, and runtime catalog are deterministic under `npm run audit:optimization-qualification`.
-- Strict cultivation profile v1 is wired into Machine Axis, canonical input hashing, and direct Workbench adapter round-trip. Kibo talent level 10 resolves to 120; bond level 1 resolves to 900 basis points and level 0 is rejected.
+- Strict cultivation profile v1 is wired into Machine Axis, canonical input hashing, and direct Workbench adapter round-trip. The frozen profile hash is `c432bd0a3f2d6415`: character `80 / star gift 7 / completed attributes through 6 / all current nodes / level breakthrough 3`; Kibo `80 / four talents 10 => 120 / bond 1 => 900 basis points / dnaFactors []`; soul essence `80 / rank 6 / star 1`; equipment `4-star / +9 / tuning 110 / starborn`.
 - Formal qualification derives one whole-stage gate from the `11/43/62/137/12` records, admissions, set-skill thresholds, actor-Kibo/soul/equipment bindings, equipment slots, and source hashes. Partial green catalogs are rejected before project/search; research scenarios remain compatible.
-- Static cultivation applies character level, completed star-gift attributes strictly through `selectedRank - 1`, current/prior eligible nodes, Kibo level/talents/bond, soul-essence level/rank, equipment enhancement, and source-backed tuning. `hero_rank` now supplies `levelBreakthroughRank` legality against `rankLevelLimit`; its attributes and skill unlocks remain explicit unapplied evidence rather than a second unproven stat stack. Xiaoyu level 80, star-gift rank 7 matches the committed naked panel with attribute completion through rank 6, and the corrected panel propagates to Kibo inheritance and damage.
+- Static cultivation applies character level, completed star-gift attributes strictly through `selectedRank - 1`, current/prior eligible nodes, Kibo level/talents/bond, soul-essence level/rank, equipment enhancement, and source-backed tuning. The level template does not include `hero_rank`; legal breakthrough attributes are therefore applied once as separate sources, while skill availability is projected separately from runtime effects. Xiaoyu level 80/star-gift 7 keeps the committed naked panel through rank 6, then receives exactly one legal breakthrough stack which propagates to Kibo inheritance and final damage.
+- All 12 source character identities have six `hero_rank` rows. Owner `112001` has two source unlock IDs that disagree with its passive slots; its breakthrough attributes remain applied, while those skill identities stay evidence-blocked rather than inferred.
+- Equipment instances preserve raw and resolved `instanceTier`, `bGoldSide`, and `maxValue`. Normal instances accept at most 100 tuning; starborn instances require the source-backed fixed maximum 110. Main and sub attributes use the same segmented `ceil` formula, and cultivation differences enter canonical input/build hashes without expanding search dimensions.
 - Runtime-applied soul effects: `10001 汁石就是力量`, `10002 家书`, `10037 厨房的秘密`, `10060 宵祝`, `10094 陪伴`, `10125 高手在此！`, `10154 月下秘仪`, and `10155 恶作剧前奏`. One data-driven matrix covers Before/After, stack/refresh, normal/charged/star-skill, suppression, exact duration/expiry, and same-frame settlement. An `AfterSkill` effect is available to following actions at the boundary but never retroactively buffs its own final-frame hit.
 - The public schema requires `levelBreakthroughRank`; legacy `ascensionRank` is rejected. Previous completed star-gift ranks apply all nodes, while the current rank applies only explicit node IDs. All 12 source character identities have 7 star-gift ranks, 6 level-breakthrough rows, and no missing rune source identity.
-- Current verification: focused and headless regression `24 files / 285 tests` passed, including the standalone Machine Axis result `12 files / 157 tests`; optimization qualification plus production imports, Workbench data, action status, applied-source, character acceptance, character combat, verified combat, and Kibo headless audits are clean; production build passed with pre-existing Sass/chunk warnings. The applied-source check no longer rewrites `generatedAt` when semantic content is unchanged.
+- Current verification: qualification/soul matrix `2 files / 39 tests`, Machine Axis `12 files / 157 tests`, and static/golden regression `4 files / 25 tests` passed. Optimization qualification plus production imports, Workbench data, action status, applied-source, character acceptance, character combat, verified combat, and Kibo headless audits are clean. Production build passed with only pre-existing Sass/circular-chunk/large-chunk warnings.
 - Current optimization-ready counts are zero for all five object kinds. M12-C remains locked.
-- Current maturity is `233 extracted / 32 runtime-integrated`; all five optimization-ready counts remain zero. Blocking gaps are `727` unique (`586 not-implemented`, `141 evidence-insufficient`).
-- Status: `B3-A-R1 verification-complete-awaiting-product-acceptance`. Stop here; do not continue B3 batches or enter M12-C before product review.
+- Current maturity is `233 extracted / 32 runtime-integrated`; all five optimization-ready counts remain zero. Blocking gaps are `443` unique (`438 not-implemented`, `5 evidence-insufficient`).
+- Status: `B3-B verification-complete-awaiting-product-acceptance`.
 
-## B3-A Blockers
+## Remaining Blockers
 
-- Not implemented: 586 unique object-scoped blockers, including 54 unresolved soul-essence dynamic skills, 12 set skills, strict cultivation runtime propagation, and missing visual acceptance. Moving DNA to the current-version product boundary removed exactly 86 former blockers (`2 x 43`); DNA contributes zero source or acceptance gaps.
-- Evidence insufficient: 141 object-scoped blockers: 137 equipment instance `bGoldSide/maxValue` gaps and 4 selected Kibo passive gaps.
-- STARBORN aliases normalize to one source-mechanism hash, but the verified static/runtime actor contract is not compiled for either alias.
+- Not implemented: `438` unique object-scoped blockers, including 54 unresolved soul-essence dynamic skills, 12 set skills, remaining runtime/visual qualification, and one missing STARBORN static actor profile. DNA contributes zero source or acceptance gaps.
+- Evidence insufficient: `5` unique blockers: 4 selected Kibo passive gaps and the owner `112001` level-breakthrough skill-unlock mismatch.
+- Formal admission remains empty. B3-B closes only the fixed cultivation and static equipment foundation; it does not qualify characters, Kibo, soul essence, equipment, set skills, or their binding matrix for optimization.
 
 ## Hard Boundaries
 

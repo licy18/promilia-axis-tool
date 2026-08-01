@@ -35,6 +35,8 @@ function createCultivationProfile({
   soulEssenceStar = 1,
   enhancementLevel = 9,
   tuningScore = 110,
+  equipmentInstanceTier = 'starborn',
+  equipmentMaxValue = 110,
   selectedStarGiftNodeIdsByCharacterId = {},
 } = {}) {
   return {
@@ -81,7 +83,8 @@ function createCultivationProfile({
             rarity: 4,
             enhancementLevel,
             tuningScore,
-            instanceTier: 'starborn',
+            instanceTier: equipmentInstanceTier,
+            maxValue: equipmentMaxValue,
           },
         ])
       ),
@@ -232,6 +235,128 @@ describe('M12-B3 optimization qualification generation', () => {
           String(record.code).includes('dna')
         )
       ).toBe(false);
+      const {
+        fixedProfileHash,
+        ...fixedOptimizationProfile
+      } = artifacts.catalog.cultivation.fixedOptimizationProfile;
+      expect(fixedOptimizationProfile).toEqual({
+        character: {
+          level: 80,
+          starGiftRank: 7,
+          completedStarGiftAttributeRank: 6,
+          currentRankNodeSelection: 'all',
+          levelBreakthroughRank: 3,
+        },
+        kibo: {
+          level: 80,
+          talentLevelsByAttributeId: { 1: 10, 3: 10, 4: 10, 5: 10 },
+          resolvedTalentValuesByAttributeId: { 1: 120, 3: 120, 4: 120, 5: 120 },
+          bondLevel: 1,
+          inheritanceBasisPoints: 900,
+          dnaFactors: [],
+        },
+        soulEssence: { level: 80, rank: 6, star: 1 },
+        equipment: {
+          rarity: 4,
+          enhancementLevel: 9,
+          tuningScore: 110,
+          instanceTier: 'starborn',
+          bGoldSide: true,
+          maxValue: 110,
+        },
+        optimizationEnumeratedDimensions: [],
+      });
+      expect(fixedProfileHash).toBe(
+        hashCanonicalValue(fixedOptimizationProfile)
+      );
+      expect(artifacts.catalog.cultivation.character.levelBreakthrough).toMatchObject({
+        status: 'source-indexed-static-runtime-applied',
+        levelTemplateIncludesBreakthroughAttributes: false,
+      });
+      expect(artifacts.catalog.cultivation.character.profiles).toHaveLength(12);
+      for (const profile of artifacts.catalog.cultivation.character.profiles) {
+        expect(profile.levelBreakthroughRanks).toHaveLength(6);
+        expect(
+          profile.levelBreakthroughRanks.every(
+            row =>
+              row.runtimeApplicationStatus ===
+              'source-indexed-static-runtime-applied'
+          )
+        ).toBe(true);
+      }
+      const mismatchedUnlockProfile =
+        artifacts.catalog.cultivation.character.profiles.find(
+          profile => profile.characterId === 112001
+        );
+      expect(
+        mismatchedUnlockProfile.levelBreakthroughRanks
+          .filter(row => row.unlockedSkillId)
+          .map(row => row.skillUnlock)
+      ).toEqual([
+        expect.objectContaining({
+          skillId: 10300261,
+          availabilityStatus: 'static-evidence-gap',
+          expectedPassiveSkillIds: expect.arrayContaining([11200161]),
+        }),
+        expect.objectContaining({
+          skillId: 10300262,
+          availabilityStatus: 'static-evidence-gap',
+          expectedPassiveSkillIds: expect.arrayContaining([11200162]),
+        }),
+      ]);
+      expect(
+        artifacts.manifests.records.find(
+          record =>
+            record.objectKind === 'character' && record.objectId === '112001'
+        ).blockers
+      ).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'level-breakthrough-skill-unlock-source-mismatch',
+            category: 'evidence-insufficient',
+          }),
+        ])
+      );
+      expect(
+        artifacts.roster.sourceSnapshot.files.il2cppRuntimeContracts
+      ).toMatchObject({
+        sha256:
+          '0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a',
+      });
+      expect(
+        artifacts.roster.sourceSnapshot.files.equipmentInstanceTerms
+      ).toMatchObject({
+        sha256:
+          '4b5ddb03534713fcecbbc41c911c88a3eb57c5f6f3d06cc68a7c3f08f39c34b7',
+      });
+      expect(artifacts.catalog.cultivation.equipment.tuningScore).toMatchObject({
+        ordinaryMaximum: 100,
+        starbornMaximum: 110,
+        status: 'source-indexed-instance-runtime-applied',
+      });
+      expect(artifacts.catalog.cultivation.equipment.instanceTiers).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            identity: 'normal',
+            bGoldSide: false,
+            maximum: 100,
+          }),
+          expect.objectContaining({
+            identity: 'starborn',
+            bGoldSide: true,
+            maximum: 110,
+          }),
+        ])
+      );
+      expect(
+        artifacts.gaps.records.some(record =>
+          [
+            'strict-character-cultivation-runtime-partial',
+            'strict-equipment-cultivation-runtime-partial',
+            'equipment-instance-tier-source-evidence-missing',
+          ].includes(record.code)
+        )
+      ).toBe(false);
       expect(artifacts.catalog.cultivation.soulEssence).toMatchObject({
         star: { minimum: 1, maximum: 4 },
         profiles: expect.arrayContaining([
@@ -257,6 +382,14 @@ describe('M12-B3 optimization qualification generation', () => {
           }),
           expect.objectContaining({
             capabilityIdentity: 'b3-formal-catalog-hard-rejection',
+            status: 'implemented',
+          }),
+          expect.objectContaining({
+            capabilityIdentity: 'b3-hero-rank-separate-static-runtime',
+            status: 'implemented',
+          }),
+          expect.objectContaining({
+            capabilityIdentity: 'b3-equipment-instance-tier-runtime',
             status: 'implemented',
           }),
         ])
@@ -574,6 +707,8 @@ describe('M12-B3 strict cultivation profile', () => {
           'character.starGiftNodeAttributes',
           'character.completedStarGiftAttributes',
           'character.levelBreakthroughLegality',
+          'character.levelBreakthroughAttributes',
+          'character.levelBreakthroughSkillUnlocks',
           'kibo.level',
           'kibo.talents',
           'kibo.bondLevel',
@@ -584,12 +719,10 @@ describe('M12-B3 strict cultivation profile', () => {
           'soulEssence.effectSkillRuntime',
           'equipment.enhancementLevel',
           'equipment.tuningScore',
+          'equipment.instanceTier',
         ]),
         unresolvedDimensions: expect.arrayContaining([
           'character.starGiftNodeSkillLevels',
-          'character.levelBreakthroughAttributes',
-          'character.levelBreakthroughSkillUnlocks',
-          'equipment.instanceTier',
         ]),
       },
     });
@@ -617,6 +750,32 @@ describe('M12-B3 strict cultivation profile', () => {
         )
         .attributes.find(attribute => attribute.id === 2001)
     ).toEqual({ id: 2001, value: 229 });
+    for (const baseSource of actor.verifiedStaticProperties.sources.filter(
+      source => ['equipment-main', 'equipment-sub'].includes(source.kind)
+    )) {
+      const [equipmentId, slotKey] = baseSource.sourceId.split(':');
+      const tuningKind =
+        baseSource.kind === 'equipment-main'
+          ? 'equipment-tuning-main'
+          : 'equipment-tuning-sub';
+      const tuningSource = actor.verifiedStaticProperties.sources.find(
+        source =>
+          source.kind === tuningKind &&
+          source.sourceId.startsWith(`${equipmentId}:${slotKey}:`)
+      );
+      expect(tuningSource).toBeTruthy();
+      for (const attribute of baseSource.attributes) {
+        const tunedDelta = tuningSource.attributes.find(
+          entry => Number(entry.id) === Number(attribute.id)
+        )?.value;
+        const expectedResolved =
+          Math.ceil(Number(attribute.value) * 0.85) +
+          Math.ceil(Number(attribute.value) * 0.6 * 0.0125 * (110 - 20));
+        expect(Number(attribute.value) + Number(tunedDelta)).toBe(
+          expectedResolved
+        );
+      }
+    }
     expect(actor.verifiedStaticKiboProperties).toMatchObject({
       level: 80,
       intimacyLevel: 1,
@@ -693,7 +852,7 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(full.hashes.input).not.toBe(base.hashes.input);
   });
 
-  it('matches the verified level-80 rank-7 Xiaoyu naked panel without the rank-7 attribute row', () => {
+  it('keeps the naked panel stable and applies hero_rank breakthrough rows exactly once', () => {
     const profile = createCultivationProfile({
       actorLevel: 80,
       starGiftRank: 7,
@@ -744,11 +903,52 @@ describe('M12-B3 strict cultivation profile', () => {
       panel.core.tuningStrength.formulaRaw,
       6
     );
+    const breakthroughSources = actor.verifiedStaticProperties.sources.filter(
+      source => source.kind === 'actor-level-breakthrough-attribute'
+    );
+    expect(breakthroughSources).toHaveLength(4);
+    expect(breakthroughSources.map(source => source.sourceId)).toEqual([
+      '101010:0',
+      '101010:1',
+      '101010:2',
+      '101010:3',
+    ]);
+    const breakthroughTotals = new Map();
+    for (const source of breakthroughSources) {
+      for (const attribute of source.attributes) {
+        breakthroughTotals.set(
+          Number(attribute.id),
+          Number(breakthroughTotals.get(Number(attribute.id)) ?? 0) +
+            Number(attribute.value)
+        );
+      }
+    }
+    expect(Object.fromEntries(breakthroughTotals)).toEqual({
+      1: 88,
+      3: 84,
+      4: 88,
+      5: 1416,
+      1001: 1620,
+    });
     expect(
       actor.verifiedStaticProperties.unapplied.filter(
         source => source.kind === 'actor-level-breakthrough-attribute'
       )
-    ).toHaveLength(4);
+    ).toHaveLength(0);
+    expect(
+      compilation.project.optimizationCultivationProfile.actors[0].character
+        .unlockedSkills
+    ).toEqual([
+      expect.objectContaining({
+        skillId: 10101061,
+        availabilityStatus: 'unlocked',
+      }),
+      expect.objectContaining({
+        skillId: 10101062,
+        availabilityStatus: 'not-applicable',
+        reason: 'unnamed-secondary-passive-not-implemented-current-client',
+      }),
+    ]);
     expect(
       actor.verifiedStaticKiboProperties.sources.find(
         source => source.kind === 'kibo-actor-intimacy-inheritance'
@@ -794,6 +994,73 @@ describe('M12-B3 strict cultivation profile', () => {
     ).toBe(true);
   });
 
+  it('enforces normal and starborn instance maxValue before canonical compilation', () => {
+    const team = createAxis().scenario.team;
+    const normalAtCap = createCultivationProfile({
+      tuningScore: 100,
+      equipmentInstanceTier: 'normal',
+      equipmentMaxValue: 100,
+    });
+    const normalOverCap = createCultivationProfile({
+      tuningScore: 110,
+      equipmentInstanceTier: 'normal',
+      equipmentMaxValue: 100,
+    });
+    const starborn = createCultivationProfile({
+      tuningScore: 110,
+      equipmentInstanceTier: 'starborn',
+      equipmentMaxValue: 110,
+    });
+
+    expect(validateOptimizationCultivationProfile(normalAtCap, { team }).valid).toBe(
+      true
+    );
+    expect(validateOptimizationCultivationProfile(normalOverCap, { team }).issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-cultivation-equipment-tuning-score-exceeds-instance-max',
+          maximum: 100,
+          actual: 110,
+        }),
+      ])
+    );
+    expect(validateOptimizationCultivationProfile(starborn, { team }).valid).toBe(
+      true
+    );
+
+    const compilation = createMachineAxisService().compile(
+      createAxis({ profile: starborn })
+    );
+    expect(
+      compilation.project.optimizationCultivationProfile.actors[0].equipment.weapon
+        .instance
+    ).toMatchObject({
+      identity: 'starborn',
+      bGoldSide: true,
+      maxValue: 110,
+    });
+  });
+
+  it('rejects an impossible equipment instance field combination at the public schema boundary', () => {
+    const axis = createAxis({
+      profile: createCultivationProfile({
+        equipmentInstanceTier: 'normal',
+        equipmentMaxValue: 110,
+      }),
+    });
+    const prepared = createMachineAxisService().prepare(axis);
+
+    expect(prepared.valid).toBe(false);
+    expect(prepared.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-cultivation-equipment-instance-max-invalid',
+          path: 'scenario.cultivationProfile.actors.0.equipment.weapon.maxValue',
+        }),
+      ])
+    );
+  });
+
   it('changes static actor and inherited Kibo values with a fixed tuning score', () => {
     const service = createMachineAxisService();
     const low = service.compile(
@@ -818,6 +1085,54 @@ describe('M12-B3 strict cultivation profile', () => {
       lowActor.verifiedStaticKiboProperties.stats.attack
     );
     expect(high.hashes.input).not.toBe(low.hashes.input);
+  });
+
+  it('propagates a legal hero_rank change through actor, Kibo, damage, and canonical hashes', () => {
+    const service = createMachineAxisService();
+    const createDamageAxis = levelBreakthroughRank => {
+      const axis = createAxis({
+        profile: createCultivationProfile({ levelBreakthroughRank }),
+      });
+      axis.actions = [
+        {
+          id: `xiaoyu-a1-rank-${levelBreakthroughRank}`,
+          owner: { kind: 'actor', slotId: 'slot-1' },
+          intent: {
+            kind: 'public-action',
+            publicActionId: 10101001,
+            actionKind: 'normal-attack',
+            attackInput: { sequenceIndex: 1, groupId: 'b3-static-damage' },
+            level: 1,
+          },
+          schedule: { mode: 'absolute', frame: 0 },
+        },
+      ];
+      return axis;
+    };
+    const rankThreeAxis = createDamageAxis(3);
+    const rankFourAxis = createDamageAxis(4);
+    const rankThreeCompilation = service.compile(rankThreeAxis);
+    const rankFourCompilation = service.compile(rankFourAxis);
+    const rankThree = service.simulate(rankThreeAxis);
+    const rankFour = service.simulate(rankFourAxis);
+    const rankThreeActor = rankThreeCompilation.canonicalCompilation.scenario.actors.find(
+      entry => entry.characterId === 101010
+    );
+    const rankFourActor = rankFourCompilation.canonicalCompilation.scenario.actors.find(
+      entry => entry.characterId === 101010
+    );
+
+    expect(rankFourActor.stats.attack).toBeGreaterThan(rankThreeActor.stats.attack);
+    expect(rankFourActor.verifiedStaticKiboProperties.stats.attack).toBeGreaterThan(
+      rankThreeActor.verifiedStaticKiboProperties.stats.attack
+    );
+    expect(rankFour.evaluation.totals.hpDamage).toBeGreaterThan(
+      rankThree.evaluation.totals.hpDamage
+    );
+    expect(rankFour.hashes.input).not.toBe(rankThree.hashes.input);
+    expect(rankFour.actionResolutions).toHaveLength(
+      rankThree.actionResolutions.length
+    );
   });
 
   it('round-trips the strict profile through the Workbench adapter without drift', () => {

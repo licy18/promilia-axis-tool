@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "phase": "M12-B3-A",
+  "phase": "M12-B3-B",
   "sourceSnapshot": {
     "files": {
       "characters": {
@@ -146,6 +146,16 @@
         "sha256": "7c31b396c6418b48fbb8311771fb1c3a0c9bf460f6940fac38dcd62114cf9689",
         "bytes": 33689
       },
+      "equipmentInstanceTerms": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_words.json",
+        "sha256": "4b5ddb03534713fcecbbc41c911c88a3eb57c5f6f3d06cc68a7c3f08f39c34b7",
+        "bytes": 354842
+      },
+      "il2cppRuntimeContracts": {
+        "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+        "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+        "bytes": 97428254
+      },
       "battleElementAssets": {
         "path": "C:/PC2/Codex/AzPr/work/combat-formulas/battle-element-assets.jsonl",
         "sha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
@@ -157,7 +167,7 @@
         "bytes": 458435
       }
     },
-    "sourceSnapshotHash": "95cac6744423e44b"
+    "sourceSnapshotHash": "9a19ffc89723635d"
   },
   "filterContract": {
     "characterElements": [
@@ -10129,5 +10139,5 @@
       ]
     }
   },
-  "rosterHash": "e574c0d8d5c9f335"
+  "rosterHash": "c4c9b57031a11480"
 }

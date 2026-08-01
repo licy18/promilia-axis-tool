@@ -1,6 +1,6 @@
 {
-  "phase": "M12-B3-A",
-  "status": "b3-a-r1-verification-complete-awaiting-product-acceptance",
+  "phase": "M12-B3-B",
+  "status": "b3-b-verification-complete-awaiting-product-acceptance",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -9,12 +9,12 @@
     "equipment": 137,
     "setSkills": 12
   },
-  "sourceSnapshotHash": "95cac6744423e44b",
-  "rosterHash": "e574c0d8d5c9f335",
-  "manifestsHash": "41d8d2857ee6c699",
-  "ledgerHash": "f31dfaa6bed204c3",
-  "bindingMatrixHash": "d21335a454947b3c",
-  "catalogHash": "9a7300aa8825aba6",
+  "sourceSnapshotHash": "9a19ffc89723635d",
+  "rosterHash": "c4c9b57031a11480",
+  "manifestsHash": "d25780b522d3fe58",
+  "ledgerHash": "c145dc13ce831692",
+  "bindingMatrixHash": "f9005f89a268a7d4",
+  "catalogHash": "f430943517426159",
   "maturityCounts": {
     "extracted": 233,
     "runtime-integrated": 32
@@ -27,31 +27,29 @@
     "set-skill": 0
   },
   "gapCounts": {
-    "blockingUniqueGapCount": 727,
+    "blockingUniqueGapCount": 443,
     "byCategory": {
-      "evidence-insufficient": 141,
-      "not-implemented": 586
+      "evidence-insufficient": 5,
+      "not-implemented": 438
     },
     "byCode": {
       "actor-static-profile-missing": 1,
       "character-acceptance-not-published": 9,
       "character-not-optimization-ready": 11,
-      "equipment-instance-tier-source-evidence-missing": 137,
       "equipment-visual-acceptance-not-published": 137,
       "kibo-headless-maturity-not-ready": 43,
       "kibo-passive-static-evidence-gap": 4,
       "kibo-visual-acceptance-not-published": 43,
+      "level-breakthrough-skill-unlock-source-mismatch": 1,
       "set-skill-dynamic-unapplied": 12,
       "set-skill-visual-acceptance-not-published": 12,
       "soulessence-effect-skill-dynamic-unapplied": 54,
       "soulessence-visual-acceptance-not-published": 62,
-      "strict-character-cultivation-runtime-partial": 11,
-      "strict-equipment-cultivation-runtime-partial": 137,
       "strict-soulessence-cultivation-runtime-partial": 54
     },
     "byObjectKind": {
-      "character": 32,
-      "equipment": 411,
+      "character": 22,
+      "equipment": 137,
       "kibo": 90,
       "set-skill": 24,
       "soul-essence": 170

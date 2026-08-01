@@ -598,6 +598,10 @@ function normalizeWorkbenchEquipmentCultivation(value) {
     instanceTier: ['normal', 'starborn'].includes(value.instanceTier)
       ? value.instanceTier
       : null,
+    maxValue: optionalClampedInteger(value.maxValue, 0, 110),
+    ...(value.instance && typeof value.instance === 'object'
+      ? { instance: structuredClone(value.instance) }
+      : {}),
     tuningFormula:
       value.tuningFormula && typeof value.tuningFormula === 'object'
         ? structuredClone(value.tuningFormula)
