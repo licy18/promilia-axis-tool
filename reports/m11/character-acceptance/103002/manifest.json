@@ -9,9 +9,9 @@
   },
   "source": {
     "profileIdentity": "actor:103002:character-combat-profile:v1",
-    "profileHash": "8afdea9a6dcd56e3cc25d311c731b09cc31ce221ec68cf4b037dd0911c7203e2",
+    "profileHash": "418c9d1cce904238aab382a1d710fb9a5080a5075a3922b554885e2051b08569",
     "profileValidationStatus": "character-combat-profile-valid",
-    "sourcePackageHash": "8c3dad80578b9b8e908523890709053bd4005da56eb46d7d224c52484624c761",
+    "sourcePackageHash": "bfdeb93df100803c3f653d1656706ddb92ad02d3932668f1a04d63ccd0c90861",
     "pipelineMaturity": "runtime-applied",
     "combatCoverageState": "partial",
     "characterComplete": false,
@@ -27,9 +27,9 @@
         "replayHash": "c16d0d7d0f2648b8d83f7219a8ad886e4eb85fbb8dcca7fd1610472ae6ec9f35",
         "summaryHash": "f9144e8d2724b63653363556774ce8d5f64e33439edd39a684e18f12f3f0e2bd",
         "canonicalHashes": {
-          "input": "9b33c2b5fa3079da",
-          "data": "3b1911c4f7179fe5",
-          "trace": "f0f2756690278bd5",
+          "input": "6f21593f7441f374",
+          "data": "e3937a8dc354ac2b",
+          "trace": "2fb2582642fb0ba5",
           "evaluation": null
         },
         "assertionCount": 129
@@ -44,15 +44,15 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "c07ca3ad859975a6",
-          "data": "ebfdf52b6e2173bf",
-          "trace": "fe5710baa2b68e36",
+          "input": "e173d5c7f113327b",
+          "data": "de745aa9cd708102",
+          "trace": "0565489225d783f9",
           "evaluation": "b06186eaa569be69"
         },
         "actionCount": 10,
         "executedActionCount": 10,
         "traceIndex": {
-          "traceHash": "fe5710baa2b68e36",
+          "traceHash": "0565489225d783f9",
           "actionCount": 10,
           "hitCount": 13,
           "effectEventCount": 2,
@@ -78,9 +78,9 @@
       "scenarioSetHash": null,
       "bindingStatus": "not-requested",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:103002::11bcde8677031917",
-        "qualificationSubjectHash": "11bcde8677031917",
-        "scenarioSetHash": "a5abaf0ea10aba33",
+        "recordIdentity": "character-product-acceptance:103002::e245bb3a3d6dd017",
+        "qualificationSubjectHash": "e245bb3a3d6dd017",
+        "scenarioSetHash": "6393d2b79cec6045",
         "scenarioIdentities": [
           "m11-d-103002-visual-acceptance"
         ]
@@ -3442,9 +3442,9 @@
         "sourceRecordHash": "96fe387fc804ea34"
       },
       {
-        "requirementIdentity": "contract:effect:effect:33:f36b4f659031a7c8",
+        "requirementIdentity": "contract:effect:effect:33:a89b6c460e3b0638",
         "dimension": "effect",
-        "subjectIdentity": "effect:33:f36b4f659031a7c8",
+        "subjectIdentity": "effect:33:a89b6c460e3b0638",
         "sourceDisposition": "gap",
         "contractStatus": null,
         "impactClassification": "gameplay-impacting",
@@ -3461,12 +3461,12 @@
           "judgment-condition-runtime-unimplemented",
           "semantic-condition-not-standalone-gameplay-effect"
         ],
-        "sourceRecordHash": "01477a34deb3f466"
+        "sourceRecordHash": "a66a84e85bebf806"
       },
       {
-        "requirementIdentity": "contract:effect:effect:34:c6354587f014a734",
+        "requirementIdentity": "contract:effect:effect:34:b4865fcf59ec0e84",
         "dimension": "effect",
-        "subjectIdentity": "effect:34:c6354587f014a734",
+        "subjectIdentity": "effect:34:b4865fcf59ec0e84",
         "sourceDisposition": "gap",
         "contractStatus": null,
         "impactClassification": "gameplay-impacting",
@@ -3483,12 +3483,12 @@
           "judgment-condition-runtime-unimplemented",
           "semantic-condition-not-standalone-gameplay-effect"
         ],
-        "sourceRecordHash": "f08465007a6858a8"
+        "sourceRecordHash": "4294abe4fd973a20"
       },
       {
-        "requirementIdentity": "contract:effect:effect:35:7ff3e5e369f044d0",
+        "requirementIdentity": "contract:effect:effect:35:49387ce522ecdd44",
         "dimension": "effect",
-        "subjectIdentity": "effect:35:7ff3e5e369f044d0",
+        "subjectIdentity": "effect:35:49387ce522ecdd44",
         "sourceDisposition": "gap",
         "contractStatus": null,
         "impactClassification": "gameplay-impacting",
@@ -3505,12 +3505,12 @@
           "judgment-condition-runtime-unimplemented",
           "semantic-condition-not-standalone-gameplay-effect"
         ],
-        "sourceRecordHash": "b985aed3a0c37986"
+        "sourceRecordHash": "0dc4e4be47551da0"
       },
       {
-        "requirementIdentity": "contract:effect:effect:36:6cf75cc30327c802",
+        "requirementIdentity": "contract:effect:effect:36:30fab7b69c654036",
         "dimension": "effect",
-        "subjectIdentity": "effect:36:6cf75cc30327c802",
+        "subjectIdentity": "effect:36:30fab7b69c654036",
         "sourceDisposition": "gap",
         "contractStatus": null,
         "impactClassification": "gameplay-impacting",
@@ -3527,7 +3527,7 @@
           "judgment-condition-runtime-unimplemented",
           "semantic-condition-not-standalone-gameplay-effect"
         ],
-        "sourceRecordHash": "01fe396e34a24612"
+        "sourceRecordHash": "1ce895dd7b28bab2"
       },
       {
         "requirementIdentity": "contract:effect:effect:37:e9fbe85226c01498",
@@ -11770,7 +11770,7 @@
         "window-boundary": 1
       }
     },
-    "inventoryHash": "de8934008b4165b5"
+    "inventoryHash": "b99aadf8baf1b3f6"
   },
   "sourceGapInventory": {
     "schemaVersion": 1,
@@ -19924,7 +19924,7 @@
         "runnerKind": "canonical-character-golden",
         "inputReference": {
           "reportPath": "reports/m10/103002/golden-trace.json",
-          "reportHash": "1cc1b076af3fb1eb",
+          "reportHash": "58367f89bcc10303",
           "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 103002 --assert-clean"
         },
         "execution": {
@@ -19932,9 +19932,9 @@
           "stableReplay": true,
           "workbenchRoundTrip": "not-applicable",
           "canonicalHashes": {
-            "input": "9b33c2b5fa3079da",
-            "data": "3b1911c4f7179fe5",
-            "trace": "f0f2756690278bd5",
+            "input": "6f21593f7441f374",
+            "data": "e3937a8dc354ac2b",
+            "trace": "2fb2582642fb0ba5",
             "evaluation": null
           }
         },
@@ -21277,7 +21277,7 @@
             "assertionHash": "4e0ca9761fbfa162"
           }
         ],
-        "scenarioCaseHash": "2d1c9052033ac8e9"
+        "scenarioCaseHash": "94c119faa43be19c"
       },
       {
         "schemaVersion": 1,
@@ -21285,7 +21285,7 @@
         "runnerKind": "machine-axis",
         "inputReference": {
           "fixturePath": "fixtures/character-acceptance/103002-visual.json",
-          "inputHash": "c07ca3ad859975a6",
+          "inputHash": "e173d5c7f113327b",
           "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/103002-visual.json"
         },
         "execution": {
@@ -21294,9 +21294,9 @@
           "workbenchRoundTrip": "passed",
           "canonicalHashes": {
             "algorithm": "fnv1a64-utf8-v1",
-            "input": "c07ca3ad859975a6",
-            "data": "ebfdf52b6e2173bf",
-            "trace": "fe5710baa2b68e36",
+            "input": "e173d5c7f113327b",
+            "data": "de745aa9cd708102",
+            "trace": "0565489225d783f9",
             "evaluation": "b06186eaa569be69"
           }
         },
@@ -22446,7 +22446,7 @@
             "assertionHash": "1ebb23438e769331"
           }
         ],
-        "scenarioCaseHash": "2ad002a7bab1d548"
+        "scenarioCaseHash": "bdc69c0cbf3fc05e"
       }
     ],
     "summary": {
@@ -22459,7 +22459,7 @@
         "machine-axis": 1
       }
     },
-    "scenarioSetHash": "e88ab0394a7ff71c"
+    "scenarioSetHash": "d34bfd22486b2f13"
   },
   "coverageContext": {
     "denominator": {
@@ -27972,14 +27972,14 @@
         ]
       },
       {
-        "requirementIdentity": "contract:effect:effect:33:f36b4f659031a7c8",
+        "requirementIdentity": "contract:effect:effect:33:a89b6c460e3b0638",
         "dimension": "effect",
-        "subjectIdentity": "effect:33:f36b4f659031a7c8",
+        "subjectIdentity": "effect:33:a89b6c460e3b0638",
         "required": true,
         "status": "blocked",
         "contractStatus": null,
         "sourceDisposition": "gap",
-        "sourceRecordHash": "01477a34deb3f466",
+        "sourceRecordHash": "a66a84e85bebf806",
         "coverageSelector": {
           "effectIdentity": "battle-element:103002274",
           "kind": "effect"
@@ -27997,14 +27997,14 @@
         ]
       },
       {
-        "requirementIdentity": "contract:effect:effect:34:c6354587f014a734",
+        "requirementIdentity": "contract:effect:effect:34:b4865fcf59ec0e84",
         "dimension": "effect",
-        "subjectIdentity": "effect:34:c6354587f014a734",
+        "subjectIdentity": "effect:34:b4865fcf59ec0e84",
         "required": true,
         "status": "blocked",
         "contractStatus": null,
         "sourceDisposition": "gap",
-        "sourceRecordHash": "f08465007a6858a8",
+        "sourceRecordHash": "4294abe4fd973a20",
         "coverageSelector": {
           "effectIdentity": "battle-element:103002274",
           "kind": "effect"
@@ -28022,14 +28022,14 @@
         ]
       },
       {
-        "requirementIdentity": "contract:effect:effect:35:7ff3e5e369f044d0",
+        "requirementIdentity": "contract:effect:effect:35:49387ce522ecdd44",
         "dimension": "effect",
-        "subjectIdentity": "effect:35:7ff3e5e369f044d0",
+        "subjectIdentity": "effect:35:49387ce522ecdd44",
         "required": true,
         "status": "blocked",
         "contractStatus": null,
         "sourceDisposition": "gap",
-        "sourceRecordHash": "b985aed3a0c37986",
+        "sourceRecordHash": "0dc4e4be47551da0",
         "coverageSelector": {
           "effectIdentity": "battle-element:103002273",
           "kind": "effect"
@@ -28047,14 +28047,14 @@
         ]
       },
       {
-        "requirementIdentity": "contract:effect:effect:36:6cf75cc30327c802",
+        "requirementIdentity": "contract:effect:effect:36:30fab7b69c654036",
         "dimension": "effect",
-        "subjectIdentity": "effect:36:6cf75cc30327c802",
+        "subjectIdentity": "effect:36:30fab7b69c654036",
         "required": true,
         "status": "blocked",
         "contractStatus": null,
         "sourceDisposition": "gap",
-        "sourceRecordHash": "01fe396e34a24612",
+        "sourceRecordHash": "1ce895dd7b28bab2",
         "coverageSelector": {
           "effectIdentity": "battle-element:103002273",
           "kind": "effect"
@@ -38258,7 +38258,7 @@
         "window-boundary": 1
       }
     },
-    "matrixHash": "e9e5fcc0ba252d89"
+    "matrixHash": "d8483941afb13f86"
   },
   "ledger": {
     "schemaVersion": 1,
@@ -60676,9 +60676,9 @@
   "derivation": {
     "status": "derived-artifacts-verified",
     "inputIncludedDerivedArtifacts": false,
-    "sourceOfTruthHash": "ef51265e032acc77"
+    "sourceOfTruthHash": "6c73cf7f7cefb25c"
   },
-  "qualificationSubjectHash": "11bcde8677031917",
+  "qualificationSubjectHash": "e245bb3a3d6dd017",
   "maturity": {
     "currentState": "runtime-integrated",
     "earnedStates": [
@@ -60718,5 +60718,5 @@
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "2856526cf6b765e7"
+  "manifestHash": "b6ba85f5eaf6a9d8"
 }

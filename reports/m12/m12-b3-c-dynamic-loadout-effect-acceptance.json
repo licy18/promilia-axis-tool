@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 6,
-  "phase": "M12-B3-C4",
+  "schemaVersion": 7,
+  "phase": "M12-B3-C4-R1",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "e05b10fd27a6c723a773a7680169a9180031c48e",
+  "baseCommit": "307daae3ca819c30f69153f108c9a3163a72729e",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
     "phase": "M12-B3-C3",
@@ -10,7 +10,7 @@
     "status": "product-accepted"
   },
   "scope": {
-    "batch": "tuning-mark-state-and-overlimit-event-condition-bridge",
+    "batch": "tuning-mark-priority-consume-single-packet-closure",
     "soulEssenceIds": [10124, 10131, 10136],
     "formalSearchExecuted": false,
     "m12cLocked": true,
@@ -35,8 +35,23 @@
     "tuningMechanics": {
       "sourceIdentity": "combat-overlimit-mechanics-20260718.json",
       "contractHash": "f39bf45155f12746",
-      "verifiedPackageFileSha256": "e9e8a3b7f5af3a3cb51a0bef6b9338b59e62f2660acc61b3eaad9c67010f17c4",
-      "verifiedPackageHash": "1d7cc2a0e376d081ccfcb7c3815098e6f8885a052281004ca44201fc83a6745b"
+      "verifiedPackageFileSha256": "74468a5944609d8ec050421335eb784e5832f317b2f4e0b68a4d8538ff1c76f2",
+      "verifiedPackageHash": "1c4462509a6b59a6cfa46b676b369cd155f3527e76e85cb543b359f48aa83afb"
+    },
+    "tuningConsumePriorityRuntimeEvidence": {
+      "path": "scripts/evidence/tuning-consume-priority-runtime-evidence.json",
+      "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+      "binaryBytes": 222485544,
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "consumer": "ConsumePackElement.CalculateConsumeCount@RVA=0x1385260",
+      "candidateLoopRange": "0x138587D-0x1385B3C",
+      "candidateLoopSha256": "f254a66bed3d1a662985e2b2107000d7d12223619eedbc67cbfdce9af3a5b0b9",
+      "insufficientFallbackRange": "0x138592C-0x1385932",
+      "selectedElementStoreRva": "0x138594C",
+      "injector": "ConsumePackElement.DoInject@RVA=0x1386950",
+      "selectedPacketLookupRange": "0x1386AD2-0x1386B65",
+      "selectedPacketLookupSha256": "ae7cd17a10c4b798c6eb4712b5d39a28dff9d440c111038e006b78ecc1aca291",
+      "conclusion": "elementArr is traversed in ascending index order; insufficient candidates fall through; the first sufficient candidate becomes m_consumeElementId and DoInject resolves exactly that candidate packet"
     },
     "soulControlClosure": {
       "skillCount": 62,
@@ -46,6 +61,16 @@
     }
   },
   "compiledContracts": {
+    "priorityJudgmentSelection": {
+      "groupKey": "source action + trigger frame + judgment source identity",
+      "runtimeSelectionMode": "priority-first-sufficient-candidate",
+      "priorityDirection": "element-arr-index-ascending",
+      "candidateSource": "ConsumePackElement.elementArr",
+      "candidatePacketMappingSource": "ConsumePackElement.injectElementDataEffects",
+      "selectionState": "canonical tuning mark state at the queued consume event",
+      "selectedResult": "one mark consume and at most one mapped overlimit packet",
+      "noCandidateResult": "one group diagnostic, no consume, no packet"
+    },
     "conditionOperators": [
       {
         "conditionType": 8,
@@ -149,6 +174,35 @@
       "laterToughnessDamageIncreases": true,
       "rightOpenExpiryRestoresBaseline": true
     },
+    "priorityConsume": {
+      "112001260BothCandidatesSufficient": {
+        "orderedCandidates": [250, 450],
+        "selectedMarkId": 250,
+        "emittedPacketElementId": 299,
+        "unselectedMarkId": 450,
+        "unselectedMarkPreserved": true
+      },
+      "112001260FirstInsufficientSecondSufficient": {
+        "orderedCandidates": [250, 450],
+        "selectedMarkId": 450,
+        "emittedPacketElementId": 499
+      },
+      "112001260NoSufficientCandidate": {
+        "consumeCount": 0,
+        "packetCount": 0,
+        "groupDiagnosticCount": 1,
+        "diagnosticCode": "tuning-consume-no-sufficient-priority-candidate"
+      },
+      "111001332CrossGroupRegression": {
+        "orderedCandidates": [750, 250],
+        "selectionUsesSameGenericContract": true
+      },
+      "sameFrameStateOrdering": "selection observes canonical expiry/acquisition before the consume event",
+      "selectedPacketLandedTriggers10131": true,
+      "selectedPacketMissTriggers10131": false,
+      "unselectedPacketMaterialized": false,
+      "replayProjectionStable": true
+    },
     "refreshAndReplayStable": true,
     "cycleInheritanceStable": true
   },
@@ -186,36 +240,37 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "8dcb0be1d668e31d",
-    "rosterHash": "6e3bef78327971df",
-    "manifestsHash": "7b91353ea59fd9ff",
-    "ledgerHash": "15ea7c546ac035da",
-    "bindingMatrixHash": "c4d2d2c7f5eed6b5",
-    "qualificationCatalogHash": "6b55d6c04641b66f",
+    "sourceSnapshotHash": "aec5244760fc3e25",
+    "rosterHash": "3ca3b661eefc7eba",
+    "manifestsHash": "20e73a31a02ab336",
+    "ledgerHash": "cf90ab696b44af41",
+    "bindingMatrixHash": "f05a3a75d60b34fd",
+    "qualificationCatalogHash": "5d689b68ea6ec00f",
     "dynamicLoadoutEffectCensusHash": "188b2f8036236259",
     "soulEssenceEffectCatalogHash": "e002776d999c842f",
     "soulEssenceSourceSnapshotHash": "87bc2d712a143bb9",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
     "soulEssenceTriggerContractHash": "c381d1508e85d4fa",
     "machineAxisCanonicalHashes": {
-      "input": "572695e45011465c",
-      "data": "35835e12c6a6e279",
-      "trace": "67802e753205e852",
+      "input": "c8bfd28dcb890f4f",
+      "data": "98deb78db6293f88",
+      "trace": "8586fe2ee148b0fe",
       "evaluation": "0b410dc9255d2654"
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "verified tuning event source identities and packet elementTypes became first-class package data",
+    "reason": "ordered tuning judgment groups, candidate packet mappings, and binary-backed priority selection became first-class package data",
     "gameplayAssertionDrift": 0,
     "rubyReplayAndSummaryHashDrift": 0,
     "xiaoyuAndHanReplayHashChange": "metadata-only; all authoritative numeric assertions pass",
-    "cycleEvaluationHashUnchanged": "412605349bbf2fe3"
+    "cycleEvaluationHashUnchanged": "412605349bbf2fe3",
+    "cycleHash": "2b724ad55f96138b"
   },
   "verification": {
     "status": "passed",
     "focusedMechanics": {
       "files": 5,
-      "tests": 99,
+      "tests": 108,
       "status": "passed"
     },
     "machineAxis": {
@@ -231,7 +286,7 @@
     },
     "canonicalAndRuntime": {
       "files": 6,
-      "tests": 104,
+      "tests": 58,
       "status": "passed"
     },
     "headlessGoldenMigration": {
@@ -256,7 +311,9 @@
       "appliedSoulSourceCount": 17,
       "appliedSoulSourceDriftCount": 0,
       "tuningConditionSourceCount": 5,
-      "tuningConditionSourceDriftCount": 0
+      "tuningConditionSourceDriftCount": 0,
+      "tuningConsumePriorityGroupCount": 12,
+      "tuningConsumePrioritySourceDriftCount": 0
     },
     "productionBuild": "passed",
     "gitDiffCheck": "passed"

@@ -143,6 +143,10 @@ try {
         loadoutPropertyTagAudit.summary.tuningConditionCount,
       loadoutTuningConditionDriftCount:
         loadoutPropertyTagAudit.summary.tuningConditionDriftCount,
+      tuningConsumePriorityGroupCount:
+        loadoutPropertyTagAudit.summary.tuningConsumePriorityGroupCount,
+      tuningConsumePriorityDriftCount:
+        loadoutPropertyTagAudit.summary.tuningConsumePriorityDriftCount,
     },
     requiredTracks,
     missingTracks,
@@ -228,35 +232,64 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
   const definitions = (catalog?.definitions ?? []).filter(
     definition => definition.runtimeStatus === 'runtime-applied'
   );
+  const tuningConsumePriorityGroups = collectTuningConsumePriorityGroups(
+    mechanicsPackage
+  );
   const requestedElementIds = new Set(
-    definitions.flatMap(definition => [
-      Number(definition.effect?.elementId),
-      Number(definition.trigger?.elementId),
-      ...(definition.sourceClosure?.wrapperElementIds ?? []).map(Number),
-      ...(definition.sourceClosure?.removalPaths ?? []).flatMap(path => [
-        Number(path.triggerElementId),
-        Number(path.removerElementId),
-        ...(path.removedElementIds ?? []).map(Number),
+    [
+      ...definitions.flatMap(definition => [
+        Number(definition.effect?.elementId),
+        Number(definition.trigger?.elementId),
+        ...(definition.sourceClosure?.wrapperElementIds ?? []).map(Number),
+        ...(definition.sourceClosure?.removalPaths ?? []).flatMap(path => [
+          Number(path.triggerElementId),
+          Number(path.removerElementId),
+          ...(path.removedElementIds ?? []).map(Number),
+        ]),
+        ...(definition.trigger?.condition?.conditions ?? []).flatMap(
+          condition =>
+            (condition.tuningProfiles ?? []).flatMap(profile => [
+              Number(profile.markId),
+              Number(profile.overlimitPacketElementId),
+              Number(profile.damageElementId),
+            ])
+        ),
       ]),
-      ...(definition.trigger?.condition?.conditions ?? []).flatMap(condition =>
-        (condition.tuningProfiles ?? []).flatMap(profile => [
-          Number(profile.markId),
-          Number(profile.overlimitPacketElementId),
-          Number(profile.damageElementId),
-        ])
-      ),
-    ])
+      ...tuningConsumePriorityGroups.flatMap(group => [
+        Number(group.contract.judgmentElementId),
+        ...(group.contract.judgmentCandidates ?? []).map(candidate =>
+          Number(candidate.packetElementId)
+        ),
+      ]),
+    ]
+  );
+  const requestedPathIds = new Set(
+    tuningConsumePriorityGroups.flatMap(group =>
+      (group.contract.judgmentCandidates ?? []).map(candidate =>
+        String(candidate.packetPathId)
+      )
+    )
   );
   const sourceRowsByElementId = new Map();
+  const sourceRowsByPathId = new Map();
   for (const line of sourceBytes.toString('utf8').split(/\r?\n/u)) {
     if (!line) continue;
     const match = line.match(/"elementConfigId"\s*:\s*(\d+)/u);
     const elementId = Number(match?.[1]);
-    if (!requestedElementIds.has(elementId)) continue;
-    const row = JSON.parse(line);
+    const pathId = line.match(/"path_id"\s*:\s*(-?\d+)/u)?.[1] ?? null;
+    if (
+      !requestedElementIds.has(elementId) &&
+      !requestedPathIds.has(String(pathId))
+    ) {
+      continue;
+    }
+    const row = JSON.parse(
+      line.replace(/("m_PathID"\s*:\s*)(-?\d+)/gu, '$1"$2"')
+    );
     if (Number(row?.typetree?.elementConfigId) === elementId) {
       sourceRowsByElementId.set(elementId, row);
     }
+    if (pathId != null) sourceRowsByPathId.set(String(pathId), row);
   }
   const supportedPropertyTags = new Set(
     (catalog?.propertyTagContract?.bindings ?? [])
@@ -476,6 +509,14 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
       issueCodes,
     };
   });
+  const tuningConsumePriority = await createTuningConsumePriorityAudit({
+    groups: tuningConsumePriorityGroups,
+    sourceRowsByElementId,
+    sourceRowsByPathId,
+  });
+  const propertyDriftCount = records.filter(
+    record => record.issueCodes.length > 0
+  ).length;
   return {
     source: {
       path: sourcePath,
@@ -487,7 +528,9 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
     },
     summary: {
       sourceCount: records.length,
-      driftCount: records.filter(record => record.issueCodes.length > 0).length,
+      driftCount:
+        propertyDriftCount + tuningConsumePriority.summary.driftCount,
+      propertyTagDriftCount: propertyDriftCount,
       tuningConditionCount: records.reduce(
         (sum, record) =>
           sum + Number(record.triggerCondition.tuningConditions?.length ?? 0),
@@ -501,9 +544,293 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
           ).length,
         0
       ),
+      tuningConsumePriorityGroupCount:
+        tuningConsumePriority.summary.groupCount,
+      tuningConsumePriorityDriftCount:
+        tuningConsumePriority.summary.driftCount,
     },
     records,
+    tuningConsumePriority,
   };
+}
+
+function collectTuningConsumePriorityGroups(mechanicsPackage) {
+  const groups = new Map();
+  for (const binding of mechanicsPackage?.controlBindings ?? []) {
+    for (const effect of binding.effects ?? []) {
+      const contract = effect.tuningOverlimit;
+      if (
+        contract?.runtimeSelectionMode !==
+          'priority-first-sufficient-candidate' ||
+        !contract.judgmentGroupIdentity
+      ) {
+        continue;
+      }
+      const identity = String(contract.judgmentGroupIdentity);
+      const group = groups.get(identity) ?? {
+        judgmentGroupIdentity: identity,
+        controlSkillId: Number(binding.controlSkillId),
+        mapIndex: Number(effect.mapIndex),
+        contract,
+        effects: [],
+      };
+      group.effects.push({
+        markId: Number(contract.markId),
+        packetElementId: Number(contract.packetElementId),
+        effectIdentity: effect.effectIdentity,
+        sourceIdentity: effect.sourceIdentity,
+      });
+      groups.set(identity, group);
+    }
+  }
+  return [...groups.values()].sort((left, right) =>
+    left.judgmentGroupIdentity.localeCompare(right.judgmentGroupIdentity)
+  );
+}
+
+async function createTuningConsumePriorityAudit({
+  groups,
+  sourceRowsByElementId,
+  sourceRowsByPathId,
+}) {
+  if (groups.length === 0) {
+    return { summary: { groupCount: 0, driftCount: 0 }, evidence: null, rows: [] };
+  }
+  const evidence = groups[0].contract.priorityRuntimeEvidence ?? {};
+  const binary = await readFile(evidence.binaryPath);
+  const dumpSource = await readFile(evidence.dumpPath, 'utf8');
+  const evidenceIssueCodes = [
+    ...(hashBytes(binary) === evidence.binarySha256
+      ? []
+      : ['tuning-consume-priority-binary-hash-drift']),
+    ...(hashBytes(
+      readPortableExecutableRvaRange(binary, evidence.candidateLoopRange)
+    ) === evidence.candidateLoopSha256
+      ? []
+      : ['tuning-consume-priority-candidate-loop-drift']),
+    ...(hashBytes(
+      readPortableExecutableRvaRange(
+        binary,
+        evidence.selectedPacketLookupRange
+      )
+    ) === evidence.selectedPacketLookupSha256
+      ? []
+      : ['tuning-consume-priority-packet-lookup-drift']),
+    ...((evidence.dumpRequiredDeclarations ?? []).every(declaration =>
+      dumpSource.includes(declaration)
+    )
+      ? []
+      : ['tuning-consume-priority-dump-declaration-drift']),
+    ...(dumpSource.includes(
+      `// RVA: 0x${String(evidence.consumerMethodRva)
+        .slice(2)
+        .toUpperCase()}`
+    ) &&
+    dumpSource.includes(
+      `// RVA: 0x${String(evidence.injectMethodRva)
+        .slice(2)
+        .toUpperCase()}`
+    )
+      ? []
+      : ['tuning-consume-priority-method-rva-drift']),
+    ...(evidence.candidateOrder === 'element-arr-index-ascending' &&
+    evidence.selectionRule ===
+      'first-candidate-with-layer-count-greater-than-or-equal-to-consume-layer-num' &&
+    evidence.fallbackRule ===
+      'continue-to-next-candidate-when-current-layer-count-is-insufficient' &&
+    evidence.packetRule ===
+      'lookup-inject-element-data-dict-by-selected-consume-element-id'
+      ? []
+      : ['tuning-consume-priority-runtime-semantics-drift']),
+  ];
+  const rows = groups.map(group => {
+    const contract = group.contract;
+    const sourceRow = sourceRowsByElementId.get(
+      Number(contract.judgmentElementId)
+    );
+    const sourceTree = sourceRow?.typetree ?? {};
+    const sourceMarkIds = normalizeOrderedIntegers(sourceTree.elementArr);
+    const sourceCandidates = sourceMarkIds.map((markId, priorityIndex) => {
+      const mapping = sourceTree.injectElementDataEffects?.[priorityIndex];
+      const packetPathIds = normalizeExactPathIds(mapping?.elements);
+      const packetRow = sourceRowsByPathId.get(packetPathIds[0]);
+      return {
+        priorityIndex,
+        markId,
+        mappedMarkId: Number(mapping?.elementAttr),
+        packetPathId: packetPathIds[0] ?? null,
+        packetElementId: Number(packetRow?.typetree?.elementConfigId) || null,
+      };
+    });
+    const generatedCandidates = (contract.judgmentCandidates ?? []).map(
+      candidate => ({
+        priorityIndex: Number(candidate.priorityIndex),
+        markId: Number(candidate.markId),
+        mappedMarkId: Number(candidate.markId),
+        packetPathId: String(candidate.packetPathId),
+        packetElementId: Number(candidate.packetElementId),
+      })
+    );
+    const generatedEffectPairs = [
+      ...new Map(
+        group.effects.map(effect => [
+          `${effect.markId}:${effect.packetElementId}`,
+          {
+            markId: effect.markId,
+            packetElementId: effect.packetElementId,
+          },
+        ])
+      ).values(),
+    ]
+      .sort((left, right) => {
+        const leftIndex = generatedCandidates.findIndex(
+          candidate => candidate.markId === left.markId
+        );
+        const rightIndex = generatedCandidates.findIndex(
+          candidate => candidate.markId === right.markId
+        );
+        return leftIndex - rightIndex;
+      });
+    const expectedEffectPairs = generatedCandidates.map(candidate => ({
+      markId: candidate.markId,
+      packetElementId: candidate.packetElementId,
+    }));
+    const issueCodes = [
+      ...evidenceIssueCodes,
+      ...(sourceRow ? [] : ['tuning-consume-priority-source-row-missing']),
+      ...(Number(sourceTree.consumeMode) === 0
+        ? []
+        : ['tuning-consume-priority-source-mode-drift']),
+      ...(JSON.stringify(sourceMarkIds) ===
+      JSON.stringify(contract.judgmentCandidateMarkIds ?? [])
+        ? []
+        : ['tuning-consume-priority-element-arr-order-drift']),
+      ...(JSON.stringify(sourceCandidates) ===
+      JSON.stringify(generatedCandidates)
+        ? []
+        : ['tuning-consume-priority-candidate-packet-map-drift']),
+      ...(JSON.stringify(generatedEffectPairs) ===
+      JSON.stringify(expectedEffectPairs)
+        ? []
+        : ['tuning-consume-priority-runtime-effect-membership-drift']),
+      ...(String(group.judgmentGroupIdentity).includes(
+        `:${contract.judgmentElementId}:${contract.judgmentPathId}`
+      )
+        ? []
+        : ['tuning-consume-priority-group-identity-drift']),
+      ...(group.effects.every(
+        effect =>
+          effect.markId !== 0 &&
+          effect.packetElementId !== 0 &&
+          effect.sourceIdentity
+      )
+        ? []
+        : ['tuning-consume-priority-effect-source-identity-missing']),
+      ...(contract.runtimeSelectionMode ===
+        'priority-first-sufficient-candidate' &&
+      contract.priorityDirection === 'element-arr-index-ascending'
+        ? []
+        : ['tuning-consume-priority-generated-selection-mode-drift']),
+    ];
+    return {
+      judgmentGroupIdentity: group.judgmentGroupIdentity,
+      controlSkillId: group.controlSkillId,
+      mapIndex: group.mapIndex,
+      judgmentElementId: Number(contract.judgmentElementId),
+      judgmentPathId: String(contract.judgmentPathId),
+      sourceConsumeMode: Number(sourceTree.consumeMode),
+      sourceMarkIds,
+      generatedMarkIds: contract.judgmentCandidateMarkIds,
+      sourceCandidates,
+      generatedCandidates,
+      generatedEffectPairs,
+      runtimeSelectionMode: contract.runtimeSelectionMode,
+      priorityDirection: contract.priorityDirection,
+      sourceIdentity: contract.judgmentSourceIdentity,
+      runtimeEvidenceSourceIdentity: evidence.sourceIdentity,
+      status:
+        issueCodes.length === 0
+          ? 'tuning-consume-priority-source-ready'
+          : 'tuning-consume-priority-source-drift',
+      issueCodes,
+    };
+  });
+  return {
+    summary: {
+      groupCount: rows.length,
+      driftCount: rows.filter(row => row.issueCodes.length > 0).length,
+    },
+    evidence: {
+      sourceIdentity: evidence.sourceIdentity,
+      binaryPath: evidence.binaryPath,
+      binarySha256: evidence.binarySha256,
+      consumerMethod: evidence.consumerMethod,
+      consumerMethodRva: evidence.consumerMethodRva,
+      candidateLoopRange: evidence.candidateLoopRange,
+      candidateLoopSha256: evidence.candidateLoopSha256,
+      fallbackRule: evidence.fallbackRule,
+      injectMethod: evidence.injectMethod,
+      injectMethodRva: evidence.injectMethodRva,
+      selectedPacketLookupRange: evidence.selectedPacketLookupRange,
+      selectedPacketLookupSha256: evidence.selectedPacketLookupSha256,
+      packetRule: evidence.packetRule,
+      issueCodes: evidenceIssueCodes,
+    },
+    rows,
+  };
+}
+
+function normalizeExactPathIds(value) {
+  const result = [];
+  visit(value);
+  return [...new Set(result)];
+
+  function visit(node) {
+    if (!node || typeof node !== 'object') return;
+    if (/^-?\d+$/u.test(String(node.m_PathID ?? ''))) {
+      result.push(String(node.m_PathID));
+      return;
+    }
+    for (const child of Object.values(node)) visit(child);
+  }
+}
+
+function normalizeOrderedIntegers(value) {
+  return (Array.isArray(value) ? value : [])
+    .map(Number)
+    .filter(Number.isInteger);
+}
+
+function readPortableExecutableRvaRange(binary, range) {
+  const match = String(range).match(/^0x([0-9a-f]+)-0x([0-9a-f]+)$/iu);
+  if (!match) throw new Error(`invalid PE RVA range: ${range}`);
+  const startRva = Number.parseInt(match[1], 16);
+  const endRva = Number.parseInt(match[2], 16);
+  const peOffset = binary.readUInt32LE(0x3c);
+  const sectionCount = binary.readUInt16LE(peOffset + 6);
+  const optionalHeaderSize = binary.readUInt16LE(peOffset + 20);
+  const sectionTableOffset = peOffset + 24 + optionalHeaderSize;
+  const resolveOffset = rva => {
+    for (let index = 0; index < sectionCount; index += 1) {
+      const offset = sectionTableOffset + index * 40;
+      const virtualSize = binary.readUInt32LE(offset + 8);
+      const virtualAddress = binary.readUInt32LE(offset + 12);
+      const rawSize = binary.readUInt32LE(offset + 16);
+      const rawOffset = binary.readUInt32LE(offset + 20);
+      if (
+        rva >= virtualAddress &&
+        rva < virtualAddress + Math.max(virtualSize, rawSize)
+      ) {
+        return rawOffset + rva - virtualAddress;
+      }
+    }
+    throw new Error(`PE RVA outside sections: 0x${rva.toString(16)}`);
+  };
+  return binary.subarray(resolveOffset(startRva), resolveOffset(endRva));
+}
+
+function hashBytes(value) {
+  return createHash('sha256').update(value).digest('hex');
 }
 
 function createTuningConditionAuditRows({

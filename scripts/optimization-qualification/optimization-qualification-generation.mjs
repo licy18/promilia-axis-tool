@@ -20,7 +20,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   soulessences:
     '385dbb96cf0feca4b42c7d3d63040c506c310beeb62ed7f9f37ac68fd012dcbe',
   verifiedMechanics:
-    'e9e8a3b7f5af3a3cb51a0bef6b9338b59e62f2660acc61b3eaad9c67010f17c4',
+    '74468a5944609d8ec050421335eb784e5832f317b2f4e0b68a4d8538ff1c76f2',
   'newTable:accessory.json':
     '449ed58b7e0d034c7c1fb48114468078810a97e4a61fe596cea53c19208c4b39',
   'newTable:accessory_customed.json':
@@ -385,7 +385,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C4',
+      phase: 'M12-B3-C4-R1',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1315,8 +1315,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C4',
-    status: 'b3-c4-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C4-R1',
+    status: 'b3-c4-r1-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1749,7 +1749,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C4 Tuning-Mark Condition Bridge Closure\n\n' +
+    '# M12-B3-C4-R1 Priority Consume Closure\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1758,7 +1758,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects; C3 adds source-bound EntrySkill(22) switch provenance and wrapper lifetimes for 10147/10151. C4 compiles CheckElementType(8), HasElementId(10), CheckSkillType(11), and CheckTargetElementId(12) into the shared trigger predicate registry, consuming the canonical tuning-mark state and landed overlimit event context for 10124/10131/10136. Soul essence 10018 remains blocked by its outer prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
+    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects; C3 adds source-bound EntrySkill(22) switch provenance and wrapper lifetimes for 10147/10151. C4 compiles CheckElementType(8), HasElementId(10), CheckSkillType(11), and CheckTargetElementId(12) into the shared trigger predicate registry, consuming the canonical tuning-mark state and landed overlimit event context for 10124/10131/10136. C4-R1 preserves ordered ConsumePackElement candidate groups and selects only the first currently sufficient candidate before emitting one overlimit packet. Soul essence 10018 remains blocked by its outer prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'

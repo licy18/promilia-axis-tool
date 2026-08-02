@@ -6,7 +6,7 @@
   "ownerName": "涂山小玉",
   "recipeIdentity": "actor:101010:character-combat-recipe:v1",
   "recipeHash": "8ddd99c751fcf40e23a25fa2d0ca821df5b95863252a44ceea29b644cf61b3b7",
-  "compilerInputHash": "a25ab905ebf0dcc6b32b18ad4f588e8742c2842c9c8a7afb8c3ce1c376577f92",
+  "compilerInputHash": "eb3b9af84409c76c159e9497ea8df2036ba7f6d40b58849fcde9d5a4210cd484",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": false,
   "reachableControlSkillIds": [
@@ -8703,6 +8703,7 @@
           "tuning-consume-judgment-missing",
           "tuning-consume-mark-identity-ambiguous",
           "tuning-consume-success-branch-unresolved",
+          "tuning-consume-current-packet-not-in-candidate-map",
           "effect-trigger-frame-missing",
           "effect-target-unresolved"
         ],
@@ -9725,6 +9726,7 @@
           "tuning-consume-judgment-missing",
           "tuning-consume-mark-identity-ambiguous",
           "tuning-consume-success-branch-unresolved",
+          "tuning-consume-current-packet-not-in-candidate-map",
           "effect-trigger-frame-missing",
           "effect-target-unresolved",
           "inject-wrapper-classified-through-child-edges",
@@ -24983,7 +24985,19 @@
               "judgmentCandidateMarkIds": [
                 950
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101012:0:101010209:-8630062226069243067",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 950,
+                  "packetElementId": 999,
+                  "packetPathId": "1781318263043700654",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -25308,7 +25322,11 @@
               "judgmentPathId": null,
               "judgmentSourceIdentity": null,
               "judgmentCandidateMarkIds": [],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101012:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -25352,6 +25370,7 @@
               "tuning-consume-judgment-missing",
               "tuning-consume-mark-identity-ambiguous",
               "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
               "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -27137,7 +27156,19 @@
               "judgmentCandidateMarkIds": [
                 750
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:101010210:-5107736885784262990",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 750,
+                  "packetElementId": 799,
+                  "packetPathId": "4731523060341306954",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -27254,7 +27285,19 @@
               "judgmentCandidateMarkIds": [
                 750
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:101010210:-5107736885784262990",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 750,
+                  "packetElementId": 799,
+                  "packetPathId": "4731523060341306954",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -27371,7 +27414,19 @@
               "judgmentCandidateMarkIds": [
                 750
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:101010210:-5107736885784262990",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 750,
+                  "packetElementId": 799,
+                  "packetPathId": "4731523060341306954",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -28552,7 +28607,11 @@
               "judgmentPathId": null,
               "judgmentSourceIdentity": null,
               "judgmentCandidateMarkIds": [],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -28596,6 +28655,7 @@
               "tuning-consume-judgment-missing",
               "tuning-consume-mark-identity-ambiguous",
               "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
               "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -29573,7 +29633,19 @@
               "judgmentCandidateMarkIds": [
                 950
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:101010209:-8630062226069243067",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 950,
+                  "packetElementId": 999,
+                  "packetPathId": "1781318263043700654",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -29690,7 +29762,19 @@
               "judgmentCandidateMarkIds": [
                 950
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:101010209:-8630062226069243067",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 950,
+                  "packetElementId": 999,
+                  "packetPathId": "1781318263043700654",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -29807,7 +29891,19 @@
               "judgmentCandidateMarkIds": [
                 950
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:101010209:-8630062226069243067",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 950,
+                  "packetElementId": 999,
+                  "packetPathId": "1781318263043700654",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -30592,7 +30688,11 @@
               "judgmentPathId": null,
               "judgmentSourceIdentity": null,
               "judgmentCandidateMarkIds": [],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -30636,6 +30736,7 @@
               "tuning-consume-judgment-missing",
               "tuning-consume-mark-identity-ambiguous",
               "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
               "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -34454,7 +34555,19 @@
               "judgmentCandidateMarkIds": [
                 750
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101021:0:101010210:-5107736885784262990",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 750,
+                  "packetElementId": 799,
+                  "packetPathId": "4731523060341306954",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -34879,7 +34992,11 @@
               "judgmentPathId": null,
               "judgmentSourceIdentity": null,
               "judgmentCandidateMarkIds": [],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101021:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -34923,6 +35040,7 @@
               "tuning-consume-judgment-missing",
               "tuning-consume-mark-identity-ambiguous",
               "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
               "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -35716,7 +35834,19 @@
               "judgmentCandidateMarkIds": [
                 750
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101021:0:101010210:-5107736885784262990",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 750,
+                  "packetElementId": 799,
+                  "packetPathId": "4731523060341306954",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -36182,7 +36312,11 @@
               "judgmentPathId": null,
               "judgmentSourceIdentity": null,
               "judgmentCandidateMarkIds": [],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101021:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -36226,6 +36360,7 @@
               "tuning-consume-judgment-missing",
               "tuning-consume-mark-identity-ambiguous",
               "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
               "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -46620,7 +46755,19 @@
               "judgmentCandidateMarkIds": [
                 750
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101042:0:101010210:-5107736885784262990",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 750,
+                  "packetElementId": 799,
+                  "packetPathId": "4731523060341306954",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -47045,7 +47192,11 @@
               "judgmentPathId": null,
               "judgmentSourceIdentity": null,
               "judgmentCandidateMarkIds": [],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101042:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -47089,6 +47240,7 @@
               "tuning-consume-judgment-missing",
               "tuning-consume-mark-identity-ambiguous",
               "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
               "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -47882,7 +48034,19 @@
               "judgmentCandidateMarkIds": [
                 750
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101042:0:101010210:-5107736885784262990",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 750,
+                  "packetElementId": 799,
+                  "packetPathId": "4731523060341306954",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -48348,7 +48512,11 @@
               "judgmentPathId": null,
               "judgmentSourceIdentity": null,
               "judgmentCandidateMarkIds": [],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101042:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -48392,6 +48560,7 @@
               "tuning-consume-judgment-missing",
               "tuning-consume-mark-identity-ambiguous",
               "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
               "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -49487,7 +49656,19 @@
               "judgmentCandidateMarkIds": [
                 750
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101042:1:101010210:-5107736885784262990",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 750,
+                  "packetElementId": 799,
+                  "packetPathId": "4731523060341306954",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -49912,7 +50093,11 @@
               "judgmentPathId": null,
               "judgmentSourceIdentity": null,
               "judgmentCandidateMarkIds": [],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101042:1:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -49956,6 +50141,7 @@
               "tuning-consume-judgment-missing",
               "tuning-consume-mark-identity-ambiguous",
               "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
               "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -50749,7 +50935,19 @@
               "judgmentCandidateMarkIds": [
                 750
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101042:1:101010210:-5107736885784262990",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 750,
+                  "packetElementId": 799,
+                  "packetPathId": "4731523060341306954",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -51215,7 +51413,11 @@
               "judgmentPathId": null,
               "judgmentSourceIdentity": null,
               "judgmentCandidateMarkIds": [],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101042:1:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -51259,6 +51461,7 @@
               "tuning-consume-judgment-missing",
               "tuning-consume-mark-identity-ambiguous",
               "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
               "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -53587,7 +53790,19 @@
               "judgmentCandidateMarkIds": [
                 750
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101049:1:101010210:-5107736885784262990",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 750,
+                  "packetElementId": 799,
+                  "packetPathId": "4731523060341306954",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -54012,7 +54227,11 @@
               "judgmentPathId": null,
               "judgmentSourceIdentity": null,
               "judgmentCandidateMarkIds": [],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101049:1:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -54056,6 +54275,7 @@
               "tuning-consume-judgment-missing",
               "tuning-consume-mark-identity-ambiguous",
               "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
               "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -54849,7 +55069,19 @@
               "judgmentCandidateMarkIds": [
                 750
               ],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101049:1:101010210:-5107736885784262990",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 750,
+                  "packetElementId": 799,
+                  "packetPathId": "4731523060341306954",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+                }
+              ],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -55315,7 +55547,11 @@
               "judgmentPathId": null,
               "judgmentSourceIdentity": null,
               "judgmentCandidateMarkIds": [],
-              "runtimeSelectionMode": "single-mark-packet"
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101049:1:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
             },
             "formula": {
               "commonFunctionId": 1,
@@ -55359,6 +55595,7 @@
               "tuning-consume-judgment-missing",
               "tuning-consume-mark-identity-ambiguous",
               "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
               "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -80250,7 +80487,19 @@
             "judgmentCandidateMarkIds": [
               950
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101012:0:101010209:-8630062226069243067",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 950,
+                "packetElementId": 999,
+                "packetPathId": "1781318263043700654",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -80345,7 +80594,11 @@
             "judgmentPathId": null,
             "judgmentSourceIdentity": null,
             "judgmentCandidateMarkIds": [],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101012:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -80389,6 +80642,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -85026,7 +85280,19 @@
             "judgmentCandidateMarkIds": [
               950
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:101010209:-8630062226069243067",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 950,
+                "packetElementId": 999,
+                "packetPathId": "1781318263043700654",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -85143,7 +85409,19 @@
             "judgmentCandidateMarkIds": [
               950
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:101010209:-8630062226069243067",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 950,
+                "packetElementId": 999,
+                "packetPathId": "1781318263043700654",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -85260,7 +85538,19 @@
             "judgmentCandidateMarkIds": [
               950
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:101010209:-8630062226069243067",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 950,
+                "packetElementId": 999,
+                "packetPathId": "1781318263043700654",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -85355,7 +85645,11 @@
             "judgmentPathId": null,
             "judgmentSourceIdentity": null,
             "judgmentCandidateMarkIds": [],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -85399,6 +85693,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -85891,7 +86186,19 @@
             "judgmentCandidateMarkIds": [
               750
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:101010210:-5107736885784262990",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetElementId": 799,
+                "packetPathId": "4731523060341306954",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -86008,7 +86315,19 @@
             "judgmentCandidateMarkIds": [
               750
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:101010210:-5107736885784262990",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetElementId": 799,
+                "packetPathId": "4731523060341306954",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -86125,7 +86444,19 @@
             "judgmentCandidateMarkIds": [
               750
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:101010210:-5107736885784262990",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetElementId": 799,
+                "packetPathId": "4731523060341306954",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -86220,7 +86551,11 @@
             "judgmentPathId": null,
             "judgmentSourceIdentity": null,
             "judgmentCandidateMarkIds": [],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -86264,6 +86599,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -89327,7 +89663,19 @@
             "judgmentCandidateMarkIds": [
               750
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101021:0:101010210:-5107736885784262990",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetElementId": 799,
+                "packetPathId": "4731523060341306954",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -89431,7 +89779,19 @@
             "judgmentCandidateMarkIds": [
               750
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101021:0:101010210:-5107736885784262990",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetElementId": 799,
+                "packetPathId": "4731523060341306954",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -89528,7 +89888,11 @@
             "judgmentPathId": null,
             "judgmentSourceIdentity": null,
             "judgmentCandidateMarkIds": [],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101021:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -89572,6 +89936,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -89628,7 +89993,11 @@
             "judgmentPathId": null,
             "judgmentSourceIdentity": null,
             "judgmentCandidateMarkIds": [],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101021:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -89672,6 +90041,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -94430,7 +94800,19 @@
             "judgmentCandidateMarkIds": [
               750
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101042:0:101010210:-5107736885784262990",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetElementId": 799,
+                "packetPathId": "4731523060341306954",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -94534,7 +94916,19 @@
             "judgmentCandidateMarkIds": [
               750
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101042:0:101010210:-5107736885784262990",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetElementId": 799,
+                "packetPathId": "4731523060341306954",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -94631,7 +95025,11 @@
             "judgmentPathId": null,
             "judgmentSourceIdentity": null,
             "judgmentCandidateMarkIds": [],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101042:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -94675,6 +95073,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -94731,7 +95130,11 @@
             "judgmentPathId": null,
             "judgmentSourceIdentity": null,
             "judgmentCandidateMarkIds": [],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101042:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -94775,6 +95178,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -97297,7 +97701,19 @@
             "judgmentCandidateMarkIds": [
               750
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101042:1:101010210:-5107736885784262990",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetElementId": 799,
+                "packetPathId": "4731523060341306954",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -97401,7 +97817,19 @@
             "judgmentCandidateMarkIds": [
               750
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101042:1:101010210:-5107736885784262990",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetElementId": 799,
+                "packetPathId": "4731523060341306954",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -97498,7 +97926,11 @@
             "judgmentPathId": null,
             "judgmentSourceIdentity": null,
             "judgmentCandidateMarkIds": [],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101042:1:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -97542,6 +97974,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -97598,7 +98031,11 @@
             "judgmentPathId": null,
             "judgmentSourceIdentity": null,
             "judgmentCandidateMarkIds": [],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101042:1:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -97642,6 +98079,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -100260,7 +100698,19 @@
             "judgmentCandidateMarkIds": [
               750
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101049:1:101010210:-5107736885784262990",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetElementId": 799,
+                "packetPathId": "4731523060341306954",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -100364,7 +100814,19 @@
             "judgmentCandidateMarkIds": [
               750
             ],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101049:1:101010210:-5107736885784262990",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetElementId": 799,
+                "packetPathId": "4731523060341306954",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -100461,7 +100923,11 @@
             "judgmentPathId": null,
             "judgmentSourceIdentity": null,
             "judgmentCandidateMarkIds": [],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101049:1:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -100505,6 +100971,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -100561,7 +101028,11 @@
             "judgmentPathId": null,
             "judgmentSourceIdentity": null,
             "judgmentCandidateMarkIds": [],
-            "runtimeSelectionMode": "single-mark-packet"
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101049:1:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
           },
           "formula": {
             "commonFunctionId": 1,
@@ -100605,6 +101076,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -105476,6 +105948,13 @@
             "markElementIds": [
               950
             ],
+            "candidateEffectMappings": [
+              {
+                "priorityIndex": 0,
+                "markId": 950,
+                "packetPathIds": []
+              }
+            ],
             "canConsume": false,
             "checkTarget": 0,
             "executeTarget": 0,
@@ -105843,6 +106322,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-static-evidence-gap",
             "effect-target-static-evidence-gap"
           ],
@@ -109602,6 +110082,13 @@
             "markElementIds": [
               750
             ],
+            "candidateEffectMappings": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetPathIds": []
+              }
+            ],
             "canConsume": false,
             "checkTarget": 0,
             "executeTarget": 0,
@@ -109777,6 +110264,13 @@
             "markElementIds": [
               750
             ],
+            "candidateEffectMappings": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetPathIds": []
+              }
+            ],
             "canConsume": false,
             "checkTarget": 0,
             "executeTarget": 0,
@@ -109951,6 +110445,13 @@
             "consumeLayerMaxNum": 1,
             "markElementIds": [
               750
+            ],
+            "candidateEffectMappings": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetPathIds": []
+              }
             ],
             "canConsume": false,
             "checkTarget": 0,
@@ -111350,6 +111851,13 @@
             "markElementIds": [
               950
             ],
+            "candidateEffectMappings": [
+              {
+                "priorityIndex": 0,
+                "markId": 950,
+                "packetPathIds": []
+              }
+            ],
             "canConsume": false,
             "checkTarget": 0,
             "executeTarget": 0,
@@ -111523,6 +112031,13 @@
             "markElementIds": [
               950
             ],
+            "candidateEffectMappings": [
+              {
+                "priorityIndex": 0,
+                "markId": 950,
+                "packetPathIds": []
+              }
+            ],
             "canConsume": false,
             "checkTarget": 0,
             "executeTarget": 0,
@@ -111695,6 +112210,13 @@
             "consumeLayerMaxNum": 1,
             "markElementIds": [
               950
+            ],
+            "candidateEffectMappings": [
+              {
+                "priorityIndex": 0,
+                "markId": 950,
+                "packetPathIds": []
+              }
             ],
             "canConsume": false,
             "checkTarget": 0,
@@ -113093,6 +113615,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-static-evidence-gap",
             "effect-target-static-evidence-gap"
           ],
@@ -114256,6 +114779,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-static-evidence-gap",
             "effect-target-static-evidence-gap"
           ],
@@ -116971,6 +117495,13 @@
             "markElementIds": [
               750
             ],
+            "candidateEffectMappings": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetPathIds": []
+              }
+            ],
             "canConsume": false,
             "checkTarget": 0,
             "executeTarget": 0,
@@ -117145,6 +117676,13 @@
             "consumeLayerMaxNum": 1,
             "markElementIds": [
               750
+            ],
+            "candidateEffectMappings": [
+              {
+                "priorityIndex": 0,
+                "markId": 750,
+                "packetPathIds": []
+              }
             ],
             "canConsume": false,
             "checkTarget": 0,
@@ -118201,6 +118739,7 @@
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
             "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "runtime-trigger-projectile-collision-frame",
             "runtime-target-from-projectile-collision",
             "effect-target-static-evidence-gap"
@@ -118372,7 +118911,8 @@
             "effect-target-static-evidence-gap",
             "tuning-consume-judgment-missing",
             "tuning-consume-mark-identity-ambiguous",
-            "tuning-consume-success-branch-unresolved"
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map"
           ],
           "rawEffectIdentities": [
             "10101021|0|elements|5|-5107736885784262990|element:4731523060341306954|unresolved-frame|0",
@@ -121426,7 +121966,8 @@
           "sp-formula-not-literal-function-5",
           "tuning-consume-judgment-missing",
           "tuning-consume-mark-identity-ambiguous",
-          "tuning-consume-success-branch-unresolved"
+          "tuning-consume-success-branch-unresolved",
+          "tuning-consume-current-packet-not-in-candidate-map"
         ],
         "sourceIdentity": "characters.items[id=101010].skillSlots[slot=203,skillId=10101021]",
         "sourceIdentities": [
@@ -121518,7 +122059,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=101010].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=229]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-119715824990577950__-119715824990577950.json#startFrame|toOwnElementDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1058249236301801642__-1058249236301801642.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[21]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6673499874988910762__-6673499874988910762.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[26]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[27]|battle-element-assets.jsonl#path_id=-4529113272733101309"
     }
   },
-  "contractHash": "79d00091ef34fb319aa01c805d14d17aca81f64ceba75174b0558e9390633097",
+  "contractHash": "21227b46365b1ff6c397188c97cb40af51f99774a161aeb147b9a216ed77ae7c",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 7,

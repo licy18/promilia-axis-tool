@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "1d7cc2a0e376d081ccfcb7c3815098e6f8885a052281004ca44201fc83a6745b",
+  "packageHash": "1c4462509a6b59a6cfa46b676b369cd155f3527e76e85cb543b359f48aa83afb",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -65474,6 +65474,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -65515,6 +65516,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -66574,6 +66576,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "inject-wrapper-classified-through-child-edges"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800112].level.labels[0]"
@@ -67337,6 +67340,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "sp-recover-type-not-direct-sp"
@@ -68658,7 +68662,8 @@
         "nested-damage-trigger-lifecycle-not-expanded",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved"
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900313].level.labels[0]"
     },
@@ -75120,6 +75125,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -75161,6 +75167,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -76609,6 +76616,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "inject-wrapper-classified-through-child-edges"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/skill_control_10800112__-4901894643090470632.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -77403,6 +77411,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "sp-recover-type-not-direct-sp"
@@ -78776,7 +78785,8 @@
         "nested-damage-trigger-lifecycle-not-expanded",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved"
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900313.asset/MonoBehaviour/skill_control_19900313__-3472649091528756862.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },

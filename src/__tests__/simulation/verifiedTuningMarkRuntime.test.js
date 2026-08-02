@@ -68,6 +68,187 @@ describe('verified tuning mark runtime', () => {
     );
   });
 
+  it('preserves ordered priority judgments and candidate packet mappings from source', () => {
+    const cases = [
+      {
+        controlSkillId: 11200113,
+        judgmentElementId: 112001260,
+        candidates: [
+          { priorityIndex: 0, markId: 250, packetElementId: 299 },
+          { priorityIndex: 1, markId: 450, packetElementId: 499 },
+        ],
+      },
+      {
+        controlSkillId: 11100113,
+        judgmentElementId: 111001332,
+        candidates: [
+          { priorityIndex: 0, markId: 750, packetElementId: 799 },
+          { priorityIndex: 1, markId: 250, packetElementId: 299 },
+        ],
+      },
+    ];
+
+    for (const expected of cases) {
+      const effects = mechanicsPackage.controlBindings
+        .find(binding => binding.controlSkillId === expected.controlSkillId)
+        .effects.filter(
+          effect =>
+            effect.tuningOverlimit?.judgmentElementId ===
+            expected.judgmentElementId
+        );
+
+      expect(effects).toHaveLength(expected.candidates.length);
+      expect(
+        effects.map(effect => effect.tuningOverlimit).map(contract => ({
+          judgmentGroupIdentity: contract.judgmentGroupIdentity,
+          runtimeSelectionMode: contract.runtimeSelectionMode,
+          priorityDirection: contract.priorityDirection,
+          candidates: contract.judgmentCandidates.map(candidate => ({
+            priorityIndex: candidate.priorityIndex,
+            markId: candidate.markId,
+            packetElementId: candidate.packetElementId,
+          })),
+          consumerMethodRva:
+            contract.priorityRuntimeEvidence?.consumerMethodRva,
+          injectMethodRva: contract.priorityRuntimeEvidence?.injectMethodRva,
+        }))
+      ).toEqual(
+        expected.candidates.map(() => ({
+          judgmentGroupIdentity: expect.stringContaining(
+            `:${expected.judgmentElementId}:`
+          ),
+          runtimeSelectionMode: 'priority-first-sufficient-candidate',
+          priorityDirection: 'element-arr-index-ascending',
+          candidates: expected.candidates,
+          consumerMethodRva: '0x1385260',
+          injectMethodRva: '0x1386950',
+        }))
+      );
+    }
+  });
+
+  it('selects only the first sufficient candidate from one real multi-mark judgment', () => {
+    const result = createDirectJudgmentGeneration({
+      controlSkillId: 11200113,
+      durationMs: 5_000,
+      initialMarks: [
+        createInheritedMarkWithCount(250, 2),
+        createInheritedMarkWithCount(450, 2),
+      ],
+    });
+
+    expect(projectConsumeEvents(result)).toEqual([
+      { markId: 250, before: 2, after: 0, packetElementId: 299 },
+    ]);
+    expect(projectFinalMarkCounts(result, [250, 450])).toEqual({
+      250: 0,
+      450: 2,
+    });
+    expect(projectConsumeUnresolved(result)).toEqual([]);
+  });
+
+  it('falls through an insufficient first candidate and emits one selected packet', () => {
+    const result = createDirectJudgmentGeneration({
+      controlSkillId: 11200113,
+      durationMs: 5_000,
+      initialMarks: [
+        createInheritedMarkWithCount(250, 1),
+        createInheritedMarkWithCount(450, 2),
+      ],
+    });
+
+    expect(projectConsumeEvents(result)).toEqual([
+      { markId: 450, before: 2, after: 0, packetElementId: 499 },
+    ]);
+    expect(projectFinalMarkCounts(result, [250, 450])).toEqual({
+      250: 1,
+      450: 0,
+    });
+    expect(projectConsumeUnresolved(result)).toEqual([]);
+  });
+
+  it('reports one group diagnostic when no priority candidate is sufficient', () => {
+    const result = createDirectJudgmentGeneration({
+      controlSkillId: 11200113,
+      durationMs: 5_000,
+      initialMarks: [
+        createInheritedMarkWithCount(250, 1),
+        createInheritedMarkWithCount(450, 1),
+      ],
+    });
+
+    expect(projectConsumeEvents(result)).toEqual([]);
+    expect(projectConsumeUnresolved(result)).toEqual([
+      expect.objectContaining({
+        kind: 'tuning-consume-no-sufficient-priority-candidate',
+        candidates: [
+          { priorityIndex: 0, markId: 250, required: 2, current: 1 },
+          { priorityIndex: 1, markId: 450, required: 2, current: 1 },
+        ],
+      }),
+    ]);
+  });
+
+  it('applies the same priority selection to another real [750,250] judgment', () => {
+    const result = createDirectJudgmentGeneration({
+      controlSkillId: 11100113,
+      durationMs: 5_000,
+      initialMarks: [
+        createInheritedMarkWithCount(750, 3),
+        createInheritedMarkWithCount(250, 3),
+      ],
+    });
+
+    expect(projectConsumeEvents(result)).toEqual([
+      { markId: 750, before: 3, after: 0, packetElementId: 799 },
+    ]);
+    expect(projectFinalMarkCounts(result, [750, 250])).toEqual({
+      250: 3,
+      750: 0,
+    });
+  });
+
+  it('selects from the real state after same-frame expiry and acquisition', () => {
+    const triggerTimeMs = (191 * 1000) / 60;
+    const expiredFirst = createDirectJudgmentGeneration({
+      controlSkillId: 11200113,
+      durationMs: 5_000,
+      initialMarks: [
+        {
+          ...createInheritedMarkWithCount(250, 2),
+          decayRemainingMs: triggerTimeMs,
+        },
+        createInheritedMarkWithCount(450, 2),
+      ],
+    });
+    const acquiredFirst = createDirectJudgmentGeneration({
+      controlSkillId: 11200113,
+      durationMs: 5_000,
+      initialMarks: [
+        createInheritedMarkWithCount(250, 1),
+        createInheritedMarkWithCount(450, 2),
+      ],
+      additionalEffects: [
+        createDirectAcquireEffect('same-frame-thunder-acquire', 250, 191, -1),
+      ],
+    });
+
+    expect(projectConsumeEvents(expiredFirst)).toEqual([
+      { markId: 450, before: 2, after: 0, packetElementId: 499 },
+    ]);
+    expect(projectFinalMarkCounts(expiredFirst, [250, 450])).toEqual({
+      250: 1,
+      450: 0,
+    });
+    expect(projectConsumeEvents(acquiredFirst)).toEqual([
+      { markId: 250, before: 2, after: 0, packetElementId: 299 },
+    ]);
+    expect(projectFinalMarkCounts(acquiredFirst, [250, 450])).toEqual({
+      250: 0,
+      450: 2,
+    });
+  });
+
   it('refreshes one shared timer on real acquisitions and then decays one layer every 20 seconds', () => {
     const result = simulateVerifiedProject({
       durationMs: 42_000,
@@ -599,20 +780,28 @@ function createDirectConsumeEffect(
   };
 }
 
-function createDirectTuningGeneration({ durationMs, initialMark, effects }) {
+function createDirectTuningGeneration({
+  durationMs,
+  initialMark,
+  initialMarks,
+  effects,
+  controlBinding = { frameRate: 60 },
+}) {
   const action = {
     id: 'direct-tuning-action',
     type: 'skill',
     actorId: 'actor-direct',
     startMs: 0,
-    durationMs: 2_000,
+    durationMs,
   };
   return createVerifiedTuningMarkGeneration({
     scenario: {
       time: { durationMs },
       actors: [],
       enemy: { id: 'enemy-direct' },
-      initialRuntimeState: { tuningMarks: [initialMark] },
+      initialRuntimeState: {
+        tuningMarks: initialMarks ?? (initialMark ? [initialMark] : []),
+      },
       actions: [action],
     },
     effectGeneration: {
@@ -621,7 +810,7 @@ function createDirectTuningGeneration({ durationMs, initialMark, effects }) {
           action.id,
           {
             ready: true,
-            controlBinding: { frameRate: 60 },
+            controlBinding,
             effects,
             hits: [],
           },
@@ -629,6 +818,78 @@ function createDirectTuningGeneration({ durationMs, initialMark, effects }) {
       ]),
     },
   });
+}
+
+function createDirectJudgmentGeneration({
+  controlSkillId,
+  durationMs,
+  initialMarks,
+  additionalEffects = [],
+}) {
+  const binding = mechanicsPackage.controlBindings.find(
+    candidate => candidate.controlSkillId === controlSkillId
+  );
+  const effects = [
+    ...additionalEffects,
+    ...binding.effects.filter(effect => effect.tuningOverlimit),
+  ];
+  return createDirectTuningGeneration({
+    durationMs,
+    initialMarks,
+    effects,
+    controlBinding: {
+      frameRate: binding.frameRate ?? 60,
+      logic: binding.logic,
+    },
+  });
+}
+
+function createInheritedMarkWithCount(markId, count) {
+  const profile = mechanicsPackage.tuningMechanicsCatalog.profiles.find(
+    candidate => candidate.markId === markId
+  );
+  return {
+    ...createInheritedMark(profile, 20_000),
+    layers: Array.from({ length: count }, (_, index) => ({
+      sourceActionId: `inherited-${markId}-${index + 1}`,
+      sourceActorId: 'actor-direct',
+      sourceIdentity: { markId, layer: index + 1 },
+    })),
+  };
+}
+
+function projectConsumeEvents(result) {
+  return result.events
+    .filter(event => event.kind === 'consume')
+    .map(event => {
+      const packet = result.combatEvents.find(
+        candidate =>
+          candidate.kind === 'overlimit-damage' &&
+          candidate.profile.markId === event.markId &&
+          candidate.timeMs === event.timeMs
+      );
+      return {
+        markId: event.markId,
+        before: event.before,
+        after: event.after,
+        packetElementId: packet?.profile?.overlimitPacket?.elementId ?? null,
+      };
+    });
+}
+
+function projectFinalMarkCounts(result, markIds) {
+  return Object.fromEntries(
+    markIds
+      .map(markId => [
+        markId,
+        result.finalState.find(state => state.markId === markId).currentValue,
+      ])
+      .sort(([left], [right]) => left - right)
+  );
+}
+
+function projectConsumeUnresolved(result) {
+  return result.unresolved.filter(row => row.kind.startsWith('tuning-consume-'));
 }
 
 function simulateVerifiedProject({

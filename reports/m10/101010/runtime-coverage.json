@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 101010,
-  "sourcePackageHash": "8c3dad80578b9b8e908523890709053bd4005da56eb46d7d224c52484624c761",
+  "sourcePackageHash": "bfdeb93df100803c3f653d1656706ddb92ad02d3932668f1a04d63ccd0c90861",
   "actionRows": [
     {
       "actionIdentity": "actor|101010|10101001|0|10101003",
@@ -737,6 +737,7 @@
         "nested-effect-wrapper-semantics-unresolved",
         "toughness:pre-shield-damage-inputs-incomplete",
         "trigger-frame-missing",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
@@ -899,6 +900,7 @@
         "sp-formula-not-literal-function-5",
         "toughness:pre-shield-damage-inputs-incomplete",
         "trigger-frame-missing",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -1137,5 +1139,5 @@
       "static-evidence-gap": 8
     }
   },
-  "profileHash": "e08af83c1164458e2a7fc6300a685245e66ca97c5c09f74e1d1bb8c8be1e9e1c"
+  "profileHash": "26a11a91917bd4ca6982788e93e1103dd8d5a8c572c0855f24ba844e19c0a082"
 }

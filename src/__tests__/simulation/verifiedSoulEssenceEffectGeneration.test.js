@@ -782,6 +782,115 @@ describe('verified soul essence effect generation', () => {
     }
   );
 
+  it('selects one 112001260 priority packet before evaluating 10131 AfterDamage', () => {
+    const createScenario = defaultWillHit =>
+      createRealSoulScenario({
+        actorCharacterId: 112001,
+        soulEssenceId: 10131,
+        effectSkillId: 1900270,
+        durationMs: 12_000,
+        combatScenario: {
+          projectile: { targetDistance: 0, defaultWillHit },
+        },
+        initialRuntimeState: {
+          tuningMarks: [
+            createInheritedTuningMark(250, 2, 20_000),
+            createInheritedTuningMark(450, 2, 20_000),
+          ],
+        },
+        actionPlan: [
+          {
+            id: 'dual-priority-overlimit-source',
+            actionKind: 'ultimate',
+            actorCharacterId: 112001,
+            startFrame: 60,
+          },
+        ],
+      });
+    const landed = createScenario(true);
+    const replayed = createScenario(true);
+    const missed = createScenario(false);
+    const project = result => ({
+      consumes: result.verifiedTuningMarkGeneration.events
+        .filter(event => event.kind === 'consume')
+        .map(event => ({
+          markId: event.markId,
+          before: event.before,
+          after: event.after,
+          selection: event.selectedPriorityCandidate,
+        })),
+      packets: result.verifiedTuningMarkGeneration.combatEvents
+        .filter(event => event.kind === 'overlimit-damage')
+        .map(event => ({
+          profileKey: event.profile.key,
+          targetElementIds: event.eventContext.targetElementIds,
+          landed: event.eventContext.landed,
+          selection: event.eventContext.selectedPriorityCandidate,
+        })),
+      finalMarks: result.verifiedTuningMarkGeneration.finalState
+        .filter(state => [250, 450].includes(state.markId))
+        .map(state => ({ markId: state.markId, value: state.currentValue })),
+      commands: result.verifiedSoulEssenceEffectGeneration.effectCommands
+        .filter(command => command.sourceSoulEssenceId === 10131)
+        .map(command => ({
+          sourceTuningEventIdentity: command.sourceTuningEventIdentity,
+          sourceActorId: command.sourceActorId,
+          targetId: command.targetId,
+        })),
+    });
+
+    expect(project(landed)).toEqual({
+      consumes: [
+        {
+          markId: 250,
+          before: 2,
+          after: 0,
+          selection: {
+            priorityIndex: 0,
+            markId: 250,
+            packetElementId: 299,
+          },
+        },
+      ],
+      packets: [
+        {
+          profileKey: 'thunder',
+          targetElementIds: [299],
+          landed: true,
+          selection: {
+            priorityIndex: 0,
+            markId: 250,
+            packetElementId: 299,
+          },
+        },
+      ],
+      finalMarks: [
+        { markId: 250, value: 0 },
+        { markId: 450, value: 2 },
+      ],
+      commands: [expect.objectContaining({ sourceActorId: 'actor-112001' })],
+    });
+    expect(project(replayed)).toEqual(project(landed));
+    expect(project(missed)).toMatchObject({
+      packets: [
+        {
+          profileKey: 'thunder',
+          targetElementIds: [299],
+          landed: false,
+          selection: {
+            priorityIndex: 0,
+            markId: 250,
+            packetElementId: 299,
+          },
+        },
+      ],
+      commands: [],
+    });
+    expect(
+      project(missed).packets.some(packet => packet.profileKey === 'dark')
+    ).toBe(false);
+  });
+
   it('requires the real wind overlimit element types and final normal-attack tag for 10136', () => {
     const ownerCharacterId = 111001;
     const initialWind = createInheritedTuningMark(750, 1, 20_000);

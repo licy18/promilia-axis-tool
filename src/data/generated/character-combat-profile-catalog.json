@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-profile-catalog",
   "status": "character-combat-profile-catalog-ready",
-  "sourcePackageHash": "8c3dad80578b9b8e908523890709053bd4005da56eb46d7d224c52484624c761",
+  "sourcePackageHash": "bfdeb93df100803c3f653d1656706ddb92ad02d3932668f1a04d63ccd0c90861",
   "profileSchema": "azpr://schemas/character-combat-profile/v1",
   "profiles": [
     {
       "ownerId": 101003,
       "ownerName": "寒悠悠",
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "0d09756bb850e8c9dfe380044dca2cd0430e23511b8bd990b51d57e39c8be487",
+      "profileHash": "d83d4e175798061dad59dbf4de7e652374eca082ebafb26dbef354dc5563446a",
       "pipelineMaturity": "runtime-applied",
       "combatCoverageState": "partial",
       "characterComplete": false,
@@ -24,14 +24,14 @@
       "ownerId": 101010,
       "ownerName": "涂山小玉",
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "e08af83c1164458e2a7fc6300a685245e66ca97c5c09f74e1d1bb8c8be1e9e1c",
+      "profileHash": "26a11a91917bd4ca6982788e93e1103dd8d5a8c572c0855f24ba844e19c0a082",
       "pipelineMaturity": "runtime-applied",
       "combatCoverageState": "partial",
       "characterComplete": false,
       "zeroDistanceSimulationComplete": false,
       "realClientEvidenceComplete": false,
       "completionState": "runtime-applied",
-      "runtimeContractHash": "50a73abc3fcff1d0cf109c83e8c116ee3ab84f3c9e1770258cbe07c9aa50b470",
+      "runtimeContractHash": "4bd46a8e2b9c56149316469899c798b97947e1c4b56051eae4d924af9ba4514b",
       "sourcePath": "src/data/generated/character-combat-profiles/101010.json",
       "status": "character-combat-profile-valid"
     },
@@ -39,7 +39,7 @@
       "ownerId": 103002,
       "ownerName": "红宝石",
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "8afdea9a6dcd56e3cc25d311c731b09cc31ce221ec68cf4b037dd0911c7203e2",
+      "profileHash": "418c9d1cce904238aab382a1d710fb9a5080a5075a3922b554885e2051b08569",
       "pipelineMaturity": "runtime-applied",
       "combatCoverageState": "partial",
       "characterComplete": false,
@@ -51,7 +51,7 @@
       "status": "character-combat-profile-valid"
     }
   ],
-  "coverageManifestHash": "a787a12d72fedd1399e8e35bf989f25e3883ba42a1df94356679de0cce2c4004",
+  "coverageManifestHash": "dd89b5b7ed12a7322979c9ff0b920d1c832559ef8c5a897210de28035dfe1323",
   "summary": {
     "publicCharacterCount": 20,
     "compiledProfileCount": 3,

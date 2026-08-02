@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "1d7cc2a0e376d081ccfcb7c3815098e6f8885a052281004ca44201fc83a6745b",
+  "packageHash": "1c4462509a6b59a6cfa46b676b369cd155f3527e76e85cb543b359f48aa83afb",
   "fixedProductDenominator": {
     "publicActionCount": 563,
     "actorOwnerCount": 20,
@@ -1519,6 +1519,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -1655,6 +1656,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -3623,6 +3625,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "inject-wrapper-classified-through-child-edges"
       ],
       "sourceIdentity": "characters.items[id=108001].skillSlots[group=ground,slot=3]"
@@ -4601,6 +4604,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "sp-recover-type-not-direct-sp"
@@ -6275,7 +6279,8 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved"
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map"
       ],
       "sourceIdentity": "characters.items[id=199003].skillSlots[group=ground,slot=4]"
     }
@@ -34447,6 +34452,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -34680,6 +34686,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "inject-wrapper-classified-through-child-edges",
@@ -39646,6 +39653,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "inject-wrapper-classified-through-child-edges"
       ],
       "sourceIdentity": "characters.items[id=108001].skillSlots[group=ground,slot=3]"
@@ -42604,6 +42612,7 @@
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "sp-recover-type-not-direct-sp"
@@ -47420,7 +47429,8 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved"
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map"
       ],
       "sourceIdentity": "characters.items[id=199003].skillSlots[group=ground,slot=4]"
     },

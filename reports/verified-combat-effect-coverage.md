@@ -84,6 +84,7 @@
 - shield-formula-not-literal-function-5: 10
 - sp-formula-not-literal-function-5: 95
 - sp-recover-type-not-direct-sp: 12
+- tuning-consume-current-packet-not-in-candidate-map: 9
 - tuning-consume-judgment-missing: 9
 - tuning-consume-mark-identity-ambiguous: 9
 - tuning-consume-success-branch-unresolved: 9

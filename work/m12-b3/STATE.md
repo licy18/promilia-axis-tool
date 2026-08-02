@@ -18,6 +18,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - B3-C2 implementation baseline: `942639f07d5a417f8145f8c11aadf006646dfbee`.
 - B3-C2-R1 product acceptance baseline: `ba3422c722f8640857fa8fd9d19040e755c8484a`.
 - B3-C3 product acceptance baseline: `e05b10fd27a6c723a773a7680169a9180031c48e`.
+- B3-C4 reviewed implementation baseline: `307daae3ca819c30f69153f108c9a3163a72729e`.
 - The B3 contract was selectively synchronized from the dirty main-workspace plan on 2026-08-01; the main workspace was not modified.
 
 ## Frozen Plan Snapshot
@@ -34,7 +35,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 
 - B2 product acceptance is closed.
 - B3-A-R1 is product-accepted at `f902de10c42c2c4dc750be2316fabe3bc026f8cc`. B3-B-R1 is product-accepted at `f846161c4a71bbc2de2b5bed3f598f03344fc692`; B3-C-R1 is product-accepted at `2804f201ac2a6ea4eebc1339703a9d40c0aba5a5`.
-- B3-C4 source and denominator recomputation is complete: source `8dcb0be1d668e31d`, roster `6e3bef78327971df`, manifests `7b91353ea59fd9ff`, ledger `15ea7c546ac035da`, catalog `6b55d6c04641b66f`, binding matrix `c4d2d2c7f5eed6b5`; dynamic census `188b2f8036236259`, soul effect catalog `e002776d999c842f`, soul source snapshot `87bc2d712a143bb9`, trigger contract `c381d1508e85d4fa`, PropertyTag contract `146e6a9a7db86606`.
+- B3-C4-R1 source and denominator recomputation is complete: source `aec5244760fc3e25`, roster `3ca3b661eefc7eba`, manifests `20e73a31a02ab336`, ledger `cf90ab696b44af41`, catalog `5d689b68ea6ec00f`, binding matrix `f05a3a75d60b34fd`; dynamic census `188b2f8036236259`, soul effect catalog `e002776d999c842f`, soul source snapshot `87bc2d712a143bb9`, trigger contract `c381d1508e85d4fa`, PropertyTag contract `146e6a9a7db86606`.
 - Generated roster, consolidated manifests, gap ledger, binding matrix, summary, and runtime catalog are deterministic under `npm run audit:optimization-qualification`.
 - Strict cultivation profile v1 is wired into Machine Axis, canonical input hashing, and direct Workbench adapter round-trip. The frozen profile hash is `c432bd0a3f2d6415`: character `80 / star gift 7 / completed attributes through 6 / all current nodes / level breakthrough 3`; Kibo `80 / four talents 10 => 120 / bond 1 => 900 basis points / dnaFactors []`; soul essence `80 / rank 6 / star 1`; equipment `4-star / +9 / tuning 110 / starborn`.
 - Formal qualification derives one whole-stage gate from the `11/43/62/137/12` records, admissions, set-skill thresholds, actor-Kibo/soul/equipment bindings, equipment slots, and source hashes. Partial green catalogs are rejected before project/search; research scenarios remain compatible.
@@ -47,11 +48,12 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - C2-R1 separates source event semantics: BeforeSkill/AfterSkill require only `execute=true` and fire once even with no hits or all misses; BeforeDamage/AfterDamage still require landed hits; blocked actions fire neither. It is product-accepted at `ba3422c722f8640857fa8fd9d19040e755c8484a`.
 - C3 preserves EntrySkill trigger provenance, wrapper duration, unload paths, refresh/right-open expiry and replay inheritance. It is product-accepted at `e05b10fd27a6c723a773a7680169a9180031c48e`.
 - C4 verification covers held-mark start/expiry, actual mark consume and landed overlimit packets, thunder/dark hidden branches, wind template element types, final skill tag, miss suppression, right-open expiry, refresh, same-packet no-self-benefit, numeric critical/toughness consequences and replay/cycle state.
-- Verification passed: focused mechanics `5 files / 99 tests`, Machine Axis `12 / 157`, three-character profile/golden `3 / 34`, canonical/runtime `6 / 104`, headless golden migration `1 / 4`, nine deterministic audits and production build. Applied-source audit is `17 property sources / 0 drift` and `5 tuning conditions / 0 drift`.
-- The current Machine Axis canonical hashes are `572695e45011465c / 35835e12c6a6e279 / 67802e753205e852 / 0b410dc9255d2654`. Identity changed because verified tuning event source metadata and packet element types became package data; evaluation and all authoritative numeric assertions are unchanged.
+- C4-R1 binds Priority mode to `ConsumePackElement.CalculateConsumeCount@0x1385260` and `DoInject@0x1386950`. Ordered candidates are selected against the queued canonical mark state; only the first sufficient candidate is consumed and only its mapped packet is emitted. Tests cover `[250,450]`, `[750,250]`, fallback, no candidate, same-frame state, selected hit/miss, 10131 suppression and replay stability.
+- Verification passed: focused mechanics `5 files / 108 tests`, Machine Axis `12 / 157`, three-character profile/golden `3 / 34`, canonical/runtime `6 / 58`, headless golden migration `1 / 4`, nine deterministic audits and production build. Applied-source audit is `17 property sources / 0 drift`, `5 tuning conditions / 0 drift`, and `12 priority consume groups / 0 drift`.
+- The current Machine Axis canonical hashes are `c8bfd28dcb890f4f / 98deb78db6293f88 / 8586fe2ee148b0fe / 0b410dc9255d2654`. Identity changed because ordered judgment groups and candidate-to-packet mappings became package data; evaluation, cycle evaluation `412605349bbf2fe3`, and all authoritative numeric assertions are unchanged.
 - Current optimization-ready counts are zero for all five object kinds. M12-C remains locked.
 - Current maturity is `224 extracted / 41 runtime-integrated`; all five optimization-ready counts remain zero. Blocking gaps are `436` unique (`420 not-implemented`, `16 evidence-insufficient`).
-- Status: `B3-C4 verification-complete-awaiting-product-acceptance`.
+- Status: `B3-C4-R1 verification-complete-awaiting-product-acceptance`.
 
 ## Remaining Blockers
 

@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "6e3bef78327971df",
-  "manifestsHash": "7b91353ea59fd9ff",
-  "gapLedgerHash": "15ea7c546ac035da",
-  "bindingMatrixHash": "c4d2d2c7f5eed6b5",
-  "sourceSnapshotHash": "8dcb0be1d668e31d",
+  "rosterHash": "3ca3b661eefc7eba",
+  "manifestsHash": "20e73a31a02ab336",
+  "gapLedgerHash": "cf90ab696b44af41",
+  "bindingMatrixHash": "f05a3a75d60b34fd",
+  "sourceSnapshotHash": "aec5244760fc3e25",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -27,7 +27,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "00d797d14abb854d"
+      "manifestHash": "a3f040635af35236"
     },
     {
       "objectKind": "character",
@@ -52,7 +52,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "ccfc61c2a3ec2afd"
+      "manifestHash": "5b87e1f96565b61d"
     },
     {
       "objectKind": "character",
@@ -3116,7 +3116,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-01T00:00:00.000Z",
-    "rosterHash": "6e3bef78327971df",
+    "rosterHash": "3ca3b661eefc7eba",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -25024,7 +25024,7 @@
       "setSkillThresholdQualifiedCount": 0,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "c4d2d2c7f5eed6b5"
+    "bindingMatrixHash": "f05a3a75d60b34fd"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44548,5 +44548,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "6b55d6c04641b66f"
+  "catalogHash": "5d689b68ea6ec00f"
 }

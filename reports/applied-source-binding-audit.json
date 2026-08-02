@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "applied-source-binding-audit",
-  "generatedAt": "2026-08-02T05:44:43.386Z",
+  "generatedAt": "2026-08-02T07:30:28.508Z",
   "decision": {
     "status": "passed",
     "passed": true,
@@ -17,7 +17,9 @@
     "loadoutPropertyTagSourceCount": 17,
     "loadoutPropertyTagDriftCount": 0,
     "loadoutTuningConditionCount": 5,
-    "loadoutTuningConditionDriftCount": 0
+    "loadoutTuningConditionDriftCount": 0,
+    "tuningConsumePriorityGroupCount": 12,
+    "tuningConsumePriorityDriftCount": 0
   },
   "requiredTracks": [
     "enemyHpDamage",
@@ -65,8 +67,11 @@
     "summary": {
       "sourceCount": 17,
       "driftCount": 0,
+      "propertyTagDriftCount": 0,
       "tuningConditionCount": 5,
-      "tuningConditionDriftCount": 0
+      "tuningConditionDriftCount": 0,
+      "tuningConsumePriorityGroupCount": 12,
+      "tuningConsumePriorityDriftCount": 0
     },
     "records": [
       {
@@ -1704,6 +1709,798 @@
         "status": "applied-source-property-tags-ready",
         "issueCodes": []
       }
-    ]
+    ],
+    "tuningConsumePriority": {
+      "summary": {
+        "groupCount": 12,
+        "driftCount": 0
+      },
+      "evidence": {
+        "sourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950",
+        "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+        "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+        "consumerMethod": "CalculateConsumeCount",
+        "consumerMethodRva": "0x1385260",
+        "candidateLoopRange": "0x138587D-0x1385B3C",
+        "candidateLoopSha256": "f254a66bed3d1a662985e2b2107000d7d12223619eedbc67cbfdce9af3a5b0b9",
+        "fallbackRule": "continue-to-next-candidate-when-current-layer-count-is-insufficient",
+        "injectMethod": "DoInject",
+        "injectMethodRva": "0x1386950",
+        "selectedPacketLookupRange": "0x1386AD2-0x1386B65",
+        "selectedPacketLookupSha256": "ae7cd17a10c4b798c6eb4712b5d39a28dff9d440c111038e006b78ecc1aca291",
+        "packetRule": "lookup-inject-element-data-dict-by-selected-consume-element-id",
+        "issueCodes": []
+      },
+      "rows": [
+        {
+          "judgmentGroupIdentity": "tuning-consume-judgment:10700212:0:107002264:-6104701335743815286",
+          "controlSkillId": 10700212,
+          "mapIndex": 0,
+          "judgmentElementId": 107002264,
+          "judgmentPathId": "-6104701335743815286",
+          "sourceConsumeMode": 0,
+          "sourceMarkIds": [
+            550,
+            750
+          ],
+          "generatedMarkIds": [
+            550,
+            750
+          ],
+          "sourceCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 550,
+              "mappedMarkId": 550,
+              "packetPathId": "2120617582505955581",
+              "packetElementId": 599
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 750,
+              "mappedMarkId": 750,
+              "packetPathId": "4731523060341306954",
+              "packetElementId": 799
+            }
+          ],
+          "generatedCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 550,
+              "mappedMarkId": 550,
+              "packetPathId": "2120617582505955581",
+              "packetElementId": 599
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 750,
+              "mappedMarkId": 750,
+              "packetPathId": "4731523060341306954",
+              "packetElementId": 799
+            }
+          ],
+          "generatedEffectPairs": [
+            {
+              "markId": 550,
+              "packetElementId": 599
+            },
+            {
+              "markId": 750,
+              "packetElementId": 799
+            }
+          ],
+          "runtimeSelectionMode": "priority-first-sufficient-candidate",
+          "priorityDirection": "element-arr-index-ascending",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-6104701335743815286",
+          "runtimeEvidenceSourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950",
+          "status": "tuning-consume-priority-source-ready",
+          "issueCodes": []
+        },
+        {
+          "judgmentGroupIdentity": "tuning-consume-judgment:10700310:2:107003190:-3610696954518353029",
+          "controlSkillId": 10700310,
+          "mapIndex": 2,
+          "judgmentElementId": 107003190,
+          "judgmentPathId": "-3610696954518353029",
+          "sourceConsumeMode": 0,
+          "sourceMarkIds": [
+            850,
+            550
+          ],
+          "generatedMarkIds": [
+            850,
+            550
+          ],
+          "sourceCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 850,
+              "mappedMarkId": 850,
+              "packetPathId": "-3161718249097424629",
+              "packetElementId": 899
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 550,
+              "mappedMarkId": 550,
+              "packetPathId": "2120617582505955581",
+              "packetElementId": 599
+            }
+          ],
+          "generatedCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 850,
+              "mappedMarkId": 850,
+              "packetPathId": "-3161718249097424629",
+              "packetElementId": 899
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 550,
+              "mappedMarkId": 550,
+              "packetPathId": "2120617582505955581",
+              "packetElementId": 599
+            }
+          ],
+          "generatedEffectPairs": [
+            {
+              "markId": 850,
+              "packetElementId": 899
+            },
+            {
+              "markId": 550,
+              "packetElementId": 599
+            }
+          ],
+          "runtimeSelectionMode": "priority-first-sufficient-candidate",
+          "priorityDirection": "element-arr-index-ascending",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-3610696954518353029",
+          "runtimeEvidenceSourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950",
+          "status": "tuning-consume-priority-source-ready",
+          "issueCodes": []
+        },
+        {
+          "judgmentGroupIdentity": "tuning-consume-judgment:10700310:4:107003190:-3610696954518353029",
+          "controlSkillId": 10700310,
+          "mapIndex": 4,
+          "judgmentElementId": 107003190,
+          "judgmentPathId": "-3610696954518353029",
+          "sourceConsumeMode": 0,
+          "sourceMarkIds": [
+            850,
+            550
+          ],
+          "generatedMarkIds": [
+            850,
+            550
+          ],
+          "sourceCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 850,
+              "mappedMarkId": 850,
+              "packetPathId": "-3161718249097424629",
+              "packetElementId": 899
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 550,
+              "mappedMarkId": 550,
+              "packetPathId": "2120617582505955581",
+              "packetElementId": 599
+            }
+          ],
+          "generatedCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 850,
+              "mappedMarkId": 850,
+              "packetPathId": "-3161718249097424629",
+              "packetElementId": 899
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 550,
+              "mappedMarkId": 550,
+              "packetPathId": "2120617582505955581",
+              "packetElementId": 599
+            }
+          ],
+          "generatedEffectPairs": [
+            {
+              "markId": 850,
+              "packetElementId": 899
+            },
+            {
+              "markId": 550,
+              "packetElementId": 599
+            }
+          ],
+          "runtimeSelectionMode": "priority-first-sufficient-candidate",
+          "priorityDirection": "element-arr-index-ascending",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-3610696954518353029",
+          "runtimeEvidenceSourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950",
+          "status": "tuning-consume-priority-source-ready",
+          "issueCodes": []
+        },
+        {
+          "judgmentGroupIdentity": "tuning-consume-judgment:10700313:0:107003167:-4200875456852599081",
+          "controlSkillId": 10700313,
+          "mapIndex": 0,
+          "judgmentElementId": 107003167,
+          "judgmentPathId": "-4200875456852599081",
+          "sourceConsumeMode": 0,
+          "sourceMarkIds": [
+            850,
+            550
+          ],
+          "generatedMarkIds": [
+            850,
+            550
+          ],
+          "sourceCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 850,
+              "mappedMarkId": 850,
+              "packetPathId": "-3161718249097424629",
+              "packetElementId": 899
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 550,
+              "mappedMarkId": 550,
+              "packetPathId": "2120617582505955581",
+              "packetElementId": 599
+            }
+          ],
+          "generatedCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 850,
+              "mappedMarkId": 850,
+              "packetPathId": "-3161718249097424629",
+              "packetElementId": 899
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 550,
+              "mappedMarkId": 550,
+              "packetPathId": "2120617582505955581",
+              "packetElementId": 599
+            }
+          ],
+          "generatedEffectPairs": [
+            {
+              "markId": 850,
+              "packetElementId": 899
+            },
+            {
+              "markId": 550,
+              "packetElementId": 599
+            }
+          ],
+          "runtimeSelectionMode": "priority-first-sufficient-candidate",
+          "priorityDirection": "element-arr-index-ascending",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4200875456852599081",
+          "runtimeEvidenceSourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950",
+          "status": "tuning-consume-priority-source-ready",
+          "issueCodes": []
+        },
+        {
+          "judgmentGroupIdentity": "tuning-consume-judgment:10800213:0:108002268:-777045592153766770",
+          "controlSkillId": 10800213,
+          "mapIndex": 0,
+          "judgmentElementId": 108002268,
+          "judgmentPathId": "-777045592153766770",
+          "sourceConsumeMode": 0,
+          "sourceMarkIds": [
+            850,
+            350
+          ],
+          "generatedMarkIds": [
+            850,
+            350
+          ],
+          "sourceCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 850,
+              "mappedMarkId": 850,
+              "packetPathId": "-3161718249097424629",
+              "packetElementId": 899
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 350,
+              "mappedMarkId": 350,
+              "packetPathId": "-3481476500606266500",
+              "packetElementId": 399
+            }
+          ],
+          "generatedCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 850,
+              "mappedMarkId": 850,
+              "packetPathId": "-3161718249097424629",
+              "packetElementId": 899
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 350,
+              "mappedMarkId": 350,
+              "packetPathId": "-3481476500606266500",
+              "packetElementId": 399
+            }
+          ],
+          "generatedEffectPairs": [
+            {
+              "markId": 850,
+              "packetElementId": 899
+            },
+            {
+              "markId": 350,
+              "packetElementId": 399
+            }
+          ],
+          "runtimeSelectionMode": "priority-first-sufficient-candidate",
+          "priorityDirection": "element-arr-index-ascending",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-777045592153766770",
+          "runtimeEvidenceSourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950",
+          "status": "tuning-consume-priority-source-ready",
+          "issueCodes": []
+        },
+        {
+          "judgmentGroupIdentity": "tuning-consume-judgment:11100101:4:111001501:4447210314696871891",
+          "controlSkillId": 11100101,
+          "mapIndex": 4,
+          "judgmentElementId": 111001501,
+          "judgmentPathId": "4447210314696871891",
+          "sourceConsumeMode": 0,
+          "sourceMarkIds": [
+            750,
+            250
+          ],
+          "generatedMarkIds": [
+            750,
+            250
+          ],
+          "sourceCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 750,
+              "mappedMarkId": 750,
+              "packetPathId": "4731523060341306954",
+              "packetElementId": 799
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 250,
+              "mappedMarkId": 250,
+              "packetPathId": "536980873299289094",
+              "packetElementId": 299
+            }
+          ],
+          "generatedCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 750,
+              "mappedMarkId": 750,
+              "packetPathId": "4731523060341306954",
+              "packetElementId": 799
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 250,
+              "mappedMarkId": 250,
+              "packetPathId": "536980873299289094",
+              "packetElementId": 299
+            }
+          ],
+          "generatedEffectPairs": [
+            {
+              "markId": 750,
+              "packetElementId": 799
+            },
+            {
+              "markId": 250,
+              "packetElementId": 299
+            }
+          ],
+          "runtimeSelectionMode": "priority-first-sufficient-candidate",
+          "priorityDirection": "element-arr-index-ascending",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=4447210314696871891",
+          "runtimeEvidenceSourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950",
+          "status": "tuning-consume-priority-source-ready",
+          "issueCodes": []
+        },
+        {
+          "judgmentGroupIdentity": "tuning-consume-judgment:11100101:6:111001501:4447210314696871891",
+          "controlSkillId": 11100101,
+          "mapIndex": 6,
+          "judgmentElementId": 111001501,
+          "judgmentPathId": "4447210314696871891",
+          "sourceConsumeMode": 0,
+          "sourceMarkIds": [
+            750,
+            250
+          ],
+          "generatedMarkIds": [
+            750,
+            250
+          ],
+          "sourceCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 750,
+              "mappedMarkId": 750,
+              "packetPathId": "4731523060341306954",
+              "packetElementId": 799
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 250,
+              "mappedMarkId": 250,
+              "packetPathId": "536980873299289094",
+              "packetElementId": 299
+            }
+          ],
+          "generatedCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 750,
+              "mappedMarkId": 750,
+              "packetPathId": "4731523060341306954",
+              "packetElementId": 799
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 250,
+              "mappedMarkId": 250,
+              "packetPathId": "536980873299289094",
+              "packetElementId": 299
+            }
+          ],
+          "generatedEffectPairs": [
+            {
+              "markId": 750,
+              "packetElementId": 799
+            },
+            {
+              "markId": 250,
+              "packetElementId": 299
+            }
+          ],
+          "runtimeSelectionMode": "priority-first-sufficient-candidate",
+          "priorityDirection": "element-arr-index-ascending",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=4447210314696871891",
+          "runtimeEvidenceSourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950",
+          "status": "tuning-consume-priority-source-ready",
+          "issueCodes": []
+        },
+        {
+          "judgmentGroupIdentity": "tuning-consume-judgment:11100102:3:111001504:-9093750736607486055",
+          "controlSkillId": 11100102,
+          "mapIndex": 3,
+          "judgmentElementId": 111001504,
+          "judgmentPathId": "-9093750736607486055",
+          "sourceConsumeMode": 0,
+          "sourceMarkIds": [
+            750,
+            250
+          ],
+          "generatedMarkIds": [
+            750,
+            250
+          ],
+          "sourceCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 750,
+              "mappedMarkId": 750,
+              "packetPathId": "4731523060341306954",
+              "packetElementId": 799
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 250,
+              "mappedMarkId": 250,
+              "packetPathId": "536980873299289094",
+              "packetElementId": 299
+            }
+          ],
+          "generatedCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 750,
+              "mappedMarkId": 750,
+              "packetPathId": "4731523060341306954",
+              "packetElementId": 799
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 250,
+              "mappedMarkId": 250,
+              "packetPathId": "536980873299289094",
+              "packetElementId": 299
+            }
+          ],
+          "generatedEffectPairs": [
+            {
+              "markId": 750,
+              "packetElementId": 799
+            },
+            {
+              "markId": 250,
+              "packetElementId": 299
+            }
+          ],
+          "runtimeSelectionMode": "priority-first-sufficient-candidate",
+          "priorityDirection": "element-arr-index-ascending",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-9093750736607486055",
+          "runtimeEvidenceSourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950",
+          "status": "tuning-consume-priority-source-ready",
+          "issueCodes": []
+        },
+        {
+          "judgmentGroupIdentity": "tuning-consume-judgment:11100102:4:111001504:-9093750736607486055",
+          "controlSkillId": 11100102,
+          "mapIndex": 4,
+          "judgmentElementId": 111001504,
+          "judgmentPathId": "-9093750736607486055",
+          "sourceConsumeMode": 0,
+          "sourceMarkIds": [
+            750,
+            250
+          ],
+          "generatedMarkIds": [
+            750,
+            250
+          ],
+          "sourceCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 750,
+              "mappedMarkId": 750,
+              "packetPathId": "4731523060341306954",
+              "packetElementId": 799
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 250,
+              "mappedMarkId": 250,
+              "packetPathId": "536980873299289094",
+              "packetElementId": 299
+            }
+          ],
+          "generatedCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 750,
+              "mappedMarkId": 750,
+              "packetPathId": "4731523060341306954",
+              "packetElementId": 799
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 250,
+              "mappedMarkId": 250,
+              "packetPathId": "536980873299289094",
+              "packetElementId": 299
+            }
+          ],
+          "generatedEffectPairs": [
+            {
+              "markId": 750,
+              "packetElementId": 799
+            },
+            {
+              "markId": 250,
+              "packetElementId": 299
+            }
+          ],
+          "runtimeSelectionMode": "priority-first-sufficient-candidate",
+          "priorityDirection": "element-arr-index-ascending",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-9093750736607486055",
+          "runtimeEvidenceSourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950",
+          "status": "tuning-consume-priority-source-ready",
+          "issueCodes": []
+        },
+        {
+          "judgmentGroupIdentity": "tuning-consume-judgment:11100113:0:111001332:-6084749423908212668",
+          "controlSkillId": 11100113,
+          "mapIndex": 0,
+          "judgmentElementId": 111001332,
+          "judgmentPathId": "-6084749423908212668",
+          "sourceConsumeMode": 0,
+          "sourceMarkIds": [
+            750,
+            250
+          ],
+          "generatedMarkIds": [
+            750,
+            250
+          ],
+          "sourceCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 750,
+              "mappedMarkId": 750,
+              "packetPathId": "4731523060341306954",
+              "packetElementId": 799
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 250,
+              "mappedMarkId": 250,
+              "packetPathId": "536980873299289094",
+              "packetElementId": 299
+            }
+          ],
+          "generatedCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 750,
+              "mappedMarkId": 750,
+              "packetPathId": "4731523060341306954",
+              "packetElementId": 799
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 250,
+              "mappedMarkId": 250,
+              "packetPathId": "536980873299289094",
+              "packetElementId": 299
+            }
+          ],
+          "generatedEffectPairs": [
+            {
+              "markId": 750,
+              "packetElementId": 799
+            },
+            {
+              "markId": 250,
+              "packetElementId": 299
+            }
+          ],
+          "runtimeSelectionMode": "priority-first-sufficient-candidate",
+          "priorityDirection": "element-arr-index-ascending",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-6084749423908212668",
+          "runtimeEvidenceSourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950",
+          "status": "tuning-consume-priority-source-ready",
+          "issueCodes": []
+        },
+        {
+          "judgmentGroupIdentity": "tuning-consume-judgment:11200113:0:112001260:-7212963066810547935",
+          "controlSkillId": 11200113,
+          "mapIndex": 0,
+          "judgmentElementId": 112001260,
+          "judgmentPathId": "-7212963066810547935",
+          "sourceConsumeMode": 0,
+          "sourceMarkIds": [
+            250,
+            450
+          ],
+          "generatedMarkIds": [
+            250,
+            450
+          ],
+          "sourceCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 250,
+              "mappedMarkId": 250,
+              "packetPathId": "536980873299289094",
+              "packetElementId": 299
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 450,
+              "mappedMarkId": 450,
+              "packetPathId": "-2413896801629279110",
+              "packetElementId": 499
+            }
+          ],
+          "generatedCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 250,
+              "mappedMarkId": 250,
+              "packetPathId": "536980873299289094",
+              "packetElementId": 299
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 450,
+              "mappedMarkId": 450,
+              "packetPathId": "-2413896801629279110",
+              "packetElementId": 499
+            }
+          ],
+          "generatedEffectPairs": [
+            {
+              "markId": 250,
+              "packetElementId": 299
+            },
+            {
+              "markId": 450,
+              "packetElementId": 499
+            }
+          ],
+          "runtimeSelectionMode": "priority-first-sufficient-candidate",
+          "priorityDirection": "element-arr-index-ascending",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-7212963066810547935",
+          "runtimeEvidenceSourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950",
+          "status": "tuning-consume-priority-source-ready",
+          "issueCodes": []
+        },
+        {
+          "judgmentGroupIdentity": "tuning-consume-judgment:11200213:0:112002121:-3923160878910548632",
+          "controlSkillId": 11200213,
+          "mapIndex": 0,
+          "judgmentElementId": 112002121,
+          "judgmentPathId": "-3923160878910548632",
+          "sourceConsumeMode": 0,
+          "sourceMarkIds": [
+            950,
+            650
+          ],
+          "generatedMarkIds": [
+            950,
+            650
+          ],
+          "sourceCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 950,
+              "mappedMarkId": 950,
+              "packetPathId": "1781318263043700654",
+              "packetElementId": 999
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 650,
+              "mappedMarkId": 650,
+              "packetPathId": "-1242046641952436421",
+              "packetElementId": 699
+            }
+          ],
+          "generatedCandidates": [
+            {
+              "priorityIndex": 0,
+              "markId": 950,
+              "mappedMarkId": 950,
+              "packetPathId": "1781318263043700654",
+              "packetElementId": 999
+            },
+            {
+              "priorityIndex": 1,
+              "markId": 650,
+              "mappedMarkId": 650,
+              "packetPathId": "-1242046641952436421",
+              "packetElementId": 699
+            }
+          ],
+          "generatedEffectPairs": [
+            {
+              "markId": 950,
+              "packetElementId": 999
+            },
+            {
+              "markId": 650,
+              "packetElementId": 699
+            }
+          ],
+          "runtimeSelectionMode": "priority-first-sufficient-candidate",
+          "priorityDirection": "element-arr-index-ascending",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-3923160878910548632",
+          "runtimeEvidenceSourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950",
+          "status": "tuning-consume-priority-source-ready",
+          "issueCodes": []
+        }
+      ]
+    }
   }
 }

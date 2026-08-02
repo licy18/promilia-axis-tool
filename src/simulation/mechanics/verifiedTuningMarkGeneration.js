@@ -121,7 +121,9 @@ export function createVerifiedTuningMarkGeneration({
         combatScenario: scenario.combatScenario,
       });
     if (!resolution?.ready) continue;
-    for (const effect of dedupeTuningRuntimeEffects(resolution.effects ?? [])) {
+    const tuningEffects = dedupeTuningRuntimeEffects(resolution.effects ?? []);
+    const enqueuedConsumeGroups = new Set();
+    for (const effect of tuningEffects) {
       if (effect.classification !== 'applied') continue;
       if (
         !isActionFrameWithinContextualOccupancy(
@@ -145,6 +147,32 @@ export function createVerifiedTuningMarkGeneration({
         });
       }
       if (effect.tuningOverlimit) {
+        const contract = effect.tuningOverlimit;
+        if (
+          contract.runtimeSelectionMode ===
+            'priority-first-sufficient-candidate' &&
+          contract.judgmentGroupIdentity
+        ) {
+          const groupKey = `${contract.judgmentGroupIdentity}|${timeMs}`;
+          if (enqueuedConsumeGroups.has(groupKey)) continue;
+          enqueuedConsumeGroups.add(groupKey);
+          enqueue({
+            kind: 'consume',
+            timeMs,
+            action,
+            resolution,
+            effect,
+            profile: null,
+            priorityCandidates: createPriorityConsumeCandidates({
+              effects: tuningEffects,
+              contract,
+              profileByMarkId,
+              triggerStartFrame: effect.trigger?.startFrame,
+              mapIndex: effect.mapIndex,
+            }),
+          });
+          continue;
+        }
         enqueue({
           kind: 'consume',
           timeMs,
@@ -303,6 +331,37 @@ function dedupeTuningRuntimeEffects(effects) {
       })
     ).values(),
   ];
+}
+
+function createPriorityConsumeCandidates({
+  effects,
+  contract,
+  profileByMarkId,
+  triggerStartFrame,
+  mapIndex,
+}) {
+  return (contract.judgmentCandidates ?? []).map(candidate => {
+    const effect = effects.find(
+      item =>
+        item.classification === 'applied' &&
+        item.tuningOverlimit?.judgmentGroupIdentity ===
+          contract.judgmentGroupIdentity &&
+        Number(item.trigger?.startFrame) === Number(triggerStartFrame) &&
+        Number(item.mapIndex) === Number(mapIndex) &&
+        Number(item.tuningOverlimit?.markId) === Number(candidate.markId) &&
+        Number(item.tuningOverlimit?.packetElementId) ===
+          Number(candidate.packetElementId)
+    );
+    return {
+      ...candidate,
+      effect: effect ?? null,
+      profile: profileByMarkId.get(Number(candidate.markId)) ?? null,
+      minimumStacks: positiveInteger(
+        effect?.tuningOverlimit?.minimumStacks,
+        positiveInteger(contract.minimumStacks, 1)
+      ),
+    };
+  });
 }
 
 function installInheritedState({
@@ -488,7 +547,7 @@ function applyLayerExpiry({
 }
 
 function applyMarkConsumption({
-  descriptor,
+  descriptor: originalDescriptor,
   stateByMarkId,
   events,
   effectCommands,
@@ -498,6 +557,66 @@ function applyMarkConsumption({
   scenario,
   enqueue,
 }) {
+  let descriptor = originalDescriptor;
+  if (Array.isArray(descriptor.priorityCandidates)) {
+    const candidates = descriptor.priorityCandidates.map(candidate => ({
+      ...candidate,
+      current:
+        stateByMarkId.get(Number(candidate.markId))?.layers.length ?? 0,
+    }));
+    const selected = candidates.find(
+      candidate => candidate.current >= candidate.minimumStacks
+    );
+    if (!selected) {
+      unresolved.push({
+        kind: 'tuning-consume-no-sufficient-priority-candidate',
+        actionId: descriptor.action.id,
+        judgmentGroupIdentity:
+          descriptor.effect.tuningOverlimit.judgmentGroupIdentity,
+        candidates: candidates.map(candidate => ({
+          priorityIndex: candidate.priorityIndex,
+          markId: candidate.markId,
+          required: candidate.minimumStacks,
+          current: candidate.current,
+        })),
+        timeMs: descriptor.timeMs,
+        sourceIdentity:
+          descriptor.effect.tuningOverlimit.priorityRuntimeEvidence
+            ?.sourceIdentity ?? descriptor.effect.sourceIdentity,
+        status: 'verified-tuning-consume-not-executed',
+        applied: false,
+      });
+      return;
+    }
+    if (!selected.effect || !selected.profile) {
+      unresolved.push({
+        kind: 'tuning-consume-selected-priority-packet-unavailable',
+        actionId: descriptor.action.id,
+        judgmentGroupIdentity:
+          descriptor.effect.tuningOverlimit.judgmentGroupIdentity,
+        priorityIndex: selected.priorityIndex,
+        markId: selected.markId,
+        packetElementId: selected.packetElementId,
+        timeMs: descriptor.timeMs,
+        sourceIdentity:
+          descriptor.effect.tuningOverlimit.priorityRuntimeEvidence
+            ?.sourceIdentity ?? descriptor.effect.sourceIdentity,
+        status: 'verified-tuning-consume-not-executed',
+        applied: false,
+      });
+      return;
+    }
+    descriptor = {
+      ...descriptor,
+      effect: selected.effect,
+      profile: selected.profile,
+      selectedPriorityCandidate: {
+        priorityIndex: selected.priorityIndex,
+        markId: selected.markId,
+        packetElementId: selected.packetElementId,
+      },
+    };
+  }
   const state = stateByMarkId.get(Number(descriptor.profile?.markId));
   if (!state) return;
   const contract = descriptor.effect.tuningOverlimit;
@@ -1071,6 +1190,10 @@ function createCombatEvent({
       sourceHitIdentity,
       skillTagIds,
       landed,
+      judgmentGroupIdentity:
+        descriptor.effect?.tuningOverlimit?.judgmentGroupIdentity ?? null,
+      selectedPriorityCandidate:
+        descriptor.selectedPriorityCandidate ?? null,
     },
     sourceIdentity: template?.sourceIdentity ?? profile.sourceIdentity,
     appliedToCalculators: true,
@@ -1126,6 +1249,9 @@ function createMarkEvent({
       state.decayDueAtMs == null
         ? 0
         : Math.max(0, state.decayDueAtMs - descriptor.timeMs),
+    judgmentGroupIdentity:
+      descriptor.effect?.tuningOverlimit?.judgmentGroupIdentity ?? null,
+    selectedPriorityCandidate: descriptor.selectedPriorityCandidate ?? null,
     sourceIdentity:
       descriptor.effect?.sourceIdentity ??
       descriptor.layer?.sourceIdentity ??

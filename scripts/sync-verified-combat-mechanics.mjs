@@ -222,6 +222,13 @@ const IL2CPP_DUMP_PATH = path.join(
   'il2cpp-tc-catch-20260709',
   'dump.cs'
 );
+const GAME_ASSEMBLY_PATH =
+  'C:\\AP\\AzurPromilia_TC\\AzurPromilia_game\\GameAssembly.dll';
+const TUNING_CONSUME_PRIORITY_EVIDENCE_PATH = path.join(
+  SCRIPT_ROOT,
+  'evidence',
+  'tuning-consume-priority-runtime-evidence.json'
+);
 const LEVEL_SAMPLE_PATHS = [1, 12].map(level =>
   path.join(
     OUTPUT_ROOT,
@@ -289,6 +296,7 @@ const M9_PRODUCT_DENOMINATOR = Object.freeze({
 const DEFAULT_CHARACTER_COMBAT_RECIPES = discoverCharacterCombatRecipes({
   recipeRoot: CHARACTER_COMBAT_RECIPE_ROOT,
 });
+let tuningConsumePriorityRuntimeEvidenceCache = null;
 const XIAOYU_PROFILE_RECIPE = DEFAULT_CHARACTER_COMBAT_RECIPES.find(
   recipe => recipe.goldStandard === true
 );
@@ -355,6 +363,7 @@ export async function createVerifiedCombatMechanicsBuild({
   const validation = runCalculatorValidation();
   const evidence = readJson(EVIDENCE_PATH);
   validateEvidence(evidence, validation);
+  validateTuningConsumePriorityRuntimeEvidence();
   const mechanismEvidence = createMechanismEvidenceManifest();
   const battleTargetTypeContract = createBattleTargetTypeContract();
   const overlimitMechanics = readJson(OVERLIMIT_MECHANICS_PATH);
@@ -1051,6 +1060,9 @@ function assertRequiredInputs() {
     SKILL_LOGIC_PATH,
     PET_PATH,
     CHARACTER_CATALOG_PATH,
+    IL2CPP_DUMP_PATH,
+    GAME_ASSEMBLY_PATH,
+    TUNING_CONSUME_PRIORITY_EVIDENCE_PATH,
     ...Object.values(STATIC_PROPERTY_TABLE_PATHS),
   ]) {
     if (!fs.existsSync(filePath)) {
@@ -1089,6 +1101,104 @@ function validateEvidence(evidence, validation) {
   ) {
     throw new Error('combat formula evidence is not in verified 18/18 state');
   }
+}
+
+function validateTuningConsumePriorityRuntimeEvidence() {
+  const evidence = readJson(TUNING_CONSUME_PRIORITY_EVIDENCE_PATH);
+  if (
+    evidence?.contractName !==
+      'AzPrTuningConsumePriorityRuntimeEvidence' ||
+    evidence?.status !== 'verified'
+  ) {
+    throw new Error('tuning consume priority runtime evidence is not verified');
+  }
+  const binary = fs.readFileSync(GAME_ASSEMBLY_PATH);
+  if (
+    binary.length !== Number(evidence.binary?.bytes) ||
+    sha256(binary) !== evidence.binary?.sha256
+  ) {
+    throw new Error('tuning consume priority GameAssembly identity drift');
+  }
+  const dumpSource = readText(IL2CPP_DUMP_PATH);
+  for (const declaration of evidence.dump?.requiredDeclarations ?? []) {
+    if (!dumpSource.includes(declaration)) {
+      throw new Error(
+        `tuning consume priority declaration missing: ${declaration}`
+      );
+    }
+  }
+  if (
+    !dumpSource.includes(
+      `// RVA: 0x${evidence.selection.consumerMethodRva.slice(2).toUpperCase()}`
+    ) ||
+    !dumpSource.includes(
+      `// RVA: 0x${evidence.injection.injectMethodRva.slice(2).toUpperCase()}`
+    )
+  ) {
+    throw new Error('tuning consume priority method RVA drift');
+  }
+  const selectionBytes = readPortableExecutableRvaRange(
+    binary,
+    evidence.selection.candidateLoopRange
+  );
+  const injectionBytes = readPortableExecutableRvaRange(
+    binary,
+    evidence.injection.selectedPacketLookupRange
+  );
+  if (
+    sha256(selectionBytes) !== evidence.selection.candidateLoopSha256 ||
+    sha256(injectionBytes) !== evidence.injection.selectedPacketLookupSha256
+  ) {
+    throw new Error('tuning consume priority disassembly window drift');
+  }
+  if (
+    evidence.selection.candidateOrder !==
+      'element-arr-index-ascending' ||
+    evidence.selection.selectionRule !==
+      'first-candidate-with-layer-count-greater-than-or-equal-to-consume-layer-num' ||
+    evidence.injection.packetRule !==
+      'lookup-inject-element-data-dict-by-selected-consume-element-id'
+  ) {
+    throw new Error('tuning consume priority semantic evidence drift');
+  }
+  tuningConsumePriorityRuntimeEvidenceCache = evidence;
+  return evidence;
+}
+
+function getTuningConsumePriorityRuntimeEvidence() {
+  return (
+    tuningConsumePriorityRuntimeEvidenceCache ??
+    validateTuningConsumePriorityRuntimeEvidence()
+  );
+}
+
+function readPortableExecutableRvaRange(binary, range) {
+  const match = String(range).match(/^0x([0-9a-f]+)-0x([0-9a-f]+)$/iu);
+  if (!match) throw new Error(`invalid PE RVA range: ${range}`);
+  const startRva = Number.parseInt(match[1], 16);
+  const endRva = Number.parseInt(match[2], 16);
+  if (!(endRva > startRva)) throw new Error(`empty PE RVA range: ${range}`);
+  const peOffset = binary.readUInt32LE(0x3c);
+  const sectionCount = binary.readUInt16LE(peOffset + 6);
+  const optionalHeaderSize = binary.readUInt16LE(peOffset + 20);
+  const sectionTableOffset = peOffset + 24 + optionalHeaderSize;
+  const resolveOffset = rva => {
+    for (let index = 0; index < sectionCount; index += 1) {
+      const offset = sectionTableOffset + index * 40;
+      const virtualSize = binary.readUInt32LE(offset + 8);
+      const virtualAddress = binary.readUInt32LE(offset + 12);
+      const rawSize = binary.readUInt32LE(offset + 16);
+      const rawOffset = binary.readUInt32LE(offset + 20);
+      if (
+        rva >= virtualAddress &&
+        rva < virtualAddress + Math.max(virtualSize, rawSize)
+      ) {
+        return rawOffset + rva - virtualAddress;
+      }
+    }
+    throw new Error(`PE RVA is outside all sections: 0x${rva.toString(16)}`);
+  };
+  return binary.subarray(resolveOffset(startRva), resolveOffset(endRva));
 }
 
 function discoverSpecialResourceIdentityHints(characterCatalog) {
@@ -5704,6 +5814,15 @@ function createBattleEffectGraphNode({
             markElementIds: (tree.elementArr ?? [])
               .map(Number)
               .filter(Number.isInteger),
+            candidateEffectMappings: (
+              Array.isArray(tree.injectElementDataEffects)
+                ? tree.injectElementDataEffects
+                : []
+            ).map((entry, priorityIndex) => ({
+              priorityIndex,
+              markId: integerOrNull(entry?.elementAttr),
+              packetPathIds: collectNestedPathIds(entry?.elements),
+            })),
             canConsume: Number(tree.canConsume) === 1,
             checkTarget: integerOrNull(tree.checkTarget),
             executeTarget: integerOrNull(tree.executeTarget),
@@ -5995,6 +6114,7 @@ function createControlRuntimeEffectBinding({
     )
     .filter(Boolean);
   const tuningBinding = resolveTuningEffectBindingContract({
+    root,
     node,
     relationPath,
     ancestorNodes,
@@ -6170,6 +6290,7 @@ function createControlRuntimeEffectBinding({
 }
 
 function resolveTuningEffectBindingContract({
+  root,
   node,
   relationPath,
   ancestorNodes,
@@ -6206,11 +6327,9 @@ function resolveTuningEffectBindingContract({
     .reverse()
     .find(candidate => candidate.judgment);
   const judgment = judgmentNode?.judgment ?? null;
-  const markIds = [
-    ...new Set(
-      (judgment?.markElementIds ?? []).map(Number).filter(Number.isInteger)
-    ),
-  ];
+  const markIds = (judgment?.markElementIds ?? [])
+    .map(Number)
+    .filter(Number.isInteger);
   const judgmentEdge = judgmentNode
     ? relationPath.find(edge => edge.from === judgmentNode.nodeIdentity)
     : null;
@@ -6232,6 +6351,29 @@ function resolveTuningEffectBindingContract({
   }
   const minimumStacks = positiveIntegerOrNull(judgment?.consumeLayerNum) ?? 1;
   const configuredMaximum = positiveIntegerOrNull(judgment?.consumeLayerMaxNum);
+  const judgmentCandidates = createTuningJudgmentCandidates({
+    root,
+    node,
+    judgment,
+    reasons,
+  });
+  const currentCandidate = judgmentCandidates.find(
+    candidate =>
+      candidate.markId === Number(node.tuningOverlimit.markId) &&
+      candidate.packetElementId ===
+        Number(node.tuningOverlimit.packetElementId)
+  );
+  if (!currentCandidate) {
+    reasons.push('tuning-consume-current-packet-not-in-candidate-map');
+  }
+  const prioritySelection =
+    markIds.length > 1 && Number(judgment?.consumeMode) === 0;
+  if (markIds.length > 1 && Number(judgment?.consumeMode) !== 0) {
+    reasons.push('tuning-consume-multi-candidate-mode-unresolved');
+  }
+  const priorityEvidence = prioritySelection
+    ? createTuningConsumePriorityEvidenceContract()
+    : null;
   return {
     kind: 'consume',
     target: {
@@ -6249,13 +6391,114 @@ function resolveTuningEffectBindingContract({
       judgmentPathId: judgmentNode?.pathId ?? null,
       judgmentSourceIdentity: judgmentNode?.sourceIdentity ?? null,
       judgmentCandidateMarkIds: markIds,
+      judgmentGroupIdentity: [
+        'tuning-consume-judgment',
+        root.controlSkillId,
+        root.mapIndex,
+        judgmentNode?.elementId ?? 'unknown-element',
+        judgmentNode?.pathId ?? 'unknown-path',
+      ].join(':'),
+      judgmentCandidates,
       runtimeSelectionMode:
-        markIds.length > 1
-          ? 'active-mark-state-selects-packet'
+        prioritySelection
+          ? 'priority-first-sufficient-candidate'
           : 'single-mark-packet',
+      priorityDirection: prioritySelection
+        ? priorityEvidence.candidateOrder
+        : null,
+      priorityRuntimeEvidence: priorityEvidence,
     },
     reasons: dedupeBy(reasons, value => value),
     applied: reasons.length === 0,
+  };
+}
+
+function createTuningJudgmentCandidates({ root, node, judgment, reasons }) {
+  const markIds = (judgment?.markElementIds ?? [])
+    .map(Number)
+    .filter(Number.isInteger);
+  const mappings = judgment?.candidateEffectMappings ?? [];
+  if (
+    markIds.length === 1 &&
+    Number(node.tuningOverlimit?.markId) === markIds[0]
+  ) {
+    return [
+      {
+        priorityIndex: 0,
+        markId: markIds[0],
+        packetElementId: integerOrNull(
+          node.tuningOverlimit?.packetElementId
+        ),
+        packetPathId: node.pathId ?? null,
+        packetSourceIdentity:
+          node.tuningOverlimit?.sourceIdentity ?? node.sourceIdentity ?? null,
+      },
+    ];
+  }
+  if (mappings.length !== markIds.length) {
+    reasons.push('tuning-consume-candidate-mapping-count-mismatch');
+  }
+  return markIds.map((markId, priorityIndex) => {
+    const mapping = mappings[priorityIndex] ?? null;
+    if (Number(mapping?.markId) !== markId) {
+      reasons.push('tuning-consume-candidate-mark-order-mismatch');
+    }
+    const packetNodes = (mapping?.packetPathIds ?? [])
+      .map(pathId =>
+        root.nodes.find(candidate => String(candidate.pathId) === String(pathId))
+      )
+      .filter(candidate => candidate?.tuningOverlimit);
+    if (packetNodes.length !== 1) {
+      reasons.push('tuning-consume-candidate-packet-mapping-unresolved');
+    }
+    const packetNode = packetNodes[0] ?? null;
+    if (
+      packetNode &&
+      Number(packetNode.tuningOverlimit.markId) !== Number(markId)
+    ) {
+      reasons.push('tuning-consume-candidate-packet-profile-mismatch');
+    }
+    return {
+      priorityIndex,
+      markId,
+      packetElementId:
+        integerOrNull(packetNode?.tuningOverlimit?.packetElementId) ??
+        integerOrNull(packetNode?.elementId),
+      packetPathId:
+        packetNode?.pathId ?? mapping?.packetPathIds?.[0] ?? null,
+      packetSourceIdentity:
+        packetNode?.tuningOverlimit?.sourceIdentity ??
+        packetNode?.sourceIdentity ??
+        null,
+    };
+  });
+}
+
+function createTuningConsumePriorityEvidenceContract() {
+  const evidence = getTuningConsumePriorityRuntimeEvidence();
+  return {
+    sourceIdentity: evidence.sourceIdentity,
+    binaryPath: evidence.binary.path,
+    binarySha256: evidence.binary.sha256,
+    dumpPath: evidence.dump.path,
+    dumpRequiredDeclarations: evidence.dump.requiredDeclarations,
+    consumerClassName: evidence.selection.className,
+    consumerMethod: evidence.selection.consumerMethod,
+    consumerMethodRva: evidence.selection.consumerMethodRva,
+    candidateLoopRange: evidence.selection.candidateLoopRange,
+    candidateLoopSha256: evidence.selection.candidateLoopSha256,
+    insufficientFallbackRange: evidence.selection.insufficientFallbackRange,
+    selectedElementStoreRva: evidence.selection.selectedElementStoreRva,
+    candidateOrder: evidence.selection.candidateOrder,
+    selectionRule: evidence.selection.selectionRule,
+    fallbackRule: evidence.selection.fallbackRule,
+    noCandidateRule: evidence.selection.noCandidateRule,
+    injectMethod: evidence.injection.injectMethod,
+    injectMethodRva: evidence.injection.injectMethodRva,
+    selectedPacketLookupRange: evidence.injection.selectedPacketLookupRange,
+    selectedPacketLookupSha256:
+      evidence.injection.selectedPacketLookupSha256,
+    packetRule: evidence.injection.packetRule,
   };
 }
 

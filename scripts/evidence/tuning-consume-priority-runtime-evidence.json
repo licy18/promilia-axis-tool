@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrTuningConsumePriorityRuntimeEvidence",
+  "status": "verified",
+  "binary": {
+    "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+    "bytes": 222485544,
+    "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+  },
+  "dump": {
+    "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+    "requiredDeclarations": [
+      "public enum ConsumePackElement.EConsumeMode",
+      "public const ConsumePackElement.EConsumeMode Priority = 0",
+      "public void CalculateConsumeCount()",
+      "public void DoConsume()",
+      "public void DoInject()"
+    ]
+  },
+  "selection": {
+    "className": "Lens.Gameplay.Modules.BigWorld.ConsumePackElement",
+    "consumerMethod": "CalculateConsumeCount",
+    "consumerMethodRva": "0x1385260",
+    "candidateLoopRange": "0x138587D-0x1385B3C",
+    "candidateLoopSha256": "f254a66bed3d1a662985e2b2107000d7d12223619eedbc67cbfdce9af3a5b0b9",
+    "insufficientFallbackRange": "0x138592C-0x1385932",
+    "selectedElementStoreRva": "0x138594C",
+    "candidateOrder": "element-arr-index-ascending",
+    "selectionRule": "first-candidate-with-layer-count-greater-than-or-equal-to-consume-layer-num",
+    "fallbackRule": "continue-to-next-candidate-when-current-layer-count-is-insufficient",
+    "noCandidateRule": "no-consume-and-no-inject"
+  },
+  "injection": {
+    "injectMethod": "DoInject",
+    "injectMethodRva": "0x1386950",
+    "selectedPacketLookupRange": "0x1386AD2-0x1386B65",
+    "selectedPacketLookupSha256": "ae7cd17a10c4b798c6eb4712b5d39a28dff9d440c111038e006b78ecc1aca291",
+    "packetRule": "lookup-inject-element-data-dict-by-selected-consume-element-id"
+  },
+  "sourceIdentity": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#ConsumePackElement.CalculateConsumeCount@RVA=0x1385260/DoInject@RVA=0x1386950"
+}
