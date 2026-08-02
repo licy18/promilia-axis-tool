@@ -105,4 +105,90 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       runtimeStatus: 'source-indexed-runtime-unapplied',
     });
   });
+
+  it('preserves source property tags and the verified skill-tag binding contract', () => {
+    expect(soulCatalog.propertyTagContract).toMatchObject({
+      sourceKind: 'il2cpp-battle-property-tag-contract',
+      matchSemantics: {
+        emptyModifierTags: 'unscoped',
+        singleModifierTag: 'exact-membership',
+        multipleModifierTags: 'evidence-open-runtime-blocked',
+      },
+      bindings: [
+        expect.objectContaining({
+          skillTagId: 1,
+          skillTagName: 'NormalAttack',
+          actionKind: 'normal-attack',
+          propertyTag: 300,
+          propertyTagName: 'NormalAttack',
+          status: 'applied',
+        }),
+        expect.objectContaining({
+          skillTagId: 2,
+          skillTagName: 'WhackAttack',
+          actionKind: 'charged-attack',
+          propertyTag: 301,
+          propertyTagName: 'Skill1',
+          status: 'applied',
+        }),
+      ],
+    });
+    expect(census.propertyTagContract).toEqual(
+      soulCatalog.propertyTagContract
+    );
+
+    const expectedTagsBySoulEssenceId = new Map([
+      [10001, []],
+      [10002, []],
+      [10037, []],
+      [10060, [300]],
+      [10094, [301]],
+      [10098, [301]],
+      [10125, []],
+      [10154, []],
+      [10155, []],
+    ]);
+    const appliedDefinitions = soulCatalog.definitions.filter(
+      definition => definition.runtimeStatus === 'runtime-applied'
+    );
+
+    expect(
+      appliedDefinitions.map(definition => definition.soulEssenceId).sort()
+    ).toEqual([...expectedTagsBySoulEssenceId.keys()].sort());
+    for (const definition of appliedDefinitions) {
+      const soulEssenceId = definition.soulEssenceId;
+      const expectedTags = expectedTagsBySoulEssenceId.get(soulEssenceId);
+      const censusRecord = census.records.find(
+        row =>
+          row.objectKind === 'soul-essence' &&
+          row.objectId === String(soulEssenceId)
+      );
+
+      expect(definition).toMatchObject({
+        runtimeStatus: 'runtime-applied',
+        effect: {
+          propertyTags: expectedTags,
+          propertyTagMatchMode:
+            expectedTags.length === 0 ? 'unscoped' : 'single-exact',
+          propertyTagSourceIdentity: expect.stringContaining(
+            `elementId=${definition.effect.elementId}`
+          ),
+        },
+        runtimeGaps: [],
+      });
+      expect(censusRecord).toMatchObject({
+        effectPropertyTags: expectedTags,
+        effectPropertyTagMatchMode:
+          expectedTags.length === 0 ? 'unscoped' : 'single-exact',
+        effectPropertyTagSourceIdentity:
+          definition.effect.propertyTagSourceIdentity,
+      });
+    }
+
+    expect(
+      soulCatalog.definitions
+        .filter(definition => definition.runtimeStatus === 'runtime-applied')
+        .every(definition => Array.isArray(definition.effect.propertyTags))
+    ).toBe(true);
+  });
 });

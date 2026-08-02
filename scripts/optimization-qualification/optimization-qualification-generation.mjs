@@ -282,6 +282,8 @@ export async function createOptimizationQualificationArtifacts({
     generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
     projectRoot,
     setSkills,
+    propertyTagContract:
+      sources.il2cppRuntimeContracts.value.battlePropertyTags,
   });
   sources.battleElementAssets = {
     ...soulEssenceEffects.sourceSnapshot.battleElements,
@@ -391,7 +393,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C',
+      phase: 'M12-B3-C-R1',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1333,8 +1335,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C',
-    status: 'b3-c-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C-R1',
+    status: 'b3-c-r1-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1768,7 +1770,7 @@ function createSourceSnapshot(sources) {
 function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
-  return '# M12-B3-C Dynamic Loadout Effect Family Closure\n\n' +
+  return '# M12-B3-C-R1 Dynamic Loadout Effect Family Closure\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1777,7 +1779,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batch: soul essence 10098 is runtime-applied through a generic landed charged-hit AfterDamage operator; soul essence 10018 remains blocked by its outer tuning-mark prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
+    '- Dynamic loadout batch: leaf defaultPropertyTags are preserved as source-bound effect scope; verified skillTag 1/2 map to battle property tags 300/301 with single-tag exact matching, while unknown or multi-tag mappings remain blocked. Soul essences 10060, 10094, and 10098 therefore apply only to their verified normal/charged hit classes. Soul essence 10018 remains blocked by its outer tuning-mark prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n';
@@ -1830,6 +1832,19 @@ async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
   const gameUtilBlock = extractIl2CppTypeBlock(text, {
     namespace: 'Lens.Gameplay.UI.Util',
     declaration: 'public static class GameUtil',
+  });
+  const skillTagBlock = extractIl2CppTypeBlock(text, {
+    namespace: 'Lens.Gameplay.Modules.BigWorld',
+    declaration: 'public enum ESkillTagType',
+  });
+  const battlePropertyTagBlock = extractIl2CppTypeBlock(text, {
+    namespace: 'Lens.Gameplay.Modules.BigWorld',
+    declaration: 'public enum EBattlePropertyTag',
+  });
+  const battlePropertyTags = createBattlePropertyTagContract({
+    sourcePath: normalizeSourcePath(sourcePath, projectRoot),
+    skillTagBlock,
+    battlePropertyTagBlock,
   });
   const heroRuntimeDeclarations = {
     fields: ['public int lv;', 'public int heroRank;'].map(declaration => ({
@@ -1906,12 +1921,128 @@ async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
     sha256: createHash('sha256').update(bytes).digest('hex'),
     value: {
       heroRuntimeDeclarations,
+      battlePropertyTags,
       equipmentInstance: {
         fields: ['score', 'bGoldSide', 'maxValue'],
         instanceOwned: true,
       },
     },
   };
+}
+
+function createBattlePropertyTagContract({
+  sourcePath,
+  skillTagBlock,
+  battlePropertyTagBlock,
+}) {
+  const bindingDeclarations = [
+    {
+      skillTagName: 'NormalAttack',
+      skillTagId: 1,
+      skillDescription: '角色普攻',
+      actionKind: 'normal-attack',
+      propertyTagName: 'NormalAttack',
+      propertyTag: 300,
+      propertyDescription: '[属性Tag]普攻',
+    },
+    {
+      skillTagName: 'WhackAttack',
+      skillTagId: 2,
+      skillDescription: '角色重击',
+      actionKind: 'charged-attack',
+      propertyTagName: 'Skill1',
+      propertyTag: 301,
+      propertyDescription: '[属性Tag]重击',
+    },
+  ];
+  const bindings = bindingDeclarations.map(binding => {
+    assertIl2CppEnumMember({
+      block: skillTagBlock,
+      enumName: 'ESkillTagType',
+      memberName: binding.skillTagName,
+      value: binding.skillTagId,
+      description: binding.skillDescription,
+    });
+    assertIl2CppEnumMember({
+      block: battlePropertyTagBlock,
+      enumName: 'EBattlePropertyTag',
+      memberName: binding.propertyTagName,
+      value: binding.propertyTag,
+      description: binding.propertyDescription,
+    });
+    return {
+      skillTagId: binding.skillTagId,
+      skillTagName: binding.skillTagName,
+      actionKind: binding.actionKind,
+      propertyTag: binding.propertyTag,
+      propertyTagName: binding.propertyTagName,
+      status: 'applied',
+      sourceIdentity: `${sourcePath}#ESkillTagType.${binding.skillTagName}=${binding.skillTagId}|${sourcePath}#EBattlePropertyTag.${binding.propertyTagName}=${binding.propertyTag}`,
+    };
+  });
+  const unresolvedPropertyTags = [
+    ['Skill2', 302],
+    ['UltraSkill', 303],
+    ['EvadeAttack', 304],
+    ['ReboundCounterattack', 305],
+    ['EvadeBoostAttack', 306],
+    ['Overdrive', 307],
+    ['Disorder', 308],
+    ['PetSkill', 309],
+    ['PetUltraSkill', 310],
+    ['PetJointStrikeSkill', 311],
+    ['DotDamage', 312],
+    ['RealDamage', 313],
+    ['AerialAttack', 314],
+    ['EnterSkill', 315],
+    ['ExitSkill', 316],
+  ].map(([propertyTagName, propertyTag]) => {
+    assertIl2CppEnumMember({
+      block: battlePropertyTagBlock,
+      enumName: 'EBattlePropertyTag',
+      memberName: propertyTagName,
+      value: propertyTag,
+    });
+    return {
+      propertyTag,
+      propertyTagName,
+      status: 'static-evidence-gap',
+      reason: 'battle-property-tag-action-binding-not-evidence-closed',
+      sourceIdentity: `${sourcePath}#EBattlePropertyTag.${propertyTagName}=${propertyTag}`,
+    };
+  });
+  const value = {
+    sourceKind: 'il2cpp-battle-property-tag-contract',
+    sourceIdentity: `${sourcePath}#ESkillTagType|${sourcePath}#EBattlePropertyTag`,
+    matchSemantics: {
+      emptyModifierTags: 'unscoped',
+      singleModifierTag: 'exact-membership',
+      multipleModifierTags: 'evidence-open-runtime-blocked',
+    },
+    bindings,
+    unresolvedPropertyTags,
+  };
+  return { ...value, contractHash: hashCanonicalValue(value) };
+}
+
+function assertIl2CppEnumMember({
+  block,
+  enumName,
+  memberName,
+  value,
+  description = null,
+}) {
+  const declaration = `public const ${enumName} ${memberName} = ${value};`;
+  if (!block.includes(declaration)) {
+    throw new Error(
+      `optimization-qualification-il2cpp-enum-member-missing:${enumName}.${memberName}=${value}`
+    );
+  }
+  if (description != null && !block.includes(`[Description("${description}")]`)) {
+    throw new Error(
+      `optimization-qualification-il2cpp-enum-description-missing:${enumName}.${memberName}`
+    );
+  }
 }
 
 const binaryHashCache = new Map();

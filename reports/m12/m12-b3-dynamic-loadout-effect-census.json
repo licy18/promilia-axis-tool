@@ -3,7 +3,144 @@
   "contractName": "AzPrDynamicLoadoutEffectMechanismCensus",
   "kind": "azpr-dynamic-loadout-effect-mechanism-census",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "sourceCatalogHash": "93390d191dd4a1c0",
+  "sourceCatalogHash": "a63cde47d91815d6",
+  "propertyTagContract": {
+    "sourceKind": "il2cpp-battle-property-tag-contract",
+    "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag",
+    "matchSemantics": {
+      "emptyModifierTags": "unscoped",
+      "singleModifierTag": "exact-membership",
+      "multipleModifierTags": "evidence-open-runtime-blocked"
+    },
+    "bindings": [
+      {
+        "skillTagId": 1,
+        "skillTagName": "NormalAttack",
+        "actionKind": "normal-attack",
+        "propertyTag": 300,
+        "propertyTagName": "NormalAttack",
+        "status": "applied",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.NormalAttack=300"
+      },
+      {
+        "skillTagId": 2,
+        "skillTagName": "WhackAttack",
+        "actionKind": "charged-attack",
+        "propertyTag": 301,
+        "propertyTagName": "Skill1",
+        "status": "applied",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.WhackAttack=2|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.Skill1=301"
+      }
+    ],
+    "unresolvedPropertyTags": [
+      {
+        "propertyTag": 302,
+        "propertyTagName": "Skill2",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.Skill2=302"
+      },
+      {
+        "propertyTag": 303,
+        "propertyTagName": "UltraSkill",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.UltraSkill=303"
+      },
+      {
+        "propertyTag": 304,
+        "propertyTagName": "EvadeAttack",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.EvadeAttack=304"
+      },
+      {
+        "propertyTag": 305,
+        "propertyTagName": "ReboundCounterattack",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.ReboundCounterattack=305"
+      },
+      {
+        "propertyTag": 306,
+        "propertyTagName": "EvadeBoostAttack",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.EvadeBoostAttack=306"
+      },
+      {
+        "propertyTag": 307,
+        "propertyTagName": "Overdrive",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.Overdrive=307"
+      },
+      {
+        "propertyTag": 308,
+        "propertyTagName": "Disorder",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.Disorder=308"
+      },
+      {
+        "propertyTag": 309,
+        "propertyTagName": "PetSkill",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.PetSkill=309"
+      },
+      {
+        "propertyTag": 310,
+        "propertyTagName": "PetUltraSkill",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.PetUltraSkill=310"
+      },
+      {
+        "propertyTag": 311,
+        "propertyTagName": "PetJointStrikeSkill",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.PetJointStrikeSkill=311"
+      },
+      {
+        "propertyTag": 312,
+        "propertyTagName": "DotDamage",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.DotDamage=312"
+      },
+      {
+        "propertyTag": 313,
+        "propertyTagName": "RealDamage",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.RealDamage=313"
+      },
+      {
+        "propertyTag": 314,
+        "propertyTagName": "AerialAttack",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.AerialAttack=314"
+      },
+      {
+        "propertyTag": 315,
+        "propertyTagName": "EnterSkill",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.EnterSkill=315"
+      },
+      {
+        "propertyTag": 316,
+        "propertyTagName": "ExitSkill",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.ExitSkill=316"
+      }
+    ],
+    "contractHash": "146e6a9a7db86606"
+  },
   "policy": {
     "thresholdActivationIsNotRuntimeApplication": true,
     "descriptionsAreDiscoveryOnly": true,
@@ -58,6 +195,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6873642074129583000;elementId=199999034.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=6873642074129583000;elementId=199999034"
           }
         ],
@@ -262,6 +401,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-547247735095652860;elementId=199999030.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-547247735095652860;elementId=199999030"
           }
         ],
@@ -347,6 +488,8 @@
             "combineNumber": 5,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-2930048594441716700;elementId=199999021.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-2930048594441716700;elementId=199999021"
           }
         ],
@@ -423,6 +566,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-7499379216637078000;elementId=199999032.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-7499379216637078000;elementId=199999032"
           }
         ],
@@ -508,6 +653,8 @@
             "combineNumber": 0,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5654239168115731000;elementId=199999086.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-5654239168115731000;elementId=199999086"
           },
           {
@@ -521,6 +668,8 @@
             "combineNumber": 0,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-2059155062252145200;elementId=199999023.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-2059155062252145200;elementId=199999023"
           }
         ],
@@ -597,6 +746,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6348192788412551000;elementId=199999028.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=6348192788412551000;elementId=199999028"
           }
         ],
@@ -700,6 +851,8 @@
             "combineNumber": 7,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-4495644276298113500;elementId=199999019.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-4495644276298113500;elementId=199999019"
           }
         ],
@@ -776,6 +929,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=4932404186359318000;elementId=199999060.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=4932404186359318000;elementId=199999060"
           }
         ],
@@ -861,6 +1016,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057"
           }
         ],
@@ -937,6 +1094,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=5052602432412010000;elementId=199999067.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=5052602432412010000;elementId=199999067"
           }
         ],
@@ -1050,6 +1209,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5884995951490395000;elementId=199999064.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-5884995951490395000;elementId=199999064"
           },
           {
@@ -1063,6 +1224,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=7187107487063477000;elementId=199999070.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=7187107487063477000;elementId=199999070"
           }
         ],
@@ -1119,6 +1282,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=7615727136823255000;elementId=19004802.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 5000,
         "stackMode": "stack",
@@ -1164,6 +1330,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-131968735896823040;elementId=19006104.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 12000,
         "stackMode": "refresh",
@@ -1193,6 +1362,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -1228,6 +1400,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -1293,6 +1468,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 12000,
         "stackMode": "stack",
@@ -1339,6 +1517,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 24000,
         "stackMode": "refresh",
@@ -1372,6 +1553,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -1407,6 +1591,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -1458,6 +1645,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6108188296881701000;elementId=19004501.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 11000,
         "stackMode": "stack",
@@ -1496,6 +1686,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-4023729244501754000;elementId=19003302.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 16000,
         "stackMode": "stack",
@@ -1538,6 +1731,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=1889171037961678300;elementId=19005503.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 16000,
         "stackMode": "refresh",
@@ -1570,6 +1766,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -1614,6 +1813,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5655228325641076000;elementId=19009202.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 8000,
         "stackMode": "refresh",
@@ -1647,6 +1849,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -1691,6 +1896,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=4769837230415874000;elementId=19009102.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 10000,
         "stackMode": "refresh",
@@ -1732,6 +1940,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-2274249246834308600;elementId=19009302.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 20000,
         "stackMode": "refresh",
@@ -1763,6 +1974,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -1798,6 +2012,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -1833,6 +2050,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -1868,6 +2088,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -1919,6 +2142,11 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [
+        300
+      ],
+      "effectPropertyTagMatchMode": "single-exact",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-2685633708192990000;elementId=19009002.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 24000,
         "stackMode": "refresh",
@@ -1948,6 +2176,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -1983,6 +2214,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -2027,6 +2261,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -2061,6 +2298,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -2096,6 +2336,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -2131,6 +2374,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -2166,6 +2412,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -2210,6 +2459,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=475903754845527040;elementId=19002302.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 24000,
         "stackMode": "refresh",
@@ -2258,6 +2510,11 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [
+        301
+      ],
+      "effectPropertyTagMatchMode": "single-exact",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8461738275188953000;elementId=19006602.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 15000,
         "stackMode": "refresh",
@@ -2287,6 +2544,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -2338,6 +2598,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-6749174475042234000;elementId=19004701.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 8000,
         "stackMode": "refresh",
@@ -2385,6 +2648,11 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [
+        301
+      ],
+      "effectPropertyTagMatchMode": "single-exact",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5650259386971768000;elementId=19006702.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 4000,
         "stackMode": "stack",
@@ -2423,6 +2691,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 4000,
         "stackMode": "stack",
@@ -2470,6 +2741,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -2502,6 +2776,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -2537,6 +2814,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -2581,6 +2861,11 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [
+        301
+      ],
+      "effectPropertyTagMatchMode": "single-exact",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8480096044321114000;elementId=19005901.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 8000,
         "stackMode": "refresh",
@@ -2622,6 +2907,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 20000,
         "stackMode": "refresh",
@@ -2669,6 +2957,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-3194128450977334000;elementId=19005402.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 5000,
         "stackMode": "stack",
@@ -2707,6 +2998,11 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [
+        301
+      ],
+      "effectPropertyTagMatchMode": "single-exact",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=7184896566896581000;elementId=19002802.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 5000,
         "stackMode": "refresh",
@@ -2748,6 +3044,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 3000,
         "stackMode": "refresh",
@@ -2779,6 +3078,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -2814,6 +3116,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -2858,6 +3163,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 8000,
         "stackMode": "refresh",
@@ -2889,6 +3197,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -2938,6 +3249,11 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [
+        301
+      ],
+      "effectPropertyTagMatchMode": "single-exact",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002.defaultPropertyTags",
       "lifecycle": {
         "durationMs": -1,
         "stackMode": "refresh",
@@ -2979,6 +3295,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6856932050092692000;elementId=19002202.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 24000,
         "stackMode": "refresh",
@@ -3020,6 +3339,11 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [
+        301
+      ],
+      "effectPropertyTagMatchMode": "single-exact",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 8000,
         "stackMode": "stack",
@@ -3066,6 +3390,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=3837107787407859700;elementId=19001302.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 10000,
         "stackMode": "refresh",
@@ -3097,6 +3424,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -3148,6 +3478,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=2209371490931731500;elementId=19002402.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 15000,
         "stackMode": "stack",
@@ -3193,6 +3526,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6931937794752071000;elementId=19002502.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 15000,
         "stackMode": "stack",
@@ -3222,6 +3558,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -3266,6 +3605,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-7968102161953321000;elementId=19007503.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 20000,
         "stackMode": "refresh",
@@ -3308,6 +3650,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -3350,6 +3695,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8237672842561680000;elementId=19001402.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 2000,
         "stackMode": "refresh",
@@ -3399,6 +3747,9 @@
         "source": "equipped-actor",
         "target": "self-actor"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502.defaultPropertyTags",
       "lifecycle": {
         "durationMs": 15000,
         "stackMode": "refresh",
@@ -3432,6 +3783,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -3467,6 +3821,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -3502,6 +3859,9 @@
         "source": "equipped-actor",
         "target": null
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -3551,6 +3911,9 @@
         "source": "equipped-actor",
         "target": "unresolved"
       },
+      "effectPropertyTags": [],
+      "effectPropertyTagMatchMode": null,
+      "effectPropertyTagSourceIdentity": null,
       "lifecycle": null,
       "resourceTransactions": [],
       "vitalChanges": [],
@@ -3596,5 +3959,5 @@
       "source-indexed-runtime-unapplied": 53
     }
   },
-  "censusHash": "3fe66fdddd74a4c6"
+  "censusHash": "23f55b801a5f0e31"
 }

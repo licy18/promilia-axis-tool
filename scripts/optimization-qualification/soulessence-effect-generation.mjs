@@ -50,7 +50,15 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   generatedAt,
   projectRoot,
   setSkills = [],
+  propertyTagContract = null,
 } = {}) {
+  if (
+    propertyTagContract?.sourceKind !==
+      'il2cpp-battle-property-tag-contract' ||
+    !propertyTagContract?.contractHash
+  ) {
+    throw new Error('soulessence-property-tag-contract-missing');
+  }
   const definitionBySoulId = new Map(
     (soulDefinitionRows ?? []).map(row => [Number(row.id), row])
   );
@@ -90,6 +98,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       logicBySkillId,
       valueRowsBySkillId,
       battleElementsByPathId: battleSource.byPathId,
+      propertyTagContract,
       control: controlSource.bySkillId.get(
         Number(definitionBySoulId.get(item.soulEssenceId)?.reishiSkill)
       ),
@@ -120,10 +129,15 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       battleElements: battleSource.metadata,
       controlClosure: controlSource.metadata,
       setSkillControlClosure: setSkillControlSource.metadata,
+      propertyTagContract: {
+        sourceIdentity: propertyTagContract.sourceIdentity,
+        contractHash: propertyTagContract.contractHash,
+      },
       sourceSnapshotHash: hashCanonicalValue({
         battleElements: battleSource.metadata,
         controlClosure: controlSource.metadata,
         setSkillControlClosure: setSkillControlSource.metadata,
+        propertyTagContractHash: propertyTagContract.contractHash,
       }),
     },
     policy: {
@@ -136,6 +150,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
         'equipped-actor-skill-tag-property-after-damage',
       ],
     },
+    propertyTagContract,
     definitions,
     setSkillDefinitions,
     unresolved,
@@ -188,6 +203,11 @@ export function createDynamicLoadoutEffectCensus(catalog) {
         source: 'equipped-actor',
         target: definition.trigger?.targetKind ?? null,
       },
+      effectPropertyTags: definition.effect?.propertyTags ?? [],
+      effectPropertyTagMatchMode:
+        definition.effect?.propertyTagMatchMode ?? null,
+      effectPropertyTagSourceIdentity:
+        definition.effect?.propertyTagSourceIdentity ?? null,
       lifecycle: projectEffectLifecycle(definition.effect),
       resourceTransactions: [],
       vitalChanges: [],
@@ -237,6 +257,7 @@ export function createDynamicLoadoutEffectCensus(catalog) {
     kind: 'azpr-dynamic-loadout-effect-mechanism-census',
     generatedAt: catalog?.generatedAt ?? null,
     sourceCatalogHash: catalog?.catalogHash ?? null,
+    propertyTagContract: catalog?.propertyTagContract ?? null,
     policy: {
       thresholdActivationIsNotRuntimeApplication: true,
       descriptionsAreDiscoveryOnly: true,
@@ -443,6 +464,8 @@ function projectPropertyEvidence(row) {
     combineNumber: numberOrNull(tree.combineNumber),
     executeTargetType: numberOrNull(tree.executeTargetType),
     inheritType: numberOrNull(tree.inheritType),
+    defaultPropertyTags: uniqueNumbers(tree.defaultPropertyTags ?? []),
+    propertyTagSourceIdentity: `${createElementIdentity(row)}.defaultPropertyTags`,
     sourceIdentity: createElementIdentity(row),
   };
 }
@@ -473,6 +496,7 @@ function compileSoulEffectDefinition({
   valueRowsBySkillId,
   battleElementsByPathId,
   control,
+  propertyTagContract,
 }) {
   const effectSkillId = Number(sourceDefinition?.reishiSkill);
   const resourcePathIds = uniqueNumbers(control?.resourcePathIds ?? []);
@@ -536,6 +560,12 @@ function compileSoulEffectDefinition({
     propertyTree.formulaParams?.formulaParamValues?.[6] ??
       propertyTree.functionParams?.[6]
   );
+  const propertyTags = uniqueNumbers(propertyTree.defaultPropertyTags ?? []);
+  const supportedPropertyTags = new Set(
+    (propertyTagContract?.bindings ?? [])
+      .filter(binding => binding.status === 'applied')
+      .map(binding => Number(binding.propertyTag))
+  );
   const conditions = Array.isArray(triggerTree.triggerConditionList)
     ? triggerTree.triggerConditionList
     : [];
@@ -578,6 +608,14 @@ function compileSoulEffectDefinition({
   }
   if (!PROPERTY_BUCKET_BY_CALCULATE_TYPE[Number(propertyTree.calculateType)]) {
     runtimeGaps.push('effect-property-bucket-unsupported');
+  }
+  if (propertyTags.length > 1) {
+    runtimeGaps.push('effect-property-tag-composition-evidence-gap');
+  } else if (
+    propertyTags.length === 1 &&
+    !supportedPropertyTags.has(propertyTags[0])
+  ) {
+    runtimeGaps.push('effect-property-tag-action-mapping-evidence-gap');
   }
   if (
     commonFunctionId !== 1 ||
@@ -652,6 +690,14 @@ function compileSoulEffectDefinition({
               Number(propertyTree.calculateType)
             ] ?? null,
             calculateType: Number(propertyTree.calculateType),
+            propertyTags,
+            propertyTagMatchMode:
+              propertyTags.length === 0
+                ? 'unscoped'
+                : propertyTags.length === 1
+                  ? 'single-exact'
+                  : 'evidence-open-multi-tag',
+            propertyTagSourceIdentity: `${createElementIdentity(property)}.defaultPropertyTags`,
             formula: {
               commonFunctionId,
               baseFunctionId,

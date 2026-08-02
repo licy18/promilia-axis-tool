@@ -262,6 +262,10 @@ function createSoulEffectCommand({
         },
         sourceElementId: effect.elementId,
         sourceElementPathId: effect.pathId,
+        propertyTags: [...(effect.propertyTags ?? [])],
+        propertyTagMatchMode: effect.propertyTagMatchMode ?? 'unscoped',
+        propertyTagSourceIdentity:
+          effect.propertyTagSourceIdentity ?? null,
         sourceIdentity: effect.sourceIdentity,
       },
     ],
@@ -288,6 +292,11 @@ function createSoulEffectCommand({
         null,
       effectElementId: effect.elementId,
       effectPathId: effect.pathId,
+      effectPropertyTags: [...(effect.propertyTags ?? [])],
+      effectPropertyTagMatchMode:
+        effect.propertyTagMatchMode ?? 'unscoped',
+      effectPropertyTagSourceIdentity:
+        effect.propertyTagSourceIdentity ?? null,
       star: binding.star,
       starValueSourceIdentity: starValue.sourceIdentity,
       cultivationSourceIdentity: binding.cultivationSourceIdentity,

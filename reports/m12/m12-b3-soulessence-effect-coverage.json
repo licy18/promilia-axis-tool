@@ -24,7 +24,11 @@
       "bytes": 95734,
       "sha256": "8985e7ce5fa74b703caf39430e29aa3a4db212348df6653b1529f58cf4b7c18d"
     },
-    "sourceSnapshotHash": "74868b8658ceb290"
+    "propertyTagContract": {
+      "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag",
+      "contractHash": "146e6a9a7db86606"
+    },
+    "sourceSnapshotHash": "6d9abffd3c83a853"
   },
   "policy": {
     "descriptionUsage": "discovery-and-cross-check-only",
@@ -34,6 +38,143 @@
       "equipped-actor-skill-tag-property-before-skill",
       "equipped-actor-skill-tag-property-after-damage"
     ]
+  },
+  "propertyTagContract": {
+    "sourceKind": "il2cpp-battle-property-tag-contract",
+    "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag",
+    "matchSemantics": {
+      "emptyModifierTags": "unscoped",
+      "singleModifierTag": "exact-membership",
+      "multipleModifierTags": "evidence-open-runtime-blocked"
+    },
+    "bindings": [
+      {
+        "skillTagId": 1,
+        "skillTagName": "NormalAttack",
+        "actionKind": "normal-attack",
+        "propertyTag": 300,
+        "propertyTagName": "NormalAttack",
+        "status": "applied",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.NormalAttack=300"
+      },
+      {
+        "skillTagId": 2,
+        "skillTagName": "WhackAttack",
+        "actionKind": "charged-attack",
+        "propertyTag": 301,
+        "propertyTagName": "Skill1",
+        "status": "applied",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.WhackAttack=2|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.Skill1=301"
+      }
+    ],
+    "unresolvedPropertyTags": [
+      {
+        "propertyTag": 302,
+        "propertyTagName": "Skill2",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.Skill2=302"
+      },
+      {
+        "propertyTag": 303,
+        "propertyTagName": "UltraSkill",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.UltraSkill=303"
+      },
+      {
+        "propertyTag": 304,
+        "propertyTagName": "EvadeAttack",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.EvadeAttack=304"
+      },
+      {
+        "propertyTag": 305,
+        "propertyTagName": "ReboundCounterattack",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.ReboundCounterattack=305"
+      },
+      {
+        "propertyTag": 306,
+        "propertyTagName": "EvadeBoostAttack",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.EvadeBoostAttack=306"
+      },
+      {
+        "propertyTag": 307,
+        "propertyTagName": "Overdrive",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.Overdrive=307"
+      },
+      {
+        "propertyTag": 308,
+        "propertyTagName": "Disorder",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.Disorder=308"
+      },
+      {
+        "propertyTag": 309,
+        "propertyTagName": "PetSkill",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.PetSkill=309"
+      },
+      {
+        "propertyTag": 310,
+        "propertyTagName": "PetUltraSkill",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.PetUltraSkill=310"
+      },
+      {
+        "propertyTag": 311,
+        "propertyTagName": "PetJointStrikeSkill",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.PetJointStrikeSkill=311"
+      },
+      {
+        "propertyTag": 312,
+        "propertyTagName": "DotDamage",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.DotDamage=312"
+      },
+      {
+        "propertyTag": 313,
+        "propertyTagName": "RealDamage",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.RealDamage=313"
+      },
+      {
+        "propertyTag": 314,
+        "propertyTagName": "AerialAttack",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.AerialAttack=314"
+      },
+      {
+        "propertyTag": 315,
+        "propertyTagName": "EnterSkill",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.EnterSkill=315"
+      },
+      {
+        "propertyTag": 316,
+        "propertyTagName": "ExitSkill",
+        "status": "static-evidence-gap",
+        "reason": "battle-property-tag-action-binding-not-evidence-closed",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag.ExitSkill=316"
+      }
+    ],
+    "contractHash": "146e6a9a7db86606"
   },
   "definitions": [
     {
@@ -71,6 +212,9 @@
         "attributeId": 222,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=7615727136823255000;elementId=19004802.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -173,6 +317,9 @@
         "attributeId": 53,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-131968735896823040;elementId=19006104.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -405,6 +552,9 @@
         "attributeId": 58,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -512,6 +662,9 @@
         "attributeId": 1,
         "bucket": "dynamicPercent",
         "calculateType": 2,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 3,
@@ -724,6 +877,9 @@
         "attributeId": 229,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6108188296881701000;elementId=19004501.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -819,6 +975,9 @@
         "attributeId": 229,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-4023729244501754000;elementId=19003302.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 3,
@@ -918,6 +1077,9 @@
         "attributeId": 52,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=1889171037961678300;elementId=19005503.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -1067,6 +1229,9 @@
         "attributeId": 1,
         "bucket": "dynamicPercent",
         "calculateType": 2,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5655228325641076000;elementId=19009202.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 3,
@@ -1217,6 +1382,9 @@
         "attributeId": 23,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=4769837230415874000;elementId=19009102.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -1315,6 +1483,9 @@
         "attributeId": 229,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-2274249246834308600;elementId=19009302.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -1623,6 +1794,11 @@
         "attributeId": 21,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [
+          300
+        ],
+        "propertyTagMatchMode": "single-exact",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-2685633708192990000;elementId=19009002.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -2110,6 +2286,9 @@
         "attributeId": 229,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=475903754845527040;elementId=19002302.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 3,
@@ -2215,6 +2394,11 @@
         "attributeId": 21,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [
+          301
+        ],
+        "propertyTagMatchMode": "single-exact",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8461738275188953000;elementId=19006602.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -2378,6 +2562,9 @@
         "attributeId": 229,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-6749174475042234000;elementId=19004701.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 3,
@@ -2482,6 +2669,11 @@
         "attributeId": 21,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [
+          301
+        ],
+        "propertyTagMatchMode": "single-exact",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5650259386971768000;elementId=19006702.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -2577,6 +2769,9 @@
         "attributeId": 222,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -2881,6 +3076,11 @@
         "attributeId": 21,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [
+          301
+        ],
+        "propertyTagMatchMode": "single-exact",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8480096044321114000;elementId=19005901.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -2979,6 +3179,9 @@
         "attributeId": 8,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -3083,6 +3286,9 @@
         "attributeId": 52,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-3194128450977334000;elementId=19005402.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -3178,6 +3384,11 @@
         "attributeId": 21,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [
+          301
+        ],
+        "propertyTagMatchMode": "single-exact",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=7184896566896581000;elementId=19002802.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -3276,6 +3487,9 @@
         "attributeId": 222,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -3490,6 +3704,9 @@
         "attributeId": 222,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -3650,6 +3867,11 @@
         "attributeId": 222,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [
+          301
+        ],
+        "propertyTagMatchMode": "single-exact",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -3750,6 +3972,9 @@
         "attributeId": 229,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6856932050092692000;elementId=19002202.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -3848,6 +4073,11 @@
         "attributeId": 21,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [
+          301
+        ],
+        "propertyTagMatchMode": "single-exact",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -3951,6 +4181,9 @@
         "attributeId": 222,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=3837107787407859700;elementId=19001302.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -4108,6 +4341,9 @@
         "attributeId": 229,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=2209371490931731500;elementId=19002402.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -4210,6 +4446,9 @@
         "attributeId": 52,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6931937794752071000;elementId=19002502.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 5,
@@ -4356,6 +4595,9 @@
         "attributeId": 229,
         "bucket": "dynamicExtra",
         "calculateType": 1,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-7968102161953321000;elementId=19007503.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 3,
@@ -4520,6 +4762,9 @@
         "attributeId": 1,
         "bucket": "dynamicPercent",
         "calculateType": 2,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8237672842561680000;elementId=19001402.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 3,
@@ -4626,6 +4871,9 @@
         "attributeId": 5,
         "bucket": "dynamicPercent",
         "calculateType": 2,
+        "propertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502.defaultPropertyTags",
         "formula": {
           "commonFunctionId": 1,
           "baseFunctionId": 3,
@@ -5032,6 +5280,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6873642074129583000;elementId=199999034.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=6873642074129583000;elementId=199999034"
           }
         ],
@@ -5073,7 +5323,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998106].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998106.asset/MonoBehaviour/skill_control_19998106__-7273921800481425865.json",
-      "mechanicsHash": "1919417010cab73f"
+      "mechanicsHash": "e5efec23e4df9c2a"
     },
     {
       "setId": 1,
@@ -5289,6 +5539,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-547247735095652860;elementId=199999030.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-547247735095652860;elementId=199999030"
           }
         ],
@@ -5330,7 +5582,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998104].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998104.asset/MonoBehaviour/skill_control_19998104__-777981310077937153.json",
-      "mechanicsHash": "f5d8e571cab5c445"
+      "mechanicsHash": "169c5abb833676fb"
     },
     {
       "setId": 2,
@@ -5397,6 +5649,8 @@
             "combineNumber": 5,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-2930048594441716700;elementId=199999021.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-2930048594441716700;elementId=199999021"
           }
         ],
@@ -5447,7 +5701,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998004].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998004.asset/MonoBehaviour/skill_control_19998004__-3432154940691725873.json",
-      "mechanicsHash": "6ab7d007bf96cccc"
+      "mechanicsHash": "25e3a4c355764607"
     },
     {
       "setId": 3,
@@ -5499,6 +5753,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-7499379216637078000;elementId=199999032.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-7499379216637078000;elementId=199999032"
           }
         ],
@@ -5540,7 +5796,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998105].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998105.asset/MonoBehaviour/skill_control_19998105__6900337914110806724.json",
-      "mechanicsHash": "e4c4f8bf22553124"
+      "mechanicsHash": "5c11b5cc18ec6e27"
     },
     {
       "setId": 3,
@@ -5607,6 +5863,8 @@
             "combineNumber": 0,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5654239168115731000;elementId=199999086.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-5654239168115731000;elementId=199999086"
           },
           {
@@ -5620,6 +5878,8 @@
             "combineNumber": 0,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-2059155062252145200;elementId=199999023.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-2059155062252145200;elementId=199999023"
           }
         ],
@@ -5673,7 +5933,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998005].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/skill_control_19998005__-2339022120750825272.json",
-      "mechanicsHash": "9575fca9a5c372e9"
+      "mechanicsHash": "3de94331683b7877"
     },
     {
       "setId": 4,
@@ -5725,6 +5985,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6348192788412551000;elementId=199999028.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=6348192788412551000;elementId=199999028"
           }
         ],
@@ -5766,7 +6028,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998103].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998103.asset/MonoBehaviour/skill_control_19998103__1339765042162713385.json",
-      "mechanicsHash": "f570146e9c9c64f8"
+      "mechanicsHash": "a8e67257b93995e9"
     },
     {
       "setId": 4,
@@ -5851,6 +6113,8 @@
             "combineNumber": 7,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-4495644276298113500;elementId=199999019.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-4495644276298113500;elementId=199999019"
           }
         ],
@@ -5901,7 +6165,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998003].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998003.asset/MonoBehaviour/skill_control_19998003__-3103682062580946589.json",
-      "mechanicsHash": "096c91d535e43f64"
+      "mechanicsHash": "81e3ba31c7d8b8c4"
     },
     {
       "setId": 5,
@@ -5953,6 +6217,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=4932404186359318000;elementId=199999060.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=4932404186359318000;elementId=199999060"
           }
         ],
@@ -5994,7 +6260,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998107].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998107.asset/MonoBehaviour/skill_control_19998107__-1110976143998619078.json",
-      "mechanicsHash": "249f817ad2dc5efd"
+      "mechanicsHash": "cd7c05ba3a1c47e8"
     },
     {
       "setId": 5,
@@ -6061,6 +6327,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057"
           }
         ],
@@ -6111,7 +6379,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998007].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998007.asset/MonoBehaviour/skill_control_19998007__-7613573473471366488.json",
-      "mechanicsHash": "0b5d4ff9f4bfb926"
+      "mechanicsHash": "97cbdc00fd181e18"
     },
     {
       "setId": 6,
@@ -6163,6 +6431,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=5052602432412010000;elementId=199999067.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=5052602432412010000;elementId=199999067"
           }
         ],
@@ -6204,7 +6474,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998108].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998108.asset/MonoBehaviour/skill_control_19998108__-8361284574940266563.json",
-      "mechanicsHash": "b583a40f22df3c93"
+      "mechanicsHash": "ad9cdfae1bf07afc"
     },
     {
       "setId": 6,
@@ -6299,6 +6569,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5884995951490395000;elementId=199999064.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-5884995951490395000;elementId=199999064"
           },
           {
@@ -6312,6 +6584,8 @@
             "combineNumber": -1,
             "executeTargetType": 0,
             "inheritType": 0,
+            "defaultPropertyTags": [],
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=7187107487063477000;elementId=199999070.defaultPropertyTags",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=7187107487063477000;elementId=199999070"
           }
         ],
@@ -6368,7 +6642,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998008.asset/MonoBehaviour/skill_control_19998008__3385592889625444843.json",
-      "mechanicsHash": "92bc3627d8314bde"
+      "mechanicsHash": "23586bb8f3bccaba"
     }
   ],
   "unresolved": [
@@ -7164,5 +7438,5 @@
       "source-indexed-runtime-unapplied": 53
     }
   },
-  "catalogHash": "93390d191dd4a1c0"
+  "catalogHash": "a63cde47d91815d6"
 }

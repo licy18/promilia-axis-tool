@@ -4,6 +4,7 @@ import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat
 import {
   clearInstalledVerifiedCombatMechanicsPackage,
   installVerifiedCombatMechanicsPackage,
+  resolveVerifiedCombatActionMechanics,
 } from '../../data/verifiedCombatMechanicsPackage';
 import { createVerifiedWorkbenchMechanicsProfileSelection } from '../../domain/workbenchMechanicsProfileSelection';
 import {
@@ -14,10 +15,15 @@ import {
   createWorkbenchProject,
   getWorkbenchGameData,
 } from '../../domain/workbenchProjectFactory';
+import { createWorkbenchAttackInputChainDrafts } from '../../domain/workbenchAttackInputChain';
 import { frameToMs } from '../../domain/timebase';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createVerifiedSoulEssenceEffectGeneration } from '../../simulation/mechanics/verifiedSoulEssenceEffectGeneration';
+import {
+  matchesVerifiedBattlePropertyTags,
+  resolveVerifiedBattlePropertyTagsForHit,
+} from '../../simulation/mechanics/verifiedBattlePropertyTags';
 import {
   createEffectRuntimeTimeline,
   resolveActiveEffectsAt,
@@ -26,6 +32,8 @@ import {
 const SOUL_ID = 10001;
 const SOUL_SKILL_ID = 1900480;
 const OWNER_ID = 101007;
+const PROPERTY_TAG_TEST_KIBO_ID = 500216;
+const PROPERTY_TAG_TEST_KIBO_SKILL_ID = 50021601;
 
 const APPLIED_SOUL_EFFECT_MATRIX = [
   {
@@ -168,6 +176,8 @@ describe('verified soul essence effect generation', () => {
       effect: {
         elementId: 19006702,
         attributeId: 21,
+        propertyTags: [301],
+        propertyTagMatchMode: 'single-exact',
         durationMs: 4000,
         stackMode: 'stack',
         maxStacks: 6,
@@ -278,6 +288,107 @@ describe('verified soul essence effect generation', () => {
         },
       });
     }
+  });
+
+  it('derives only verified normal and charged hit property tags from the action binding', () => {
+    const resolutions = new Map(
+      [
+        ['normal-attack', 10100701, 0],
+        ['charged-attack', 10100701, 1],
+        ['star-skill', 10100712, 0],
+        ['ultimate', 10100713, 0],
+      ].map(([actionKind, skillId, actionVariantIndex]) => {
+        const action = createRealSoulActionDraft({
+          id: `property-tag-${actionKind}`,
+          actionKind,
+          startFrame: 0,
+          mappingOverride: verifiedCombatMechanicsPackage.actionMappings.find(
+            entry =>
+              entry.ownerId === OWNER_ID &&
+              entry.sourceSkillId === skillId &&
+              entry.actionVariantIndex === actionVariantIndex
+          ),
+        });
+        return [
+          actionKind,
+          resolveVerifiedBattlePropertyTagsForHit({
+            action,
+            resolution: resolveVerifiedCombatActionMechanics(action),
+          }),
+        ];
+      })
+    );
+
+    expect(resolutions.get('normal-attack')).toMatchObject({
+      status: 'verified-battle-property-tags-ready',
+      skillTags: [1],
+      propertyTags: [300],
+      applied: true,
+    });
+    expect(resolutions.get('charged-attack')).toMatchObject({
+      status: 'verified-battle-property-tags-ready',
+      skillTags: [2],
+      propertyTags: [301],
+      applied: true,
+    });
+    for (const actionKind of ['star-skill', 'ultimate']) {
+      expect(resolutions.get(actionKind)).toMatchObject({
+        status: 'battle-property-tag-action-mapping-evidence-gap',
+        propertyTags: [],
+        applied: false,
+      });
+    }
+    for (const [skillTag, reason] of [
+      [null, 'battle-property-tag-source-skill-tag-missing'],
+      ['1|2', 'battle-property-tag-multi-skill-tag-semantics-evidence-gap'],
+      ['99', 'battle-property-tag-action-mapping-evidence-gap'],
+    ]) {
+      expect(
+        resolveVerifiedBattlePropertyTagsForHit({
+          action: { actionKind: 'normal-attack' },
+          resolution: {
+            actionBinding: { actionKind: 'normal-attack' },
+            controlBinding: {
+              logic: { skillTag, sourceIdentity: 'synthetic:skill-tag' },
+            },
+          },
+        })
+      ).toMatchObject({
+        status: 'battle-property-tag-action-mapping-evidence-gap',
+        propertyTags: [],
+        reason,
+        applied: false,
+      });
+    }
+
+    const kiboMapping = verifiedCombatMechanicsPackage.actionMappings.find(
+      entry => entry.ownerKind === 'kibo' && entry.actionKind === 'active'
+    );
+    const kiboAction = createWorkbenchActionDraft({
+      id: 'property-tag-kibo-active',
+      type: 'kiboEvent',
+      actorCharacterId: OWNER_ID,
+      kiboId: kiboMapping.ownerId,
+      skillId: kiboMapping.sourceSkillId,
+    });
+    expect(
+      resolveVerifiedBattlePropertyTagsForHit({
+        action: kiboAction,
+        resolution: resolveVerifiedCombatActionMechanics(kiboAction),
+      })
+    ).toMatchObject({
+      status: 'battle-property-tag-action-mapping-evidence-gap',
+      propertyTags: [],
+      applied: false,
+    });
+
+    expect(matchesVerifiedBattlePropertyTags([], [])).toBe(true);
+    expect(matchesVerifiedBattlePropertyTags([300], [300])).toBe(true);
+    expect(matchesVerifiedBattlePropertyTags([301], [301])).toBe(true);
+    expect(matchesVerifiedBattlePropertyTags([301], [])).toBe(false);
+    expect(matchesVerifiedBattlePropertyTags([301], [300])).toBe(false);
+    expect(matchesVerifiedBattlePropertyTags([301], [300, 301])).toBe(false);
+    expect(matchesVerifiedBattlePropertyTags([300, 301], [301])).toBe(false);
   });
 
   it.each(APPLIED_SOUL_EFFECT_MATRIX)(
@@ -750,6 +861,12 @@ describe('verified soul essence effect generation', () => {
     expect(boundaryEffect).toMatchObject({
       stacks: 1,
       appliedToCalculators: true,
+      modifiers: [
+        expect.objectContaining({
+          propertyTags: [301],
+          propertyTagMatchMode: 'single-exact',
+        }),
+      ],
     });
     expect(inheritedRemainingMs).toBeCloseTo(3183.333, 3);
     expect(secondTimeline.events[0]).toMatchObject({
@@ -765,7 +882,15 @@ describe('verified soul essence effect generation', () => {
         calculatorOnly: true,
       }
     )[0];
-    expect(refreshedEffect).toMatchObject({ stacks: 2 });
+    expect(refreshedEffect).toMatchObject({
+      stacks: 2,
+      modifiers: [
+        expect.objectContaining({
+          propertyTags: [301],
+          propertyTagMatchMode: 'single-exact',
+        }),
+      ],
+    });
     expect(refreshedEffect.expiresAtMs).toBeCloseTo(
       triggerTimeMs + 4000,
       3
@@ -879,7 +1004,111 @@ describe('verified soul essence effect generation', () => {
         command => command.sourceSoulEssenceId === 10098
       )
     ).toHaveLength(16);
+    expect(
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.every(
+        command =>
+          command.modifiers[0].propertyTags.join('|') === '301' &&
+          command.modifiers[0].propertyTagMatchMode === 'single-exact'
+      )
+    ).toBe(true);
   });
+
+  it.each([
+    {
+      soulEssenceId: 10060,
+      effectSkillId: 1900900,
+      matchingActionId: 'normal-after-trigger',
+      rejectedActionId: 'charged-after-normal',
+      otherSkillActionId: 'ultimate-during-layer',
+      propertyTag: 300,
+      valueRaw: 610,
+    },
+    {
+      soulEssenceId: 10094,
+      effectSkillId: 1900660,
+      matchingActionId: 'charged-after-normal',
+      rejectedActionId: 'normal-after-trigger',
+      otherSkillActionId: 'ultimate-during-layer',
+      propertyTag: 301,
+      valueRaw: 1220,
+    },
+  ])(
+    'scopes real soul $soulEssenceId to its source property tag across action kinds',
+    expected => {
+      const result = createRealSoulScenario({
+        soulEssenceId: expected.soulEssenceId,
+        effectSkillId: expected.effectSkillId,
+        actionPlan: [
+          { id: 'star-skill-trigger', actionKind: 'star-skill' },
+          { id: 'normal-after-trigger', actionKind: 'normal-attack' },
+          { id: 'charged-after-normal', actionKind: 'charged-attack' },
+          { id: expected.otherSkillActionId, actionKind: 'ultimate' },
+        ],
+      });
+      const sourceTraces = actionId =>
+        result.verifiedCombatRuntime.damageEvents
+          .filter(event => event.actionId === actionId)
+          .flatMap(event => event.payload.dynamicPropertyTrace?.source ?? [])
+          .filter(trace => trace.attributeId === 21);
+
+      expect(sourceTraces('star-skill-trigger')).toEqual([]);
+      expect(sourceTraces(expected.matchingActionId)).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            dynamicExtraRaw: expected.valueRaw,
+            effects: [
+              expect.objectContaining({
+                propertyTags: [expected.propertyTag],
+                propertyTagMatchMode: 'single-exact',
+              }),
+            ],
+          }),
+        ])
+      );
+      expect(sourceTraces(expected.rejectedActionId)).toEqual([]);
+      expect(sourceTraces(expected.otherSkillActionId)).toEqual([]);
+    }
+  );
+
+  it.each([
+    ['normal attack', 'normal-attack'],
+    ['star skill', 'star-skill'],
+    ['ultimate', 'ultimate'],
+    ['Kibo signature', 'kibo-signature'],
+  ])(
+    'keeps a live 10098 charged layer off a following %s',
+    (_label, actionKind) => {
+      const targetActionId = `${actionKind}-during-layer`;
+      const result = createRealSoulScenario({
+        actorCharacterId: 101010,
+        soulEssenceId: 10098,
+        effectSkillId: 1900670,
+        actionPlan: [
+          { id: 'charged-layer-source', actionKind: 'charged-attack' },
+          { id: targetActionId, actionKind },
+        ],
+      });
+      const targetHits = result.verifiedCombatRuntime.damageEvents.filter(
+        event => event.actionId === targetActionId
+      );
+
+      expect(targetHits.length).toBeGreaterThan(0);
+      expect(
+        targetHits.flatMap(
+          event =>
+            (event.payload.dynamicPropertyTrace?.source ?? []).flatMap(
+              trace => trace.effects ?? []
+            )
+        )
+      ).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            effectId: 'soulessence:10098:element:19006702',
+          }),
+        ])
+      );
+    }
+  );
 
   it('does not bind legacy loadouts that omit the strict runtime contract', () => {
     const definition = soulEssenceEffectCatalog.definitions.find(
@@ -927,25 +1156,40 @@ describe('verified soul essence effect generation', () => {
 });
 
 function createRealSoulScenario({
+  actorCharacterId = OWNER_ID,
   soulEssenceId = SOUL_ID,
   effectSkillId = SOUL_SKILL_ID,
+  actionPlan = null,
 } = {}) {
-  const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
-    entry =>
-      entry.ownerId === OWNER_ID &&
-      entry.actionKind === 'charged-attack' &&
-      entry.actionVariantIndex === 1
+  const requestedActions =
+    actionPlan ??
+    ['pangpang-heavy-1', 'pangpang-heavy-2'].map(id => ({
+      id,
+      actionKind: 'charged-attack',
+    }));
+  const includesKiboAction = requestedActions.some(
+    action => action.actionKind === 'kibo-signature'
   );
-  const durationFrames = mapping.actionTiming.occupancy.durationFrames;
-  const durationMs = frameToMs(durationFrames);
+  const selection = {
+    ...DEFAULT_WORKBENCH_SELECTION,
+    characterId: actorCharacterId,
+  };
+  const teamSlots = createDefaultWorkbenchTeamSlots(selection);
+  const ownerSlotId = teamSlots.find(
+    slot => Number(slot.characterId) === actorCharacterId
+  )?.slotId;
   const actorConfigs = createDefaultWorkbenchActorConfigs(
-    DEFAULT_WORKBENCH_SELECTION
+    selection
   ).map(config =>
-    Number(config.characterId) === OWNER_ID
+    Number(config.characterId) === actorCharacterId
       ? {
           ...config,
+          initialSp: 100,
           loadout: {
             ...config.loadout,
+            kiboId: includesKiboAction
+              ? PROPERTY_TAG_TEST_KIBO_ID
+              : config.loadout?.kiboId,
             soulessenceId: soulEssenceId,
             soulessenceLevel: 80,
             soulessenceRank: 1,
@@ -963,28 +1207,105 @@ function createRealSoulScenario({
         }
       : config
   );
-  const actions = ['pangpang-heavy-1', 'pangpang-heavy-2'].map(
-    (id, index) =>
-      createWorkbenchActionDraft({
-        id,
-        type: 'skill',
-        actorCharacterId: OWNER_ID,
-        skillId: 10100701,
-        actionVariantIndex: 1,
-        startMs: index * durationMs,
-        durationMs,
-        durationFrames,
-      })
-  );
-  const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
-    durationMs: 10_000,
-    teamSlots: createDefaultWorkbenchTeamSlots(),
+  let startFrame = 0;
+  const actions = requestedActions.map(requested => {
+    const action = createRealSoulActionDraft({
+      id: requested.id,
+      actionKind: requested.actionKind,
+      startFrame,
+      actorCharacterId,
+    });
+    startFrame +=
+      Number(action.durationFrames) ||
+      Math.max(1, Math.round((Number(action.durationMs) * 60) / 1000));
+    return action;
+  });
+  const project = createWorkbenchProject(selection, {
+    durationMs: 20_000,
+    teamSlots,
     actorConfigs,
     actions,
+    initialRuntimeState:
+      includesKiboAction && ownerSlotId
+        ? {
+            kiboEnergyBySlot: [
+              {
+                slotId: ownerSlotId,
+                kiboId: PROPERTY_TAG_TEST_KIBO_ID,
+                currentValue: 100,
+                maxValue: 100,
+              },
+            ],
+          }
+        : {},
     mechanicsProfileSelection:
       createVerifiedWorkbenchMechanicsProfileSelection(),
   });
   return simulateScenario(compileProject(project, getWorkbenchGameData()));
+}
+
+function createRealSoulActionDraft({
+  id,
+  actionKind,
+  startFrame,
+  actorCharacterId = OWNER_ID,
+  mappingOverride = null,
+}) {
+  if (actionKind === 'kibo-signature') {
+    const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+      entry =>
+        entry.ownerKind === 'kibo' &&
+        entry.ownerId === PROPERTY_TAG_TEST_KIBO_ID &&
+        entry.sourceSkillId === PROPERTY_TAG_TEST_KIBO_SKILL_ID
+    );
+    if (!mapping) throw new Error('missing property-tag Kibo signature');
+    const durationFrames = mapping.actionTiming.occupancy.durationFrames;
+    return createWorkbenchActionDraft({
+      id,
+      type: 'kiboEvent',
+      actorCharacterId,
+      kiboId: PROPERTY_TAG_TEST_KIBO_ID,
+      skillId: PROPERTY_TAG_TEST_KIBO_SKILL_ID,
+      actionVariantIndex: mapping.actionVariantIndex,
+      eventType: 'signature',
+      startMs: frameToMs(startFrame),
+      durationMs: frameToMs(durationFrames),
+      durationFrames,
+      timingSource: 'azpr-unity-skill-control-root',
+      timingStatus: 'verified',
+      needsTimingData: false,
+    });
+  }
+  const mapping =
+    mappingOverride ??
+    verifiedCombatMechanicsPackage.actionMappings.find(
+      entry =>
+        entry.ownerId === actorCharacterId && entry.actionKind === actionKind
+    );
+  if (!mapping) throw new Error(`missing test action kind ${actionKind}`);
+  if (actionKind === 'normal-attack') {
+    const [action] = createWorkbenchAttackInputChainDrafts({
+      entry: mapping,
+      actorCharacterId,
+      skillId: mapping.sourceSkillId,
+      startMs: frameToMs(startFrame),
+      createActionId: (_segment, index) =>
+        index === 0 ? id : `${id}-unused-${index + 1}`,
+    });
+    if (!action) throw new Error(`missing test attack input for ${actionKind}`);
+    return action;
+  }
+  const durationFrames = mapping.actionTiming.occupancy.durationFrames;
+  return createWorkbenchActionDraft({
+    id,
+    type: 'skill',
+    actorCharacterId,
+    skillId: mapping.sourceSkillId,
+    actionVariantIndex: mapping.actionVariantIndex,
+    startMs: frameToMs(startFrame),
+    durationMs: frameToMs(durationFrames),
+    durationFrames,
+  });
 }
 
 function createSyntheticCatalog() {
@@ -1049,6 +1370,9 @@ function createSyntheticHitCatalog() {
         effect: {
           ...definition.effect,
           attributeId: 21,
+          propertyTags: [301],
+          propertyTagMatchMode: 'single-exact',
+          propertyTagSourceIdentity: 'synthetic:effect.defaultPropertyTags',
           durationMs: 4000,
           maxStacks: 6,
         },

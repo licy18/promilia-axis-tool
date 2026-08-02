@@ -379,7 +379,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M12-B3-C 首批动态装配效果机制族已完成实现，等待产品复验**。M12-B3-B-R1 已在 `f846161c4a71bbc2de2b5bed3f598f03344fc692` 通过产品验收；固定培养、普通/缘星实例档以及 `hero_rank` 证据边界保持不变。B3-C 只按可审计来源分批接入通用动态装配算子，不执行正式配队、装配或输出轴搜索；M12-C 在 11/11 角色优化对象、43/43 奇波、62/62 灵子、137/137 装备、12/12 套装技能及绑定矩阵全部通过前保持硬锁。
+当前里程碑：**M12-B3-C-R1 PropertyTag 作用域整改已完成，等待产品复验**。M12-B3-B-R1 已在 `f846161c4a71bbc2de2b5bed3f598f03344fc692` 通过产品验收；固定培养、普通/缘星实例档以及 `hero_rank` 证据边界保持不变。B3-C-R1 只修复动态装配效果的来源标签与 hit 结算作用域，不执行正式配队、装配或输出轴搜索；M12-C 在 11/11 角色优化对象、43/43 奇波、62/62 灵子、137/137 装备、12/12 套装技能及绑定矩阵全部通过前保持硬锁。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -885,14 +885,14 @@ Workbench 草稿快照与项目重建路径现在持久化并恢复 Machine Axis
 
 M12-B-R1 已关闭原五项主体缺口；R2 进一步把资源等待从逐整数事件改为候选动作真实费用驱动的最早可执行阈值，并让多 seed 的角色、动作与 hit 贡献按稳定 identity 聚合且与排序指标守恒。独立验收确认 SP 90→100 在 `2886F` 达阈值、`2887F` 释放星决技，405/425 两个样本的总指标和三层贡献均为 415；聚焦回归 6 文件/62 测试、相关无头回归 6 文件/66 测试及 production build 均通过。M12-B 正式关闭且不做 R3，当前进入 M12-B2；M12-C 继续锁定。
 
-#### M12-B3：风/雷体系、星临者与装配优化资格阶段（B3-B-R1 已验收，B3-C 首批待复验）
+#### M12-B3：风/雷体系、星临者与装配优化资格阶段（B3-B-R1 已验收，B3-C-R1 待复验）
 
 - 本阶段只建立并验收优化资格，不执行正式配队搜索；M12-B2 已通过并关闭，当前从 B3-A 固定分母、资格产物和严格培养合同开始，M12-C 在本阶段整体通过前继续锁定。
 - B3-A-R1 已在 `f902de10c42c2c4dc750be2316fabe3bc026f8cc` 通过产品验收。B3-B-R1 唯一生成命令继续重算 `11/43/62/137/12`，source/roster/manifests/ledger/catalog/binding hash 分别为 `4c1259408e1d716c`、`a8f727dfd0288518`、`8f8feddcd152890a`、`d6dcd25e48632b9e`、`14e8c20e2a6ab41c`、`79777849b22eeb65`。固定培养输入 profile hash 仍为 `c432bd0a3f2d6415`；当前版本仍不研究或应用奇波 DNA，`dnaFactors` 省略时规范为 `[]`，非空输入在 compile/validate/search 前拒绝，DNA 不进入资格缺口。
 - B3-B-R1 将 `hero_rank` 拆为表声明、等级/突破档合法性、属性应用、技能可用性与技能效果运行时五层合同。`GameAssembly.dll` 的 `HeroData.Populate(HeroAttrInfo)@0x2458520`、`RefreshAttributes@0x2458C00`、`RefreshHeroSkill@0x2458F50` 及 `AttrModuleInfo` 调用边只能证明服务端属性模块被刷新，不能排除 `HeroAttrInfo` 已包含突破属性；在取得同角色同等级空装配的相邻档最终面板差分前，`hero_rank.attribute` 不进入角色面板、奇波继承或伤害，11 个角色培养 blocker 恢复。表内技能只记录声明；实际可用性与效果运行时分开，`112001` 的错误 ID 继续单列。装备实例仍以运行时 `bGoldSide/maxValue` 与客户端术语共同区分普通最多 100、缘星固定 110；固定 `4星/+9/110` 只生成合法缘星实例，主副属性继续使用分段 `ceil` 公式。
 - formal admission 由 11/43/62/137/12 对象准入、12/12 套装技能、角色-奇波/灵子/装备绑定、装备部位和所有 hash 共同重算；任一分母少 1、set-skill 或 binding 未就绪、hash 漂移时均以 `optimization-qualification-stage-locked` 在 project/search 前拒绝，只有完整 synthetic 全绿矩阵可解锁。8 个已接入灵子已用数据驱动矩阵覆盖 Before/After、normal/charged/star-skill、stack/refresh、持续/到期、错误动作抑制与同帧边界；`AfterSkill` 不反向增益自身末帧 hit。当前五类 optimization-ready 仍全为 0，阻断账本为 454 条（438 `not-implemented`、16 `evidence-insufficient`），M12-C 继续锁定。
 - B3-B-R1 已在 `f846161c4a71bbc2de2b5bed3f598f03344fc692` 通过产品验收：资格/灵子矩阵 `2 文件 / 40`、Machine Axis `12 文件 / 157`、九道审计与 production build 均通过；分母 11/43/62/137/12、454 条 blocker（438 `not-implemented`、16 `evidence-insufficient`）及五类空 admission 保持诚实。B3-C 现建立 62 灵子与 12 套装技能的动态机制族 census，并只接入来源闭合批次；整个 B3 尚未完成。
-- B3-C 首批把 `10098 此身为枪` 的真实 `AfterDamage` 蓄力命中叠层接入通用 landed-hit operator：逐 hit miss 不触发、同一 hit 不读取自己刚产生的层、后续同帧 hit 可读取前一 hit 层，4 秒/6 层效果可跨循环边界继承并刷新。`10018 飞行试验` 因外层双雷印记条件尚无通用算子继续阻断；12/12 套装只完成件数门槛与效果运行时分层，均未标绿。当前灵子为 9/62 `runtime-applied`、53/62 `dynamic-unapplied`，阻断账本为 452 条（436 `not-implemented`、16 `evidence-insufficient`），五类 formal admission 仍为空，M12-C 继续锁定。census/hash 与验证结论见 `reports/m12/m12-b3-c-dynamic-loadout-effect-acceptance.json`。
+- B3-C-R1 将 Battle element 叶节点 `defaultPropertyTags` 保留到 census、effect definition、modifier、来源审计和 hit 结算，并用 IL2CPP 确证的 `skillTag 1 -> propertyTag 300`（普攻）、`skillTag 2 -> propertyTag 301`（重击）进行单标签精确匹配；未知、缺失或多标签不会扩大成全伤害。`10060` 仅增强普攻，`10094/10098` 仅增强重击，miss、同帧、到期与循环继承合同不变。302..316 仍为结构化证据缺口，本轮不扩展其他机制族。当前灵子仍为 9/62 `runtime-applied`、53/62 `dynamic-unapplied`，阻断账本仍为 452 条（436 `not-implemented`、16 `evidence-insufficient`），五类 formal admission 为空，M12-C 继续锁定。census/hash 与验证结论见 `reports/m12/m12-b3-c-dynamic-loadout-effect-acceptance.json`。
 - 资格分母由生成数据按规则确定，而不是手写后静默漂移。角色范围为 `element.abbrName` 的离散属性标签中包含 `风` 或 `雷` 的全部角色，再额外并入一个统一的星临者优化对象；底层 `199001/199002` 只作为该对象的来源身份别名，不分别进入优化分母。奇波同样将 `element` 按 `、` 等分隔符拆成离散属性标签，纳入标签中包含 `风` 或 `雷` 的全部单属性及双属性奇波。装配范围为当前公开目录的全部灵子和五部位装备，并以 verified 静态目录中的套装技能门槛记录为动态效果分母。阶段启动时必须生成并提交 `reports/m12/m12-b3-optimization-qualification-roster.json`，记录筛选与归一化规则、生成时间、源文件 SHA-256、优化对象 ID/名称、来源别名、装配兼容关系与各分母计数；源数据变化必须显式重定基线并重新验收，不能自动增删分母。
 - 当前生成快照为 `2026-07-08T03:35:51.289Z`。角色源 `characters.json` SHA-256 为 `4A73F5E393F7410F5AF80A811CAC604D97CA6BF74CA8E0BE66445CA932FB5052`，奇波源 `kibos.json` SHA-256 为 `1CCA2E3D0D1CB5A0A984164AB0C6B05EF0B6C5416B0E9872F0C8AB36394519C4`，装备源 `equipment.json` SHA-256 为 `D718604A7B28F84163C175F7F7D0B4D26F891606BB18ACF22939E2EF16EAF593`，灵子源 `soulessences.json` SHA-256 为 `385DBB96CF0FECA4B42C7D3D63040C506C310BEEB62ED7F9F37AC68FD012DCBE`，当前 verified mechanics package 文件 SHA-256 为 `F38A6C56AD1C7113BD87CAA66BE27118C0F3FE793E7F0C91E5A76BA80C3CCA49`。
 - 当前角色分母为 11 个优化对象：`101010 涂山小玉`、`102001 莉莉`、`103002 红宝石`、`107001 西芙莉雅`、`107002 米砂`、`108001 忒拉拉`、`108003 米蒂`、`109001 末音`、`111001 法兰塔`、`112001 姬瑟贝露`，以及统一的 `STARBORN 星临者`。星临者只生成一份资格 manifest、一个优化候选和一个队伍对象；`199001 女主角`、`199002 男主角` 作为 `sourceCharacterIds`/运行时外观别名映射到它，别名一致性只做适配回归，不形成两份产品签收，也不得被优化器枚举两次。
@@ -1037,7 +1037,7 @@ M12-B-R1 已关闭原五项主体缺口；R2 进一步把资源等待从逐整�
 63. 已通过产品验收：M11-C 在 `308dd07` 完成 canonical trace 可视编辑与复验闭环。
 64. 已完成协议实现：M11-D-R1 在 `899edea0c5a1f718153ebe86712ecd8c31aabf7d` 完成 committed source-of-truth、可执行 scenario case、精确 coverage edge、去重 ledger 与 manifest/catalog 发布索引门禁；该角色单边可视签收未带入最终合并外审基线，当前 `visually-accepted=0`、`optimization-ready=0`。M12、第四角色、包体优化和未验收奇波机制接入均未启动。
 65. 已完成并通过最终外部短复核：M11 无头核心外审在 `64603640bda82d6ab3d869e98d70696f73caeef7` 关闭，M11-01..09 与 R2 CLI/path 跟进项无新增 P0-P3；现有审计包和 SHA 不变。此结论不授予角色/奇波视觉验收或优化资格，M12 保持锁定，等待用户明确解锁。
-66. B3-C 首批实现完成、等待产品复验：M12-B3-B-R1 已在 `f846161c4a71bbc2de2b5bed3f598f03344fc692` 通过产品验收；`hero_rank` 仍只保留合法性与来源声明，普通/缘星实例合同不变。当前只新增来源闭合的 `10098` landed-hit AfterDamage 机制族，五类 formal admission 继续全空，M12-C 继续锁定。
+66. B3-C-R1 整改完成、等待产品复验：以 `5878ef8ca5bcff5eb0bdafeb92571837faaff865` 为修复基线，已关闭 `defaultPropertyTags` 在生成与 hit 结算链丢失的问题；`10060/10094/10098` 分别按 300/301 精确作用域运行，9 个已接入灵子来源标签审计零漂移。五类 formal admission 继续全空，M12-C 继续锁定。
 
 ## 8. 风险和取舍
 

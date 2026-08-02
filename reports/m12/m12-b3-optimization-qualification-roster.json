@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "phase": "M12-B3-C",
+  "phase": "M12-B3-C-R1",
   "sourceSnapshot": {
     "files": {
       "characters": {
@@ -1865,6 +1865,9 @@
           "attributeId": 222,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=7615727136823255000;elementId=19004802.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -1981,6 +1984,9 @@
           "attributeId": 53,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-131968735896823040;elementId=19006104.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -2255,6 +2261,9 @@
           "attributeId": 58,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -2376,6 +2385,9 @@
           "attributeId": 1,
           "bucket": "dynamicPercent",
           "calculateType": 2,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -2630,6 +2642,9 @@
           "attributeId": 229,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6108188296881701000;elementId=19004501.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -2739,6 +2754,9 @@
           "attributeId": 229,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-4023729244501754000;elementId=19003302.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -2852,6 +2870,9 @@
           "attributeId": 52,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=1889171037961678300;elementId=19005503.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -3029,6 +3050,9 @@
           "attributeId": 1,
           "bucket": "dynamicPercent",
           "calculateType": 2,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5655228325641076000;elementId=19009202.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -3207,6 +3231,9 @@
           "attributeId": 23,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=4769837230415874000;elementId=19009102.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -3319,6 +3346,9 @@
           "attributeId": 229,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-2274249246834308600;elementId=19009302.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -3697,6 +3727,11 @@
           "attributeId": 21,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [
+            300
+          ],
+          "propertyTagMatchMode": "single-exact",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-2685633708192990000;elementId=19009002.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -4296,6 +4331,9 @@
           "attributeId": 229,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=475903754845527040;elementId=19002302.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -4415,6 +4453,11 @@
           "attributeId": 21,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [
+            301
+          ],
+          "propertyTagMatchMode": "single-exact",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8461738275188953000;elementId=19006602.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -4606,6 +4649,9 @@
           "attributeId": 229,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-6749174475042234000;elementId=19004701.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -4724,6 +4770,11 @@
           "attributeId": 21,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [
+            301
+          ],
+          "propertyTagMatchMode": "single-exact",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5650259386971768000;elementId=19006702.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -4833,6 +4884,9 @@
           "attributeId": 222,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -5193,6 +5247,11 @@
           "attributeId": 21,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [
+            301
+          ],
+          "propertyTagMatchMode": "single-exact",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8480096044321114000;elementId=19005901.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -5305,6 +5364,9 @@
           "attributeId": 8,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -5423,6 +5485,9 @@
           "attributeId": 52,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-3194128450977334000;elementId=19005402.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -5532,6 +5597,11 @@
           "attributeId": 21,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [
+            301
+          ],
+          "propertyTagMatchMode": "single-exact",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=7184896566896581000;elementId=19002802.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -5644,6 +5714,9 @@
           "attributeId": 222,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -5900,6 +5973,9 @@
           "attributeId": 222,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -6088,6 +6164,11 @@
           "attributeId": 222,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [
+            301
+          ],
+          "propertyTagMatchMode": "single-exact",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -6202,6 +6283,9 @@
           "attributeId": 229,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6856932050092692000;elementId=19002202.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -6314,6 +6398,11 @@
           "attributeId": 21,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [
+            301
+          ],
+          "propertyTagMatchMode": "single-exact",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -6431,6 +6520,9 @@
           "attributeId": 222,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=3837107787407859700;elementId=19001302.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -6616,6 +6708,9 @@
           "attributeId": 229,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=2209371490931731500;elementId=19002402.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -6732,6 +6827,9 @@
           "attributeId": 52,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6931937794752071000;elementId=19002502.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -6906,6 +7004,9 @@
           "attributeId": 229,
           "bucket": "dynamicExtra",
           "calculateType": 1,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-7968102161953321000;elementId=19007503.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -7098,6 +7199,9 @@
           "attributeId": 1,
           "bucket": "dynamicPercent",
           "calculateType": 2,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8237672842561680000;elementId=19001402.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -7218,6 +7322,9 @@
           "attributeId": 5,
           "bucket": "dynamicPercent",
           "calculateType": 2,
+          "propertyTags": [],
+          "propertyTagMatchMode": "unscoped",
+          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502.defaultPropertyTags",
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -10372,5 +10479,5 @@
       ]
     }
   },
-  "rosterHash": "49bec5654a1ec44f"
+  "rosterHash": "c55413ac0c470726"
 }

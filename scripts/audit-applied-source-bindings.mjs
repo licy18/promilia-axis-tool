@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
@@ -52,6 +53,21 @@ try {
     factory.getWorkbenchGameData()
   );
   const result = engine.simulateScenario(scenario);
+  const soulEssenceCatalog = JSON.parse(
+    await readFile(
+      path.join(
+        repositoryRoot,
+        'src',
+        'data',
+        'generated',
+        'soulessence-effect-mechanics.json'
+      ),
+      'utf8'
+    )
+  );
+  const loadoutPropertyTagAudit = await createLoadoutPropertyTagAudit(
+    soulEssenceCatalog
+  );
   const deltas = result.threeValueGenerationLayer.deltas
     .filter(delta => delta.layerKey === 'applied')
     .map(delta => ({
@@ -87,7 +103,8 @@ try {
     deltas.length > 0 &&
     boundDrift.length === 0 &&
     unexplainedCompatibleUnbound.length === 0 &&
-    missingTracks.length === 0;
+    missingTracks.length === 0 &&
+    loadoutPropertyTagAudit.summary.driftCount === 0;
   const reportBody = {
     schemaVersion: 1,
     kind: 'applied-source-binding-audit',
@@ -106,10 +123,14 @@ try {
       compatibleUnboundCount: compatibleUnbound.length,
       unexplainedCompatibleUnboundCount: unexplainedCompatibleUnbound.length,
       missingTrackCount: missingTracks.length,
+      loadoutPropertyTagSourceCount:
+        loadoutPropertyTagAudit.summary.sourceCount,
+      loadoutPropertyTagDriftCount: loadoutPropertyTagAudit.summary.driftCount,
     },
     requiredTracks,
     missingTracks,
     deltas,
+    loadoutPropertyTags: loadoutPropertyTagAudit,
   };
   const previousReport = await readJsonIfExists(outputPath);
   const semanticUnchanged = reportsHaveSameSemanticContent(
@@ -128,6 +149,7 @@ try {
     requiredTracks: reportBody.requiredTracks,
     missingTracks: reportBody.missingTracks,
     deltas: reportBody.deltas,
+    loadoutPropertyTags: reportBody.loadoutPropertyTags,
   };
   const serializedReport = `${JSON.stringify(report, null, 2)}\n`;
 
@@ -176,6 +198,109 @@ function createAuditDraft(drafts, fixtures) {
 function readArgument(name) {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : null;
+}
+
+async function createLoadoutPropertyTagAudit(catalog) {
+  const sourcePath = catalog?.sourceSnapshot?.battleElements?.path;
+  const expectedSourceSha256 =
+    catalog?.sourceSnapshot?.battleElements?.sha256 ?? null;
+  const sourceBytes = await readFile(sourcePath);
+  const actualSourceSha256 = createHash('sha256')
+    .update(sourceBytes)
+    .digest('hex');
+  const definitions = (catalog?.definitions ?? []).filter(
+    definition => definition.runtimeStatus === 'runtime-applied'
+  );
+  const requestedElementIds = new Set(
+    definitions.map(definition => Number(definition.effect?.elementId))
+  );
+  const sourceRowsByElementId = new Map();
+  for (const line of sourceBytes.toString('utf8').split(/\r?\n/u)) {
+    if (!line) continue;
+    const match = line.match(/"elementConfigId"\s*:\s*(\d+)/u);
+    const elementId = Number(match?.[1]);
+    if (!requestedElementIds.has(elementId)) continue;
+    const row = JSON.parse(line);
+    if (Number(row?.typetree?.elementConfigId) === elementId) {
+      sourceRowsByElementId.set(elementId, row);
+    }
+  }
+  const supportedPropertyTags = new Set(
+    (catalog?.propertyTagContract?.bindings ?? [])
+      .filter(binding => binding.status === 'applied')
+      .map(binding => Number(binding.propertyTag))
+  );
+  const records = definitions.map(definition => {
+    const elementId = Number(definition.effect?.elementId);
+    const sourceRow = sourceRowsByElementId.get(elementId);
+    const sourcePropertyTags = normalizeIntegerTags(
+      sourceRow?.typetree?.defaultPropertyTags
+    );
+    const generatedPropertyTags = normalizeIntegerTags(
+      definition.effect?.propertyTags
+    );
+    const expectedMatchMode =
+      sourcePropertyTags.length === 0
+        ? 'unscoped'
+        : sourcePropertyTags.length === 1 &&
+            supportedPropertyTags.has(sourcePropertyTags[0])
+          ? 'single-exact'
+          : null;
+    const issueCodes = [
+      ...(sourceRow ? [] : ['loadout-property-tag-source-row-missing']),
+      ...(actualSourceSha256 === expectedSourceSha256
+        ? []
+        : ['loadout-property-tag-source-hash-drift']),
+      ...(JSON.stringify(sourcePropertyTags) ===
+      JSON.stringify(generatedPropertyTags)
+        ? []
+        : ['loadout-property-tag-generated-value-drift']),
+      ...(expectedMatchMode === definition.effect?.propertyTagMatchMode
+        ? []
+        : ['loadout-property-tag-match-mode-drift']),
+      ...(String(definition.effect?.propertyTagSourceIdentity ?? '').includes(
+        `elementId=${elementId}.defaultPropertyTags`
+      )
+        ? []
+        : ['loadout-property-tag-source-identity-missing']),
+    ];
+    return {
+      soulEssenceId: Number(definition.soulEssenceId),
+      effectElementId: elementId,
+      sourcePropertyTags,
+      generatedPropertyTags,
+      propertyTagMatchMode: definition.effect?.propertyTagMatchMode ?? null,
+      propertyTagSourceIdentity:
+        definition.effect?.propertyTagSourceIdentity ?? null,
+      sourceIdentity: definition.effect?.sourceIdentity ?? null,
+      status:
+        issueCodes.length === 0
+          ? 'applied-source-property-tags-ready'
+          : 'applied-source-property-tags-drift',
+      issueCodes,
+    };
+  });
+  return {
+    source: {
+      path: sourcePath,
+      expectedSha256: expectedSourceSha256,
+      actualSha256: actualSourceSha256,
+      propertyTagContractHash:
+        catalog?.propertyTagContract?.contractHash ?? null,
+    },
+    summary: {
+      sourceCount: records.length,
+      driftCount: records.filter(record => record.issueCodes.length > 0)
+        .length,
+    },
+    records,
+  };
+}
+
+function normalizeIntegerTags(values) {
+  return [...new Set((values ?? []).map(Number))]
+    .filter(Number.isInteger)
+    .sort((left, right) => left - right);
 }
 
 async function readJsonIfExists(filePath) {
