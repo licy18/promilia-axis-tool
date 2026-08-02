@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "phase": "M12-B3-C5",
+  "phase": "M12-B3-C6",
   "sourceSnapshot": {
     "files": {
       "characters": {
@@ -318,6 +318,84 @@
           }
         }
       },
+      "soulEffectBeforeDamageRuntimeEvidence": {
+        "path": "scripts/optimization-qualification/evidence/soulessence-before-damage-runtime-evidence.json",
+        "sha256": "a1a30e0c70dbfaf49990bddb48bf97c1b9cca31f2a77a303fba9382c239a3f7f",
+        "bytes": 2984,
+        "value": {
+          "schemaVersion": 1,
+          "contractName": "AzPrSoulEssenceBeforeDamageRuntimeEvidence",
+          "reviewedBinary": {
+            "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+            "bytes": 222485544,
+            "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+          },
+          "consumer": {
+            "identity": "Lens.Gameplay.Modules.BigWorld.AliveElementSystem.OnExecuteDamageElement",
+            "rva": "0x1318800",
+            "orderedDispatch": {
+              "range": "0x1319260-0x13193D0",
+              "sha256": "6ff8e96a6bfb84f825a2f6de65cbdc246649e7b78804be6d9eea944dfedfde43"
+            },
+            "beforeAttack": {
+              "identity": "Lens.Gameplay.Modules.BigWorld.DamageEventTriggerUtility.OnBeforeAttack",
+              "rva": "0x1872740",
+              "eventId": 1,
+              "eventArgumentRva": "0x18727FA",
+              "callRva": "0x1319276",
+              "dispatchCallRva": "0x187282F",
+              "range": "0x18727F0-0x1872834",
+              "sha256": "d8c9829b7dcafc1bd3ad65ead120fc5006e746034107df7f29b58cc7afc14b2b"
+            },
+            "damageSettlement": {
+              "identity": "Lens.Gameplay.Modules.BigWorld.AliveElementSystem.ExecuteDamageElement",
+              "rva": "0x13151F0",
+              "callRva": "0x131935A"
+            },
+            "afterAttack": {
+              "identity": "Lens.Gameplay.Modules.BigWorld.DamageEventTriggerUtility.OnAfterAttack",
+              "rva": "0x1871F20",
+              "eventId": 2,
+              "eventArgumentRva": "0x187202F",
+              "callRva": "0x13193C7",
+              "dispatchCallRva": "0x1872056",
+              "range": "0x1872020-0x187205B",
+              "sha256": "15d094315a03a2dbbf1c191a5b864b1fdc2aba76ddff0510532050755d66cfdb"
+            },
+            "triggerInvoker": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElement_DamageHandle",
+            "triggerInvokerRva": "0x18B5F10"
+          },
+          "dispatchSemantics": {
+            "beforeDamageEventId": 1,
+            "afterDamageEventId": 2,
+            "beforeDamagePrecedesSettlement": true,
+            "afterDamageFollowsSettlement": true,
+            "samePacketBeforeDamageVisible": true,
+            "ordinaryLandedHitDispatch": true,
+            "tuningDamagePacketDispatch": true,
+            "missDispatch": false,
+            "failedOrUnexecutedDispatch": false,
+            "eventElementIdentity": "damage-element-config-id-and-types",
+            "reason": "OnExecuteDamageElement calls OnBeforeAttack, then ExecuteDamageElement, then OnAfterAttack. OnBeforeAttack dispatches event 1 and OnAfterAttack dispatches event 2 through InvokeTriggerElement_DamageHandle."
+          },
+          "sourceVisibility": {
+            "triggerTargetType": 0,
+            "enumName": "Self",
+            "runtimeSourceKind": "equipped-actor-source-events",
+            "reason": "The trigger observes damage events sourced by the equipped actor; triggerEffectList.targetType controls effect recipients independently."
+          },
+          "conclusion": {
+            "status": "applied",
+            "eventContract": "paired-before-settlement-after-damage-transaction",
+            "sourceIdentity": "GameAssembly.dll#AliveElementSystem.OnExecuteDamageElement@0x1318800/DamageEventTriggerUtility.OnBeforeAttack@0x1872740/ExecuteDamageElement@0x13151F0/DamageEventTriggerUtility.OnAfterAttack@0x1871F20"
+          },
+          "verifiedBinary": {
+            "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+            "bytes": 222485544,
+            "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+          }
+        }
+      },
       "battleElementAssets": {
         "path": "C:/PC2/Codex/AzPr/work/combat-formulas/battle-element-assets.jsonl",
         "sha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
@@ -334,7 +412,7 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "8368dcab431c3a25"
+    "sourceSnapshotHash": "38214acbcfcd3bec"
   },
   "filterContract": {
     "characterElements": [
@@ -2675,8 +2753,7 @@
           ]
         },
         "runtimeGaps": [
-          "effect-activation-condition-operator-unsupported",
-          "effect-trigger-event-operator-unsupported"
+          "effect-activation-condition-operator-unsupported"
         ],
         "sourceIdentity": "NewTable/soulessence.rows[id=10018].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900400.asset/MonoBehaviour/skill_control_1900400__-2587960116876469994.json|battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002|battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003"
       }
@@ -3456,7 +3533,7 @@
       "maximumRank": 6,
       "staticProfileApplied": true,
       "effectSkillId": 1900550,
-      "effectStatus": "source-indexed-runtime-unapplied",
+      "effectStatus": "runtime-applied",
       "sourceIdentity": "NewTable/soulessence.rows[id=10044]",
       "sourceEffectStatus": "effect-skill-dynamic-unapplied",
       "effectMechanics": {
@@ -3467,7 +3544,7 @@
           "skillLogicType": 6,
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900550]"
         },
-        "runtimeStatus": "source-indexed-runtime-unapplied",
+        "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
         "activationPrerequisites": [],
         "trigger": {
@@ -3478,8 +3555,14 @@
           "frameAnchor": "hit-before-damage",
           "condition": {
             "kind": "condition-group",
+            "conditionType": null,
+            "skillSlotId": null,
+            "skillSlotName": null,
+            "skillTagId": null,
+            "skillTagName": null,
             "logic": "or",
             "logicValue": 1,
+            "logicName": "OR",
             "conditions": [
               {
                 "kind": "event-element-id",
@@ -3488,9 +3571,24 @@
                 "conditionValue": 196,
                 "actionKinds": [],
                 "provenanceRequirement": null,
-                "tuningProfiles": [],
-                "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|condition-value-unresolved",
-                "status": "static-evidence-gap"
+                "tuningProfiles": [
+                  {
+                    "profileKey": "fire",
+                    "markId": 150,
+                    "overlimitPacketElementId": 199,
+                    "damageElementId": 196,
+                    "elementTypes": [
+                      22,
+                      31,
+                      43,
+                      307
+                    ],
+                    "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=-310946560669858520.types",
+                    "status": "applied"
+                  }
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=-310946560669858520.types",
+                "status": "applied"
               },
               {
                 "kind": "event-element-id",
@@ -3499,14 +3597,29 @@
                 "conditionValue": 796,
                 "actionKinds": [],
                 "provenanceRequirement": null,
-                "tuningProfiles": [],
-                "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|condition-value-unresolved",
-                "status": "static-evidence-gap"
+                "tuningProfiles": [
+                  {
+                    "profileKey": "wind",
+                    "markId": 750,
+                    "overlimitPacketElementId": 799,
+                    "damageElementId": 796,
+                    "elementTypes": [
+                      22,
+                      32,
+                      43,
+                      307
+                    ],
+                    "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
+                    "status": "applied"
+                  }
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
+                "status": "applied"
               }
             ],
             "actionKinds": [],
-            "status": "static-evidence-gap",
-            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionType|triggerConditionList"
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1"
           },
           "triggerTargetType": 0,
           "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerTargetType",
@@ -3650,10 +3763,7 @@
           "damageElementIds": [],
           "activationPrerequisiteElementIds": []
         },
-        "runtimeGaps": [
-          "effect-skill-tag-condition-operator-unsupported",
-          "effect-trigger-event-operator-unsupported"
-        ],
+        "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10044].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900550.asset/MonoBehaviour/skill_control_1900550__-7653067718708357441.json|battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500|battle-element-assets.jsonl#path_id=1889171037961678300;elementId=19005503"
       }
     },
@@ -6836,7 +6946,7 @@
       "maximumRank": 6,
       "staticProfileApplied": true,
       "effectSkillId": 1900590,
-      "effectStatus": "source-indexed-runtime-unapplied",
+      "effectStatus": "runtime-applied",
       "sourceIdentity": "NewTable/soulessence.rows[id=10123]",
       "sourceEffectStatus": "effect-skill-dynamic-unapplied",
       "effectMechanics": {
@@ -6847,7 +6957,7 @@
           "skillLogicType": 6,
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900590]"
         },
-        "runtimeStatus": "source-indexed-runtime-unapplied",
+        "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
         "activationPrerequisites": [],
         "trigger": {
@@ -6857,9 +6967,15 @@
           "event": "BeforeDamage",
           "frameAnchor": "hit-before-damage",
           "condition": {
-            "kind": "condition-group",
+            "kind": "event-element-id",
+            "conditionType": 13,
+            "skillSlotId": null,
+            "skillSlotName": null,
+            "skillTagId": null,
+            "skillTagName": null,
             "logic": "or",
             "logicValue": 1,
+            "logicName": "OR",
             "conditions": [
               {
                 "kind": "event-element-id",
@@ -6868,14 +6984,29 @@
                 "conditionValue": 796,
                 "actionKinds": [],
                 "provenanceRequirement": null,
-                "tuningProfiles": [],
-                "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|condition-value-unresolved",
-                "status": "static-evidence-gap"
+                "tuningProfiles": [
+                  {
+                    "profileKey": "wind",
+                    "markId": 750,
+                    "overlimitPacketElementId": 799,
+                    "damageElementId": 796,
+                    "elementTypes": [
+                      22,
+                      32,
+                      43,
+                      307
+                    ],
+                    "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
+                    "status": "applied"
+                  }
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
+                "status": "applied"
               }
             ],
             "actionKinds": [],
-            "status": "static-evidence-gap",
-            "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerConditionType|triggerConditionList"
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1"
           },
           "triggerTargetType": 0,
           "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerTargetType",
@@ -7019,10 +7150,7 @@
           "damageElementIds": [],
           "activationPrerequisiteElementIds": []
         },
-        "runtimeGaps": [
-          "effect-skill-tag-condition-operator-unsupported",
-          "effect-trigger-event-operator-unsupported"
-        ],
+        "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10123].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900590.asset/MonoBehaviour/skill_control_1900590__210735096432786726.json|battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900|battle-element-assets.jsonl#path_id=8480096044321114000;elementId=19005901"
       }
     },
@@ -7476,7 +7604,7 @@
       "maximumRank": 6,
       "staticProfileApplied": true,
       "effectSkillId": 1900280,
-      "effectStatus": "source-indexed-runtime-unapplied",
+      "effectStatus": "runtime-applied",
       "sourceIdentity": "NewTable/soulessence.rows[id=10130]",
       "sourceEffectStatus": "effect-skill-dynamic-unapplied",
       "effectMechanics": {
@@ -7487,7 +7615,7 @@
           "skillLogicType": 6,
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900280]"
         },
-        "runtimeStatus": "source-indexed-runtime-unapplied",
+        "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
         "activationPrerequisites": [],
         "trigger": {
@@ -7680,9 +7808,7 @@
           "damageElementIds": [],
           "activationPrerequisiteElementIds": []
         },
-        "runtimeGaps": [
-          "effect-trigger-event-operator-unsupported"
-        ],
+        "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10130].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900280.asset/MonoBehaviour/skill_control_1900280__4588656220270570984.json|battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801|battle-element-assets.jsonl#path_id=7184896566896581000;elementId=19002802"
       }
     },
@@ -8979,7 +9105,7 @@
       "maximumRank": 6,
       "staticProfileApplied": true,
       "effectSkillId": 1900560,
-      "effectStatus": "source-indexed-runtime-unapplied",
+      "effectStatus": "runtime-applied",
       "sourceIdentity": "NewTable/soulessence.rows[id=10150]",
       "sourceEffectStatus": "effect-skill-dynamic-unapplied",
       "effectMechanics": {
@@ -8990,7 +9116,7 @@
           "skillLogicType": 6,
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900560]"
         },
-        "runtimeStatus": "source-indexed-runtime-unapplied",
+        "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
         "activationPrerequisites": [],
         "trigger": {
@@ -9001,8 +9127,14 @@
           "frameAnchor": "hit-before-damage",
           "condition": {
             "kind": "condition-group",
+            "conditionType": null,
+            "skillSlotId": null,
+            "skillSlotName": null,
+            "skillTagId": null,
+            "skillTagName": null,
             "logic": "or",
             "logicValue": 1,
+            "logicName": "OR",
             "conditions": [
               {
                 "kind": "event-element-id",
@@ -9011,9 +9143,24 @@
                 "conditionValue": 196,
                 "actionKinds": [],
                 "provenanceRequirement": null,
-                "tuningProfiles": [],
-                "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|condition-value-unresolved",
-                "status": "static-evidence-gap"
+                "tuningProfiles": [
+                  {
+                    "profileKey": "fire",
+                    "markId": 150,
+                    "overlimitPacketElementId": 199,
+                    "damageElementId": 196,
+                    "elementTypes": [
+                      22,
+                      31,
+                      43,
+                      307
+                    ],
+                    "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=-310946560669858520.types",
+                    "status": "applied"
+                  }
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=-310946560669858520.types",
+                "status": "applied"
               },
               {
                 "kind": "event-element-id",
@@ -9022,14 +9169,29 @@
                 "conditionValue": 796,
                 "actionKinds": [],
                 "provenanceRequirement": null,
-                "tuningProfiles": [],
-                "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|condition-value-unresolved",
-                "status": "static-evidence-gap"
+                "tuningProfiles": [
+                  {
+                    "profileKey": "wind",
+                    "markId": 750,
+                    "overlimitPacketElementId": 799,
+                    "damageElementId": 796,
+                    "elementTypes": [
+                      22,
+                      32,
+                      43,
+                      307
+                    ],
+                    "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
+                    "status": "applied"
+                  }
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
+                "status": "applied"
               }
             ],
             "actionKinds": [],
-            "status": "static-evidence-gap",
-            "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionType|triggerConditionList"
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1"
           },
           "triggerTargetType": 0,
           "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerTargetType",
@@ -9175,10 +9337,7 @@
           "damageElementIds": [],
           "activationPrerequisiteElementIds": []
         },
-        "runtimeGaps": [
-          "effect-skill-tag-condition-operator-unsupported",
-          "effect-trigger-event-operator-unsupported"
-        ],
+        "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10150].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900560.asset/MonoBehaviour/skill_control_1900560__1002074190257504026.json|battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600|battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601"
       }
     },
@@ -13786,5 +13945,5 @@
       ]
     }
   },
-  "rosterHash": "0f328c23d795ad6b"
+  "rosterHash": "8b862efb68f88445"
 }

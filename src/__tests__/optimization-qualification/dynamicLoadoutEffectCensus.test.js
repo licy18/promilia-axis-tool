@@ -7,8 +7,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 19,
-      runtimeUnappliedCount: 55,
+      runtimeAppliedCount: 23,
+      runtimeUnappliedCount: 51,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -26,6 +26,127 @@ describe('M12-B3-C dynamic loadout effect census', () => {
           definition.sourceIdentity
       )
     ).toBe(true);
+  });
+
+  it('compiles source-bound BeforeDamage element predicates and consumer ordering', () => {
+    const definitions = new Map(
+      soulCatalog.definitions.map(definition => [
+        definition.soulEssenceId,
+        definition,
+      ])
+    );
+
+    expect(soulCatalog.triggerContract.beforeDamageRuntime).toMatchObject({
+      status: 'applied',
+      contractName: 'AzPrSoulEssenceBeforeDamageRuntimeEvidence',
+      beforeDamageEventId: 1,
+      afterDamageEventId: 2,
+      beforeDamagePrecedesSettlement: true,
+      afterDamageFollowsSettlement: true,
+      consumer: {
+        identity:
+          'Lens.Gameplay.Modules.BigWorld.AliveElementSystem.OnExecuteDamageElement',
+        beforeAttack: expect.objectContaining({
+          eventId: 1,
+          callRva: '0x1319276',
+        }),
+        damageSettlement: expect.objectContaining({ callRva: '0x131935A' }),
+        afterAttack: expect.objectContaining({
+          eventId: 2,
+          callRva: '0x13193C7',
+        }),
+      },
+      sourceIdentity: expect.stringContaining(
+        'AliveElementSystem.OnExecuteDamageElement@0x1318800'
+      ),
+    });
+
+    for (const soulEssenceId of [10044, 10123, 10130, 10150]) {
+      expect(definitions.get(soulEssenceId)).toMatchObject({
+        runtimeStatus: 'runtime-applied',
+        trigger: {
+          eventId: 1,
+          event: 'BeforeDamage',
+          frameAnchor: 'hit-before-damage',
+          triggerTarget: expect.objectContaining({
+            kind: 'equipped-actor-source-events',
+          }),
+          target: expect.objectContaining({ kind: 'self-actor' }),
+        },
+        runtimeGaps: [],
+      });
+    }
+
+    expect(definitions.get(10044).trigger.condition).toMatchObject({
+      logic: 'or',
+      conditions: [
+        expect.objectContaining({
+          kind: 'event-element-id',
+          conditionValue: 196,
+          tuningProfiles: [
+            expect.objectContaining({
+              profileKey: 'fire',
+              damageElementId: 196,
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          kind: 'event-element-id',
+          conditionValue: 796,
+          tuningProfiles: [
+            expect.objectContaining({
+              profileKey: 'wind',
+              damageElementId: 796,
+            }),
+          ],
+        }),
+      ],
+    });
+    expect(definitions.get(10123)).toMatchObject({
+      effect: {
+        attributeId: 21,
+        propertyTags: [301],
+        durationMs: 8000,
+        stackMode: 'refresh',
+        valuesByStar: expect.arrayContaining([
+          expect.objectContaining({ star: 1, valueRaw: 1130 }),
+          expect.objectContaining({ star: 4, valueRaw: 2250 }),
+        ]),
+      },
+    });
+    expect(definitions.get(10130).trigger.condition).toMatchObject({
+      logic: 'and',
+      conditions: [
+        expect.objectContaining({
+          kind: 'event-element-type',
+          conditionValue: 37,
+          tuningProfiles: [
+            expect.objectContaining({
+              profileKey: 'thunder',
+              elementTypes: expect.arrayContaining([37]),
+            }),
+          ],
+        }),
+      ],
+    });
+    expect(definitions.get(10150)).toMatchObject({
+      effect: {
+        attributeId: 21,
+        propertyTags: [301],
+        durationMs: 8000,
+        stackMode: 'stack',
+        maxStacks: 5,
+        valuesByStar: expect.arrayContaining([
+          expect.objectContaining({ star: 1, valueRaw: 230 }),
+          expect.objectContaining({ star: 4, valueRaw: 450 }),
+        ]),
+      },
+    });
+
+    expect(definitions.get(10018)).toMatchObject({
+      runtimeStatus: 'source-indexed-runtime-unapplied',
+      runtimeGaps: ['effect-activation-condition-operator-unsupported'],
+    });
   });
 
   it('compiles the ultimate OR selectors, AllHero target and point-valued formula family', () => {
@@ -679,7 +800,11 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       [10131, []],
       [10136, []],
       [10043, []],
+      [10044, []],
       [10149, []],
+      [10123, [301]],
+      [10130, [301]],
+      [10150, [301]],
       [10125, []],
       [10154, []],
       [10155, []],

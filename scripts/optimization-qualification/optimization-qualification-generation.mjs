@@ -75,6 +75,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '2161ca317a3f641dd6b5d8721fd9422c2598fada3c37af86f8248cfbf511c91f',
   soulEffectGetElementRuntimeEvidence:
     '06db8dd699ccad3a5b28b1099b5879ff6dd0990620d230918342d5ee80988ab3',
+  soulEffectBeforeDamageRuntimeEvidence:
+    'a1a30e0c70dbfaf49990bddb48bf97c1b9cca31f2a77a303fba9382c239a3f7f',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
@@ -132,6 +134,7 @@ export async function createOptimizationQualificationArtifacts({
   il2cppRuntimeContractsPath = 'C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs',
   heroRankRuntimeEvidencePath = null,
   soulEffectGetElementRuntimeEvidencePath = null,
+  soulEffectBeforeDamageRuntimeEvidencePath = null,
   gameAssemblyPath = 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
 } = {}) {
   if (!projectRoot) throw new TypeError('projectRoot is required');
@@ -201,10 +204,28 @@ export async function createOptimizationQualificationArtifacts({
       gameAssemblyPath,
       projectRoot
     );
+  sources.soulEffectBeforeDamageRuntimeEvidence =
+    await readSoulEffectBeforeDamageRuntimeEvidenceSource(
+      soulEffectBeforeDamageRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          'scripts',
+          'optimization-qualification',
+          'evidence',
+          'soulessence-before-damage-runtime-evidence.json'
+        ),
+      gameAssemblyPath,
+      projectRoot
+    );
   sources.il2cppRuntimeContracts.value.soulEffectTriggers =
     attachSoulEffectGetElementRuntimeEvidence(
       sources.il2cppRuntimeContracts.value.soulEffectTriggers,
       sources.soulEffectGetElementRuntimeEvidence.value
+    );
+  sources.il2cppRuntimeContracts.value.soulEffectTriggers =
+    attachSoulEffectBeforeDamageRuntimeEvidence(
+      sources.il2cppRuntimeContracts.value.soulEffectTriggers,
+      sources.soulEffectBeforeDamageRuntimeEvidence.value
     );
   const characters = sources.characters.value.items ?? [];
   const kibos = sources.kibos.value.items ?? [];
@@ -406,7 +427,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C5',
+      phase: 'M12-B3-C6',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1336,8 +1357,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C5',
-    status: 'b3-c5-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C6',
+    status: 'b3-c6-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1756,7 +1777,8 @@ function createSourceSnapshot(sources) {
       };
       if (
         key === 'heroRankRuntimeEvidence' ||
-        key === 'soulEffectGetElementRuntimeEvidence'
+        key === 'soulEffectGetElementRuntimeEvidence' ||
+        key === 'soulEffectBeforeDamageRuntimeEvidence'
       ) {
         record.value = structuredClone(source.value);
       }
@@ -1773,7 +1795,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C5 Get-Element Event Bridge\n\n' +
+    '# M12-B3-C6 Before-Damage Event Bridge\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1782,7 +1804,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects; C3 adds source-bound EntrySkill(22) switch provenance and wrapper lifetimes for 10147/10151. C4 compiles CheckElementType(8), HasElementId(10), CheckSkillType(11), and CheckTargetElementId(12), while C4-R1 preserves ordered ConsumePackElement candidate groups and emits only the first sufficient packet. C5 compiles BeforeGetElement(9), AfterGetElement(10), CheckElementId(13), and Self source visibility into paired canonical acquire transactions for 10043/10149. Before is dispatched before mutation, After after mutation; successful at-cap refresh remains an acquire transaction, while inherited initial state and consume/expire paths emit none. Soul essence 10018 remains blocked by its outer prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
+    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects; C3 adds source-bound EntrySkill(22) switch provenance and wrapper lifetimes for 10147/10151. C4 compiles tuning conditions and ordered ConsumePackElement candidate selection; C5 compiles paired BeforeGetElement/AfterGetElement transactions for 10043/10149. C6 compiles BeforeDamage(1), CheckElementId(13), and CheckElementType(8) from frozen consumer evidence, then dispatches exactly one before-damage transaction for each landed ordinary or tuning damage settlement. The command precedes its own settlement, while earlier same-frame source sequences and C4 AfterDamage remain isolated. Soul essence 10018 remains blocked by its outer prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'
@@ -2496,13 +2518,84 @@ async function readSoulEffectGetElementRuntimeEvidenceSource(
   };
 }
 
-function attachSoulEffectGetElementRuntimeEvidence(
-  triggerContract,
-  evidence
+async function readSoulEffectBeforeDamageRuntimeEvidenceSource(
+  sourcePath,
+  gameAssemblyPath,
+  projectRoot
 ) {
+  const bytes = await fs.readFile(sourcePath);
+  const value = JSON.parse(bytes.toString('utf8'));
+  if (
+    value?.contractName !== 'AzPrSoulEssenceBeforeDamageRuntimeEvidence' ||
+    Number(value?.schemaVersion) !== 1 ||
+    value?.conclusion?.status !== 'applied'
+  ) {
+    throw new Error(
+      'optimization-qualification-before-damage-evidence-contract-invalid'
+    );
+  }
+  const binaryIdentity = await readBinaryIdentity(gameAssemblyPath);
+  if (
+    Number(value.reviewedBinary?.bytes) !== binaryIdentity.bytes ||
+    value.reviewedBinary?.sha256 !== binaryIdentity.sha256
+  ) {
+    throw new Error(
+      'optimization-qualification-before-damage-evidence-binary-mismatch'
+    );
+  }
+  const binary = await fs.readFile(gameAssemblyPath);
+  const ranges = [
+    value.consumer?.orderedDispatch,
+    value.consumer?.beforeAttack,
+    value.consumer?.afterAttack,
+  ];
+  for (const evidenceRange of ranges) {
+    const rangeBytes = readPortableExecutableRvaRange(
+      binary,
+      evidenceRange?.range
+    );
+    if (
+      createHash('sha256').update(rangeBytes).digest('hex') !==
+      evidenceRange?.sha256
+    ) {
+      throw new Error(
+        `optimization-qualification-before-damage-evidence-range-drift:${evidenceRange?.range ?? 'missing'}`
+      );
+    }
+  }
+  const consumer = value.consumer ?? {};
+  const semantics = value.dispatchSemantics ?? {};
+  if (
+    consumer.beforeAttack?.callRva !== '0x1319276' ||
+    consumer.damageSettlement?.callRva !== '0x131935A' ||
+    consumer.afterAttack?.callRva !== '0x13193C7' ||
+    Number(semantics.beforeDamageEventId) !== 1 ||
+    Number(semantics.afterDamageEventId) !== 2 ||
+    semantics.beforeDamagePrecedesSettlement !== true ||
+    semantics.afterDamageFollowsSettlement !== true ||
+    semantics.samePacketBeforeDamageVisible !== true ||
+    semantics.ordinaryLandedHitDispatch !== true ||
+    semantics.tuningDamagePacketDispatch !== true ||
+    semantics.missDispatch !== false ||
+    semantics.failedOrUnexecutedDispatch !== false
+  ) {
+    throw new Error(
+      'optimization-qualification-before-damage-evidence-semantics-incomplete'
+    );
+  }
+  return {
+    path: normalizeSourcePath(sourcePath, projectRoot),
+    bytes: bytes.byteLength,
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+    value: { ...value, verifiedBinary: binaryIdentity },
+  };
+}
+
+function attachSoulEffectGetElementRuntimeEvidence(triggerContract, evidence) {
   const sourceVisibility = evidence?.sourceVisibility ?? {};
   const triggerTargetBinding = triggerContract.triggerTargetBindings?.find(
-    binding => Number(binding.value) === Number(sourceVisibility.triggerTargetType)
+    binding =>
+      Number(binding.value) === Number(sourceVisibility.triggerTargetType)
   );
   if (
     !triggerTargetBinding ||
@@ -2534,6 +2627,58 @@ function attachSoulEffectGetElementRuntimeEvidence(
       expireDispatch: evidence.dispatchSemantics.expireDispatch,
       failedOrUnexecutedDispatch:
         evidence.dispatchSemantics.failedOrUnexecutedDispatch,
+      sourceVisibility: structuredClone(sourceVisibility),
+      consumer: structuredClone(evidence.consumer),
+      reviewedBinary: structuredClone(evidence.reviewedBinary),
+      sourceIdentity: evidence.conclusion.sourceIdentity,
+    },
+  };
+  const { contractHash: _contractHash, ...hashInput } = value;
+  return { ...hashInput, contractHash: hashCanonicalValue(hashInput) };
+}
+
+function attachSoulEffectBeforeDamageRuntimeEvidence(
+  triggerContract,
+  evidence
+) {
+  const sourceVisibility = evidence?.sourceVisibility ?? {};
+  const triggerTargetBinding = triggerContract.triggerTargetBindings?.find(
+    binding =>
+      Number(binding.value) === Number(sourceVisibility.triggerTargetType)
+  );
+  const beforeEvent = triggerContract.eventBindings?.find(
+    binding => Number(binding.value) === 1
+  );
+  const afterEvent = triggerContract.eventBindings?.find(
+    binding => Number(binding.value) === 2
+  );
+  if (
+    !triggerTargetBinding ||
+    triggerTargetBinding.enumName !== sourceVisibility.enumName ||
+    triggerTargetBinding.sourceKind !== sourceVisibility.runtimeSourceKind ||
+    beforeEvent?.frameAnchor !== 'hit-before-damage' ||
+    afterEvent?.frameAnchor !== 'hit-after-damage'
+  ) {
+    throw new Error(
+      'optimization-qualification-before-damage-source-binding-drift'
+    );
+  }
+  const semantics = evidence.dispatchSemantics;
+  const value = {
+    ...triggerContract,
+    beforeDamageRuntime: {
+      status: evidence.conclusion.status,
+      contractName: evidence.contractName,
+      beforeDamageEventId: Number(semantics.beforeDamageEventId),
+      afterDamageEventId: Number(semantics.afterDamageEventId),
+      beforeDamagePrecedesSettlement: semantics.beforeDamagePrecedesSettlement,
+      afterDamageFollowsSettlement: semantics.afterDamageFollowsSettlement,
+      samePacketBeforeDamageVisible: semantics.samePacketBeforeDamageVisible,
+      ordinaryLandedHitDispatch: semantics.ordinaryLandedHitDispatch,
+      tuningDamagePacketDispatch: semantics.tuningDamagePacketDispatch,
+      missDispatch: semantics.missDispatch,
+      failedOrUnexecutedDispatch: semantics.failedOrUnexecutedDispatch,
+      eventElementIdentity: semantics.eventElementIdentity,
       sourceVisibility: structuredClone(sourceVisibility),
       consumer: structuredClone(evidence.consumer),
       reviewedBinary: structuredClone(evidence.reviewedBinary),

@@ -1,17 +1,18 @@
 {
-  "schemaVersion": 8,
-  "phase": "M12-B3-C5",
+  "schemaVersion": 9,
+  "phase": "M12-B3-C6",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "8bf0b3a77538102c1995dd5943e4a7275664ca0a",
+  "baseCommit": "5c713e55ffdc46e5e75e9a4a4dcc1d0366201be0",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
-    "phase": "M12-B3-C4-R1",
-    "acceptanceBaseline": "8bf0b3a77538102c1995dd5943e4a7275664ca0a",
+    "phase": "M12-B3-C5",
+    "acceptanceBaseline": "5c713e55ffdc46e5e75e9a4a4dcc1d0366201be0",
     "status": "product-accepted"
   },
   "scope": {
-    "batch": "tuning-mark-get-element-event-bridge",
-    "soulEssenceIds": [10043, 10149],
+    "batch": "before-damage-event-and-damage-element-context-bridge",
+    "soulEssenceIds": [10044, 10123, 10130, 10150],
+    "explicitlyExcludedSoulEssenceIds": [10018],
     "formalSearchExecuted": false,
     "m12cLocked": true,
     "fixedCultivationChanged": false,
@@ -29,23 +30,22 @@
       "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
       "bytes": 97428254,
       "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
-      "sourceIdentity": "EElementTriggerEventType.BeforeGetElement=9|AfterGetElement=10|EElementTriggerFixedConditionType.CheckElementId=13|EElementTriggerTargetType.Self=0|ETriggerEffectTargetType.AllHero=15",
-      "triggerContractHash": "ff9e03917cfae20c"
+      "sourceIdentity": "EElementTriggerEventType.BeforeDamage=1|AfterDamage=2|EElementTriggerFixedConditionType.CheckElementType=8|CheckElementId=13|EElementTriggerTargetType.Self=0",
+      "triggerContractHash": "ff74850293e0ab1b"
     },
-    "getElementRuntimeEvidence": {
-      "path": "scripts/optimization-qualification/evidence/soulessence-get-element-runtime-evidence.json",
-      "bytes": 2671,
-      "sha256": "06db8dd699ccad3a5b28b1099b5879ff6dd0990620d230918342d5ee80988ab3",
+    "beforeDamageRuntimeEvidence": {
+      "path": "scripts/optimization-qualification/evidence/soulessence-before-damage-runtime-evidence.json",
+      "bytes": 2984,
+      "sha256": "a1a30e0c70dbfaf49990bddb48bf97c1b9cca31f2a77a303fba9382c239a3f7f",
       "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
       "binaryBytes": 222485544,
       "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
-      "consumer": "AliveElementSystem.OnExecuteNormalElement@0x13195C0",
-      "beforeMutationCall": "BeforeGetElement(9)@0x1319EF5",
-      "beforeRangeSha256": "b6e8fb3ace9061da8425c36ef18078e635095424c860da308a709ecdb6392a5e",
-      "combineAfterMutationCall": "AfterGetElement(10)@0x131A4C7",
-      "combineAfterRangeSha256": "92a6d391f09d9e452f62792ebff0a8c942714eabfb6fae2bd1b13274102861a7",
-      "newElementAfterCall": "AfterGetElement(10)@0x131501F",
-      "newElementAfterRangeSha256": "b073418b335877ddfbd6ce2584342d11e996dd527b141e3349901a6af1f57da6"
+      "consumer": "AliveElementSystem.OnExecuteDamageElement@0x1318800",
+      "orderedDispatchRange": "0x1319260-0x13193D0",
+      "orderedDispatchSha256": "6ff8e96a6bfb84f825a2f6de65cbdc246649e7b78804be6d9eea944dfedfde43",
+      "beforeCall": "OnBeforeAttack@0x1319276,event=1@0x18727FA",
+      "settlementCall": "ExecuteDamageElement@0x131935A",
+      "afterCall": "OnAfterAttack@0x13193C7,event=2@0x187202F"
     },
     "tuningMechanics": {
       "sourceIdentity": "combat-overlimit-mechanics-20260718.json",
@@ -58,86 +58,122 @@
       "sha256": "fc30b3421db5c04a517a29f81e969c428b33ade9392ef806fad56a29cd1fcdfe"
     }
   },
-  "compiledContracts": {
-    "getElementEvent": {
-      "transactionContract": "paired-before-after-acquisition-transaction",
-      "beforeMutationEventId": 9,
-      "afterMutationEventId": 10,
-      "conditionType": 13,
-      "conditionSelector": "current event elementId",
-      "sourceVisibility": "equipped actor acquisition events only",
-      "effectRecipients": "triggerEffectList.targetType, independently expanded",
-      "appliedSources": ["verified-action-effect", "verified-threshold-grant"],
-      "zeroDeltaAtCap": "successful acquisition refresh transaction",
-      "excludedSources": ["initial-state-restore", "consume", "expire", "held-periodic", "overlimit-packet", "failed-or-unexecuted-action"]
+  "compiledContract": {
+    "event": "BeforeDamage(1)",
+    "frameAnchor": "hit-before-damage",
+    "transactionContract": "before-settlement-after",
+    "ordinaryAndTuningShareContext": true,
+    "stableContextFields": [
+      "transactionIdentity",
+      "eventIdentity",
+      "phase",
+      "absoluteFrame",
+      "sourceSequencePath",
+      "sourceActionId",
+      "sourceActorId",
+      "sourceHitIdentity",
+      "controlSkillId",
+      "subSkillIndex",
+      "skillTags",
+      "battlePropertyTags",
+      "damageElementId",
+      "elementTypes",
+      "damageType",
+      "markId",
+      "profileKey",
+      "judgmentIdentity",
+      "selectedCandidateMarkId",
+      "templateSourceIdentity"
+    ],
+    "dispatchRules": {
+      "landedOrdinaryHit": true,
+      "landedTuningPacket": true,
+      "miss": false,
+      "executeFalse": false,
+      "packetNotMaterialized": false,
+      "initialMarkState": false
     },
-    "10043": {
-      "name": "宣告黎明之花",
-      "triggerElementId": 19003301,
-      "event": "BeforeGetElement(9)",
-      "condition": "CheckElementId(13)=750",
-      "triggerSource": "Self(0)",
-      "target": "AllHero(15)",
-      "effectElementId": 19003302,
-      "attributeId": 229,
-      "formula": "baseFunctionId=3, A/10000",
+    "phaseOrder": "before command -> matching damage settlement -> after event",
+    "samePacketBeforeDamageVisible": true,
+    "earlierSameFrameSourceSequenceIsolated": true,
+    "afterDamageDoesNotSelfApply": true
+  },
+  "definitions": {
+    "10044": {
+      "name": "狩猎姿态",
+      "condition": "CheckElementId(13)=196 OR 796",
+      "target": "Self",
+      "attributeId": 52,
+      "propertyTags": [],
       "durationMs": 16000,
-      "stackMode": "stack",
-      "maxStacks": 5,
-      "valuesByStarRaw": [75000, 100000, 125000, 150000]
-    },
-    "10149": {
-      "name": "失控飞行",
-      "triggerElementId": 19002201,
-      "event": "AfterGetElement(10)",
-      "condition": "CheckElementId(13)=150",
-      "triggerSource": "Self(0)",
-      "target": "AllHero(15)",
-      "effectElementId": 19002202,
-      "attributeId": 229,
-      "formula": "baseFunctionId=5, A",
-      "durationMs": 24000,
       "stackMode": "refresh",
       "maxStacks": 1,
-      "valuesByStarRaw": [45, 60, 75, 90]
+      "valuesByStarRaw": [1220, 1620, 2030, 2430]
+    },
+    "10123": {
+      "name": "桃芳春笺",
+      "condition": "CheckElementId(13)=796",
+      "target": "Self",
+      "attributeId": 21,
+      "propertyTags": [301],
+      "durationMs": 8000,
+      "stackMode": "refresh",
+      "maxStacks": 1,
+      "valuesByStarRaw": [1130, 1500, 1880, 2250]
+    },
+    "10130": {
+      "name": "女仆的疗养日",
+      "condition": "CheckElementType(8)=37",
+      "target": "Self",
+      "attributeId": 21,
+      "propertyTags": [301],
+      "durationMs": 5000,
+      "stackMode": "refresh",
+      "maxStacks": 1,
+      "valuesByStarRaw": [1130, 1500, 1880, 2250]
+    },
+    "10150": {
+      "name": "狼少女的心意",
+      "condition": "CheckElementId(13)=196 OR 796",
+      "target": "Self",
+      "attributeId": 21,
+      "propertyTags": [301],
+      "durationMs": 8000,
+      "stackMode": "stack",
+      "maxStacks": 5,
+      "valuesByStarRaw": [230, 300, 380, 450]
+    },
+    "10018": {
+      "name": "飞行试验",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "blockingReason": "effect-activation-condition-operator-unsupported",
+      "beforeDamageBridgeAloneDoesNotQualify": true
     }
   },
   "runtimeMatrix": {
-    "stableTransactionFields": ["transactionIdentity", "phase", "eventId", "elementId", "markId", "profileKey", "before", "requestedDelta", "delta", "after", "outcome", "sourceActionId", "sourceActorId", "sourceHitIdentity", "absoluteFrame", "sourceSequencePath", "transactionSourceSequencePath", "phaseSequenceIndex", "applied", "success", "initialState"],
-    "phaseOrder": "before -> mark mutation/refresh -> after",
-    "10043": {
-      "realSourceAction": "10700212 star-skill wind mark acquisition",
-      "allHeroCommands": 3,
-      "teammateMasteryIncreaseAtStar1": 7.5,
-      "stackCap": 5,
-      "atCapRefreshTriggers": true,
-      "wrongElementOrWrongSourceTriggers": false,
-      "inheritedOrConsumeOrExpireTriggers": false,
-      "blockedActionTriggers": false,
-      "rightOpenExpiryRestoresBaseline": true
-    },
-    "10149": {
-      "realSourceAction": "10800112 star-skill fire mark acquisition",
-      "allHeroCommands": 3,
-      "teammateMasteryIncreaseAtStar1": 45,
-      "repeatedAcquisition": "refresh-one-layer",
-      "wrongElementOrWrongSourceTriggers": false,
-      "inheritedOrConsumeOrExpireTriggers": false,
-      "failedOrUnexecutedTriggers": false,
-      "rightOpenExpiryRestoresBaseline": true
-    },
+    "fireOverlimit196": "10044 and 10150 trigger from the materialized landed packet",
+    "windOverlimit796": "10044, 10123 and 10150 trigger from the materialized landed packet",
+    "thunderType37": "10130 matches the real damage template types, not profile names",
+    "samePacket": "BeforeDamage command is visible to its own settlement when PropertyTag scope matches",
+    "wrongPropertyTag": "command may exist but does not modify the mismatched settlement",
+    "ordinaryHit": "one transaction per landed hit; no duplicate tuning transaction",
+    "sameFrameSequence": "earlier source sequence does not see a later command",
+    "missAndBlocked": "no BeforeDamage command",
+    "refreshAndExpiry": "right-open duration and source-defined stack semantics preserved",
+    "selfOwnership": "does not transfer when controlled actor changes",
     "replayStable": true,
     "cycleStateStable": true,
-    "priorityConsumeC4Regression": "passed"
+    "c4AfterDamageRegression": "passed",
+    "c5AcquireRegression": "passed"
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 19,
-    "runtimeUnappliedSoulEssenceCount": 43,
+    "runtimeAppliedSoulEssenceCount": 23,
+    "runtimeUnappliedSoulEssenceCount": 39,
     "runtimeAppliedSetSkillCount": 0,
-    "newlyAppliedSoulEssenceIds": [10043, 10149],
-    "preservedRuntimeAppliedSoulEssenceCount": 17,
+    "newlyAppliedSoulEssenceIds": [10044, 10123, 10130, 10150],
+    "preservedRuntimeAppliedSoulEssenceCount": 19,
     "explicitlyUnapplied": {
-      "soulEssenceCount": 43,
+      "soulEssenceCount": 39,
       "setSkillCount": 12,
       "reason": "source evidence or canonical runtime operator remains incomplete"
     }
@@ -150,9 +186,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 432,
+    "blockingUniqueGapCount": 424,
     "blockingByCategory": {
-      "not-implemented": 416,
+      "not-implemented": 408,
       "evidence-insufficient": 16
     },
     "formalAdmissions": {
@@ -164,17 +200,17 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "8368dcab431c3a25",
-    "rosterHash": "0f328c23d795ad6b",
-    "manifestsHash": "fde0e0f54cfdde54",
-    "ledgerHash": "9f4861b9759f8779",
-    "bindingMatrixHash": "e5dede43eddc1f7d",
-    "qualificationCatalogHash": "0b52db0abd10b411",
-    "dynamicLoadoutEffectCensusHash": "b4c21f28dbbfdffa",
-    "soulEssenceEffectCatalogHash": "116773c16e562c21",
-    "soulEssenceSourceSnapshotHash": "0446ee7113c4f37b",
+    "sourceSnapshotHash": "38214acbcfcd3bec",
+    "rosterHash": "8b862efb68f88445",
+    "manifestsHash": "1dd7a09ca04173dd",
+    "ledgerHash": "7b49c3b804c860f2",
+    "bindingMatrixHash": "fd76c55a6c4b4e24",
+    "qualificationCatalogHash": "0c97a0222e1f8f27",
+    "dynamicLoadoutEffectCensusHash": "15865c016a511f04",
+    "soulEssenceEffectCatalogHash": "5ded9fcb8005078b",
+    "soulEssenceSourceSnapshotHash": "d4eda61c780b1ee6",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
-    "soulEssenceTriggerContractHash": "ff9e03917cfae20c",
+    "soulEssenceTriggerContractHash": "ff74850293e0ab1b",
     "machineAxisCanonicalHashes": {
       "input": "c8bfd28dcb890f4f",
       "data": "98deb78db6293f88",
@@ -183,25 +219,40 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "source-bound get-element enums, binary evidence, paired acquisition context, and source visibility became first-class qualification data",
+    "reason": "frozen BeforeDamage consumer evidence and damage-event context became first-class qualification data",
     "machineAxisCanonicalHashDrift": 0,
     "gameplayAssertionDrift": 0,
-    "priorityConsumeRegression": 0
+    "c4AfterDamageRegression": 0,
+    "c5AcquireRegression": 0
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": {"files": 3, "tests": 86, "status": "passed"},
-    "machineAxis": {"files": 12, "tests": 157, "status": "passed"},
-    "characterProfileGolden": {"files": 3, "tests": 34, "status": "passed", "gameplayAssertionDrift": 0},
-    "canonicalAndRuntime": {"files": 6, "tests": 106, "status": "passed"},
-    "headlessGoldenMigration": {"files": 1, "tests": 4, "status": "passed"},
+    "focusedMechanics": { "files": 4, "tests": 115, "status": "passed" },
+    "characterProfileAndMigration": {
+      "files": 4,
+      "tests": 38,
+      "status": "passed",
+      "gameplayAssertionDrift": 0
+    },
+    "machineAxis": { "files": 12, "tests": 157, "status": "passed" },
+    "canonicalAndRuntime": { "files": 6, "tests": 62, "status": "passed" },
     "audits": {
       "count": 9,
       "status": "clean",
-      "names": ["optimization-qualification", "production-imports", "workbench-data", "action-status", "applied-source-bindings", "character-acceptance", "character-combat", "verified-combat", "kibo-headless"],
-      "appliedSoulSourceCount": 19,
+      "names": [
+        "optimization-qualification",
+        "production-imports",
+        "workbench-data",
+        "action-status",
+        "applied-source-bindings",
+        "character-acceptance",
+        "character-combat",
+        "verified-combat",
+        "kibo-headless"
+      ],
+      "appliedSoulSourceCount": 23,
       "appliedSoulSourceDriftCount": 0,
-      "tuningConditionSourceCount": 7,
+      "tuningConditionSourceCount": 13,
       "tuningConditionSourceDriftCount": 0,
       "tuningConsumePriorityGroupCount": 12,
       "tuningConsumePrioritySourceDriftCount": 0

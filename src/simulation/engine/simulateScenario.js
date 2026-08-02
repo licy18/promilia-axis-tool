@@ -18,6 +18,7 @@ import { createVerifiedTuningMarkGeneration } from '../mechanics/verifiedTuningM
 import { createVerifiedActionVariantRuntime } from '../mechanics/verifiedActionVariantRuntime';
 import { createVerifiedKiboPassiveGeneration } from '../mechanics/verifiedKiboPassiveGeneration';
 import { createVerifiedSoulEssenceEffectGeneration } from '../mechanics/verifiedSoulEssenceEffectGeneration';
+import { createVerifiedDamageEventGeneration } from '../mechanics/verifiedDamageEventGeneration';
 import { projectScenarioEffectiveActionTimeline } from '../mechanics/actionEffectiveTimeline';
 import { validateCombatCriticalScenario } from '../../domain/combatCriticalPolicy';
 import { createDeterministicCriticalRandomSource } from '../runtime/criticalRandomSource';
@@ -250,6 +251,7 @@ export function simulateScenario(
     verifiedKiboPassiveGeneration: runtimeBundle.kiboPassiveGeneration,
     verifiedSoulEssenceEffectGeneration:
       runtimeBundle.soulEssenceEffectGeneration,
+    verifiedDamageEventGeneration: runtimeBundle.damageEventGeneration,
     verifiedTuningMarkGeneration: runtimeBundle.tuningGeneration,
     verifiedActionVariantRuntime: runtimeBundle.actionVariantRuntime,
     effectiveActionTimeline,
@@ -417,6 +419,14 @@ function createVerifiedRuntimeBundle({
         acceptedSkillStartTransitions,
       })
     : null;
+  const damageEventGeneration = isVerifiedCombatMechanicsScenario(scenario)
+    ? createVerifiedDamageEventGeneration({
+        scenario,
+        actionExecutionPlan,
+        actionResolutionById: actionVariantRuntime?.actionResolutionById,
+        tuningGeneration,
+      })
+    : null;
   const soulEssenceEffectGeneration = isVerifiedCombatMechanicsScenario(
     scenario
   )
@@ -425,6 +435,7 @@ function createVerifiedRuntimeBundle({
         actionExecutionPlan,
         actionResolutionById: actionVariantRuntime?.actionResolutionById,
         tuningGeneration,
+        damageEventGeneration,
       })
     : null;
   const effectTimeline = createEffectRuntimeTimeline({
@@ -445,6 +456,7 @@ function createVerifiedRuntimeBundle({
     controlledActorTimeline,
     effectGeneration,
     tuningGeneration,
+    damageEventGeneration,
     effectTimeline,
     actionVariantRuntime,
     kiboPassiveGeneration,
@@ -456,6 +468,7 @@ function createVerifiedRuntimeBundle({
     effectGeneration,
     kiboPassiveGeneration,
     soulEssenceEffectGeneration,
+    damageEventGeneration,
     tuningGeneration,
     effectTimeline,
     verifiedCombatRuntime,

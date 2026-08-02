@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "0f328c23d795ad6b",
-  "manifestsHash": "fde0e0f54cfdde54",
-  "gapLedgerHash": "9f4861b9759f8779",
-  "bindingMatrixHash": "e5dede43eddc1f7d",
-  "sourceSnapshotHash": "8368dcab431c3a25",
+  "rosterHash": "8b862efb68f88445",
+  "manifestsHash": "1dd7a09ca04173dd",
+  "gapLedgerHash": "7b49c3b804c860f2",
+  "bindingMatrixHash": "fd76c55a6c4b4e24",
+  "sourceSnapshotHash": "38214acbcfcd3bec",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -2390,7 +2390,7 @@
         "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "d7050c0cbfa425b9"
+      "manifestHash": "eda79f2fd1284259"
     },
     {
       "objectKind": "soul-essence",
@@ -2457,14 +2457,12 @@
       "objectKind": "soul-essence",
       "objectId": "10044",
       "displayName": "狩猎姿态",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "f81ae90ce29e4cff"
+      "manifestHash": "9d7a4580135fa5e4"
     },
     {
       "objectKind": "soul-essence",
@@ -2796,14 +2794,12 @@
       "objectKind": "soul-essence",
       "objectId": "10123",
       "displayName": "桃芳春笺",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "3beb166c4aad1d14"
+      "manifestHash": "367ca0a43cd11d70"
     },
     {
       "objectKind": "soul-essence",
@@ -2831,14 +2827,12 @@
       "objectKind": "soul-essence",
       "objectId": "10130",
       "displayName": "女仆的疗养日",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "4aa56867c84b44f5"
+      "manifestHash": "3fd2d2e84ab037e0"
     },
     {
       "objectKind": "soul-essence",
@@ -2927,14 +2921,12 @@
       "objectKind": "soul-essence",
       "objectId": "10150",
       "displayName": "狼少女的心意",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "33414813a81de3e3"
+      "manifestHash": "1960f680ff104c89"
     },
     {
       "objectKind": "soul-essence",
@@ -3112,7 +3104,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-01T00:00:00.000Z",
-    "rosterHash": "0f328c23d795ad6b",
+    "rosterHash": "8b862efb68f88445",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -25020,7 +25012,7 @@
       "setSkillThresholdQualifiedCount": 0,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "e5dede43eddc1f7d"
+    "bindingMatrixHash": "fd76c55a6c4b4e24"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -39291,7 +39283,7 @@
             ],
             "status": "source-indexed-runtime-unapplied",
             "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
-            "catalogDefinitionHash": "0133e64f92eeeca4",
+            "catalogDefinitionHash": "80b298746fa204c2",
             "sourceIdentity": "NewTable/soulessence.rows[id=10018].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10018]"
@@ -39691,9 +39683,9 @@
                 "sourceIdentity": "NewTable/skill_level.rows[id=2817,skillId=1900550,level=4]"
               }
             ],
-            "status": "source-indexed-runtime-unapplied",
+            "status": "runtime-applied",
             "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
-            "catalogDefinitionHash": "21b7dd30ea608c8b",
+            "catalogDefinitionHash": "50728485a13652e7",
             "sourceIdentity": "NewTable/soulessence.rows[id=10044].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10044]"
@@ -41500,9 +41492,9 @@
                 "sourceIdentity": "NewTable/skill_level.rows[id=2833,skillId=1900590,level=4]"
               }
             ],
-            "status": "source-indexed-runtime-unapplied",
+            "status": "runtime-applied",
             "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
-            "catalogDefinitionHash": "65c4b9a49ccbffb2",
+            "catalogDefinitionHash": "1d0daab0be58bd57",
             "sourceIdentity": "NewTable/soulessence.rows[id=10123].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10123]"
@@ -41701,9 +41693,9 @@
                 "sourceIdentity": "NewTable/skill_level.rows[id=2709,skillId=1900280,level=4]"
               }
             ],
-            "status": "source-indexed-runtime-unapplied",
+            "status": "runtime-applied",
             "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
-            "catalogDefinitionHash": "1c5b5518f6db8fae",
+            "catalogDefinitionHash": "1039467f6a544c51",
             "sourceIdentity": "NewTable/soulessence.rows[id=10130].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10130]"
@@ -42237,9 +42229,9 @@
                 "sourceIdentity": "NewTable/skill_level.rows[id=2821,skillId=1900560,level=4]"
               }
             ],
-            "status": "source-indexed-runtime-unapplied",
+            "status": "runtime-applied",
             "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
-            "catalogDefinitionHash": "6a54737175374b45",
+            "catalogDefinitionHash": "2ee4c2b68cfa7d1f",
             "sourceIdentity": "NewTable/soulessence.rows[id=10150].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10150]"
@@ -43118,8 +43110,8 @@
       ],
       "effectStatus": {
         "status": "partially-runtime-applied",
-        "runtimeAppliedCount": 19,
-        "unresolvedCount": 43
+        "runtimeAppliedCount": 23,
+        "unresolvedCount": 39
       }
     },
     "equipment": {
@@ -44448,8 +44440,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 222,
-      "runtime-integrated": 43
+      "extracted": 218,
+      "runtime-integrated": 47
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -44459,7 +44451,7 @@
       "set-skill": 0
     },
     "optimizationReadyTotal": 0,
-    "gameplayBlockingGapCount": 432,
+    "gameplayBlockingGapCount": 424,
     "bindingQualifiedEdgeCount": 0,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44544,5 +44536,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "0b52db0abd10b411"
+  "catalogHash": "0c97a0222e1f8f27"
 }

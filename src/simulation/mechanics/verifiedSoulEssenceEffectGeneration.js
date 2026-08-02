@@ -4,9 +4,7 @@ import {
   EFFECT_STACK_MODES,
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
-import { resolveActionHitWillHit } from '../../domain/actionHitOverrides';
 import { getActionSourceSequencePath } from '../../domain/actionSourceSequence';
-import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
 import { evaluateVerifiedBattleEffectFormula } from './verifiedBattleEffectFormulaRuntime';
 
 export const VERIFIED_SOULESSENCE_EFFECT_GENERATION_CONTRACT_NAME =
@@ -15,7 +13,8 @@ export const VERIFIED_SOULESSENCE_EFFECT_GENERATION_CONTRACT_NAME =
 const SOULESSENCE_TRIGGER_OPERATOR_REGISTRY = Object.freeze({
   'action-start': resolveActionTriggerOccurrence,
   'action-end': resolveActionTriggerOccurrence,
-  'hit-after-damage': resolveLandedHitTriggerOccurrences,
+  'hit-before-damage': resolveDamageTriggerOccurrences,
+  'hit-after-damage': resolveDamageTriggerOccurrences,
   'element-before-acquire': resolveGetElementTriggerOccurrences,
   'element-after-acquire': resolveGetElementTriggerOccurrences,
 });
@@ -25,6 +24,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
   actionExecutionPlan = null,
   actionResolutionById = null,
   tuningGeneration = null,
+  damageEventGeneration = null,
   catalog = soulEssenceEffectCatalog,
 } = {}) {
   const executionByActionId = new Map(
@@ -87,6 +87,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
         resolution,
         scenario,
         tuningGeneration,
+        damageEventGeneration,
         frameAnchor: binding.definition.trigger.frameAnchor,
       });
       if (!Array.isArray(occurrences) || occurrences.length === 0) {
@@ -263,86 +264,23 @@ function resolveGetElementTriggerOccurrences({
     }));
 }
 
-function resolveLandedHitTriggerOccurrences({
+function resolveDamageTriggerOccurrences({
   action,
-  actionIndex,
-  resolution,
-  scenario,
-  tuningGeneration,
+  damageEventGeneration,
+  frameAnchor,
 }) {
-  const defaultWillHit =
-    (scenario?.combatScenario?.projectile?.defaultWillHit ??
-      scenario?.projectile?.defaultWillHit) !== false;
-  const actionSourceSequencePath = getActionSourceSequencePath(
-    action,
-    actionIndex
-  ) ?? [actionIndex];
-  const hitOccurrences = (resolution?.hits ?? [])
-    .filter(hit => isSoulTriggerHitWithinAction(action, resolution, hit))
-    .filter(hit =>
-      resolveActionHitWillHit(
-        action,
-        resolveSoulTriggerHitIdentity(hit),
-        defaultWillHit
-      )
-    )
-    .map(hit => {
-      const frameRate = positiveNumber(
-        resolution?.controlBinding?.frameRate,
-        60
-      );
-      const timeMs = roundRuntimeTime(
-        Number(action.startMs) +
-          (Number(hit.trigger?.startFrame) * 1000) / frameRate
-      );
-      const triggerSequencePath = [
-        ...actionSourceSequencePath,
-        Number(hit.hitIndex),
-      ];
-      return {
-        hit,
-        tuningEvent: null,
-        timeMs,
-        triggerSequencePath,
-        eventContext: {
-          eventIdentity: `combat-hit|${action.id}|${resolveSoulTriggerHitIdentity(hit)}`,
-          eventKind: 'combat-hit',
-          timeMs,
-          absoluteFrame: Math.round((timeMs * 60) / 1000),
-          sourceSequencePath: triggerSequencePath,
-          heldElementIds: [],
-          elementId: Number.isInteger(Number(hit.elementId))
-            ? Number(hit.elementId)
-            : null,
-          elementTypes: uniqueFiniteIntegers(
-            hit.damage?.elementTypes ?? hit.damage?.types ?? []
-          ),
-          targetElementIds: [],
-          landed: true,
-        },
-      };
-    });
-  const tuningOccurrences = (tuningGeneration?.combatEvents ?? [])
+  return (damageEventGeneration?.events ?? [])
     .filter(event => String(event.actionId) === String(action.id))
+    .filter(event => String(event.actorId) === String(action.actorId))
+    .filter(event => event.kind === frameAnchor)
     .filter(event => event.eventContext?.landed === true)
-    .filter(event => event.kind === 'overlimit-damage')
     .map(event => ({
-      hit: null,
-      tuningEvent: event,
+      hit: event.hit ?? null,
+      tuningEvent: event.tuningEvent ?? null,
       timeMs: Number(event.timeMs),
-      triggerSequencePath: event.eventContext.sourceSequencePath,
+      triggerSequencePath: event.sourceSequencePath,
       eventContext: event.eventContext,
     }));
-  return [...hitOccurrences, ...tuningOccurrences];
-}
-
-function resolveSoulTriggerHitIdentity(hit) {
-  return String(
-    hit?.identity ??
-      hit?.hitIdentity ??
-      hit?.sourceIdentity ??
-      `${hit?.elementId ?? 'element'}|${hit?.hitIndex ?? 'hit'}`
-  );
 }
 
 function createEquippedSoulBinding(actor, definitionBySoulId) {
@@ -408,7 +346,8 @@ function createSoulEffectCommand({
         Number(action.startMs) +
           (frameAnchor === 'action-end'
             ? Number(action.durationMs)
-            : frameAnchor === 'hit-after-damage'
+            : frameAnchor === 'hit-before-damage' ||
+                frameAnchor === 'hit-after-damage'
               ? (hitFrame * 1000) / frameRate
               : 0)
       );
@@ -430,9 +369,10 @@ function createSoulEffectCommand({
     sourceActorId: actor.id,
     sourceActorName: actor.name,
     sourceSoulEssenceId: binding.soulEssenceId,
-    sourceHitIdentity: hit?.sourceIdentity ?? null,
-    sourceHitIndex: hit?.hitIndex ?? null,
-    sourceHitElementId: hit?.elementId ?? null,
+    sourceHitIdentity:
+      eventContext?.sourceHitIdentity ?? hit?.sourceIdentity ?? null,
+    sourceHitIndex: eventContext?.sourceHitIndex ?? hit?.hitIndex ?? null,
+    sourceHitElementId: eventContext?.damageElementId ?? hit?.elementId ?? null,
     sourceTuningEventIdentity: tuningEvent?.eventIdentity ?? null,
     effectId: effectIdentity,
     effectName: `${definition.name}-${effect.name ?? effect.elementId}`,
@@ -491,9 +431,11 @@ function createSoulEffectCommand({
       triggerEvent: definition.trigger.event,
       frameAnchor,
       triggerSequencePath,
-      sourceHitIdentity: hit?.sourceIdentity ?? null,
-      sourceHitIndex: hit?.hitIndex ?? null,
-      sourceHitElementId: hit?.elementId ?? null,
+      sourceHitIdentity:
+        eventContext?.sourceHitIdentity ?? hit?.sourceIdentity ?? null,
+      sourceHitIndex: eventContext?.sourceHitIndex ?? hit?.hitIndex ?? null,
+      sourceHitElementId:
+        eventContext?.damageElementId ?? hit?.elementId ?? null,
       sourceTuningEventIdentity: tuningEvent?.eventIdentity ?? null,
       triggerEventContext: eventContext,
       triggerCondition: definition.trigger.condition,
@@ -741,15 +683,6 @@ function parseDelimitedNumbers(value) {
 
 function uniqueFiniteIntegers(values) {
   return [...new Set(values.map(Number).filter(Number.isInteger))];
-}
-
-function isSoulTriggerHitWithinAction(action, resolution, hit) {
-  const frameRate = positiveNumber(resolution?.controlBinding?.frameRate, 60);
-  const hitFrame = Number(hit?.trigger?.startFrame);
-  return (
-    Number.isFinite(hitFrame) &&
-    isActionFrameWithinContextualOccupancy(action, hitFrame, frameRate)
-  );
 }
 
 function normalizeStackMode(value) {

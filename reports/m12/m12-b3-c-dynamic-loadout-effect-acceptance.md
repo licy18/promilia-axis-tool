@@ -1,25 +1,23 @@
-# M12-B3-C5 Get-Element Event Bridge
+# M12-B3-C6 BeforeDamage Event Bridge
 
 - Status: `verification-complete-awaiting-product-acceptance`
-- Base: `8bf0b3a77538102c1995dd5943e4a7275664ca0a` (C4-R1 product-accepted baseline)
-- Formal admissions: `0 / 0 / 0 / 0 / 0`; M12-C remains locked.
+- Base: C5 product-accepted at `5c713e55ffdc46e5e75e9a4a4dcc1d0366201be0`
+- Scope: soul essences `10044`, `10123`, `10130`, and `10150`; `10018` remains blocked by its unresolved outer activation prerequisite.
 
-## Contract
+## Source Contract
 
-The source compiler now preserves `BeforeGetElement(9)`, `AfterGetElement(10)`, `CheckElementId(13)`, trigger-source `Self(0)`, and effect target `AllHero(15)` as separate identities. `GameAssembly.dll` binds event 9 before `AliveElementSystem.OnExecuteNormalElement` mutates the element and event 10 after combine/new-element execution. The exact RVA ranges are hash-gated by `soulessence-get-element-runtime-evidence.json`.
+`AliveElementSystem.OnExecuteDamageElement@0x1318800` calls `OnBeforeAttack` at `0x1319276`, settles the damage at `0x131935A`, then calls `OnAfterAttack` at `0x13193C7`. The frozen binary/range hashes prove event 1 is dispatched before settlement and event 2 after settlement. `CheckElementId(13)` reads the actual damage element ID, while `CheckElementType(8)` reads the damage template's real `types` collection.
 
-Verified tuning generation publishes one paired transaction for each successful action or threshold acquisition. Both phases share a transaction identity and retain before/delta/after state, mark/profile, source action/actor/hit, frame and source sequence. A successful acquisition at the five-layer cap is a zero-delta refresh transaction and still dispatches; initial-state restoration, consume, expiry, held/periodic state, overlimit packets, and failed/unexecuted actions do not.
+Ordinary landed hits and verified tuning damage packets publish the same stable `before -> settlement -> after` transaction. Misses, blocked actions, absent packets, held marks without consumption, and initial-state restoration publish no triggerable BeforeDamage event. Each transaction retains action/actor/hit, final control binding, skill and property tags, damage element/types, tuning judgment/selected candidate, frame, and source sequence.
 
-`10043 宣告黎明之花` listens only to wind mark 750 acquisitions sourced by its equipped actor, then applies `attribute 229` to every hero before mutation. The effect uses `A/10000`, lasts 16 seconds, stacks independently to five layers, and star values are `75000/100000/125000/150000`. `10149 失控飞行` listens only to fire mark 150 acquisitions from its equipped actor after mutation, applies the same attribute to every hero with literal `A`, lasts 24 seconds, refreshes one layer, and uses `45/60/75/90`.
+## Runtime Result
 
-## Runtime Matrix
+`10044` reacts to landed fire `196` or wind `796` packets and adds the source actor's fire damage property. `10123` reacts to wind `796`; `10130` matches real template type `37`; `10150` stacks on fire `196` or wind `796`. PropertyTag `[301]` remains an independent charged-damage scope: a trigger command may exist while an ordinary or otherwise mismatched settlement receives no modifier.
 
-Real verified star-skill actions `10700212` and `10800112` produce wind/fire acquire transactions. Both soul effects expand to three deterministic hero commands, increase a non-source teammate's tuning settlement by the source formula, survive controlled-actor switches, and return to baseline at the right-open expiry boundary. Tests cover stacking, cap refresh, repeated refresh, wrong element, same element from the wrong actor, inherited state, consume/expiry, blocked actions, replay and cycle inheritance. C4-R1 ordered candidate selection and one-packet overlimit behavior remain unchanged.
+BeforeDamage is visible to its own matching settlement but never to an earlier same-frame source sequence. C4 AfterDamage remains post-settlement and cannot self-apply. Refresh, stack cap, right-open expiry, Self ownership, switch behavior, replay, and cycle state are covered by real ordinary/tuning runtime tests.
 
-## Result
+## Qualification
 
-Soul effects are `19/62 runtime-applied` and `43/62 dynamic-unapplied`. The unique blocker ledger is `432` (`416 not-implemented`, `16 evidence-insufficient`). All 12 set effects remain unapplied and no formal qualification was granted.
+Soul effects are `23/62 runtime-applied` and `39/62 dynamic-unapplied`. The unique blocker ledger is `424` (`408 not-implemented`, `16 evidence-insufficient`). All 12 set effects remain unapplied; every formal admission count is zero and M12-C remains locked.
 
-Verification passed: C5 focused mechanics `3 files / 86 tests`, Machine Axis `12 / 157`, three-character profile/golden `3 / 34`, canonical/runtime `6 / 106`, headless golden migration `1 / 4`, nine deterministic audits, and production build. Applied-source audit is `19 property sources / 0 drift`, `7 tuning conditions / 0 drift`, and `12 priority consume groups / 0 drift`.
-
-The qualification hashes are `8368dcab431c3a25 / 0f328c23d795ad6b / fde0e0f54cfdde54 / 9f4861b9759f8779 / e5dede43eddc1f7d / 0b52db0abd10b411`. The Machine Axis hashes remain `c8bfd28dcb890f4f / 98deb78db6293f88 / 8586fe2ee148b0fe / 0b410dc9255d2654`; no canonical gameplay hash drift occurred. Existing Sass, circular-chunk and large-chunk warnings remain non-blocking.
+Final verification passed C6 focused mechanics `4 files / 115 tests`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, canonical/runtime `6 / 62`, nine deterministic audits, and production build. Applied-source audit is `23 property sources / 0 drift`, `13 tuning conditions / 0 drift`, and `12 priority consume groups / 0 drift`.

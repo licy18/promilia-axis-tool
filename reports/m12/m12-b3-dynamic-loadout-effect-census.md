@@ -1,11 +1,11 @@
 # M12-B3-C Dynamic Loadout Effect Census
 
-- Census: `b4c21f28dbbfdffa`
+- Census: `15865c016a511f04`
 - Soul essences: 62
 - Set skills: 12
-- Runtime applied: 19
-- Runtime unapplied: 55
-- Applied objects: soul-essence:10001, soul-essence:10002, soul-essence:10037, soul-essence:10043, soul-essence:10055, soul-essence:10060, soul-essence:10093, soul-essence:10094, soul-essence:10097, soul-essence:10098, soul-essence:10124, soul-essence:10125, soul-essence:10131, soul-essence:10136, soul-essence:10147, soul-essence:10149, soul-essence:10151, soul-essence:10154, soul-essence:10155
+- Runtime applied: 23
+- Runtime unapplied: 51
+- Applied objects: soul-essence:10001, soul-essence:10002, soul-essence:10037, soul-essence:10043, soul-essence:10044, soul-essence:10055, soul-essence:10060, soul-essence:10093, soul-essence:10094, soul-essence:10097, soul-essence:10098, soul-essence:10123, soul-essence:10124, soul-essence:10125, soul-essence:10130, soul-essence:10131, soul-essence:10136, soul-essence:10147, soul-essence:10149, soul-essence:10150, soul-essence:10151, soul-essence:10154, soul-essence:10155
 
 ## Mechanism Families
 

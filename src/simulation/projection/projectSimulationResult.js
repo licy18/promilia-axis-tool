@@ -1449,6 +1449,7 @@ export function projectSimulationResult({
   verifiedBattleEffectGeneration = null,
   verifiedKiboPassiveGeneration = null,
   verifiedSoulEssenceEffectGeneration = null,
+  verifiedDamageEventGeneration = null,
   verifiedTuningMarkGeneration = null,
   verifiedActionVariantRuntime = null,
   effectiveActionTimeline = null,
@@ -1646,6 +1647,7 @@ export function projectSimulationResult({
     ) > 0
       ? { verifiedSoulEssenceEffectGeneration }
       : {}),
+    verifiedDamageEventGeneration,
     verifiedTuningMarkGeneration,
     verifiedActionVariantRuntime,
     effectiveActionTimeline,

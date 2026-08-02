@@ -80,6 +80,7 @@ export function createVerifiedCombatRuntime({
   effectTimeline = null,
   actionVariantRuntime = null,
   kiboPassiveGeneration = null,
+  damageEventGeneration = null,
   criticalRandomSource = null,
 } = {}) {
   const enabled = isVerifiedCombatMechanicsScenario(scenario);
@@ -97,6 +98,22 @@ export function createVerifiedCombatRuntime({
     (actionExecutionPlan?.actions ?? []).map(entry => [entry.actionId, entry])
   );
   const actionResolutionById = new Map();
+  const ordinaryDamageTransactionByKey = new Map(
+    (damageEventGeneration?.transactions ?? [])
+      .filter(transaction => transaction.sourceKind === 'ordinary-hit')
+      .map(transaction => [
+        `${transaction.sourceActionId}|${transaction.sourceHitIdentity}`,
+        transaction,
+      ])
+  );
+  const tuningDamageTransactionByIdentity = new Map(
+    (damageEventGeneration?.transactions ?? [])
+      .filter(transaction => transaction.sourceKind === 'tuning-damage')
+      .map(transaction => [
+        String(transaction.sourceTuningEventIdentity),
+        transaction,
+      ])
+  );
   const descriptors = [];
   for (const action of scenario?.actions ?? []) {
     if (executionByActionId.get(action.id)?.execute === false) continue;
@@ -155,6 +172,9 @@ export function createVerifiedCombatRuntime({
         action,
         resolution,
         hit,
+        damageEventTransaction: ordinaryDamageTransactionByKey.get(
+          `${action.id}|${resolveCriticalHitIdentity(hit)}`
+        ),
       });
     }
   }
@@ -189,6 +209,9 @@ export function createVerifiedCombatRuntime({
       timeMs: tuningEvent.timeMs,
       action: tuningEvent.action,
       tuningEvent,
+      damageEventTransaction: tuningDamageTransactionByIdentity.get(
+        String(tuningEvent.eventIdentity)
+      ),
     });
   }
   for (const command of kiboPassiveGeneration?.derivedDamageCommands ?? []) {
@@ -2802,13 +2825,27 @@ function applyTuningCombatDescriptor({
   const resolution = tuningEvent.resolution;
   const template = tuningEvent.template;
   if (!action || !resolution || !template) return null;
+  const damageEventContext =
+    descriptor.damageEventTransaction?.beforeEvent?.eventContext ?? null;
+  const settlingSourceSequencePath = Array.isArray(
+    descriptor.damageEventTransaction?.settlementSourceSequencePath
+  )
+    ? [...descriptor.damageEventTransaction.settlementSourceSequencePath]
+    : descriptor.sourceSequencePath;
+  const propertyTags = Array.isArray(damageEventContext?.propertyTags)
+    ? [...damageEventContext.propertyTags]
+    : resolveVerifiedBattlePropertyTagsForHit({
+        action,
+        resolution,
+      }).propertyTags;
   const source = resolveHitSource({
     action,
     resolution,
     hit: { damage: template },
     state,
     timeMs: tuningEvent.timeMs,
-    settlingSourceSequencePath: descriptor.sourceSequencePath,
+    propertyTags,
+    settlingSourceSequencePath,
   });
   if (!source.ready || !state.enemy.profile?.applied) {
     return {
@@ -2843,6 +2880,20 @@ function applyTuningCombatDescriptor({
       : { consumedMarks: tuningEvent.markCount }),
     attackerDamageUp: source.damageUp,
     targetDamageDown: 0,
+    elementCalculationFactor: basisPoints(
+      template.elementCalculationFactorBasisPoints,
+      1
+    ),
+    attackerElementUp: resolveBeforeDamageElementExtraRatio({
+      state,
+      action,
+      resolution,
+      timeMs: tuningEvent.timeMs,
+      elementalType: template.elementalType,
+      propertyTags,
+      settlingSourceSequencePath,
+    }),
+    targetElementDefense: 0,
     skillTags: [],
     hitLocationRatio: 1,
     mastery: source.mastery,
@@ -2952,6 +3003,7 @@ function applyTuningCombatDescriptor({
       payload: {
         verifiedCombat: true,
         tuningMechanics: true,
+        damageEventContext,
         tuningKind: tuningEvent.kind,
         profileKey: tuningEvent.profile.key,
         markId: tuningEvent.profile.markId,
@@ -3062,9 +3114,13 @@ function applyHitDescriptor({
 }) {
   const { action, resolution, hit } = descriptor;
   const actionSourceSequencePath = getActionSourceSequencePath(action);
-  const settlingSourceSequencePath = actionSourceSequencePath
-    ? [...actionSourceSequencePath, Number(hit.hitIndex)]
-    : null;
+  const settlingSourceSequencePath = Array.isArray(
+    descriptor.damageEventTransaction?.settlementSourceSequencePath
+  )
+    ? [...descriptor.damageEventTransaction.settlementSourceSequencePath]
+    : actionSourceSequencePath
+      ? [...actionSourceSequencePath, Number(hit.hitIndex)]
+      : null;
   const propertyTagResolution = resolveVerifiedBattlePropertyTagsForHit({
     action,
     resolution,
@@ -3367,6 +3423,8 @@ function applyHitDescriptor({
           ]),
         },
         propertyTagResolution,
+        damageEventContext:
+          descriptor.damageEventTransaction?.beforeEvent?.eventContext ?? null,
         rawDamage: hpDamage,
         toughnessDamage,
         hpLossPercent: ratioOrZero(hpDamage, enemy.maxHp),
@@ -4496,7 +4554,8 @@ function resolveEnemyElementDefense(
   elementalType,
   state,
   timeMs,
-  propertyTags = []
+  propertyTags = [],
+  settlingSourceSequencePath = null
 ) {
   const row = (enemy?.elementDefenses ?? []).find(
     item => Number(item.elementId) === Number(elementalType)
@@ -4522,8 +4581,52 @@ function resolveEnemyElementDefense(
     attributeId,
     baseRaw: row?.effectiveValue,
     propertyTags,
+    settlingSourceSequencePath,
   });
   return basisPoints(result.value);
+}
+
+function resolveBeforeDamageElementExtraRatio({
+  state,
+  action,
+  resolution,
+  timeMs,
+  elementalType,
+  propertyTags,
+  settlingSourceSequencePath,
+}) {
+  const attributeId =
+    ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE[Number(elementalType)];
+  if (!Number.isInteger(attributeId)) return 0;
+  const targetKind =
+    resolution?.actionBinding?.ownerKind === 'kibo'
+      ? EFFECT_TARGET_KINDS.KIBO
+      : EFFECT_TARGET_KINDS.ACTOR;
+  const activeEffects = resolveActiveEffectsAt(state.effectTimeline, timeMs, {
+    targetKind,
+    targetId: action.actorId,
+    calculatorOnly: true,
+    settlingActionId: action.id,
+    settlingSourceSequencePath,
+  });
+  const dynamicExtraRaw = activeEffects.reduce((total, effect) => {
+    if (effect.sourceIdentity?.triggerEvent !== 'BeforeDamage') return total;
+    const stacks = Number(effect.stacks ?? 1);
+    const effectExtraRaw = (effect.modifiers ?? [])
+      .filter(
+        modifier =>
+          modifier.kind === 'battle-property' &&
+          modifier.bucket === 'dynamicExtra' &&
+          Number(modifier.attributeId) === attributeId &&
+          matchesVerifiedBattlePropertyTags(modifier.propertyTags, propertyTags)
+      )
+      .reduce(
+        (sum, modifier) => sum + Number(modifier.valueRaw ?? 0) * stacks,
+        0
+      );
+    return total + effectExtraRaw;
+  }, 0);
+  return basisPoints(dynamicExtraRaw);
 }
 
 function resolveActorElementDamageUp(actor, elementalType) {
@@ -4901,13 +5004,17 @@ function annotateRuntimeDescriptorOrder(descriptors, frameRate) {
     descriptor.runtimePriority = order.priority;
     descriptor.sourceSequence = sourceSequence;
     descriptor.sourceSequenceIndex = actionSourceSequencePath?.[0] ?? null;
+    const damageSettlementSequencePath =
+      descriptor.damageEventTransaction?.settlementSourceSequencePath;
     const tuningSourceSequencePath =
       descriptor.tuningEvent?.eventContext?.sourceSequencePath;
-    descriptor.sourceSequencePath = Array.isArray(tuningSourceSequencePath)
-      ? [...tuningSourceSequencePath]
-      : actionSourceSequencePath
-        ? [...actionSourceSequencePath, sourceSequence]
-        : [Number.MAX_SAFE_INTEGER, sourceSequence];
+    descriptor.sourceSequencePath = Array.isArray(damageSettlementSequencePath)
+      ? [...damageSettlementSequencePath]
+      : Array.isArray(tuningSourceSequencePath)
+        ? [...tuningSourceSequencePath]
+        : actionSourceSequencePath
+          ? [...actionSourceSequencePath, sourceSequence]
+          : [Number.MAX_SAFE_INTEGER, sourceSequence];
   });
 }
 

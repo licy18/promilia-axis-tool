@@ -232,37 +232,33 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
   const definitions = (catalog?.definitions ?? []).filter(
     definition => definition.runtimeStatus === 'runtime-applied'
   );
-  const tuningConsumePriorityGroups = collectTuningConsumePriorityGroups(
-    mechanicsPackage
-  );
-  const requestedElementIds = new Set(
-    [
-      ...definitions.flatMap(definition => [
-        Number(definition.effect?.elementId),
-        Number(definition.trigger?.elementId),
-        ...(definition.sourceClosure?.wrapperElementIds ?? []).map(Number),
-        ...(definition.sourceClosure?.removalPaths ?? []).flatMap(path => [
-          Number(path.triggerElementId),
-          Number(path.removerElementId),
-          ...(path.removedElementIds ?? []).map(Number),
-        ]),
-        ...(definition.trigger?.condition?.conditions ?? []).flatMap(
-          condition =>
-            (condition.tuningProfiles ?? []).flatMap(profile => [
-              Number(profile.markId),
-              Number(profile.overlimitPacketElementId),
-              Number(profile.damageElementId),
-            ])
-        ),
+  const tuningConsumePriorityGroups =
+    collectTuningConsumePriorityGroups(mechanicsPackage);
+  const requestedElementIds = new Set([
+    ...definitions.flatMap(definition => [
+      Number(definition.effect?.elementId),
+      Number(definition.trigger?.elementId),
+      ...(definition.sourceClosure?.wrapperElementIds ?? []).map(Number),
+      ...(definition.sourceClosure?.removalPaths ?? []).flatMap(path => [
+        Number(path.triggerElementId),
+        Number(path.removerElementId),
+        ...(path.removedElementIds ?? []).map(Number),
       ]),
-      ...tuningConsumePriorityGroups.flatMap(group => [
-        Number(group.contract.judgmentElementId),
-        ...(group.contract.judgmentCandidates ?? []).map(candidate =>
-          Number(candidate.packetElementId)
-        ),
-      ]),
-    ]
-  );
+      ...(definition.trigger?.condition?.conditions ?? []).flatMap(condition =>
+        (condition.tuningProfiles ?? []).flatMap(profile => [
+          Number(profile.markId),
+          Number(profile.overlimitPacketElementId),
+          Number(profile.damageElementId),
+        ])
+      ),
+    ]),
+    ...tuningConsumePriorityGroups.flatMap(group => [
+      Number(group.contract.judgmentElementId),
+      ...(group.contract.judgmentCandidates ?? []).map(candidate =>
+        Number(candidate.packetElementId)
+      ),
+    ]),
+  ]);
   const requestedPathIds = new Set(
     tuningConsumePriorityGroups.flatMap(group =>
       (group.contract.judgmentCandidates ?? []).map(candidate =>
@@ -384,6 +380,7 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
     );
     const tuningConditions = createTuningConditionAuditRows({
       conditions: definition.trigger?.condition?.conditions ?? [],
+      triggerEventId: Number(definition.trigger?.eventId),
       tuningProfiles,
       sourceRowsByElementId,
     });
@@ -564,8 +561,7 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
     },
     summary: {
       sourceCount: records.length,
-      driftCount:
-        propertyDriftCount + tuningConsumePriority.summary.driftCount,
+      driftCount: propertyDriftCount + tuningConsumePriority.summary.driftCount,
       propertyTagDriftCount: propertyDriftCount,
       tuningConditionCount: records.reduce(
         (sum, record) =>
@@ -580,10 +576,8 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
           ).length,
         0
       ),
-      tuningConsumePriorityGroupCount:
-        tuningConsumePriority.summary.groupCount,
-      tuningConsumePriorityDriftCount:
-        tuningConsumePriority.summary.driftCount,
+      tuningConsumePriorityGroupCount: tuningConsumePriority.summary.groupCount,
+      tuningConsumePriorityDriftCount: tuningConsumePriority.summary.driftCount,
     },
     records,
     tuningConsumePriority,
@@ -630,7 +624,11 @@ async function createTuningConsumePriorityAudit({
   sourceRowsByPathId,
 }) {
   if (groups.length === 0) {
-    return { summary: { groupCount: 0, driftCount: 0 }, evidence: null, rows: [] };
+    return {
+      summary: { groupCount: 0, driftCount: 0 },
+      evidence: null,
+      rows: [],
+    };
   }
   const evidence = groups[0].contract.priorityRuntimeEvidence ?? {};
   const binary = await readFile(evidence.binaryPath);
@@ -645,10 +643,7 @@ async function createTuningConsumePriorityAudit({
       ? []
       : ['tuning-consume-priority-candidate-loop-drift']),
     ...(hashBytes(
-      readPortableExecutableRvaRange(
-        binary,
-        evidence.selectedPacketLookupRange
-      )
+      readPortableExecutableRvaRange(binary, evidence.selectedPacketLookupRange)
     ) === evidence.selectedPacketLookupSha256
       ? []
       : ['tuning-consume-priority-packet-lookup-drift']),
@@ -658,14 +653,10 @@ async function createTuningConsumePriorityAudit({
       ? []
       : ['tuning-consume-priority-dump-declaration-drift']),
     ...(dumpSource.includes(
-      `// RVA: 0x${String(evidence.consumerMethodRva)
-        .slice(2)
-        .toUpperCase()}`
+      `// RVA: 0x${String(evidence.consumerMethodRva).slice(2).toUpperCase()}`
     ) &&
     dumpSource.includes(
-      `// RVA: 0x${String(evidence.injectMethodRva)
-        .slice(2)
-        .toUpperCase()}`
+      `// RVA: 0x${String(evidence.injectMethodRva).slice(2).toUpperCase()}`
     )
       ? []
       : ['tuning-consume-priority-method-rva-drift']),
@@ -717,16 +708,15 @@ async function createTuningConsumePriorityAudit({
           },
         ])
       ).values(),
-    ]
-      .sort((left, right) => {
-        const leftIndex = generatedCandidates.findIndex(
-          candidate => candidate.markId === left.markId
-        );
-        const rightIndex = generatedCandidates.findIndex(
-          candidate => candidate.markId === right.markId
-        );
-        return leftIndex - rightIndex;
-      });
+    ].sort((left, right) => {
+      const leftIndex = generatedCandidates.findIndex(
+        candidate => candidate.markId === left.markId
+      );
+      const rightIndex = generatedCandidates.findIndex(
+        candidate => candidate.markId === right.markId
+      );
+      return leftIndex - rightIndex;
+    });
     const expectedEffectPairs = generatedCandidates.map(candidate => ({
       markId: candidate.markId,
       packetElementId: candidate.packetElementId,
@@ -871,6 +861,7 @@ function hashBytes(value) {
 
 function createTuningConditionAuditRows({
   conditions,
+  triggerEventId,
   tuningProfiles,
   sourceRowsByElementId,
 }) {
@@ -895,8 +886,20 @@ function createTuningConditionAuditRows({
               .map(Number)
               .includes(conditionValue);
           }
-          if (conditionType === 10 || conditionType === 13) {
+          if (conditionType === 10) {
             return Number(profile.markId) === conditionValue;
+          }
+          if (conditionType === 13) {
+            if (triggerEventId === 1 || triggerEventId === 2) {
+              return (
+                Number(profile.overlimitDamage?.template?.elementConfigId) ===
+                conditionValue
+              );
+            }
+            if (triggerEventId === 9 || triggerEventId === 10) {
+              return Number(profile.markId) === conditionValue;
+            }
+            return false;
           }
           return Number(profile.overlimitPacket?.elementId) === conditionValue;
         })
@@ -950,6 +953,7 @@ function createTuningConditionAuditRows({
         conditionType,
         conditionTypeName: condition.conditionTypeName ?? null,
         conditionValue,
+        triggerEventId,
         kind: condition.kind ?? null,
         expectedProfiles,
         generatedProfiles,

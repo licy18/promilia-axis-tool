@@ -23,6 +23,7 @@ const TRIGGER_EVENT_BY_ID = Object.freeze({
 const SUPPORTED_FRAME_ANCHORS = new Set([
   'action-start',
   'action-end',
+  'hit-before-damage',
   'hit-after-damage',
   'element-before-acquire',
   'element-after-acquire',
@@ -539,6 +540,7 @@ function compileTriggerCondition({
   conditionLogicValue,
   triggerContract,
   tuningMechanicsCatalog,
+  frameAnchor,
 }) {
   if (!trigger) {
     return {
@@ -573,6 +575,7 @@ function compileTriggerCondition({
       selectorKind: typeBinding?.selectorKind,
       conditionValue,
       tuningMechanicsCatalog,
+      frameAnchor,
     });
     const valueApplied =
       valueBinding?.status === 'applied' || tuningProfiles.length > 0;
@@ -669,6 +672,7 @@ function resolveTuningConditionProfiles({
   selectorKind,
   conditionValue,
   tuningMechanicsCatalog,
+  frameAnchor,
 }) {
   if (
     ![
@@ -682,14 +686,36 @@ function resolveTuningConditionProfiles({
   }
   return (tuningMechanicsCatalog?.profiles ?? [])
     .filter(profile => {
-      if (
-        selectorKind === 'held-element-id' ||
-        selectorKind === 'event-element-id'
-      ) {
+      if (selectorKind === 'held-element-id') {
         return Number(profile.markId) === conditionValue;
+      }
+      if (selectorKind === 'event-element-id') {
+        if (
+          frameAnchor === 'element-before-acquire' ||
+          frameAnchor === 'element-after-acquire'
+        ) {
+          return Number(profile.markId) === conditionValue;
+        }
+        if (
+          frameAnchor === 'hit-before-damage' ||
+          frameAnchor === 'hit-after-damage'
+        ) {
+          return (
+            Number(profile.overlimitDamage?.template?.elementConfigId) ===
+            conditionValue
+          );
+        }
+        return false;
       }
       if (selectorKind === 'target-element-id') {
         return Number(profile.overlimitPacket?.elementId) === conditionValue;
+      }
+      if (
+        selectorKind === 'event-element-type' &&
+        frameAnchor !== 'hit-before-damage' &&
+        frameAnchor !== 'hit-after-damage'
+      ) {
+        return false;
       }
       return (profile.overlimitDamage?.template?.elementTypes ?? []).includes(
         conditionValue
@@ -815,16 +841,17 @@ function compileSoulEffectDefinition({
   const conditions = Array.isArray(triggerTree.triggerConditionList)
     ? triggerTree.triggerConditionList
     : [];
+  const triggerEvent = triggerContract.eventBindings.find(
+    binding => Number(binding.value) === Number(triggerTree.triggerParam1)
+  );
   const compiledCondition = compileTriggerCondition({
     trigger,
     conditions,
     conditionLogicValue: Number(triggerTree.triggerConditionType),
     triggerContract,
     tuningMechanicsCatalog,
+    frameAnchor: triggerEvent?.frameAnchor ?? null,
   });
-  const triggerEvent = triggerContract.eventBindings.find(
-    binding => Number(binding.value) === Number(triggerTree.triggerParam1)
-  );
   const triggerTargetBinding = triggerContract.triggerTargetBindings.find(
     binding => Number(binding.value) === Number(triggerTree.triggerTargetType)
   );

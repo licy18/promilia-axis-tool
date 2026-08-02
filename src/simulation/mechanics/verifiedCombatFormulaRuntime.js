@@ -552,6 +552,10 @@ export function calculateStackOverLimitDamage(input = {}) {
       coefficientPerMark: Number(coefficientRaw) / 10_000,
     };
   }
+  if (Number(input.attackerElementUp ?? 0) !== 0) {
+    const element = calculateElementFactor(input);
+    raw = applyFactor(raw, BigInt(element.raw), 'element', trace);
+  }
   const general = calculateGeneralFactor(input);
   raw = applyFactor(raw, BigInt(general.raw), 'general', trace);
   const skillTags = calculateSkillTagFactor(input.skillTags);

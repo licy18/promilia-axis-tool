@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrSoulEssenceBeforeDamageRuntimeEvidence",
+  "reviewedBinary": {
+    "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+    "bytes": 222485544,
+    "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+  },
+  "consumer": {
+    "identity": "Lens.Gameplay.Modules.BigWorld.AliveElementSystem.OnExecuteDamageElement",
+    "rva": "0x1318800",
+    "orderedDispatch": {
+      "range": "0x1319260-0x13193D0",
+      "sha256": "6ff8e96a6bfb84f825a2f6de65cbdc246649e7b78804be6d9eea944dfedfde43"
+    },
+    "beforeAttack": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.DamageEventTriggerUtility.OnBeforeAttack",
+      "rva": "0x1872740",
+      "eventId": 1,
+      "eventArgumentRva": "0x18727FA",
+      "callRva": "0x1319276",
+      "dispatchCallRva": "0x187282F",
+      "range": "0x18727F0-0x1872834",
+      "sha256": "d8c9829b7dcafc1bd3ad65ead120fc5006e746034107df7f29b58cc7afc14b2b"
+    },
+    "damageSettlement": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.AliveElementSystem.ExecuteDamageElement",
+      "rva": "0x13151F0",
+      "callRva": "0x131935A"
+    },
+    "afterAttack": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.DamageEventTriggerUtility.OnAfterAttack",
+      "rva": "0x1871F20",
+      "eventId": 2,
+      "eventArgumentRva": "0x187202F",
+      "callRva": "0x13193C7",
+      "dispatchCallRva": "0x1872056",
+      "range": "0x1872020-0x187205B",
+      "sha256": "15d094315a03a2dbbf1c191a5b864b1fdc2aba76ddff0510532050755d66cfdb"
+    },
+    "triggerInvoker": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElement_DamageHandle",
+    "triggerInvokerRva": "0x18B5F10"
+  },
+  "dispatchSemantics": {
+    "beforeDamageEventId": 1,
+    "afterDamageEventId": 2,
+    "beforeDamagePrecedesSettlement": true,
+    "afterDamageFollowsSettlement": true,
+    "samePacketBeforeDamageVisible": true,
+    "ordinaryLandedHitDispatch": true,
+    "tuningDamagePacketDispatch": true,
+    "missDispatch": false,
+    "failedOrUnexecutedDispatch": false,
+    "eventElementIdentity": "damage-element-config-id-and-types",
+    "reason": "OnExecuteDamageElement calls OnBeforeAttack, then ExecuteDamageElement, then OnAfterAttack. OnBeforeAttack dispatches event 1 and OnAfterAttack dispatches event 2 through InvokeTriggerElement_DamageHandle."
+  },
+  "sourceVisibility": {
+    "triggerTargetType": 0,
+    "enumName": "Self",
+    "runtimeSourceKind": "equipped-actor-source-events",
+    "reason": "The trigger observes damage events sourced by the equipped actor; triggerEffectList.targetType controls effect recipients independently."
+  },
+  "conclusion": {
+    "status": "applied",
+    "eventContract": "paired-before-settlement-after-damage-transaction",
+    "sourceIdentity": "GameAssembly.dll#AliveElementSystem.OnExecuteDamageElement@0x1318800/DamageEventTriggerUtility.OnBeforeAttack@0x1872740/ExecuteDamageElement@0x13151F0/DamageEventTriggerUtility.OnAfterAttack@0x1871F20"
+  }
+}
