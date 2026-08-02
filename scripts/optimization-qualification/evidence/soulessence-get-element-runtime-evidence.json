@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrSoulEssenceGetElementRuntimeEvidence",
+  "reviewedBinary": {
+    "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+    "bytes": 222485544,
+    "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+  },
+  "consumer": {
+    "identity": "Lens.Gameplay.Modules.BigWorld.AliveElementSystem.OnExecuteNormalElement",
+    "rva": "0x13195C0",
+    "triggerInvoker": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElement_ElementHandle",
+    "triggerInvokerRva": "0x18B6250",
+    "beforeMutation": {
+      "eventId": 9,
+      "callRva": "0x1319EF5",
+      "range": "0x1319ED0-0x1319F05",
+      "sha256": "b6e8fb3ace9061da8425c36ef18078e635095424c860da308a709ecdb6392a5e"
+    },
+    "combineThenAfterMutation": {
+      "eventId": 10,
+      "callRva": "0x131A4C7",
+      "range": "0x131A3E9-0x131A4CC",
+      "sha256": "92a6d391f09d9e452f62792ebff0a8c942714eabfb6fae2bd1b13274102861a7"
+    },
+    "newElementAfterExecution": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.AliveElementSystem.ExcuteElement",
+      "rva": "0x1314890",
+      "eventId": 10,
+      "callRva": "0x131501F",
+      "range": "0x1314FF0-0x1315040",
+      "sha256": "b073418b335877ddfbd6ce2584342d11e996dd527b141e3349901a6af1f57da6"
+    }
+  },
+  "dispatchSemantics": {
+    "beforeMutationEventId": 9,
+    "afterMutationEventId": 10,
+    "appliedAcquisitionSources": [
+      "verified-action-effect",
+      "verified-threshold-grant"
+    ],
+    "zeroDeltaRefreshDispatch": "applied-acquisition-event",
+    "initialStateDispatch": false,
+    "consumeDispatch": false,
+    "expireDispatch": false,
+    "failedOrUnexecutedDispatch": false,
+    "reason": "OnExecuteNormalElement invokes event 9 before the normal-element combine path and event 10 after the combine call. StackElement marks use shared-duration refresh semantics, so an executed acquisition at maximum layers remains an applied combine transaction with zero layer delta. Restored state and non-acquire mutations do not enter this injection path."
+  },
+  "sourceVisibility": {
+    "triggerTargetType": 0,
+    "enumName": "Self",
+    "runtimeSourceKind": "equipped-actor-source-events",
+    "reason": "The trigger observes acquisition events whose source actor is the equipped actor; AllHero on triggerEffectList controls effect recipients separately."
+  },
+  "conclusion": {
+    "status": "applied",
+    "eventContract": "paired-before-after-acquisition-transaction",
+    "sourceIdentity": "GameAssembly.dll#AliveElementSystem.OnExecuteNormalElement@0x13195C0/ExcuteElement@0x1314890/SkillUtility.InvokeTriggerElement_ElementHandle@0x18B6250"
+  }
+}

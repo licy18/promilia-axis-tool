@@ -73,6 +73,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a',
   heroRankRuntimeEvidence:
     '2161ca317a3f641dd6b5d8721fd9422c2598fada3c37af86f8248cfbf511c91f',
+  soulEffectGetElementRuntimeEvidence:
+    '06db8dd699ccad3a5b28b1099b5879ff6dd0990620d230918342d5ee80988ab3',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
@@ -129,6 +131,7 @@ export async function createOptimizationQualificationArtifacts({
   equipmentInstanceTermsPath = 'C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_words.json',
   il2cppRuntimeContractsPath = 'C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs',
   heroRankRuntimeEvidencePath = null,
+  soulEffectGetElementRuntimeEvidencePath = null,
   gameAssemblyPath = 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
 } = {}) {
   if (!projectRoot) throw new TypeError('projectRoot is required');
@@ -185,6 +188,24 @@ export async function createOptimizationQualificationArtifacts({
     sources.il2cppRuntimeContracts,
     projectRoot
   );
+  sources.soulEffectGetElementRuntimeEvidence =
+    await readSoulEffectGetElementRuntimeEvidenceSource(
+      soulEffectGetElementRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          'scripts',
+          'optimization-qualification',
+          'evidence',
+          'soulessence-get-element-runtime-evidence.json'
+        ),
+      gameAssemblyPath,
+      projectRoot
+    );
+  sources.il2cppRuntimeContracts.value.soulEffectTriggers =
+    attachSoulEffectGetElementRuntimeEvidence(
+      sources.il2cppRuntimeContracts.value.soulEffectTriggers,
+      sources.soulEffectGetElementRuntimeEvidence.value
+    );
   const characters = sources.characters.value.items ?? [];
   const kibos = sources.kibos.value.items ?? [];
   const equipment = sources.equipment.value.items ?? [];
@@ -385,7 +406,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C4-R1',
+      phase: 'M12-B3-C5',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1315,8 +1336,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C4-R1',
-    status: 'b3-c4-r1-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C5',
+    status: 'b3-c5-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1733,7 +1754,10 @@ function createSourceSnapshot(sources) {
         sha256: source.sha256,
         bytes: source.bytes,
       };
-      if (key === 'heroRankRuntimeEvidence') {
+      if (
+        key === 'heroRankRuntimeEvidence' ||
+        key === 'soulEffectGetElementRuntimeEvidence'
+      ) {
         record.value = structuredClone(source.value);
       }
       return [key, record];
@@ -1749,7 +1773,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C4-R1 Priority Consume Closure\n\n' +
+    '# M12-B3-C5 Get-Element Event Bridge\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1758,7 +1782,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects; C3 adds source-bound EntrySkill(22) switch provenance and wrapper lifetimes for 10147/10151. C4 compiles CheckElementType(8), HasElementId(10), CheckSkillType(11), and CheckTargetElementId(12) into the shared trigger predicate registry, consuming the canonical tuning-mark state and landed overlimit event context for 10124/10131/10136. C4-R1 preserves ordered ConsumePackElement candidate groups and selects only the first currently sufficient candidate before emitting one overlimit packet. Soul essence 10018 remains blocked by its outer prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
+    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects; C3 adds source-bound EntrySkill(22) switch provenance and wrapper lifetimes for 10147/10151. C4 compiles CheckElementType(8), HasElementId(10), CheckSkillType(11), and CheckTargetElementId(12), while C4-R1 preserves ordered ConsumePackElement candidate groups and emits only the first sufficient packet. C5 compiles BeforeGetElement(9), AfterGetElement(10), CheckElementId(13), and Self source visibility into paired canonical acquire transactions for 10043/10149. Before is dispatched before mutation, After after mutation; successful at-cap refresh remains an acquire transaction, while inherited initial state and consume/expire paths emit none. Soul essence 10018 remains blocked by its outer prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'
@@ -1834,6 +1858,14 @@ async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
     namespace: 'Lens.Gameplay.Modules.BigWorld',
     declaration: 'public enum EElementTriggerFixedConditionType',
   });
+  const triggerEventTypeBlock = extractIl2CppTypeBlock(text, {
+    namespace: 'Lens.Gameplay.Modules.BigWorld',
+    declaration: 'public enum EElementTriggerEventType',
+  });
+  const triggerSourceTargetBlock = extractIl2CppTypeBlock(text, {
+    namespace: 'Lens.Gameplay.Modules.BigWorld',
+    declaration: 'public enum EElementTriggerTargetType',
+  });
   const triggerEffectTargetBlock = extractIl2CppTypeBlock(text, {
     namespace: 'Lens.Gameplay.Modules.BigWorld',
     declaration: 'public enum ETriggerEffectTargetType',
@@ -1853,6 +1885,8 @@ async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
     skillTagBlock,
     triggerConditionLogicBlock,
     triggerFixedConditionBlock,
+    triggerEventTypeBlock,
+    triggerSourceTargetBlock,
     triggerEffectTargetBlock,
     buffElementParamsBlock,
   });
@@ -1948,6 +1982,8 @@ function createSoulEffectTriggerContract({
   skillTagBlock,
   triggerConditionLogicBlock,
   triggerFixedConditionBlock,
+  triggerEventTypeBlock,
+  triggerSourceTargetBlock,
   triggerEffectTargetBlock,
   buffElementParamsBlock,
 }) {
@@ -1997,6 +2033,12 @@ function createSoulEffectTriggerContract({
       enumName: 'CheckTargetElementId',
       selectorKind: 'target-element-id',
       description: 'Target拥有元素ID',
+    },
+    {
+      value: 13,
+      enumName: 'CheckElementId',
+      selectorKind: 'event-element-id',
+      description: '事件元素ID是',
     },
   ].map(binding => {
     assertIl2CppEnumMember({
@@ -2065,6 +2107,53 @@ function createSoulEffectTriggerContract({
       };
     }
   );
+  const eventBindings = [
+    [1, 'BeforeDamage', 'hit-before-damage', '造成伤害前'],
+    [2, 'AfterDamage', 'hit-after-damage', '造成伤害后'],
+    [5, 'BeforeSkill', 'action-start', '释放技能前'],
+    [6, 'AfterSkill', 'action-end', '释放技能后'],
+    [9, 'BeforeGetElement', 'element-before-acquire', '获取元素前'],
+    [10, 'AfterGetElement', 'element-after-acquire', '获取元素后'],
+    [36, 'UnloadSkill', 'loadout-uninstall', '卸载技能'],
+  ].map(([value, enumName, frameAnchor, description]) => {
+    assertIl2CppEnumMember({
+      block: triggerEventTypeBlock,
+      enumName: 'EElementTriggerEventType',
+      memberName: enumName,
+      value,
+      description,
+      annotationKind: 'InspectorName',
+    });
+    return {
+      value,
+      enumName,
+      name: enumName,
+      frameAnchor,
+      status: 'applied',
+      sourceIdentity: `${sourcePath}#EElementTriggerEventType.${enumName}=${value}`,
+    };
+  });
+  const triggerTargetBindings = [
+    {
+      value: 0,
+      enumName: 'Self',
+      sourceKind: 'equipped-actor-source-events',
+      description: '自身',
+    },
+  ].map(binding => {
+    assertIl2CppEnumMember({
+      block: triggerSourceTargetBlock,
+      enumName: 'EElementTriggerTargetType',
+      memberName: binding.enumName,
+      value: binding.value,
+      description: binding.description,
+    });
+    return {
+      ...binding,
+      status: 'applied',
+      sourceIdentity: `${sourcePath}#EElementTriggerTargetType.${binding.enumName}=${binding.value}`,
+    };
+  });
   const targetBindings = [
     {
       value: 0,
@@ -2097,6 +2186,8 @@ function createSoulEffectTriggerContract({
     sourceIdentity: [
       'EElementTriggerConditionType',
       'EElementTriggerFixedConditionType',
+      'EElementTriggerEventType',
+      'EElementTriggerTargetType',
       'ESkillSlotType',
       'ESkillTagType',
       'ETriggerEffectTargetType',
@@ -2105,6 +2196,8 @@ function createSoulEffectTriggerContract({
       .join('|'),
     logicBindings,
     conditionTypeBindings,
+    eventBindings,
+    triggerTargetBindings,
     skillSlotBindings,
     skillTagBindings,
     targetBindings,
@@ -2244,6 +2337,7 @@ function assertIl2CppEnumMember({
   memberName,
   value,
   description = null,
+  annotationKind = 'Description',
 }) {
   const declaration = `public const ${enumName} ${memberName} = ${value};`;
   if (!block.includes(declaration)) {
@@ -2253,7 +2347,7 @@ function assertIl2CppEnumMember({
   }
   if (
     description != null &&
-    !block.includes(`[Description("${description}")]`)
+    !block.includes(`[${annotationKind}("${description}")]`)
   ) {
     throw new Error(
       `optimization-qualification-il2cpp-enum-description-missing:${enumName}.${memberName}`
@@ -2329,6 +2423,153 @@ async function readHeroRankRuntimeEvidenceSource(
       },
     },
   };
+}
+
+async function readSoulEffectGetElementRuntimeEvidenceSource(
+  sourcePath,
+  gameAssemblyPath,
+  projectRoot
+) {
+  const bytes = await fs.readFile(sourcePath);
+  const value = JSON.parse(bytes.toString('utf8'));
+  if (
+    value?.contractName !== 'AzPrSoulEssenceGetElementRuntimeEvidence' ||
+    Number(value?.schemaVersion) !== 1 ||
+    value?.conclusion?.status !== 'applied'
+  ) {
+    throw new Error(
+      'optimization-qualification-get-element-evidence-contract-invalid'
+    );
+  }
+  const binaryIdentity = await readBinaryIdentity(gameAssemblyPath);
+  if (
+    Number(value.reviewedBinary?.bytes) !== binaryIdentity.bytes ||
+    value.reviewedBinary?.sha256 !== binaryIdentity.sha256
+  ) {
+    throw new Error(
+      'optimization-qualification-get-element-evidence-binary-mismatch'
+    );
+  }
+  const binary = await fs.readFile(gameAssemblyPath);
+  const ranges = [
+    value.consumer?.beforeMutation,
+    value.consumer?.combineThenAfterMutation,
+    value.consumer?.newElementAfterExecution,
+  ];
+  for (const evidenceRange of ranges) {
+    const rangeBytes = readPortableExecutableRvaRange(
+      binary,
+      evidenceRange?.range
+    );
+    if (
+      !evidenceRange?.callRva ||
+      createHash('sha256').update(rangeBytes).digest('hex') !==
+        evidenceRange.sha256
+    ) {
+      throw new Error(
+        `optimization-qualification-get-element-evidence-range-drift:${evidenceRange?.range ?? 'missing'}`
+      );
+    }
+  }
+  const semantics = value.dispatchSemantics ?? {};
+  if (
+    Number(semantics.beforeMutationEventId) !== 9 ||
+    Number(semantics.afterMutationEventId) !== 10 ||
+    semantics.zeroDeltaRefreshDispatch !== 'applied-acquisition-event' ||
+    semantics.initialStateDispatch !== false ||
+    semantics.consumeDispatch !== false ||
+    semantics.expireDispatch !== false ||
+    semantics.failedOrUnexecutedDispatch !== false
+  ) {
+    throw new Error(
+      'optimization-qualification-get-element-evidence-semantics-incomplete'
+    );
+  }
+  return {
+    path: normalizeSourcePath(sourcePath, projectRoot),
+    bytes: bytes.byteLength,
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+    value: {
+      ...value,
+      verifiedBinary: binaryIdentity,
+    },
+  };
+}
+
+function attachSoulEffectGetElementRuntimeEvidence(
+  triggerContract,
+  evidence
+) {
+  const sourceVisibility = evidence?.sourceVisibility ?? {};
+  const triggerTargetBinding = triggerContract.triggerTargetBindings?.find(
+    binding => Number(binding.value) === Number(sourceVisibility.triggerTargetType)
+  );
+  if (
+    !triggerTargetBinding ||
+    triggerTargetBinding.enumName !== sourceVisibility.enumName ||
+    triggerTargetBinding.sourceKind !== sourceVisibility.runtimeSourceKind
+  ) {
+    throw new Error(
+      'optimization-qualification-get-element-source-visibility-drift'
+    );
+  }
+  const value = {
+    ...triggerContract,
+    getElementRuntime: {
+      status: evidence.conclusion.status,
+      contractName: evidence.contractName,
+      beforeMutationEventId: Number(
+        evidence.dispatchSemantics.beforeMutationEventId
+      ),
+      afterMutationEventId: Number(
+        evidence.dispatchSemantics.afterMutationEventId
+      ),
+      appliedAcquisitionSources: [
+        ...(evidence.dispatchSemantics.appliedAcquisitionSources ?? []),
+      ],
+      zeroDeltaRefreshDispatch:
+        evidence.dispatchSemantics.zeroDeltaRefreshDispatch,
+      initialStateDispatch: evidence.dispatchSemantics.initialStateDispatch,
+      consumeDispatch: evidence.dispatchSemantics.consumeDispatch,
+      expireDispatch: evidence.dispatchSemantics.expireDispatch,
+      failedOrUnexecutedDispatch:
+        evidence.dispatchSemantics.failedOrUnexecutedDispatch,
+      sourceVisibility: structuredClone(sourceVisibility),
+      consumer: structuredClone(evidence.consumer),
+      reviewedBinary: structuredClone(evidence.reviewedBinary),
+      sourceIdentity: evidence.conclusion.sourceIdentity,
+    },
+  };
+  const { contractHash: _contractHash, ...hashInput } = value;
+  return { ...hashInput, contractHash: hashCanonicalValue(hashInput) };
+}
+
+function readPortableExecutableRvaRange(binary, range) {
+  const match = String(range).match(/^0x([0-9a-f]+)-0x([0-9a-f]+)$/iu);
+  if (!match) throw new Error(`invalid PE RVA range: ${range}`);
+  const startRva = Number.parseInt(match[1], 16);
+  const endRva = Number.parseInt(match[2], 16);
+  const peOffset = binary.readUInt32LE(0x3c);
+  const sectionCount = binary.readUInt16LE(peOffset + 6);
+  const optionalHeaderSize = binary.readUInt16LE(peOffset + 20);
+  const sectionTableOffset = peOffset + 24 + optionalHeaderSize;
+  const resolveOffset = rva => {
+    for (let index = 0; index < sectionCount; index += 1) {
+      const offset = sectionTableOffset + index * 40;
+      const virtualSize = binary.readUInt32LE(offset + 8);
+      const virtualAddress = binary.readUInt32LE(offset + 12);
+      const rawSize = binary.readUInt32LE(offset + 16);
+      const rawOffset = binary.readUInt32LE(offset + 20);
+      if (
+        rva >= virtualAddress &&
+        rva < virtualAddress + Math.max(virtualSize, rawSize)
+      ) {
+        return rawOffset + rva - virtualAddress;
+      }
+    }
+    throw new Error(`PE RVA outside sections: 0x${rva.toString(16)}`);
+  };
+  return binary.subarray(resolveOffset(startRva), resolveOffset(endRva));
 }
 
 function extractIl2CppTypeBlock(text, { namespace, declaration }) {

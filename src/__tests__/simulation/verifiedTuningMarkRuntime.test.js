@@ -709,6 +709,145 @@ describe('verified tuning mark runtime', () => {
       ).currentValue
     ).toBe(0);
   });
+
+  it('publishes ordered BeforeGetElement and AfterGetElement contexts around each applied acquisition', () => {
+    const result = createDirectTuningGeneration({
+      durationMs: 5_000,
+      initialMarks: [createInheritedMarkWithCount(750, 4)],
+      effects: [
+        createDirectAcquireEffect('wind-acquire-to-cap', 750, 10, 0),
+        createDirectAcquireEffect('wind-refresh-at-cap', 750, 10, 1),
+      ],
+    });
+    const events = result.getElementEvents;
+
+    expect(events).toHaveLength(4);
+    expect(
+      events.map(event => ({
+        phase: event.phase,
+        eventId: event.eventId,
+        elementId: event.eventContext.elementId,
+        before: event.eventContext.before,
+        delta: event.eventContext.delta,
+        after: event.eventContext.after,
+        outcome: event.eventContext.outcome,
+        applied: event.eventContext.applied,
+        success: event.eventContext.success,
+      }))
+    ).toEqual([
+      {
+        phase: 'before-mutation',
+        eventId: 9,
+        elementId: 750,
+        before: 4,
+        delta: 1,
+        after: 5,
+        outcome: 'layers-added',
+        applied: true,
+        success: true,
+      },
+      {
+        phase: 'after-mutation',
+        eventId: 10,
+        elementId: 750,
+        before: 4,
+        delta: 1,
+        after: 5,
+        outcome: 'layers-added',
+        applied: true,
+        success: true,
+      },
+      {
+        phase: 'before-mutation',
+        eventId: 9,
+        elementId: 750,
+        before: 5,
+        delta: 0,
+        after: 5,
+        outcome: 'refresh-at-cap',
+        applied: true,
+        success: true,
+      },
+      {
+        phase: 'after-mutation',
+        eventId: 10,
+        elementId: 750,
+        before: 5,
+        delta: 0,
+        after: 5,
+        outcome: 'refresh-at-cap',
+        applied: true,
+        success: true,
+      },
+    ]);
+    expect(events[0].transactionIdentity).toBe(
+      events[1].transactionIdentity
+    );
+    expect(events[2].transactionIdentity).toBe(
+      events[3].transactionIdentity
+    );
+    expect(events[0].transactionIdentity).not.toBe(
+      events[2].transactionIdentity
+    );
+    expect(
+      events.map(event => event.eventContext.sourceSequencePath.at(-3))
+    ).toEqual([19, 21, 19, 21]);
+    expect(
+      events.map(event => ({
+        transactionPath: event.transactionSourceSequencePath,
+        phaseSequenceIndex: event.phaseSequenceIndex,
+      }))
+    ).toEqual([
+      {
+        transactionPath: events[1].transactionSourceSequencePath,
+        phaseSequenceIndex: 0,
+      },
+      {
+        transactionPath: events[0].transactionSourceSequencePath,
+        phaseSequenceIndex: 1,
+      },
+      {
+        transactionPath: events[3].transactionSourceSequencePath,
+        phaseSequenceIndex: 0,
+      },
+      {
+        transactionPath: events[2].transactionSourceSequencePath,
+        phaseSequenceIndex: 1,
+      },
+    ]);
+    expect(result.summary).toMatchObject({
+      getElementEventCount: 4,
+      getElementTransactionCount: 2,
+      zeroDeltaGetElementTransactionCount: 1,
+    });
+  });
+
+  it('does not synthesize get-element events from inherited state, consume or expiry', () => {
+    const inheritedOnly = createDirectTuningGeneration({
+      durationMs: 5_000,
+      initialMarks: [createInheritedMarkWithCount(150, 1)],
+      effects: [],
+    });
+    const consumed = createDirectTuningGeneration({
+      durationMs: 5_000,
+      initialMarks: [createInheritedMarkWithCount(150, 1)],
+      effects: [createDirectConsumeEffect('fire-consume', 150, 10, 1)],
+    });
+    const expired = createDirectTuningGeneration({
+      durationMs: 2_000,
+      initialMarks: [
+        {
+          ...createInheritedMarkWithCount(150, 1),
+          decayRemainingMs: 1_000,
+        },
+      ],
+      effects: [],
+    });
+
+    expect(inheritedOnly.getElementEvents).toEqual([]);
+    expect(consumed.getElementEvents).toEqual([]);
+    expect(expired.getElementEvents).toEqual([]);
+  });
 });
 
 function createPangpangAttack(id, startMs) {

@@ -7,8 +7,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 17,
-      runtimeUnappliedCount: 57,
+      runtimeAppliedCount: 19,
+      runtimeUnappliedCount: 55,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -404,6 +404,159 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     });
   });
 
+  it('compiles get-element phases and event element predicates from source evidence', () => {
+    const definitions = new Map(
+      soulCatalog.definitions.map(definition => [
+        definition.soulEssenceId,
+        definition,
+      ])
+    );
+
+    expect(soulCatalog.triggerContract).toMatchObject({
+      eventBindings: expect.arrayContaining([
+        expect.objectContaining({
+          value: 9,
+          enumName: 'BeforeGetElement',
+          frameAnchor: 'element-before-acquire',
+          sourceIdentity: expect.stringContaining(
+            'EElementTriggerEventType.BeforeGetElement=9'
+          ),
+        }),
+        expect.objectContaining({
+          value: 10,
+          enumName: 'AfterGetElement',
+          frameAnchor: 'element-after-acquire',
+          sourceIdentity: expect.stringContaining(
+            'EElementTriggerEventType.AfterGetElement=10'
+          ),
+        }),
+      ]),
+      conditionTypeBindings: expect.arrayContaining([
+        expect.objectContaining({
+          value: 13,
+          enumName: 'CheckElementId',
+          selectorKind: 'event-element-id',
+          sourceIdentity: expect.stringContaining(
+            'EElementTriggerFixedConditionType.CheckElementId=13'
+          ),
+        }),
+      ]),
+      triggerTargetBindings: expect.arrayContaining([
+        expect.objectContaining({
+          value: 0,
+          enumName: 'Self',
+          sourceKind: 'equipped-actor-source-events',
+          sourceIdentity: expect.stringContaining(
+            'EElementTriggerTargetType.Self=0'
+          ),
+        }),
+      ]),
+      getElementRuntime: expect.objectContaining({
+        status: 'applied',
+        beforeMutationEventId: 9,
+        afterMutationEventId: 10,
+        zeroDeltaRefreshDispatch: 'applied-acquisition-event',
+        initialStateDispatch: false,
+      }),
+    });
+
+    expect(definitions.get(10043)).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      trigger: {
+        eventId: 9,
+        event: 'BeforeGetElement',
+        frameAnchor: 'element-before-acquire',
+        triggerTarget: expect.objectContaining({
+          kind: 'equipped-actor-source-events',
+          triggerTargetType: 0,
+        }),
+        condition: {
+          logic: 'and',
+          conditions: [
+            expect.objectContaining({
+              kind: 'event-element-id',
+              conditionType: 13,
+              conditionValue: 750,
+              tuningProfiles: [
+                expect.objectContaining({
+                  profileKey: 'wind',
+                  markId: 750,
+                }),
+              ],
+            }),
+          ],
+        },
+        target: expect.objectContaining({ kind: 'team-actors' }),
+      },
+      effect: expect.objectContaining({
+        attributeId: 229,
+        bucket: 'dynamicExtra',
+        durationMs: 16000,
+        stackMode: 'stack',
+        maxStacks: 5,
+        formula: expect.objectContaining({
+          baseFunctionId: 3,
+          baseExpression: 'A/10000',
+        }),
+        valuesByStar: [
+          expect.objectContaining({ star: 1, valueRaw: 75000 }),
+          expect.objectContaining({ star: 2, valueRaw: 100000 }),
+          expect.objectContaining({ star: 3, valueRaw: 125000 }),
+          expect.objectContaining({ star: 4, valueRaw: 150000 }),
+        ],
+      }),
+      runtimeGaps: [],
+    });
+
+    expect(definitions.get(10149)).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      trigger: {
+        eventId: 10,
+        event: 'AfterGetElement',
+        frameAnchor: 'element-after-acquire',
+        triggerTarget: expect.objectContaining({
+          kind: 'equipped-actor-source-events',
+          triggerTargetType: 0,
+        }),
+        condition: {
+          logic: 'and',
+          conditions: [
+            expect.objectContaining({
+              kind: 'event-element-id',
+              conditionType: 13,
+              conditionValue: 150,
+              tuningProfiles: [
+                expect.objectContaining({
+                  profileKey: 'fire',
+                  markId: 150,
+                }),
+              ],
+            }),
+          ],
+        },
+        target: expect.objectContaining({ kind: 'team-actors' }),
+      },
+      effect: expect.objectContaining({
+        attributeId: 229,
+        bucket: 'dynamicExtra',
+        durationMs: 24000,
+        stackMode: 'refresh',
+        maxStacks: 1,
+        formula: expect.objectContaining({
+          baseFunctionId: 5,
+          baseExpression: 'A',
+        }),
+        valuesByStar: [
+          expect.objectContaining({ star: 1, valueRaw: 45 }),
+          expect.objectContaining({ star: 2, valueRaw: 60 }),
+          expect.objectContaining({ star: 3, valueRaw: 75 }),
+          expect.objectContaining({ star: 4, valueRaw: 90 }),
+        ],
+      }),
+      runtimeGaps: [],
+    });
+  });
+
   it('keeps threshold activation distinct from set-effect runtime qualification', () => {
     expect(
       soulCatalog.setSkillDefinitions.every(
@@ -525,6 +678,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       [10124, []],
       [10131, []],
       [10136, []],
+      [10043, []],
+      [10149, []],
       [10125, []],
       [10154, []],
       [10155, []],

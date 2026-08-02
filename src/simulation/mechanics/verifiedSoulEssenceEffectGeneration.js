@@ -16,6 +16,8 @@ const SOULESSENCE_TRIGGER_OPERATOR_REGISTRY = Object.freeze({
   'action-start': resolveActionTriggerOccurrence,
   'action-end': resolveActionTriggerOccurrence,
   'hit-after-damage': resolveLandedHitTriggerOccurrences,
+  'element-before-acquire': resolveGetElementTriggerOccurrences,
+  'element-after-acquire': resolveGetElementTriggerOccurrences,
 });
 
 export function createVerifiedSoulEssenceEffectGeneration({
@@ -230,7 +232,35 @@ function resolveEmptyTriggerOccurrenceReason(frameAnchor) {
   if (String(frameAnchor).startsWith('hit-')) {
     return 'soulessence-effect-no-landed-source-hit';
   }
+  if (String(frameAnchor).startsWith('element-')) {
+    return 'soulessence-effect-no-source-get-element-transaction';
+  }
   return 'soulessence-effect-action-occurrence-unavailable';
+}
+
+function resolveGetElementTriggerOccurrences({
+  action,
+  tuningGeneration,
+  frameAnchor,
+}) {
+  return (tuningGeneration?.getElementEvents ?? [])
+    .filter(event => String(event.actionId) === String(action.id))
+    .filter(event => String(event.actorId) === String(action.actorId))
+    .filter(event => event.kind === frameAnchor)
+    .filter(
+      event =>
+        event.applied === true &&
+        event.eventContext?.applied === true &&
+        event.eventContext?.success === true &&
+        event.eventContext?.initialState !== true
+    )
+    .map(event => ({
+      hit: null,
+      tuningEvent: event,
+      timeMs: Number(event.timeMs),
+      triggerSequencePath: event.eventContext.sourceSequencePath,
+      eventContext: event.eventContext,
+    }));
 }
 
 function resolveLandedHitTriggerOccurrences({
@@ -620,6 +650,9 @@ function matchesSoulTriggerCondition(condition, actionContext, eventContext) {
       return (eventContext?.elementTypes ?? []).includes(
         Number(entry.conditionValue)
       );
+    }
+    if (entry.kind === 'event-element-id') {
+      return Number(eventContext?.elementId) === Number(entry.conditionValue);
     }
     if (entry.kind === 'target-element-id') {
       return (eventContext?.targetElementIds ?? []).includes(

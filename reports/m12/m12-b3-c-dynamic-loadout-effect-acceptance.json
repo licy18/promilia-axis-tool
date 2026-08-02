@@ -1,17 +1,17 @@
 {
-  "schemaVersion": 7,
-  "phase": "M12-B3-C4-R1",
+  "schemaVersion": 8,
+  "phase": "M12-B3-C5",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "307daae3ca819c30f69153f108c9a3163a72729e",
+  "baseCommit": "8bf0b3a77538102c1995dd5943e4a7275664ca0a",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
-    "phase": "M12-B3-C3",
-    "acceptanceBaseline": "e05b10fd27a6c723a773a7680169a9180031c48e",
+    "phase": "M12-B3-C4-R1",
+    "acceptanceBaseline": "8bf0b3a77538102c1995dd5943e4a7275664ca0a",
     "status": "product-accepted"
   },
   "scope": {
-    "batch": "tuning-mark-priority-consume-single-packet-closure",
-    "soulEssenceIds": [10124, 10131, 10136],
+    "batch": "tuning-mark-get-element-event-bridge",
+    "soulEssenceIds": [10043, 10149],
     "formalSearchExecuted": false,
     "m12cLocked": true,
     "fixedCultivationChanged": false,
@@ -25,33 +25,31 @@
       "sha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
       "rowCount": 14781
     },
-    "il2cppConditionContract": {
+    "il2cppTriggerContract": {
       "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
       "bytes": 97428254,
       "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
-      "sourceIdentity": "EElementTriggerConditionType.AND=0|OR=1|EElementTriggerFixedConditionType.CheckElementType=8|HasElementId=10|CheckSkillType=11|CheckTargetElementId=12",
-      "triggerContractHash": "c381d1508e85d4fa"
+      "sourceIdentity": "EElementTriggerEventType.BeforeGetElement=9|AfterGetElement=10|EElementTriggerFixedConditionType.CheckElementId=13|EElementTriggerTargetType.Self=0|ETriggerEffectTargetType.AllHero=15",
+      "triggerContractHash": "ff9e03917cfae20c"
     },
-    "tuningMechanics": {
-      "sourceIdentity": "combat-overlimit-mechanics-20260718.json",
-      "contractHash": "f39bf45155f12746",
-      "verifiedPackageFileSha256": "74468a5944609d8ec050421335eb784e5832f317b2f4e0b68a4d8538ff1c76f2",
-      "verifiedPackageHash": "1c4462509a6b59a6cfa46b676b369cd155f3527e76e85cb543b359f48aa83afb"
-    },
-    "tuningConsumePriorityRuntimeEvidence": {
-      "path": "scripts/evidence/tuning-consume-priority-runtime-evidence.json",
+    "getElementRuntimeEvidence": {
+      "path": "scripts/optimization-qualification/evidence/soulessence-get-element-runtime-evidence.json",
+      "bytes": 2671,
+      "sha256": "06db8dd699ccad3a5b28b1099b5879ff6dd0990620d230918342d5ee80988ab3",
       "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
       "binaryBytes": 222485544,
       "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
-      "consumer": "ConsumePackElement.CalculateConsumeCount@RVA=0x1385260",
-      "candidateLoopRange": "0x138587D-0x1385B3C",
-      "candidateLoopSha256": "f254a66bed3d1a662985e2b2107000d7d12223619eedbc67cbfdce9af3a5b0b9",
-      "insufficientFallbackRange": "0x138592C-0x1385932",
-      "selectedElementStoreRva": "0x138594C",
-      "injector": "ConsumePackElement.DoInject@RVA=0x1386950",
-      "selectedPacketLookupRange": "0x1386AD2-0x1386B65",
-      "selectedPacketLookupSha256": "ae7cd17a10c4b798c6eb4712b5d39a28dff9d440c111038e006b78ecc1aca291",
-      "conclusion": "elementArr is traversed in ascending index order; insufficient candidates fall through; the first sufficient candidate becomes m_consumeElementId and DoInject resolves exactly that candidate packet"
+      "consumer": "AliveElementSystem.OnExecuteNormalElement@0x13195C0",
+      "beforeMutationCall": "BeforeGetElement(9)@0x1319EF5",
+      "beforeRangeSha256": "b6e8fb3ace9061da8425c36ef18078e635095424c860da308a709ecdb6392a5e",
+      "combineAfterMutationCall": "AfterGetElement(10)@0x131A4C7",
+      "combineAfterRangeSha256": "92a6d391f09d9e452f62792ebff0a8c942714eabfb6fae2bd1b13274102861a7",
+      "newElementAfterCall": "AfterGetElement(10)@0x131501F",
+      "newElementAfterRangeSha256": "b073418b335877ddfbd6ce2584342d11e996dd527b141e3349901a6af1f57da6"
+    },
+    "tuningMechanics": {
+      "sourceIdentity": "combat-overlimit-mechanics-20260718.json",
+      "contractHash": "f39bf45155f12746"
     },
     "soulControlClosure": {
       "skillCount": 62,
@@ -61,159 +59,85 @@
     }
   },
   "compiledContracts": {
-    "priorityJudgmentSelection": {
-      "groupKey": "source action + trigger frame + judgment source identity",
-      "runtimeSelectionMode": "priority-first-sufficient-candidate",
-      "priorityDirection": "element-arr-index-ascending",
-      "candidateSource": "ConsumePackElement.elementArr",
-      "candidatePacketMappingSource": "ConsumePackElement.injectElementDataEffects",
-      "selectionState": "canonical tuning mark state at the queued consume event",
-      "selectedResult": "one mark consume and at most one mapped overlimit packet",
-      "noCandidateResult": "one group diagnostic, no consume, no packet"
+    "getElementEvent": {
+      "transactionContract": "paired-before-after-acquisition-transaction",
+      "beforeMutationEventId": 9,
+      "afterMutationEventId": 10,
+      "conditionType": 13,
+      "conditionSelector": "current event elementId",
+      "sourceVisibility": "equipped actor acquisition events only",
+      "effectRecipients": "triggerEffectList.targetType, independently expanded",
+      "appliedSources": ["verified-action-effect", "verified-threshold-grant"],
+      "zeroDeltaAtCap": "successful acquisition refresh transaction",
+      "excludedSources": ["initial-state-restore", "consume", "expire", "held-periodic", "overlimit-packet", "failed-or-unexecuted-action"]
     },
-    "conditionOperators": [
-      {
-        "conditionType": 8,
-        "name": "CheckElementType",
-        "selector": "canonical tuning event elementTypes"
-      },
-      {
-        "conditionType": 10,
-        "name": "HasElementId",
-        "selector": "action-start held tuning mark state"
-      },
-      {
-        "conditionType": 11,
-        "name": "CheckSkillType",
-        "selector": "resolved control binding skillTag"
-      },
-      {
-        "conditionType": 12,
-        "name": "CheckTargetElementId",
-        "selector": "landed overlimit packet targetElementIds"
-      }
-    ],
-    "10124": {
-      "name": "夕阳下的约定",
-      "triggerElementId": 19004101,
-      "event": "BeforeSkill",
-      "frameAnchor": "action-start",
-      "condition": "CheckSkillType(11)=UltraSkill(4) AND HasElementId(10)=250",
+    "10043": {
+      "name": "宣告黎明之花",
+      "triggerElementId": 19003301,
+      "event": "BeforeGetElement(9)",
+      "condition": "CheckElementId(13)=750",
+      "triggerSource": "Self(0)",
       "target": "AllHero(15)",
-      "attributeId": 8,
-      "durationMs": 20000,
-      "stackMode": "refresh",
-      "valuesByStarRaw": [2150, 2870, 3590, 4310]
+      "effectElementId": 19003302,
+      "attributeId": 229,
+      "formula": "baseFunctionId=3, A/10000",
+      "durationMs": 16000,
+      "stackMode": "stack",
+      "maxStacks": 5,
+      "valuesByStarRaw": [75000, 100000, 125000, 150000]
     },
-    "10131": {
-      "name": "节日佳肴",
-      "triggerElementId": 19002701,
-      "event": "AfterDamage",
-      "frameAnchor": "hit-after-damage",
-      "condition": "CheckTargetElementId(12)=299 OR CheckTargetElementId(12)=499",
-      "hiddenStructuralBranch": "dark overlimit packet 499 is source-present although public text names thunder",
-      "target": "Self(0)",
-      "attributeId": 222,
-      "durationMs": 3000,
+    "10149": {
+      "name": "失控飞行",
+      "triggerElementId": 19002201,
+      "event": "AfterGetElement(10)",
+      "condition": "CheckElementId(13)=150",
+      "triggerSource": "Self(0)",
+      "target": "AllHero(15)",
+      "effectElementId": 19002202,
+      "attributeId": 229,
+      "formula": "baseFunctionId=5, A",
+      "durationMs": 24000,
       "stackMode": "refresh",
-      "valuesByStarRaw": [4460, 5950, 7440, 8930]
-    },
-    "10136": {
-      "name": "林间野餐",
-      "triggerElementId": 19002101,
-      "event": "AfterDamage",
-      "frameAnchor": "hit-after-damage",
-      "condition": "CheckElementType(8)=43 AND CheckSkillType(11)=NormalAttack(1) AND CheckElementType(8)=32",
-      "windDamageElementId": 796,
-      "windElementTypes": [22, 32, 43, 307],
-      "target": "Self(0)",
-      "attributeId": 222,
-      "durationMs": 8000,
-      "stackMode": "refresh",
-      "valuesByStarRaw": [3720, 4960, 6200, 7440]
+      "maxStacks": 1,
+      "valuesByStarRaw": [45, 60, 75, 90]
     }
   },
   "runtimeMatrix": {
-    "usesCanonicalTuningGeneration": true,
-    "duplicatesTuningStateMachine": false,
-    "stableEventContextFields": [
-      "eventIdentity",
-      "elementId",
-      "elementTypes",
-      "targetElementIds",
-      "markId",
-      "profileKey",
-      "sourceActionId",
-      "sourceHitIdentity",
-      "absoluteFrame",
-      "sourceSequencePath"
-    ],
-    "10124": {
-      "inheritedThunderMarkTriggers": true,
-      "zeroOrExpiredOrOtherMarkTriggers": false,
-      "blockedUltimateTriggers": false,
+    "stableTransactionFields": ["transactionIdentity", "phase", "eventId", "elementId", "markId", "profileKey", "before", "requestedDelta", "delta", "after", "outcome", "sourceActionId", "sourceActorId", "sourceHitIdentity", "absoluteFrame", "sourceSequencePath", "transactionSourceSequencePath", "phaseSequenceIndex", "applied", "success", "initialState"],
+    "phaseOrder": "before -> mark mutation/refresh -> after",
+    "10043": {
+      "realSourceAction": "10700212 star-skill wind mark acquisition",
       "allHeroCommands": 3,
-      "nonSourceTeammateCriticalDamageIncreases": true,
+      "teammateMasteryIncreaseAtStar1": 7.5,
+      "stackCap": 5,
+      "atCapRefreshTriggers": true,
+      "wrongElementOrWrongSourceTriggers": false,
+      "inheritedOrConsumeOrExpireTriggers": false,
+      "blockedActionTriggers": false,
       "rightOpenExpiryRestoresBaseline": true
     },
-    "10131": {
-      "landedThunderPacket299Triggers": true,
-      "landedDarkPacket499Triggers": true,
-      "ordinaryElementDamageTriggers": false,
-      "unconsumedOrMissedPacketTriggers": false,
-      "samePacketReceivesNewLayer": false,
-      "laterToughnessDamageIncreases": true,
+    "10149": {
+      "realSourceAction": "10800112 star-skill fire mark acquisition",
+      "allHeroCommands": 3,
+      "teammateMasteryIncreaseAtStar1": 45,
+      "repeatedAcquisition": "refresh-one-layer",
+      "wrongElementOrWrongSourceTriggers": false,
+      "inheritedOrConsumeOrExpireTriggers": false,
+      "failedOrUnexecutedTriggers": false,
       "rightOpenExpiryRestoresBaseline": true
     },
-    "10136": {
-      "landedNormalAttackWindPacket796Triggers": true,
-      "chargedOrSkillWindPacketTriggers": false,
-      "normalAttackWithoutWindConsumeTriggers": false,
-      "otherOverlimitOrMissTriggers": false,
-      "samePacketReceivesNewLayer": false,
-      "laterToughnessDamageIncreases": true,
-      "rightOpenExpiryRestoresBaseline": true
-    },
-    "priorityConsume": {
-      "112001260BothCandidatesSufficient": {
-        "orderedCandidates": [250, 450],
-        "selectedMarkId": 250,
-        "emittedPacketElementId": 299,
-        "unselectedMarkId": 450,
-        "unselectedMarkPreserved": true
-      },
-      "112001260FirstInsufficientSecondSufficient": {
-        "orderedCandidates": [250, 450],
-        "selectedMarkId": 450,
-        "emittedPacketElementId": 499
-      },
-      "112001260NoSufficientCandidate": {
-        "consumeCount": 0,
-        "packetCount": 0,
-        "groupDiagnosticCount": 1,
-        "diagnosticCode": "tuning-consume-no-sufficient-priority-candidate"
-      },
-      "111001332CrossGroupRegression": {
-        "orderedCandidates": [750, 250],
-        "selectionUsesSameGenericContract": true
-      },
-      "sameFrameStateOrdering": "selection observes canonical expiry/acquisition before the consume event",
-      "selectedPacketLandedTriggers10131": true,
-      "selectedPacketMissTriggers10131": false,
-      "unselectedPacketMaterialized": false,
-      "replayProjectionStable": true
-    },
-    "refreshAndReplayStable": true,
-    "cycleInheritanceStable": true
+    "replayStable": true,
+    "cycleStateStable": true,
+    "priorityConsumeC4Regression": "passed"
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 17,
-    "runtimeUnappliedSoulEssenceCount": 45,
+    "runtimeAppliedSoulEssenceCount": 19,
+    "runtimeUnappliedSoulEssenceCount": 43,
     "runtimeAppliedSetSkillCount": 0,
-    "newlyAppliedSoulEssenceIds": [10124, 10131, 10136],
-    "preservedRuntimeAppliedSoulEssenceCount": 14,
+    "newlyAppliedSoulEssenceIds": [10043, 10149],
+    "preservedRuntimeAppliedSoulEssenceCount": 17,
     "explicitlyUnapplied": {
-      "soulEssenceCount": 45,
+      "soulEssenceCount": 43,
       "setSkillCount": 12,
       "reason": "source evidence or canonical runtime operator remains incomplete"
     }
@@ -226,9 +150,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 436,
+    "blockingUniqueGapCount": 432,
     "blockingByCategory": {
-      "not-implemented": 420,
+      "not-implemented": 416,
       "evidence-insufficient": 16
     },
     "formalAdmissions": {
@@ -240,17 +164,17 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "aec5244760fc3e25",
-    "rosterHash": "3ca3b661eefc7eba",
-    "manifestsHash": "20e73a31a02ab336",
-    "ledgerHash": "cf90ab696b44af41",
-    "bindingMatrixHash": "f05a3a75d60b34fd",
-    "qualificationCatalogHash": "5d689b68ea6ec00f",
-    "dynamicLoadoutEffectCensusHash": "188b2f8036236259",
-    "soulEssenceEffectCatalogHash": "e002776d999c842f",
-    "soulEssenceSourceSnapshotHash": "87bc2d712a143bb9",
+    "sourceSnapshotHash": "8368dcab431c3a25",
+    "rosterHash": "0f328c23d795ad6b",
+    "manifestsHash": "fde0e0f54cfdde54",
+    "ledgerHash": "9f4861b9759f8779",
+    "bindingMatrixHash": "e5dede43eddc1f7d",
+    "qualificationCatalogHash": "0b52db0abd10b411",
+    "dynamicLoadoutEffectCensusHash": "b4c21f28dbbfdffa",
+    "soulEssenceEffectCatalogHash": "116773c16e562c21",
+    "soulEssenceSourceSnapshotHash": "0446ee7113c4f37b",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
-    "soulEssenceTriggerContractHash": "c381d1508e85d4fa",
+    "soulEssenceTriggerContractHash": "ff9e03917cfae20c",
     "machineAxisCanonicalHashes": {
       "input": "c8bfd28dcb890f4f",
       "data": "98deb78db6293f88",
@@ -259,58 +183,25 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "ordered tuning judgment groups, candidate packet mappings, and binary-backed priority selection became first-class package data",
+    "reason": "source-bound get-element enums, binary evidence, paired acquisition context, and source visibility became first-class qualification data",
+    "machineAxisCanonicalHashDrift": 0,
     "gameplayAssertionDrift": 0,
-    "rubyReplayAndSummaryHashDrift": 0,
-    "xiaoyuAndHanReplayHashChange": "metadata-only; all authoritative numeric assertions pass",
-    "cycleEvaluationHashUnchanged": "412605349bbf2fe3",
-    "cycleHash": "2b724ad55f96138b"
+    "priorityConsumeRegression": 0
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": {
-      "files": 5,
-      "tests": 108,
-      "status": "passed"
-    },
-    "machineAxis": {
-      "files": 12,
-      "tests": 157,
-      "status": "passed"
-    },
-    "characterProfileGolden": {
-      "files": 3,
-      "tests": 34,
-      "status": "passed",
-      "gameplayAssertionDrift": 0
-    },
-    "canonicalAndRuntime": {
-      "files": 6,
-      "tests": 58,
-      "status": "passed"
-    },
-    "headlessGoldenMigration": {
-      "files": 1,
-      "tests": 4,
-      "status": "passed"
-    },
+    "focusedMechanics": {"files": 3, "tests": 86, "status": "passed"},
+    "machineAxis": {"files": 12, "tests": 157, "status": "passed"},
+    "characterProfileGolden": {"files": 3, "tests": 34, "status": "passed", "gameplayAssertionDrift": 0},
+    "canonicalAndRuntime": {"files": 6, "tests": 106, "status": "passed"},
+    "headlessGoldenMigration": {"files": 1, "tests": 4, "status": "passed"},
     "audits": {
       "count": 9,
       "status": "clean",
-      "names": [
-        "optimization-qualification",
-        "production-imports",
-        "workbench-data",
-        "action-status",
-        "applied-source-bindings",
-        "character-acceptance",
-        "character-combat",
-        "verified-combat",
-        "kibo-headless"
-      ],
-      "appliedSoulSourceCount": 17,
+      "names": ["optimization-qualification", "production-imports", "workbench-data", "action-status", "applied-source-bindings", "character-acceptance", "character-combat", "verified-combat", "kibo-headless"],
+      "appliedSoulSourceCount": 19,
       "appliedSoulSourceDriftCount": 0,
-      "tuningConditionSourceCount": 5,
+      "tuningConditionSourceCount": 7,
       "tuningConditionSourceDriftCount": 0,
       "tuningConsumePriorityGroupCount": 12,
       "tuningConsumePrioritySourceDriftCount": 0

@@ -321,6 +321,15 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
     const generatedConditionLogic = Number(
       definition.trigger?.condition?.logicValue
     );
+    const sourceTriggerEventId = Number(triggerTree.triggerParam1);
+    const generatedTriggerEventId = Number(definition.trigger?.eventId);
+    const triggerEventBinding = catalog.triggerContract?.eventBindings?.find(
+      binding => Number(binding.value) === sourceTriggerEventId
+    );
+    const sourceTriggerTargetType = Number(triggerTree.triggerTargetType);
+    const generatedTriggerTargetType = Number(
+      definition.trigger?.triggerTarget?.triggerTargetType
+    );
     const sourceConditions = normalizeTriggerConditions(
       triggerTree.triggerConditionList
     );
@@ -405,6 +414,19 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
       ...(sourceConditionLogic === generatedConditionLogic
         ? []
         : ['loadout-trigger-condition-logic-drift']),
+      ...(sourceTriggerEventId === generatedTriggerEventId &&
+      triggerEventBinding?.status === 'applied' &&
+      String(triggerEventBinding?.sourceIdentity ?? '').includes(
+        `EElementTriggerEventType.${triggerEventBinding?.enumName}=${sourceTriggerEventId}`
+      )
+        ? []
+        : ['loadout-trigger-event-enum-drift']),
+      ...(sourceTriggerTargetType === generatedTriggerTargetType &&
+      String(definition.trigger?.triggerTarget?.sourceIdentity ?? '').includes(
+        `EElementTriggerTargetType.${definition.trigger?.triggerTarget?.triggerTargetTypeName}=${sourceTriggerTargetType}`
+      )
+        ? []
+        : ['loadout-trigger-source-target-drift']),
       ...(JSON.stringify(sourceConditions) ===
       JSON.stringify(generatedConditions)
         ? []
@@ -476,6 +498,20 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
         generatedConditions,
         sourceIdentity: definition.trigger?.condition?.sourceIdentity ?? null,
         tuningConditions,
+      },
+      triggerEvent: {
+        sourceEventId: sourceTriggerEventId,
+        generatedEventId: generatedTriggerEventId,
+        enumName: triggerEventBinding?.enumName ?? null,
+        frameAnchor: triggerEventBinding?.frameAnchor ?? null,
+        sourceIdentity: triggerEventBinding?.sourceIdentity ?? null,
+      },
+      triggerSourceTarget: {
+        sourceTriggerTargetType,
+        generatedTriggerTargetType,
+        sourceKind: definition.trigger?.triggerTarget?.kind ?? null,
+        sourceIdentity:
+          definition.trigger?.triggerTarget?.sourceIdentity ?? null,
       },
       triggerEffectTarget: {
         sourceTargetType,
@@ -842,6 +878,7 @@ function createTuningConditionAuditRows({
     [8, { kind: 'event-element-type', name: 'CheckElementType' }],
     [10, { kind: 'held-element-id', name: 'HasElementId' }],
     [12, { kind: 'target-element-id', name: 'CheckTargetElementId' }],
+    [13, { kind: 'event-element-id', name: 'CheckElementId' }],
   ]);
   return conditions
     .filter(condition =>
@@ -858,7 +895,7 @@ function createTuningConditionAuditRows({
               .map(Number)
               .includes(conditionValue);
           }
-          if (conditionType === 10) {
+          if (conditionType === 10 || conditionType === 13) {
             return Number(profile.markId) === conditionValue;
           }
           return Number(profile.overlimitPacket?.elementId) === conditionValue;

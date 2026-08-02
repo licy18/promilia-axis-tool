@@ -57,6 +57,7 @@ export function createVerifiedTuningMarkGeneration({
   );
   const queue = [];
   const events = [];
+  const getElementEvents = [];
   const effectCommands = [];
   const combatEvents = [];
   const unresolved = [];
@@ -107,6 +108,7 @@ export function createVerifiedTuningMarkGeneration({
         },
       },
       profile,
+      acquisitionSourceKind: 'verified-threshold-grant',
     });
   }
 
@@ -144,6 +146,7 @@ export function createVerifiedTuningMarkGeneration({
           resolution,
           effect,
           profile: profileByMarkId.get(Number(effect.tuningMark.markId)),
+          acquisitionSourceKind: 'verified-action-effect',
         });
       }
       if (effect.tuningOverlimit) {
@@ -228,6 +231,7 @@ export function createVerifiedTuningMarkGeneration({
         descriptor,
         stateByMarkId,
         events,
+        getElementEvents,
         effectCommands,
         mechanicsPackage,
         scenario,
@@ -272,6 +276,9 @@ export function createVerifiedTuningMarkGeneration({
     event.runtimeSequenceIndex = runtimeSequenceIndex;
   }
   events.sort(compareGeneratedEvents);
+  for (const [runtimeSequenceIndex, event] of getElementEvents.entries()) {
+    event.runtimeSequenceIndex = runtimeSequenceIndex;
+  }
   combatEvents.sort(compareGeneratedEvents);
   effectCommands.sort(compareGeneratedEvents);
   return {
@@ -282,6 +289,7 @@ export function createVerifiedTuningMarkGeneration({
     packageId: mechanicsPackage.packageId,
     packageHash: mechanicsPackage.packageHash,
     events,
+    getElementEvents,
     effectCommands,
     combatEvents,
     unresolved,
@@ -295,6 +303,15 @@ export function createVerifiedTuningMarkGeneration({
       refreshAtMaximumEventCount: events.filter(
         event => event.kind === 'acquire' && event.delta === 0
       ).length,
+      getElementEventCount: getElementEvents.length,
+      getElementTransactionCount: new Set(
+        getElementEvents.map(event => event.transactionIdentity)
+      ).size,
+      zeroDeltaGetElementTransactionCount: new Set(
+        getElementEvents
+          .filter(event => event.eventContext?.delta === 0)
+          .map(event => event.transactionIdentity)
+      ).size,
       consumeEventCount: events.filter(event => event.kind === 'consume')
         .length,
       expireEventCount: events.filter(event => event.kind === 'expire').length,
@@ -421,6 +438,7 @@ function applyLayerAcquisition({
   descriptor,
   stateByMarkId,
   events,
+  getElementEvents,
   effectCommands,
   mechanicsPackage,
   scenario,
@@ -461,6 +479,27 @@ function applyLayerAcquisition({
   }
   const after = state.layers.length;
   const source = createDescriptorSource(descriptor);
+  const transactionIdentity = [
+    'tuning-get-element',
+    state.profile.markId,
+    descriptor.timeMs,
+    descriptor.queueSequence,
+  ].join('|');
+  const outcome = after > before ? 'layers-added' : 'refresh-at-cap';
+  getElementEvents.push(
+    createGetElementEvent({
+      phase: 'before-mutation',
+      eventId: 9,
+      descriptor,
+      state,
+      before,
+      after,
+      requestedLayerCount,
+      acquiredLayerCount,
+      transactionIdentity,
+      outcome,
+    })
+  );
   events.push(
     createMarkEvent({
       kind: 'acquire',
@@ -470,6 +509,20 @@ function applyLayerAcquisition({
       after,
       delta: after - before,
       layerIds: layers.map(layer => layer.id),
+    })
+  );
+  getElementEvents.push(
+    createGetElementEvent({
+      phase: 'after-mutation',
+      eventId: 10,
+      descriptor,
+      state,
+      before,
+      after,
+      requestedLayerCount,
+      acquiredLayerCount,
+      transactionIdentity,
+      outcome,
     })
   );
   if (after !== before) {
@@ -1261,6 +1314,106 @@ function createMarkEvent({
   };
 }
 
+function createGetElementEvent({
+  phase,
+  eventId,
+  descriptor,
+  state,
+  before,
+  after,
+  requestedLayerCount,
+  acquiredLayerCount,
+  transactionIdentity,
+  outcome,
+}) {
+  const transactionSourceSequencePath = createTuningSourceSequencePath({
+    descriptor,
+    localKind: 'acquire',
+    localIdentity: state.profile.markId,
+  });
+  const phaseSequenceIndex = phase === 'before-mutation' ? 0 : 1;
+  const sourceSequencePath = createTuningSourceSequencePath({
+    descriptor,
+    localKind:
+      phase === 'before-mutation'
+        ? 'get-element-before'
+        : 'get-element-after',
+    localIdentity: state.profile.markId,
+  });
+  const sourceHitIdentity = resolveTuningSourceHitIdentity(descriptor);
+  const eventIdentity = `${transactionIdentity}|event:${eventId}`;
+  const eventContext = {
+    eventIdentity,
+    transactionIdentity,
+    eventKind:
+      phase === 'before-mutation'
+        ? 'element-before-acquire'
+        : 'element-after-acquire',
+    eventId,
+    phase,
+    timeMs: roundValue(descriptor.timeMs),
+    absoluteFrame: Math.round((descriptor.timeMs * FRAME_RATE) / 1000),
+    sourceSequencePath,
+    transactionSourceSequencePath,
+    phaseSequenceIndex,
+    elementId: Number(state.profile.markId),
+    markId: Number(state.profile.markId),
+    profileKey: state.profile.key,
+    before,
+    requested: requestedLayerCount,
+    delta: acquiredLayerCount,
+    after,
+    outcome,
+    applied: true,
+    success: true,
+    initialState: false,
+    acquisitionSourceKind:
+      descriptor.acquisitionSourceKind ?? 'verified-action-effect',
+    sourceActionId: descriptor.action?.id ?? null,
+    sourceActorId: descriptor.action?.actorId ?? null,
+    sourceHitIdentity,
+    sourceEffectIdentity: descriptor.effect?.effectIdentity ?? null,
+    sourceIdentity:
+      descriptor.effect?.sourceIdentity ?? state.profile.sourceIdentity,
+    landed: null,
+    elementTypes: [],
+    targetElementIds: [],
+    heldElementIds: [],
+  };
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-verified-tuning-get-element-event',
+    status: 'verified-tuning-get-element-event-applied',
+    eventIdentity,
+    transactionIdentity,
+    kind: eventContext.eventKind,
+    type:
+      eventId === 9
+        ? 'VERIFIED_TUNING_BEFORE_GET_ELEMENT'
+        : 'VERIFIED_TUNING_AFTER_GET_ELEMENT',
+    eventId,
+    phase,
+    timeMs: eventContext.timeMs,
+    frameIndex: eventContext.absoluteFrame,
+    absoluteFrame: eventContext.absoluteFrame,
+    sourceSequencePath,
+    transactionSourceSequencePath,
+    phaseSequenceIndex,
+    actionId: eventContext.sourceActionId,
+    actorId: eventContext.sourceActorId,
+    markId: eventContext.markId,
+    profileKey: eventContext.profileKey,
+    before,
+    delta: acquiredLayerCount,
+    after,
+    outcome,
+    eventContext,
+    sourceIdentity: eventContext.sourceIdentity,
+    appliedToCalculators: true,
+    applied: true,
+  };
+}
+
 function createTuningSourceSequencePath({
   descriptor,
   localKind,
@@ -1269,7 +1422,9 @@ function createTuningSourceSequencePath({
   const actionPath = getActionSourceSequencePath(descriptor.action);
   const kindOrder = {
     expire: 10,
+    'get-element-before': 19,
     acquire: 20,
+    'get-element-after': 21,
     consume: 30,
     'held-trigger': 40,
     'held-damage': 50,
@@ -1469,6 +1624,7 @@ function createUnavailableGeneration(reason) {
     sourceKind: 'azpr-verified-tuning-mark-generation',
     status: reason,
     events: [],
+    getElementEvents: [],
     effectCommands: [],
     combatEvents: [],
     unresolved: [],

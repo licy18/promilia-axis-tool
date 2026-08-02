@@ -15,6 +15,8 @@ const TRIGGER_EVENT_BY_ID = Object.freeze({
   2: { name: 'AfterDamage', frameAnchor: 'hit-after-damage' },
   5: { name: 'BeforeSkill', frameAnchor: 'action-start' },
   6: { name: 'AfterSkill', frameAnchor: 'action-end' },
+  9: { name: 'BeforeGetElement', frameAnchor: 'element-before-acquire' },
+  10: { name: 'AfterGetElement', frameAnchor: 'element-after-acquire' },
   36: { name: 'UnloadSkill', frameAnchor: 'loadout-uninstall' },
 });
 
@@ -22,6 +24,8 @@ const SUPPORTED_FRAME_ANCHORS = new Set([
   'action-start',
   'action-end',
   'hit-after-damage',
+  'element-before-acquire',
+  'element-after-acquire',
 ]);
 
 export const SOULESSENCE_EFFECT_CATALOG_CONTRACT_NAME =
@@ -667,15 +671,21 @@ function resolveTuningConditionProfiles({
   tuningMechanicsCatalog,
 }) {
   if (
-    !['event-element-type', 'held-element-id', 'target-element-id'].includes(
-      selectorKind
-    )
+    ![
+      'event-element-type',
+      'event-element-id',
+      'held-element-id',
+      'target-element-id',
+    ].includes(selectorKind)
   ) {
     return [];
   }
   return (tuningMechanicsCatalog?.profiles ?? [])
     .filter(profile => {
-      if (selectorKind === 'held-element-id') {
+      if (
+        selectorKind === 'held-element-id' ||
+        selectorKind === 'event-element-id'
+      ) {
         return Number(profile.markId) === conditionValue;
       }
       if (selectorKind === 'target-element-id') {
@@ -812,7 +822,12 @@ function compileSoulEffectDefinition({
     triggerContract,
     tuningMechanicsCatalog,
   });
-  const triggerEvent = TRIGGER_EVENT_BY_ID[Number(triggerTree.triggerParam1)];
+  const triggerEvent = triggerContract.eventBindings.find(
+    binding => Number(binding.value) === Number(triggerTree.triggerParam1)
+  );
+  const triggerTargetBinding = triggerContract.triggerTargetBindings.find(
+    binding => Number(binding.value) === Number(triggerTree.triggerTargetType)
+  );
   const triggerEffectRows = Array.isArray(triggerTree.triggerEffectList)
     ? triggerTree.triggerEffectList
         .map((effectRow, effectListIndex) => ({
@@ -879,6 +894,9 @@ function compileSoulEffectDefinition({
   }
   if (!triggerEvent || !SUPPORTED_FRAME_ANCHORS.has(triggerEvent.frameAnchor)) {
     runtimeGaps.push('effect-trigger-event-operator-unsupported');
+  }
+  if (!triggerTargetBinding) {
+    runtimeGaps.push('effect-trigger-source-target-unsupported');
   }
   if (activationPrerequisiteRows.length > 0) {
     runtimeGaps.push('effect-activation-condition-operator-unsupported');
@@ -968,6 +986,15 @@ function compileSoulEffectDefinition({
             condition: compiledCondition,
             triggerTargetType: numberOrNull(triggerTree.triggerTargetType),
             triggerTargetTypeSourceIdentity: `${createElementIdentity(trigger)}.triggerTargetType`,
+            triggerTarget:
+              triggerTargetBinding == null
+                ? null
+                : {
+                    kind: triggerTargetBinding.sourceKind,
+                    triggerTargetType: Number(triggerTargetBinding.value),
+                    triggerTargetTypeName: triggerTargetBinding.enumName,
+                    sourceIdentity: `${createElementIdentity(trigger)}.triggerTargetType|${triggerTargetBinding.sourceIdentity}`,
+                  },
             target:
               targetBinding == null
                 ? null
@@ -1090,6 +1117,12 @@ function createMechanismFamily(triggerEvent) {
   }
   if (triggerEvent?.frameAnchor === 'hit-after-damage') {
     return 'equipped-actor-skill-tag-property-after-damage';
+  }
+  if (triggerEvent?.frameAnchor === 'element-before-acquire') {
+    return 'equipped-actor-get-element-property-before-acquire';
+  }
+  if (triggerEvent?.frameAnchor === 'element-after-acquire') {
+    return 'equipped-actor-get-element-property-after-acquire';
   }
   return 'source-indexed-composite-effect';
 }

@@ -204,6 +204,28 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     maxStacks: 1,
     attributeId: 222,
   },
+  {
+    soulEssenceId: 10043,
+    contextual: true,
+    event: 'BeforeGetElement',
+    frameAnchor: 'element-before-acquire',
+    actionKind: null,
+    durationMs: 16000,
+    stackMode: 'stack',
+    maxStacks: 5,
+    attributeId: 229,
+  },
+  {
+    soulEssenceId: 10149,
+    contextual: true,
+    event: 'AfterGetElement',
+    frameAnchor: 'element-after-acquire',
+    actionKind: null,
+    durationMs: 24000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 229,
+  },
 ];
 
 beforeEach(() => {
@@ -221,8 +243,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 17,
-      unresolvedCount: 45,
+      runtimeAppliedCount: 19,
+      unresolvedCount: 43,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -1032,6 +1054,630 @@ describe('verified soul essence effect generation', () => {
     expect(
       wrongSkillTag.verifiedSoulEssenceEffectGeneration.effectCommands
     ).toEqual([]);
+  });
+
+  it('bridges a real wind-mark acquisition to 10043 before mutation and changes teammate tuning settlement', () => {
+    const sourceActorId = 107002;
+    const sourceActionId = 'c5-wind-acquire-source';
+    const activeActionId = 'c5-wind-buff-active';
+    const expiredActionId = 'c5-wind-buff-expired';
+    const actionPlan = [
+      {
+        id: sourceActionId,
+        actionKind: 'star-skill',
+        actorCharacterId: sourceActorId,
+        startFrame: 60,
+      },
+      {
+        id: 'c5-wind-switch',
+        actionKind: 'switch',
+        sourceCharacterId: sourceActorId,
+        targetCharacterId: 101003,
+        startFrame: 420,
+      },
+      {
+        id: activeActionId,
+        actionKind: 'normal-attack',
+        actorCharacterId: 101003,
+        startFrame: 720,
+      },
+      {
+        id: expiredActionId,
+        actionKind: 'normal-attack',
+        actorCharacterId: 101003,
+        startFrame: 1200,
+      },
+    ];
+    const simulate = effectSkillId =>
+      createRealSoulScenario({
+        actorCharacterId: sourceActorId,
+        soulEssenceId: effectSkillId == null ? null : 10043,
+        effectSkillId,
+        durationMs: frameToMs(1400),
+        teamCharacterIds: [sourceActorId, 101003, 101010],
+        actionPlan,
+      });
+    const withSoul = simulate(1900330);
+    const withoutSoul = simulate(null);
+    const commands =
+      withSoul.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10043
+      );
+    const getEvents = withSoul.verifiedTuningMarkGeneration.getElementEvents.filter(
+      event => event.actionId === sourceActionId && event.markId === 750
+    );
+    const tuningPayload = (result, actionId) =>
+      result.verifiedCombatRuntime.damageEvents.find(
+        event =>
+          event.type === 'VERIFIED_TUNING_DAMAGE' &&
+          event.actionId === actionId &&
+          event.payload.profileKey === 'wind'
+      )?.payload;
+    const activeWithSoul = tuningPayload(withSoul, activeActionId);
+    const activeWithoutSoul = tuningPayload(withoutSoul, activeActionId);
+    const expiredWithSoul = tuningPayload(withSoul, expiredActionId);
+    const expiredWithoutSoul = tuningPayload(withoutSoul, expiredActionId);
+
+    expect(getEvents).toHaveLength(2);
+    expect(getEvents.map(event => event.eventId)).toEqual([9, 10]);
+    expect(getEvents[0]).toMatchObject({
+      phase: 'before-mutation',
+      before: 0,
+      delta: 1,
+      after: 1,
+      eventContext: expect.objectContaining({
+        elementId: 750,
+        acquisitionSourceKind: 'verified-action-effect',
+        sourceActorId: 'actor-107002',
+      }),
+    });
+    expect(commands).toHaveLength(3);
+    expect(commands.map(command => command.targetId).sort()).toEqual([
+      'actor-101003',
+      'actor-101010',
+      'actor-107002',
+    ]);
+    expect(commands[0]).toMatchObject({
+      sourceActionId,
+      sourceActorId: 'actor-107002',
+      sourceTuningEventIdentity: getEvents[0].eventIdentity,
+      timeMs: frameToMs(150),
+      durationMs: 16000,
+      stackMode: 'stack',
+      maxStacks: 5,
+      modifiers: [
+        expect.objectContaining({
+          attributeId: 229,
+          sourceRawA: 75000,
+          evaluatedValue: 7.5,
+        }),
+      ],
+    });
+    expect(activeWithSoul.mastery - activeWithoutSoul.mastery).toBeCloseTo(
+      7.5,
+      6
+    );
+    expect(activeWithSoul.rawDamage).toBeGreaterThanOrEqual(
+      activeWithoutSoul.rawDamage
+    );
+    expect(expiredWithSoul.mastery).toBeCloseTo(
+      expiredWithoutSoul.mastery,
+      6
+    );
+    expect(expiredWithSoul.rawDamage).toBeCloseTo(
+      expiredWithoutSoul.rawDamage,
+      6
+    );
+  });
+
+  it('stacks 10043 from canonical before-acquire transactions, caps at five and refreshes at cap', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10043
+    );
+    const actorId = 'actor-107002';
+    const action = {
+      ...createRealSoulActionDraft({
+        id: 'c5-wind-stack-source',
+        actionKind: 'star-skill',
+        startFrame: 60,
+        actorCharacterId: 107002,
+      }),
+      actorId,
+    };
+    const resolution = resolveVerifiedCombatActionMechanics(action);
+    const events = Array.from({ length: 6 }, (_value, index) =>
+      createCanonicalGetElementEvent({
+        action,
+        markId: 750,
+        eventId: 9,
+        transactionIndex: index,
+        before: Math.min(index, 5),
+        after: Math.min(index + 1, 5),
+      })
+    );
+    const scenario = {
+      time: { fps: 60, durationMs: 30000 },
+      actors: [createSoulMatrixActor({ actorId, definition })],
+      actions: [action],
+    };
+    const actionExecutionPlan = {
+      actions: [{ actionId: action.id, execute: true }],
+    };
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      actionResolutionById: new Map([[action.id, resolution]]),
+      tuningGeneration: { getElementEvents: events },
+    });
+    const timeline = createEffectRuntimeTimeline({
+      scenario,
+      actionExecutionPlan,
+      generatedCommands: generation.effectCommands,
+    });
+    const finalTriggerTime = events.at(-1).timeMs;
+    const active = resolveActiveEffectsAt(timeline, finalTriggerTime, {
+      targetKind: 'actor',
+      targetId: actorId,
+      calculatorOnly: true,
+    });
+
+    expect(generation.effectCommands).toHaveLength(6);
+    expect(active).toHaveLength(1);
+    expect(active[0].stacks).toBe(5);
+    expect(active[0].expiresAtMs).toBeCloseTo(
+      finalTriggerTime + 16000,
+      3
+    );
+    expect(
+      resolveActiveEffectsAt(timeline, finalTriggerTime + 16000, {
+        targetKind: 'actor',
+        targetId: actorId,
+        calculatorOnly: true,
+      })
+    ).toEqual([]);
+  });
+
+  it('keeps 10043 scoped to the equipped actor and ignores inherited, wrong-element and blocked acquisition attempts', () => {
+    const inheritedOnly = createRealSoulScenario({
+      actorCharacterId: 107002,
+      soulEssenceId: 10043,
+      effectSkillId: 1900330,
+      initialRuntimeState: {
+        tuningMarks: [createInheritedTuningMark(750, 1, 20_000)],
+      },
+      actionPlan: [],
+    });
+    const wrongElement = createRealSoulScenario({
+      actorCharacterId: 108001,
+      soulEssenceId: 10043,
+      effectSkillId: 1900330,
+      actionPlan: [
+        {
+          id: 'c5-before-wrong-fire',
+          actionKind: 'star-skill',
+          actorCharacterId: 108001,
+          startFrame: 60,
+        },
+      ],
+    });
+    const wrongSource = createRealSoulScenario({
+      actorCharacterId: 107002,
+      soulEssenceId: 10043,
+      effectSkillId: 1900330,
+      durationMs: frameToMs(900),
+      teamCharacterIds: [107002, 107001, 101003],
+      actionPlan: [
+        {
+          id: 'c5-before-source-switch',
+          actionKind: 'switch',
+          sourceCharacterId: 107002,
+          targetCharacterId: 107001,
+          startFrame: 0,
+        },
+        {
+          id: 'c5-before-teammate-wind',
+          actionKind: 'star-skill',
+          actorCharacterId: 107001,
+          startFrame: 300,
+        },
+      ],
+    });
+    const blocked = createRealSoulScenario({
+      actorCharacterId: 107002,
+      soulEssenceId: 10043,
+      effectSkillId: 1900330,
+      actionPlan: [
+        {
+          id: 'c5-before-allowed',
+          actionKind: 'star-skill',
+          actorCharacterId: 107002,
+          startFrame: 60,
+        },
+        {
+          id: 'c5-before-cooldown-blocked',
+          actionKind: 'star-skill',
+          actorCharacterId: 107002,
+          startFrame: 420,
+        },
+      ],
+    });
+    const allMiss = createRealSoulScenario({
+      actorCharacterId: 107002,
+      soulEssenceId: 10043,
+      effectSkillId: 1900330,
+      combatScenario: {
+        projectile: { targetDistance: 0, defaultWillHit: false },
+      },
+      actionPlan: [
+        {
+          id: 'c5-before-all-miss',
+          actionKind: 'star-skill',
+          actorCharacterId: 107002,
+          startFrame: 60,
+        },
+      ],
+    });
+
+    expect(
+      inheritedOnly.verifiedSoulEssenceEffectGeneration.effectCommands
+    ).toEqual([]);
+    expect(
+      wrongElement.verifiedSoulEssenceEffectGeneration.effectCommands
+    ).toEqual([]);
+    expect(
+      wrongSource.verifiedTuningMarkGeneration.getElementEvents.some(
+        event => event.actionId === 'c5-before-teammate-wind'
+      )
+    ).toBe(true);
+    expect(
+      wrongSource.verifiedSoulEssenceEffectGeneration.effectCommands
+    ).toEqual([]);
+    expect(
+      blocked.verifiedSoulEssenceEffectGeneration.effectCommands.some(
+        command => command.sourceActionId === 'c5-before-cooldown-blocked'
+      )
+    ).toBe(false);
+    expect(
+      allMiss.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceActionId === 'c5-before-all-miss'
+      )
+    ).toHaveLength(3);
+  });
+
+  it('bridges a real fire-mark acquisition to 10149 after mutation, refreshes and changes teammate tuning settlement', () => {
+    const sourceActorId = 108001;
+    const sourceActionId = 'c5-fire-acquire-source';
+    const activeActionId = 'c5-fire-buff-active';
+    const actionPlan = [
+      {
+        id: sourceActionId,
+        actionKind: 'star-skill',
+        actorCharacterId: sourceActorId,
+        startFrame: 60,
+      },
+      {
+        id: 'c5-fire-switch',
+        actionKind: 'switch',
+        sourceCharacterId: sourceActorId,
+        targetCharacterId: 101003,
+        startFrame: 400,
+      },
+      {
+        id: activeActionId,
+        actionKind: 'normal-attack',
+        actorCharacterId: 101003,
+        startFrame: 720,
+      },
+    ];
+    const simulate = effectSkillId =>
+      createRealSoulScenario({
+        actorCharacterId: sourceActorId,
+        soulEssenceId: effectSkillId == null ? null : 10149,
+        effectSkillId,
+        durationMs: frameToMs(1000),
+        teamCharacterIds: [sourceActorId, 101003, 101010],
+        actionPlan,
+      });
+    const withSoul = simulate(1900220);
+    const withoutSoul = simulate(null);
+    const commands =
+      withSoul.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10149
+      );
+    const getEvents = withSoul.verifiedTuningMarkGeneration.getElementEvents.filter(
+      event => event.actionId === sourceActionId && event.markId === 150
+    );
+    const tuningPayload = result =>
+      result.verifiedCombatRuntime.damageEvents.find(
+        event =>
+          event.type === 'VERIFIED_TUNING_DAMAGE' &&
+          event.actionId === activeActionId &&
+          event.payload.profileKey === 'fire'
+      )?.payload;
+    const activeWithSoul = tuningPayload(withSoul);
+    const activeWithoutSoul = tuningPayload(withoutSoul);
+
+    expect(getEvents).toHaveLength(2);
+    expect(getEvents.map(event => event.eventId)).toEqual([9, 10]);
+    expect(getEvents[1]).toMatchObject({
+      phase: 'after-mutation',
+      before: 0,
+      delta: 1,
+      after: 1,
+      eventContext: expect.objectContaining({
+        elementId: 150,
+        sourceActorId: 'actor-108001',
+      }),
+    });
+    expect(commands).toHaveLength(3);
+    expect(commands[0]).toMatchObject({
+      sourceActionId,
+      sourceActorId: 'actor-108001',
+      sourceTuningEventIdentity: getEvents[1].eventIdentity,
+      timeMs: frameToMs(79),
+      durationMs: 24000,
+      stackMode: 'refresh',
+      maxStacks: 1,
+      modifiers: [
+        expect.objectContaining({
+          attributeId: 229,
+          sourceRawA: 45,
+          evaluatedValue: 45,
+        }),
+      ],
+    });
+    expect(activeWithSoul.mastery - activeWithoutSoul.mastery).toBeCloseTo(
+      45,
+      6
+    );
+    expect(activeWithSoul.rawDamage).toBeGreaterThan(
+      activeWithoutSoul.rawDamage
+    );
+
+    const targetCommand = commands.find(
+      command => command.targetId === 'actor-101003'
+    );
+    const inheritedFire = createInheritedTuningMark(150, 1, 60_000);
+    const activeReplay = replayRealActionWithSoulCommands({
+      actorCharacterId: 101003,
+      soulEssenceId: 10149,
+      actionId: 'c5-fire-replay-active',
+      actionKind: 'normal-attack',
+      startFrame: 720,
+      commands: [targetCommand],
+      initialRuntimeState: { tuningMarks: [inheritedFire] },
+    });
+    const expiredReplay = replayRealActionWithSoulCommands({
+      actorCharacterId: 101003,
+      soulEssenceId: 10149,
+      actionId: 'c5-fire-replay-expired',
+      actionKind: 'normal-attack',
+      startFrame: 1520,
+      commands: [targetCommand],
+      initialRuntimeState: { tuningMarks: [inheritedFire] },
+    });
+    const replayPayload = (runtime, actionId) =>
+      runtime.damageEvents.find(
+        event =>
+          event.type === 'VERIFIED_TUNING_DAMAGE' &&
+          event.actionId === actionId &&
+          event.payload.profileKey === 'fire'
+      )?.payload;
+    expect(
+      replayPayload(
+        activeReplay.withCommands,
+        'c5-fire-replay-active'
+      ).rawDamage
+    ).toBeGreaterThan(
+      replayPayload(
+        activeReplay.withoutCommands,
+        'c5-fire-replay-active'
+      ).rawDamage
+    );
+    expect(
+      replayPayload(
+        expiredReplay.withCommands,
+        'c5-fire-replay-expired'
+      ).rawDamage
+    ).toBeCloseTo(
+      replayPayload(
+        expiredReplay.withoutCommands,
+        'c5-fire-replay-expired'
+      ).rawDamage,
+      6
+    );
+  });
+
+  it('refreshes 10149 from repeated real acquisitions and rejects inherited, wrong-element, wrong-source and blocked events', () => {
+    const sourceActorId = 108001;
+    const refreshed = createRealSoulScenario({
+      actorCharacterId: sourceActorId,
+      soulEssenceId: 10149,
+      effectSkillId: 1900220,
+      durationMs: frameToMs(2800),
+      teamCharacterIds: [sourceActorId, 101003, 101010],
+      actionPlan: [
+        {
+          id: 'c5-fire-refresh-1',
+          actionKind: 'star-skill',
+          actorCharacterId: sourceActorId,
+          startFrame: 60,
+        },
+        {
+          id: 'c5-fire-refresh-2',
+          actionKind: 'star-skill',
+          actorCharacterId: sourceActorId,
+          startFrame: 1200,
+        },
+      ],
+    });
+    const commands =
+      refreshed.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10149
+      );
+    const sourceCommands = commands.filter(
+      command => command.targetId === 'actor-108001'
+    );
+    const secondTriggerTime = sourceCommands.at(-1).timeMs;
+
+    expect(sourceCommands.map(command => command.sourceActionId)).toEqual([
+      'c5-fire-refresh-1',
+      'c5-fire-refresh-2',
+    ]);
+    const refreshedSoulEffects = resolveActiveEffectsAt(
+      refreshed.effectTimeline,
+      secondTriggerTime + 0.001,
+      {
+        targetKind: 'actor',
+        targetId: 'actor-108001',
+        calculatorOnly: true,
+      }
+    ).filter(effect => effect.effectId === sourceCommands[0].effectId);
+    expect(refreshedSoulEffects).toHaveLength(1);
+    expect(refreshedSoulEffects[0].stacks).toBe(1);
+    expect(refreshedSoulEffects[0].refreshCount).toBe(1);
+    expect(refreshedSoulEffects[0].expiresAtMs).toBeCloseTo(
+      secondTriggerTime + 24000,
+      3
+    );
+
+    const inheritedOnly = createRealSoulScenario({
+      actorCharacterId: sourceActorId,
+      soulEssenceId: 10149,
+      effectSkillId: 1900220,
+      initialRuntimeState: {
+        tuningMarks: [createInheritedTuningMark(150, 1, 20_000)],
+      },
+      actionPlan: [],
+    });
+    const wrongElement = createRealSoulScenario({
+      actorCharacterId: 107002,
+      soulEssenceId: 10149,
+      effectSkillId: 1900220,
+      actionPlan: [
+        {
+          id: 'c5-wrong-wind-acquire',
+          actionKind: 'star-skill',
+          actorCharacterId: 107002,
+          startFrame: 60,
+        },
+      ],
+    });
+    const blocked = createRealSoulScenario({
+      actorCharacterId: sourceActorId,
+      soulEssenceId: 10149,
+      effectSkillId: 1900220,
+      actionPlan: [
+        {
+          id: 'c5-fire-allowed',
+          actionKind: 'star-skill',
+          actorCharacterId: sourceActorId,
+          startFrame: 60,
+        },
+        {
+          id: 'c5-fire-cooldown-blocked',
+          actionKind: 'star-skill',
+          actorCharacterId: sourceActorId,
+          startFrame: 400,
+        },
+      ],
+    });
+    const wrongSource = createRealSoulScenario({
+      actorCharacterId: sourceActorId,
+      soulEssenceId: 10149,
+      effectSkillId: 1900220,
+      durationMs: frameToMs(900),
+      teamCharacterIds: [sourceActorId, 101003, 101010],
+      actionPlan: [
+        {
+          id: 'c5-after-source-switch',
+          actionKind: 'switch',
+          sourceCharacterId: sourceActorId,
+          targetCharacterId: 101003,
+          startFrame: 0,
+        },
+        {
+          id: 'c5-after-teammate-fire',
+          actionKind: 'star-skill',
+          actorCharacterId: 101003,
+          startFrame: 300,
+        },
+      ],
+    });
+    const atCap = createRealSoulScenario({
+      actorCharacterId: sourceActorId,
+      soulEssenceId: 10149,
+      effectSkillId: 1900220,
+      initialRuntimeState: {
+        tuningMarks: [createInheritedTuningMark(150, 5, 20_000)],
+      },
+      actionPlan: [
+        {
+          id: 'c5-after-refresh-at-cap',
+          actionKind: 'star-skill',
+          actorCharacterId: sourceActorId,
+          startFrame: 60,
+        },
+      ],
+    });
+    const allMiss = createRealSoulScenario({
+      actorCharacterId: sourceActorId,
+      soulEssenceId: 10149,
+      effectSkillId: 1900220,
+      combatScenario: {
+        projectile: { targetDistance: 0, defaultWillHit: false },
+      },
+      actionPlan: [
+        {
+          id: 'c5-fire-all-miss',
+          actionKind: 'star-skill',
+          actorCharacterId: sourceActorId,
+          startFrame: 60,
+        },
+      ],
+    });
+
+    expect(
+      inheritedOnly.verifiedSoulEssenceEffectGeneration.effectCommands
+    ).toEqual([]);
+    expect(
+      wrongElement.verifiedSoulEssenceEffectGeneration.effectCommands
+    ).toEqual([]);
+    expect(
+      blocked.verifiedSoulEssenceEffectGeneration.effectCommands.some(
+        command => command.sourceActionId === 'c5-fire-cooldown-blocked'
+      )
+    ).toBe(false);
+    expect(
+      wrongSource.verifiedTuningMarkGeneration.getElementEvents.some(
+        event => event.actionId === 'c5-after-teammate-fire'
+      )
+    ).toBe(true);
+    expect(
+      wrongSource.verifiedSoulEssenceEffectGeneration.effectCommands
+    ).toEqual([]);
+    expect(
+      atCap.verifiedTuningMarkGeneration.getElementEvents.find(
+        event =>
+          event.actionId === 'c5-after-refresh-at-cap' && event.eventId === 10
+      )
+    ).toMatchObject({
+      before: 5,
+      delta: 0,
+      after: 5,
+      outcome: 'refresh-at-cap',
+      applied: true,
+    });
+    expect(
+      atCap.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceActionId === 'c5-after-refresh-at-cap'
+      )
+    ).toHaveLength(3);
+    expect(
+      allMiss.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceActionId === 'c5-fire-all-miss'
+      )
+    ).toHaveLength(3);
   });
 
   it('evaluates every 10097 star through the same base-3 Q16.16 formula', () => {
@@ -3207,13 +3853,22 @@ function replayRealActionWithSoulCommands({
   actionKind,
   startFrame,
   commands,
+  initialRuntimeState = null,
 }) {
+  const replayTeamCharacterIds = [
+    actorCharacterId,
+    ...[101007, 101003, 101010].filter(
+      characterId => Number(characterId) !== Number(actorCharacterId)
+    ),
+  ].slice(0, 3);
   const projection = createRealSoulScenario({
     actorCharacterId,
     soulEssenceId,
     effectSkillId: 0,
     durationMs: frameToMs(startFrame + 480),
+    teamCharacterIds: replayTeamCharacterIds,
     initialRuntimeState: {
+      ...(initialRuntimeState ?? {}),
       enemy: {
         hp: { currentValue: 1_000_000, maxValue: 1_000_000 },
         toughness: { currentValue: 1_000_000, maxValue: 1_000_000 },
@@ -3244,6 +3899,7 @@ function replayRealActionWithSoulCommands({
       actionExecutionPlan,
       controlledActorTimeline,
       actionVariantRuntime: projection.verifiedActionVariantRuntime,
+      tuningGeneration: projection.verifiedTuningMarkGeneration,
       effectTimeline: createEffectRuntimeTimeline({
         scenario,
         actionExecutionPlan,
@@ -3254,6 +3910,88 @@ function replayRealActionWithSoulCommands({
   return {
     withCommands: createRuntime(commands),
     withoutCommands: createRuntime([]),
+  };
+}
+
+function createCanonicalGetElementEvent({
+  action,
+  markId,
+  eventId,
+  transactionIndex,
+  before,
+  after,
+}) {
+  const phase = eventId === 9 ? 'before-mutation' : 'after-mutation';
+  const eventKind =
+    eventId === 9 ? 'element-before-acquire' : 'element-after-acquire';
+  const timeMs = frameToMs(90 + transactionIndex);
+  const transactionIdentity = `fixture:get-element:${action.id}:${transactionIndex}`;
+  const eventIdentity = `${transactionIdentity}:event:${eventId}`;
+  const sourceSequencePath = [
+    ...(action.sourceSequencePath ?? [action.sourceSequenceIndex ?? 0]),
+    eventId === 9 ? 19 : 21,
+    transactionIndex,
+    markId,
+  ];
+  const eventContext = {
+    eventIdentity,
+    transactionIdentity,
+    eventKind,
+    eventId,
+    phase,
+    timeMs,
+    absoluteFrame: 90 + transactionIndex,
+    sourceSequencePath,
+    transactionSourceSequencePath: [
+      ...(action.sourceSequencePath ?? [action.sourceSequenceIndex ?? 0]),
+      20,
+      transactionIndex,
+      markId,
+    ],
+    phaseSequenceIndex: eventId === 9 ? 0 : 1,
+    elementId: markId,
+    markId,
+    profileKey: markId === 750 ? 'wind' : 'fire',
+    before,
+    requested: 1,
+    delta: after - before,
+    after,
+    outcome: after > before ? 'layers-added' : 'refresh-at-cap',
+    applied: true,
+    success: true,
+    initialState: false,
+    acquisitionSourceKind: 'verified-action-effect',
+    sourceActionId: action.id,
+    sourceActorId: action.actorId,
+    sourceHitIdentity: null,
+    sourceEffectIdentity: `fixture:mark:${markId}:${transactionIndex}`,
+  };
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-verified-tuning-get-element-event',
+    status: 'verified-tuning-get-element-event-applied',
+    eventIdentity,
+    transactionIdentity,
+    kind: eventKind,
+    eventId,
+    phase,
+    timeMs,
+    frameIndex: eventContext.absoluteFrame,
+    absoluteFrame: eventContext.absoluteFrame,
+    sourceSequencePath,
+    transactionSourceSequencePath: eventContext.transactionSourceSequencePath,
+    phaseSequenceIndex: eventContext.phaseSequenceIndex,
+    actionId: action.id,
+    actorId: action.actorId,
+    markId,
+    profileKey: eventContext.profileKey,
+    before,
+    delta: after - before,
+    after,
+    outcome: eventContext.outcome,
+    eventContext,
+    appliedToCalculators: true,
+    applied: true,
   };
 }
 

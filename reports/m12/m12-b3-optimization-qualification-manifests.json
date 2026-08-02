@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "3ca3b661eefc7eba",
+  "rosterHash": "0f328c23d795ad6b",
   "records": [
     {
       "objectKind": "character",
@@ -6801,6 +6801,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -6937,7 +6943,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10001].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900480.asset/MonoBehaviour/skill_control_1900480__-3360510152850789063.json|battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801|battle-element-assets.jsonl#path_id=7615727136823255000;elementId=19004802"
         }
       },
-      "manifestHash": "698d9c32254f4525"
+      "manifestHash": "654d549e94a9c1a4"
     },
     {
       "objectKind": "soul-essence",
@@ -7021,6 +7027,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -7157,7 +7169,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10002].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900610.asset/MonoBehaviour/skill_control_1900610__-5226631149718649563.json|battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100|battle-element-assets.jsonl#path_id=-131968735896823040;elementId=19006104"
         }
       },
-      "manifestHash": "afe219a222705ed3"
+      "manifestHash": "72b17a2159079652"
     },
     {
       "objectKind": "soul-essence",
@@ -7185,6 +7197,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -7269,12 +7282,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10008].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900120.asset/MonoBehaviour/skill_control_1900120__672231505877738425.json"
         }
       },
-      "manifestHash": "340394795c1a9b86"
+      "manifestHash": "9a7fc27ef9e35e38"
     },
     {
       "objectKind": "soul-essence",
@@ -7302,6 +7316,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -7386,12 +7401,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10011].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900530.asset/MonoBehaviour/skill_control_1900530__7646815027927349175.json"
         }
       },
-      "manifestHash": "4877cecb0a11111c"
+      "manifestHash": "baa5557ffc1f99f4"
     },
     {
       "objectKind": "soul-essence",
@@ -7504,6 +7520,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "team-actors",
               "effectTargetType": 15,
@@ -7647,7 +7669,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10018].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900400.asset/MonoBehaviour/skill_control_1900400__-2587960116876469994.json|battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002|battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003"
         }
       },
-      "manifestHash": "167296c9c49029b3"
+      "manifestHash": "d7050c0cbfa425b9"
     },
     {
       "objectKind": "soul-essence",
@@ -7736,6 +7758,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "team-actors",
               "effectTargetType": 15,
@@ -7879,7 +7907,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10032].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900340.asset/MonoBehaviour/skill_control_1900340__-7674146641941054446.json|battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401|battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403"
         }
       },
-      "manifestHash": "5d09a59af063fccb"
+      "manifestHash": "c6cbf242631659d0"
     },
     {
       "objectKind": "soul-essence",
@@ -7907,6 +7935,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -7984,12 +8013,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10033].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900360.asset/MonoBehaviour/skill_control_1900360__-440932271014106498.json"
         }
       },
-      "manifestHash": "e1844bf01678bea7"
+      "manifestHash": "8ae631b139032d85"
     },
     {
       "objectKind": "soul-essence",
@@ -8017,6 +8047,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -8094,12 +8125,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10034].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900890.asset/MonoBehaviour/skill_control_1900890__5524612621614489939.json"
         }
       },
-      "manifestHash": "60899e635a6a495b"
+      "manifestHash": "2acf30bf067979a9"
     },
     {
       "objectKind": "soul-essence",
@@ -8183,6 +8215,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -8319,7 +8357,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10037].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900450.asset/MonoBehaviour/skill_control_1900450__2734482160659846208.json|battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500|battle-element-assets.jsonl#path_id=6108188296881701000;elementId=19004501"
         }
       },
-      "manifestHash": "b25e1016b57c862e"
+      "manifestHash": "412ba5dd68db6216"
     },
     {
       "objectKind": "soul-essence",
@@ -8329,24 +8367,9 @@
         "generated/soulessences.json#items[id=10043]",
         "NewTable/soulessence.rows[id=10043]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "soulessence-effect-skill-dynamic-unapplied",
-          "category": "not-implemented",
-          "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
-          "skillId": 1900330,
-          "reasons": [
-            "effect-skill-tag-condition-operator-unsupported",
-            "effect-trigger-event-operator-unsupported"
-          ]
-        },
-        {
-          "code": "strict-soulessence-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied."
-        },
         {
           "code": "soulessence-visual-acceptance-not-published",
           "category": "not-implemented",
@@ -8363,7 +8386,7 @@
         "maximumRank": 6,
         "staticProfileApplied": true,
         "effectSkillId": 1900330,
-        "effectStatus": "source-indexed-runtime-unapplied",
+        "effectStatus": "runtime-applied",
         "sourceIdentity": "NewTable/soulessence.rows[id=10043]",
         "sourceEffectStatus": "effect-skill-dynamic-unapplied",
         "effectMechanics": {
@@ -8374,38 +8397,65 @@
             "skillLogicType": 6,
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900330]"
           },
-          "runtimeStatus": "source-indexed-runtime-unapplied",
-          "mechanismFamily": "source-indexed-composite-effect",
+          "runtimeStatus": "runtime-applied",
+          "mechanismFamily": "equipped-actor-get-element-property-before-acquire",
           "activationPrerequisites": [],
           "trigger": {
             "elementId": 19003301,
             "pathId": -2023989584562330600,
             "eventId": 9,
-            "event": null,
-            "frameAnchor": null,
+            "event": "BeforeGetElement",
+            "frameAnchor": "element-before-acquire",
             "condition": {
-              "kind": "condition-group",
+              "kind": "event-element-id",
+              "conditionType": 13,
+              "skillSlotId": null,
+              "skillSlotName": null,
+              "skillTagId": null,
+              "skillTagName": null,
               "logic": "and",
               "logicValue": 0,
+              "logicName": "AND",
               "conditions": [
                 {
-                  "kind": "unresolved",
+                  "kind": "event-element-id",
                   "conditionType": 13,
-                  "conditionTypeName": null,
+                  "conditionTypeName": "CheckElementId",
                   "conditionValue": 750,
                   "actionKinds": [],
                   "provenanceRequirement": null,
-                  "tuningProfiles": [],
-                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
-                  "status": "static-evidence-gap"
+                  "tuningProfiles": [
+                    {
+                      "profileKey": "wind",
+                      "markId": 750,
+                      "overlimitPacketElementId": 799,
+                      "damageElementId": 796,
+                      "elementTypes": [
+                        22,
+                        32,
+                        43,
+                        307
+                      ],
+                      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
+                      "status": "applied"
+                    }
+                  ],
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
+                  "status": "applied"
                 }
               ],
               "actionKinds": [],
-              "status": "static-evidence-gap",
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301.triggerConditionType|triggerConditionList"
+              "status": "applied",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "team-actors",
               "effectTargetType": 15,
@@ -8538,14 +8588,11 @@
             "damageElementIds": [],
             "activationPrerequisiteElementIds": []
           },
-          "runtimeGaps": [
-            "effect-skill-tag-condition-operator-unsupported",
-            "effect-trigger-event-operator-unsupported"
-          ],
+          "runtimeGaps": [],
           "sourceIdentity": "NewTable/soulessence.rows[id=10043].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900330.asset/MonoBehaviour/skill_control_1900330__-3361609167118804129.json|battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301|battle-element-assets.jsonl#path_id=-4023729244501754000;elementId=19003302"
         }
       },
-      "manifestHash": "908ba7d3261800d1"
+      "manifestHash": "50c3eea140650e71"
     },
     {
       "objectKind": "soul-essence",
@@ -8615,25 +8662,25 @@
               "logicValue": 1,
               "conditions": [
                 {
-                  "kind": "unresolved",
+                  "kind": "event-element-id",
                   "conditionType": 13,
-                  "conditionTypeName": null,
+                  "conditionTypeName": "CheckElementId",
                   "conditionValue": 196,
                   "actionKinds": [],
                   "provenanceRequirement": null,
                   "tuningProfiles": [],
-                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|condition-value-unresolved",
                   "status": "static-evidence-gap"
                 },
                 {
-                  "kind": "unresolved",
+                  "kind": "event-element-id",
                   "conditionType": 13,
-                  "conditionTypeName": null,
+                  "conditionTypeName": "CheckElementId",
                   "conditionValue": 796,
                   "actionKinds": [],
                   "provenanceRequirement": null,
                   "tuningProfiles": [],
-                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionList[1]|condition-type-unresolved|condition-value-unresolved",
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|condition-value-unresolved",
                   "status": "static-evidence-gap"
                 }
               ],
@@ -8643,6 +8690,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -8784,7 +8837,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10044].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900550.asset/MonoBehaviour/skill_control_1900550__-7653067718708357441.json|battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500|battle-element-assets.jsonl#path_id=1889171037961678300;elementId=19005503"
         }
       },
-      "manifestHash": "884c1870e18f1d80"
+      "manifestHash": "f81ae90ce29e4cff"
     },
     {
       "objectKind": "soul-essence",
@@ -8812,6 +8865,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -8889,12 +8943,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10047].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900810.asset/MonoBehaviour/skill_control_1900810__-876374953354589919.json"
         }
       },
-      "manifestHash": "2ad9bdad2e18d50f"
+      "manifestHash": "e8c59fe1a0dc3345"
     },
     {
       "objectKind": "soul-essence",
@@ -8969,6 +9024,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "team-actors",
               "effectTargetType": 15,
@@ -9108,7 +9169,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10048].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900920.asset/MonoBehaviour/skill_control_1900920__-4473087367283292344.json|battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201|battle-element-assets.jsonl#path_id=-5655228325641076000;elementId=19009202"
         }
       },
-      "manifestHash": "6a0060995281ac1c"
+      "manifestHash": "4415d966c324593b"
     },
     {
       "objectKind": "soul-essence",
@@ -9136,6 +9197,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -9213,12 +9275,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10050].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900840.asset/MonoBehaviour/skill_control_1900840__-2378796549379110630.json"
         }
       },
-      "manifestHash": "2642e024d8810c80"
+      "manifestHash": "79a277c1c5fbca88"
     },
     {
       "objectKind": "soul-essence",
@@ -9237,8 +9300,7 @@
           "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
           "skillId": 1900910,
           "reasons": [
-            "effect-skill-tag-condition-operator-unsupported",
-            "effect-trigger-event-operator-unsupported"
+            "effect-skill-tag-condition-operator-unsupported"
           ]
         },
         {
@@ -9274,14 +9336,14 @@
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900910]"
           },
           "runtimeStatus": "source-indexed-runtime-unapplied",
-          "mechanismFamily": "source-indexed-composite-effect",
+          "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
           "activationPrerequisites": [],
           "trigger": {
             "elementId": 19009101,
             "pathId": -7255963679965377000,
             "eventId": 10,
-            "event": null,
-            "frameAnchor": null,
+            "event": "AfterGetElement",
+            "frameAnchor": "element-after-acquire",
             "condition": {
               "kind": "condition-group",
               "logic": "and",
@@ -9305,6 +9367,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -9438,13 +9506,12 @@
             "activationPrerequisiteElementIds": []
           },
           "runtimeGaps": [
-            "effect-skill-tag-condition-operator-unsupported",
-            "effect-trigger-event-operator-unsupported"
+            "effect-skill-tag-condition-operator-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10052].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900910.asset/MonoBehaviour/skill_control_1900910__2559169442837246188.json|battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101|battle-element-assets.jsonl#path_id=4769837230415874000;elementId=19009102"
         }
       },
-      "manifestHash": "a49de72676fa0cd4"
+      "manifestHash": "0c6683832e5b5073"
     },
     {
       "objectKind": "soul-essence",
@@ -9543,6 +9610,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "team-actors",
               "effectTargetType": 15,
@@ -9679,7 +9752,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10055].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900930.asset/MonoBehaviour/skill_control_1900930__3135420117074848428.json|battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301|battle-element-assets.jsonl#path_id=-2274249246834308600;elementId=19009302"
         }
       },
-      "manifestHash": "04fd76e607b889de"
+      "manifestHash": "aba05b31477518ed"
     },
     {
       "objectKind": "soul-essence",
@@ -9707,6 +9780,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -9784,12 +9858,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10056].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900820.asset/MonoBehaviour/skill_control_1900820__1924228818353611560.json"
         }
       },
-      "manifestHash": "d455ec98cffb18f4"
+      "manifestHash": "2f32f7ce852b419c"
     },
     {
       "objectKind": "soul-essence",
@@ -9817,6 +9892,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -9894,12 +9970,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10057].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900860.asset/MonoBehaviour/skill_control_1900860__9138623509120075127.json"
         }
       },
-      "manifestHash": "ca10373c0e56966b"
+      "manifestHash": "9452afe204700bfb"
     },
     {
       "objectKind": "soul-essence",
@@ -9927,6 +10004,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -10004,12 +10082,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10058].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900870.asset/MonoBehaviour/skill_control_1900870__1324522920890314377.json"
         }
       },
-      "manifestHash": "1839251bd0dd2e91"
+      "manifestHash": "d3282ee06eb6fe9b"
     },
     {
       "objectKind": "soul-essence",
@@ -10037,6 +10116,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -10114,12 +10194,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10059].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900850.asset/MonoBehaviour/skill_control_1900850__6970494516969606121.json"
         }
       },
-      "manifestHash": "4485ea442394398e"
+      "manifestHash": "f8175f49689f8240"
     },
     {
       "objectKind": "soul-essence",
@@ -10203,6 +10284,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "team-actors",
               "effectTargetType": 15,
@@ -10341,7 +10428,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10060].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900900.asset/MonoBehaviour/skill_control_1900900__44735022036249210.json|battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001|battle-element-assets.jsonl#path_id=-2685633708192990000;elementId=19009002"
         }
       },
-      "manifestHash": "f31ee10305eafada"
+      "manifestHash": "e7ae9f8625600d6b"
     },
     {
       "objectKind": "soul-essence",
@@ -10369,6 +10456,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -10446,12 +10534,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10061].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900800.asset/MonoBehaviour/skill_control_1900800__-6686526748891625587.json"
         }
       },
-      "manifestHash": "2dfd0a92d89839ca"
+      "manifestHash": "10e83c1ca14b1da2"
     },
     {
       "objectKind": "soul-essence",
@@ -10479,6 +10568,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -10556,12 +10646,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10062].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900830.asset/MonoBehaviour/skill_control_1900830__5312386218762302104.json"
         }
       },
-      "manifestHash": "79b44317dc142dac"
+      "manifestHash": "e19556f23ede2cfe"
     },
     {
       "objectKind": "soul-essence",
@@ -10644,6 +10735,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": null,
             "targetKind": "unresolved",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801"
@@ -10695,7 +10792,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10063].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900880.asset/MonoBehaviour/skill_control_1900880__3748949261925534020.json|battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801"
         }
       },
-      "manifestHash": "6b2bdba3d0f28267"
+      "manifestHash": "1a79de335a7e50a6"
     },
     {
       "objectKind": "soul-essence",
@@ -10723,6 +10820,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -10807,12 +10905,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10071].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900650.asset/MonoBehaviour/skill_control_1900650__855217176283647622.json"
         }
       },
-      "manifestHash": "e9bd0adc47d6a72f"
+      "manifestHash": "24de358d8383bc25"
     },
     {
       "objectKind": "soul-essence",
@@ -10840,6 +10939,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -10929,12 +11029,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10076].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900190.asset/MonoBehaviour/skill_control_1900190__947113783478568836.json"
         }
       },
-      "manifestHash": "a3de69a924d54755"
+      "manifestHash": "9add8433c9e9957d"
     },
     {
       "objectKind": "soul-essence",
@@ -10962,6 +11063,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -11041,12 +11143,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10078].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/skill_control_1900460__-8502177423078042080.json"
         }
       },
-      "manifestHash": "57f9c7668e9ea1ad"
+      "manifestHash": "e0623b66a033dd35"
     },
     {
       "objectKind": "soul-essence",
@@ -11074,6 +11177,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -11153,12 +11257,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10084].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/skill_control_1900600__6392545110535611621.json"
         }
       },
-      "manifestHash": "bc35f71c54c1804a"
+      "manifestHash": "2a4c4767f2cf8f42"
     },
     {
       "objectKind": "soul-essence",
@@ -11257,6 +11362,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "team-actors",
               "effectTargetType": 15,
@@ -11393,7 +11504,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10093].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900230.asset/MonoBehaviour/skill_control_1900230__7491246200405412096.json|battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301|battle-element-assets.jsonl#path_id=475903754845527040;elementId=19002302"
         }
       },
-      "manifestHash": "0cdbb5f96afe7175"
+      "manifestHash": "4d4848883105f982"
     },
     {
       "objectKind": "soul-essence",
@@ -11477,6 +11588,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -11615,7 +11732,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10094].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900660.asset/MonoBehaviour/skill_control_1900660__7785137375177341249.json|battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601|battle-element-assets.jsonl#path_id=8461738275188953000;elementId=19006602"
         }
       },
-      "manifestHash": "1ad22bbfb3d525f0"
+      "manifestHash": "5a0c49b8737ca8bb"
     },
     {
       "objectKind": "soul-essence",
@@ -11643,6 +11760,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -11730,12 +11848,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10095].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900320.asset/MonoBehaviour/skill_control_1900320__-2637092768690775001.json"
         }
       },
-      "manifestHash": "3965d18a9e992d9c"
+      "manifestHash": "b21765306d38807a"
     },
     {
       "objectKind": "soul-essence",
@@ -11819,6 +11938,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -11955,7 +12080,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10097].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900470.asset/MonoBehaviour/skill_control_1900470__7648283824826147029.json|battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700|battle-element-assets.jsonl#path_id=-6749174475042234000;elementId=19004701"
         }
       },
-      "manifestHash": "0b0bdeb71a2f5fdd"
+      "manifestHash": "8a6e1a71b043dc55"
     },
     {
       "objectKind": "soul-essence",
@@ -12039,6 +12164,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -12177,7 +12308,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10098].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900670.asset/MonoBehaviour/skill_control_1900670__-3252376364471466317.json|battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701|battle-element-assets.jsonl#path_id=-5650259386971768000;elementId=19006702"
         }
       },
-      "manifestHash": "1714d3644ca80aaa"
+      "manifestHash": "6e553df4e7ecafb9"
     },
     {
       "objectKind": "soul-essence",
@@ -12251,6 +12382,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -12389,7 +12526,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10101].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900200.asset/MonoBehaviour/skill_control_1900200__-1028192825404748457.json|battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001|battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002"
         }
       },
-      "manifestHash": "f0faa9d4ada5fa83"
+      "manifestHash": "405b723ce0701fb0"
     },
     {
       "objectKind": "soul-essence",
@@ -12494,6 +12631,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": null,
             "targetKind": "unresolved",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501"
@@ -12545,7 +12688,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10107].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900350.asset/MonoBehaviour/skill_control_1900350__715439430624416201.json|battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501"
         }
       },
-      "manifestHash": "4fdf25ebc66b6f65"
+      "manifestHash": "ac2731c3aa65a9fe"
     },
     {
       "objectKind": "soul-essence",
@@ -12573,6 +12716,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -12672,12 +12816,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10121].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900580.asset/MonoBehaviour/skill_control_1900580__5994700394878693879.json"
         }
       },
-      "manifestHash": "0747f91ac52fa44c"
+      "manifestHash": "cd2eeb9b80af92a2"
     },
     {
       "objectKind": "soul-essence",
@@ -12705,6 +12850,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -12795,12 +12941,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10122].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900570.asset/MonoBehaviour/skill_control_1900570__334890856914764825.json"
         }
       },
-      "manifestHash": "0a00099ea56e0f39"
+      "manifestHash": "8ecfb4aed63d41a1"
     },
     {
       "objectKind": "soul-essence",
@@ -12870,14 +13017,14 @@
               "logicValue": 1,
               "conditions": [
                 {
-                  "kind": "unresolved",
+                  "kind": "event-element-id",
                   "conditionType": 13,
-                  "conditionTypeName": null,
+                  "conditionTypeName": "CheckElementId",
                   "conditionValue": 796,
                   "actionKinds": [],
                   "provenanceRequirement": null,
                   "tuningProfiles": [],
-                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|condition-value-unresolved",
                   "status": "static-evidence-gap"
                 }
               ],
@@ -12887,6 +13034,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -13028,7 +13181,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10123].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900590.asset/MonoBehaviour/skill_control_1900590__210735096432786726.json|battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900|battle-element-assets.jsonl#path_id=8480096044321114000;elementId=19005901"
         }
       },
-      "manifestHash": "3f58d56966a0ee11"
+      "manifestHash": "3beb166c4aad1d14"
     },
     {
       "objectKind": "soul-essence",
@@ -13138,6 +13291,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "team-actors",
               "effectTargetType": 15,
@@ -13274,7 +13433,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10124].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900410.asset/MonoBehaviour/skill_control_1900410__4820183586340899112.json|battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101|battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102"
         }
       },
-      "manifestHash": "e1199ab117f2a0d3"
+      "manifestHash": "3e5c876ce814c739"
     },
     {
       "objectKind": "soul-essence",
@@ -13358,6 +13517,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -13494,7 +13659,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10125].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900540.asset/MonoBehaviour/skill_control_1900540__-5207417492774847545.json|battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401|battle-element-assets.jsonl#path_id=-3194128450977334000;elementId=19005402"
         }
       },
-      "manifestHash": "02f6e79a827a49b0"
+      "manifestHash": "af6bbd220970ab6f"
     },
     {
       "objectKind": "soul-essence",
@@ -13601,6 +13766,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -13741,7 +13912,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10130].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900280.asset/MonoBehaviour/skill_control_1900280__4588656220270570984.json|battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801|battle-element-assets.jsonl#path_id=7184896566896581000;elementId=19002802"
         }
       },
-      "manifestHash": "b99616da4d253d67"
+      "manifestHash": "4aa56867c84b44f5"
     },
     {
       "objectKind": "soul-essence",
@@ -13860,6 +14031,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -13996,7 +14173,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10131].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900270.asset/MonoBehaviour/skill_control_1900270__1514447479398424667.json|battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701|battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702"
         }
       },
-      "manifestHash": "713275af1ee691fb"
+      "manifestHash": "66e078a55464c7ac"
     },
     {
       "objectKind": "soul-essence",
@@ -14024,6 +14201,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -14111,12 +14289,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10132].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900430.asset/MonoBehaviour/skill_control_1900430__-3725567591603608227.json"
         }
       },
-      "manifestHash": "8785a07df0371586"
+      "manifestHash": "686903b952368b18"
     },
     {
       "objectKind": "soul-essence",
@@ -14144,6 +14323,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -14226,12 +14406,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10133].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900440.asset/MonoBehaviour/skill_control_1900440__-6971828899594067906.json"
         }
       },
-      "manifestHash": "8659564b664e9071"
+      "manifestHash": "0cb2b0f51e4306d9"
     },
     {
       "objectKind": "soul-essence",
@@ -14479,6 +14660,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -14615,7 +14802,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10136].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900210.asset/MonoBehaviour/skill_control_1900210__4149299819814011094.json|battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101|battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102"
         }
       },
-      "manifestHash": "a36edd1170bd7f72"
+      "manifestHash": "23d07ea1f77c7642"
     },
     {
       "objectKind": "soul-essence",
@@ -14643,6 +14830,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -14727,12 +14915,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10146].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900420.asset/MonoBehaviour/skill_control_1900420__-4853276219982639132.json"
         }
       },
-      "manifestHash": "488ba46780065541"
+      "manifestHash": "db40321a6e470421"
     },
     {
       "objectKind": "soul-essence",
@@ -14816,6 +15005,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -14970,7 +15165,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10147].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900110.asset/MonoBehaviour/skill_control_1900110__4798028882442525532.json|battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101|battle-element-assets.jsonl#path_id=2200502015063215000;elementId=19001001|battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002"
         }
       },
-      "manifestHash": "2cd62db73641795c"
+      "manifestHash": "1ee0d59909849ec5"
     },
     {
       "objectKind": "soul-essence",
@@ -14980,24 +15175,9 @@
         "generated/soulessences.json#items[id=10149]",
         "NewTable/soulessence.rows[id=10149]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "soulessence-effect-skill-dynamic-unapplied",
-          "category": "not-implemented",
-          "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
-          "skillId": 1900220,
-          "reasons": [
-            "effect-skill-tag-condition-operator-unsupported",
-            "effect-trigger-event-operator-unsupported"
-          ]
-        },
-        {
-          "code": "strict-soulessence-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied."
-        },
         {
           "code": "soulessence-visual-acceptance-not-published",
           "category": "not-implemented",
@@ -15014,7 +15194,7 @@
         "maximumRank": 6,
         "staticProfileApplied": true,
         "effectSkillId": 1900220,
-        "effectStatus": "source-indexed-runtime-unapplied",
+        "effectStatus": "runtime-applied",
         "sourceIdentity": "NewTable/soulessence.rows[id=10149]",
         "sourceEffectStatus": "effect-skill-dynamic-unapplied",
         "effectMechanics": {
@@ -15025,38 +15205,65 @@
             "skillLogicType": 6,
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900220]"
           },
-          "runtimeStatus": "source-indexed-runtime-unapplied",
-          "mechanismFamily": "source-indexed-composite-effect",
+          "runtimeStatus": "runtime-applied",
+          "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
           "activationPrerequisites": [],
           "trigger": {
             "elementId": 19002201,
             "pathId": 2849866293729341000,
             "eventId": 10,
-            "event": null,
-            "frameAnchor": null,
+            "event": "AfterGetElement",
+            "frameAnchor": "element-after-acquire",
             "condition": {
-              "kind": "condition-group",
+              "kind": "event-element-id",
+              "conditionType": 13,
+              "skillSlotId": null,
+              "skillSlotName": null,
+              "skillTagId": null,
+              "skillTagName": null,
               "logic": "and",
               "logicValue": 0,
+              "logicName": "AND",
               "conditions": [
                 {
-                  "kind": "unresolved",
+                  "kind": "event-element-id",
                   "conditionType": 13,
-                  "conditionTypeName": null,
+                  "conditionTypeName": "CheckElementId",
                   "conditionValue": 150,
                   "actionKinds": [],
                   "provenanceRequirement": null,
-                  "tuningProfiles": [],
-                  "sourceIdentity": "battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
-                  "status": "static-evidence-gap"
+                  "tuningProfiles": [
+                    {
+                      "profileKey": "fire",
+                      "markId": 150,
+                      "overlimitPacketElementId": 199,
+                      "damageElementId": 196,
+                      "elementTypes": [
+                        22,
+                        31,
+                        43,
+                        307
+                      ],
+                      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=-310946560669858520.types",
+                      "status": "applied"
+                    }
+                  ],
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=-310946560669858520.types",
+                  "status": "applied"
                 }
               ],
               "actionKinds": [],
-              "status": "static-evidence-gap",
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201.triggerConditionType|triggerConditionList"
+              "status": "applied",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "team-actors",
               "effectTargetType": 15,
@@ -15189,14 +15396,11 @@
             "damageElementIds": [],
             "activationPrerequisiteElementIds": []
           },
-          "runtimeGaps": [
-            "effect-skill-tag-condition-operator-unsupported",
-            "effect-trigger-event-operator-unsupported"
-          ],
+          "runtimeGaps": [],
           "sourceIdentity": "NewTable/soulessence.rows[id=10149].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900220.asset/MonoBehaviour/skill_control_1900220__-6482979135949661655.json|battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201|battle-element-assets.jsonl#path_id=6856932050092692000;elementId=19002202"
         }
       },
-      "manifestHash": "920649abc4a49b44"
+      "manifestHash": "519936461515c26b"
     },
     {
       "objectKind": "soul-essence",
@@ -15266,25 +15470,25 @@
               "logicValue": 1,
               "conditions": [
                 {
-                  "kind": "unresolved",
+                  "kind": "event-element-id",
                   "conditionType": 13,
-                  "conditionTypeName": null,
+                  "conditionTypeName": "CheckElementId",
                   "conditionValue": 196,
                   "actionKinds": [],
                   "provenanceRequirement": null,
                   "tuningProfiles": [],
-                  "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|condition-value-unresolved",
                   "status": "static-evidence-gap"
                 },
                 {
-                  "kind": "unresolved",
+                  "kind": "event-element-id",
                   "conditionType": 13,
-                  "conditionTypeName": null,
+                  "conditionTypeName": "CheckElementId",
                   "conditionValue": 796,
                   "actionKinds": [],
                   "provenanceRequirement": null,
                   "tuningProfiles": [],
-                  "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionList[1]|condition-type-unresolved|condition-value-unresolved",
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|condition-value-unresolved",
                   "status": "static-evidence-gap"
                 }
               ],
@@ -15294,6 +15498,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -15437,7 +15647,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10150].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900560.asset/MonoBehaviour/skill_control_1900560__1002074190257504026.json|battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600|battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601"
         }
       },
-      "manifestHash": "92c32759c35eb7c3"
+      "manifestHash": "33414813a81de3e3"
     },
     {
       "objectKind": "soul-essence",
@@ -15521,6 +15731,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -15657,7 +15873,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10151].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900130.asset/MonoBehaviour/skill_control_1900130__6614751741932084313.json|battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301|battle-element-assets.jsonl#path_id=3837107787407859700;elementId=19001302"
         }
       },
-      "manifestHash": "484b411c753bc71c"
+      "manifestHash": "1f6f3b69ba772b88"
     },
     {
       "objectKind": "soul-essence",
@@ -15685,6 +15901,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -15764,12 +15981,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10152].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/skill_control_1900490__6965820132206929978.json"
         }
       },
-      "manifestHash": "6bac03ad5e0d5334"
+      "manifestHash": "717f78560352129e"
     },
     {
       "objectKind": "soul-essence",
@@ -15853,6 +16071,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -15989,7 +16213,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10154].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900240.asset/MonoBehaviour/skill_control_1900240__-7012870850065822120.json|battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401|battle-element-assets.jsonl#path_id=2209371490931731500;elementId=19002402"
         }
       },
-      "manifestHash": "a3526b9a22a71d12"
+      "manifestHash": "d3bc5b70a8ae8936"
     },
     {
       "objectKind": "soul-essence",
@@ -16073,6 +16297,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "self-actor",
               "effectTargetType": 0,
@@ -16209,7 +16439,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10155].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900250.asset/MonoBehaviour/skill_control_1900250__-4475867281655653105.json|battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501|battle-element-assets.jsonl#path_id=6931937794752071000;elementId=19002502"
         }
       },
-      "manifestHash": "b3aeed2ce6e72aa1"
+      "manifestHash": "70b6baaded2ebdde"
     },
     {
       "objectKind": "soul-essence",
@@ -16237,6 +16467,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -16314,12 +16545,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10156].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900260.asset/MonoBehaviour/skill_control_1900260__-4703645512991011607.json"
         }
       },
-      "manifestHash": "d841cf2ea14a6544"
+      "manifestHash": "fdc9592561684c04"
     },
     {
       "objectKind": "soul-essence",
@@ -16394,6 +16626,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": {
               "kind": "team-actors",
               "effectTargetType": 15,
@@ -16533,7 +16771,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10169].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900750.asset/MonoBehaviour/skill_control_1900750__4791716372985824884.json|battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500|battle-element-assets.jsonl#path_id=-7968102161953321000;elementId=19007503"
         }
       },
-      "manifestHash": "275b5419318dbc3d"
+      "manifestHash": "47843aef12dc7862"
     },
     {
       "objectKind": "soul-essence",
@@ -16557,9 +16795,7 @@
             "effect-property-duration-unresolved",
             "effect-property-leaf-not-unique",
             "effect-property-stack-operator-unsupported",
-            "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
-            "effect-trigger-event-operator-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -16596,37 +16832,64 @@
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900740]"
           },
           "runtimeStatus": "source-indexed-runtime-unapplied",
-          "mechanismFamily": "source-indexed-composite-effect",
+          "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
           "activationPrerequisites": [],
           "trigger": {
             "elementId": 19007400,
             "pathId": 1288282584316539400,
             "eventId": 10,
-            "event": null,
-            "frameAnchor": null,
+            "event": "AfterGetElement",
+            "frameAnchor": "element-after-acquire",
             "condition": {
-              "kind": "condition-group",
+              "kind": "event-element-id",
+              "conditionType": 13,
+              "skillSlotId": null,
+              "skillSlotName": null,
+              "skillTagId": null,
+              "skillTagName": null,
               "logic": "or",
               "logicValue": 1,
+              "logicName": "OR",
               "conditions": [
                 {
-                  "kind": "unresolved",
+                  "kind": "event-element-id",
                   "conditionType": 13,
-                  "conditionTypeName": null,
+                  "conditionTypeName": "CheckElementId",
                   "conditionValue": 650,
                   "actionKinds": [],
                   "provenanceRequirement": null,
-                  "tuningProfiles": [],
-                  "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
-                  "status": "static-evidence-gap"
+                  "tuningProfiles": [
+                    {
+                      "profileKey": "earth",
+                      "markId": 650,
+                      "overlimitPacketElementId": 699,
+                      "damageElementId": 697,
+                      "elementTypes": [
+                        22,
+                        33,
+                        43,
+                        307
+                      ],
+                      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=earth]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=650]|battle-element-assets.jsonl#path_id=-1242046641952436421|battle-element-assets.jsonl#path_id=-1242046641952436421|battle-element-assets.jsonl#path_id=1920742622307174111.types",
+                      "status": "applied"
+                    }
+                  ],
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=earth]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=650]|battle-element-assets.jsonl#path_id=-1242046641952436421|battle-element-assets.jsonl#path_id=-1242046641952436421|battle-element-assets.jsonl#path_id=1920742622307174111.types",
+                  "status": "applied"
                 }
               ],
               "actionKinds": [],
-              "status": "static-evidence-gap",
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400.triggerConditionType|triggerConditionList"
+              "status": "applied",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1"
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": null,
             "targetKind": "unresolved",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400"
@@ -16672,15 +16935,13 @@
             "effect-property-duration-unresolved",
             "effect-property-leaf-not-unique",
             "effect-property-stack-operator-unsupported",
-            "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
-            "effect-trigger-event-operator-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10170].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900740.asset/MonoBehaviour/skill_control_1900740__3612376006236613009.json|battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400"
         }
       },
-      "manifestHash": "701a11fcc5776cf6"
+      "manifestHash": "f601e53cd2617c85"
     },
     {
       "objectKind": "soul-essence",
@@ -16779,6 +17040,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": null,
             "targetKind": "unresolved",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401"
@@ -16911,7 +17178,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10175].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900140.asset/MonoBehaviour/skill_control_1900140__2623401305453258783.json|battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401|battle-element-assets.jsonl#path_id=8237672842561680000;elementId=19001402"
         }
       },
-      "manifestHash": "5122179a0c39f04b"
+      "manifestHash": "512bff8140c87fba"
     },
     {
       "objectKind": "soul-essence",
@@ -17011,6 +17278,12 @@
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501.triggerTargetType",
+            "triggerTarget": {
+              "kind": "equipped-actor-source-events",
+              "triggerTargetType": 0,
+              "triggerTargetTypeName": "Self",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+            },
             "target": null,
             "targetKind": "unresolved",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501"
@@ -17144,7 +17417,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10176].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900150.asset/MonoBehaviour/skill_control_1900150__-6680374433071234951.json|battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501|battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502"
         }
       },
-      "manifestHash": "e5a1cc11529d3050"
+      "manifestHash": "f0a6bc1ae650eabc"
     },
     {
       "objectKind": "soul-essence",
@@ -17172,6 +17445,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -17303,12 +17577,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10196].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900790.asset/MonoBehaviour/skill_control_1900790__-7033315392035953286.json"
         }
       },
-      "manifestHash": "3b580f39eb269d23"
+      "manifestHash": "dfb4db2108f39053"
     },
     {
       "objectKind": "soul-essence",
@@ -17336,6 +17611,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -17415,12 +17691,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10197].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/skill_control_1900770__4036970557047763662.json"
         }
       },
-      "manifestHash": "005b7a34d27af5db"
+      "manifestHash": "ffc6eae82410bdfb"
     },
     {
       "objectKind": "soul-essence",
@@ -17448,6 +17725,7 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -17534,12 +17812,13 @@
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
             "effect-trigger-event-operator-unsupported",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10198].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900760.asset/MonoBehaviour/skill_control_1900760__-7896113229959849353.json"
         }
       },
-      "manifestHash": "fc4bf09597b02122"
+      "manifestHash": "d5e8e9c9c57b4f58"
     },
     {
       "objectKind": "soul-essence",
@@ -17565,6 +17844,7 @@
             "effect-property-stack-operator-unsupported",
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ]
         },
@@ -17634,6 +17914,7 @@
             },
             "triggerTargetType": 12,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerTargetType",
+            "triggerTarget": null,
             "target": null,
             "targetKind": "unresolved",
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801"
@@ -17676,19 +17957,20 @@
             "effect-property-stack-operator-unsupported",
             "effect-skill-tag-condition-operator-unsupported",
             "effect-star-values-incomplete",
+            "effect-trigger-source-target-unsupported",
             "effect-trigger-target-unsupported"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10216].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900780.asset/MonoBehaviour/skill_control_1900780__6516213473126657462.json|battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801"
         }
       },
-      "manifestHash": "da29605c7be746a7"
+      "manifestHash": "661702cb10328291"
     }
   ],
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 224,
-      "runtime-integrated": 41
+      "extracted": 222,
+      "runtime-integrated": 43
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -17699,5 +17981,5 @@
     },
     "optimizationReadyTotal": 0
   },
-  "manifestsHash": "20e73a31a02ab336"
+  "manifestsHash": "fde0e0f54cfdde54"
 }
