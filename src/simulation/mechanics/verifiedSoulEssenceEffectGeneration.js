@@ -7,6 +7,7 @@ import {
 import { resolveActionHitWillHit } from '../../domain/actionHitOverrides';
 import { getActionSourceSequencePath } from '../../domain/actionSourceSequence';
 import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
+import { evaluateVerifiedBattleEffectFormula } from './verifiedBattleEffectFormulaRuntime';
 
 export const VERIFIED_SOULESSENCE_EFFECT_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedSoulEssenceEffectGeneration';
@@ -50,18 +51,34 @@ export function createVerifiedSoulEssenceEffectGeneration({
       });
       continue;
     }
+    if (binding.formulaResult?.applied !== true) {
+      unresolved.push({
+        actorId: binding.actor.id,
+        soulEssenceId: binding.soulEssenceId,
+        effectSkillId: binding.definition.effectSkillId,
+        status: 'soulessence-effect-runtime-unresolved',
+        reasons: [
+          binding.formulaResult?.reason ??
+            'soulessence-effect-formula-evaluation-unresolved',
+        ],
+        sourceIdentity: binding.definition.sourceIdentity,
+      });
+      continue;
+    }
     for (const [actionIndex, action] of (scenario.actions ?? []).entries()) {
       if (String(action.actorId) !== String(binding.actor.id)) continue;
       if (executionByActionId.get(action.id)?.execute === false) continue;
       const resolution = actionResolutionById?.get?.(action.id) ?? null;
-      const actionKind =
-        resolution?.actionBinding?.actionKind ??
-        action.actionKind ??
-        action.eventType ??
-        null;
-      if (
-        !binding.definition.trigger?.condition?.actionKinds?.includes(actionKind)
-      ) {
+      const actionContext = resolveSoulTriggerActionContext({
+        action,
+        resolution,
+      });
+      const actionKind = actionContext.actionKind;
+      const conditionMatch = matchesSoulTriggerCondition(
+        binding.definition.trigger?.condition,
+        actionContext
+      );
+      if (!conditionMatch.matched) {
         suppressions.push({
           actionId: action.id,
           actorId: binding.actor.id,
@@ -71,6 +88,11 @@ export function createVerifiedSoulEssenceEffectGeneration({
           expectedActionKinds:
             binding.definition.trigger?.condition?.actionKinds ?? [],
           actualActionKind: actionKind,
+          expectedCondition:
+            binding.definition.trigger?.condition ?? null,
+          actualSkillSlotIds: actionContext.skillSlotIds,
+          actualSkillTagIds: actionContext.skillTagIds,
+          conditionReasons: conditionMatch.reasons,
         });
         continue;
       }
@@ -95,17 +117,27 @@ export function createVerifiedSoulEssenceEffectGeneration({
         });
         continue;
       }
+      const targets = resolveSoulEffectTargets({
+        binding,
+        scenario,
+      });
       effectCommands.push(
-        ...occurrences.map(({ hit }) =>
-          createSoulEffectCommand({
-          binding,
-          action,
-          actionIndex,
-          actionKind,
-          resolution,
-          hit,
-          catalog,
-          })
+        ...occurrences.flatMap(({ hit }) =>
+          targets.map((target, targetIndex) =>
+            createSoulEffectCommand({
+              binding,
+              action,
+              actionIndex,
+              actionKind,
+              actionContext,
+              conditionMatch,
+              resolution,
+              hit,
+              target,
+              targetIndex,
+              catalog,
+            })
+          )
         )
       );
     }
@@ -131,7 +163,19 @@ export function createVerifiedSoulEssenceEffectGeneration({
   };
 }
 
-function resolveActionTriggerOccurrence() {
+function resolveActionTriggerOccurrence({ action, resolution, scenario }) {
+  const hits = Array.isArray(resolution?.hits) ? resolution.hits : [];
+  if (hits.length > 0) {
+    const defaultWillHit = scenario?.projectile?.defaultWillHit !== false;
+    const hasLandedHit = hits.some(hit =>
+      resolveActionHitWillHit(
+        action,
+        resolveSoulTriggerHitIdentity(hit),
+        defaultWillHit
+      )
+    );
+    if (!hasLandedHit) return [];
+  }
   return [{ hit: null }];
 }
 
@@ -174,12 +218,21 @@ function createEquippedSoulBinding(actor, definitionBySoulId) {
   const starValue = definition.effect?.valuesByStar?.find(
     row => Number(row.star) === star
   );
+  const formulaResult = starValue
+    ? evaluateSoulEffectFormula({
+        definition,
+        starValue,
+        star,
+        actor,
+      })
+    : null;
   return {
     actor,
     soulEssenceId,
     definition,
     star: Number.isInteger(star) ? star : null,
     starValue: starValue ?? null,
+    formulaResult,
     cultivationSourceIdentity: effectSkill?.sourceIdentity ?? null,
   };
 }
@@ -189,11 +242,15 @@ function createSoulEffectCommand({
   action,
   actionIndex,
   actionKind,
+  actionContext,
+  conditionMatch,
   resolution,
   hit,
+  target,
+  targetIndex,
   catalog,
 }) {
-  const { definition, starValue, actor } = binding;
+  const { definition, starValue, formulaResult, actor } = binding;
   const effect = definition.effect;
   const frameAnchor = definition.trigger.frameAnchor;
   const frameRate = positiveNumber(resolution?.controlBinding?.frameRate, 60);
@@ -210,11 +267,11 @@ function createSoulEffectCommand({
     getActionSourceSequencePath(action, actionIndex) ?? [actionIndex];
   const triggerSequencePath =
     hit == null
-      ? [...actionSourceSequencePath]
-      : [...actionSourceSequencePath, Number(hit.hitIndex)];
+      ? [...actionSourceSequencePath, targetIndex]
+      : [...actionSourceSequencePath, Number(hit.hitIndex), targetIndex];
   const effectIdentity = `soulessence:${binding.soulEssenceId}:element:${effect.elementId}`;
   return {
-    id: `soulessence|${binding.soulEssenceId}|${action.id}|${effect.elementId}|${frameAnchor}${hit == null ? '' : `|hit:${hit.hitIndex}`}`,
+    id: `soulessence|${binding.soulEssenceId}|${action.id}|${effect.elementId}|${frameAnchor}|target:${target.id}${hit == null ? '' : `|hit:${hit.hitIndex}`}`,
     sourceActionId: action.id,
     sourceActionName: action.name,
     sourceActorId: actor.id,
@@ -227,8 +284,9 @@ function createSoulEffectCommand({
     effectName: `${definition.name}-${effect.name ?? effect.elementId}`,
     operation: EFFECT_OPERATIONS.APPLY,
     targetKind: EFFECT_TARGET_KINDS.ACTOR,
-    targetId: String(actor.id),
-    semanticTargetKind: 'self-actor',
+    targetId: String(target.id),
+    targetName: target.name ?? null,
+    semanticTargetKind: definition.trigger.target?.kind ?? 'self-actor',
     timeMs,
     durationMs: effect.durationMs,
     stackMode: normalizeStackMode(effect.stackMode),
@@ -253,13 +311,12 @@ function createSoulEffectCommand({
         kind: 'battle-property',
         attributeId: effect.attributeId,
         bucket: effect.bucket,
-        valueRaw: starValue.valueRaw,
-        value: starValue.valueRaw,
-        formulaResult: {
-          family: effect.formula.family,
-          value: starValue.valueRaw,
-          reason: null,
-        },
+        valueRaw: formulaResult.value,
+        value: formulaResult.value,
+        sourceRawA: formulaResult.sourceRawA,
+        evaluatedValue: formulaResult.evaluatedValue,
+        formulaIdentity: formulaResult.formulaIdentity,
+        formulaResult,
         sourceElementId: effect.elementId,
         sourceElementPathId: effect.pathId,
         propertyTags: [...(effect.propertyTags ?? [])],
@@ -284,7 +341,10 @@ function createSoulEffectCommand({
       sourceHitIdentity: hit?.sourceIdentity ?? null,
       sourceHitIndex: hit?.hitIndex ?? null,
       sourceHitElementId: hit?.elementId ?? null,
-      skillTagId: definition.trigger.condition.skillTagId,
+      triggerCondition: definition.trigger.condition,
+      matchedConditionIdentities: conditionMatch.matchedConditionIdentities,
+      actionSkillSlotIds: actionContext.skillSlotIds,
+      actionSkillTagIds: actionContext.skillTagIds,
       actionKind,
       actionBindingIdentity:
         resolution?.actionBinding?.identity ??
@@ -299,10 +359,151 @@ function createSoulEffectCommand({
         effect.propertyTagSourceIdentity ?? null,
       star: binding.star,
       starValueSourceIdentity: starValue.sourceIdentity,
+      formulaIdentity: formulaResult.formulaIdentity,
+      formulaSourceIdentity: effect.formula.sourceIdentity ?? null,
+      sourceRawA: formulaResult.sourceRawA,
+      evaluatedValue: formulaResult.evaluatedValue,
+      targetIdentity: {
+        targetKind: definition.trigger.target?.kind ?? 'self-actor',
+        targetId: String(target.id),
+        targetIndex,
+        sourceIdentity: definition.trigger.target?.sourceIdentity ?? null,
+      },
       cultivationSourceIdentity: binding.cultivationSourceIdentity,
       provenance: [definition.sourceIdentity],
     },
   };
+}
+
+function evaluateSoulEffectFormula({ definition, starValue, star, actor }) {
+  if (
+    !Number.isInteger(Number(definition.effect.formula?.commonFunctionId)) ||
+    !Number.isInteger(Number(definition.effect.formula?.baseFunctionId))
+  ) {
+    return {
+      family: definition.effect.formula?.family ?? 'legacy-literal-a',
+      status: 'applied',
+      evaluator: 'legacy-synthetic-literal-a',
+      applied: true,
+      value: Number(starValue.valueRaw),
+      raw: null,
+      sourceRawA: Number(starValue.valueRaw),
+      evaluatedValue: Number(starValue.valueRaw),
+      evaluatedRaw: null,
+      formulaIdentity: 'synthetic-legacy-formula',
+      trace: [],
+      q16Trace: [],
+      reason: null,
+    };
+  }
+  const params = Array.from({ length: 26 }, () => 0);
+  params[0] = Number(starValue.valueRaw);
+  params[6] = Number(definition.effect.formula.commonRatioRaw);
+  return evaluateVerifiedBattleEffectFormula({
+    effect: {
+      ...definition.effect,
+      property: { bucket: definition.effect.bucket },
+      formula: {
+        ...definition.effect.formula,
+        paramsByLevel: { [star]: params },
+      },
+    },
+    level: star,
+    sourceActor: actor,
+  });
+}
+
+function resolveSoulEffectTargets({ binding, scenario }) {
+  if (binding.definition.trigger?.target?.kind === 'team-actors') {
+    return (scenario.actors ?? []).map(actor => ({
+      id: actor.id,
+      name: actor.name ?? null,
+    }));
+  }
+  return [{ id: binding.actor.id, name: binding.actor.name ?? null }];
+}
+
+function resolveSoulTriggerActionContext({ action, resolution }) {
+  const actionBinding = resolution?.actionBinding ?? {};
+  const controlBinding = resolution?.controlBinding ?? {};
+  return {
+    actionKind:
+      actionBinding.actionKind ??
+      action.actionKind ??
+      action.eventType ??
+      null,
+    skillSlotIds: uniqueFiniteIntegers([
+      actionBinding.skillSlotId,
+      actionBinding.skillSlotType,
+      action.skillSlotId,
+      ...extractSkillSlotIds(actionBinding.bindingSourceIdentity),
+    ]),
+    skillTagIds: uniqueFiniteIntegers([
+      controlBinding.logic?.skillTagId,
+      ...parseDelimitedNumbers(controlBinding.logic?.skillTag),
+    ]),
+  };
+}
+
+function matchesSoulTriggerCondition(condition, actionContext) {
+  const legacyConditionShape = !Array.isArray(condition?.conditions);
+  const conditions = Array.isArray(condition?.conditions)
+    ? condition.conditions
+    : condition
+      ? [condition]
+      : [];
+  if (conditions.length === 0) {
+    return {
+      matched: false,
+      matchedConditionIdentities: [],
+      reasons: ['soulessence-effect-trigger-condition-missing'],
+    };
+  }
+  const results = conditions.map(entry => {
+    if (entry.kind === 'skill-slot') {
+      return actionContext.skillSlotIds.includes(Number(entry.skillSlotId)) ||
+        (legacyConditionShape &&
+          (entry.actionKinds ?? []).includes(actionContext.actionKind));
+    }
+    if (entry.kind === 'skill-tag') {
+      return actionContext.skillTagIds.includes(Number(entry.skillTagId)) ||
+        (legacyConditionShape &&
+          (entry.actionKinds ?? []).includes(actionContext.actionKind));
+    }
+    return (entry.actionKinds ?? []).includes(actionContext.actionKind);
+  });
+  const logic = condition?.logic ?? 'and';
+  const matched = logic === 'or' ? results.some(Boolean) : results.every(Boolean);
+  return {
+    matched,
+    matchedConditionIdentities: conditions
+      .filter((_entry, index) => results[index])
+      .map(entry => entry.sourceIdentity)
+      .filter(Boolean),
+    reasons: matched
+      ? []
+      : conditions.map((entry, index) => ({
+          condition: entry,
+          matched: results[index],
+        })),
+  };
+}
+
+function extractSkillSlotIds(sourceIdentity) {
+  return [...String(sourceIdentity ?? '').matchAll(/skillSlots\[[^\]]*slot=(\d+)\]/gu)]
+    .map(match => Number(match[1]));
+}
+
+function parseDelimitedNumbers(value) {
+  if (Array.isArray(value)) return value.map(Number);
+  return String(value ?? '')
+    .split(/[^\d-]+/u)
+    .filter(Boolean)
+    .map(Number);
+}
+
+function uniqueFiniteIntegers(values) {
+  return [...new Set(values.map(Number).filter(Number.isInteger))];
 }
 
 function isSoulTriggerHitWithinAction(action, resolution, hit) {

@@ -59,12 +59,22 @@ export function evaluateVerifiedBattleEffectFormula({
   sourceActor = null,
 } = {}) {
   const contract = classifyVerifiedBattleEffectFormula(effect);
+  const formulaIdentity =
+    effect.formula?.formulaIdentity ??
+    effect.formulaIdentity ??
+    effect.sourceIdentity ??
+    effect.sourceIdentities ??
+    null;
   if (!contract.applied) {
     return {
       ...contract,
       value: null,
       raw: null,
       trace: [],
+      formulaIdentity,
+      sourceRawA: null,
+      evaluatedValue: null,
+      evaluatedRaw: null,
       reason:
         contract.status === 'delegated'
           ? 'formula-delegated-to-verified-tuning-runtime'
@@ -82,6 +92,10 @@ export function evaluateVerifiedBattleEffectFormula({
       value: null,
       raw: null,
       trace: [],
+      formulaIdentity,
+      sourceRawA: a,
+      evaluatedValue: null,
+      evaluatedRaw: null,
       reason: 'formula-parameters-a-or-g-missing',
     };
   }
@@ -104,49 +118,16 @@ export function evaluateVerifiedBattleEffectFormula({
     const ratioRaw = qFromBasisPoints(a);
     const commonRaw = qFromBasisPoints(g);
     const resultRaw = qMul(qMul(sourceRaw, ratioRaw), commonRaw);
-    return {
-      ...contract,
-      value: qToNumber(resultRaw),
-      raw: resultRaw.toString(),
-      trace: [
-        {
-          step: 'source-actor-tuning-strength',
-          input: sourceTuning,
-          raw: sourceRaw.toString(),
-        },
-        {
-          step: 'base-function-2008-a-per-10000',
-          input: a,
-          raw: ratioRaw.toString(),
-        },
-        {
-          step: 'common-function-1-g-per-10000',
-          input: g,
-          raw: commonRaw.toString(),
-        },
-        { step: 'q16.16-multiply', raw: resultRaw.toString() },
-      ],
-      sourceIdentity:
-        effect.sourceIdentity ?? effect.sourceIdentities ?? null,
-      reason: null,
-    };
-  }
-  const baseRaw = qFromFloat(a);
-  const commonRaw = qFromBasisPoints(g);
-  const resultRaw = qMul(baseRaw, commonRaw);
-  return {
-    ...contract,
-    value: qToNumber(resultRaw),
-    raw: resultRaw.toString(),
-    trace: [
+    const trace = [
       {
-        step:
-          contract.family ===
-          'basis-point-property-a-with-common-ratio'
-            ? 'base-function-3-basis-point-property-a'
-            : 'base-function-5-a',
+        step: 'source-actor-tuning-strength',
+        input: sourceTuning,
+        raw: sourceRaw.toString(),
+      },
+      {
+        step: 'base-function-2008-a-per-10000',
         input: a,
-        raw: baseRaw.toString(),
+        raw: ratioRaw.toString(),
       },
       {
         step: 'common-function-1-g-per-10000',
@@ -154,10 +135,80 @@ export function evaluateVerifiedBattleEffectFormula({
         raw: commonRaw.toString(),
       },
       { step: 'q16.16-multiply', raw: resultRaw.toString() },
-    ],
+    ];
+    return {
+      ...contract,
+      value: qToNumber(resultRaw),
+      raw: resultRaw.toString(),
+      trace,
+      q16Trace: trace,
+      formulaIdentity,
+      sourceRawA: a,
+      evaluatedValue: qToNumber(resultRaw),
+      evaluatedRaw: resultRaw.toString(),
+      sourceIdentity:
+        effect.sourceIdentity ?? effect.sourceIdentities ?? null,
+      reason: null,
+    };
+  }
+  const commonRaw = qFromBasisPoints(g);
+  const sourceBaseRaw = qFromFloat(a);
+  const evaluatedBaseRaw =
+    contract.family === 'basis-point-property-a-with-common-ratio'
+      ? qFromSourceBasisPoints(a)
+      : sourceBaseRaw;
+  const evaluatedResultRaw = qMul(evaluatedBaseRaw, commonRaw);
+  const outputUsesEvaluatedValue =
+    contract.family === 'basis-point-property-a-with-common-ratio' &&
+    resolveEffectPropertyBucket(effect) === 'dynamicExtra';
+  const outputRaw = outputUsesEvaluatedValue
+    ? evaluatedResultRaw
+    : qMul(sourceBaseRaw, commonRaw);
+  const trace = [
+    {
+      step:
+        contract.family ===
+        'basis-point-property-a-with-common-ratio'
+          ? 'base-function-3-a-per-10000'
+          : 'base-function-5-a',
+      input: a,
+      raw: evaluatedBaseRaw.toString(),
+      sourceRaw: sourceBaseRaw.toString(),
+    },
+    {
+      step: 'common-function-1-g-per-10000',
+      input: g,
+      raw: commonRaw.toString(),
+    },
+    {
+      step: 'q16.16-multiply',
+      raw: evaluatedResultRaw.toString(),
+      outputRaw: outputRaw.toString(),
+    },
+  ];
+  return {
+    ...contract,
+    value: qToNumber(outputRaw),
+    raw: outputRaw.toString(),
+    trace,
+    q16Trace: trace,
+    formulaIdentity,
+    sourceRawA: a,
+    evaluatedValue: qToNumber(evaluatedResultRaw),
+    evaluatedRaw: evaluatedResultRaw.toString(),
     sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities ?? null,
     reason: null,
   };
+}
+
+function resolveEffectPropertyBucket(effect) {
+  return effect?.property?.bucket ?? effect?.bucket ?? null;
+}
+
+function qFromSourceBasisPoints(value) {
+  return Number.isInteger(value)
+    ? qFromBasisPoints(value)
+    : qFromFloat(value / 10_000);
 }
 
 function resolveFormulaParams(effect, level) {

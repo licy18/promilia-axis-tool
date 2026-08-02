@@ -1,11 +1,17 @@
 {
-  "schemaVersion": 2,
-  "phase": "M12-B3-C-R1",
+  "schemaVersion": 3,
+  "phase": "M12-B3-C2",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "5878ef8ca5bcff5eb0bdafeb92571837faaff865",
+  "baseCommit": "2804f201ac2a6ea4eebc1339703a9d40c0aba5a5",
   "implementationCommit": "git-self",
+  "acceptedPredecessor": {
+    "phase": "M12-B3-C-R1",
+    "commit": "2804f201ac2a6ea4eebc1339703a9d40c0aba5a5",
+    "status": "product-accepted"
+  },
   "scope": {
-    "batch": "battle-property-tag-source-and-settlement-closure",
+    "batch": "ultimate-all-hero-point-buffs-and-limit-counter-self-buff",
+    "soulEssenceIds": [10055, 10093, 10097],
     "formalSearchExecuted": false,
     "m12cLocked": true,
     "fixedCultivationChanged": false,
@@ -19,12 +25,12 @@
       "sha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
       "rowCount": 14781
     },
-    "il2cppBattlePropertyTags": {
+    "il2cppTriggerContract": {
       "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
       "bytes": 97428254,
       "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
-      "sourceIdentity": "ESkillTagType|EBattlePropertyTag",
-      "contractHash": "146e6a9a7db86606"
+      "sourceIdentity": "EElementTriggerConditionType|EElementTriggerFixedConditionType|ESkillSlotType|ESkillTagType|ETriggerEffectTargetType",
+      "contractHash": "3ea277c2d63e2d6d"
     },
     "soulControlClosure": {
       "skillCount": 62,
@@ -39,78 +45,99 @@
       "sha256": "8985e7ce5fa74b703caf39430e29aa3a4db212348df6653b1529f58cf4b7c18d"
     }
   },
-  "propertyTagRemediation": {
-    "rootCause": "effect-leaf defaultPropertyTags were dropped before modifier generation and hit settlement did not query attributes with the final verified hit property tags",
-    "verifiedBindings": [
-      {
-        "skillTagId": 1,
-        "skillTagName": "NormalAttack",
-        "actionKind": "normal-attack",
-        "propertyTag": 300,
-        "propertyTagName": "NormalAttack",
-        "status": "applied"
+  "compiledContracts": {
+    "conditionLogic": {
+      "10055": "CheckSkillSlot(6)=UltraSkill(4) OR CheckSkillType(11)=UltraSkill(4)",
+      "10093": "CheckSkillSlot(6)=UltraSkill(4) OR CheckSkillType(11)=UltraSkill(4)",
+      "10097": "CheckSkillType(11)=ExtremityAttack(11)"
+    },
+    "targetSource": "triggerEffectList[].targetType",
+    "targets": {
+      "10055": "AllHero(15)",
+      "10093": "AllHero(15)",
+      "10097": "Self(0)"
+    },
+    "formulaRegistry": "AzPrVerifiedBattleEffectFormulaRegistry",
+    "formulas": {
+      "10055": {
+        "base": "A",
+        "common": "G/10000",
+        "valuesByStar": [60, 75, 90, 105]
       },
-      {
-        "skillTagId": 2,
-        "skillTagName": "WhackAttack",
-        "actionKind": "charged-attack",
-        "propertyTag": 301,
-        "propertyTagName": "Skill1",
-        "status": "applied"
+      "10093": {
+        "base": "A/10000",
+        "common": "G/10000",
+        "sourceRawAByStar": [938000, 1250000, 1563000, 1875000],
+        "valuesByStar": [93.8, 125, 156.3, 187.5]
+      },
+      "10097": {
+        "base": "A/10000",
+        "common": "G/10000",
+        "sourceRawAByStar": [1125000, 1500000, 1875000, 2250000],
+        "valuesByStar": [112.5, 150, 187.5, 225]
       }
-    ],
-    "matchSemantics": {
-      "emptyModifierTags": "unscoped",
-      "singleModifierTag": "single-exact",
-      "multipleModifierTags": "evidence-open-runtime-blocked",
-      "unknownHitTag": "not-applied-with-structured-evidence-gap"
     },
-    "unresolvedPropertyTags": {
-      "values": [302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316],
-      "status": "static-evidence-gap",
-      "reason": "battle-property-tag-action-binding-not-evidence-closed"
+    "traceFields": [
+      "sourceRawA",
+      "formulaIdentity",
+      "q16Trace",
+      "evaluatedValue",
+      "sourceActorId",
+      "formulaSourceActorId",
+      "effectAdderActorId",
+      "targetId"
+    ]
+  },
+  "runtimeMatrix": {
+    "ultimateTeamBuffs": {
+      "sourceSoulEssenceIds": [10055, 10093],
+      "frameAnchor": "action-end",
+      "commandCountPerTrigger": 3,
+      "targetKind": "team-actors",
+      "directKiboTargetCommandCount": 0,
+      "triggeringUltimateReceivesOwnBuff": false,
+      "switchPreservesRemainingDuration": true,
+      "stackMode": "refresh",
+      "rightOpenExpiry": true
     },
-    "runtimeAppliedSoulAudit": {
-      "sourceCount": 9,
-      "driftCount": 0,
-      "scopedEffects": [
-        { "soulEssenceId": 10060, "effectElementId": 19009002, "propertyTags": [300] },
-        { "soulEssenceId": 10094, "effectElementId": 19006602, "propertyTags": [301] },
-        { "soulEssenceId": 10098, "effectElementId": 19006702, "propertyTags": [301] }
-      ],
-      "unscopedEffects": [10001, 10002, 10037, 10125, 10154, 10155]
+    "limitCounterBuff": {
+      "sourceSoulEssenceId": 10097,
+      "verifiedActionKind": "limit-counter",
+      "verifiedControl": "10101025/sub0",
+      "verifiedSkillTag": 11,
+      "frameAnchor": "action-start",
+      "sameActionHitsReceiveBuff": true,
+      "stackMode": "refresh",
+      "rightOpenExpiry": true
     },
-    "settlementBoundary": "the final resolved control binding supplies the hit skillTag; all source and target runtime attribute queries used by HP and toughness settlement receive the same verified property tag set"
+    "suppression": {
+      "nonMatchingActionKinds": true,
+      "blockedExecution": true,
+      "allVerifiedHitsMissed": true
+    },
+    "persistence": {
+      "canonicalReplay": true,
+      "cycleEffectInheritance": true,
+      "sourceAndTargetIdentityPreserved": true
+    }
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 9,
-    "runtimeUnappliedSoulEssenceCount": 53,
+    "runtimeAppliedSoulEssenceCount": 12,
+    "runtimeUnappliedSoulEssenceCount": 50,
     "runtimeAppliedSetSkillCount": 0,
-    "crossActionMatrix": {
-      "10060": "star-skill trigger; later normal attack receives the modifier; charged and other skill hits do not",
-      "10094": "star-skill trigger; later charged attack receives the modifier; normal and other skill hits do not",
-      "10098": "landed charged hit applies after settlement; later charged hits receive the layer; normal, star-skill, ultimate, and Kibo hits do not"
+    "newlyAppliedSoulEssenceIds": [10055, 10093, 10097],
+    "preservedRuntimeAppliedSoulEssenceIds": [10001, 10002, 10037, 10060, 10094, 10098, 10125, 10154, 10155],
+    "propertyTagRegression": {
+      "10060": [300],
+      "10094": [301],
+      "10098": [301],
+      "driftCount": 0
     },
-    "preservedSemantics": [
-      "per-hit miss suppression",
-      "same-frame hit sequence",
-      "duration and expiry",
-      "replay and cycle inheritance"
-    ],
-    "explicitlyUnapplied": [
-      {
-        "objectKind": "soul-essence",
-        "objectId": 10018,
-        "reason": "effect-activation-condition-operator-unsupported",
-        "evidenceBoundary": "outer element 19004001 requires two thunder tuning marks"
-      },
-      {
-        "objectKind": "set-skill",
-        "objectCount": 12,
-        "reason": "set-skill-runtime-operator-not-implemented",
-        "thresholdActivationStatus": "source-indexed-separate-from-runtime-effect"
-      }
-    ]
+    "explicitlyUnapplied": {
+      "soulEssenceCount": 50,
+      "setSkillCount": 12,
+      "reason": "source evidence or canonical runtime operator remains incomplete"
+    }
   },
   "qualification": {
     "denominators": {
@@ -120,9 +147,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 452,
+    "blockingUniqueGapCount": 446,
     "blockingByCategory": {
-      "not-implemented": 436,
+      "not-implemented": 430,
       "evidence-insufficient": 16
     },
     "formalAdmissions": {
@@ -135,20 +162,21 @@
   },
   "hashes": {
     "sourceSnapshotHash": "fcf7e135b22019c8",
-    "rosterHash": "c55413ac0c470726",
-    "manifestsHash": "3b82c4d160714d77",
-    "ledgerHash": "9c7b85320cc95012",
-    "bindingMatrixHash": "5ab7cda81c827796",
-    "qualificationCatalogHash": "02e994d39cb03b85",
-    "dynamicLoadoutEffectCensusHash": "23f55b801a5f0e31",
-    "soulEssenceEffectCatalogHash": "a63cde47d91815d6",
-    "soulEssenceSourceSnapshotHash": "6d9abffd3c83a853",
-    "battlePropertyTagContractHash": "146e6a9a7db86606"
+    "rosterHash": "ab1fe6bdba580f21",
+    "manifestsHash": "ddd8540432f737bc",
+    "ledgerHash": "44943aece7e05da0",
+    "bindingMatrixHash": "ef739ad3c350c724",
+    "qualificationCatalogHash": "ca1a9dae97651348",
+    "dynamicLoadoutEffectCensusHash": "d67e16da316ccb87",
+    "soulEssenceEffectCatalogHash": "b3fd516e07fd6424",
+    "soulEssenceSourceSnapshotHash": "a820d6ec9704f111",
+    "battlePropertyTagContractHash": "146e6a9a7db86606",
+    "soulEssenceTriggerContractHash": "3ea277c2d63e2d6d"
   },
   "verification": {
-    "focusedPropertyTagAndRuntime": {
+    "focusedMechanics": {
       "files": 5,
-      "tests": 85,
+      "tests": 77,
       "status": "passed"
     },
     "machineAxis": {
@@ -159,11 +187,12 @@
     "characterProfileGolden": {
       "files": 3,
       "tests": 34,
-      "status": "passed"
+      "status": "passed",
+      "gameplayHashDrift": 0
     },
     "canonicalMigrationAndCombatRuntime": {
       "files": 3,
-      "tests": 33,
+      "tests": 39,
       "status": "passed",
       "gameplayAssertionDrift": 0
     },
@@ -180,9 +209,12 @@
         "character-combat",
         "verified-combat",
         "kibo-headless"
-      ]
+      ],
+      "appliedSoulSourceCount": 12,
+      "appliedSoulSourceDriftCount": 0
     },
-    "productionBuild": "passed"
+    "productionBuild": "passed",
+    "gitDiffCheck": "passed"
   },
   "knownNonBlockingRisks": [
     "Sass @import deprecation warning",

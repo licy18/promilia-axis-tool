@@ -7,8 +7,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 9,
-      runtimeUnappliedCount: 65,
+      runtimeAppliedCount: 12,
+      runtimeUnappliedCount: 62,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -26,6 +26,109 @@ describe('M12-B3-C dynamic loadout effect census', () => {
           definition.sourceIdentity
       )
     ).toBe(true);
+  });
+
+  it('compiles the ultimate OR selectors, AllHero target and point-valued formula family', () => {
+    const definitions = new Map(
+      soulCatalog.definitions.map(definition => [
+        definition.soulEssenceId,
+        definition,
+      ])
+    );
+
+    for (const soulEssenceId of [10055, 10093]) {
+      expect(definitions.get(soulEssenceId)).toMatchObject({
+        runtimeStatus: 'runtime-applied',
+        trigger: {
+          condition: {
+            logic: 'or',
+            logicValue: 1,
+            conditions: [
+              expect.objectContaining({
+                kind: 'skill-slot',
+                conditionType: 6,
+                skillSlotId: 4,
+              }),
+              expect.objectContaining({
+                kind: 'skill-tag',
+                conditionType: 11,
+                skillTagId: 4,
+              }),
+            ],
+          },
+          target: expect.objectContaining({
+            kind: 'team-actors',
+            effectTargetType: 15,
+          }),
+        },
+        runtimeGaps: [],
+      });
+    }
+    expect(definitions.get(10093)).toMatchObject({
+      effect: {
+        bucket: 'dynamicExtra',
+        formula: {
+          baseFunctionId: 3,
+          baseExpression: 'A/10000',
+          family: 'basis-point-property-a-with-common-ratio',
+        },
+      },
+    });
+    expect(definitions.get(10097)).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      trigger: {
+        condition: {
+          logic: 'and',
+          conditions: [
+            expect.objectContaining({
+              kind: 'skill-tag',
+              skillTagId: 11,
+            }),
+          ],
+        },
+        target: expect.objectContaining({
+          kind: 'self-actor',
+          effectTargetType: 0,
+        }),
+      },
+      runtimeGaps: [],
+    });
+    expect(soulCatalog.triggerContract).toMatchObject({
+      sourceKind: 'il2cpp-soulessence-trigger-contract',
+      logicBindings: expect.arrayContaining([
+        expect.objectContaining({
+          enumName: 'OR',
+          value: 1,
+          runtimeLogic: 'or',
+          sourceIdentity: expect.stringContaining(
+            'EElementTriggerConditionType.OR=1'
+          ),
+        }),
+      ]),
+      conditionTypeBindings: expect.arrayContaining([
+        expect.objectContaining({
+          enumName: 'CheckSkillSlot',
+          value: 6,
+          selectorKind: 'skill-slot',
+        }),
+        expect.objectContaining({
+          enumName: 'CheckSkillType',
+          value: 11,
+          selectorKind: 'skill-tag',
+        }),
+      ]),
+      targetBindings: expect.arrayContaining([
+        expect.objectContaining({
+          enumName: 'AllHero',
+          value: 15,
+          targetKind: 'team-actors',
+          sourceIdentity: expect.stringContaining(
+            'ETriggerEffectTargetType.AllHero=15'
+          ),
+        }),
+      ]),
+    });
+    expect(census.triggerContract).toEqual(soulCatalog.triggerContract);
   });
 
   it('keeps threshold activation distinct from set-effect runtime qualification', () => {
@@ -141,8 +244,11 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       [10001, []],
       [10002, []],
       [10037, []],
+      [10055, []],
       [10060, [300]],
+      [10093, []],
       [10094, [301]],
+      [10097, []],
       [10098, [301]],
       [10125, []],
       [10154, []],

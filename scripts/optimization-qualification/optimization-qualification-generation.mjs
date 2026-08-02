@@ -284,6 +284,8 @@ export async function createOptimizationQualificationArtifacts({
     setSkills,
     propertyTagContract:
       sources.il2cppRuntimeContracts.value.battlePropertyTags,
+    triggerContract:
+      sources.il2cppRuntimeContracts.value.soulEffectTriggers,
   });
   sources.battleElementAssets = {
     ...soulEssenceEffects.sourceSnapshot.battleElements,
@@ -393,7 +395,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C-R1',
+      phase: 'M12-B3-C2',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1335,8 +1337,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C-R1',
-    status: 'b3-c-r1-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C2',
+    status: 'b3-c2-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1770,7 +1772,7 @@ function createSourceSnapshot(sources) {
 function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
-  return '# M12-B3-C-R1 Dynamic Loadout Effect Family Closure\n\n' +
+  return '# M12-B3-C2 Dynamic Loadout Effect Family Closure\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1779,7 +1781,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batch: leaf defaultPropertyTags are preserved as source-bound effect scope; verified skillTag 1/2 map to battle property tags 300/301 with single-tag exact matching, while unknown or multi-tag mappings remain blocked. Soul essences 10060, 10094, and 10098 therefore apply only to their verified normal/charged hit classes. Soul essence 10018 remains blocked by its outer tuning-mark prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
+    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098. C2 additionally compiles verified OR skill-slot/skill-tag selectors, trigger-effect AllHero targets, and Q16.16 point formulas for 10055/10093 ultimate-end team buffs plus the 10097 limit-counter-start self buff. Soul essence 10018 remains blocked by its outer tuning-mark prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n';
@@ -1841,10 +1843,34 @@ async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
     namespace: 'Lens.Gameplay.Modules.BigWorld',
     declaration: 'public enum EBattlePropertyTag',
   });
+  const skillSlotBlock = extractIl2CppTypeBlock(text, {
+    namespace: 'Lens.Gameplay.Modules.BigWorld',
+    declaration: 'public enum ESkillSlotType',
+  });
+  const triggerConditionLogicBlock = extractIl2CppTypeBlock(text, {
+    namespace: 'Lens.Gameplay.Modules.BigWorld',
+    declaration: 'public enum EElementTriggerConditionType',
+  });
+  const triggerFixedConditionBlock = extractIl2CppTypeBlock(text, {
+    namespace: 'Lens.Gameplay.Modules.BigWorld',
+    declaration: 'public enum EElementTriggerFixedConditionType',
+  });
+  const triggerEffectTargetBlock = extractIl2CppTypeBlock(text, {
+    namespace: 'Lens.Gameplay.Modules.BigWorld',
+    declaration: 'public enum ETriggerEffectTargetType',
+  });
   const battlePropertyTags = createBattlePropertyTagContract({
     sourcePath: normalizeSourcePath(sourcePath, projectRoot),
     skillTagBlock,
     battlePropertyTagBlock,
+  });
+  const soulEffectTriggers = createSoulEffectTriggerContract({
+    sourcePath: normalizeSourcePath(sourcePath, projectRoot),
+    skillSlotBlock,
+    skillTagBlock,
+    triggerConditionLogicBlock,
+    triggerFixedConditionBlock,
+    triggerEffectTargetBlock,
   });
   const heroRuntimeDeclarations = {
     fields: ['public int lv;', 'public int heroRank;'].map(declaration => ({
@@ -1922,12 +1948,162 @@ async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
     value: {
       heroRuntimeDeclarations,
       battlePropertyTags,
+      soulEffectTriggers,
       equipmentInstance: {
         fields: ['score', 'bGoldSide', 'maxValue'],
         instanceOwned: true,
       },
     },
   };
+}
+
+function createSoulEffectTriggerContract({
+  sourcePath,
+  skillSlotBlock,
+  skillTagBlock,
+  triggerConditionLogicBlock,
+  triggerFixedConditionBlock,
+  triggerEffectTargetBlock,
+}) {
+  const logicBindings = [
+    { value: 0, enumName: 'AND', runtimeLogic: 'and' },
+    { value: 1, enumName: 'OR', runtimeLogic: 'or' },
+  ].map(binding => {
+    assertIl2CppEnumMember({
+      block: triggerConditionLogicBlock,
+      enumName: 'EElementTriggerConditionType',
+      memberName: binding.enumName,
+      value: binding.value,
+    });
+    return {
+      ...binding,
+      status: 'applied',
+      sourceIdentity: `${sourcePath}#EElementTriggerConditionType.${binding.enumName}=${binding.value}`,
+    };
+  });
+  const conditionTypeBindings = [
+    {
+      value: 6,
+      enumName: 'CheckSkillSlot',
+      selectorKind: 'skill-slot',
+      description: '事件技能槽位',
+    },
+    {
+      value: 11,
+      enumName: 'CheckSkillType',
+      selectorKind: 'skill-tag',
+      description: '事件技能Tag',
+    },
+  ].map(binding => {
+    assertIl2CppEnumMember({
+      block: triggerFixedConditionBlock,
+      enumName: 'EElementTriggerFixedConditionType',
+      memberName: binding.enumName,
+      value: binding.value,
+      description: binding.description,
+    });
+    return {
+      ...binding,
+      status: 'applied',
+      sourceIdentity: `${sourcePath}#EElementTriggerFixedConditionType.${binding.enumName}=${binding.value}`,
+    };
+  });
+  const skillSlotBindings = [
+    {
+      value: 4,
+      enumName: 'UltraSkill',
+      actionKinds: ['ultimate'],
+      description: '大招',
+    },
+  ].map(binding => {
+    assertIl2CppEnumMember({
+      block: skillSlotBlock,
+      enumName: 'ESkillSlotType',
+      memberName: binding.enumName,
+      value: binding.value,
+      description: binding.description,
+    });
+    return {
+      ...binding,
+      status: 'applied',
+      sourceIdentity: `${sourcePath}#ESkillSlotType.${binding.enumName}=${binding.value}`,
+    };
+  });
+  const skillTagDeclarations = [
+    ['NormalAttack', 1, 'normal-attack', '角色普攻'],
+    ['WhackAttack', 2, 'charged-attack', '角色重击'],
+    ['NormalSkill', 3, 'star-skill', '角色小技能'],
+    ['UltraSkill', 4, 'ultimate', '角色大招'],
+    ['Dodge', 6, 'dodge-attack', '角色闪避'],
+    ['Jump', 7, 'plunging-attack', '角色跳跃'],
+    ['AerialAttack', 9, 'plunging-attack', '角色下落攻击'],
+    ['ExtremityAttack', 11, 'limit-counter', '角色极限反击'],
+    ['PerfectDodge', 12, 'perfect-parry', '角色完美闪避'],
+    ['HeroJointStrikeSkill', 17, 'star-combo', '角色合击技能'],
+  ];
+  const skillTagBindings = skillTagDeclarations.map(
+    ([enumName, value, actionKind, description]) => {
+      assertIl2CppEnumMember({
+        block: skillTagBlock,
+        enumName: 'ESkillTagType',
+        memberName: enumName,
+        value,
+        description,
+      });
+      return {
+        value,
+        enumName,
+        actionKinds: [actionKind],
+        status: 'applied',
+        sourceIdentity: `${sourcePath}#ESkillTagType.${enumName}=${value}`,
+      };
+    }
+  );
+  const targetBindings = [
+    {
+      value: 0,
+      enumName: 'Self',
+      targetKind: 'self-actor',
+      description: '自身',
+    },
+    {
+      value: 15,
+      enumName: 'AllHero',
+      targetKind: 'team-actors',
+      description: '玩家所有角色（不包括联机玩家）',
+    },
+  ].map(binding => {
+    assertIl2CppEnumMember({
+      block: triggerEffectTargetBlock,
+      enumName: 'ETriggerEffectTargetType',
+      memberName: binding.enumName,
+      value: binding.value,
+      description: binding.description,
+    });
+    return {
+      ...binding,
+      status: 'applied',
+      sourceIdentity: `${sourcePath}#ETriggerEffectTargetType.${binding.enumName}=${binding.value}`,
+    };
+  });
+  const value = {
+    sourceKind: 'il2cpp-soulessence-trigger-contract',
+    sourceIdentity: [
+      'EElementTriggerConditionType',
+      'EElementTriggerFixedConditionType',
+      'ESkillSlotType',
+      'ESkillTagType',
+      'ETriggerEffectTargetType',
+    ]
+      .map(identity => `${sourcePath}#${identity}`)
+      .join('|'),
+    logicBindings,
+    conditionTypeBindings,
+    skillSlotBindings,
+    skillTagBindings,
+    targetBindings,
+  };
+  return { ...value, contractHash: hashCanonicalValue(value) };
 }
 
 function createBattlePropertyTagContract({

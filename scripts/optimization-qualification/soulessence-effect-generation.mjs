@@ -24,19 +24,6 @@ const SUPPORTED_FRAME_ANCHORS = new Set([
   'hit-after-damage',
 ]);
 
-const ACTION_KINDS_BY_SKILL_TAG = Object.freeze({
-  1: ['normal-attack'],
-  2: ['charged-attack'],
-  3: ['star-skill'],
-  4: ['ultimate'],
-  6: ['dodge-attack'],
-  7: ['plunging-attack'],
-  9: ['plunging-attack'],
-  11: ['limit-counter'],
-  12: ['perfect-parry'],
-  17: ['star-combo'],
-});
-
 export const SOULESSENCE_EFFECT_CATALOG_CONTRACT_NAME =
   'AzPrSoulEssenceEffectMechanicsCatalog';
 
@@ -51,6 +38,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   projectRoot,
   setSkills = [],
   propertyTagContract = null,
+  triggerContract = null,
 } = {}) {
   if (
     propertyTagContract?.sourceKind !==
@@ -58,6 +46,13 @@ export async function createSoulEssenceEffectMechanicsCatalog({
     !propertyTagContract?.contractHash
   ) {
     throw new Error('soulessence-property-tag-contract-missing');
+  }
+  if (
+    triggerContract?.sourceKind !==
+      'il2cpp-soulessence-trigger-contract' ||
+    !triggerContract?.contractHash
+  ) {
+    throw new Error('soulessence-trigger-contract-missing');
   }
   const definitionBySoulId = new Map(
     (soulDefinitionRows ?? []).map(row => [Number(row.id), row])
@@ -99,6 +94,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       valueRowsBySkillId,
       battleElementsByPathId: battleSource.byPathId,
       propertyTagContract,
+      triggerContract,
       control: controlSource.bySkillId.get(
         Number(definitionBySoulId.get(item.soulEssenceId)?.reishiSkill)
       ),
@@ -133,11 +129,16 @@ export async function createSoulEssenceEffectMechanicsCatalog({
         sourceIdentity: propertyTagContract.sourceIdentity,
         contractHash: propertyTagContract.contractHash,
       },
+      triggerContract: {
+        sourceIdentity: triggerContract.sourceIdentity,
+        contractHash: triggerContract.contractHash,
+      },
       sourceSnapshotHash: hashCanonicalValue({
         battleElements: battleSource.metadata,
         controlClosure: controlSource.metadata,
         setSkillControlClosure: setSkillControlSource.metadata,
         propertyTagContractHash: propertyTagContract.contractHash,
+        triggerContractHash: triggerContract.contractHash,
       }),
     },
     policy: {
@@ -151,6 +152,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       ],
     },
     propertyTagContract,
+    triggerContract,
     definitions,
     setSkillDefinitions,
     unresolved,
@@ -202,7 +204,9 @@ export function createDynamicLoadoutEffectCensus(catalog) {
       sourceTarget: {
         source: 'equipped-actor',
         target: definition.trigger?.targetKind ?? null,
+        targetEvidence: definition.trigger?.target ?? null,
       },
+      formula: definition.effect?.formula ?? null,
       effectPropertyTags: definition.effect?.propertyTags ?? [],
       effectPropertyTagMatchMode:
         definition.effect?.propertyTagMatchMode ?? null,
@@ -258,6 +262,7 @@ export function createDynamicLoadoutEffectCensus(catalog) {
     generatedAt: catalog?.generatedAt ?? null,
     sourceCatalogHash: catalog?.catalogHash ?? null,
     propertyTagContract: catalog?.propertyTagContract ?? null,
+    triggerContract: catalog?.triggerContract ?? null,
     policy: {
       thresholdActivationIsNotRuntimeApplication: true,
       descriptionsAreDiscoveryOnly: true,
@@ -444,7 +449,15 @@ function projectTriggerEvidence(row) {
     event: event?.name ?? null,
     frameAnchor: event?.frameAnchor ?? null,
     triggerTargetType: numberOrNull(tree.triggerTargetType),
+    triggerConditionType: numberOrNull(tree.triggerConditionType),
     conditions: projectConditions(tree.triggerConditionList),
+    triggerEffects: (tree.triggerEffectList ?? []).map((effect, index) => ({
+      effectIndex: index,
+      effectType: numberOrNull(effect?.effectType),
+      targetType: numberOrNull(effect?.targetType),
+      targetElementPathId: numberOrNull(effect?.targetElement?.m_PathID),
+      sourceIdentity: `${createElementIdentity(row)}.triggerEffectList[${index}]`,
+    })),
     intervalMs: numberOrNull(tree.triggerInv),
     triggerCounter: numberOrNull(tree.triggerCounter),
     sourceIdentity: createElementIdentity(row),
@@ -489,6 +502,132 @@ function projectEffectLifecycle(effect) {
       };
 }
 
+function compileTriggerCondition({
+  trigger,
+  conditions,
+  conditionLogicValue,
+  triggerContract,
+}) {
+  if (!trigger) {
+    return {
+      kind: 'condition-group',
+      logic: 'unresolved',
+      logicValue: null,
+      conditions: [],
+      actionKinds: [],
+      status: 'static-evidence-gap',
+      sourceIdentity: 'battle-element-trigger-source-not-unique',
+    };
+  }
+  const logicBinding = triggerContract.logicBindings.find(
+    binding => Number(binding.value) === Number(conditionLogicValue)
+  );
+  const compiledConditions = (conditions ?? []).map((condition, index) => {
+    const conditionType = Number(condition?.conditionParam1);
+    const conditionValue = Number(condition?.conditionParam2);
+    const typeBinding = triggerContract.conditionTypeBindings.find(
+      binding => Number(binding.value) === conditionType
+    );
+    const valueBindings =
+      typeBinding?.selectorKind === 'skill-slot'
+        ? triggerContract.skillSlotBindings
+        : typeBinding?.selectorKind === 'skill-tag'
+          ? triggerContract.skillTagBindings
+          : [];
+    const valueBinding = valueBindings.find(
+      binding => Number(binding.value) === conditionValue
+    );
+    const base = {
+      kind: typeBinding?.selectorKind ?? 'unresolved',
+      conditionType,
+      conditionTypeName: typeBinding?.enumName ?? null,
+      conditionValue,
+      actionKinds: valueBinding?.actionKinds ?? [],
+      sourceIdentity: `${createElementIdentity(trigger)}.triggerConditionList[${index}]|${typeBinding?.sourceIdentity ?? 'condition-type-unresolved'}|${valueBinding?.sourceIdentity ?? 'condition-value-unresolved'}`,
+      status:
+        typeBinding?.status === 'applied' && valueBinding?.status === 'applied'
+          ? 'applied'
+          : 'static-evidence-gap',
+    };
+    if (typeBinding?.selectorKind === 'skill-slot') {
+      return {
+        ...base,
+        skillSlotId: conditionValue,
+        skillSlotName: valueBinding?.enumName ?? null,
+      };
+    }
+    if (typeBinding?.selectorKind === 'skill-tag') {
+      return {
+        ...base,
+        skillTagId: conditionValue,
+        skillTagName: valueBinding?.enumName ?? null,
+      };
+    }
+    return base;
+  });
+  if (
+    !logicBinding ||
+    compiledConditions.length === 0 ||
+    compiledConditions.some(condition => condition.status !== 'applied')
+  ) {
+    return {
+      kind: 'condition-group',
+      logic: logicBinding?.runtimeLogic ?? 'unresolved',
+      logicValue: Number.isInteger(conditionLogicValue)
+        ? conditionLogicValue
+        : null,
+      conditions: compiledConditions,
+      actionKinds: [],
+      status: 'static-evidence-gap',
+      sourceIdentity: `${createElementIdentity(trigger)}.triggerConditionType|triggerConditionList`,
+    };
+  }
+  const actionKinds = resolveConditionActionKinds({
+    logic: logicBinding.runtimeLogic,
+    conditions: compiledConditions,
+  });
+  const single = compiledConditions.length === 1 ? compiledConditions[0] : null;
+  return {
+    kind: single?.kind ?? 'condition-group',
+    conditionType: single?.conditionType ?? null,
+    skillSlotId: single?.skillSlotId ?? null,
+    skillSlotName: single?.skillSlotName ?? null,
+    skillTagId: single?.skillTagId ?? null,
+    skillTagName: single?.skillTagName ?? null,
+    logic: logicBinding.runtimeLogic,
+    logicValue: Number(logicBinding.value),
+    logicName: logicBinding.enumName,
+    conditions: compiledConditions,
+    actionKinds,
+    status: 'applied',
+    sourceIdentity: `${createElementIdentity(trigger)}.triggerConditionType|triggerConditionList|${logicBinding.sourceIdentity}`,
+  };
+}
+
+function resolveConditionActionKinds({ logic, conditions }) {
+  const rows = conditions.map(condition => new Set(condition.actionKinds ?? []));
+  if (rows.length === 0) return [];
+  if (logic === 'or') {
+    return uniqueStrings(rows.flatMap(row => [...row]));
+  }
+  if (logic === 'and') {
+    return [...rows[0]].filter(actionKind =>
+      rows.slice(1).every(row => row.has(actionKind))
+    );
+  }
+  return [];
+}
+
+function resolveFormulaFamily({ commonFunctionId, baseFunctionId }) {
+  if (commonFunctionId === 1 && baseFunctionId === 5) {
+    return 'literal-a-with-common-ratio';
+  }
+  if (commonFunctionId === 1 && baseFunctionId === 3) {
+    return 'basis-point-property-a-with-common-ratio';
+  }
+  return `unsupported-${commonFunctionId || 0}-${baseFunctionId || 0}`;
+}
+
 function compileSoulEffectDefinition({
   soul,
   sourceDefinition,
@@ -497,6 +636,7 @@ function compileSoulEffectDefinition({
   battleElementsByPathId,
   control,
   propertyTagContract,
+  triggerContract,
 }) {
   const effectSkillId = Number(sourceDefinition?.reishiSkill);
   const resourcePathIds = uniqueNumbers(control?.resourcePathIds ?? []);
@@ -569,14 +709,37 @@ function compileSoulEffectDefinition({
   const conditions = Array.isArray(triggerTree.triggerConditionList)
     ? triggerTree.triggerConditionList
     : [];
-  const skillTagCondition =
-    conditions.length === 1 && Number(conditions[0]?.conditionParam1) === 11
-      ? conditions[0]
-      : null;
+  const compiledCondition = compileTriggerCondition({
+    trigger,
+    conditions,
+    conditionLogicValue: Number(triggerTree.triggerConditionType),
+    triggerContract,
+  });
   const triggerEvent = TRIGGER_EVENT_BY_ID[Number(triggerTree.triggerParam1)];
-  const actionKinds = ACTION_KINDS_BY_SKILL_TAG[
-    Number(skillTagCondition?.conditionParam2)
-  ];
+  const triggerEffectRows = Array.isArray(triggerTree.triggerEffectList)
+    ? triggerTree.triggerEffectList
+        .map((effectRow, effectListIndex) => ({
+          effectRow,
+          effectListIndex,
+        }))
+        .filter(
+          ({ effectRow }) =>
+            Number(effectRow?.targetElement?.m_PathID) ===
+            Number(property?.path_id)
+        )
+    : [];
+  const targetBinding =
+    triggerEffectRows.length === 1
+      ? triggerContract.targetBindings.find(
+          binding =>
+            Number(binding.value) ===
+            Number(triggerEffectRows[0]?.effectRow?.targetType)
+        ) ?? null
+      : null;
+  const formulaFamily = resolveFormulaFamily({
+    commonFunctionId,
+    baseFunctionId,
+  });
   const starValues = compileStarValues({
     rows: valueRowsBySkillId.get(effectSkillId) ?? [],
     elementId: Number(propertyTree.elementConfigId),
@@ -593,7 +756,7 @@ function compileSoulEffectDefinition({
   if (activationPrerequisiteRows.length > 0) {
     runtimeGaps.push('effect-activation-condition-operator-unsupported');
   }
-  if (!skillTagCondition || !actionKinds?.length) {
+  if (compiledCondition?.status !== 'applied') {
     runtimeGaps.push('effect-skill-tag-condition-operator-unsupported');
   }
   if (reachablePropertyRows.length !== 1) {
@@ -619,13 +782,13 @@ function compileSoulEffectDefinition({
   }
   if (
     commonFunctionId !== 1 ||
-    baseFunctionId !== 5 ||
+    ![3, 5].includes(baseFunctionId) ||
     commonRatioRaw !== 10_000
   ) {
     runtimeGaps.push('effect-formula-family-operator-unsupported');
   }
   if (starValues.length !== 4) runtimeGaps.push('effect-star-values-incomplete');
-  if (Number(triggerTree.triggerTargetType) !== 0) {
+  if (triggerEffectRows.length !== 1 || !targetBinding) {
     runtimeGaps.push('effect-trigger-target-unsupported');
   }
   const runtimeStatus = runtimeGaps.length
@@ -666,16 +829,23 @@ function compileSoulEffectDefinition({
             eventId: Number(triggerTree.triggerParam1),
             event: triggerEvent?.name ?? null,
             frameAnchor: triggerEvent?.frameAnchor ?? null,
-            condition:
-              skillTagCondition == null
+            condition: compiledCondition,
+            triggerTargetType: numberOrNull(triggerTree.triggerTargetType),
+            triggerTargetTypeSourceIdentity: `${createElementIdentity(trigger)}.triggerTargetType`,
+            target:
+              targetBinding == null
                 ? null
                 : {
-                    kind: 'skill-tag',
-                    conditionType: 11,
-                    skillTagId: Number(skillTagCondition.conditionParam2),
-                    actionKinds: actionKinds ?? [],
+                    kind: targetBinding.targetKind,
+                    effectTargetType: Number(targetBinding.value),
+                    effectTargetTypeName: targetBinding.enumName,
+                    effectListIndex: triggerEffectRows[0].effectListIndex,
+                    targetElementPathId: Number(
+                      triggerEffectRows[0]?.effectRow?.targetElement?.m_PathID
+                    ),
+                    sourceIdentity: `${createElementIdentity(trigger)}.triggerEffectList[${triggerEffectRows[0].effectListIndex}].targetType|${targetBinding.sourceIdentity}`,
                   },
-            targetKind: Number(triggerTree.triggerTargetType) === 0 ? 'self-actor' : 'unresolved',
+            targetKind: targetBinding?.targetKind ?? 'unresolved',
             sourceIdentity: createElementIdentity(trigger),
           },
     effect:
@@ -699,13 +869,20 @@ function compileSoulEffectDefinition({
                   : 'evidence-open-multi-tag',
             propertyTagSourceIdentity: `${createElementIdentity(property)}.defaultPropertyTags`,
             formula: {
+              formulaIdentity: `battle-effect-formula:soulessence:${effectSkillId}:${Number(propertyTree.elementConfigId)}:${property.path_id}`,
               commonFunctionId,
+              commonExpression: commonFunctionId === 1 ? 'G/10000' : null,
               baseFunctionId,
+              baseExpression:
+                baseFunctionId === 3
+                  ? 'A/10000'
+                  : baseFunctionId === 5
+                    ? 'A'
+                    : null,
               commonRatioRaw,
-              family:
-                commonFunctionId === 1 && baseFunctionId === 5
-                  ? 'literal-a-with-common-ratio'
-                  : `unsupported-${commonFunctionId || 0}-${baseFunctionId || 0}`,
+              sourceParameterEncoding: 'battle-element-raw-a',
+              family: formulaFamily,
+              sourceIdentity: `${createElementIdentity(property)}.formulaParams|functionParams`,
             },
             durationMs: Number(propertyTree.time),
             stackMode:

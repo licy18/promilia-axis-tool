@@ -14,9 +14,11 @@ import {
   createWorkbenchActionDraft,
   createWorkbenchProject,
   getWorkbenchGameData,
+  normalizeWorkbenchActorConfigs,
 } from '../../domain/workbenchProjectFactory';
 import { createWorkbenchAttackInputChainDrafts } from '../../domain/workbenchAttackInputChain';
 import { frameToMs } from '../../domain/timebase';
+import { createSwitchAction } from '../../domain/projectSchema';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createVerifiedSoulEssenceEffectGeneration } from '../../simulation/mechanics/verifiedSoulEssenceEffectGeneration';
@@ -67,6 +69,16 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     attributeId: 229,
   },
   {
+    soulEssenceId: 10055,
+    event: 'AfterSkill',
+    frameAnchor: 'action-end',
+    actionKind: 'ultimate',
+    durationMs: 20000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 229,
+  },
+  {
     soulEssenceId: 10060,
     event: 'AfterSkill',
     frameAnchor: 'action-end',
@@ -77,6 +89,16 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     attributeId: 21,
   },
   {
+    soulEssenceId: 10093,
+    event: 'AfterSkill',
+    frameAnchor: 'action-end',
+    actionKind: 'ultimate',
+    durationMs: 24000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 229,
+  },
+  {
     soulEssenceId: 10094,
     event: 'AfterSkill',
     frameAnchor: 'action-end',
@@ -85,6 +107,16 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     stackMode: 'refresh',
     maxStacks: 1,
     attributeId: 21,
+  },
+  {
+    soulEssenceId: 10097,
+    event: 'BeforeSkill',
+    frameAnchor: 'action-start',
+    actionKind: 'limit-counter',
+    durationMs: 8000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 229,
   },
   {
     soulEssenceId: 10125,
@@ -133,8 +165,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 9,
-      unresolvedCount: 53,
+      runtimeAppliedCount: 12,
+      unresolvedCount: 50,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -143,12 +175,13 @@ describe('verified soul essence effect generation', () => {
     ).toBe(true);
     expect(
       soulEssenceEffectCatalog.definitions.find(
-        definition => definition.soulEssenceId === 10097
+        definition => definition.soulEssenceId === 10032
       )
     ).toMatchObject({
       runtimeStatus: 'source-indexed-runtime-unapplied',
       runtimeGaps: expect.arrayContaining([
-        'effect-formula-family-operator-unsupported',
+        'effect-damage-branch-unapplied',
+        'effect-skill-tag-condition-operator-unsupported',
       ]),
     });
   });
@@ -288,6 +321,596 @@ describe('verified soul essence effect generation', () => {
         },
       });
     }
+  });
+
+  it.each([
+    {
+      soulEssenceId: 10055,
+      expectedByStar: [60, 75, 90, 105],
+      durationMs: 20000,
+    },
+    {
+      soulEssenceId: 10093,
+      expectedByStar: [93.8, 125, 156.3, 187.5],
+      durationMs: 24000,
+    },
+  ])(
+    'targets every hero and evaluates all stars for soul $soulEssenceId',
+    expected => {
+      const definition = soulEssenceEffectCatalog.definitions.find(
+        entry => entry.soulEssenceId === expected.soulEssenceId
+      );
+      const action = {
+        ...createRealSoulActionDraft({
+        id: `ultimate-${expected.soulEssenceId}`,
+        actionKind: 'ultimate',
+        startFrame: 60,
+        }),
+        actorId: 'actor-101007',
+      };
+      const resolution = resolveVerifiedCombatActionMechanics(action);
+      const actionEndMs = action.startMs + action.durationMs;
+
+      expect(resolution).toMatchObject({
+        actionBinding: {
+          actionKind: 'ultimate',
+          bindingSourceIdentity: expect.stringContaining('slot=4'),
+        },
+        controlBinding: {
+          logic: { skillTag: '4' },
+        },
+      });
+
+      expected.expectedByStar.forEach((expectedValue, starIndex) => {
+        const actorId = String(action.actorId);
+        const actors = [
+          createSoulMatrixActor({
+            actorId,
+            definition,
+            star: starIndex + 1,
+          }),
+          { id: 'actor-team-2', name: 'team-2', loadout: {} },
+          { id: 'actor-team-3', name: 'team-3', loadout: {} },
+        ];
+        const scenario = {
+          time: { fps: 60, durationMs: 40000 },
+          actors,
+          actions: [action],
+        };
+        const actionExecutionPlan = {
+          actions: [{ actionId: action.id, execute: true }],
+        };
+        const generation = createVerifiedSoulEssenceEffectGeneration({
+          scenario,
+          actionExecutionPlan,
+          actionResolutionById: new Map([[action.id, resolution]]),
+        });
+        const timeline = createEffectRuntimeTimeline({
+          scenario,
+          actionExecutionPlan,
+          generatedCommands: generation.effectCommands,
+        });
+
+        expect(generation.effectCommands).toHaveLength(3);
+        expect(
+          generation.effectCommands.map(command => command.targetId)
+        ).toEqual(actors.map(actor => String(actor.id)));
+        expect(
+          generation.effectCommands.every(
+            command =>
+              String(command.sourceActorId) === actorId &&
+              String(command.formulaSourceActorId) === actorId &&
+              String(command.effectAdderActorId) === actorId &&
+              command.semanticTargetKind === 'team-actors' &&
+              command.targetKind === 'actor'
+          )
+        ).toBe(true);
+        expect(
+          generation.effectCommands.map(command =>
+            command.modifiers[0].formulaResult.sourceRawA
+          )
+        ).toEqual(
+          Array(3).fill(definition.effect.valuesByStar[starIndex].valueRaw)
+        );
+        for (const command of generation.effectCommands) {
+          expect(command.timeMs).toBe(actionEndMs);
+          expect(command.modifiers[0].valueRaw).toBeCloseTo(expectedValue, 3);
+          expect(command.modifiers[0].evaluatedValue).toBeCloseTo(
+            expectedValue,
+            3
+          );
+          expect(command.modifiers[0].formulaIdentity).toBe(
+            definition.effect.formula.formulaIdentity
+          );
+          expect(command.modifiers[0].formulaResult).toMatchObject({
+            sourceRawA: definition.effect.valuesByStar[starIndex].valueRaw,
+            formulaIdentity: definition.effect.formula.formulaIdentity,
+            q16Trace: expect.arrayContaining([
+              expect.objectContaining({ step: 'q16.16-multiply' }),
+            ]),
+          });
+        }
+        for (const actor of actors) {
+          expect(
+            resolveActiveEffectsAt(timeline, actionEndMs, {
+              targetKind: 'actor',
+              targetId: actor.id,
+              calculatorOnly: true,
+              settlingActionId: 'following-action',
+            })
+          ).toHaveLength(1);
+          expect(
+            resolveActiveEffectsAt(
+              timeline,
+              actionEndMs + expected.durationMs,
+              {
+                targetKind: 'actor',
+                targetId: actor.id,
+                calculatorOnly: true,
+              }
+            )
+          ).toEqual([]);
+        }
+      });
+    }
+  );
+
+  it('evaluates every 10097 star through the same base-3 Q16.16 formula', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10097
+    );
+    const action = {
+      ...createRealSoulActionDraft({
+        id: 'xiaoyu-limit-counter-stars',
+        actionKind: 'limit-counter',
+        startFrame: 60,
+        actorCharacterId: 101010,
+      }),
+      actorId: 'actor-101010',
+    };
+    const resolution = resolveVerifiedCombatActionMechanics(action);
+    const expectedValues = [112.5, 150, 187.5, 225];
+
+    expectedValues.forEach((expectedValue, starIndex) => {
+      const actor = createSoulMatrixActor({
+        actorId: action.actorId,
+        definition,
+        star: starIndex + 1,
+      });
+      const generation = createVerifiedSoulEssenceEffectGeneration({
+        scenario: {
+          time: { fps: 60, durationMs: 12000 },
+          actors: [actor],
+          actions: [action],
+        },
+        actionExecutionPlan: {
+          actions: [{ actionId: action.id, execute: true }],
+        },
+        actionResolutionById: new Map([[action.id, resolution]]),
+      });
+      const modifier = generation.effectCommands[0]?.modifiers?.[0];
+
+      expect(modifier).toMatchObject({
+        sourceRawA: definition.effect.valuesByStar[starIndex].valueRaw,
+        formulaIdentity: definition.effect.formula.formulaIdentity,
+        formulaResult: {
+          family: 'basis-point-property-a-with-common-ratio',
+          sourceRawA: definition.effect.valuesByStar[starIndex].valueRaw,
+          q16Trace: expect.arrayContaining([
+            expect.objectContaining({
+              step: 'base-function-3-a-per-10000',
+            }),
+          ]),
+        },
+      });
+      expect(modifier.evaluatedValue).toBeCloseTo(expectedValue, 3);
+    });
+  });
+
+  it('matches the verified ultimate slot or tag independently and rejects an AND reinterpretation', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10055
+    );
+    const actor = createSoulMatrixActor({
+      actorId: 'actor-or-source',
+      definition,
+      star: 1,
+    });
+    const actions = [
+      {
+        id: 'ultimate-slot-only',
+        actorId: actor.id,
+        actionKind: 'normal-attack',
+        startMs: 0,
+        durationMs: 100,
+      },
+      {
+        id: 'ultimate-tag-only',
+        actorId: actor.id,
+        actionKind: 'normal-attack',
+        startMs: 200,
+        durationMs: 100,
+      },
+      {
+        id: 'not-an-ultimate',
+        actorId: actor.id,
+        actionKind: 'normal-attack',
+        startMs: 400,
+        durationMs: 100,
+      },
+    ];
+    const actionResolutionById = new Map([
+      [
+        'ultimate-slot-only',
+        {
+          actionBinding: {
+            actionKind: 'normal-attack',
+            skillSlotType: 4,
+          },
+          controlBinding: { logic: { skillTag: '1' } },
+        },
+      ],
+      [
+        'ultimate-tag-only',
+        {
+          actionBinding: { actionKind: 'normal-attack' },
+          controlBinding: { logic: { skillTag: '4' } },
+        },
+      ],
+      [
+        'not-an-ultimate',
+        {
+          actionBinding: {
+            actionKind: 'normal-attack',
+            skillSlotType: 1,
+          },
+          controlBinding: { logic: { skillTag: '1' } },
+        },
+      ],
+    ]);
+    const scenario = {
+      time: { fps: 60, durationMs: 2000 },
+      actors: [actor],
+      actions,
+    };
+    const actionExecutionPlan = {
+      actions: actions.map(action => ({ actionId: action.id, execute: true })),
+    };
+    const catalog = {
+      ...soulEssenceEffectCatalog,
+      definitions: [definition],
+    };
+
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      actionResolutionById,
+      catalog,
+    });
+    expect(
+      generation.effectCommands.map(command => command.sourceActionId)
+    ).toEqual(['ultimate-slot-only', 'ultimate-tag-only']);
+    expect(
+      generation.effectCommands.map(
+        command => command.sourceIdentity.matchedConditionIdentities.length
+      )
+    ).toEqual([1, 1]);
+
+    const andCatalog = {
+      ...catalog,
+      definitions: [
+        {
+          ...definition,
+          trigger: {
+            ...definition.trigger,
+            condition: {
+              ...definition.trigger.condition,
+              logic: 'and',
+            },
+          },
+        },
+      ],
+    };
+    expect(
+      createVerifiedSoulEssenceEffectGeneration({
+        scenario,
+        actionExecutionPlan,
+        actionResolutionById,
+        catalog: andCatalog,
+      }).effectCommands
+    ).toEqual([]);
+  });
+
+  it('uses the real limit-counter binding for 10097 and applies before its hits', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10097
+    );
+    const action = {
+      ...createRealSoulActionDraft({
+        id: 'xiaoyu-real-limit-counter',
+        actionKind: 'limit-counter',
+        startFrame: 120,
+        actorCharacterId: 101010,
+      }),
+      actorId: 'actor-101010',
+    };
+    const resolution = resolveVerifiedCombatActionMechanics(action);
+    const actor = createSoulMatrixActor({
+      actorId: action.actorId,
+      definition,
+      star: 1,
+    });
+    const scenario = {
+      time: { fps: 60, durationMs: 12000 },
+      actors: [actor],
+      actions: [action],
+    };
+    const actionExecutionPlan = {
+      actions: [{ actionId: action.id, execute: true }],
+    };
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      actionResolutionById: new Map([[action.id, resolution]]),
+    });
+    const timeline = createEffectRuntimeTimeline({
+      scenario,
+      actionExecutionPlan,
+      generatedCommands: generation.effectCommands,
+    });
+
+    expect(resolution).toMatchObject({
+      actionBinding: { actionKind: 'limit-counter' },
+      controlBinding: { logic: { skillTag: '11' } },
+    });
+    expect(resolution.hits.length).toBeGreaterThan(0);
+    expect(generation.effectCommands).toEqual([
+      expect.objectContaining({
+        sourceSoulEssenceId: 10097,
+        sourceActionId: action.id,
+        targetId: String(action.actorId),
+        timeMs: action.startMs,
+        modifiers: [
+          expect.objectContaining({
+            attributeId: 229,
+            bucket: 'dynamicExtra',
+            sourceRawA: 1125000,
+            evaluatedValue: expect.closeTo(112.5, 3),
+          }),
+        ],
+      }),
+    ]);
+    expect(
+      resolveActiveEffectsAt(timeline, action.startMs, {
+        targetKind: 'actor',
+        targetId: action.actorId,
+        calculatorOnly: true,
+        settlingActionId: action.id,
+      })
+    ).toHaveLength(1);
+  });
+
+  it.each([
+    [10055, 1900930, 60],
+    [10093, 1900230, 93.8],
+  ])(
+    'keeps real AllHero soul %s active across two switches and off the triggering ultimate hits',
+    (soulEssenceId, effectSkillId, expectedValue) => {
+      const result = createRealSoulScenario({
+        soulEssenceId,
+        effectSkillId,
+        durationMs: 40_000,
+        teamCharacterIds: [101007, 101003, 101010],
+        actionPlan: [
+          {
+            id: 'ultimate-source',
+            actionKind: 'ultimate',
+            actorCharacterId: 101007,
+            startFrame: 0,
+          },
+          {
+            id: 'owner-follow-up',
+            actionKind: 'normal-attack',
+            actorCharacterId: 101007,
+            startFrame: 451,
+          },
+          {
+            id: 'switch-team-2',
+            actionKind: 'switch',
+            sourceCharacterId: 101007,
+            targetCharacterId: 101003,
+            startFrame: 600,
+          },
+          {
+            id: 'team-2-follow-up',
+            actionKind: 'normal-attack',
+            actorCharacterId: 101003,
+            startFrame: 900,
+          },
+          {
+            id: 'switch-team-3',
+            actionKind: 'switch',
+            sourceCharacterId: 101003,
+            targetCharacterId: 101010,
+            startFrame: 1000,
+          },
+          {
+            id: 'team-3-follow-up',
+            actionKind: 'normal-attack',
+            actorCharacterId: 101010,
+            startFrame: 1310,
+          },
+        ],
+      });
+      const effectId = `soulessence:${soulEssenceId}:element:${
+        soulEssenceId === 10055 ? 19009302 : 19002302
+      }`;
+      const commands =
+        result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+          command => command.sourceActionId === 'ultimate-source'
+        );
+      const sourceTraces = actionId =>
+        result.verifiedCombatRuntime.damageEvents
+          .filter(
+            event =>
+              event.type === 'VERIFIED_COMBAT_HIT' &&
+              event.actionId === actionId
+          )
+          .flatMap(event => event.payload.dynamicPropertyTrace?.source ?? [])
+          .filter(trace => trace.attributeId === 229)
+          .flatMap(trace => trace.effects ?? []);
+
+      expect(commands).toHaveLength(3);
+      expect(new Set(commands.map(command => command.targetId)).size).toBe(3);
+      expect(
+        commands.every(
+          command =>
+            command.targetKind === 'actor' &&
+            command.semanticTargetKind === 'team-actors'
+        )
+      ).toBe(true);
+      for (const command of commands) {
+        expect(command.modifiers[0].evaluatedValue).toBeCloseTo(
+          expectedValue,
+          3
+        );
+      }
+      expect(
+        commands.some(command => command.targetKind === 'kibo')
+      ).toBe(false);
+      expect(sourceTraces('ultimate-source')).not.toEqual(
+        expect.arrayContaining([expect.objectContaining({ effectId })])
+      );
+      for (const actionId of [
+        'owner-follow-up',
+        'team-2-follow-up',
+        'team-3-follow-up',
+      ]) {
+        expect(
+          result.actionExecutionPlan.actions.find(
+            entry => entry.actionId === actionId
+          ),
+          actionId
+        ).toMatchObject({ execute: true });
+        expect(sourceTraces(actionId), actionId).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              effectId,
+            }),
+          ])
+        );
+      }
+    }
+  );
+
+  it('settles real 10097 limit-counter hits with the action-start layer and suppresses blocked execution', () => {
+    const result = createRealSoulScenario({
+      actorCharacterId: 101010,
+      soulEssenceId: 10097,
+      effectSkillId: 1900470,
+      actionPlan: [
+        {
+          id: 'real-limit-counter',
+          actionKind: 'limit-counter',
+          actorCharacterId: 101010,
+          startFrame: 120,
+        },
+      ],
+    });
+    const hits = result.verifiedCombatRuntime.damageEvents.filter(
+      event =>
+        event.type === 'VERIFIED_COMBAT_HIT' &&
+        event.actionId === 'real-limit-counter'
+    );
+    const effectId = 'soulessence:10097:element:19004701';
+
+    expect(result.actionExecutionPlan.actions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actionId: 'real-limit-counter',
+          execute: true,
+        }),
+      ])
+    );
+    expect(hits.length).toBeGreaterThan(0);
+    expect(
+      hits.every(event =>
+        (event.payload.dynamicPropertyTrace?.source ?? []).some(
+          trace =>
+            trace.attributeId === 229 &&
+            (trace.effects ?? []).some(
+              effect =>
+                effect.effectId === effectId &&
+                Math.abs(Number(effect.valueRaw) - 112.5) < 0.001
+            )
+        )
+      )
+    ).toBe(true);
+
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10097
+    );
+    const actor = createSoulMatrixActor({
+      actorId: 'actor-blocked',
+      definition,
+      star: 1,
+    });
+    const blockedAction = {
+      ...createRealSoulActionDraft({
+        id: 'blocked-limit-counter',
+        actionKind: 'limit-counter',
+        startFrame: 0,
+        actorCharacterId: 101010,
+      }),
+      actorId: actor.id,
+    };
+    const blockedResolution = resolveVerifiedCombatActionMechanics(
+      blockedAction
+    );
+    const missedAction = {
+      ...blockedAction,
+      id: 'missed-limit-counter',
+      startMs: 2000,
+      hitOverrides: Object.fromEntries(
+        blockedResolution.hits.map(hit => [
+          String(
+            hit.identity ??
+              hit.hitIdentity ??
+              hit.sourceIdentity ??
+              `${hit.elementId ?? 'element'}|${hit.hitIndex ?? 'hit'}`
+          ),
+          { willHit: false },
+        ])
+      ),
+    };
+    const blockedGeneration = createVerifiedSoulEssenceEffectGeneration({
+      scenario: {
+        time: { fps: 60, durationMs: 4000 },
+        actors: [actor],
+        actions: [blockedAction, missedAction],
+      },
+      actionExecutionPlan: {
+        actions: [
+          { actionId: blockedAction.id, execute: false },
+          { actionId: missedAction.id, execute: true },
+        ],
+      },
+      actionResolutionById: new Map([
+        [blockedAction.id, blockedResolution],
+        [missedAction.id, blockedResolution],
+      ]),
+      catalog: {
+        ...soulEssenceEffectCatalog,
+        definitions: [definition],
+      },
+    });
+    expect(blockedGeneration.effectCommands).toEqual([]);
+    expect(blockedGeneration.suppressions).toEqual([
+      expect.objectContaining({
+        actionId: missedAction.id,
+        reason: 'soulessence-effect-no-landed-source-hit',
+      }),
+    ]);
   });
 
   it('derives only verified normal and charged hit property tags from the action binding', () => {
@@ -436,7 +1059,7 @@ describe('verified soul essence effect generation', () => {
       const actionResolutionById = new Map(
         actions.map(action => [
           action.id,
-          { actionBinding: { actionKind: action.actionKind } },
+          createSyntheticVerifiedActionResolution(action.actionKind),
         ])
       );
       const generation = createVerifiedSoulEssenceEffectGeneration({
@@ -1160,6 +1783,8 @@ function createRealSoulScenario({
   soulEssenceId = SOUL_ID,
   effectSkillId = SOUL_SKILL_ID,
   actionPlan = null,
+  durationMs = 20_000,
+  teamCharacterIds = null,
 } = {}) {
   const requestedActions =
     actionPlan ??
@@ -1174,12 +1799,20 @@ function createRealSoulScenario({
     ...DEFAULT_WORKBENCH_SELECTION,
     characterId: actorCharacterId,
   };
-  const teamSlots = createDefaultWorkbenchTeamSlots(selection);
+  const teamSlots = createDefaultWorkbenchTeamSlots(selection).map(
+    (slot, index) => ({
+      ...slot,
+      characterId:
+        Number(teamCharacterIds?.[index]) || Number(slot.characterId),
+    })
+  );
   const ownerSlotId = teamSlots.find(
     slot => Number(slot.characterId) === actorCharacterId
   )?.slotId;
-  const actorConfigs = createDefaultWorkbenchActorConfigs(
-    selection
+  const actorConfigs = normalizeWorkbenchActorConfigs(
+    createDefaultWorkbenchActorConfigs(selection),
+    selection,
+    teamSlots
   ).map(config =>
     Number(config.characterId) === actorCharacterId
       ? {
@@ -1209,19 +1842,35 @@ function createRealSoulScenario({
   );
   let startFrame = 0;
   const actions = requestedActions.map(requested => {
+    const requestedStartFrame = Number.isFinite(Number(requested.startFrame))
+      ? Number(requested.startFrame)
+      : startFrame;
+    if (requested.actionKind === 'switch') {
+      const action = createSwitchAction({
+        id: requested.id,
+        actorId: `actor-${requested.sourceCharacterId}`,
+        targetActorId: `actor-${requested.targetCharacterId}`,
+        targetCharacterId: requested.targetCharacterId,
+        startMs: frameToMs(requestedStartFrame),
+      });
+      startFrame = requestedStartFrame;
+      return action;
+    }
     const action = createRealSoulActionDraft({
       id: requested.id,
       actionKind: requested.actionKind,
-      startFrame,
-      actorCharacterId,
+      startFrame: requestedStartFrame,
+      actorCharacterId:
+        Number(requested.actorCharacterId) || actorCharacterId,
     });
-    startFrame +=
+    const actionDurationFrames =
       Number(action.durationFrames) ||
       Math.max(1, Math.round((Number(action.durationMs) * 60) / 1000));
+    startFrame = requestedStartFrame + actionDurationFrames;
     return action;
   });
   const project = createWorkbenchProject(selection, {
-    durationMs: 20_000,
+    durationMs,
     teamSlots,
     actorConfigs,
     actions,
@@ -1381,8 +2030,10 @@ function createSyntheticHitCatalog() {
   };
 }
 
-function createSoulMatrixActor({ actorId, definition }) {
-  const starValue = definition.effect.valuesByStar[0];
+function createSoulMatrixActor({ actorId, definition, star = 1 }) {
+  const starValue = definition.effect.valuesByStar.find(
+    row => Number(row.star) === Number(star)
+  );
   return {
     id: actorId,
     name: actorId,
@@ -1397,6 +2048,35 @@ function createSoulMatrixActor({ actorId, definition }) {
           runtimeStatus: 'runtime-applied',
           sourceIdentity: `fixture:soul:${definition.soulEssenceId}`,
         },
+      },
+    },
+  };
+}
+
+function createSyntheticVerifiedActionResolution(actionKind) {
+  const bindingByActionKind = {
+    'normal-attack': { skillSlotId: 1, skillTagId: 1 },
+    'charged-attack': { skillSlotId: 2, skillTagId: 2 },
+    'star-skill': { skillSlotId: 3, skillTagId: 3 },
+    ultimate: { skillSlotId: 4, skillTagId: 4 },
+    'dodge-attack': { skillSlotId: 204, skillTagId: 6 },
+    'plunging-attack': { skillSlotId: 301, skillTagId: 9 },
+    'limit-counter': { skillSlotId: 207, skillTagId: 11 },
+    'perfect-parry': { skillSlotId: 209, skillTagId: 12 },
+    'star-combo': { skillSlotId: 208, skillTagId: 17 },
+  };
+  const binding = bindingByActionKind[actionKind] ?? {};
+  return {
+    actionBinding: {
+      identity: `synthetic-binding:${actionKind}`,
+      actionKind,
+      bindingSourceIdentity: `characters.items[id=fixture].skillSlots[group=ground,slot=${binding.skillSlotId ?? 999}]`,
+    },
+    controlBinding: {
+      frameRate: 60,
+      logic: {
+        skillTag: String(binding.skillTagId ?? 999),
+        sourceIdentity: `NewTable/skillsub_logic.rows[skillId=fixture:${actionKind}]`,
       },
     },
   };

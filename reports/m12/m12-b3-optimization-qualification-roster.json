@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "phase": "M12-B3-C-R1",
+  "phase": "M12-B3-C2",
   "sourceSnapshot": {
     "files": {
       "characters": {
@@ -1850,10 +1850,43 @@
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
+            "skillSlotId": null,
+            "skillSlotName": null,
             "skillTagId": 2,
+            "skillTagName": "WhackAttack",
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 2,
+                "actionKinds": [
+                  "charged-attack"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.WhackAttack=2",
+                "status": "applied",
+                "skillTagId": 2,
+                "skillTagName": "WhackAttack"
+              }
+            ],
             "actionKinds": [
               "charged-attack"
-            ]
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": 7615727136823255000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
           },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801"
@@ -1869,10 +1902,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=7615727136823255000;elementId=19004802.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900480:19004802:7615727136823255000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=7615727136823255000;elementId=19004802.formulaParams|functionParams"
           },
           "durationMs": 5000,
           "stackMode": "stack",
@@ -1969,10 +2007,43 @@
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
+            "skillSlotId": null,
+            "skillSlotName": null,
             "skillTagId": 3,
+            "skillTagName": "NormalSkill",
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 3,
+                "actionKinds": [
+                  "star-skill"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalSkill=3",
+                "status": "applied",
+                "skillTagId": 3,
+                "skillTagName": "NormalSkill"
+              }
+            ],
             "actionKinds": [
               "star-skill"
-            ]
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": -131968735896823040,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
           },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100"
@@ -1988,10 +2059,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-131968735896823040;elementId=19006104.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900610:19006104:-131968735896823040",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-131968735896823040;elementId=19006104.formulaParams|functionParams"
           },
           "durationMs": 12000,
           "stackMode": "refresh",
@@ -2246,12 +2322,45 @@
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
+            "skillSlotId": null,
+            "skillSlotName": null,
             "skillTagId": 2,
+            "skillTagName": "WhackAttack",
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 2,
+                "actionKinds": [
+                  "charged-attack"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.WhackAttack=2",
+                "status": "applied",
+                "skillTagId": 2,
+                "skillTagName": "WhackAttack"
+              }
+            ],
             "actionKinds": [
               "charged-attack"
-            ]
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
           },
-          "targetKind": "self-actor",
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002.triggerTargetType",
+          "target": {
+            "kind": "team-actors",
+            "effectTargetType": 15,
+            "effectTargetTypeName": "AllHero",
+            "effectListIndex": 0,
+            "targetElementPathId": -8968084659041655000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+          },
+          "targetKind": "team-actors",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002"
         },
         "effect": {
@@ -2265,10 +2374,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900400:19004003:-8968084659041655000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003.formulaParams|functionParams"
           },
           "durationMs": 12000,
           "stackMode": "stack",
@@ -2370,12 +2484,37 @@
           "event": "AfterSkill",
           "frameAnchor": "action-end",
           "condition": {
-            "kind": "skill-tag",
-            "conditionType": 11,
-            "skillTagId": 8,
-            "actionKinds": []
+            "kind": "condition-group",
+            "logic": "and",
+            "logicValue": 0,
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 8,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|condition-value-unresolved",
+                "status": "static-evidence-gap",
+                "skillTagId": 8,
+                "skillTagName": null
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401.triggerConditionType|triggerConditionList"
           },
-          "targetKind": "self-actor",
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401.triggerTargetType",
+          "target": {
+            "kind": "team-actors",
+            "effectTargetType": 15,
+            "effectTargetTypeName": "AllHero",
+            "effectListIndex": 0,
+            "targetElementPathId": -6568649023911365000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+          },
+          "targetKind": "team-actors",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401"
         },
         "effect": {
@@ -2389,10 +2528,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900340:19003403:-6568649023911365000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 3,
+            "baseExpression": "A/10000",
             "commonRatioRaw": 10000,
-            "family": "unsupported-1-3"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "basis-point-property-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403.formulaParams|functionParams"
           },
           "durationMs": 24000,
           "stackMode": "refresh",
@@ -2458,7 +2602,6 @@
         },
         "runtimeGaps": [
           "effect-damage-branch-unapplied",
-          "effect-formula-family-operator-unsupported",
           "effect-skill-tag-condition-operator-unsupported"
         ],
         "sourceIdentity": "NewTable/soulessence.rows[id=10032].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900340.asset/MonoBehaviour/skill_control_1900340__-7674146641941054446.json|battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401|battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403"
@@ -2627,10 +2770,43 @@
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
+            "skillSlotId": null,
+            "skillSlotName": null,
             "skillTagId": 3,
+            "skillTagName": "NormalSkill",
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 3,
+                "actionKinds": [
+                  "star-skill"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalSkill=3",
+                "status": "applied",
+                "skillTagId": 3,
+                "skillTagName": "NormalSkill"
+              }
+            ],
             "actionKinds": [
               "star-skill"
-            ]
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": 6108188296881701000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
           },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500"
@@ -2646,10 +2822,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6108188296881701000;elementId=19004501.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900450:19004501:6108188296881701000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=6108188296881701000;elementId=19004501.formulaParams|functionParams"
           },
           "durationMs": 11000,
           "stackMode": "stack",
@@ -2743,8 +2924,36 @@
           "eventId": 9,
           "event": null,
           "frameAnchor": null,
-          "condition": null,
-          "targetKind": "self-actor",
+          "condition": {
+            "kind": "condition-group",
+            "logic": "and",
+            "logicValue": 0,
+            "conditions": [
+              {
+                "kind": "unresolved",
+                "conditionType": 13,
+                "conditionTypeName": null,
+                "conditionValue": 750,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301.triggerTargetType",
+          "target": {
+            "kind": "team-actors",
+            "effectTargetType": 15,
+            "effectTargetTypeName": "AllHero",
+            "effectListIndex": 0,
+            "targetElementPathId": -4023729244501754000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+          },
+          "targetKind": "team-actors",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301"
         },
         "effect": {
@@ -2758,10 +2967,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-4023729244501754000;elementId=19003302.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900330:19003302:-4023729244501754000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 3,
+            "baseExpression": "A/10000",
             "commonRatioRaw": 10000,
-            "family": "unsupported-1-3"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "basis-point-property-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4023729244501754000;elementId=19003302.formulaParams|functionParams"
           },
           "durationMs": 16000,
           "stackMode": "stack",
@@ -2822,7 +3036,6 @@
           "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
-          "effect-formula-family-operator-unsupported",
           "effect-skill-tag-condition-operator-unsupported",
           "effect-trigger-event-operator-unsupported"
         ],
@@ -2859,7 +3072,44 @@
           "eventId": 1,
           "event": "BeforeDamage",
           "frameAnchor": "hit-before-damage",
-          "condition": null,
+          "condition": {
+            "kind": "condition-group",
+            "logic": "or",
+            "logicValue": 1,
+            "conditions": [
+              {
+                "kind": "unresolved",
+                "conditionType": 13,
+                "conditionTypeName": null,
+                "conditionValue": 196,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              },
+              {
+                "kind": "unresolved",
+                "conditionType": 13,
+                "conditionTypeName": null,
+                "conditionValue": 796,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionList[1]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": 1889171037961678300,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+          },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500"
         },
@@ -2874,10 +3124,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=1889171037961678300;elementId=19005503.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900550:19005503:1889171037961678300",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1889171037961678300;elementId=19005503.formulaParams|functionParams"
           },
           "durationMs": 16000,
           "stackMode": "refresh",
@@ -3039,8 +3294,26 @@
           "eventId": 34,
           "event": null,
           "frameAnchor": null,
-          "condition": null,
-          "targetKind": "self-actor",
+          "condition": {
+            "kind": "condition-group",
+            "logic": "and",
+            "logicValue": 0,
+            "conditions": [],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201.triggerTargetType",
+          "target": {
+            "kind": "team-actors",
+            "effectTargetType": 15,
+            "effectTargetTypeName": "AllHero",
+            "effectListIndex": 0,
+            "targetElementPathId": -5655228325641076000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+          },
+          "targetKind": "team-actors",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201"
         },
         "effect": {
@@ -3054,10 +3327,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5655228325641076000;elementId=19009202.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900920:19009202:-5655228325641076000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 3,
+            "baseExpression": "A/10000",
             "commonRatioRaw": 10000,
-            "family": "unsupported-1-3"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "basis-point-property-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-5655228325641076000;elementId=19009202.formulaParams|functionParams"
           },
           "durationMs": 8000,
           "stackMode": "refresh",
@@ -3118,7 +3396,6 @@
           "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
-          "effect-formula-family-operator-unsupported",
           "effect-skill-tag-condition-operator-unsupported",
           "effect-trigger-event-operator-unsupported"
         ],
@@ -3220,7 +3497,35 @@
           "eventId": 10,
           "event": null,
           "frameAnchor": null,
-          "condition": null,
+          "condition": {
+            "kind": "condition-group",
+            "logic": "and",
+            "logicValue": 0,
+            "conditions": [
+              {
+                "kind": "unresolved",
+                "conditionType": 8,
+                "conditionTypeName": null,
+                "conditionValue": 41,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": 4769837230415874000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+          },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101"
         },
@@ -3235,10 +3540,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=4769837230415874000;elementId=19009102.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900910:19009102:4769837230415874000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4769837230415874000;elementId=19009102.formulaParams|functionParams"
           },
           "durationMs": 10000,
           "stackMode": "refresh",
@@ -3315,7 +3625,7 @@
       "maximumRank": 6,
       "staticProfileApplied": true,
       "effectSkillId": 1900930,
-      "effectStatus": "source-indexed-runtime-unapplied",
+      "effectStatus": "runtime-applied",
       "sourceIdentity": "NewTable/soulessence.rows[id=10055]",
       "sourceEffectStatus": "effect-skill-dynamic-unapplied",
       "effectMechanics": {
@@ -3326,7 +3636,7 @@
           "skillLogicType": 6,
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900930]"
         },
-        "runtimeStatus": "source-indexed-runtime-unapplied",
+        "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
         "activationPrerequisites": [],
         "trigger": {
@@ -3335,8 +3645,61 @@
           "eventId": 6,
           "event": "AfterSkill",
           "frameAnchor": "action-end",
-          "condition": null,
-          "targetKind": "self-actor",
+          "condition": {
+            "kind": "condition-group",
+            "conditionType": null,
+            "skillSlotId": null,
+            "skillSlotName": null,
+            "skillTagId": null,
+            "skillTagName": null,
+            "logic": "or",
+            "logicValue": 1,
+            "logicName": "OR",
+            "conditions": [
+              {
+                "kind": "skill-slot",
+                "conditionType": 6,
+                "conditionTypeName": "CheckSkillSlot",
+                "conditionValue": 4,
+                "actionKinds": [
+                  "ultimate"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillSlot=6|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType.UltraSkill=4",
+                "status": "applied",
+                "skillSlotId": 4,
+                "skillSlotName": "UltraSkill"
+              },
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 4,
+                "actionKinds": [
+                  "ultimate"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.UltraSkill=4",
+                "status": "applied",
+                "skillTagId": 4,
+                "skillTagName": "UltraSkill"
+              }
+            ],
+            "actionKinds": [
+              "ultimate"
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301.triggerTargetType",
+          "target": {
+            "kind": "team-actors",
+            "effectTargetType": 15,
+            "effectTargetTypeName": "AllHero",
+            "effectListIndex": 0,
+            "targetElementPathId": -2274249246834308600,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+          },
+          "targetKind": "team-actors",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301"
         },
         "effect": {
@@ -3350,10 +3713,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-2274249246834308600;elementId=19009302.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900930:19009302:-2274249246834308600",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-2274249246834308600;elementId=19009302.formulaParams|functionParams"
           },
           "durationMs": 20000,
           "stackMode": "refresh",
@@ -3413,9 +3781,7 @@
           "damageElementIds": [],
           "activationPrerequisiteElementIds": []
         },
-        "runtimeGaps": [
-          "effect-skill-tag-condition-operator-unsupported"
-        ],
+        "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10055].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900930.asset/MonoBehaviour/skill_control_1900930__3135420117074848428.json|battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301|battle-element-assets.jsonl#path_id=-2274249246834308600;elementId=19009302"
       }
     },
@@ -3712,12 +4078,45 @@
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
+            "skillSlotId": null,
+            "skillSlotName": null,
             "skillTagId": 3,
+            "skillTagName": "NormalSkill",
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 3,
+                "actionKinds": [
+                  "star-skill"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalSkill=3",
+                "status": "applied",
+                "skillTagId": 3,
+                "skillTagName": "NormalSkill"
+              }
+            ],
             "actionKinds": [
               "star-skill"
-            ]
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
           },
-          "targetKind": "self-actor",
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001.triggerTargetType",
+          "target": {
+            "kind": "team-actors",
+            "effectTargetType": 15,
+            "effectTargetTypeName": "AllHero",
+            "effectListIndex": 0,
+            "targetElementPathId": -2685633708192990000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+          },
+          "targetKind": "team-actors",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001"
         },
         "effect": {
@@ -3733,10 +4132,15 @@
           "propertyTagMatchMode": "single-exact",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-2685633708192990000;elementId=19009002.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900900:19009002:-2685633708192990000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-2685633708192990000;elementId=19009002.formulaParams|functionParams"
           },
           "durationMs": 24000,
           "stackMode": "refresh",
@@ -3960,8 +4364,19 @@
           "eventId": 32,
           "event": null,
           "frameAnchor": null,
-          "condition": null,
-          "targetKind": "self-actor",
+          "condition": {
+            "kind": "condition-group",
+            "logic": "and",
+            "logicValue": 0,
+            "conditions": [],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerTargetType",
+          "target": null,
+          "targetKind": "unresolved",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801"
         },
         "effect": null,
@@ -4002,7 +4417,8 @@
           "effect-property-stack-operator-unsupported",
           "effect-skill-tag-condition-operator-unsupported",
           "effect-star-values-incomplete",
-          "effect-trigger-event-operator-unsupported"
+          "effect-trigger-event-operator-unsupported",
+          "effect-trigger-target-unsupported"
         ],
         "sourceIdentity": "NewTable/soulessence.rows[id=10063].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900880.asset/MonoBehaviour/skill_control_1900880__3748949261925534020.json|battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801"
       }
@@ -4300,7 +4716,7 @@
       "maximumRank": 6,
       "staticProfileApplied": true,
       "effectSkillId": 1900230,
-      "effectStatus": "source-indexed-runtime-unapplied",
+      "effectStatus": "runtime-applied",
       "sourceIdentity": "NewTable/soulessence.rows[id=10093]",
       "sourceEffectStatus": "effect-skill-dynamic-unapplied",
       "effectMechanics": {
@@ -4311,7 +4727,7 @@
           "skillLogicType": 6,
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900230]"
         },
-        "runtimeStatus": "source-indexed-runtime-unapplied",
+        "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
         "activationPrerequisites": [],
         "trigger": {
@@ -4320,8 +4736,61 @@
           "eventId": 6,
           "event": "AfterSkill",
           "frameAnchor": "action-end",
-          "condition": null,
-          "targetKind": "self-actor",
+          "condition": {
+            "kind": "condition-group",
+            "conditionType": null,
+            "skillSlotId": null,
+            "skillSlotName": null,
+            "skillTagId": null,
+            "skillTagName": null,
+            "logic": "or",
+            "logicValue": 1,
+            "logicName": "OR",
+            "conditions": [
+              {
+                "kind": "skill-slot",
+                "conditionType": 6,
+                "conditionTypeName": "CheckSkillSlot",
+                "conditionValue": 4,
+                "actionKinds": [
+                  "ultimate"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillSlot=6|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType.UltraSkill=4",
+                "status": "applied",
+                "skillSlotId": 4,
+                "skillSlotName": "UltraSkill"
+              },
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 4,
+                "actionKinds": [
+                  "ultimate"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.UltraSkill=4",
+                "status": "applied",
+                "skillTagId": 4,
+                "skillTagName": "UltraSkill"
+              }
+            ],
+            "actionKinds": [
+              "ultimate"
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301.triggerTargetType",
+          "target": {
+            "kind": "team-actors",
+            "effectTargetType": 15,
+            "effectTargetTypeName": "AllHero",
+            "effectListIndex": 0,
+            "targetElementPathId": 475903754845527040,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+          },
+          "targetKind": "team-actors",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301"
         },
         "effect": {
@@ -4335,10 +4804,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=475903754845527040;elementId=19002302.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900230:19002302:475903754845527040",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 3,
+            "baseExpression": "A/10000",
             "commonRatioRaw": 10000,
-            "family": "unsupported-1-3"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "basis-point-property-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=475903754845527040;elementId=19002302.formulaParams|functionParams"
           },
           "durationMs": 24000,
           "stackMode": "refresh",
@@ -4398,10 +4872,7 @@
           "damageElementIds": [],
           "activationPrerequisiteElementIds": []
         },
-        "runtimeGaps": [
-          "effect-formula-family-operator-unsupported",
-          "effect-skill-tag-condition-operator-unsupported"
-        ],
+        "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10093].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900230.asset/MonoBehaviour/skill_control_1900230__7491246200405412096.json|battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301|battle-element-assets.jsonl#path_id=475903754845527040;elementId=19002302"
       }
     },
@@ -4438,10 +4909,43 @@
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
+            "skillSlotId": null,
+            "skillSlotName": null,
             "skillTagId": 3,
+            "skillTagName": "NormalSkill",
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 3,
+                "actionKinds": [
+                  "star-skill"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalSkill=3",
+                "status": "applied",
+                "skillTagId": 3,
+                "skillTagName": "NormalSkill"
+              }
+            ],
             "actionKinds": [
               "star-skill"
-            ]
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": 8461738275188953000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
           },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601"
@@ -4459,10 +4963,15 @@
           "propertyTagMatchMode": "single-exact",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8461738275188953000;elementId=19006602.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900660:19006602:8461738275188953000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=8461738275188953000;elementId=19006602.formulaParams|functionParams"
           },
           "durationMs": 15000,
           "stackMode": "refresh",
@@ -4611,7 +5120,7 @@
       "maximumRank": 6,
       "staticProfileApplied": true,
       "effectSkillId": 1900470,
-      "effectStatus": "source-indexed-runtime-unapplied",
+      "effectStatus": "runtime-applied",
       "sourceIdentity": "NewTable/soulessence.rows[id=10097]",
       "sourceEffectStatus": "effect-skill-dynamic-unapplied",
       "effectMechanics": {
@@ -4622,7 +5131,7 @@
           "skillLogicType": 6,
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900470]"
         },
-        "runtimeStatus": "source-indexed-runtime-unapplied",
+        "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
         "activationPrerequisites": [],
         "trigger": {
@@ -4634,10 +5143,43 @@
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
+            "skillSlotId": null,
+            "skillSlotName": null,
             "skillTagId": 11,
+            "skillTagName": "ExtremityAttack",
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 11,
+                "actionKinds": [
+                  "limit-counter"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.ExtremityAttack=11",
+                "status": "applied",
+                "skillTagId": 11,
+                "skillTagName": "ExtremityAttack"
+              }
+            ],
             "actionKinds": [
               "limit-counter"
-            ]
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": -6749174475042234000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
           },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700"
@@ -4653,10 +5195,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-6749174475042234000;elementId=19004701.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900470:19004701:-6749174475042234000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 3,
+            "baseExpression": "A/10000",
             "commonRatioRaw": 10000,
-            "family": "unsupported-1-3"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "basis-point-property-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-6749174475042234000;elementId=19004701.formulaParams|functionParams"
           },
           "durationMs": 8000,
           "stackMode": "refresh",
@@ -4716,9 +5263,7 @@
           "damageElementIds": [],
           "activationPrerequisiteElementIds": []
         },
-        "runtimeGaps": [
-          "effect-formula-family-operator-unsupported"
-        ],
+        "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10097].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900470.asset/MonoBehaviour/skill_control_1900470__7648283824826147029.json|battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700|battle-element-assets.jsonl#path_id=-6749174475042234000;elementId=19004701"
       }
     },
@@ -4755,10 +5300,43 @@
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
+            "skillSlotId": null,
+            "skillSlotName": null,
             "skillTagId": 2,
+            "skillTagName": "WhackAttack",
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 2,
+                "actionKinds": [
+                  "charged-attack"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.WhackAttack=2",
+                "status": "applied",
+                "skillTagId": 2,
+                "skillTagName": "WhackAttack"
+              }
+            ],
             "actionKinds": [
               "charged-attack"
-            ]
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": -5650259386971768000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
           },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701"
@@ -4776,10 +5354,15 @@
           "propertyTagMatchMode": "single-exact",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5650259386971768000;elementId=19006702.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900670:19006702:-5650259386971768000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-5650259386971768000;elementId=19006702.formulaParams|functionParams"
           },
           "durationMs": 4000,
           "stackMode": "stack",
@@ -4873,7 +5456,25 @@
           "eventId": 2,
           "event": "AfterDamage",
           "frameAnchor": "hit-after-damage",
-          "condition": null,
+          "condition": {
+            "kind": "condition-group",
+            "logic": "and",
+            "logicValue": 0,
+            "conditions": [],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": 447782200906035000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+          },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001"
         },
@@ -4888,10 +5489,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900200:19002002:447782200906035000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002.formulaParams|functionParams"
           },
           "durationMs": 4000,
           "stackMode": "stack",
@@ -4990,12 +5596,38 @@
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
+            "skillSlotId": null,
+            "skillSlotName": null,
             "skillTagId": 3,
+            "skillTagName": "NormalSkill",
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 3,
+                "actionKinds": [
+                  "star-skill"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalSkill=3",
+                "status": "applied",
+                "skillTagId": 3,
+                "skillTagName": "NormalSkill"
+              }
+            ],
             "actionKinds": [
               "star-skill"
-            ]
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
           },
-          "targetKind": "self-actor",
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501.triggerTargetType",
+          "target": null,
+          "targetKind": "unresolved",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501"
         },
         "effect": null,
@@ -5036,7 +5668,8 @@
           "effect-property-duration-unresolved",
           "effect-property-leaf-not-unique",
           "effect-property-stack-operator-unsupported",
-          "effect-star-values-incomplete"
+          "effect-star-values-incomplete",
+          "effect-trigger-target-unsupported"
         ],
         "sourceIdentity": "NewTable/soulessence.rows[id=10107].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900350.asset/MonoBehaviour/skill_control_1900350__715439430624416201.json|battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501"
       }
@@ -5236,7 +5869,35 @@
           "eventId": 1,
           "event": "BeforeDamage",
           "frameAnchor": "hit-before-damage",
-          "condition": null,
+          "condition": {
+            "kind": "condition-group",
+            "logic": "or",
+            "logicValue": 1,
+            "conditions": [
+              {
+                "kind": "unresolved",
+                "conditionType": 13,
+                "conditionTypeName": null,
+                "conditionValue": 796,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": 8480096044321114000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+          },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900"
         },
@@ -5253,10 +5914,15 @@
           "propertyTagMatchMode": "single-exact",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8480096044321114000;elementId=19005901.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900590:19005901:8480096044321114000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=8480096044321114000;elementId=19005901.formulaParams|functionParams"
           },
           "durationMs": 8000,
           "stackMode": "refresh",
@@ -5353,8 +6019,49 @@
           "eventId": 5,
           "event": "BeforeSkill",
           "frameAnchor": "action-start",
-          "condition": null,
-          "targetKind": "self-actor",
+          "condition": {
+            "kind": "condition-group",
+            "logic": "and",
+            "logicValue": 0,
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 4,
+                "actionKinds": [
+                  "ultimate"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.UltraSkill=4",
+                "status": "applied",
+                "skillTagId": 4,
+                "skillTagName": "UltraSkill"
+              },
+              {
+                "kind": "unresolved",
+                "conditionType": 10,
+                "conditionTypeName": null,
+                "conditionValue": 250,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101.triggerConditionList[1]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101.triggerTargetType",
+          "target": {
+            "kind": "team-actors",
+            "effectTargetType": 15,
+            "effectTargetTypeName": "AllHero",
+            "effectListIndex": 0,
+            "targetElementPathId": -4751821042418617000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+          },
+          "targetKind": "team-actors",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101"
         },
         "effect": {
@@ -5368,10 +6075,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900410:19004102:-4751821042418617000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102.formulaParams|functionParams"
           },
           "durationMs": 20000,
           "stackMode": "refresh",
@@ -5470,10 +6182,43 @@
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
+            "skillSlotId": null,
+            "skillSlotName": null,
             "skillTagId": 1,
+            "skillTagName": "NormalAttack",
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 1,
+                "actionKinds": [
+                  "normal-attack"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1",
+                "status": "applied",
+                "skillTagId": 1,
+                "skillTagName": "NormalAttack"
+              }
+            ],
             "actionKinds": [
               "normal-attack"
-            ]
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": -3194128450977334000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
           },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401"
@@ -5489,10 +6234,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-3194128450977334000;elementId=19005402.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900540:19005402:-3194128450977334000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-3194128450977334000;elementId=19005402.formulaParams|functionParams"
           },
           "durationMs": 5000,
           "stackMode": "stack",
@@ -5586,7 +6336,35 @@
           "eventId": 1,
           "event": "BeforeDamage",
           "frameAnchor": "hit-before-damage",
-          "condition": null,
+          "condition": {
+            "kind": "condition-group",
+            "logic": "and",
+            "logicValue": 0,
+            "conditions": [
+              {
+                "kind": "unresolved",
+                "conditionType": 8,
+                "conditionTypeName": null,
+                "conditionValue": 37,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": 7184896566896581000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+          },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801"
         },
@@ -5603,10 +6381,15 @@
           "propertyTagMatchMode": "single-exact",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=7184896566896581000;elementId=19002802.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900280:19002802:7184896566896581000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=7184896566896581000;elementId=19002802.formulaParams|functionParams"
           },
           "durationMs": 5000,
           "stackMode": "refresh",
@@ -5703,7 +6486,44 @@
           "eventId": 2,
           "event": "AfterDamage",
           "frameAnchor": "hit-after-damage",
-          "condition": null,
+          "condition": {
+            "kind": "condition-group",
+            "logic": "or",
+            "logicValue": 1,
+            "conditions": [
+              {
+                "kind": "unresolved",
+                "conditionType": 12,
+                "conditionTypeName": null,
+                "conditionValue": 299,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              },
+              {
+                "kind": "unresolved",
+                "conditionType": 12,
+                "conditionTypeName": null,
+                "conditionValue": 499,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701.triggerConditionList[1]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": 8731924757452644000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+          },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701"
         },
@@ -5718,10 +6538,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900270:19002702:8731924757452644000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702.formulaParams|functionParams"
           },
           "durationMs": 3000,
           "stackMode": "refresh",
@@ -5962,7 +6787,57 @@
           "eventId": 2,
           "event": "AfterDamage",
           "frameAnchor": "hit-after-damage",
-          "condition": null,
+          "condition": {
+            "kind": "condition-group",
+            "logic": "and",
+            "logicValue": 0,
+            "conditions": [
+              {
+                "kind": "unresolved",
+                "conditionType": 8,
+                "conditionTypeName": null,
+                "conditionValue": 43,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              },
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 1,
+                "actionKinds": [
+                  "normal-attack"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1",
+                "status": "applied",
+                "skillTagId": 1,
+                "skillTagName": "NormalAttack"
+              },
+              {
+                "kind": "unresolved",
+                "conditionType": 8,
+                "conditionTypeName": null,
+                "conditionValue": 32,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerConditionList[2]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": -5684518322628377000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+          },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101"
         },
@@ -5977,10 +6852,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900210:19002102:-5684518322628377000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102.formulaParams|functionParams"
           },
           "durationMs": 8000,
           "stackMode": "refresh",
@@ -6149,12 +7029,30 @@
           "event": "BeforeSkill",
           "frameAnchor": "action-start",
           "condition": {
-            "kind": "skill-tag",
-            "conditionType": 11,
-            "skillTagId": 22,
-            "actionKinds": []
+            "kind": "condition-group",
+            "logic": "and",
+            "logicValue": 0,
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 22,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|condition-value-unresolved",
+                "status": "static-evidence-gap",
+                "skillTagId": 22,
+                "skillTagName": null
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101.triggerConditionType|triggerConditionList"
           },
-          "targetKind": "self-actor",
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101.triggerTargetType",
+          "target": null,
+          "targetKind": "unresolved",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101"
         },
         "effect": {
@@ -6170,10 +7068,15 @@
           "propertyTagMatchMode": "single-exact",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900110:19001002:-6475704673365761000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002.formulaParams|functionParams"
           },
           "durationMs": -1,
           "stackMode": "refresh",
@@ -6237,7 +7140,8 @@
         },
         "runtimeGaps": [
           "effect-property-duration-unresolved",
-          "effect-skill-tag-condition-operator-unsupported"
+          "effect-skill-tag-condition-operator-unsupported",
+          "effect-trigger-target-unsupported"
         ],
         "sourceIdentity": "NewTable/soulessence.rows[id=10147].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900110.asset/MonoBehaviour/skill_control_1900110__4798028882442525532.json|battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101|battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002"
       }
@@ -6272,8 +7176,36 @@
           "eventId": 10,
           "event": null,
           "frameAnchor": null,
-          "condition": null,
-          "targetKind": "self-actor",
+          "condition": {
+            "kind": "condition-group",
+            "logic": "and",
+            "logicValue": 0,
+            "conditions": [
+              {
+                "kind": "unresolved",
+                "conditionType": 13,
+                "conditionTypeName": null,
+                "conditionValue": 150,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201.triggerTargetType",
+          "target": {
+            "kind": "team-actors",
+            "effectTargetType": 15,
+            "effectTargetTypeName": "AllHero",
+            "effectListIndex": 0,
+            "targetElementPathId": 6856932050092692000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+          },
+          "targetKind": "team-actors",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201"
         },
         "effect": {
@@ -6287,10 +7219,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6856932050092692000;elementId=19002202.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900220:19002202:6856932050092692000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=6856932050092692000;elementId=19002202.formulaParams|functionParams"
           },
           "durationMs": 24000,
           "stackMode": "refresh",
@@ -6387,7 +7324,44 @@
           "eventId": 1,
           "event": "BeforeDamage",
           "frameAnchor": "hit-before-damage",
-          "condition": null,
+          "condition": {
+            "kind": "condition-group",
+            "logic": "or",
+            "logicValue": 1,
+            "conditions": [
+              {
+                "kind": "unresolved",
+                "conditionType": 13,
+                "conditionTypeName": null,
+                "conditionValue": 196,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              },
+              {
+                "kind": "unresolved",
+                "conditionType": 13,
+                "conditionTypeName": null,
+                "conditionValue": 796,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionList[1]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": 6687059805823089000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+          },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600"
         },
@@ -6404,10 +7378,15 @@
           "propertyTagMatchMode": "single-exact",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900560:19005601:6687059805823089000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601.formulaParams|functionParams"
           },
           "durationMs": 8000,
           "stackMode": "stack",
@@ -6505,10 +7484,35 @@
           "event": "BeforeSkill",
           "frameAnchor": "action-start",
           "condition": {
-            "kind": "skill-tag",
-            "conditionType": 11,
-            "skillTagId": 22,
-            "actionKinds": []
+            "kind": "condition-group",
+            "logic": "or",
+            "logicValue": 1,
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 22,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|condition-value-unresolved",
+                "status": "static-evidence-gap",
+                "skillTagId": 22,
+                "skillTagName": null
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": 3837107787407859700,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
           },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301"
@@ -6524,10 +7528,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=3837107787407859700;elementId=19001302.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900130:19001302:3837107787407859700",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=3837107787407859700;elementId=19001302.formulaParams|functionParams"
           },
           "durationMs": 10000,
           "stackMode": "refresh",
@@ -6693,10 +7702,43 @@
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
+            "skillSlotId": null,
+            "skillSlotName": null,
             "skillTagId": 1,
+            "skillTagName": "NormalAttack",
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 1,
+                "actionKinds": [
+                  "normal-attack"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1",
+                "status": "applied",
+                "skillTagId": 1,
+                "skillTagName": "NormalAttack"
+              }
+            ],
             "actionKinds": [
               "normal-attack"
-            ]
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": 2209371490931731500,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
           },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401"
@@ -6712,10 +7754,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=2209371490931731500;elementId=19002402.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900240:19002402:2209371490931731500",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=2209371490931731500;elementId=19002402.formulaParams|functionParams"
           },
           "durationMs": 15000,
           "stackMode": "stack",
@@ -6812,10 +7859,43 @@
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
+            "skillSlotId": null,
+            "skillSlotName": null,
             "skillTagId": 1,
+            "skillTagName": "NormalAttack",
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 1,
+                "actionKinds": [
+                  "normal-attack"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1",
+                "status": "applied",
+                "skillTagId": 1,
+                "skillTagName": "NormalAttack"
+              }
+            ],
             "actionKinds": [
               "normal-attack"
-            ]
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501.triggerTargetType",
+          "target": {
+            "kind": "self-actor",
+            "effectTargetType": 0,
+            "effectTargetTypeName": "Self",
+            "effectListIndex": 0,
+            "targetElementPathId": 6931937794752071000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
           },
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501"
@@ -6831,10 +7911,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6931937794752071000;elementId=19002502.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900250:19002502:6931937794752071000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 5,
+            "baseExpression": "A",
             "commonRatioRaw": 10000,
-            "family": "literal-a-with-common-ratio"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "literal-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=6931937794752071000;elementId=19002502.formulaParams|functionParams"
           },
           "durationMs": 15000,
           "stackMode": "stack",
@@ -6993,8 +8078,26 @@
           "eventId": 40,
           "event": null,
           "frameAnchor": null,
-          "condition": null,
-          "targetKind": "self-actor",
+          "condition": {
+            "kind": "condition-group",
+            "logic": "and",
+            "logicValue": 0,
+            "conditions": [],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500.triggerTargetType",
+          "target": {
+            "kind": "team-actors",
+            "effectTargetType": 15,
+            "effectTargetTypeName": "AllHero",
+            "effectListIndex": 0,
+            "targetElementPathId": -7968102161953321000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+          },
+          "targetKind": "team-actors",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500"
         },
         "effect": {
@@ -7008,10 +8111,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-7968102161953321000;elementId=19007503.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900750:19007503:-7968102161953321000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 3,
+            "baseExpression": "A/10000",
             "commonRatioRaw": 10000,
-            "family": "unsupported-1-3"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "basis-point-property-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-7968102161953321000;elementId=19007503.formulaParams|functionParams"
           },
           "durationMs": 20000,
           "stackMode": "refresh",
@@ -7072,7 +8180,6 @@
           "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
-          "effect-formula-family-operator-unsupported",
           "effect-skill-tag-condition-operator-unsupported",
           "effect-trigger-event-operator-unsupported"
         ],
@@ -7109,8 +8216,29 @@
           "eventId": 10,
           "event": null,
           "frameAnchor": null,
-          "condition": null,
-          "targetKind": "self-actor",
+          "condition": {
+            "kind": "condition-group",
+            "logic": "or",
+            "logicValue": 1,
+            "conditions": [
+              {
+                "kind": "unresolved",
+                "conditionType": 13,
+                "conditionTypeName": null,
+                "conditionValue": 650,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
+                "status": "static-evidence-gap"
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400.triggerConditionType|triggerConditionList"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400.triggerTargetType",
+          "target": null,
+          "targetKind": "unresolved",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400"
         },
         "effect": null,
@@ -7153,7 +8281,8 @@
           "effect-property-stack-operator-unsupported",
           "effect-skill-tag-condition-operator-unsupported",
           "effect-star-values-incomplete",
-          "effect-trigger-event-operator-unsupported"
+          "effect-trigger-event-operator-unsupported",
+          "effect-trigger-target-unsupported"
         ],
         "sourceIdentity": "NewTable/soulessence.rows[id=10170].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900740.asset/MonoBehaviour/skill_control_1900740__3612376006236613009.json|battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400"
       }
@@ -7188,8 +8317,41 @@
           "eventId": 44,
           "event": null,
           "frameAnchor": null,
-          "condition": null,
-          "targetKind": "self-actor",
+          "condition": {
+            "kind": "skill-slot",
+            "conditionType": 6,
+            "skillSlotId": 4,
+            "skillSlotName": "UltraSkill",
+            "skillTagId": null,
+            "skillTagName": null,
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-slot",
+                "conditionType": 6,
+                "conditionTypeName": "CheckSkillSlot",
+                "conditionValue": 4,
+                "actionKinds": [
+                  "ultimate"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillSlot=6|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType.UltraSkill=4",
+                "status": "applied",
+                "skillSlotId": 4,
+                "skillSlotName": "UltraSkill"
+              }
+            ],
+            "actionKinds": [
+              "ultimate"
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          },
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401.triggerTargetType",
+          "target": null,
+          "targetKind": "unresolved",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401"
         },
         "effect": {
@@ -7203,10 +8365,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8237672842561680000;elementId=19001402.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900140:19001402:8237672842561680000",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 3,
+            "baseExpression": "A/10000",
             "commonRatioRaw": 10000,
-            "family": "unsupported-1-3"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "basis-point-property-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=8237672842561680000;elementId=19001402.formulaParams|functionParams"
           },
           "durationMs": 2000,
           "stackMode": "refresh",
@@ -7267,9 +8434,8 @@
           "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
-          "effect-formula-family-operator-unsupported",
-          "effect-skill-tag-condition-operator-unsupported",
-          "effect-trigger-event-operator-unsupported"
+          "effect-trigger-event-operator-unsupported",
+          "effect-trigger-target-unsupported"
         ],
         "sourceIdentity": "NewTable/soulessence.rows[id=10175].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900140.asset/MonoBehaviour/skill_control_1900140__2623401305453258783.json|battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401|battle-element-assets.jsonl#path_id=8237672842561680000;elementId=19001402"
       }
@@ -7307,12 +8473,38 @@
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
+            "skillSlotId": null,
+            "skillSlotName": null,
             "skillTagId": 1,
+            "skillTagName": "NormalAttack",
+            "logic": "and",
+            "logicValue": 0,
+            "logicName": "AND",
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 1,
+                "actionKinds": [
+                  "normal-attack"
+                ],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1",
+                "status": "applied",
+                "skillTagId": 1,
+                "skillTagName": "NormalAttack"
+              }
+            ],
             "actionKinds": [
               "normal-attack"
-            ]
+            ],
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
           },
-          "targetKind": "self-actor",
+          "triggerTargetType": 0,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501.triggerTargetType",
+          "target": null,
+          "targetKind": "unresolved",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501"
         },
         "effect": {
@@ -7326,10 +8518,15 @@
           "propertyTagMatchMode": "unscoped",
           "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502.defaultPropertyTags",
           "formula": {
+            "formulaIdentity": "battle-effect-formula:soulessence:1900150:19001502:-398033826930552400",
             "commonFunctionId": 1,
+            "commonExpression": "G/10000",
             "baseFunctionId": 3,
+            "baseExpression": "A/10000",
             "commonRatioRaw": 10000,
-            "family": "unsupported-1-3"
+            "sourceParameterEncoding": "battle-element-raw-a",
+            "family": "basis-point-property-a-with-common-ratio",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502.formulaParams|functionParams"
           },
           "durationMs": 15000,
           "stackMode": "refresh",
@@ -7390,9 +8587,9 @@
           "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
-          "effect-formula-family-operator-unsupported",
           "effect-property-stack-operator-unsupported",
-          "effect-trigger-event-operator-unsupported"
+          "effect-trigger-event-operator-unsupported",
+          "effect-trigger-target-unsupported"
         ],
         "sourceIdentity": "NewTable/soulessence.rows[id=10176].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900150.asset/MonoBehaviour/skill_control_1900150__-6680374433071234951.json|battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501|battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502"
       }
@@ -7688,11 +8885,29 @@
           "event": "BeforeSkill",
           "frameAnchor": "action-start",
           "condition": {
-            "kind": "skill-tag",
-            "conditionType": 11,
-            "skillTagId": 14,
-            "actionKinds": []
+            "kind": "condition-group",
+            "logic": "and",
+            "logicValue": 0,
+            "conditions": [
+              {
+                "kind": "skill-tag",
+                "conditionType": 11,
+                "conditionTypeName": "CheckSkillType",
+                "conditionValue": 14,
+                "actionKinds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|condition-value-unresolved",
+                "status": "static-evidence-gap",
+                "skillTagId": 14,
+                "skillTagName": null
+              }
+            ],
+            "actionKinds": [],
+            "status": "static-evidence-gap",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerConditionType|triggerConditionList"
           },
+          "triggerTargetType": 12,
+          "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerTargetType",
+          "target": null,
           "targetKind": "unresolved",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801"
         },
@@ -10479,5 +11694,5 @@
       ]
     }
   },
-  "rosterHash": "c55413ac0c470726"
+  "rosterHash": "ab1fe6bdba580f21"
 }

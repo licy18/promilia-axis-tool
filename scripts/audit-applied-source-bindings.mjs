@@ -212,7 +212,10 @@ async function createLoadoutPropertyTagAudit(catalog) {
     definition => definition.runtimeStatus === 'runtime-applied'
   );
   const requestedElementIds = new Set(
-    definitions.map(definition => Number(definition.effect?.elementId))
+    definitions.flatMap(definition => [
+      Number(definition.effect?.elementId),
+      Number(definition.trigger?.elementId),
+    ])
   );
   const sourceRowsByElementId = new Map();
   for (const line of sourceBytes.toString('utf8').split(/\r?\n/u)) {
@@ -233,6 +236,9 @@ async function createLoadoutPropertyTagAudit(catalog) {
   const records = definitions.map(definition => {
     const elementId = Number(definition.effect?.elementId);
     const sourceRow = sourceRowsByElementId.get(elementId);
+    const triggerElementId = Number(definition.trigger?.elementId);
+    const triggerSourceRow = sourceRowsByElementId.get(triggerElementId);
+    const triggerTree = triggerSourceRow?.typetree ?? {};
     const sourcePropertyTags = normalizeIntegerTags(
       sourceRow?.typetree?.defaultPropertyTags
     );
@@ -246,8 +252,47 @@ async function createLoadoutPropertyTagAudit(catalog) {
             supportedPropertyTags.has(sourcePropertyTags[0])
           ? 'single-exact'
           : null;
+    const sourceConditionLogic = Number(triggerTree.triggerConditionType);
+    const generatedConditionLogic = Number(
+      definition.trigger?.condition?.logicValue
+    );
+    const sourceConditions = normalizeTriggerConditions(
+      triggerTree.triggerConditionList
+    );
+    const generatedConditions = normalizeTriggerConditions(
+      definition.trigger?.condition?.conditions?.map(condition => ({
+        conditionParam1: condition.conditionType,
+        conditionParam2: condition.conditionValue,
+      }))
+    );
+    const sourceTargetEffect = (triggerTree.triggerEffectList ?? []).find(
+      effect =>
+        Number(effect?.targetElement?.m_PathID) ===
+        Number(definition.effect?.pathId)
+    );
+    const sourceTargetType = Number(sourceTargetEffect?.targetType);
+    const generatedTargetType = Number(
+      definition.trigger?.target?.effectTargetType
+    );
+    const sourceCommonFunctionId = Number(
+      sourceRow?.typetree?.formulaParams?.function_1 ??
+        sourceRow?.typetree?.baseIntParams?.[0]
+    );
+    const sourceBaseFunctionId = Number(
+      sourceRow?.typetree?.formulaParams?.function_2 ??
+        sourceRow?.typetree?.baseIntParams?.[1]
+    );
+    const generatedCommonFunctionId = Number(
+      definition.effect?.formula?.commonFunctionId
+    );
+    const generatedBaseFunctionId = Number(
+      definition.effect?.formula?.baseFunctionId
+    );
     const issueCodes = [
       ...(sourceRow ? [] : ['loadout-property-tag-source-row-missing']),
+      ...(triggerSourceRow
+        ? []
+        : ['loadout-trigger-source-row-missing']),
       ...(actualSourceSha256 === expectedSourceSha256
         ? []
         : ['loadout-property-tag-source-hash-drift']),
@@ -263,6 +308,39 @@ async function createLoadoutPropertyTagAudit(catalog) {
       )
         ? []
         : ['loadout-property-tag-source-identity-missing']),
+      ...(sourceConditionLogic === generatedConditionLogic
+        ? []
+        : ['loadout-trigger-condition-logic-drift']),
+      ...(JSON.stringify(sourceConditions) ===
+      JSON.stringify(generatedConditions)
+        ? []
+        : ['loadout-trigger-condition-list-drift']),
+      ...(Number.isInteger(sourceTargetType) &&
+      sourceTargetType === generatedTargetType
+        ? []
+        : ['loadout-trigger-effect-target-drift']),
+      ...(sourceCommonFunctionId === generatedCommonFunctionId &&
+      sourceBaseFunctionId === generatedBaseFunctionId
+        ? []
+        : ['loadout-effect-formula-function-drift']),
+      ...((definition.trigger?.condition?.conditions ?? []).every(condition =>
+        String(condition.sourceIdentity ?? '').includes('dump.cs#')
+      )
+        ? []
+        : ['loadout-trigger-condition-enum-source-identity-missing']),
+      ...(String(definition.trigger?.target?.sourceIdentity ?? '').includes(
+        '.triggerEffectList['
+      ) &&
+      String(definition.trigger?.target?.sourceIdentity ?? '').includes(
+        'ETriggerEffectTargetType.'
+      )
+        ? []
+        : ['loadout-trigger-effect-target-source-identity-missing']),
+      ...(String(definition.effect?.formula?.sourceIdentity ?? '').includes(
+        `elementId=${elementId}.formulaParams|functionParams`
+      )
+        ? []
+        : ['loadout-effect-formula-source-identity-missing']),
     ];
     return {
       soulEssenceId: Number(definition.soulEssenceId),
@@ -272,6 +350,27 @@ async function createLoadoutPropertyTagAudit(catalog) {
       propertyTagMatchMode: definition.effect?.propertyTagMatchMode ?? null,
       propertyTagSourceIdentity:
         definition.effect?.propertyTagSourceIdentity ?? null,
+      triggerCondition: {
+        sourceLogicValue: sourceConditionLogic,
+        generatedLogicValue: generatedConditionLogic,
+        sourceConditions,
+        generatedConditions,
+        sourceIdentity: definition.trigger?.condition?.sourceIdentity ?? null,
+      },
+      triggerEffectTarget: {
+        sourceTargetType,
+        generatedTargetType,
+        targetKind: definition.trigger?.target?.kind ?? null,
+        sourceIdentity: definition.trigger?.target?.sourceIdentity ?? null,
+      },
+      formula: {
+        sourceCommonFunctionId,
+        generatedCommonFunctionId,
+        sourceBaseFunctionId,
+        generatedBaseFunctionId,
+        formulaIdentity: definition.effect?.formula?.formulaIdentity ?? null,
+        sourceIdentity: definition.effect?.formula?.sourceIdentity ?? null,
+      },
       sourceIdentity: definition.effect?.sourceIdentity ?? null,
       status:
         issueCodes.length === 0
@@ -287,6 +386,7 @@ async function createLoadoutPropertyTagAudit(catalog) {
       actualSha256: actualSourceSha256,
       propertyTagContractHash:
         catalog?.propertyTagContract?.contractHash ?? null,
+      triggerContractHash: catalog?.triggerContract?.contractHash ?? null,
     },
     summary: {
       sourceCount: records.length,
@@ -301,6 +401,24 @@ function normalizeIntegerTags(values) {
   return [...new Set((values ?? []).map(Number))]
     .filter(Number.isInteger)
     .sort((left, right) => left - right);
+}
+
+function normalizeTriggerConditions(values) {
+  return (values ?? [])
+    .map(condition => ({
+      conditionType: Number(condition?.conditionParam1),
+      conditionValue: Number(condition?.conditionParam2),
+    }))
+    .filter(
+      condition =>
+        Number.isInteger(condition.conditionType) &&
+        Number.isInteger(condition.conditionValue)
+    )
+    .sort(
+      (left, right) =>
+        left.conditionType - right.conditionType ||
+        left.conditionValue - right.conditionValue
+    );
 }
 
 async function readJsonIfExists(filePath) {

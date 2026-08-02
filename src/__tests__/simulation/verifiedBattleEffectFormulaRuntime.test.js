@@ -33,6 +33,30 @@ describe('verified Battle effect formula registry', () => {
       value: 1000,
       reason: null,
     });
+    const dynamicExtra = evaluateVerifiedBattleEffectFormula({
+      effect: createEffect({
+        a: 938000,
+        baseFunctionId: 3,
+        bucket: 'dynamicExtra',
+        formulaIdentity: 'battle-effect-formula:19002302',
+      }),
+    });
+    expect(dynamicExtra).toMatchObject({
+      family: 'basis-point-property-a-with-common-ratio',
+      sourceRawA: 938000,
+      formulaIdentity: 'battle-effect-formula:19002302',
+      value: dynamicExtra.evaluatedValue,
+      reason: null,
+    });
+    expect(dynamicExtra.evaluatedValue).toBeCloseTo(93.8, 3);
+    expect(dynamicExtra.trace).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          step: 'base-function-3-a-per-10000',
+          input: 938000,
+        }),
+      ])
+    );
     expect(
       evaluateVerifiedBattleEffectFormula({
         effect: createEffect({ a: 1800, baseFunctionId: 2008 }),
@@ -149,9 +173,14 @@ function createEffect({
   g = 10000,
   commonFunctionId = 1,
   baseFunctionId = 5,
+  bucket = null,
+  formulaIdentity = 'battle-effect-formula:fixture',
 } = {}) {
   return {
+    property: bucket == null ? undefined : { bucket },
+    bucket,
     formula: {
+      formulaIdentity,
       commonFunctionId,
       baseFunctionId,
       paramsByLevel: {
