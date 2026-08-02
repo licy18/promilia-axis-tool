@@ -22,6 +22,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - B3-C4-R1 product acceptance baseline: `8bf0b3a77538102c1995dd5943e4a7275664ca0a`.
 - B3-C5 product acceptance baseline: `5c713e55ffdc46e5e75e9a4a4dcc1d0366201be0`.
 - B3-C6 product acceptance baseline: `5c5a33a21cce05fbf090af72c783bad475b55656`.
+- B3-C7 reviewed implementation baseline: `5647f1a74d74cb63b763ed06367ac8198084cab1`; C7-R1 repairs its non-damage projection resource ledger.
 - The B3 contract was selectively synchronized from the dirty main-workspace plan on 2026-08-01; the main workspace was not modified.
 
 ## Frozen Plan Snapshot
@@ -56,7 +57,9 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - The current Machine Axis canonical hashes are `c8bfd28dcb890f4f / 98deb78db6293f88 / 8586fe2ee148b0fe / 0b410dc9255d2654`. Identity changed because ordered judgment groups and candidate-to-packet mappings became package data; evaluation, cycle evaluation `412605349bbf2fe3`, and all authoritative numeric assertions are unchanged.
 - Current optimization-ready counts are zero for all five object kinds. M12-C remains locked.
 - Current maturity is `216 extracted / 49 runtime-integrated`; all five optimization-ready counts remain zero. Blocking gaps are `420` unique (`402 not-implemented`, `18 evidence-insufficient`).
-- Status: `B3-C7 verification-complete-awaiting-product-acceptance`.
+- C7-R1 resource parity covers manual resource, auto SP, direct SP, landed-hit actor/Kibo recovery and tuning overlimit direct SP. The projection emits direct heal/shield and periodic heal events only after the same resource cost gate as full runtime; it emits no damage/toughness events and consumes no critical samples.
+- Verification passed: focused mechanics `3 / 100`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, canonical/runtime `6 / 69`, nine deterministic audits, and production build.
+- Status: `B3-C7-R1 verification-complete-awaiting-product-acceptance`.
 
 ## Remaining Blockers
 

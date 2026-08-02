@@ -1,7 +1,7 @@
-# M12-B3-C7 Non-Damage Event Transactions
+# M12-B3-C7-R1 Non-Damage Resource Parity
 
 - Status: `verification-complete-awaiting-product-acceptance`
-- Base: C6 product-accepted at `5c5a33a21cce05fbf090af72c783bad475b55656`
+- Reviewed C7 base: `5647f1a74d74cb63b763ed06367ac8198084cab1`
 - Scope: soul essences `10048`, `10169`, `10175`, and `10176`; `10018`, `10052`, and `10101` remain outside this batch.
 
 ## Source Contract
@@ -18,8 +18,14 @@ Canonical non-damage transactions now project successful switches, direct and pe
 
 `10169` remains evidence-insufficient because native shield refresh/replacement dispatch has not been closed. `10176` remains unapplied because `combineType=5 / combineNumber=-1` semantics are unresolved. Neither is approximated by the runtime.
 
+## C7-R1 Resource Parity
+
+The rejected C7 build kept action costs in `non-damage-event-projection` but filtered the earlier resource gains that make those actions executable. R1 projects manual resource changes, automatic SP, direct SP, landed-hit actor and Kibo recovery, and tuning overlimit direct SP before applying the same actor/Kibo cost gates. A landed hit contributes recovery through its verified damage transaction identity without evaluating damage, toughness, or critical branches.
+
+The real regression now proves `manual +100 SP -> cost 100 -> direct heal/shield`: full and preliminary runtimes both execute, AfterHeal is emitted exactly once, and `10175` still targets the healed actor. Resource-insufficient actor and Kibo actions emit neither heal nor shield. The isolated projection produces zero damage/toughness events and consumes zero sampled critical rolls; the final runtime starts from a fresh state and random source.
+
 ## Qualification
 
 Soul effects are `25/62 runtime-applied` and `37/62 dynamic-unapplied`. The unique blocker ledger is `420` (`402 not-implemented`, `18 evidence-insufficient`). All 12 set effects remain unapplied; every formal admission count is zero and M12-C remains locked.
 
-Verification passed C7 focused mechanics `3 files / 82 tests`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, canonical/runtime `6 / 87`, nine deterministic audits, and production build. Applied-source audit is `25 property sources / 0 drift`, `13 tuning conditions / 0 drift`, and `12 priority consume groups / 0 drift`.
+Verification passed C7-R1 focused mechanics `3 files / 100 tests`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, canonical/runtime `6 / 69`, nine deterministic audits, and production build. Applied-source audit remains `25 property sources / 0 drift`, `13 tuning conditions / 0 drift`, and `12 priority consume groups / 0 drift`.

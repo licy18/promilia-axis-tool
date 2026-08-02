@@ -417,6 +417,21 @@ export function createVerifiedCombatRuntime({
       continue;
     }
     if (['hit', 'passive-derived-hit'].includes(descriptor.kind)) {
+      if (nonDamageProjectionOnly && descriptor.kind === 'hit') {
+        if (descriptor.damageEventTransaction) {
+          applyHitRecovery({
+            descriptor,
+            hitResult: {
+              hitKey: createVerifiedCombatHitKey(descriptor),
+            },
+            state,
+            hitRecoveryAtByIdentity,
+            resourceEvents,
+            kiboResourceEvents,
+          });
+        }
+        continue;
+      }
       const hitResult = applyHitDescriptor({
         descriptor,
         scenario,
@@ -2682,14 +2697,20 @@ function createDirectVitalEvent({
 function isNonDamageProjectionDescriptor(descriptor) {
   if (
     descriptor?.kind === 'tuning-combat' &&
-    descriptor.tuningEvent?.kind === 'periodic-heal'
+    ['periodic-heal', 'overlimit-direct-sp'].includes(
+      descriptor.tuningEvent?.kind
+    )
   ) {
     return true;
   }
   return [
+    'manual-resource',
     'action-cost',
+    'auto-sp-tick',
+    'direct-sp',
     'direct-heal',
     'direct-shield',
+    'hit',
     'passive-vital-change',
     'passive-periodic-heal',
     'passive-periodic-heal-contract-unresolved',
@@ -3423,9 +3444,7 @@ function applyHitDescriptor({
   const stateAfter = createEnemyStateSnapshot(enemy);
   const passiveDerivedDamageCommand =
     descriptor.passiveDerivedDamageCommand ?? null;
-  const hitKey = passiveDerivedDamageCommand
-    ? `verified-${passiveDerivedDamageCommand.id}`
-    : `verified-hit-${hit.hitIndex}-${hit.elementId}`;
+  const hitKey = createVerifiedCombatHitKey(descriptor);
   const shieldAbsorbed = Math.max(
     0,
     qToNumber(
@@ -3578,6 +3597,15 @@ function applyHitDescriptor({
       },
     },
   };
+}
+
+function createVerifiedCombatHitKey(descriptor) {
+  const passiveDerivedDamageCommand =
+    descriptor?.passiveDerivedDamageCommand ?? null;
+  if (passiveDerivedDamageCommand) {
+    return `verified-${passiveDerivedDamageCommand.id}`;
+  }
+  return `verified-hit-${descriptor?.hit?.hitIndex}-${descriptor?.hit?.elementId}`;
 }
 
 function applyHitRecovery({

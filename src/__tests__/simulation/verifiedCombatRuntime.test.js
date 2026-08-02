@@ -1283,6 +1283,323 @@ describe('verified combat mechanics runtime', () => {
     );
   });
 
+  it('keeps auto and landed-hit recovery in the non-damage execution projection without sampling or damage', () => {
+    const autoFunded = simulateVerifiedAcceptanceScenario({
+      includeActor: false,
+      includeActorUltimate: true,
+      includeKibo: false,
+      durationMs: 1000,
+      actorUltimateStartMs: 200,
+      initialSpByCharacterId: { 109001: 99.99 },
+    });
+    const autoProjection = createNonDamageExecutionProjection(autoFunded);
+    expect(
+      autoProjection.resourceEvents.find(
+        event =>
+          event.actionId === 'verified-muyin-ultimate' &&
+          event.payload.reason === 'verified-skill-cost'
+      )?.payload
+    ).toMatchObject({ beforeValue: 100, change: -100, afterValue: 0 });
+    expect(
+      autoProjection.resourceEvents.some(
+        event => event.payload.reason === 'verified-auto-sp-background'
+      )
+    ).toBe(true);
+
+    const hitFunded = simulateVerifiedAcceptanceScenario({
+      includeActor: true,
+      includeActorUltimate: true,
+      includeKibo: false,
+      durationMs: 1200,
+      actorUltimateStartMs: 300,
+      initialSpByCharacterId: { 109001: 99.45 },
+    });
+    let randomSampleCount = 0;
+    const sampledProjectionScenario = structuredClone(
+      hitFunded.effectiveActionTimeline.scenario
+    );
+    sampledProjectionScenario.combatScenario = {
+      ...(sampledProjectionScenario.combatScenario ?? {}),
+      critical: {
+        policy: 'sampled',
+        seed: 'projection-must-not-consume',
+      },
+    };
+    const hitProjection = createNonDamageExecutionProjection(hitFunded, {
+      scenario: sampledProjectionScenario,
+      criticalRandomSource: {
+        algorithm: 'test-counting-source',
+        seed: 'projection-must-not-consume',
+        nextSample() {
+          randomSampleCount += 1;
+          return { value: 0, streamIndex: randomSampleCount - 1 };
+        },
+      },
+    });
+    expect(
+      hitProjection.resourceEvents.some(
+        event =>
+          event.actionId === 'verified-pangpang-normal' &&
+          event.actorId === 'actor-109001' &&
+          event.payload.reason === 'verified-hit-sp-shared-recovery'
+      )
+    ).toBe(true);
+    expect(
+      hitProjection.resourceEvents.find(
+        event =>
+          event.actionId === 'verified-muyin-ultimate' &&
+          event.payload.reason === 'verified-skill-cost'
+      )?.payload.afterValue
+    ).toBeCloseTo(0, 6);
+    expect(hitProjection.damageEvents).toEqual([]);
+    expect(randomSampleCount).toBe(0);
+
+    const kiboFunded = simulateVerifiedAcceptanceScenario({
+      includeActor: true,
+      includeKibo: true,
+      durationMs: 3800,
+      kiboStartMs: 300,
+      initialRuntimeState: {
+        kiboEnergyBySlot: [
+          {
+            slotId: 'team-slot-3',
+            kiboId: HEAVY_ROCK_HOOF_ID,
+            currentValue: 96,
+            maxValue: 100,
+          },
+        ],
+      },
+    });
+    const kiboProjection = createNonDamageExecutionProjection(kiboFunded);
+    expect(
+      kiboProjection.kiboResourceEvents.some(
+        event =>
+          event.actionId === 'verified-pangpang-normal' &&
+          event.payload.reason === 'verified-hit-pet-sp-shared-recovery'
+      )
+    ).toBe(true);
+    expect(
+      kiboProjection.kiboResourceEvents.find(
+        event =>
+          event.actionId === 'verified-heavy-rock-hoof' &&
+          event.payload.reason === 'verified-skill-cost'
+      )?.payload.afterValue
+    ).toBeCloseTo(0, 6);
+    expect(kiboProjection.damageEvents).toEqual([]);
+  });
+
+  it('keeps direct and tuning SP transactions that fund later action costs in the projection', () => {
+    const prepared = simulateVerifiedAcceptanceScenario({
+      includeActor: false,
+      includeActorUltimate: true,
+      includeKibo: false,
+      durationMs: 2200,
+      actorUltimateStartMs: 1000,
+      initialSpByCharacterId: { 109001: 100 },
+    });
+    const scenario = structuredClone(prepared.effectiveActionTimeline.scenario);
+    const sourceActor = scenario.actors.find(
+      actor => Number(actor.characterId) === 109001
+    );
+    sourceActor.initialSp = 0;
+    const action = scenario.actions.find(
+      entry => entry.id === 'verified-muyin-ultimate'
+    );
+    const resolution =
+      prepared.verifiedActionVariantRuntime.actionResolutionById.get(action.id);
+    const commonArguments = {
+      scenario,
+      actionExecutionPlan: prepared.actionExecutionPlan,
+      controlledActorTimeline: prepared.controlledActorTimeline,
+      damageEventGeneration: prepared.verifiedDamageEventGeneration,
+      effectTimeline: prepared.effectTimeline,
+      actionVariantRuntime: prepared.verifiedActionVariantRuntime,
+      kiboPassiveGeneration: prepared.verifiedKiboPassiveGeneration,
+      runtimeMode: 'non-damage-event-projection',
+    };
+    const directProjection = createVerifiedCombatRuntime({
+      ...commonArguments,
+      effectGeneration: {
+        ...prepared.verifiedBattleEffectGeneration,
+        directSpEvents: [
+          {
+            eventIdentity: 'fixture:projection-direct-sp',
+            timeMs: 500,
+            action,
+            actionId: action.id,
+            actorId: sourceActor.id,
+            target: { kind: 'actor', id: sourceActor.id },
+            value: 100,
+            effect: {
+              elementId: 1,
+              directSp: {
+                enhanceable: false,
+                shareType: 0,
+                petShareType: 0,
+                mainPetShareType: 0,
+              },
+            },
+            resolution,
+            sourceIdentity: 'fixture:projection-direct-sp',
+          },
+        ],
+      },
+      tuningGeneration: prepared.verifiedTuningMarkGeneration,
+    });
+    expect(
+      directProjection.resourceEvents.map(event => event.payload.reason)
+    ).toEqual(
+      expect.arrayContaining(['verified-direct-sp', 'verified-skill-cost'])
+    );
+    expect(directProjection.executionBlocks).toEqual([]);
+
+    const tuningProjection = createVerifiedCombatRuntime({
+      ...commonArguments,
+      effectGeneration: {
+        ...prepared.verifiedBattleEffectGeneration,
+        directSpEvents: [],
+      },
+      tuningGeneration: {
+        ...prepared.verifiedTuningMarkGeneration,
+        combatEvents: [
+          {
+            kind: 'overlimit-direct-sp',
+            eventIdentity: 'fixture:projection-overlimit-direct-sp',
+            timeMs: 500,
+            actorId: sourceActor.id,
+            actionId: action.id,
+            action,
+            markCount: 1,
+            template: { valuePerMark: 100 },
+            eventContext: { landed: true },
+            sourceIdentity: 'fixture:projection-overlimit-direct-sp',
+          },
+        ],
+      },
+    });
+    expect(
+      tuningProjection.resourceEvents.map(event => event.payload.reason)
+    ).toEqual(
+      expect.arrayContaining([
+        'tuning-overlimit-direct-sp',
+        'verified-skill-cost',
+      ])
+    );
+    expect(tuningProjection.executionBlocks).toEqual([]);
+    expect(tuningProjection.damageEvents).toEqual([]);
+  });
+
+  it('suppresses projected actor and kibo vital settlements when resources remain insufficient', () => {
+    const actorPrepared = simulateVerifiedAcceptanceScenario({
+      includeActor: false,
+      includeActorUltimate: true,
+      includeKibo: false,
+      durationMs: 1000,
+      actorUltimateStartMs: 100,
+      initialSpByCharacterId: { 109001: 100 },
+    });
+    const actorScenario = structuredClone(
+      actorPrepared.effectiveActionTimeline.scenario
+    );
+    const actor = actorScenario.actors.find(
+      entry => Number(entry.characterId) === 109001
+    );
+    actor.initialSp = 0;
+    const actorAction = actorScenario.actions.find(
+      entry => entry.id === 'verified-muyin-ultimate'
+    );
+    const actorProjection = createVerifiedCombatRuntime({
+      scenario: actorScenario,
+      actionExecutionPlan: actorPrepared.actionExecutionPlan,
+      controlledActorTimeline: actorPrepared.controlledActorTimeline,
+      effectGeneration: {
+        ...actorPrepared.verifiedBattleEffectGeneration,
+        directHpEvents: [
+          createProjectionVitalFixture({
+            action: actorAction,
+            resolution:
+              actorPrepared.verifiedActionVariantRuntime.actionResolutionById.get(
+                actorAction.id
+              ),
+            timeMs: 200,
+          }),
+        ],
+      },
+      tuningGeneration: actorPrepared.verifiedTuningMarkGeneration,
+      damageEventGeneration: actorPrepared.verifiedDamageEventGeneration,
+      effectTimeline: actorPrepared.effectTimeline,
+      actionVariantRuntime: actorPrepared.verifiedActionVariantRuntime,
+      kiboPassiveGeneration: actorPrepared.verifiedKiboPassiveGeneration,
+      runtimeMode: 'non-damage-event-projection',
+    });
+    expect(actorProjection.executionBlocks).toEqual([
+      expect.objectContaining({
+        actionId: actorAction.id,
+        reason: 'verified-actor-resource-insufficient',
+        currentValue: 0,
+        requiredValue: 100,
+      }),
+    ]);
+    expect(actorProjection.vitalEvents).toEqual([]);
+
+    const kiboPrepared = simulateVerifiedAcceptanceScenario({
+      includeActor: false,
+      includeKibo: true,
+      durationMs: 1200,
+      kiboStartMs: 100,
+      initialRuntimeState: {
+        kiboEnergyBySlot: [
+          {
+            slotId: 'team-slot-3',
+            kiboId: HEAVY_ROCK_HOOF_ID,
+            currentValue: 100,
+            maxValue: 100,
+          },
+        ],
+      },
+    });
+    const kiboScenario = structuredClone(
+      kiboPrepared.effectiveActionTimeline.scenario
+    );
+    kiboScenario.initialRuntimeState.kiboEnergyBySlot[0].currentValue = 99;
+    const kiboAction = kiboScenario.actions.find(
+      entry => entry.id === 'verified-heavy-rock-hoof'
+    );
+    const kiboProjection = createVerifiedCombatRuntime({
+      scenario: kiboScenario,
+      actionExecutionPlan: kiboPrepared.actionExecutionPlan,
+      controlledActorTimeline: kiboPrepared.controlledActorTimeline,
+      effectGeneration: {
+        ...kiboPrepared.verifiedBattleEffectGeneration,
+        directHpEvents: [
+          createProjectionVitalFixture({
+            action: kiboAction,
+            resolution:
+              kiboPrepared.verifiedActionVariantRuntime.actionResolutionById.get(
+                kiboAction.id
+              ),
+            timeMs: 200,
+          }),
+        ],
+      },
+      tuningGeneration: kiboPrepared.verifiedTuningMarkGeneration,
+      damageEventGeneration: kiboPrepared.verifiedDamageEventGeneration,
+      effectTimeline: kiboPrepared.effectTimeline,
+      actionVariantRuntime: kiboPrepared.verifiedActionVariantRuntime,
+      kiboPassiveGeneration: kiboPrepared.verifiedKiboPassiveGeneration,
+      runtimeMode: 'non-damage-event-projection',
+    });
+    expect(kiboProjection.executionBlocks).toEqual([
+      expect.objectContaining({
+        actionId: kiboAction.id,
+        reason: 'verified-kibo-resource-insufficient',
+        currentValue: 99,
+        requiredValue: 100,
+      }),
+    ]);
+    expect(kiboProjection.vitalEvents).toEqual([]);
+  });
+
   it('applies matching shields and enters Break without enabling useOneBreak', () => {
     const shielded = simulateVerifiedAcceptanceScenario({
       includeKibo: false,
@@ -1918,6 +2235,7 @@ function simulateVerifiedAcceptanceScenario({
   durationMs = 5000,
   kiboStartMs = null,
   switchAtMs = null,
+  actorUltimateStartMs = 100,
   initialSpByCharacterId = {},
 } = {}) {
   const teamSlots = createDefaultWorkbenchTeamSlots();
@@ -1974,7 +2292,7 @@ function simulateVerifiedAcceptanceScenario({
         actorCharacterId: 109001,
         skillId: MUYIN_ULTIMATE_SKILL_ID,
         actionVariantIndex: 0,
-        startMs: 100,
+        startMs: actorUltimateStartMs,
         durationMs: 800,
       })
     );
@@ -2042,6 +2360,39 @@ function simulateVerifiedAcceptanceScenario({
   });
   const scenario = compileProject(project, getWorkbenchGameData());
   return simulateScenario(scenario);
+}
+
+function createNonDamageExecutionProjection(result, overrides = {}) {
+  return createVerifiedCombatRuntime({
+    scenario: result.effectiveActionTimeline.scenario,
+    actionExecutionPlan: result.actionExecutionPlan,
+    controlledActorTimeline: result.controlledActorTimeline,
+    effectGeneration: result.verifiedBattleEffectGeneration,
+    tuningGeneration: result.verifiedTuningMarkGeneration,
+    damageEventGeneration: result.verifiedDamageEventGeneration,
+    effectTimeline: result.effectTimeline,
+    actionVariantRuntime: result.verifiedActionVariantRuntime,
+    kiboPassiveGeneration: result.verifiedKiboPassiveGeneration,
+    runtimeMode: 'non-damage-event-projection',
+    ...overrides,
+  });
+}
+
+function createProjectionVitalFixture({ action, resolution, timeMs }) {
+  return {
+    eventIdentity: `fixture:projection-vital:${action.id}`,
+    timeMs,
+    action,
+    actionId: action.id,
+    actorId: action.actorId,
+    target: { kind: 'actor', id: action.actorId },
+    value: 100,
+    effect: {
+      effectIdentity: `fixture:projection-vital-effect:${action.id}`,
+    },
+    resolution,
+    sourceIdentity: `fixture:projection-vital:${action.id}`,
+  };
 }
 
 function simulateRubyStarSkill(hitOverrides = {}, initialAmmo = 0) {

@@ -4745,6 +4745,195 @@ describe('verified soul essence effect generation', () => {
     );
   });
 
+  it('keeps resource-funded direct heals executable in the non-damage event projection', () => {
+    const result = createRealSoulScenario({
+      actorCharacterId: 112002,
+      soulEssenceId: 10175,
+      effectSkillId: 1900140,
+      ownerInitialSp: 0,
+      durationMs: 7000,
+      teamCharacterIds: [112002, 101003, 101010],
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: 'actor-112002',
+          characterId: 112002,
+        },
+        actorVitalsByActor: [
+          {
+            actorId: 'actor-112002',
+            characterId: 112002,
+            currentValue: 1000,
+            maxValue: 5000,
+            valueShields: [],
+          },
+        ],
+      },
+      actionPlan: [
+        {
+          id: 'c7-r1-manual-sp-before-heal',
+          actionKind: 'resource',
+          actorCharacterId: 112002,
+          startFrame: 30,
+          resource: 'sp',
+          change: 100,
+        },
+        {
+          id: 'c7-r1-costed-ultimate-heal',
+          actionKind: 'ultimate',
+          actorCharacterId: 112002,
+          startFrame: 60,
+        },
+      ],
+    });
+    const scenario = result.effectiveActionTimeline.scenario;
+    const sourceAction = scenario.actions.find(
+      action => action.id === 'c7-r1-costed-ultimate-heal'
+    );
+    const sourceResolution =
+      result.verifiedActionVariantRuntime.actionResolutionById.get(
+        sourceAction.id
+      );
+    const effectGeneration = {
+      ...result.verifiedBattleEffectGeneration,
+      directHpEvents: [
+        ...(result.verifiedBattleEffectGeneration?.directHpEvents ?? []),
+        {
+          eventIdentity: 'fixture:c7-r1-costed-direct-heal',
+          timeMs: frameToMs(180),
+          action: sourceAction,
+          actionId: sourceAction.id,
+          actorId: sourceAction.actorId,
+          target: { kind: 'actor', id: sourceAction.actorId },
+          value: 100,
+          effect: {
+            effectIdentity: 'fixture:c7-r1-direct-heal-effect',
+          },
+          resolution: sourceResolution,
+          sourceIdentity: 'fixture:c7-r1-direct-heal-settlement',
+        },
+      ],
+      shieldEvents: [
+        ...(result.verifiedBattleEffectGeneration?.shieldEvents ?? []),
+        {
+          eventIdentity: 'fixture:c7-r1-costed-direct-shield',
+          timeMs: frameToMs(181),
+          action: sourceAction,
+          actionId: sourceAction.id,
+          actorId: sourceAction.actorId,
+          target: { kind: 'actor', id: sourceAction.actorId },
+          value: 100,
+          effect: {
+            effectIdentity: 'fixture:c7-r1-direct-shield-effect',
+          },
+          resolution: sourceResolution,
+          sourceIdentity: 'fixture:c7-r1-direct-shield-settlement',
+        },
+      ],
+    };
+    const runtimeArguments = {
+      scenario,
+      actionExecutionPlan: result.actionExecutionPlan,
+      controlledActorTimeline: result.controlledActorTimeline,
+      effectGeneration,
+      tuningGeneration: result.verifiedTuningMarkGeneration,
+      damageEventGeneration: result.verifiedDamageEventGeneration,
+      effectTimeline: result.effectTimeline,
+      actionVariantRuntime: result.verifiedActionVariantRuntime,
+      kiboPassiveGeneration: result.verifiedKiboPassiveGeneration,
+    };
+    const fullRuntime = createVerifiedCombatRuntime(runtimeArguments);
+    const projectionRuntime = createVerifiedCombatRuntime({
+      ...runtimeArguments,
+      runtimeMode: 'non-damage-event-projection',
+    });
+    const nonDamageEventGeneration = createVerifiedNonDamageEventGeneration({
+      scenario,
+      actionExecutionPlan: result.actionExecutionPlan,
+      controlledActorTimeline: result.controlledActorTimeline,
+      actionResolutionById:
+        result.verifiedActionVariantRuntime.actionResolutionById,
+      verifiedCombatRuntime: projectionRuntime,
+    });
+    const soulGeneration = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan: result.actionExecutionPlan,
+      actionResolutionById:
+        result.verifiedActionVariantRuntime.actionResolutionById,
+      tuningGeneration: result.verifiedTuningMarkGeneration,
+      damageEventGeneration: result.verifiedDamageEventGeneration,
+      nonDamageEventGeneration,
+    });
+    const cost = fullRuntime.resourceEvents.find(
+      event =>
+        event.actionId === 'c7-r1-costed-ultimate-heal' &&
+        event.payload.reason === 'verified-skill-cost'
+    );
+    const heal = fullRuntime.vitalEvents.find(
+      event =>
+        event.actionId === 'c7-r1-costed-ultimate-heal' &&
+        event.type === 'VERIFIED_DIRECT_HEAL'
+    );
+    const projectionHeal = projectionRuntime.vitalEvents.find(
+      event =>
+        event.actionId === 'c7-r1-costed-ultimate-heal' &&
+        event.type === 'VERIFIED_DIRECT_HEAL'
+    );
+    const projectionShield = projectionRuntime.vitalEvents.find(
+      event =>
+        event.actionId === 'c7-r1-costed-ultimate-heal' &&
+        event.type === 'VERIFIED_DIRECT_SHIELD'
+    );
+    const afterHealEvents = nonDamageEventGeneration.events.filter(
+      event =>
+        event.eventId === 44 &&
+        event.actionId === 'c7-r1-costed-ultimate-heal'
+    );
+    const commands = soulGeneration.effectCommands.filter(
+      command =>
+        command.sourceSoulEssenceId === 10175 &&
+        command.sourceActionId === 'c7-r1-costed-ultimate-heal'
+    );
+
+    expect(cost?.payload).toMatchObject({
+      beforeValue: 100,
+      change: -100,
+      afterValue: 0,
+    });
+    expect(heal).toMatchObject({
+      actorId: 'actor-112002',
+      targetId: 'actor-112002',
+      payload: {
+        applied: true,
+        afterHealDispatchEligible: true,
+      },
+    });
+    expect(projectionHeal).toMatchObject({
+      actorId: 'actor-112002',
+      targetId: 'actor-112002',
+      payload: {
+        applied: true,
+        afterHealDispatchEligible: true,
+      },
+    });
+    expect(projectionShield).toMatchObject({
+      actorId: 'actor-112002',
+      targetId: 'actor-112002',
+      payload: {
+        applied: true,
+        requestedChange: 100,
+      },
+    });
+    expect(projectionRuntime.damageEvents).toEqual([]);
+    expect(afterHealEvents).toHaveLength(1);
+    expect(commands).toEqual([
+      expect.objectContaining({
+        sourceActorId: 'actor-112002',
+        targetId: 'actor-112002',
+        semanticTargetKind: 'event-target-actor',
+      }),
+    ]);
+  });
+
   it('projects inherited wood-mark periodic healing without borrowing its source action skill tags', () => {
     const sourceActionId = 'c7-inherited-wood-source-ultimate';
     const result = createRealSoulScenario({
@@ -4954,6 +5143,20 @@ function createRealSoulScenario({
         targetCharacterId: requested.targetCharacterId,
         startMs: frameToMs(requestedStartFrame),
         hitOverrides: requested.hitOverrides ?? null,
+      });
+      startFrame = requestedStartFrame;
+      return action;
+    }
+    if (requested.actionKind === 'resource') {
+      const action = createWorkbenchActionDraft({
+        id: requested.id,
+        type: 'resource',
+        actorCharacterId:
+          Number(requested.actorCharacterId) || actorCharacterId,
+        startMs: frameToMs(requestedStartFrame),
+        resource: requested.resource ?? 'sp',
+        change: requested.change ?? 0,
+        reason: requested.reason ?? 'test-resource-parity',
       });
       startFrame = requestedStartFrame;
       return action;

@@ -1,8 +1,9 @@
 {
-  "schemaVersion": 10,
-  "phase": "M12-B3-C7",
+  "schemaVersion": 11,
+  "phase": "M12-B3-C7-R1",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "5c5a33a21cce05fbf090af72c783bad475b55656",
+  "baseCommit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
+  "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
     "phase": "M12-B3-C6",
@@ -153,6 +154,32 @@
     "cycleStateStable": true,
     "numericConsequences": "teammate attack damage and healed-target attack damage read the canonical modifiers within their lifetimes and return to baseline at expiry"
   },
+  "r1ResourceExecutionProjection": {
+    "rootCause": "non-damage-event-projection retained action costs and vital settlements while filtering earlier resource gains, so its executable action set diverged from the full runtime",
+    "contract": "the preliminary projection reuses all deterministic resource transactions needed for execution eligibility while suppressing damage, toughness, tuning business settlement and critical sampling",
+    "projectedResourceSources": [
+      "manual-resource",
+      "auto-sp-tick",
+      "direct-sp",
+      "landed-hit-actor-sp-recovery",
+      "landed-hit-kibo-sp-recovery",
+      "overlimit-direct-sp"
+    ],
+    "vitalSettlements": ["direct-heal", "direct-shield", "periodic-heal"],
+    "negativeGates": [
+      "actor-resource-insufficient",
+      "kibo-resource-insufficient",
+      "execute-false-or-runtime-blocked",
+      "missed-hit-does-not-recover"
+    ],
+    "sideEffectIsolation": {
+      "damageEventCount": 0,
+      "toughnessStateEventCount": 0,
+      "criticalRandomSampleCount": 0,
+      "finalRuntimeStateReused": false
+    },
+    "realPipelineAssertion": "manual +100 SP at 500ms funds a 100-SP ultimate settlement; direct heal and shield both project, AfterHeal dispatches once, and 10175 resolves Target(1) to the healed actor"
+  },
   "batchResults": {
     "runtimeAppliedSoulEssenceCount": 25,
     "runtimeUnappliedSoulEssenceCount": 37,
@@ -202,7 +229,7 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "frozen non-damage consumer evidence and event-target semantics became first-class qualification data",
+    "reason": "C7-R1 changes only the isolated preliminary resource/execution projection; generated qualification data and canonical full-runtime gameplay identities remain unchanged",
     "machineAxisCanonicalHashDrift": 0,
     "gameplayAssertionDrift": 0,
     "c4ConsumeAndAfterDamageRegression": 0,
@@ -211,10 +238,10 @@
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 3, "tests": 82, "status": "passed" },
+    "focusedMechanics": { "files": 3, "tests": 100, "status": "passed" },
     "characterProfileAndMigration": { "files": 4, "tests": 38, "status": "passed", "gameplayAssertionDrift": 0 },
     "machineAxis": { "files": 12, "tests": 157, "status": "passed" },
-    "canonicalAndRuntime": { "files": 6, "tests": 87, "status": "passed" },
+    "canonicalAndRuntime": { "files": 6, "tests": 69, "status": "passed" },
     "audits": {
       "count": 9,
       "status": "clean",
