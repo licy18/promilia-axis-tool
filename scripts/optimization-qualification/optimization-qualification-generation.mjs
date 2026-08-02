@@ -18,6 +18,11 @@ import {
   GET_ELEMENT_TYPE_EVIDENCE_RELATIVE_PATH,
   readGetElementTypeRuntimeEvidenceSource,
 } from './get-element-type-evidence.mjs';
+import {
+  assertPersistentLoadoutPropertyRuntimeEvidenceReference,
+  PERSISTENT_LOADOUT_PROPERTY_EVIDENCE_RELATIVE_PATH,
+  readPersistentLoadoutPropertyRuntimeEvidenceSource,
+} from './persistent-loadout-property-evidence.mjs';
 
 export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
   '2026-08-01T00:00:00.000Z';
@@ -91,6 +96,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     'a1a30e0c70dbfaf49990bddb48bf97c1b9cca31f2a77a303fba9382c239a3f7f',
   landedHitRecoveryRuntimeEvidence:
     '634c979cda572f8fff1509bbf888240aebe8fad7728f357ce06390fee364a248',
+  persistentLoadoutPropertyRuntimeEvidence:
+    'c8b9205b959a241f284dcacb4a27cbe63fc62cd028766777f50cca8941ecea57',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
@@ -152,6 +159,7 @@ export async function createOptimizationQualificationArtifacts({
   soulEffectBeforeDamageRuntimeEvidencePath = null,
   soulEffectNonDamageRuntimeEvidencePath = null,
   landedHitRecoveryRuntimeEvidencePath = null,
+  persistentLoadoutPropertyRuntimeEvidencePath = null,
   dynamicLoadoutAcceptanceReportPath = null,
   gameAssemblyPath = 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
 } = {}) {
@@ -272,6 +280,18 @@ export async function createOptimizationQualificationArtifacts({
       il2CppDumpPath: il2cppRuntimeContractsPath,
       projectRoot,
     });
+  sources.persistentLoadoutPropertyRuntimeEvidence =
+    await readPersistentLoadoutPropertyRuntimeEvidenceSource({
+      sourcePath:
+        persistentLoadoutPropertyRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          ...PERSISTENT_LOADOUT_PROPERTY_EVIDENCE_RELATIVE_PATH.split('/')
+        ),
+      gameAssemblyPath,
+      il2CppDumpPath: il2cppRuntimeContractsPath,
+      projectRoot,
+    });
   const acceptanceReport = JSON.parse(
     await fs.readFile(
       dynamicLoadoutAcceptanceReportPath ??
@@ -291,6 +311,11 @@ export async function createOptimizationQualificationArtifacts({
   assertGetElementTypeRuntimeEvidenceReference(
     acceptanceReport?.sourceClosure?.getElementTypeRuntimeEvidence,
     sources.soulEffectGetElementTypeRuntimeEvidence
+  );
+  assertPersistentLoadoutPropertyRuntimeEvidenceReference(
+    acceptanceReport?.sourceClosure
+      ?.persistentLoadoutPropertyRuntimeEvidence,
+    sources.persistentLoadoutPropertyRuntimeEvidence
   );
   sources.il2cppRuntimeContracts.value.soulEffectTriggers =
     attachSoulEffectGetElementRuntimeEvidence(
@@ -399,6 +424,8 @@ export async function createOptimizationQualificationArtifacts({
       sources.il2cppRuntimeContracts.value.battlePropertyTags,
     triggerContract: sources.il2cppRuntimeContracts.value.soulEffectTriggers,
     tuningMechanicsCatalog: mechanics.tuningMechanicsCatalog,
+    persistentLoadoutPropertyRuntimeEvidence:
+      sources.persistentLoadoutPropertyRuntimeEvidence.value,
   });
   sources.battleElementAssets = {
     ...soulEssenceEffects.sourceSnapshot.battleElements,
@@ -492,6 +519,7 @@ export async function createOptimizationQualificationArtifacts({
     kiboPassives: sources.kiboPassives.value,
     kiboMaturity: sources.kiboMaturity.value,
     cultivationCatalog,
+    setSkillEffectDefinitions: soulEssenceEffects.setSkillDefinitions,
   });
   const bindingMatrix = createBindingMatrix({
     characterObjects,
@@ -508,7 +536,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C8-R1',
+      phase: 'M12-B3-C9',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -620,6 +648,7 @@ function createQualificationManifests({
   kiboPassives,
   kiboMaturity,
   cultivationCatalog,
+  setSkillEffectDefinitions,
 }) {
   const actorStaticIds = new Set(
     (staticCatalog.actor?.profiles ?? []).map(profile =>
@@ -883,28 +912,55 @@ function createQualificationManifests({
       })
     );
   }
+  const setSkillEffectByKey = new Map(
+    (setSkillEffectDefinitions ?? []).map(definition => [
+      `${definition.setId}:${definition.pieces}`,
+      definition,
+    ])
+  );
   for (const setSkill of setSkills) {
+    const effectMechanics = setSkillEffectByKey.get(
+      `${setSkill.setId}:${setSkill.pieces}`
+    );
+    const effectApplied = effectMechanics?.runtimeStatus === 'runtime-applied';
+    const effectRuntimeGaps = effectMechanics?.runtimeGaps ?? [
+      'set-skill-effect-mechanics-profile-missing',
+    ];
+    const effectGapCategory =
+      effectRuntimeGaps.length > 0 &&
+      effectRuntimeGaps.every(reason =>
+        String(reason).endsWith('-evidence-gap')
+      )
+        ? 'evidence-insufficient'
+        : 'not-implemented';
     records.push(
       qualificationRecord({
         objectKind: 'set-skill',
         objectId: `${setSkill.setId}:${setSkill.pieces}`,
         displayName: `套装 ${setSkill.setId} ${setSkill.pieces}件`,
         sourceIdentities: [setSkill.sourceIdentity],
-        maturityState: 'extracted',
+        maturityState: effectApplied ? 'runtime-integrated' : 'extracted',
         blockers: [
-          blocker(
-            'set-skill-dynamic-unapplied',
-            'not-implemented',
-            'The accessory set skill is tracked but not applied by the dynamic runtime.',
-            { skillId: setSkill.skillId }
-          ),
+          ...(effectApplied
+            ? []
+            : [
+                blocker(
+                  'set-skill-dynamic-unapplied',
+                  effectGapCategory,
+                  'The accessory set skill is tracked but not applied by the dynamic runtime.',
+                  {
+                    skillId: setSkill.skillId,
+                    reasons: effectRuntimeGaps,
+                  }
+                ),
+              ]),
           blocker(
             'set-skill-visual-acceptance-not-published',
             'not-implemented',
             'No product visual acceptance manifest exists for this set skill.'
           ),
         ],
-        evidence: setSkill,
+        evidence: { ...setSkill, effectMechanics },
       })
     );
   }
@@ -1446,8 +1502,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C8-R1',
-    status: 'b3-c8-r1-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C9',
+    status: 'b3-c9-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1870,7 +1926,8 @@ function createSourceSnapshot(sources) {
         key === 'soulEffectGetElementTypeRuntimeEvidence' ||
         key === 'soulEffectBeforeDamageRuntimeEvidence' ||
         key === 'soulEffectNonDamageRuntimeEvidence' ||
-        key === 'landedHitRecoveryRuntimeEvidence'
+        key === 'landedHitRecoveryRuntimeEvidence' ||
+        key === 'persistentLoadoutPropertyRuntimeEvidence'
       ) {
         record.value = structuredClone(source.value);
       }
@@ -1887,7 +1944,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C8-R1 Native Tuning-Mark Element Types\n\n' +
+    '# M12-B3-C9 Persistent Loadout Property Roots\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1896,7 +1953,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects; C3 adds source-bound EntrySkill(22) switch provenance and wrapper lifetimes for 10147/10151. C4 compiles tuning conditions and ordered ConsumePackElement candidate selection; C5 compiles paired BeforeGetElement/AfterGetElement transactions for 10043/10149. C6 compiles the ordered BeforeDamage transaction. C7 projects source-bound SwitchEnter(34), OnGotShield(40), and AfterHeal(44) transactions from canonical switch and vital settlements. C8 publishes each tuning-mark StackElement native `types`, binds CheckElementType(8) to `TriggerElement.CheckTriggerCondition`, and applies 10052 only to a real type-41 acquisition; linked property leaves and DamageElements do not synthesize GetElement. Direct healing now consumes source SHOOT_HEALUP and target SUFFER_HEALUP through the shared Q16.16 settlement path.\n' +
+    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2-C8 retain their accepted trigger, transaction, ordering and healing contracts. C9 compiles only source-closed frame-zero Self PropertyElement roots with time=-1, cover semantics and an explicit UnloadSkill path. Twelve soul roots and six two-piece set roots share one static loadout operator; 10133 keeps both leaves, while four conditional or finite wrapper outliers and all four-piece set effects remain blocked.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'

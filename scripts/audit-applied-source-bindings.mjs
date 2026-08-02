@@ -230,8 +230,37 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
     .update(sourceBytes)
     .digest('hex');
   const definitions = (catalog?.definitions ?? []).filter(
-    definition => definition.runtimeStatus === 'runtime-applied'
+    definition =>
+      definition.runtimeStatus === 'runtime-applied' &&
+      definition.trigger != null &&
+      definition.effect != null
   );
+  const persistentDefinitions = [
+    ...(catalog?.definitions ?? [])
+      .filter(
+        definition =>
+          definition.runtimeStatus === 'runtime-applied' &&
+          definition.persistentRoot?.status === 'runtime-applied'
+      )
+      .map(definition => ({
+        ownerKind: 'soulessence',
+        ownerId: Number(definition.soulEssenceId),
+        skillId: Number(definition.effectSkillId),
+        definition,
+      })),
+    ...(catalog?.setSkillDefinitions ?? [])
+      .filter(
+        definition =>
+          definition.runtimeStatus === 'runtime-applied' &&
+          definition.persistentRoot?.status === 'runtime-applied'
+      )
+      .map(definition => ({
+        ownerKind: 'set-skill',
+        ownerId: `${definition.setId}:${definition.pieces}`,
+        skillId: Number(definition.skillId),
+        definition,
+      })),
+  ];
   const tuningConsumePriorityGroups =
     collectTuningConsumePriorityGroups(mechanicsPackage);
   const requestedElementIds = new Set([
@@ -250,6 +279,16 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
           Number(profile.overlimitPacketElementId),
           Number(profile.damageElementId),
         ])
+      ),
+    ]),
+    ...persistentDefinitions.flatMap(({ definition }) => [
+      Number(definition.persistentRoot?.installation?.rootElementId),
+      Number(definition.persistentRoot?.unload?.triggerElementId),
+      ...(definition.persistentRoot?.effects ?? []).map(effect =>
+        Number(effect.elementId)
+      ),
+      ...(definition.persistentRoot?.unload?.removalPaths ?? []).flatMap(path =>
+        (path.elementIds ?? []).map(Number)
       ),
     ]),
     ...tuningConsumePriorityGroups.flatMap(group => [
@@ -552,7 +591,15 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
     sourceRowsByElementId,
     sourceRowsByPathId,
   });
-  const propertyDriftCount = records.filter(
+  const persistentRecords = persistentDefinitions.flatMap(owner =>
+    createPersistentLoadoutPropertyAuditRecords({
+      ...owner,
+      sourceRowsByElementId,
+      supportedPropertyTags,
+    })
+  );
+  const allRecords = [...records, ...persistentRecords];
+  const propertyDriftCount = allRecords.filter(
     record => record.issueCodes.length > 0
   ).length;
   return {
@@ -565,7 +612,9 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
       triggerContractHash: catalog?.triggerContract?.contractHash ?? null,
     },
     summary: {
-      sourceCount: records.length,
+      sourceCount: allRecords.length,
+      triggeredSourceCount: records.length,
+      persistentSourceCount: persistentRecords.length,
       driftCount: propertyDriftCount + tuningConsumePriority.summary.driftCount,
       propertyTagDriftCount: propertyDriftCount,
       tuningConditionCount: records.reduce(
@@ -584,9 +633,152 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
       tuningConsumePriorityGroupCount: tuningConsumePriority.summary.groupCount,
       tuningConsumePriorityDriftCount: tuningConsumePriority.summary.driftCount,
     },
-    records,
+    records: allRecords,
     tuningConsumePriority,
   };
+}
+
+function createPersistentLoadoutPropertyAuditRecords({
+  ownerKind,
+  ownerId,
+  skillId,
+  definition,
+  sourceRowsByElementId,
+  supportedPropertyTags,
+}) {
+  const root = definition.persistentRoot;
+  const installationSourceRow = sourceRowsByElementId.get(
+    Number(root.installation?.rootElementId)
+  );
+  const unloadSourceRow = sourceRowsByElementId.get(
+    Number(root.unload?.triggerElementId)
+  );
+  const expectedEffectElementIds = [
+    ...new Set((definition.sourceClosure?.propertyElementIds ?? []).map(Number)),
+  ].sort((left, right) => left - right);
+  const generatedEffectElementIds = [
+    ...new Set((root.effects ?? []).map(effect => Number(effect.elementId))),
+  ].sort((left, right) => left - right);
+  const closureIssueCodes =
+    JSON.stringify(expectedEffectElementIds) ===
+    JSON.stringify(generatedEffectElementIds)
+      ? []
+      : ['persistent-property-effect-closure-incomplete'];
+  const effects = root.effects?.length ? root.effects : [null];
+  return effects.map(effect => {
+    const sourceRow = sourceRowsByElementId.get(Number(effect?.elementId));
+    const tree = sourceRow?.typetree ?? {};
+    const sourcePropertyTags = normalizeIntegerTags(tree.defaultPropertyTags);
+    const generatedPropertyTags = normalizeIntegerTags(effect?.propertyTags);
+    const sourceCommonFunctionId = Number(
+      tree.formulaParams?.function_1 ?? tree.baseIntParams?.[0]
+    );
+    const sourceBaseFunctionId = Number(
+      tree.formulaParams?.function_2 ?? tree.baseIntParams?.[1]
+    );
+    const expectedMatchMode =
+      sourcePropertyTags.length === 0
+        ? 'unscoped'
+        : sourcePropertyTags.length === 1 &&
+            supportedPropertyTags.has(sourcePropertyTags[0])
+          ? 'single-exact'
+          : null;
+    const removalPaths = root.unload?.removalPaths ?? [];
+    const issueCodes = [
+      ...closureIssueCodes,
+      ...(sourceRow ? [] : ['persistent-property-source-row-missing']),
+      ...(installationSourceRow
+        ? []
+        : ['persistent-property-installation-root-source-row-missing']),
+      ...(unloadSourceRow
+        ? []
+        : ['persistent-property-unload-source-row-missing']),
+      ...(JSON.stringify(sourcePropertyTags) ===
+      JSON.stringify(generatedPropertyTags)
+        ? []
+        : ['persistent-property-tag-drift']),
+      ...(expectedMatchMode === effect?.propertyTagMatchMode
+        ? []
+        : ['persistent-property-tag-match-mode-drift']),
+      ...(Number(tree.attributeID) === Number(effect?.attributeId) &&
+      Number(tree.calculateType) === Number(effect?.calculateType)
+        ? []
+        : ['persistent-property-attribute-bucket-drift']),
+      ...(Number(tree.time) === Number(effect?.durationMs) &&
+      Number(tree.combineType) === Number(effect?.combineType) &&
+      Number(tree.combineNumber) === Number(effect?.combineNumber) &&
+      Number(tree.executeTargetType) === Number(effect?.executeTargetType) &&
+      Number(tree.inheritType) === Number(effect?.inheritType)
+        ? []
+        : ['persistent-property-lifecycle-drift']),
+      ...(sourceCommonFunctionId ===
+        Number(effect?.formula?.commonFunctionId) &&
+      sourceBaseFunctionId === Number(effect?.formula?.baseFunctionId)
+        ? []
+        : ['persistent-property-formula-drift']),
+      ...(Number(root.installation?.frame) === 0 &&
+      Number(root.installation?.directInjectTargetType) === 0 &&
+      root.installation?.removeElementOnEnd === false &&
+      Array.isArray(root.installation?.sourceSequencePath) &&
+      root.installation.sourceSequencePath.length > 0
+        ? []
+        : ['persistent-property-installation-contract-drift']),
+      ...(root.lifecycle?.durationMode === 'until-loadout-uninstall' &&
+      Number(root.lifecycle?.leafDurationMs) === -1 &&
+      root.lifecycle?.combineMode === 'cover-by-source-identity' &&
+      Number(root.lifecycle?.inheritType) === 0
+        ? []
+        : ['persistent-property-native-lifecycle-contract-drift']),
+      ...(Number(root.unload?.eventId) === 36 && removalPaths.length > 0
+        ? []
+        : ['persistent-property-unload-contract-drift']),
+      ...(String(effect?.sourceIdentity ?? '').includes(
+        `elementId=${Number(effect?.elementId)}`
+      ) &&
+      String(root.installation?.sourceIdentity ?? '').includes(
+        `elementId=${Number(root.installation?.rootElementId)}`
+      ) &&
+      String(root.unload?.sourceIdentity ?? '').includes(
+        `elementId=${Number(root.unload?.triggerElementId)}`
+      )
+        ? []
+        : ['persistent-property-source-identity-drift']),
+    ];
+    return {
+      kind: 'persistent-loadout-property-source-binding',
+      ownerKind,
+      ownerId,
+      skillId,
+      effectElementId:
+        effect?.elementId == null ? null : Number(effect.elementId),
+      installationRootElementId: Number(root.installation?.rootElementId),
+      unloadTriggerElementId: Number(root.unload?.triggerElementId),
+      sourcePropertyTags,
+      generatedPropertyTags,
+      propertyTagMatchMode: effect?.propertyTagMatchMode ?? null,
+      attribute: {
+        sourceAttributeId: Number(tree.attributeID),
+        generatedAttributeId: Number(effect?.attributeId),
+        sourceCalculateType: Number(tree.calculateType),
+        generatedCalculateType: Number(effect?.calculateType),
+      },
+      formula: {
+        sourceCommonFunctionId,
+        generatedCommonFunctionId: Number(effect?.formula?.commonFunctionId),
+        sourceBaseFunctionId,
+        generatedBaseFunctionId: Number(effect?.formula?.baseFunctionId),
+      },
+      lifecycle: structuredClone(root.lifecycle),
+      installation: structuredClone(root.installation),
+      unload: structuredClone(root.unload),
+      sourceIdentity: effect?.sourceIdentity ?? null,
+      status:
+        issueCodes.length === 0
+          ? 'applied-source-persistent-property-ready'
+          : 'applied-source-persistent-property-drift',
+      issueCodes,
+    };
+  });
 }
 
 function collectTuningConsumePriorityGroups(mechanicsPackage) {

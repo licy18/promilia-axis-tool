@@ -51,6 +51,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   propertyTagContract = null,
   triggerContract = null,
   tuningMechanicsCatalog = null,
+  persistentLoadoutPropertyRuntimeEvidence = null,
 } = {}) {
   if (
     propertyTagContract?.sourceKind !== 'il2cpp-battle-property-tag-contract' ||
@@ -70,6 +71,13 @@ export async function createSoulEssenceEffectMechanicsCatalog({
     tuningMechanicsCatalog?.applied !== true
   ) {
     throw new Error('soulessence-tuning-mechanics-contract-missing');
+  }
+  if (
+    persistentLoadoutPropertyRuntimeEvidence?.contractName !==
+      'AzPrPersistentLoadoutPropertyRuntimeEvidence' ||
+    persistentLoadoutPropertyRuntimeEvidence?.conclusion?.status !== 'applied'
+  ) {
+    throw new Error('soulessence-persistent-loadout-property-evidence-missing');
   }
   const tuningMechanicsHash = hashCanonicalValue(tuningMechanicsCatalog);
   const definitionBySoulId = new Map(
@@ -115,6 +123,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       propertyTagContract,
       triggerContract,
       tuningMechanicsCatalog,
+      persistentLoadoutPropertyRuntimeEvidence,
       control: controlSource.bySkillId.get(
         Number(definitionBySoulId.get(item.soulEssenceId)?.reishiSkill)
       ),
@@ -134,6 +143,8 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       setSkill: item,
       battleElementsByPathId: battleSource.byPathId,
       control: setSkillControlSource.bySkillId.get(Number(item.skillId)),
+      propertyTagContract,
+      persistentLoadoutPropertyRuntimeEvidence,
     })
   );
   const value = {
@@ -157,6 +168,13 @@ export async function createSoulEssenceEffectMechanicsCatalog({
         sourceIdentity: tuningMechanicsCatalog.sourceIdentity,
         contractHash: tuningMechanicsHash,
       },
+      persistentLoadoutPropertyRuntimeEvidence: {
+        sourceIdentity:
+          persistentLoadoutPropertyRuntimeEvidence.conclusion.sourceIdentity,
+        contractHash: hashCanonicalValue(
+          persistentLoadoutPropertyRuntimeEvidence
+        ),
+      },
       sourceSnapshotHash: hashCanonicalValue({
         battleElements: battleSource.metadata,
         controlClosure: controlSource.metadata,
@@ -164,6 +182,9 @@ export async function createSoulEssenceEffectMechanicsCatalog({
         propertyTagContractHash: propertyTagContract.contractHash,
         triggerContractHash: triggerContract.contractHash,
         tuningMechanicsHash,
+        persistentLoadoutPropertyRuntimeEvidenceHash: hashCanonicalValue(
+          persistentLoadoutPropertyRuntimeEvidence
+        ),
       }),
     },
     policy: {
@@ -174,6 +195,8 @@ export async function createSoulEssenceEffectMechanicsCatalog({
         'equipped-actor-skill-tag-property-after-skill',
         'equipped-actor-skill-tag-property-before-skill',
         'equipped-actor-skill-tag-property-after-damage',
+        'equipped-actor-persistent-property-root',
+        'set-skill-persistent-property',
       ],
     },
     propertyTagContract,
@@ -200,7 +223,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       unresolvedCount: unresolved.length,
       setSkillCount: setSkillDefinitions.length,
       setSkillThresholdIndexedCount: setSkillDefinitions.filter(
-        definition => definition.thresholdActivation.status === 'source-indexed'
+        definition => definition.thresholdActivation != null
       ).length,
       setSkillRuntimeAppliedCount: setSkillDefinitions.filter(
         definition => definition.runtimeStatus === 'runtime-applied'
@@ -239,6 +262,7 @@ export function createDynamicLoadoutEffectCensus(catalog) {
         definition.effect?.propertyTagMatchMode ?? null,
       effectPropertyTagSourceIdentity:
         definition.effect?.propertyTagSourceIdentity ?? null,
+      persistentRoot: definition.persistentRoot ?? null,
       lifecycle: projectEffectLifecycle(definition.effect),
       resourceTransactions: [],
       vitalChanges: [],
@@ -267,6 +291,7 @@ export function createDynamicLoadoutEffectCensus(catalog) {
       trigger: definition.triggers,
       activationPrerequisites: definition.activationPrerequisites,
       sourceTarget: definition.sourceTarget,
+      persistentRoot: definition.persistentRoot ?? null,
       lifecycle: definition.lifecycle,
       resourceTransactions: definition.resourceTransactions,
       vitalChanges: definition.vitalChanges,
@@ -318,6 +343,8 @@ function compileSetSkillEffectDefinition({
   setSkill,
   battleElementsByPathId,
   control,
+  propertyTagContract,
+  persistentLoadoutPropertyRuntimeEvidence,
 }) {
   const resourcePathIds = uniqueNumbers(control?.resourcePathIds ?? []);
   const missingPathIds = resourcePathIds.filter(
@@ -342,6 +369,28 @@ function compileSetSkillEffectDefinition({
   );
   const triggers = activeTriggerRows.map(projectTriggerEvidence);
   const properties = propertyRows.map(projectPropertyEvidence);
+  const persistentCandidate =
+    Number(setSkill.pieces) === 2 &&
+    activeTriggerRows.length === 0 &&
+    propertyRows.length > 0;
+  const persistentRoot = persistentCandidate
+    ? compilePersistentPropertyRoot({
+        ownerKind: 'set-skill',
+        ownerId: `${setSkill.setId}:${setSkill.pieces}`,
+        skillId: Number(setSkill.skillId),
+        control,
+        closure,
+        propertyRows,
+        unloadTriggers: triggerRows.filter(
+          row => Number(row.typetree?.triggerParam1) === 36
+        ),
+        damageRows,
+        battleElementsByPathId,
+        propertyTagContract,
+        persistentLoadoutPropertyRuntimeEvidence,
+        resolveValues: () => [],
+      })
+    : null;
   const mechanismFamilies = uniqueStrings([
     ...triggers.map(trigger =>
       trigger.event == null
@@ -359,10 +408,14 @@ function compileSetSkillEffectDefinition({
     evidenceGaps.push('set-skill-resource-reference-missing');
   if (closure.rows.length === 0)
     evidenceGaps.push('set-skill-element-closure-empty');
-  const runtimeGaps = uniqueStrings([
-    ...evidenceGaps,
-    'set-skill-runtime-operator-not-implemented',
-  ]);
+  const runtimeGaps = uniqueStrings(
+    persistentCandidate
+      ? [...evidenceGaps, ...(persistentRoot?.runtimeGaps ?? [])]
+      : [...evidenceGaps, 'set-skill-runtime-operator-not-implemented']
+  );
+  const runtimeStatus = runtimeGaps.length
+    ? 'source-indexed-runtime-unapplied'
+    : 'runtime-applied';
   const value = {
     setId: Number(setSkill.setId),
     pieces: Number(setSkill.pieces),
@@ -370,14 +423,19 @@ function compileSetSkillEffectDefinition({
     thresholdActivation: {
       selectedPieceCountRequired: Number(setSkill.pieces),
       comparison: 'selected-piece-count-greater-than-or-equal',
-      status: 'source-indexed',
-      appliedToRuntimeEffect: false,
+      status:
+        runtimeStatus === 'runtime-applied'
+          ? 'runtime-applied'
+          : 'source-indexed',
+      appliedToRuntimeEffect: runtimeStatus === 'runtime-applied',
       sourceIdentity: setSkill.sourceIdentity,
     },
     mechanismFamily:
-      mechanismFamilies.length === 1
-        ? mechanismFamilies[0]
-        : 'set-skill-composite-effect',
+      runtimeStatus === 'runtime-applied'
+        ? 'set-skill-persistent-property'
+        : mechanismFamilies.length === 1
+          ? mechanismFamilies[0]
+          : 'set-skill-composite-effect',
     mechanismFamilies,
     triggers,
     activationPrerequisites: closure.rows
@@ -412,6 +470,10 @@ function compileSetSkillEffectDefinition({
         closure.rows.map(row => Number(row.typetree?.inheritType))
       ),
     },
+    persistentRoot:
+      persistentRoot == null
+        ? null
+        : { ...persistentRoot, status: runtimeStatus },
     resourceTransactions: resourceRows.map(row => ({
       elementId: Number(row.typetree?.elementConfigId),
       recoverType: numberOrNull(row.typetree?.recoverType),
@@ -446,8 +508,14 @@ function compileSetSkillEffectDefinition({
         status: 'source-indexed-runtime-unapplied',
       })),
     loopPersistence: {
-      status: 'runtime-unapplied',
-      reason: 'set-skill-runtime-operator-not-implemented',
+      status:
+        runtimeStatus === 'runtime-applied'
+          ? 'canonical-static-loadout-applied'
+          : 'runtime-unapplied',
+      reason:
+        runtimeStatus === 'runtime-applied'
+          ? null
+          : 'set-skill-runtime-operator-not-implemented',
     },
     sourceClosure: {
       controlSkillId: Number(setSkill.skillId),
@@ -458,12 +526,18 @@ function compileSetSkillEffectDefinition({
       elementIds: closure.rows.map(row =>
         Number(row.typetree?.elementConfigId)
       ),
+      propertyElementIds: propertyRows.map(row =>
+        Number(row.typetree?.elementConfigId)
+      ),
+      timelineInjections: structuredClone(control?.timelineInjections ?? []),
     },
     evidenceStatus:
-      evidenceGaps.length === 0
-        ? 'source-closure-indexed'
-        : 'static-evidence-gap',
-    runtimeStatus: 'source-indexed-runtime-unapplied',
+      runtimeStatus === 'runtime-applied'
+        ? 'runtime-applied'
+        : evidenceGaps.length === 0
+          ? 'source-closure-indexed'
+          : 'static-evidence-gap',
+    runtimeStatus,
     runtimeGaps,
     sourceIdentity: [setSkill.sourceIdentity, control?.sourceIdentity]
       .filter(Boolean)
@@ -820,6 +894,7 @@ function compileSoulEffectDefinition({
   propertyTagContract,
   triggerContract,
   tuningMechanicsCatalog,
+  persistentLoadoutPropertyRuntimeEvidence,
 }) {
   const effectSkillId = Number(sourceDefinition?.reishiSkill);
   const resourcePathIds = uniqueNumbers(control?.resourcePathIds ?? []);
@@ -845,6 +920,23 @@ function compileSoulEffectDefinition({
       Number.isInteger(Number(row.typetree?.calculateType))
   );
   const damageRows = closure.rows.filter(row => isDamageElement(row.typetree));
+  if (activeTriggers.length === 0 && propertyRows.length > 0) {
+    return compilePersistentSoulEffectDefinition({
+      soul,
+      effectSkillId,
+      effectSkillLogic: logicBySkillId.get(effectSkillId),
+      valueRows: valueRowsBySkillId.get(effectSkillId) ?? [],
+      control,
+      closure,
+      propertyRows,
+      unloadTriggers,
+      damageRows,
+      missingPathIds,
+      battleElementsByPathId,
+      propertyTagContract,
+      persistentLoadoutPropertyRuntimeEvidence,
+    });
+  }
   const trigger = activeTriggers.length === 1 ? activeTriggers[0] : null;
   const activationPrerequisiteRows = trigger
     ? closure.rows.filter(row => {
@@ -1200,6 +1292,437 @@ function compileSoulEffectDefinition({
   };
 }
 
+function compilePersistentSoulEffectDefinition({
+  soul,
+  effectSkillId,
+  effectSkillLogic,
+  valueRows,
+  control,
+  closure,
+  propertyRows,
+  unloadTriggers,
+  damageRows,
+  missingPathIds,
+  battleElementsByPathId,
+  propertyTagContract,
+  persistentLoadoutPropertyRuntimeEvidence,
+}) {
+  const persistentRoot = compilePersistentPropertyRoot({
+    ownerKind: 'soul-essence',
+    ownerId: soul.soulEssenceId,
+    skillId: effectSkillId,
+    control,
+    closure,
+    propertyRows,
+    unloadTriggers,
+    damageRows,
+    battleElementsByPathId,
+    propertyTagContract,
+    persistentLoadoutPropertyRuntimeEvidence,
+    resolveValues: property =>
+      compileStarValues({
+        rows: valueRows,
+        elementId: Number(property.typetree?.elementConfigId),
+      }),
+  });
+  const runtimeGaps = uniqueStrings([
+    ...(control ? [] : ['effect-control-source-missing']),
+    ...(missingPathIds.length
+      ? ['effect-resource-reference-missing']
+      : []),
+    ...persistentRoot.runtimeGaps,
+  ]);
+  const runtimeStatus = runtimeGaps.length
+    ? 'source-indexed-runtime-unapplied'
+    : 'runtime-applied';
+  return {
+    soulEssenceId: soul.soulEssenceId,
+    name: soul.name,
+    effectSkillId,
+    effectSkillLogic: effectSkillLogic
+      ? {
+          skillLogicType: Number(effectSkillLogic.skillLogicType),
+          sourceIdentity: `NewTable/skillsub_logic.rows[skillId=${effectSkillId}]`,
+        }
+      : null,
+    runtimeStatus,
+    mechanismFamily:
+      runtimeStatus === 'runtime-applied'
+        ? 'equipped-actor-persistent-property-root'
+        : 'source-indexed-composite-effect',
+    activationPrerequisites: persistentRoot.activationPrerequisites,
+    trigger: null,
+    effect: null,
+    persistentRoot: {
+      ...persistentRoot,
+      status: runtimeStatus,
+    },
+    sourceClosure: {
+      controlSkillId: effectSkillId,
+      controlSourceIdentity: control?.sourceIdentity ?? null,
+      resourcePathIds: uniqueNumbers(control?.resourcePathIds ?? []),
+      missingPathIds,
+      reachablePathIds: closure.rows.map(row => row.path_id),
+      activeTriggerElementIds: [],
+      unloadTriggerElementIds: unloadTriggers.map(row =>
+        Number(row.typetree?.elementConfigId)
+      ),
+      propertyElementIds: propertyRows.map(row =>
+        Number(row.typetree?.elementConfigId)
+      ),
+      wrapperElementIds: persistentRoot.wrapperElementIds,
+      effectPathElementIds: persistentRoot.effectPathElementIds,
+      removalPaths: persistentRoot.unload.removalPaths,
+      damageElementIds: damageRows.map(row =>
+        Number(row.typetree?.elementConfigId)
+      ),
+      activationPrerequisiteElementIds:
+        persistentRoot.activationPrerequisites.map(row => row.elementId),
+      timelineInjections: structuredClone(control?.timelineInjections ?? []),
+    },
+    runtimeGaps,
+    sourceIdentity: [
+      `NewTable/soulessence.rows[id=${soul.soulEssenceId}].reishiSkill`,
+      control?.sourceIdentity,
+      persistentRoot.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+  };
+}
+
+function compilePersistentPropertyRoot({
+  ownerKind,
+  ownerId,
+  skillId,
+  control,
+  closure,
+  propertyRows,
+  unloadTriggers,
+  damageRows,
+  battleElementsByPathId,
+  propertyTagContract,
+  persistentLoadoutPropertyRuntimeEvidence,
+  resolveValues,
+}) {
+  const supportedPropertyTags = new Set(
+    (propertyTagContract?.bindings ?? [])
+      .filter(binding => binding.status === 'applied')
+      .map(binding => Number(binding.propertyTag))
+  );
+  const installationCandidates = (control?.timelineInjections ?? [])
+    .filter(
+      injection =>
+        Number(injection.startFrame) === 0 &&
+        Number(injection.directInjectTargetType) === 0 &&
+        injection.removeElementOnEnd === false
+    )
+    .map(injection => ({
+      injection,
+      root: battleElementsByPathId.get(Number(injection.elementPathId)),
+    }))
+    .filter(({ root }) => {
+      if (!root) return false;
+      if (
+        Number(root.typetree?.triggerType) === 1 &&
+        Number(root.typetree?.triggerParam1) === 36
+      ) {
+        return false;
+      }
+      return collectReachableRows(
+        root.path_id,
+        closure.edges,
+        battleElementsByPathId
+      ).some(reachable =>
+        propertyRows.some(property => property.path_id === reachable.path_id)
+      );
+    });
+  const installation =
+    installationCandidates.length === 1 ? installationCandidates[0] : null;
+  const rootRow = installation?.root ?? null;
+  const reachableRows = rootRow
+    ? collectReachableRows(
+        rootRow.path_id,
+        closure.edges,
+        battleElementsByPathId
+      )
+    : [];
+  const effects = reachableRows
+    .filter(row =>
+      propertyRows.some(property => property.path_id === row.path_id)
+    )
+    .map(property =>
+      compilePersistentPropertyEffect({
+        ownerKind,
+        ownerId,
+        skillId,
+        property,
+        values: resolveValues(property),
+      })
+    )
+    .sort(
+      (left, right) =>
+        left.elementId - right.elementId || left.pathId - right.pathId
+    );
+  const wrapperRows = reachableRows.filter(
+    row =>
+      row.path_id !== rootRow?.path_id &&
+      !effects.some(effect => effect.pathId === Number(row.path_id))
+  );
+  const conditionalRows = reachableRows.filter(row => {
+    const tree = row.typetree ?? {};
+    return (
+      Number(tree.triggerType) === 0 ||
+      (Array.isArray(tree.triggerConditionList) &&
+        tree.triggerConditionList.length > 0)
+    );
+  });
+  const unloadCandidates = (control?.timelineInjections ?? [])
+    .map(injection => ({
+      injection,
+      trigger: unloadTriggers.find(
+        row => Number(row.path_id) === Number(injection.elementPathId)
+      ),
+    }))
+    .filter(
+      ({ injection, trigger }) =>
+        trigger != null &&
+        Number(injection.startFrame) === 0 &&
+        Number(injection.directInjectTargetType) === 0 &&
+        injection.removeElementOnEnd === false
+    );
+  const unloadCandidate =
+    unloadCandidates.length === 1 ? unloadCandidates[0] : null;
+  const removalPath =
+    unloadCandidate?.trigger && rootRow
+      ? findElementPath(
+          unloadCandidate.trigger.path_id,
+          rootRow.path_id,
+          closure.edges
+        )
+      : null;
+  const runtimeGaps = [];
+  if (
+    persistentLoadoutPropertyRuntimeEvidence?.conclusion?.status !== 'applied'
+  ) {
+    runtimeGaps.push('effect-persistent-root-native-evidence-gap');
+  }
+  if (installationCandidates.length !== 1) {
+    runtimeGaps.push('effect-persistent-root-installation-not-unique');
+  }
+  if (conditionalRows.length > 0) {
+    runtimeGaps.push('effect-persistent-root-conditional-wrapper-unsupported');
+  }
+  if (damageRows.length > 0) {
+    runtimeGaps.push('effect-persistent-root-damage-branch-unapplied');
+  }
+  if (effects.length === 0) {
+    runtimeGaps.push('effect-persistent-root-property-leaf-missing');
+  }
+  if (
+    rootRow &&
+    Object.hasOwn(rootRow.typetree ?? {}, 'time') &&
+    Number(rootRow.typetree?.time) !== -1
+  ) {
+    runtimeGaps.push('effect-persistent-root-lifetime-not-permanent');
+    runtimeGaps.push('effect-persistent-root-conditional-wrapper-unsupported');
+  }
+  for (const effect of effects) {
+    if (effect.durationMs !== -1) {
+      runtimeGaps.push('effect-persistent-root-lifetime-not-permanent');
+      runtimeGaps.push('effect-persistent-root-conditional-wrapper-unsupported');
+    }
+    if (
+      effect.combineType !== 3 ||
+      effect.combineNumber !== -1 ||
+      effect.executeTargetType !== 0 ||
+      effect.inheritType !== 0
+    ) {
+      runtimeGaps.push('effect-persistent-root-lifecycle-unsupported');
+    }
+    if (!['dynamicExtra', 'dynamicPercent'].includes(effect.bucket)) {
+      runtimeGaps.push('effect-persistent-root-property-bucket-unsupported');
+    }
+    if (
+      effect.formula.commonFunctionId !== 1 ||
+      ![3, 5].includes(effect.formula.baseFunctionId) ||
+      effect.formula.commonRatioRaw !== 10_000
+    ) {
+      runtimeGaps.push('effect-persistent-root-formula-unsupported');
+    }
+    if (
+      effect.propertyTags.length > 1 ||
+      (effect.propertyTags.length === 1 &&
+        !supportedPropertyTags.has(effect.propertyTags[0]))
+    ) {
+      runtimeGaps.push('effect-persistent-root-property-tag-unsupported');
+    }
+    if (ownerKind === 'soul-essence' && effect.valuesByStar.length !== 4) {
+      runtimeGaps.push('effect-persistent-root-star-values-incomplete');
+    }
+  }
+  if (unloadCandidates.length !== 1 || !removalPath) {
+    runtimeGaps.push('effect-persistent-root-unload-path-unresolved');
+  }
+  const evidenceSourceIdentity =
+    persistentLoadoutPropertyRuntimeEvidence?.conclusion?.sourceIdentity ??
+    'persistent-loadout-property-native-evidence-unresolved';
+  return {
+    status: runtimeGaps.length
+      ? 'source-indexed-runtime-unapplied'
+      : 'runtime-applied',
+    installation: {
+      frame: installation?.injection?.startFrame ?? null,
+      targetKind:
+        Number(installation?.injection?.directInjectTargetType) === 0
+          ? 'self-actor'
+          : 'unresolved',
+      directInjectTargetType:
+        installation?.injection?.directInjectTargetType ?? null,
+      removeElementOnEnd:
+        installation?.injection?.removeElementOnEnd ?? null,
+      rootElementId: numberOrNull(rootRow?.typetree?.elementConfigId),
+      rootPathId: numberOrNull(rootRow?.path_id),
+      sourceSequencePath: structuredClone(
+        installation?.injection?.sourceSequencePath ?? []
+      ),
+      sourceIdentity: [
+        installation?.injection?.sourceIdentity,
+        rootRow ? createElementIdentity(rootRow) : null,
+        evidenceSourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+    },
+    lifecycle: {
+      durationMode: 'until-loadout-uninstall',
+      leafDurationMs:
+        effects.length > 0 &&
+        effects.every(effect => effect.durationMs === effects[0].durationMs)
+          ? effects[0].durationMs
+          : null,
+      combineMode: 'cover-by-source-identity',
+      inheritType: 0,
+      sourceIdentity: evidenceSourceIdentity,
+    },
+    unload: {
+      eventId: 36,
+      triggerElementId: numberOrNull(
+        unloadCandidate?.trigger?.typetree?.elementConfigId
+      ),
+      triggerPathId: numberOrNull(unloadCandidate?.trigger?.path_id),
+      removalPaths: removalPath
+        ? [
+            {
+              pathIds: removalPath,
+              elementIds: removalPath
+                .map(pathId => battleElementsByPathId.get(pathId))
+                .filter(Boolean)
+                .map(row => Number(row.typetree?.elementConfigId)),
+            },
+          ]
+        : [],
+      sourceIdentity: [
+        unloadCandidate?.injection?.sourceIdentity,
+        unloadCandidate?.trigger
+          ? createElementIdentity(unloadCandidate.trigger)
+          : null,
+        evidenceSourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+    },
+    effects,
+    activationPrerequisites: conditionalRows.map(row => ({
+      elementId: Number(row.typetree?.elementConfigId),
+      pathId: Number(row.path_id),
+      triggerType: numberOrNull(row.typetree?.triggerType),
+      conditions: projectConditions(row.typetree?.triggerConditionList),
+      sourceIdentity: createElementIdentity(row),
+    })),
+    wrapperElementIds: wrapperRows.map(row =>
+      Number(row.typetree?.elementConfigId)
+    ),
+    effectPathElementIds: reachableRows.map(row =>
+      Number(row.typetree?.elementConfigId)
+    ),
+    runtimeGaps: uniqueStrings(runtimeGaps),
+    sourceIdentity: [
+      installation?.injection?.sourceIdentity,
+      rootRow ? createElementIdentity(rootRow) : null,
+      ...effects.map(effect => effect.sourceIdentity),
+      unloadCandidate?.injection?.sourceIdentity,
+      unloadCandidate?.trigger
+        ? createElementIdentity(unloadCandidate.trigger)
+        : null,
+      evidenceSourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+  };
+}
+
+function compilePersistentPropertyEffect({
+  ownerKind,
+  ownerId,
+  skillId,
+  property,
+  values,
+}) {
+  const tree = property.typetree ?? {};
+  const commonFunctionId = Number(
+    tree.formulaParams?.function_1 ?? tree.baseIntParams?.[0]
+  );
+  const baseFunctionId = Number(
+    tree.formulaParams?.function_2 ?? tree.baseIntParams?.[1]
+  );
+  const formulaParams = structuredClone(
+    tree.formulaParams?.formulaParamValues ?? tree.functionParams ?? []
+  ).map(Number);
+  return {
+    elementId: Number(tree.elementConfigId),
+    pathId: Number(property.path_id),
+    name: tree.elementName ?? property.name ?? null,
+    attributeId: Number(tree.attributeID),
+    bucket:
+      PROPERTY_BUCKET_BY_CALCULATE_TYPE[Number(tree.calculateType)] ?? null,
+    calculateType: numberOrNull(tree.calculateType),
+    durationMs: numberOrNull(tree.time),
+    combineType: numberOrNull(tree.combineType),
+    combineNumber: numberOrNull(tree.combineNumber),
+    executeTargetType: numberOrNull(tree.executeTargetType),
+    inheritType: numberOrNull(tree.inheritType),
+    propertyTags: uniqueNumbers(tree.defaultPropertyTags ?? []),
+    propertyTagMatchMode:
+      (tree.defaultPropertyTags ?? []).length === 0
+        ? 'unscoped'
+        : (tree.defaultPropertyTags ?? []).length === 1
+          ? 'single-exact'
+          : 'evidence-open-multi-tag',
+    propertyTagSourceIdentity: `${createElementIdentity(property)}.defaultPropertyTags`,
+    formula: {
+      formulaIdentity: `battle-effect-formula:${ownerKind}:${ownerId}:${skillId}:${Number(tree.elementConfigId)}:${property.path_id}`,
+      commonFunctionId,
+      commonExpression: commonFunctionId === 1 ? 'G/10000' : null,
+      baseFunctionId,
+      baseExpression:
+        baseFunctionId === 3
+          ? 'A/10000'
+          : baseFunctionId === 5
+            ? 'A'
+            : null,
+      commonRatioRaw: Number(formulaParams[6]),
+      formulaParams,
+      sourceParameterEncoding: 'battle-element-raw-a',
+      family: resolveFormulaFamily({ commonFunctionId, baseFunctionId }),
+      sourceIdentity: `${createElementIdentity(property)}.formulaParams|functionParams`,
+    },
+    sourceRawA: numberOrNull(formulaParams[0]),
+    valuesByStar: structuredClone(values ?? []),
+    sourceIdentity: createElementIdentity(property),
+  };
+}
+
 function createMechanismFamily(triggerEvent) {
   if (triggerEvent?.frameAnchor === 'action-start') {
     return 'equipped-actor-skill-tag-property-before-skill';
@@ -1284,6 +1807,7 @@ async function readControlClosures({
       fileCount += 1;
       documents.push({
         name,
+        pathId: documentPathId(name),
         sourceIdentity: relative,
         value: JSON.parse(fileBytes.toString('utf8')),
       });
@@ -1299,10 +1823,85 @@ async function readControlClosures({
         )
       )
     );
+    const documentByPathId = new Map();
+    for (const document of documents.filter(item =>
+      Number.isFinite(item.pathId)
+    )) {
+      const pathId = Number(document.pathId);
+      const current = documentByPathId.get(pathId);
+      if (
+        !current ||
+        documentSemanticScore(document) > documentSemanticScore(current)
+      ) {
+        documentByPathId.set(pathId, document);
+      }
+    }
+    const timelineInjections = [];
+    for (const [skillPlayerIndex, skillPlayer] of (
+      root?.value?.skillControlData?.skillPlayers ?? []
+    ).entries()) {
+      for (const [trackListIndex, trackReference] of (
+        skillPlayer?.skillTrackDatas ?? []
+      ).entries()) {
+        const track = documentByPathId.get(Number(trackReference?.m_PathID));
+        for (const [behaviorLineIndex, behaviorLine] of (
+          track?.value?.behaviorlineControl ?? []
+        ).entries()) {
+          for (const [behaviorListIndex, behaviorReference] of (
+            behaviorLine?.behaviorList ?? []
+          ).entries()) {
+            const behavior = documentByPathId.get(
+              Number(behaviorReference?.m_PathID)
+            );
+            const behaviorValue = behavior?.value ?? {};
+            for (const [elementIndex, elementReference] of (
+              behaviorValue.elementDataList ?? []
+            ).entries()) {
+              timelineInjections.push({
+                skillPlayerIndex,
+                trackListIndex,
+                trackPathId: numberOrNull(trackReference?.m_PathID),
+                trackIndex: numberOrNull(track?.value?.trackIndex),
+                behaviorLineIndex,
+                behaviorListIndex,
+                behaviorPathId: numberOrNull(behaviorReference?.m_PathID),
+                elementIndex,
+                elementPathId: Number(elementReference?.m_PathID),
+                startFrame: Number(
+                  behaviorValue.startFrame ?? behaviorLine?.startFrame ?? 0
+                ),
+                frameCount: numberOrNull(behaviorValue.frameCount),
+                directInjectTargetType: numberOrNull(
+                  behaviorValue.directInjectTargetType
+                ),
+                removeElementOnEnd:
+                  Number(behaviorValue.removeElementOnEnd) === 1,
+                sourceSequencePath: [
+                  skillPlayerIndex,
+                  trackListIndex,
+                  behaviorLineIndex,
+                  behaviorListIndex,
+                  elementIndex,
+                ],
+                sourceIdentity: [
+                  track?.sourceIdentity,
+                  `behaviorlineControl[${behaviorLineIndex}].behaviorList[${behaviorListIndex}]`,
+                  behavior?.sourceIdentity,
+                  `elementDataList[${elementIndex}]`,
+                ]
+                  .filter(Boolean)
+                  .join('|'),
+              });
+            }
+          }
+        }
+      }
+    }
     bySkillId.set(skillId, {
       sourceIdentity:
         root?.sourceIdentity ?? normalizePath(monoRoot, projectRoot),
       resourcePathIds,
+      timelineInjections: timelineInjections.sort(compareTimelineInjections),
       documentCount: documents.length,
     });
   }
@@ -1316,6 +1915,33 @@ async function readControlClosures({
       sha256: hash.digest('hex'),
     },
   };
+}
+
+function documentPathId(name) {
+  const match = String(name).match(/__(-?\d+)\.json$/u);
+  return match ? Number(match[1]) : null;
+}
+
+function documentSemanticScore(document) {
+  const value = document?.value ?? {};
+  return (
+    (value.skillControlData ? 16 : 0) +
+    (Array.isArray(value.behaviorlineControl) ? 8 : 0) +
+    (Array.isArray(value.elementDataList) ? 4 : 0) +
+    (Number.isFinite(Number(value.startFrame)) ? 2 : 0) +
+    (value.m_Name != null ? 1 : 0)
+  );
+}
+
+function compareTimelineInjections(left, right) {
+  const leftPath = left.sourceSequencePath ?? [];
+  const rightPath = right.sourceSequencePath ?? [];
+  const length = Math.max(leftPath.length, rightPath.length);
+  for (let index = 0; index < length; index += 1) {
+    const delta = Number(leftPath[index] ?? -1) - Number(rightPath[index] ?? -1);
+    if (delta !== 0) return delta;
+  }
+  return Number(left.elementPathId) - Number(right.elementPathId);
 }
 
 function collectElementClosure({ rootPathIds, battleElementsByPathId }) {

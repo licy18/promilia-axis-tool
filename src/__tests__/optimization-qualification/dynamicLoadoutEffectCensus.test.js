@@ -3,12 +3,100 @@ import census from '../../data/generated/dynamic-loadout-effect-mechanics.json';
 import soulCatalog from '../../data/generated/soulessence-effect-mechanics.json';
 
 describe('M12-B3-C dynamic loadout effect census', () => {
+  it('compiles only evidence-closed persistent property roots and keeps conditional wrappers blocked', () => {
+    const definitions = new Map(
+      soulCatalog.definitions.map(definition => [
+        definition.soulEssenceId,
+        definition,
+      ])
+    );
+    const persistentSoulIds = [
+      10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061,
+      10062, 10133, 10156,
+    ];
+
+    for (const soulEssenceId of persistentSoulIds) {
+      expect(definitions.get(soulEssenceId)).toMatchObject({
+        runtimeStatus: 'runtime-applied',
+        mechanismFamily: 'equipped-actor-persistent-property-root',
+        trigger: null,
+        persistentRoot: {
+          status: 'runtime-applied',
+          installation: {
+            frame: 0,
+            targetKind: 'self-actor',
+            sourceSequencePath: expect.any(Array),
+          },
+          lifecycle: {
+            durationMode: 'until-loadout-uninstall',
+            leafDurationMs: -1,
+          },
+          unload: {
+            eventId: 36,
+            sourceIdentity: expect.any(String),
+          },
+          effects: expect.any(Array),
+        },
+        runtimeGaps: [],
+      });
+    }
+    expect(definitions.get(10133).persistentRoot.effects).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ elementId: 19004401, attributeId: 105 }),
+        expect.objectContaining({ elementId: 19004403, attributeId: 23 }),
+      ])
+    );
+    expect(definitions.get(10133).persistentRoot.effects).toHaveLength(2);
+
+    for (const soulEssenceId of [10078, 10084, 10152, 10197]) {
+      expect(definitions.get(soulEssenceId)).toMatchObject({
+        runtimeStatus: 'source-indexed-runtime-unapplied',
+        runtimeGaps: expect.arrayContaining([
+          'effect-persistent-root-conditional-wrapper-unsupported',
+        ]),
+      });
+    }
+  });
+
+  it('compiles the six evidence-closed two-piece persistent properties without admitting four-piece effects', () => {
+    const definitions = new Map(
+      soulCatalog.setSkillDefinitions.map(definition => [
+        `${definition.setId}:${definition.pieces}`,
+        definition,
+      ])
+    );
+
+    for (let setId = 1; setId <= 6; setId += 1) {
+      expect(definitions.get(`${setId}:2`)).toMatchObject({
+        runtimeStatus: 'runtime-applied',
+        mechanismFamily: 'set-skill-persistent-property',
+        thresholdActivation: {
+          selectedPieceCountRequired: 2,
+          appliedToRuntimeEffect: true,
+        },
+        persistentRoot: {
+          status: 'runtime-applied',
+          installation: {
+            frame: 0,
+            targetKind: 'self-actor',
+            sourceSequencePath: expect.any(Array),
+          },
+          effects: [expect.objectContaining({ durationMs: -1 })],
+        },
+        runtimeGaps: [],
+      });
+      expect(definitions.get(`${setId}:4`)).toMatchObject({
+        runtimeStatus: 'source-indexed-runtime-unapplied',
+      });
+    }
+  });
+
   it('indexes the complete 62 soul and 12 set-skill denominators from source closures', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 26,
-      runtimeUnappliedCount: 48,
+      runtimeAppliedCount: 44,
+      runtimeUnappliedCount: 30,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -854,8 +942,23 @@ describe('M12-B3-C dynamic loadout effect census', () => {
   });
 
   it('keeps threshold activation distinct from set-effect runtime qualification', () => {
+    const twoPiece = soulCatalog.setSkillDefinitions.filter(
+      definition => definition.pieces === 2
+    );
+    const fourPiece = soulCatalog.setSkillDefinitions.filter(
+      definition => definition.pieces === 4
+    );
     expect(
-      soulCatalog.setSkillDefinitions.every(
+      twoPiece.every(
+        definition =>
+          definition.thresholdActivation.status === 'runtime-applied' &&
+          definition.thresholdActivation.appliedToRuntimeEffect === true &&
+          definition.runtimeStatus === 'runtime-applied' &&
+          definition.runtimeGaps.length === 0
+      )
+    ).toBe(true);
+    expect(
+      fourPiece.every(
         definition =>
           definition.thresholdActivation.status === 'source-indexed' &&
           definition.thresholdActivation.appliedToRuntimeEffect === false &&
@@ -867,7 +970,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     ).toBe(true);
     expect(soulCatalog.summary).toMatchObject({
       setSkillThresholdIndexedCount: 12,
-      setSkillRuntimeAppliedCount: 0,
+      setSkillRuntimeAppliedCount: 6,
     });
   });
 
@@ -988,7 +1091,9 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       [10175, []],
     ]);
     const appliedDefinitions = soulCatalog.definitions.filter(
-      definition => definition.runtimeStatus === 'runtime-applied'
+      definition =>
+        definition.runtimeStatus === 'runtime-applied' &&
+        definition.effect != null
     );
 
     expect(
@@ -1026,7 +1131,11 @@ describe('M12-B3-C dynamic loadout effect census', () => {
 
     expect(
       soulCatalog.definitions
-        .filter(definition => definition.runtimeStatus === 'runtime-applied')
+        .filter(
+          definition =>
+            definition.runtimeStatus === 'runtime-applied' &&
+            definition.effect != null
+        )
         .every(definition => Array.isArray(definition.effect.propertyTags))
     ).toBe(true);
   });

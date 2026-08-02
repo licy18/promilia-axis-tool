@@ -39,7 +39,12 @@ export function createVerifiedSoulEssenceEffectGeneration({
   );
   const definitionBySoulId = new Map(
     (catalog?.definitions ?? [])
-      .filter(definition => definition.runtimeStatus === 'runtime-applied')
+      .filter(
+        definition =>
+          definition.runtimeStatus === 'runtime-applied' &&
+          definition.trigger != null &&
+          definition.effect != null
+      )
       .map(definition => [Number(definition.soulEssenceId), definition])
   );
   const bindings = (scenario.actors ?? [])

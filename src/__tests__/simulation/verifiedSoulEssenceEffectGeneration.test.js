@@ -324,8 +324,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 26,
-      unresolvedCount: 36,
+      runtimeAppliedCount: 38,
+      unresolvedCount: 24,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -488,7 +488,9 @@ describe('verified soul essence effect generation', () => {
 
   it('covers every runtime-integrated soul through one data-driven trigger contract', () => {
     const appliedDefinitions = soulEssenceEffectCatalog.definitions.filter(
-      definition => definition.runtimeStatus === 'runtime-applied'
+      definition =>
+        definition.runtimeStatus === 'runtime-applied' &&
+        definition.trigger != null
     );
 
     expect(

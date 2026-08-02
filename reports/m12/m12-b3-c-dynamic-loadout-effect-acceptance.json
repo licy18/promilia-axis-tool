@@ -1,23 +1,27 @@
 {
-  "schemaVersion": 15,
-  "phase": "M12-B3-C8-R1",
+  "schemaVersion": 16,
+  "phase": "M12-B3-C9",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "1b16f2ddcbc3594a2c5de964ff11933d1da37c63",
+  "baseCommit": "26a8125b2ca262777ff11b12f37e7d32b68eac91",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
   "reviewedC7R2Commit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
   "acceptedC7R3Commit": "f73b0ac6a457719ad0e24b98415f2f9d67c3e8a5",
   "reviewedC8Commit": "1b16f2ddcbc3594a2c5de964ff11933d1da37c63",
+  "acceptedC8R1Commit": "26a8125b2ca262777ff11b12f37e7d32b68eac91",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
-    "phase": "M12-B3-C7-R3",
-    "acceptanceBaseline": "f73b0ac6a457719ad0e24b98415f2f9d67c3e8a5",
+    "phase": "M12-B3-C8-R1",
+    "acceptanceBaseline": "26a8125b2ca262777ff11b12f37e7d32b68eac91",
     "status": "product-accepted"
   },
   "scope": {
-    "batch": "native-tuning-mark-element-types-and-get-element-healing",
-    "soulEssenceIds": [10052],
-    "explicitlyExcludedSoulEssenceIds": [10018, 10101, 10169, 10170, 10176],
+    "batch": "persistent-loadout-property-roots-and-two-piece-set-properties",
+    "soulEssenceIds": [10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061, 10062, 10078, 10084, 10133, 10152, 10156, 10197],
+    "runtimeAppliedSoulEssenceIds": [10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061, 10062, 10133, 10156],
+    "evidenceBlockedSoulEssenceIds": [10078, 10084, 10152, 10197],
+    "setSkillIds": ["set-skill:1:2", "set-skill:2:2", "set-skill:3:2", "set-skill:4:2", "set-skill:5:2", "set-skill:6:2"],
+    "explicitlyExcludedSetSkillThresholds": ["set-skill:1:4", "set-skill:2:4", "set-skill:3:4", "set-skill:4:4", "set-skill:5:4", "set-skill:6:4"],
     "formalSearchExecuted": false,
     "m12cLocked": true,
     "fixedCultivationChanged": false,
@@ -72,6 +76,17 @@
       "path": "scripts/optimization-qualification/evidence/soulessence-get-element-type-runtime-evidence.json",
       "bytes": 3234,
       "sha256": "4054d0d97a146faeb56f1fcb518126c1ca41edb698c3ed722fe5247e4ffff56a",
+      "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+      "binaryBytes": 222485544,
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "il2CppDumpPath": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+      "il2CppDumpBytes": 97428254,
+      "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+    },
+    "persistentLoadoutPropertyRuntimeEvidence": {
+      "path": "scripts/optimization-qualification/evidence/persistent-loadout-property-runtime-evidence.json",
+      "bytes": 5615,
+      "sha256": "c8b9205b959a241f284dcacb4a27cbe63fc62cd028766777f50cca8941ecea57",
       "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
       "binaryBytes": 222485544,
       "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
@@ -192,6 +207,35 @@
       "resultsAfterDescriptorInsertion": [100, 111],
       "directSpProvenanceStable": true,
       "directShieldProvenanceStable": true
+    }
+  },
+  "c9PersistentLoadoutPropertyContract": {
+    "nativeEvidence": "InjectToOwnElementBehavior.Start/GetInjectTargets installs frame-zero Self elements; ChangePropertyElement.Parse/Combine binds time=-1 and Cover; explicit UnloadSkill(36) removal closes the lifetime",
+    "runtimeAppliedSoulEssenceIds": [10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061, 10062, 10133, 10156],
+    "conditionalOrFiniteOutliers": {
+      "10078": "conditional wrapper and finite 1100ms property leaf",
+      "10084": "conditional wrapper and finite 1100ms property leaf",
+      "10152": "two source conditions and finite 1200ms property leaf",
+      "10197": "finite 2300ms property leaf"
+    },
+    "twoPieceSetSkills": ["set-skill:1:2", "set-skill:2:2", "set-skill:3:2", "set-skill:4:2", "set-skill:5:2", "set-skill:6:2"],
+    "fourPieceDynamicEffectsApplied": false,
+    "target": "equipped actor Self only; inheritType None",
+    "installation": "one canonical static source per leaf at scenario/loadout initialization",
+    "duplicateInitialization": "cover by stable source identity; two, three and four selected pieces retain one two-piece source",
+    "unload": "changing or removing the loadout recompiles without the source; explicit source UnloadSkill paths remain auditable",
+    "sourceSequence": "actor character, loadout kind, soul/set identity, threshold, skill/control graph path and leaf element",
+    "dualLeafSoulEssence": {
+      "soulEssenceId": 10133,
+      "leafElementIds": [19004401, 19004403],
+      "attributeIds": [105, 23]
+    },
+    "numericConsequences": {
+      "windDamage": "10056 increases a real wind hit and remains actor-isolated",
+      "directHeal": "10133 star1 changes a 100-point direct heal to 116 through source SHOOT_HEALUP",
+      "kiboInheritance": "10033 MAXHP reaches the equipped actor's Kibo through the existing inheritance contract",
+      "toughness": "set-skill:6:2 adds attr222=2000 and increases a real charged-hit toughness settlement",
+      "twoPassReplay": "the same persistent source is installed once and produces equal first/second pass hit results"
     }
   },
   "definitions": {
@@ -366,12 +410,13 @@
     "gameplayLogicChanged": false
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 26,
-    "runtimeUnappliedSoulEssenceCount": 36,
-    "runtimeAppliedSetSkillCount": 0,
-    "newlyAppliedSoulEssenceIds": [10052],
-    "preservedRuntimeAppliedSoulEssenceCount": 25,
-    "evidenceBlockedSoulEssenceIds": [10169, 10170, 10176]
+    "runtimeAppliedSoulEssenceCount": 38,
+    "runtimeUnappliedSoulEssenceCount": 24,
+    "runtimeAppliedSetSkillCount": 6,
+    "runtimeUnappliedSetSkillCount": 6,
+    "newlyAppliedSoulEssenceIds": [10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061, 10062, 10133, 10156],
+    "preservedRuntimeAppliedSoulEssenceCount": 26,
+    "evidenceBlockedC9SoulEssenceIds": [10078, 10084, 10152, 10197]
   },
   "qualification": {
     "denominators": {
@@ -381,9 +426,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 418,
+    "blockingUniqueGapCount": 388,
     "blockingByCategory": {
-      "not-implemented": 400,
+      "not-implemented": 370,
       "evidence-insufficient": 18
     },
     "formalAdmissions": {
@@ -395,15 +440,15 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "b49537c3859dd0ad",
-    "rosterHash": "3ae68f8d9c3eb62a",
-    "manifestsHash": "d5cf870eb3ca547d",
-    "ledgerHash": "dc8015acb06da47a",
-    "bindingMatrixHash": "d4110346a5460742",
-    "qualificationCatalogHash": "fdb4256d91bb9234",
-    "dynamicLoadoutEffectCensusHash": "0f1ceff2c159e7d8",
-    "soulEssenceEffectCatalogHash": "3630dd738d03a4d5",
-    "soulEssenceSourceSnapshotHash": "e7da9453d0a0325a",
+    "sourceSnapshotHash": "a67408542cc51aae",
+    "rosterHash": "5b6d960755dd1b2c",
+    "manifestsHash": "2a3b8a97bbd414e7",
+    "ledgerHash": "350b93a9d62e8f66",
+    "bindingMatrixHash": "05d6d4922e1584cf",
+    "qualificationCatalogHash": "c822661eb91c9416",
+    "dynamicLoadoutEffectCensusHash": "91a15fb4e10c79ed",
+    "soulEssenceEffectCatalogHash": "968fe1128b017dba",
+    "soulEssenceSourceSnapshotHash": "3a8cf57e38b2ee37",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
     "soulEssenceTriggerContractHash": "d68083acc3d5496d",
     "verifiedMechanicsPackageHash": "20498c0f436fdcc3f0e86ebb6308ea75586d4b2379127d23ec4d971e81bb88e9",
@@ -416,8 +461,8 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "C8-R1 adds stable effect-source ordering metadata to the verified package. Input/data/trace identities change because fixtures bind that package identity, while evaluation and authoritative gameplay assertions remain numerically unchanged.",
-    "machineAxisCanonicalHashDrift": 3,
+    "reason": "C9 adds source-bound static loadout properties without changing the verified mechanics package or the standard Machine Axis fixture loadout. C8-R1 canonical identities remain the expected baseline; C9-specific loadouts carry their own static source identities.",
+    "machineAxisCanonicalHashDrift": 0,
     "machineAxisEvaluationHashDrift": 0,
     "gameplayAssertionDrift": 0,
     "c4ConsumeAndAfterDamageRegression": 0,
@@ -427,24 +472,26 @@
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 8, "tests": 148, "status": "passed" },
+    "focusedMechanics": { "files": 5, "tests": 125, "status": "passed" },
     "characterProfileAndMigration": {
       "files": 4,
-      "tests": 26,
+      "tests": 38,
       "status": "passed",
       "gameplayAssertionDrift": 0
     },
     "machineAxis": { "files": 12, "tests": 157, "status": "passed" },
     "canonicalAndRuntime": {
-      "files": 3,
-      "tests": 27,
+      "files": 5,
+      "tests": 52,
       "status": "passed"
     },
     "audits": {
       "count": 9,
       "status": "clean",
-      "appliedSoulSourceCount": 26,
-      "appliedSoulSourceDriftCount": 0,
+      "appliedLoadoutPropertySourceCount": 45,
+      "triggeredLoadoutPropertySourceCount": 26,
+      "persistentLoadoutPropertySourceCount": 19,
+      "appliedLoadoutPropertySourceDriftCount": 0,
       "tuningConditionSourceCount": 14,
       "tuningConditionSourceDriftCount": 0,
       "tuningConsumePriorityGroupCount": 12,

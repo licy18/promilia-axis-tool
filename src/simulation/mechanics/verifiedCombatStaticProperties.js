@@ -1,4 +1,6 @@
 import { getInstalledVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
+import soulEssenceEffectCatalog from '../../data/generated/soulessence-effect-mechanics.json';
+import { evaluateVerifiedBattleEffectFormula } from './verifiedBattleEffectFormulaRuntime';
 
 const CORE_ATTRIBUTE_KEYS = Object.freeze({
   1: 'ATK',
@@ -146,6 +148,7 @@ export function compileVerifiedStaticActorProperties({
     sources,
   });
   applySoulessenceSource({
+    characterId,
     loadout: actor?.loadout,
     indexes,
     sources,
@@ -153,6 +156,7 @@ export function compileVerifiedStaticActorProperties({
     unapplied,
   });
   const setSkillActivations = applyEquipmentSources({
+    characterId,
     loadout: actor?.loadout,
     indexes,
     sources,
@@ -533,6 +537,7 @@ function applyFavorabilitySources({
 }
 
 function applySoulessenceSource({
+  characterId,
   loadout,
   indexes,
   sources,
@@ -596,7 +601,43 @@ function applySoulessenceSource({
   }
   if (profile.effectSkill?.skillId) {
     const cultivationEffect = loadout?.soulessenceCultivation?.effectSkill;
-    if (cultivationEffect?.runtimeStatus !== 'runtime-applied') {
+    const effectDefinition = indexes.soulessenceEffects.get(soulessenceId);
+    const persistentValidation = validatePersistentLoadoutPropertyRoot(
+      effectDefinition?.persistentRoot,
+      {
+        requiresStarValues: true,
+        expectedPropertyElementIds:
+          effectDefinition?.sourceClosure?.propertyElementIds,
+      }
+    );
+    const persistentDeclared =
+      cultivationEffect?.runtimeStatus === 'runtime-applied' &&
+      effectDefinition?.runtimeStatus === 'runtime-applied' &&
+      effectDefinition?.persistentRoot != null;
+    const persistentApplied =
+      persistentDeclared &&
+      Number(cultivationEffect?.skillId) ===
+        Number(profile.effectSkill.skillId) &&
+      persistentValidation.valid;
+    if (persistentApplied) {
+      applyPersistentSoulEffectSources({
+        characterId,
+        soulessenceId,
+        effectDefinition,
+        cultivationEffect,
+        indexes,
+        sources,
+        unresolved,
+      });
+    } else if (persistentDeclared && !persistentValidation.valid) {
+      unresolved.push({
+        kind: 'soulessence-persistent-property',
+        sourceId: soulessenceId,
+        reason: 'soulessence-persistent-property-contract-invalid',
+        issueCodes: persistentValidation.issueCodes,
+        sourceIdentity: effectDefinition?.sourceIdentity ?? null,
+      });
+    } else if (cultivationEffect?.runtimeStatus !== 'runtime-applied') {
       unapplied.push({
         kind: 'soulessence-effect-skill',
         sourceId: profile.effectSkill.skillId,
@@ -617,7 +658,85 @@ function applySoulessenceSource({
   }
 }
 
+function applyPersistentSoulEffectSources({
+  characterId,
+  soulessenceId,
+  effectDefinition,
+  cultivationEffect,
+  indexes,
+  sources,
+  unresolved,
+}) {
+  const star = Number(cultivationEffect?.star);
+  for (const effect of effectDefinition.persistentRoot.effects ?? []) {
+    const starValue = effect.valuesByStar?.find(
+      row => Number(row.star) === star
+    );
+    if (!starValue) {
+      unresolved.push({
+        kind: 'soulessence-persistent-property',
+        sourceId: `${soulessenceId}:${effect.elementId}`,
+        reason: 'soulessence-persistent-property-star-value-missing',
+        star,
+        sourceIdentity: effect.sourceIdentity,
+      });
+      continue;
+    }
+    const formulaResult = evaluatePersistentPropertyFormula({
+      effect,
+      level: star,
+      sourceRawA: Number(starValue.valueRaw),
+    });
+    const attribute = projectPersistentPropertyAttribute({
+      effect,
+      formulaResult,
+      indexes,
+    });
+    if (!attribute) {
+      unresolved.push({
+        kind: 'soulessence-persistent-property',
+        sourceId: `${soulessenceId}:${effect.elementId}`,
+        reason:
+          formulaResult?.reason ??
+          'soulessence-persistent-property-formula-or-bucket-unresolved',
+        sourceIdentity: effect.sourceIdentity,
+      });
+      continue;
+    }
+    sources.push({
+      ...createAppliedSource({
+        kind: 'soulessence-persistent-property',
+        sourceId: `${soulessenceId}:${effect.elementId}:star-${star}`,
+        sourceIdentity: [
+          effectDefinition.persistentRoot.installation.sourceIdentity,
+          effect.sourceIdentity,
+          starValue.sourceIdentity,
+          effectDefinition.persistentRoot.unload.sourceIdentity,
+        ]
+          .filter(Boolean)
+          .join('|'),
+        attributes: [attribute],
+      }),
+      sourceSequencePath: createPersistentLoadoutSourceSequencePath({
+        characterId,
+        loadoutKind: 'soulessence',
+        ownerId: soulessenceId,
+        skillId: effectDefinition.effectSkillId,
+        elementId: effect.elementId,
+        graphPath:
+          effectDefinition.persistentRoot.installation.sourceSequencePath,
+      }),
+      sourceSequenceStatus:
+        'verified-persistent-loadout-property-source-sequence-ready',
+      formulaResult,
+      lifecycle: structuredClone(effectDefinition.persistentRoot.lifecycle),
+      unload: structuredClone(effectDefinition.persistentRoot.unload),
+    });
+  }
+}
+
 function applyEquipmentSources({
+  characterId,
   loadout,
   indexes,
   sources,
@@ -752,6 +871,88 @@ function applyEquipmentSources({
   const setSkillActivations = indexes.accessorySets.map(setProfile => {
     const selectedPieceCount = selectedSetCounts.get(setProfile.setId) ?? 0;
     const thresholdMet = selectedPieceCount >= setProfile.pieces;
+    const effectDefinition = indexes.setSkillEffects.get(
+      `${setProfile.setId}:${setProfile.pieces}`
+    );
+    const persistentValidation = validatePersistentLoadoutPropertyRoot(
+      effectDefinition?.persistentRoot,
+      {
+        expectedPropertyElementIds:
+          effectDefinition?.sourceClosure?.propertyElementIds,
+      }
+    );
+    const persistentDeclared =
+      thresholdMet &&
+      effectDefinition?.runtimeStatus === 'runtime-applied' &&
+      effectDefinition?.persistentRoot != null;
+    const persistentApplied =
+      persistentDeclared && persistentValidation.valid;
+    if (persistentDeclared && !persistentValidation.valid) {
+      unresolved.push({
+        kind: 'accessory-set-persistent-property',
+        sourceId: `${setProfile.setId}:${setProfile.pieces}`,
+        reason: 'set-persistent-property-contract-invalid',
+        issueCodes: persistentValidation.issueCodes,
+        sourceIdentity: effectDefinition?.sourceIdentity ?? null,
+      });
+    }
+    if (persistentApplied) {
+      for (const effect of effectDefinition.persistentRoot.effects ?? []) {
+        const formulaResult = evaluatePersistentPropertyFormula({
+          effect,
+          level: 1,
+          sourceRawA: effect.sourceRawA,
+        });
+        const attribute = projectPersistentPropertyAttribute({
+          effect,
+          formulaResult,
+          indexes,
+        });
+        if (!attribute) {
+          unresolved.push({
+            kind: 'accessory-set-persistent-property',
+            sourceId: `${setProfile.setId}:${setProfile.pieces}:${effect.elementId}`,
+            reason:
+              formulaResult?.reason ??
+              'set-persistent-property-formula-or-bucket-unresolved',
+            sourceIdentity: effect.sourceIdentity,
+          });
+          continue;
+        }
+        sources.push({
+          ...createAppliedSource({
+            kind: 'accessory-set-persistent-property',
+            sourceId: `${setProfile.setId}:${setProfile.pieces}:${effect.elementId}`,
+            sourceIdentity: [
+              setProfile.sourceIdentity,
+              effectDefinition.persistentRoot.installation.sourceIdentity,
+              effect.sourceIdentity,
+              effectDefinition.persistentRoot.unload.sourceIdentity,
+            ]
+              .filter(Boolean)
+              .join('|'),
+            attributes: [attribute],
+          }),
+          sourceSequencePath: createPersistentLoadoutSourceSequencePath({
+            characterId,
+            loadoutKind: 'accessory-set',
+            ownerId: setProfile.setId,
+            skillId: setProfile.skillId,
+            elementId: effect.elementId,
+            graphPath:
+              effectDefinition.persistentRoot.installation.sourceSequencePath,
+            threshold: setProfile.pieces,
+          }),
+          sourceSequenceStatus:
+            'verified-persistent-loadout-property-source-sequence-ready',
+          formulaResult,
+          lifecycle: structuredClone(
+            effectDefinition.persistentRoot.lifecycle
+          ),
+          unload: structuredClone(effectDefinition.persistentRoot.unload),
+        });
+      }
+    }
     return {
       kind: 'accessory-set-skill-threshold',
       setId: setProfile.setId,
@@ -762,13 +963,14 @@ function applyEquipmentSources({
       thresholdStatus: thresholdMet
         ? 'set-skill-piece-threshold-met'
         : 'set-skill-piece-threshold-not-met',
-      runtimeEffectStatus: setProfile.status,
+      runtimeEffectStatus:
+        effectDefinition?.runtimeStatus ?? setProfile.status,
       sourceIdentity: setProfile.sourceIdentity,
-      appliedToCalculators: false,
+      appliedToCalculators: persistentApplied,
     };
   });
   for (const activation of setSkillActivations) {
-    if (!activation.thresholdMet) continue;
+    if (!activation.thresholdMet || activation.appliedToCalculators) continue;
     unapplied.push({
       kind: 'accessory-set-skill',
       sourceId: activation.skillId,
@@ -782,6 +984,163 @@ function applyEquipmentSources({
     });
   }
   return setSkillActivations;
+}
+
+function createPersistentLoadoutSourceSequencePath({
+  characterId,
+  loadoutKind,
+  ownerId,
+  skillId,
+  elementId,
+  graphPath,
+  threshold = 0,
+}) {
+  const loadoutKindIndex = loadoutKind === 'soulessence' ? 1 : 2;
+  return [
+    0,
+    Number(characterId),
+    loadoutKindIndex,
+    Number(ownerId),
+    Number(threshold),
+    Number(skillId),
+    ...structuredClone(graphPath ?? []).map(Number),
+    Number(elementId),
+  ];
+}
+
+export function validatePersistentLoadoutPropertyRoot(
+  root,
+  { requiresStarValues = false, expectedPropertyElementIds = null } = {}
+) {
+  const issueCodes = [];
+  if (root?.status !== 'runtime-applied') {
+    issueCodes.push('persistent-root-status-not-applied');
+  }
+  if (
+    Number(root?.installation?.frame) !== 0 ||
+    root?.installation?.targetKind !== 'self-actor' ||
+    Number(root?.installation?.directInjectTargetType) !== 0 ||
+    root?.installation?.removeElementOnEnd !== false ||
+    !Array.isArray(root?.installation?.sourceSequencePath) ||
+    root.installation.sourceSequencePath.length === 0 ||
+    !String(root?.installation?.sourceIdentity ?? '').length
+  ) {
+    issueCodes.push('persistent-root-installation-invalid');
+  }
+  if (
+    root?.lifecycle?.durationMode !== 'until-loadout-uninstall' ||
+    Number(root?.lifecycle?.leafDurationMs) !== -1 ||
+    root?.lifecycle?.combineMode !== 'cover-by-source-identity' ||
+    Number(root?.lifecycle?.inheritType) !== 0 ||
+    !String(root?.lifecycle?.sourceIdentity ?? '').length
+  ) {
+    issueCodes.push('persistent-root-lifecycle-invalid');
+  }
+  if (
+    Number(root?.unload?.eventId) !== 36 ||
+    !(root?.unload?.removalPaths?.length > 0) ||
+    !String(root?.unload?.sourceIdentity ?? '').length
+  ) {
+    issueCodes.push('persistent-root-unload-invalid');
+  }
+  if (!(root?.effects?.length > 0)) {
+    issueCodes.push('persistent-root-effects-empty');
+  }
+  if (Array.isArray(expectedPropertyElementIds)) {
+    const expected = [...new Set(expectedPropertyElementIds.map(Number))].sort(
+      (left, right) => left - right
+    );
+    const actual = [
+      ...new Set((root?.effects ?? []).map(effect => Number(effect.elementId))),
+    ].sort((left, right) => left - right);
+    if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+      issueCodes.push('persistent-root-effect-closure-incomplete');
+    }
+  }
+  for (const effect of root?.effects ?? []) {
+    if (
+      !Number.isInteger(Number(effect?.elementId)) ||
+      !Number.isInteger(Number(effect?.attributeId)) ||
+      !['dynamicExtra', 'dynamicPercent'].includes(effect?.bucket) ||
+      Number(effect?.durationMs) !== -1 ||
+      Number(effect?.combineType) !== 3 ||
+      Number(effect?.combineNumber) !== -1 ||
+      Number(effect?.executeTargetType) !== 0 ||
+      Number(effect?.inheritType) !== 0 ||
+      !String(effect?.sourceIdentity ?? '').length
+    ) {
+      issueCodes.push('persistent-root-effect-contract-invalid');
+    }
+    if (
+      Number(effect?.formula?.commonFunctionId) !== 1 ||
+      ![3, 5].includes(Number(effect?.formula?.baseFunctionId)) ||
+      Number(effect?.formula?.commonRatioRaw) !== 10000 ||
+      !String(effect?.formula?.sourceIdentity ?? '').length
+    ) {
+      issueCodes.push('persistent-root-effect-formula-invalid');
+    }
+    if (
+      requiresStarValues &&
+      (!(effect?.valuesByStar?.length === 4) ||
+        effect.valuesByStar.some(
+          row =>
+            !Number.isInteger(Number(row?.star)) ||
+            !Number.isFinite(Number(row?.valueRaw)) ||
+            !String(row?.sourceIdentity ?? '').length
+        ))
+    ) {
+      issueCodes.push('persistent-root-effect-star-values-invalid');
+    }
+  }
+  return {
+    valid: issueCodes.length === 0,
+    issueCodes: [...new Set(issueCodes)],
+  };
+}
+
+function evaluatePersistentPropertyFormula({ effect, level, sourceRawA }) {
+  const params = Array.from({ length: 26 }, (_, index) =>
+    Number(effect.formula?.formulaParams?.[index] ?? 0)
+  );
+  params[0] = Number(sourceRawA);
+  params[6] = Number(effect.formula?.commonRatioRaw);
+  return evaluateVerifiedBattleEffectFormula({
+    effect: {
+      ...effect,
+      property: { bucket: effect.bucket },
+      formula: {
+        ...effect.formula,
+        paramsByLevel: { [level]: params },
+      },
+    },
+    level,
+  });
+}
+
+function projectPersistentPropertyAttribute({
+  effect,
+  formulaResult,
+  indexes,
+}) {
+  if (formulaResult?.applied !== true) return null;
+  const attributeId = Number(effect.attributeId);
+  const group = indexes.attributeGroups.find(
+    entry => Number(entry.baseAttrId) === attributeId
+  );
+  if (effect.bucket === 'dynamicPercent') {
+    if (!group) return null;
+    return {
+      id: Number(group.percentAttrId),
+      value: Number(formulaResult.value),
+    };
+  }
+  if (effect.bucket === 'dynamicExtra') {
+    return {
+      id: Number(group?.extraAttrId ?? attributeId),
+      value: Number(formulaResult.value),
+    };
+  }
+  return null;
 }
 
 function applyEquipmentTuningSource({
@@ -1129,6 +1488,19 @@ function getCatalogIndexes(catalog) {
     soulessences: indexBy(catalog.soulessences, 'soulessenceId'),
     equipment: indexBy(catalog.equipment, 'equipmentId'),
     accessorySets: catalog.accessorySets ?? [],
+    soulessenceEffects: new Map(
+      (soulEssenceEffectCatalog.definitions ?? []).map(definition => [
+        Number(definition.soulEssenceId),
+        definition,
+      ])
+    ),
+    setSkillEffects: new Map(
+      (soulEssenceEffectCatalog.setSkillDefinitions ?? []).map(definition => [
+        `${definition.setId}:${definition.pieces}`,
+        definition,
+      ])
+    ),
+    attributeGroups: catalog.attributeGroups ?? [],
     kiboProfiles: indexBy(catalog.kibo?.profiles, 'kiboId'),
     kiboGrowth: indexBy(catalog.kibo?.levelGrowth, 'level'),
     kiboMaximumLevel: maximumOf(catalog.kibo?.levelGrowth, 'level', 100),
