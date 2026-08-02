@@ -1,9 +1,9 @@
-# M12-B3-C8 Native Tuning-Mark Element Types
+# M12-B3-C8-R1 Native Tuning-Mark Element Types
 
-- Status: `b3-c8-verification-complete-awaiting-product-acceptance`
-- Source snapshot: `350d89382b7021c0`
-- Roster: `0f41c75dccd11ec7`
-- Catalog: `9bcee4c6e7f4450c`
+- Status: `b3-c8-r1-verification-complete-awaiting-product-acceptance`
+- Source snapshot: `b49537c3859dd0ad`
+- Roster: `3ae68f8d9c3eb62a`
+- Catalog: `fdb4256d91bb9234`
 - Denominators: characters 11, Kibo 43, soul essence 62, equipment 137, set skills 12
 - Optimization ready: characters 0, Kibo 0, soul essence 0, equipment 0, set skills 0
 - Blocking gaps: not implemented 400, evidence insufficient 18

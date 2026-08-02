@@ -10,6 +10,10 @@ import { isControlledActorEffectTargetKind } from '../../domain/effectTargetSema
 import { createBattlePropertyEffectDisplayLabel } from '../../domain/sourceDisplayText';
 import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
 import { resolveControlledActorAt } from '../runtime/controlledActorTimeline';
+import {
+  VERIFIED_EFFECT_SOURCE_SEQUENCE_CONTRACT_NAME,
+  createVerifiedEffectSourceSequencePath,
+} from '../../domain/verifiedEffectSourceSequence';
 
 export const VERIFIED_BATTLE_EFFECT_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedBattleEffectGeneration';
@@ -83,7 +87,7 @@ export function createVerifiedBattleEffectGeneration({
         );
         continue;
       }
-      for (const target of targets) {
+      for (const [targetSequenceIndex, target] of targets.entries()) {
         if (effect.propertyChange) {
           effectCommands.push(
             createPropertyEffectCommand({
@@ -94,6 +98,7 @@ export function createVerifiedBattleEffectGeneration({
               value,
               formulaResult,
               resolution,
+              targetSequenceIndex,
             })
           );
           continue;
@@ -109,6 +114,7 @@ export function createVerifiedBattleEffectGeneration({
               value,
               formulaResult,
               resolution,
+              targetSequenceIndex,
             })
           );
           continue;
@@ -124,6 +130,7 @@ export function createVerifiedBattleEffectGeneration({
               value,
               formulaResult,
               resolution,
+              targetSequenceIndex,
             })
           );
           continue;
@@ -139,6 +146,7 @@ export function createVerifiedBattleEffectGeneration({
               value,
               formulaResult,
               resolution,
+              targetSequenceIndex,
             })
           );
           continue;
@@ -285,12 +293,22 @@ function createDirectEvent({
   value,
   formulaResult,
   resolution,
+  targetSequenceIndex,
 }) {
   const effectIdentity = resolveEffectIdentity(effect);
+  const sourceSequencePath = createVerifiedEffectSourceSequencePath({
+    action,
+    effect,
+    phase: 'settlement',
+    localSequenceSuffix: [targetSequenceIndex],
+  });
+  const sourceSequenceReady = Array.isArray(sourceSequencePath);
   return {
     schemaVersion: 1,
     sourceKind: 'azpr-verified-battle-direct-effect',
-    status: 'verified-battle-direct-effect-ready',
+    status: sourceSequenceReady
+      ? 'verified-battle-direct-effect-ready'
+      : 'verified-battle-direct-effect-source-sequence-unresolved',
     eventIdentity: `${kind}|${action.id}|${effectIdentity}|${target.kind}:${target.id}`,
     kind,
     timeMs,
@@ -302,9 +320,24 @@ function createDirectEvent({
     formulaResult,
     effect,
     resolution,
+    sourceSequencePath,
+    sourceSequenceStatus: sourceSequenceReady
+      ? 'verified-direct-effect-source-sequence-ready'
+      : 'verified-direct-effect-source-sequence-unresolved',
+    sourceSequenceContract: {
+      contractName: VERIFIED_EFFECT_SOURCE_SEQUENCE_CONTRACT_NAME,
+      phase: 'settlement',
+      targetSequenceIndex,
+      effectSourceOrder: effect.sourceOrder ?? null,
+      sourceIdentity:
+        effect.sourceOrder?.sourceIdentity ?? effect.sourceIdentity ?? null,
+    },
     sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities ?? null,
-    appliedToCalculators: true,
-    applied: true,
+    unresolvedReasons: sourceSequenceReady
+      ? []
+      : ['verified-direct-effect-source-sequence-unresolved'],
+    appliedToCalculators: sourceSequenceReady,
+    applied: sourceSequenceReady,
   };
 }
 

@@ -104,7 +104,7 @@ export function applyVerifiedTargetStateRuntime({
         group,
       });
     }
-    for (const binding of runtimeBindings) {
+    for (const [bindingSequenceIndex, binding] of runtimeBindings.entries()) {
       if (
         binding.triggerKind !== 'action-frame' ||
         Number(binding.controlSkillId) !== controlSkillId ||
@@ -123,6 +123,7 @@ export function applyVerifiedTargetStateRuntime({
         action,
         resolution,
         binding,
+        bindingSequenceIndex,
       });
     }
   }
@@ -166,7 +167,10 @@ export function applyVerifiedTargetStateRuntime({
       });
       groupResults.push(result);
       if (result.applied) {
-        for (const binding of runtimeBindings) {
+        for (const [
+          bindingSequenceIndex,
+          binding,
+        ] of runtimeBindings.entries()) {
           if (
             binding.triggerKind !== 'conditional-hit-group-applied' ||
             binding.conditionalGroupIdentity !== descriptor.group.groupIdentity
@@ -187,6 +191,7 @@ export function applyVerifiedTargetStateRuntime({
             mechanicsPackage,
             effectCommands,
             directSpEvents,
+            bindingSequenceIndex,
           });
         }
       }
@@ -202,6 +207,7 @@ export function applyVerifiedTargetStateRuntime({
       mechanicsPackage,
       effectCommands,
       directSpEvents,
+      bindingSequenceIndex: descriptor.bindingSequenceIndex,
     });
   }
 
@@ -606,6 +612,7 @@ function emitRuntimeBinding({
   mechanicsPackage,
   effectCommands,
   directSpEvents,
+  bindingSequenceIndex,
 }) {
   const targets = resolveBindingTargets({
     binding,
@@ -615,7 +622,7 @@ function emitRuntimeBinding({
     controlledActorTimeline,
   });
   if (binding.directSp) {
-    for (const target of targets) {
+    for (const [targetSequenceIndex, target] of targets.entries()) {
       directSpEvents.push(
         createDirectSpEvent({
           binding,
@@ -623,6 +630,8 @@ function emitRuntimeBinding({
           resolution,
           target,
           timeMs,
+          bindingSequenceIndex,
+          targetSequenceIndex,
         })
       );
     }
@@ -734,8 +743,21 @@ function resolveBindingTargets({
   return [];
 }
 
-function createDirectSpEvent({ binding, action, resolution, target, timeMs }) {
+function createDirectSpEvent({
+  binding,
+  action,
+  resolution,
+  target,
+  timeMs,
+  bindingSequenceIndex,
+  targetSequenceIndex,
+}) {
   const directSp = binding.directSp;
+  const sourceSequencePath = createTargetStateDirectEffectSourceSequencePath({
+    action,
+    bindingSequenceIndex,
+    targetSequenceIndex,
+  });
   return {
     schemaVersion: 1,
     sourceKind: 'azpr-verified-battle-direct-effect',
@@ -764,10 +786,41 @@ function createDirectSpEvent({ binding, action, resolution, target, timeMs }) {
       },
     },
     resolution,
+    sourceSequencePath,
+    sourceSequenceStatus: sourceSequencePath
+      ? 'verified-direct-effect-source-sequence-ready'
+      : 'verified-direct-effect-source-sequence-unresolved',
+    sourceSequenceContract: {
+      contractName: 'AzPrVerifiedTargetStateDirectEffectSourceSequence',
+      sourceKind: 'verified-target-state-runtime-binding-array-order',
+      bindingSequenceIndex,
+      targetSequenceIndex,
+      bindingIdentity: binding.bindingIdentity,
+    },
     sourceIdentity: binding.sourceIdentity,
-    appliedToCalculators: true,
-    applied: true,
+    appliedToCalculators: Boolean(sourceSequencePath),
+    applied: Boolean(sourceSequencePath),
   };
+}
+
+function createTargetStateDirectEffectSourceSequencePath({
+  action,
+  bindingSequenceIndex,
+  targetSequenceIndex,
+}) {
+  const actionPath = getActionSourceSequencePath(action);
+  const bindingIndex = Number(bindingSequenceIndex);
+  const targetIndex = Number(targetSequenceIndex);
+  if (
+    !actionPath ||
+    !Number.isInteger(bindingIndex) ||
+    bindingIndex < 0 ||
+    !Number.isInteger(targetIndex) ||
+    targetIndex < 0
+  ) {
+    return null;
+  }
+  return [...actionPath, 30, bindingIndex, targetIndex];
 }
 
 function actionFrameToMs(action, frame, frameRate) {

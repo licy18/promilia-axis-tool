@@ -11,6 +11,7 @@ import {
   createEffectSourceDisplayLabel,
   isSourceDisplayTextSafe,
 } from '../src/domain/sourceDisplayText.js';
+import { VERIFIED_EFFECT_SOURCE_SEQUENCE_CONTRACT_NAME } from '../src/domain/verifiedEffectSourceSequence.js';
 import { createCharacterCombatOutputRecords } from './character-combat/character-combat-profile-pipeline.mjs';
 import { createCharacterCombatStatDependencies } from './character-combat/character-combat-contract-compiler.mjs';
 import { createCharacterCombatGoldenRuntime } from './character-combat/character-combat-golden-runtime.mjs';
@@ -5541,14 +5542,17 @@ function createControlEffectGraph({
       }
       if (visited.has(nodeIdentity) || depth > 12) return;
       visited.add(nodeIdentity);
-      const node = createBattleEffectGraphNode({
-        record,
-        controlSkillId: control.skillId,
-        formulas,
-        overridesBySkillAndElement,
-        depth,
-        tuningMechanicsCatalog,
-      });
+      const node = {
+        ...createBattleEffectGraphNode({
+          record,
+          controlSkillId: control.skillId,
+          formulas,
+          overridesBySkillAndElement,
+          depth,
+          tuningMechanicsCatalog,
+        }),
+        sourceTraversalIndex: nodes.length,
+      };
       nodes.push(node);
       for (const childReference of collectBattleElementChildReferences(
         record.typetree
@@ -6233,6 +6237,12 @@ function createControlRuntimeEffectBinding({
     depth: node.depth,
     relationPath,
     trigger,
+    sourceOrder: createBattleEffectSourceOrder({
+      root,
+      node,
+      trigger,
+      triggerIndex,
+    }),
     target,
     lifecycle: {
       durationMs: effectiveDurationMs,
@@ -6285,6 +6295,41 @@ function createControlRuntimeEffectBinding({
     status: `verified-action-effect-binding-${classification}`,
     confidence: classification === 'applied' ? 'high' : classification,
     applied: classification === 'applied',
+  };
+}
+
+function createBattleEffectSourceOrder({ root, node, trigger, triggerIndex }) {
+  const referenceKindOrder =
+    root.referenceKind === 'elements'
+      ? 0
+      : root.referenceKind === 'bulletElements'
+        ? 1
+        : null;
+  const fields = {
+    timelineGroupIndex: integerOrNull(trigger?.timelineGroupIndex),
+    mapIndex: integerOrNull(root.mapIndex),
+    referenceKindOrder,
+    elementIndex: integerOrNull(root.elementIndex),
+    nodeTraversalIndex: integerOrNull(node.sourceTraversalIndex),
+    triggerIndex: integerOrNull(triggerIndex),
+  };
+  const missingFields = Object.entries(fields)
+    .filter(([, value]) => !Number.isInteger(value) || value < 0)
+    .map(([field]) => field);
+  return {
+    contractName: VERIFIED_EFFECT_SOURCE_SEQUENCE_CONTRACT_NAME,
+    status:
+      missingFields.length === 0
+        ? 'verified-battle-effect-source-order-ready'
+        : 'verified-battle-effect-source-order-unresolved',
+    referenceKind: root.referenceKind ?? null,
+    ...fields,
+    missingFields,
+    sourceIdentity: [
+      root.sourceIdentity,
+      node.sourceIdentity ?? `element:${node.pathId}`,
+      trigger?.sourceIdentity ?? 'trigger-unresolved',
+    ].join('|'),
   };
 }
 

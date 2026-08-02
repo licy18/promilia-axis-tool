@@ -30,7 +30,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   soulessences:
     '385dbb96cf0feca4b42c7d3d63040c506c310beeb62ed7f9f37ac68fd012dcbe',
   verifiedMechanics:
-    '629498a6b8902eb977ed8270deea4d07c1ea3e59f620c920bec3eaac87253ec5',
+    'b84aaca9cd3fe1384df62cbdde5db531a0339e1c6a988f3fb6c9088d7953a971',
   'newTable:accessory.json':
     '449ed58b7e0d034c7c1fb48114468078810a97e4a61fe596cea53c19208c4b39',
   'newTable:accessory_customed.json':
@@ -508,7 +508,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C8',
+      phase: 'M12-B3-C8-R1',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1446,8 +1446,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C8',
-    status: 'b3-c8-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C8-R1',
+    status: 'b3-c8-r1-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1887,7 +1887,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C8 Native Tuning-Mark Element Types\n\n' +
+    '# M12-B3-C8-R1 Native Tuning-Mark Element Types\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +

@@ -13,6 +13,7 @@ import {
   compareSourceSequencePaths,
   getActionSourceSequencePath,
 } from '../../domain/actionSourceSequence';
+import { createVerifiedEffectSourceSequencePath } from '../../domain/verifiedEffectSourceSequence';
 import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
 
 export const VERIFIED_TUNING_MARK_GENERATION_CONTRACT_NAME =
@@ -1419,6 +1420,20 @@ function createTuningSourceSequencePath({
   localKind,
   localIdentity,
 }) {
+  const effectPhase = {
+    'get-element-before': 'before',
+    acquire: 'settlement',
+    'get-element-after': 'after',
+  }[localKind];
+  if (effectPhase && descriptor.effect) {
+    const effectSourceSequencePath = createVerifiedEffectSourceSequencePath({
+      action: descriptor.action,
+      effect: descriptor.effect,
+      phase: effectPhase,
+      localSequenceSuffix: [Math.max(0, Number(localIdentity) || 0)],
+    });
+    if (effectSourceSequencePath) return effectSourceSequencePath;
+  }
   const actionPath = getActionSourceSequencePath(descriptor.action);
   const kindOrder = {
     expire: 10,

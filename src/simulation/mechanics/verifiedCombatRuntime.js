@@ -305,6 +305,16 @@ export function createVerifiedCombatRuntime({
       continue;
     }
     if (
+      isDirectEffectDescriptor(descriptor) &&
+      (!Array.isArray(descriptor.sourceSequencePath) ||
+        descriptor.directEvent?.applied !== true)
+    ) {
+      eventLog.push(
+        createDirectEffectSourceSequenceUnresolvedEvent(descriptor)
+      );
+      continue;
+    }
+    if (
       nonDamageProjectionOnly &&
       !isNonDamageProjectionDescriptor(descriptor)
     ) {
@@ -2797,6 +2807,30 @@ function createDirectVitalEvent({
       appliedToCalculators: applied,
       ...(formulaPayload ?? {}),
     },
+  };
+}
+
+function createDirectEffectSourceSequenceUnresolvedEvent(descriptor) {
+  const directEvent = descriptor.directEvent ?? {};
+  return {
+    type: 'VERIFIED_DIRECT_EFFECT_SOURCE_SEQUENCE_UNRESOLVED',
+    timeMs: descriptor.timeMs,
+    absoluteFrame: descriptor.absoluteFrame,
+    actionId: directEvent.actionId ?? descriptor.action?.id ?? null,
+    actorId: directEvent.actorId ?? descriptor.action?.actorId ?? null,
+    targetId: directEvent.target?.id ?? null,
+    sourceSequencePath: null,
+    payload: {
+      reason: 'verified-direct-effect-source-sequence-unresolved',
+      directEffectKind: descriptor.kind,
+      sourceEventIdentity: directEvent.eventIdentity ?? null,
+      sourceIdentity: directEvent.sourceIdentity ?? null,
+      sourceSequenceStatus:
+        directEvent.sourceSequenceStatus ??
+        'verified-direct-effect-source-sequence-unresolved',
+      appliedToCalculators: false,
+    },
+    appliedToCalculators: false,
   };
 }
 
@@ -5331,16 +5365,30 @@ function annotateRuntimeDescriptorOrder(descriptors, frameRate) {
     const tuningSourceSequencePath =
       descriptor.tuningEvent?.eventContext?.sourceSequencePath;
     const directEffectSequencePath = descriptor.directEvent?.sourceSequencePath;
+    const directEffectDescriptor = isDirectEffectDescriptor(descriptor);
     descriptor.sourceSequencePath = Array.isArray(damageSettlementSequencePath)
       ? [...damageSettlementSequencePath]
       : Array.isArray(tuningSourceSequencePath)
         ? [...tuningSourceSequencePath]
         : Array.isArray(directEffectSequencePath)
           ? [...directEffectSequencePath]
-          : actionSourceSequencePath
-            ? [...actionSourceSequencePath, sourceSequence]
-            : [Number.MAX_SAFE_INTEGER, sourceSequence];
+          : directEffectDescriptor
+            ? null
+            : actionSourceSequencePath
+              ? [...actionSourceSequencePath, sourceSequence]
+              : [Number.MAX_SAFE_INTEGER, sourceSequence];
+    descriptor.sourceSequenceStatus = directEffectDescriptor
+      ? Array.isArray(descriptor.sourceSequencePath)
+        ? 'verified-direct-effect-source-sequence-ready'
+        : 'verified-direct-effect-source-sequence-unresolved'
+      : 'runtime-descriptor-source-sequence-ready';
   });
+}
+
+function isDirectEffectDescriptor(descriptor) {
+  return ['direct-sp', 'direct-heal', 'direct-shield'].includes(
+    descriptor?.kind
+  );
 }
 
 function resolveDescriptorOrder(kind) {

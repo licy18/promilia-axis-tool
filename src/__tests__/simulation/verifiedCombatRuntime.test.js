@@ -1799,6 +1799,14 @@ describe('verified combat mechanics runtime', () => {
             },
             resolution,
             sourceIdentity: 'fixture:projection-direct-sp',
+            sourceSequencePath: createFixtureDirectEffectSourceSequencePath(
+              action,
+              500,
+              0
+            ),
+            sourceSequenceStatus:
+              'verified-direct-effect-source-sequence-ready',
+            applied: true,
           },
         ],
       },
@@ -2881,7 +2889,22 @@ function createProjectionVitalFixture({ action, resolution, timeMs }) {
     },
     resolution,
     sourceIdentity: `fixture:projection-vital:${action.id}`,
+    sourceSequencePath: createFixtureDirectEffectSourceSequencePath(
+      action,
+      timeMs,
+      0
+    ),
+    sourceSequenceStatus: 'verified-direct-effect-source-sequence-ready',
+    applied: true,
   };
+}
+
+function createFixtureDirectEffectSourceSequencePath(action, ...suffix) {
+  return [
+    ...(action.sourceSequencePath ?? [Number(action.sourceSequenceIndex ?? 0)]),
+    90,
+    ...suffix.map(value => Number(value)),
+  ];
 }
 
 function simulateRubyStarSkill(hitOverrides = {}, initialAmmo = 0) {

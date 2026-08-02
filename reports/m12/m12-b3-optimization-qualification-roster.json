@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "phase": "M12-B3-C8",
+  "phase": "M12-B3-C8-R1",
   "sourceSnapshot": {
     "files": {
       "characters": {
@@ -28,12 +28,12 @@
       },
       "verifiedMechanics": {
         "path": "src/data/generated/verified-combat-mechanics-package.json",
-        "sha256": "629498a6b8902eb977ed8270deea4d07c1ea3e59f620c920bec3eaac87253ec5",
-        "bytes": 83053769
+        "sha256": "b84aaca9cd3fe1384df62cbdde5db531a0339e1c6a988f3fb6c9088d7953a971",
+        "bytes": 87064142
       },
       "characterAcceptance": {
         "path": "src/data/generated/character-acceptance-catalog.json",
-        "sha256": "caf7a2338e08cb0d97c416f36e8d3846dcec79efae609e39de491fa7d106cf7e",
+        "sha256": "555d2c97a236834893cd7f51ec9320a15fc8d7397c09d963c156b3747a9f4c12",
         "bytes": 2872
       },
       "kiboPassives": {
@@ -904,7 +904,7 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "350d89382b7021c0"
+    "sourceSnapshotHash": "b49537c3859dd0ad"
   },
   "filterContract": {
     "characterElements": [
@@ -14667,5 +14667,5 @@
       ]
     }
   },
-  "rosterHash": "0f41c75dccd11ec7"
+  "rosterHash": "3ae68f8d9c3eb62a"
 }

@@ -196,8 +196,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 205,
-    "productionReachableCount": 201,
+    "sourceCodeFileCount": 206,
+    "productionReachableCount": 202,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -207,7 +207,7 @@
       "src/character-acceptance": 3,
       "src/data": 5,
       "src/data/generated": 1,
-      "src/domain": 46,
+      "src/domain": 47,
       "src/features/workbench": 60,
       "src/i18n": 1,
       "src/machine-axis": 13,
@@ -262,6 +262,7 @@
     "src/domain/spUnitContract.js",
     "src/domain/timebase.js",
     "src/domain/verifiedActionContextScheduling.js",
+    "src/domain/verifiedEffectSourceSequence.js",
     "src/domain/workbenchActionClipboard.js",
     "src/domain/workbenchActionPlacement.js",
     "src/domain/workbenchActionRelations.js",

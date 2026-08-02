@@ -23,6 +23,7 @@ import { createSwitchAction } from '../../domain/projectSchema';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { createActionExecutionPlan } from '../../simulation/engine/actionExecutionPlan';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
+import { createVerifiedBattleEffectGeneration } from '../../simulation/mechanics/verifiedBattleEffectGeneration';
 import { createVerifiedCombatRuntime } from '../../simulation/mechanics/verifiedCombatRuntime';
 import { createVerifiedDamageEventGeneration } from '../../simulation/mechanics/verifiedDamageEventGeneration';
 import { createVerifiedNonDamageEventGeneration } from '../../simulation/mechanics/verifiedNonDamageEventGeneration';
@@ -1838,7 +1839,11 @@ describe('verified soul essence effect generation', () => {
               ...triggerSequencePath.slice(0, -1),
               triggerTail + (relativeToTrigger === 'before' ? -1 : 1),
             ]
-          : null;
+          : createFixtureDirectEffectSourceSequencePath(
+              sourceAction,
+              frame,
+              index
+            );
         return {
           eventIdentity: `fixture:c8-direct-heal:${soulEssenceStar}:${frame}:${index}`,
           timeMs: frameToMs(frame),
@@ -1847,7 +1852,9 @@ describe('verified soul essence effect generation', () => {
           actorId: sourceAction.actorId,
           target: { kind: 'actor', id: sourceAction.actorId },
           value: 100,
-          ...(sourceSequencePath == null ? {} : { sourceSequencePath }),
+          sourceSequencePath,
+          sourceSequenceStatus: 'verified-direct-effect-source-sequence-ready',
+          applied: true,
           effect: {
             effectIdentity: `fixture:c8-direct-heal-effect:${index}`,
           },
@@ -1964,6 +1971,266 @@ describe('verified soul essence effect generation', () => {
     });
     expect(sameFrame.heals.map(event => event.payload.requestedChange)).toEqual(
       [100, 111]
+    );
+  });
+
+  it('keeps generated direct-effect settlement order local to its source provenance', () => {
+    const sourceActionId = 'c8-r1-generated-direct-effects';
+    const projection = createRealSoulScenario({
+      actorCharacterId: 107002,
+      soulEssenceId: 10052,
+      effectSkillId: 1900910,
+      soulEssenceStar: 1,
+      durationMs: frameToMs(900),
+      initialRuntimeState: {
+        actorVitalsByActor: [
+          {
+            actorId: 'actor-107002',
+            characterId: 107002,
+            currentValue: 1,
+          },
+        ],
+      },
+      actionPlan: [
+        {
+          id: sourceActionId,
+          actionKind: 'star-skill',
+          actorCharacterId: 107002,
+          startFrame: 60,
+        },
+      ],
+    });
+    const scenario = projection.effectiveActionTimeline.scenario;
+    const action = scenario.actions.find(entry => entry.id === sourceActionId);
+    const resolution =
+      projection.verifiedActionVariantRuntime.actionResolutionById.get(
+        sourceActionId
+      );
+    const markEffect = resolution.effects.find(
+      effect =>
+        Number(effect.tuningMark?.markId) === 750 &&
+        Number(effect.trigger?.startFrame) === 90
+    );
+    expect(markEffect.sourceOrder).toMatchObject({
+      status: 'verified-battle-effect-source-order-ready',
+      mapIndex: 0,
+      referenceKind: 'elements',
+      elementIndex: 3,
+    });
+
+    const createSourceOrder = (elementIndex, sourceIdentity) => ({
+      ...markEffect.sourceOrder,
+      elementIndex,
+      nodeTraversalIndex: 0,
+      triggerIndex: 0,
+      sourceIdentity,
+    });
+    const valueByLevel = Object.fromEntries(
+      Array.from({ length: 12 }, (_, index) => [String(index + 1), 100])
+    );
+    const createDirectEffect = ({
+      effectIdentity,
+      kind,
+      elementIndex,
+      startFrame = 90,
+    }) => ({
+      effectIdentity,
+      role: 'gameplay-effect',
+      classification: 'applied',
+      trigger: {
+        ...markEffect.trigger,
+        startFrame,
+      },
+      target: {
+        kind: 'source-owner',
+        sourceIdentity: `fixture:${effectIdentity}:target`,
+      },
+      lifecycle: {
+        durationMs: null,
+        stackMode: 'replace',
+        stackDelta: 1,
+        maxStacks: 1,
+      },
+      propertyChange: null,
+      directSp: kind === 'direct-sp' ? { valueByLevel } : null,
+      heal: kind === 'direct-heal' ? { valueByLevel } : null,
+      shield: kind === 'direct-shield' ? { valueByLevel } : null,
+      formula: {
+        commonFunctionId: 1,
+        baseFunctionId: 5,
+      },
+      sourceOrder: createSourceOrder(
+        elementIndex,
+        `fixture:${effectIdentity}:source-order`
+      ),
+      sourceIdentity: `fixture:${effectIdentity}`,
+    });
+    const directEffects = [
+      createDirectEffect({
+        effectIdentity: 'fixture:c8-r1:heal-before-acquire',
+        kind: 'direct-heal',
+        elementIndex: 2,
+      }),
+      createDirectEffect({
+        effectIdentity: 'fixture:c8-r1:heal-after-acquire',
+        kind: 'direct-heal',
+        elementIndex: 4,
+      }),
+      createDirectEffect({
+        effectIdentity: 'fixture:c8-r1:direct-sp-provenance',
+        kind: 'direct-sp',
+        elementIndex: 5,
+        startFrame: 91,
+      }),
+      createDirectEffect({
+        effectIdentity: 'fixture:c8-r1:direct-shield-provenance',
+        kind: 'direct-shield',
+        elementIndex: 6,
+        startFrame: 92,
+      }),
+    ];
+    const generated = createVerifiedBattleEffectGeneration({
+      scenario,
+      actionExecutionPlan: projection.actionExecutionPlan,
+      actionResolutionById: new Map([
+        [
+          sourceActionId,
+          {
+            ...resolution,
+            semanticEffects: directEffects,
+            effects: directEffects,
+          },
+        ],
+      ]),
+      controlledActorTimeline: projection.controlledActorTimeline,
+    });
+    expect(generated.directHpEvents).toHaveLength(2);
+    expect(
+      generated.directHpEvents.map(event => event.sourceSequenceStatus)
+    ).toEqual([
+      'verified-direct-effect-source-sequence-ready',
+      'verified-direct-effect-source-sequence-ready',
+    ]);
+    expect(generated.directSpEvents[0].sourceSequencePath).toEqual(
+      expect.any(Array)
+    );
+    expect(generated.shieldEvents[0].sourceSequencePath).toEqual(
+      expect.any(Array)
+    );
+    const reversedGeneration = createVerifiedBattleEffectGeneration({
+      scenario,
+      actionExecutionPlan: projection.actionExecutionPlan,
+      actionResolutionById: new Map([
+        [
+          sourceActionId,
+          {
+            ...resolution,
+            semanticEffects: [...directEffects].reverse(),
+            effects: [...directEffects].reverse(),
+          },
+        ],
+      ]),
+      controlledActorTimeline: projection.controlledActorTimeline,
+    });
+    const indexDirectPaths = generation =>
+      Object.fromEntries(
+        [
+          ...generation.directHpEvents,
+          ...generation.directSpEvents,
+          ...generation.shieldEvents,
+        ].map(event => [event.eventIdentity, event.sourceSequencePath])
+      );
+    expect(indexDirectPaths(reversedGeneration)).toEqual(
+      indexDirectPaths(generated)
+    );
+
+    const command =
+      projection.verifiedSoulEssenceEffectGeneration.effectCommands.find(
+        entry => entry.sourceSoulEssenceId === 10052
+      );
+    const effectTimeline = createEffectRuntimeTimeline({
+      scenario,
+      actionExecutionPlan: projection.actionExecutionPlan,
+      controlledActorTimeline: projection.controlledActorTimeline,
+      generatedCommands: [command],
+    });
+    const createDecoy = index => ({
+      eventIdentity: `fixture:c8-r1:out-of-horizon:${index}`,
+      kind: 'direct-sp',
+      timeMs: frameToMs(901 + index),
+      action,
+      actionId: action.id,
+      actorId: action.actorId,
+      target: { kind: 'actor', id: action.actorId },
+      value: 0,
+      effect: { effectIdentity: `fixture:c8-r1:decoy:${index}` },
+      resolution,
+      sourceIdentity: 'fixture:c8-r1:legacy-decoy',
+    });
+    const run = decoyCount =>
+      createVerifiedCombatRuntime({
+        scenario,
+        actionExecutionPlan: projection.actionExecutionPlan,
+        controlledActorTimeline: projection.controlledActorTimeline,
+        effectGeneration: {
+          ...generated,
+          directSpEvents: [
+            ...Array.from({ length: decoyCount }, (_, index) =>
+              createDecoy(index)
+            ),
+            ...generated.directSpEvents,
+          ],
+        },
+        tuningGeneration: projection.verifiedTuningMarkGeneration,
+        damageEventGeneration: projection.verifiedDamageEventGeneration,
+        effectTimeline,
+        actionVariantRuntime: projection.verifiedActionVariantRuntime,
+        kiboPassiveGeneration: projection.verifiedKiboPassiveGeneration,
+      });
+    const baseline = run(0);
+    const withUnexecutedDescriptors = run(30);
+    const requestedChanges = runtime =>
+      runtime.vitalEvents
+        .filter(event => event.type === 'VERIFIED_DIRECT_HEAL')
+        .map(event => event.payload.requestedChange);
+    expect(requestedChanges(baseline)).toEqual([100, 111]);
+    expect(requestedChanges(withUnexecutedDescriptors)).toEqual([100, 111]);
+
+    const legacyGenerated = {
+      ...generated,
+      directHpEvents: [
+        {
+          ...generated.directHpEvents[0],
+          sourceSequencePath: undefined,
+          sourceSequenceStatus: undefined,
+        },
+      ],
+      directSpEvents: [],
+      shieldEvents: [],
+    };
+    const legacyRuntime = createVerifiedCombatRuntime({
+      scenario,
+      actionExecutionPlan: projection.actionExecutionPlan,
+      controlledActorTimeline: projection.controlledActorTimeline,
+      effectGeneration: legacyGenerated,
+      tuningGeneration: projection.verifiedTuningMarkGeneration,
+      damageEventGeneration: projection.verifiedDamageEventGeneration,
+      effectTimeline,
+      actionVariantRuntime: projection.verifiedActionVariantRuntime,
+      kiboPassiveGeneration: projection.verifiedKiboPassiveGeneration,
+    });
+    expect(
+      legacyRuntime.vitalEvents.filter(
+        event => event.type === 'VERIFIED_DIRECT_HEAL'
+      )
+    ).toEqual([]);
+    expect(legacyRuntime.eventLog).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          type: 'VERIFIED_DIRECT_EFFECT_SOURCE_SEQUENCE_UNRESOLVED',
+          actionId: sourceActionId,
+        }),
+      ])
     );
   });
 
@@ -5224,6 +5491,13 @@ describe('verified soul essence effect generation', () => {
           },
           resolution: sourceResolution,
           sourceIdentity: 'fixture:c7-r1-direct-heal-settlement',
+          sourceSequencePath: createFixtureDirectEffectSourceSequencePath(
+            sourceAction,
+            180,
+            0
+          ),
+          sourceSequenceStatus: 'verified-direct-effect-source-sequence-ready',
+          applied: true,
         },
       ],
       shieldEvents: [
@@ -5241,6 +5515,13 @@ describe('verified soul essence effect generation', () => {
           },
           resolution: sourceResolution,
           sourceIdentity: 'fixture:c7-r1-direct-shield-settlement',
+          sourceSequencePath: createFixtureDirectEffectSourceSequencePath(
+            sourceAction,
+            181,
+            0
+          ),
+          sourceSequenceStatus: 'verified-direct-effect-source-sequence-ready',
+          applied: true,
         },
       ],
     };
@@ -5908,6 +6189,14 @@ function createCanonicalGetElementEvent({
     appliedToCalculators: true,
     applied: true,
   };
+}
+
+function createFixtureDirectEffectSourceSequencePath(action, ...suffix) {
+  return [
+    ...(action.sourceSequencePath ?? [Number(action.sourceSequenceIndex ?? 0)]),
+    90,
+    ...suffix.map(value => Number(value)),
+  ];
 }
 
 function createInheritedTuningMark(markId, currentValue, decayRemainingMs) {
