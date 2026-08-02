@@ -53,6 +53,34 @@ describe('verified tuning mark runtime', () => {
     expect(profiles).toHaveLength(9);
     expect(new Set(profiles.map(profile => profile.markId)).size).toBe(9);
     expect(
+      Object.fromEntries(
+        profiles.map(profile => [
+          profile.markId,
+          profile.markContainer.elementTypes,
+        ])
+      )
+    ).toEqual({
+      150: [31, 41, 1001],
+      250: [37, 41, 1001],
+      350: [35, 41, 1001],
+      450: [32, 41, 1001],
+      550: [34, 41, 1001],
+      650: [33, 41, 1001],
+      750: [32, 41, 1001],
+      850: [32, 41, 1001],
+      950: [38, 41, 1001],
+    });
+    expect(
+      profiles.every(
+        profile =>
+          profile.markContainer.elementId === profile.markId &&
+          profile.markContainer.sourceIdentity.includes(
+            'battle-element-assets.jsonl#path_id='
+          ) &&
+          profile.markContainer.elementTypeSourceIdentity.endsWith('.types')
+      )
+    ).toBe(true);
+    expect(
       profiles.every(
         profile =>
           profile.maxStacks === 5 &&
@@ -99,19 +127,21 @@ describe('verified tuning mark runtime', () => {
 
       expect(effects).toHaveLength(expected.candidates.length);
       expect(
-        effects.map(effect => effect.tuningOverlimit).map(contract => ({
-          judgmentGroupIdentity: contract.judgmentGroupIdentity,
-          runtimeSelectionMode: contract.runtimeSelectionMode,
-          priorityDirection: contract.priorityDirection,
-          candidates: contract.judgmentCandidates.map(candidate => ({
-            priorityIndex: candidate.priorityIndex,
-            markId: candidate.markId,
-            packetElementId: candidate.packetElementId,
-          })),
-          consumerMethodRva:
-            contract.priorityRuntimeEvidence?.consumerMethodRva,
-          injectMethodRva: contract.priorityRuntimeEvidence?.injectMethodRva,
-        }))
+        effects
+          .map(effect => effect.tuningOverlimit)
+          .map(contract => ({
+            judgmentGroupIdentity: contract.judgmentGroupIdentity,
+            runtimeSelectionMode: contract.runtimeSelectionMode,
+            priorityDirection: contract.priorityDirection,
+            candidates: contract.judgmentCandidates.map(candidate => ({
+              priorityIndex: candidate.priorityIndex,
+              markId: candidate.markId,
+              packetElementId: candidate.packetElementId,
+            })),
+            consumerMethodRva:
+              contract.priorityRuntimeEvidence?.consumerMethodRva,
+            injectMethodRva: contract.priorityRuntimeEvidence?.injectMethodRva,
+          }))
       ).toEqual(
         expected.candidates.map(() => ({
           judgmentGroupIdentity: expect.stringContaining(
@@ -727,6 +757,7 @@ describe('verified tuning mark runtime', () => {
         phase: event.phase,
         eventId: event.eventId,
         elementId: event.eventContext.elementId,
+        elementTypes: event.eventContext.elementTypes,
         before: event.eventContext.before,
         delta: event.eventContext.delta,
         after: event.eventContext.after,
@@ -739,6 +770,7 @@ describe('verified tuning mark runtime', () => {
         phase: 'before-mutation',
         eventId: 9,
         elementId: 750,
+        elementTypes: [32, 41, 1001],
         before: 4,
         delta: 1,
         after: 5,
@@ -750,6 +782,7 @@ describe('verified tuning mark runtime', () => {
         phase: 'after-mutation',
         eventId: 10,
         elementId: 750,
+        elementTypes: [32, 41, 1001],
         before: 4,
         delta: 1,
         after: 5,
@@ -761,6 +794,7 @@ describe('verified tuning mark runtime', () => {
         phase: 'before-mutation',
         eventId: 9,
         elementId: 750,
+        elementTypes: [32, 41, 1001],
         before: 5,
         delta: 0,
         after: 5,
@@ -772,6 +806,7 @@ describe('verified tuning mark runtime', () => {
         phase: 'after-mutation',
         eventId: 10,
         elementId: 750,
+        elementTypes: [32, 41, 1001],
         before: 5,
         delta: 0,
         after: 5,
@@ -780,12 +815,8 @@ describe('verified tuning mark runtime', () => {
         success: true,
       },
     ]);
-    expect(events[0].transactionIdentity).toBe(
-      events[1].transactionIdentity
-    );
-    expect(events[2].transactionIdentity).toBe(
-      events[3].transactionIdentity
-    );
+    expect(events[0].transactionIdentity).toBe(events[1].transactionIdentity);
+    expect(events[2].transactionIdentity).toBe(events[3].transactionIdentity);
     expect(events[0].transactionIdentity).not.toBe(
       events[2].transactionIdentity
     );
@@ -1028,7 +1059,9 @@ function projectFinalMarkCounts(result, markIds) {
 }
 
 function projectConsumeUnresolved(result) {
-  return result.unresolved.filter(row => row.kind.startsWith('tuning-consume-'));
+  return result.unresolved.filter(row =>
+    row.kind.startsWith('tuning-consume-')
+  );
 }
 
 function simulateVerifiedProject({

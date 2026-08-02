@@ -13,6 +13,11 @@ import {
   LANDED_HIT_RECOVERY_EVIDENCE_RELATIVE_PATH,
   readLandedHitRecoveryRuntimeEvidenceSource,
 } from './landed-hit-recovery-evidence.mjs';
+import {
+  assertGetElementTypeRuntimeEvidenceReference,
+  GET_ELEMENT_TYPE_EVIDENCE_RELATIVE_PATH,
+  readGetElementTypeRuntimeEvidenceSource,
+} from './get-element-type-evidence.mjs';
 
 export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
   '2026-08-01T00:00:00.000Z';
@@ -25,7 +30,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   soulessences:
     '385dbb96cf0feca4b42c7d3d63040c506c310beeb62ed7f9f37ac68fd012dcbe',
   verifiedMechanics:
-    '74468a5944609d8ec050421335eb784e5832f317b2f4e0b68a4d8538ff1c76f2',
+    '629498a6b8902eb977ed8270deea4d07c1ea3e59f620c920bec3eaac87253ec5',
   'newTable:accessory.json':
     '449ed58b7e0d034c7c1fb48114468078810a97e4a61fe596cea53c19208c4b39',
   'newTable:accessory_customed.json':
@@ -80,6 +85,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '2161ca317a3f641dd6b5d8721fd9422c2598fada3c37af86f8248cfbf511c91f',
   soulEffectGetElementRuntimeEvidence:
     '06db8dd699ccad3a5b28b1099b5879ff6dd0990620d230918342d5ee80988ab3',
+  soulEffectGetElementTypeRuntimeEvidence:
+    '4054d0d97a146faeb56f1fcb518126c1ca41edb698c3ed722fe5247e4ffff56a',
   soulEffectBeforeDamageRuntimeEvidence:
     'a1a30e0c70dbfaf49990bddb48bf97c1b9cca31f2a77a303fba9382c239a3f7f',
   landedHitRecoveryRuntimeEvidence:
@@ -141,6 +148,7 @@ export async function createOptimizationQualificationArtifacts({
   il2cppRuntimeContractsPath = 'C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs',
   heroRankRuntimeEvidencePath = null,
   soulEffectGetElementRuntimeEvidencePath = null,
+  soulEffectGetElementTypeRuntimeEvidencePath = null,
   soulEffectBeforeDamageRuntimeEvidencePath = null,
   soulEffectNonDamageRuntimeEvidencePath = null,
   landedHitRecoveryRuntimeEvidencePath = null,
@@ -214,6 +222,18 @@ export async function createOptimizationQualificationArtifacts({
       gameAssemblyPath,
       projectRoot
     );
+  sources.soulEffectGetElementTypeRuntimeEvidence =
+    await readGetElementTypeRuntimeEvidenceSource({
+      sourcePath:
+        soulEffectGetElementTypeRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          ...GET_ELEMENT_TYPE_EVIDENCE_RELATIVE_PATH.split('/')
+        ),
+      gameAssemblyPath,
+      il2CppDumpPath: il2cppRuntimeContractsPath,
+      projectRoot,
+    });
   sources.soulEffectBeforeDamageRuntimeEvidence =
     await readSoulEffectBeforeDamageRuntimeEvidenceSource(
       soulEffectBeforeDamageRuntimeEvidencePath ??
@@ -268,10 +288,15 @@ export async function createOptimizationQualificationArtifacts({
     acceptanceReport?.sourceClosure?.landedHitRecoveryRuntimeEvidence,
     sources.landedHitRecoveryRuntimeEvidence
   );
+  assertGetElementTypeRuntimeEvidenceReference(
+    acceptanceReport?.sourceClosure?.getElementTypeRuntimeEvidence,
+    sources.soulEffectGetElementTypeRuntimeEvidence
+  );
   sources.il2cppRuntimeContracts.value.soulEffectTriggers =
     attachSoulEffectGetElementRuntimeEvidence(
       sources.il2cppRuntimeContracts.value.soulEffectTriggers,
-      sources.soulEffectGetElementRuntimeEvidence.value
+      sources.soulEffectGetElementRuntimeEvidence.value,
+      sources.soulEffectGetElementTypeRuntimeEvidence.value
     );
   sources.il2cppRuntimeContracts.value.soulEffectTriggers =
     attachSoulEffectBeforeDamageRuntimeEvidence(
@@ -483,7 +508,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C7',
+      phase: 'M12-B3-C8',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1421,8 +1446,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C7',
-    status: 'b3-c7-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C8',
+    status: 'b3-c8-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1842,6 +1867,7 @@ function createSourceSnapshot(sources) {
       if (
         key === 'heroRankRuntimeEvidence' ||
         key === 'soulEffectGetElementRuntimeEvidence' ||
+        key === 'soulEffectGetElementTypeRuntimeEvidence' ||
         key === 'soulEffectBeforeDamageRuntimeEvidence' ||
         key === 'soulEffectNonDamageRuntimeEvidence' ||
         key === 'landedHitRecoveryRuntimeEvidence'
@@ -1861,7 +1887,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C7 Non-Damage Event Transactions\n\n' +
+    '# M12-B3-C8 Native Tuning-Mark Element Types\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1870,7 +1896,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects; C3 adds source-bound EntrySkill(22) switch provenance and wrapper lifetimes for 10147/10151. C4 compiles tuning conditions and ordered ConsumePackElement candidate selection; C5 compiles paired BeforeGetElement/AfterGetElement transactions for 10043/10149. C6 compiles the ordered BeforeDamage transaction. C7 projects source-bound SwitchEnter(34), OnGotShield(40), and AfterHeal(44) transactions from canonical switch and vital settlements: 10048 and 10175 are runtime-applied, 10169 remains evidence-insufficient because native shield refresh/replacement semantics are open, and 10176 remains unapplied because combineType 5 is not evidence-closed. Initial state, rejected descriptors, wrong event subjects, and borrowed periodic-heal action provenance cannot trigger these effects.\n' +
+    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects; C3 adds source-bound EntrySkill(22) switch provenance and wrapper lifetimes for 10147/10151. C4 compiles tuning conditions and ordered ConsumePackElement candidate selection; C5 compiles paired BeforeGetElement/AfterGetElement transactions for 10043/10149. C6 compiles the ordered BeforeDamage transaction. C7 projects source-bound SwitchEnter(34), OnGotShield(40), and AfterHeal(44) transactions from canonical switch and vital settlements. C8 publishes each tuning-mark StackElement native `types`, binds CheckElementType(8) to `TriggerElement.CheckTriggerCondition`, and applies 10052 only to a real type-41 acquisition; linked property leaves and DamageElements do not synthesize GetElement. Direct healing now consumes source SHOOT_HEALUP and target SUFFER_HEALUP through the shared Q16.16 settlement path.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'
@@ -2748,7 +2774,11 @@ async function readSoulEffectNonDamageRuntimeEvidenceSource(
   };
 }
 
-function attachSoulEffectGetElementRuntimeEvidence(triggerContract, evidence) {
+function attachSoulEffectGetElementRuntimeEvidence(
+  triggerContract,
+  evidence,
+  elementTypeEvidence
+) {
   const sourceVisibility = evidence?.sourceVisibility ?? {};
   const triggerTargetBinding = triggerContract.triggerTargetBindings?.find(
     binding =>
@@ -2786,6 +2816,21 @@ function attachSoulEffectGetElementRuntimeEvidence(triggerContract, evidence) {
         evidence.dispatchSemantics.failedOrUnexecutedDispatch,
       sourceVisibility: structuredClone(sourceVisibility),
       consumer: structuredClone(evidence.consumer),
+      elementTypeCondition: {
+        status: elementTypeEvidence.conclusion.status,
+        conditionTypeIndex: Number(
+          elementTypeEvidence.conditionConsumer.dispatch.conditionTypeIndex
+        ),
+        conditionTypeTargetRva:
+          elementTypeEvidence.conditionConsumer.dispatch.conditionTypeTargetRva,
+        selector: elementTypeEvidence.semantics.selector,
+        consumer: structuredClone(elementTypeEvidence.conditionConsumer),
+        reviewedBinary: structuredClone(elementTypeEvidence.reviewedBinary),
+        reviewedIl2CppDump: structuredClone(
+          elementTypeEvidence.reviewedIl2CppDump
+        ),
+        sourceIdentity: elementTypeEvidence.conclusion.sourceIdentity,
+      },
       reviewedBinary: structuredClone(evidence.reviewedBinary),
       sourceIdentity: evidence.conclusion.sourceIdentity,
     },

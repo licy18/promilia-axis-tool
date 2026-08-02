@@ -267,6 +267,7 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
     )
   );
   const sourceRowsByElementId = new Map();
+  const sourceRowsByElementIdAll = new Map();
   const sourceRowsByPathId = new Map();
   for (const line of sourceBytes.toString('utf8').split(/\r?\n/u)) {
     if (!line) continue;
@@ -284,6 +285,9 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
     );
     if (Number(row?.typetree?.elementConfigId) === elementId) {
       sourceRowsByElementId.set(elementId, row);
+      const rows = sourceRowsByElementIdAll.get(elementId) ?? [];
+      rows.push(row);
+      sourceRowsByElementIdAll.set(elementId, rows);
     }
     if (pathId != null) sourceRowsByPathId.set(String(pathId), row);
   }
@@ -383,6 +387,7 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
       triggerEventId: Number(definition.trigger?.eventId),
       tuningProfiles,
       sourceRowsByElementId,
+      sourceRowsByElementIdAll,
     });
     const tuningConditionIssueCodes = tuningConditions.flatMap(condition =>
       condition.issueCodes.map(
@@ -864,6 +869,7 @@ function createTuningConditionAuditRows({
   triggerEventId,
   tuningProfiles,
   sourceRowsByElementId,
+  sourceRowsByElementIdAll,
 }) {
   const fixedConditionContract = new Map([
     [8, { kind: 'event-element-type', name: 'CheckElementType' }],
@@ -882,9 +888,10 @@ function createTuningConditionAuditRows({
       const expectedProfiles = tuningProfiles
         .filter(profile => {
           if (conditionType === 8) {
-            return (profile.overlimitDamage?.template?.elementTypes ?? [])
-              .map(Number)
-              .includes(conditionValue);
+            const sourceTypes = [9, 10].includes(triggerEventId)
+              ? (profile.markContainer?.elementTypes ?? [])
+              : (profile.overlimitDamage?.template?.elementTypes ?? []);
+            return sourceTypes.map(Number).includes(conditionValue);
           }
           if (conditionType === 10) {
             return Number(profile.markId) === conditionValue;
@@ -904,7 +911,13 @@ function createTuningConditionAuditRows({
           return Number(profile.overlimitPacket?.elementId) === conditionValue;
         })
         .map(profile =>
-          normalizeTuningConditionProfile(profile, sourceRowsByElementId)
+          normalizeTuningConditionProfile({
+            profile,
+            sourceRowsByElementId,
+            sourceRowsByElementIdAll,
+            useMarkContainerTypes:
+              conditionType === 8 && [9, 10].includes(triggerEventId),
+          })
         )
         .sort(compareTuningConditionProfiles);
       const generatedProfiles = (condition.tuningProfiles ?? [])
@@ -914,6 +927,7 @@ function createTuningConditionAuditRows({
           overlimitPacketElementId: Number(profile.overlimitPacketElementId),
           damageElementId: Number(profile.damageElementId),
           elementTypes: normalizeIntegerTags(profile.elementTypes),
+          elementTypeSourceKind: profile.elementTypeSourceKind ?? null,
         }))
         .sort(compareTuningConditionProfiles);
       const rawSourceRowsPresent = expectedProfiles.every(
@@ -928,6 +942,7 @@ function createTuningConditionAuditRows({
         overlimitPacketElementId: profile.overlimitPacketElementId,
         damageElementId: profile.damageElementId,
         elementTypes: profile.elementTypes,
+        elementTypeSourceKind: profile.elementTypeSourceKind,
       }));
       const issueCodes = [
         ...(condition.kind === contract.kind
@@ -967,20 +982,38 @@ function createTuningConditionAuditRows({
     });
 }
 
-function normalizeTuningConditionProfile(profile, sourceRowsByElementId) {
+function normalizeTuningConditionProfile({
+  profile,
+  sourceRowsByElementId,
+  sourceRowsByElementIdAll,
+  useMarkContainerTypes,
+}) {
   const markId = Number(profile.markId);
   const overlimitPacketElementId = Number(profile.overlimitPacket?.elementId);
   const damageElementId = Number(
     profile.overlimitDamage?.template?.elementConfigId
   );
   const damageSourceRow = sourceRowsByElementId.get(damageElementId);
+  const markSourceRow = (sourceRowsByElementIdAll.get(markId) ?? []).find(
+    row =>
+      Number(row?.typetree?.combineType) === 4 &&
+      Number(row?.typetree?.combineNumber) === 5 &&
+      Array.isArray(row?.typetree?.types)
+  );
   return {
     profileKey: String(profile.key),
     markId,
     overlimitPacketElementId,
     damageElementId,
-    elementTypes: normalizeIntegerTags(damageSourceRow?.typetree?.types),
-    markSourcePresent: sourceRowsByElementId.has(markId),
+    elementTypes: normalizeIntegerTags(
+      useMarkContainerTypes
+        ? markSourceRow?.typetree?.types
+        : damageSourceRow?.typetree?.types
+    ),
+    elementTypeSourceKind: useMarkContainerTypes
+      ? 'mark-container'
+      : 'damage-template',
+    markSourcePresent: Boolean(markSourceRow),
     packetSourcePresent: sourceRowsByElementId.has(overlimitPacketElementId),
     damageSourcePresent: Boolean(damageSourceRow),
   };

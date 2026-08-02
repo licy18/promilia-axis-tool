@@ -1106,8 +1106,7 @@ function validateEvidence(evidence, validation) {
 function validateTuningConsumePriorityRuntimeEvidence() {
   const evidence = readJson(TUNING_CONSUME_PRIORITY_EVIDENCE_PATH);
   if (
-    evidence?.contractName !==
-      'AzPrTuningConsumePriorityRuntimeEvidence' ||
+    evidence?.contractName !== 'AzPrTuningConsumePriorityRuntimeEvidence' ||
     evidence?.status !== 'verified'
   ) {
     throw new Error('tuning consume priority runtime evidence is not verified');
@@ -1152,8 +1151,7 @@ function validateTuningConsumePriorityRuntimeEvidence() {
     throw new Error('tuning consume priority disassembly window drift');
   }
   if (
-    evidence.selection.candidateOrder !==
-      'element-arr-index-ascending' ||
+    evidence.selection.candidateOrder !== 'element-arr-index-ascending' ||
     evidence.selection.selectionRule !==
       'first-candidate-with-layer-count-greater-than-or-equal-to-consume-layer-num' ||
     evidence.injection.packetRule !==
@@ -5814,10 +5812,11 @@ function createBattleEffectGraphNode({
             markElementIds: (tree.elementArr ?? [])
               .map(Number)
               .filter(Number.isInteger),
-            candidateEffectMappings: (
-              Array.isArray(tree.injectElementDataEffects)
-                ? tree.injectElementDataEffects
-                : []
+            candidateEffectMappings: (Array.isArray(
+              tree.injectElementDataEffects
+            )
+              ? tree.injectElementDataEffects
+              : []
             ).map((entry, priorityIndex) => ({
               priorityIndex,
               markId: integerOrNull(entry?.elementAttr),
@@ -6360,8 +6359,7 @@ function resolveTuningEffectBindingContract({
   const currentCandidate = judgmentCandidates.find(
     candidate =>
       candidate.markId === Number(node.tuningOverlimit.markId) &&
-      candidate.packetElementId ===
-        Number(node.tuningOverlimit.packetElementId)
+      candidate.packetElementId === Number(node.tuningOverlimit.packetElementId)
   );
   if (!currentCandidate) {
     reasons.push('tuning-consume-current-packet-not-in-candidate-map');
@@ -6399,10 +6397,9 @@ function resolveTuningEffectBindingContract({
         judgmentNode?.pathId ?? 'unknown-path',
       ].join(':'),
       judgmentCandidates,
-      runtimeSelectionMode:
-        prioritySelection
-          ? 'priority-first-sufficient-candidate'
-          : 'single-mark-packet',
+      runtimeSelectionMode: prioritySelection
+        ? 'priority-first-sufficient-candidate'
+        : 'single-mark-packet',
       priorityDirection: prioritySelection
         ? priorityEvidence.candidateOrder
         : null,
@@ -6426,9 +6423,7 @@ function createTuningJudgmentCandidates({ root, node, judgment, reasons }) {
       {
         priorityIndex: 0,
         markId: markIds[0],
-        packetElementId: integerOrNull(
-          node.tuningOverlimit?.packetElementId
-        ),
+        packetElementId: integerOrNull(node.tuningOverlimit?.packetElementId),
         packetPathId: node.pathId ?? null,
         packetSourceIdentity:
           node.tuningOverlimit?.sourceIdentity ?? node.sourceIdentity ?? null,
@@ -6445,7 +6440,9 @@ function createTuningJudgmentCandidates({ root, node, judgment, reasons }) {
     }
     const packetNodes = (mapping?.packetPathIds ?? [])
       .map(pathId =>
-        root.nodes.find(candidate => String(candidate.pathId) === String(pathId))
+        root.nodes.find(
+          candidate => String(candidate.pathId) === String(pathId)
+        )
       )
       .filter(candidate => candidate?.tuningOverlimit);
     if (packetNodes.length !== 1) {
@@ -6464,8 +6461,7 @@ function createTuningJudgmentCandidates({ root, node, judgment, reasons }) {
       packetElementId:
         integerOrNull(packetNode?.tuningOverlimit?.packetElementId) ??
         integerOrNull(packetNode?.elementId),
-      packetPathId:
-        packetNode?.pathId ?? mapping?.packetPathIds?.[0] ?? null,
+      packetPathId: packetNode?.pathId ?? mapping?.packetPathIds?.[0] ?? null,
       packetSourceIdentity:
         packetNode?.tuningOverlimit?.sourceIdentity ??
         packetNode?.sourceIdentity ??
@@ -6496,8 +6492,7 @@ function createTuningConsumePriorityEvidenceContract() {
     injectMethod: evidence.injection.injectMethod,
     injectMethodRva: evidence.injection.injectMethodRva,
     selectedPacketLookupRange: evidence.injection.selectedPacketLookupRange,
-    selectedPacketLookupSha256:
-      evidence.injection.selectedPacketLookupSha256,
+    selectedPacketLookupSha256: evidence.injection.selectedPacketLookupSha256,
     packetRule: evidence.injection.packetRule,
   };
 }
@@ -6788,6 +6783,17 @@ function createTuningMechanicsCatalog({
     if (!container) {
       throw new Error(`verified tuning container missing: ${markId}`);
     }
+    const markContainerSourceRecord = resolveTuningMarkContainerSourceRecord({
+      markId,
+      allIndexedElementsById,
+    });
+    const markContainerElementTypes = [
+      ...new Set(
+        (markContainerSourceRecord.typetree?.types ?? [])
+          .map(Number)
+          .filter(Number.isInteger)
+      ),
+    ].sort((left, right) => left - right);
     const packetRecord = resolveTuningOverlimitPacketRecord({
       profile,
       records,
@@ -6868,6 +6874,16 @@ function createTuningMechanicsCatalog({
       key: String(profile.key),
       element: String(profile.element),
       markId,
+      markContainer: {
+        elementId: markId,
+        pathId: String(markContainerSourceRecord.pathId),
+        kind: 'stack-element',
+        elementTypes: markContainerElementTypes,
+        elementTypeSourceIdentity: `battle-element-assets.jsonl#path_id=${markContainerSourceRecord.pathId}.types`,
+        sourceIdentity: `battle-element-assets.jsonl#path_id=${markContainerSourceRecord.pathId}`,
+        status: 'verified-tuning-mark-container-ready',
+        applied: true,
+      },
       maxStacks: Number(container.maxMarks),
       layerDurationMs: layerDurations[0],
       heldReadyMs: Number(container.additionalHitRefreshSeconds) * 1000,
@@ -6908,6 +6924,8 @@ function createTuningMechanicsCatalog({
         profile.maxStacks !== 5 ||
         profile.layerDurationMs !== 20_000 ||
         profile.heldReadyMs !== 5_000 ||
+        profile.markContainer?.elementTypes?.length === 0 ||
+        !profile.markContainer.elementTypes.includes(41) ||
         profile.heldDamageTemplates.length === 0
     )
   ) {
@@ -6942,6 +6960,30 @@ function createTuningMechanicsCatalog({
     sourceIdentity: 'combat-overlimit-mechanics-20260718.json',
     applied: true,
   };
+}
+
+function resolveTuningMarkContainerSourceRecord({
+  markId,
+  allIndexedElementsById,
+}) {
+  const candidates = dedupeBy(
+    allIndexedElementsById.get(Number(markId)) ?? [],
+    record => String(record.pathId)
+  ).filter(record => {
+    const tree = record.typetree ?? {};
+    return (
+      Number(tree.elementConfigId) === Number(markId) &&
+      Number(tree.combineType) === 4 &&
+      Number(tree.combineNumber) === 5 &&
+      Array.isArray(tree.types)
+    );
+  });
+  if (candidates.length !== 1) {
+    throw new Error(
+      `verified tuning mark container source not unique: ${markId} (${candidates.length})`
+    );
+  }
+  return candidates[0];
 }
 
 function resolveTuningOverlimitPacketRecord({

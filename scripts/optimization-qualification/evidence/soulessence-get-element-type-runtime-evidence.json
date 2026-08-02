@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrGetElementTypeRuntimeEvidence",
+  "reviewedBinary": {
+    "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+    "bytes": 222485544,
+    "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+  },
+  "reviewedIl2CppDump": {
+    "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+    "bytes": 97428254,
+    "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+  },
+  "dumpBindings": {
+    "methods": [
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.CheckTriggerCondition",
+        "rva": "0x13B6A50",
+        "declaration": "private bool CheckTriggerCondition(TTriggerElementParams.TriggerElementCondition condition, ElementTriggerDataBase triggerData) { }"
+      }
+    ],
+    "fields": [
+      {
+        "identity": "ElementTriggerDataBase.elementParams",
+        "declaration": "public TElementParams elementParams; // 0x30"
+      },
+      {
+        "identity": "TElementParams.types",
+        "declaration": "public List<int> types; // 0x30"
+      },
+      {
+        "identity": "TriggerElementCondition.conditionParam1",
+        "declaration": "public int conditionParam1; // 0x0"
+      },
+      {
+        "identity": "TriggerElementCondition.conditionParam2",
+        "declaration": "public int conditionParam2; // 0x4"
+      }
+    ],
+    "enums": [
+      {
+        "identity": "EElementTriggerFixedConditionType.CheckElementType",
+        "declaration": "public const EElementTriggerFixedConditionType CheckElementType = 8;",
+        "description": "[Description(\"事件元素类型\")]"
+      }
+    ]
+  },
+  "conditionConsumer": {
+    "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.CheckTriggerCondition",
+    "rva": "0x13B6A50",
+    "dispatch": {
+      "conditionTypeFieldOffset": "0x0",
+      "conditionTypeIndex": 8,
+      "conditionTypeTargetRva": "0x13B6ED6"
+    },
+    "type8Branch": {
+      "eventElementParamsFieldOffset": "0x30",
+      "elementTypesFieldOffset": "0x30",
+      "conditionValueFieldOffset": "0x4",
+      "listContainsTargetRva": "0x60E9EB0"
+    }
+  },
+  "binaryRanges": [
+    {
+      "identity": "condition-type-dispatch",
+      "range": "0x13B6BFE-0x13B6C1D",
+      "bytes": 31,
+      "sha256": "85c789191b0c13fb41f3327c5823752da33db7990ac50e84fa8d80521a966f1c"
+    },
+    {
+      "identity": "check-element-type-branch",
+      "range": "0x13B6ED6-0x13B6F47",
+      "bytes": 113,
+      "sha256": "9410b014caad3ea1cb1dbd0a18137edf76916c747f9c4e9d2c768dad390da16c"
+    },
+    {
+      "identity": "condition-type-jump-table",
+      "range": "0x13B7C04-0x13B7C60",
+      "bytes": 92,
+      "sha256": "60b110520bef07c8acd48f2da1b98bfd0f0aff8dee6c3989d15df521a2a366f3"
+    }
+  ],
+  "semantics": {
+    "selector": "current-event-element-params-types-contains-condition-value",
+    "heldElementCollectionRead": false,
+    "damageTemplateSubstitution": false,
+    "linkedLeafSyntheticDispatch": false
+  },
+  "conclusion": {
+    "status": "applied",
+    "sourceIdentity": "GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)"
+  }
+}

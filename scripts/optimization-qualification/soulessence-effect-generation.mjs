@@ -583,6 +583,8 @@ function compileTriggerCondition({
       conditionValue,
       tuningMechanicsCatalog,
       frameAnchor,
+      elementTypeConditionRuntime:
+        triggerContract.getElementRuntime?.elementTypeCondition,
     });
     const valueApplied =
       valueBinding?.status === 'applied' || tuningProfiles.length > 0;
@@ -698,6 +700,7 @@ function resolveTuningConditionProfiles({
   conditionValue,
   tuningMechanicsCatalog,
   frameAnchor,
+  elementTypeConditionRuntime,
 }) {
   if (
     ![
@@ -738,33 +741,62 @@ function resolveTuningConditionProfiles({
       if (
         selectorKind === 'event-element-type' &&
         frameAnchor !== 'hit-before-damage' &&
-        frameAnchor !== 'hit-after-damage'
+        frameAnchor !== 'hit-after-damage' &&
+        frameAnchor !== 'element-before-acquire' &&
+        frameAnchor !== 'element-after-acquire'
       ) {
         return false;
+      }
+      if (
+        selectorKind === 'event-element-type' &&
+        (frameAnchor === 'element-before-acquire' ||
+          frameAnchor === 'element-after-acquire')
+      ) {
+        return (
+          elementTypeConditionRuntime?.status === 'applied' &&
+          elementTypeConditionRuntime?.selector ===
+            'current-event-element-params-types-contains-condition-value' &&
+          (profile.markContainer?.elementTypes ?? []).includes(conditionValue)
+        );
       }
       return (profile.overlimitDamage?.template?.elementTypes ?? []).includes(
         conditionValue
       );
     })
-    .map(profile => ({
-      profileKey: profile.key,
-      markId: Number(profile.markId),
-      overlimitPacketElementId: Number(profile.overlimitPacket?.elementId),
-      damageElementId: Number(
-        profile.overlimitDamage?.template?.elementConfigId
-      ),
-      elementTypes: uniqueNumbers(
-        profile.overlimitDamage?.template?.elementTypes ?? []
-      ),
-      sourceIdentity: [
-        profile.sourceIdentity,
-        profile.overlimitPacket?.sourceIdentity,
-        profile.overlimitDamage?.template?.elementTypeSourceIdentity,
-      ]
-        .filter(Boolean)
-        .join('|'),
-      status: 'applied',
-    }))
+    .map(profile => {
+      const usesMarkContainer =
+        selectorKind === 'event-element-type' &&
+        (frameAnchor === 'element-before-acquire' ||
+          frameAnchor === 'element-after-acquire');
+      return {
+        profileKey: profile.key,
+        markId: Number(profile.markId),
+        overlimitPacketElementId: Number(profile.overlimitPacket?.elementId),
+        damageElementId: Number(
+          profile.overlimitDamage?.template?.elementConfigId
+        ),
+        elementTypes: uniqueNumbers(
+          usesMarkContainer
+            ? (profile.markContainer?.elementTypes ?? [])
+            : (profile.overlimitDamage?.template?.elementTypes ?? [])
+        ),
+        elementTypeSourceKind: usesMarkContainer
+          ? 'mark-container'
+          : 'damage-template',
+        sourceIdentity: [
+          profile.sourceIdentity,
+          usesMarkContainer
+            ? profile.markContainer?.elementTypeSourceIdentity
+            : profile.overlimitPacket?.sourceIdentity,
+          usesMarkContainer
+            ? elementTypeConditionRuntime?.sourceIdentity
+            : profile.overlimitDamage?.template?.elementTypeSourceIdentity,
+        ]
+          .filter(Boolean)
+          .join('|'),
+        status: 'applied',
+      };
+    })
     .sort((left, right) => left.markId - right.markId);
 }
 

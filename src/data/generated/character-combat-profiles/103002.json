@@ -74,7 +74,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "bfdeb93df100803c3f653d1656706ddb92ad02d3932668f1a04d63ccd0c90861",
+    "packageHash": "4e739aba0756875a4f21f00e7f6638a4c5329c6b3de2596170a0c42907725130",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -61401,6 +61401,20 @@
               "key": "fire",
               "element": "火",
               "markId": 150,
+              "markContainer": {
+                "elementId": 150,
+                "pathId": "-1498771669867596146",
+                "kind": "stack-element",
+                "elementTypes": [
+                  31,
+                  41,
+                  1001
+                ],
+                "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-1498771669867596146.types",
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-1498771669867596146",
+                "status": "verified-tuning-mark-container-ready",
+                "applied": true
+              },
               "maxStacks": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
@@ -69396,6 +69410,20 @@
               "key": "thunder",
               "element": "雷",
               "markId": 250,
+              "markContainer": {
+                "elementId": 250,
+                "pathId": "-3809486317990090417",
+                "kind": "stack-element",
+                "elementTypes": [
+                  37,
+                  41,
+                  1001
+                ],
+                "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-3809486317990090417.types",
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-3809486317990090417",
+                "status": "verified-tuning-mark-container-ready",
+                "applied": true
+              },
               "maxStacks": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
@@ -96436,6 +96464,20 @@
           "key": "fire",
           "element": "火",
           "markId": 150,
+          "markContainer": {
+            "elementId": 150,
+            "pathId": "-1498771669867596146",
+            "kind": "stack-element",
+            "elementTypes": [
+              31,
+              41,
+              1001
+            ],
+            "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-1498771669867596146.types",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-1498771669867596146",
+            "status": "verified-tuning-mark-container-ready",
+            "applied": true
+          },
           "maxStacks": 5,
           "layerDurationMs": 20000,
           "heldReadyMs": 5000,
@@ -96583,6 +96625,20 @@
           "key": "thunder",
           "element": "雷",
           "markId": 250,
+          "markContainer": {
+            "elementId": 250,
+            "pathId": "-3809486317990090417",
+            "kind": "stack-element",
+            "elementTypes": [
+              37,
+              41,
+              1001
+            ],
+            "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-3809486317990090417.types",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-3809486317990090417",
+            "status": "verified-tuning-mark-container-ready",
+            "applied": true
+          },
           "maxStacks": 5,
           "layerDurationMs": 20000,
           "heldReadyMs": 5000,
@@ -120893,6 +120949,20 @@
             "key": "fire",
             "element": "火",
             "markId": 150,
+            "markContainer": {
+              "elementId": 150,
+              "pathId": "-1498771669867596146",
+              "kind": "stack-element",
+              "elementTypes": [
+                31,
+                41,
+                1001
+              ],
+              "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-1498771669867596146.types",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-1498771669867596146",
+              "status": "verified-tuning-mark-container-ready",
+              "applied": true
+            },
             "maxStacks": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
@@ -125034,6 +125104,20 @@
             "key": "thunder",
             "element": "雷",
             "markId": 250,
+            "markContainer": {
+              "elementId": 250,
+              "pathId": "-3809486317990090417",
+              "kind": "stack-element",
+              "elementTypes": [
+                37,
+                41,
+                1001
+              ],
+              "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-3809486317990090417.types",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-3809486317990090417",
+              "status": "verified-tuning-mark-container-ready",
+              "applied": true
+            },
             "maxStacks": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
@@ -139250,8 +139334,8 @@
       "recipeIdentity": "actor:103002:character-combat-recipe:v1",
       "recipeHash": "b434c9c4fe06aeece4800d04d18d599073a1035455ffee6005615a3dfe331336",
       "compilerInputHash": "3322ff5e005e9c04c5030d193ab30a0b05aa83268eaba8ebca583d5bd492f53d",
-      "recipeContractHash": "c63e970925bf6f604caefd08663e4afd52f887a90c08193c86cf3f36759c3b3a",
-      "ownerContractHash": "aa6b77529fba60133463c19b963ec0db7479ac3962d859516fda6ea452ac1202"
+      "recipeContractHash": "096511dd196f6bf80c95b5c311b993faa384cfe0687064230ea8c25c49606d0b",
+      "ownerContractHash": "42dfcdbedd429c28a122df31fd6886cbe6a4e112aeb5b20397a1f5349546cb10"
     },
     "operators": [
       "public-action-binding",
@@ -150858,7 +150942,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "d5128dfcf880d98ca8c61def612203d630e049e4885cfd9523556c7c39f12381"
+    "deterministicInputHash": "2349542455ecf6523764bc5ae98f70ad68647f7bf87e9da5734203062e484edc"
   },
-  "profileHash": "418c9d1cce904238aab382a1d710fb9a5080a5075a3922b554885e2051b08569"
+  "profileHash": "c3158d03fe24dce1411caf952912f8368db66847c73206d8eac88609cf775656"
 }

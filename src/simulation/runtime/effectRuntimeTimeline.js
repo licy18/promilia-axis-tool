@@ -357,11 +357,24 @@ function isEffectEventVisibleToSettlement(
   ) {
     return true;
   }
+  if (
+    ![
+      EFFECT_RUNTIME_EVENT_TYPES.APPLIED,
+      EFFECT_RUNTIME_EVENT_TYPES.REFRESHED,
+    ].includes(event.type)
+  ) {
+    return true;
+  }
   const state = event?.after ?? event?.before ?? null;
   const triggerEvent = state?.sourceIdentity?.triggerEvent ?? null;
-  const triggerSequencePath = state?.sourceIdentity?.triggerSequencePath ?? null;
+  const triggerSequencePath =
+    state?.sourceIdentity?.triggerSequencePath ?? null;
+  const beforeSettlementTriggers = ['BeforeDamage', 'BeforeGetElement'];
+  const afterSettlementTriggers = ['AfterDamage', 'AfterGetElement'];
   if (
-    !['BeforeDamage', 'AfterDamage'].includes(triggerEvent) ||
+    ![...beforeSettlementTriggers, ...afterSettlementTriggers].includes(
+      triggerEvent
+    ) ||
     !Array.isArray(triggerSequencePath)
   ) {
     return true;
@@ -370,7 +383,9 @@ function isEffectEventVisibleToSettlement(
     triggerSequencePath,
     settlingSourceSequencePath
   );
-  return triggerEvent === 'BeforeDamage' ? comparison <= 0 : comparison < 0;
+  return beforeSettlementTriggers.includes(triggerEvent)
+    ? comparison <= 0
+    : comparison < 0;
 }
 
 function isInheritedEffectTargetAvailable(effect, scenario) {
@@ -1117,9 +1132,7 @@ function createEffectRuntimeEvent({
       normalizedTimeMs,
       strictNumberOrNull(scenario.time?.fps) ?? 60
     ),
-    runtimePhase: transition
-      ? 'controlled-actor-transition'
-      : 'effect-command',
+    runtimePhase: transition ? 'controlled-actor-transition' : 'effect-command',
     runtimePriority: transition ? 1 : 0,
     frameIndex: msToFrame(
       normalizedTimeMs,

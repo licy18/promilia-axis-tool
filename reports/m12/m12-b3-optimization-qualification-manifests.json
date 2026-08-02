@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "97681c274a2378d8",
+  "rosterHash": "0f41c75dccd11ec7",
   "records": [
     {
       "objectKind": "character",
@@ -32,10 +32,10 @@
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "a15c4b85bf39e64b"
+          "51c639353d09d919"
         ]
       },
-      "manifestHash": "a3f040635af35236"
+      "manifestHash": "b486d26d13c1f532"
     },
     {
       "objectKind": "character",
@@ -99,10 +99,10 @@
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "b6ba85f5eaf6a9d8"
+          "1b0a829b989c1fa5"
         ]
       },
-      "manifestHash": "5b87e1f96565b61d"
+      "manifestHash": "1272996a5f6e786f"
     },
     {
       "objectKind": "character",
@@ -8446,6 +8446,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
                       "status": "applied"
                     }
@@ -8602,7 +8603,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10043].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900330.asset/MonoBehaviour/skill_control_1900330__-3361609167118804129.json|battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301|battle-element-assets.jsonl#path_id=-4023729244501754000;elementId=19003302"
         }
       },
-      "manifestHash": "e216eab5be11f3e5"
+      "manifestHash": "f07252fdb9e6b15e"
     },
     {
       "objectKind": "soul-essence",
@@ -8683,6 +8684,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=-310946560669858520.types",
                       "status": "applied"
                     }
@@ -8709,6 +8711,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
                       "status": "applied"
                     }
@@ -8867,7 +8870,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10044].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900550.asset/MonoBehaviour/skill_control_1900550__-7653067718708357441.json|battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500|battle-element-assets.jsonl#path_id=1889171037961678300;elementId=19005503"
         }
       },
-      "manifestHash": "79c70e79ab22b635"
+      "manifestHash": "bff52b56a73186b5"
     },
     {
       "objectKind": "soul-essence",
@@ -9306,23 +9309,9 @@
         "generated/soulessences.json#items[id=10052]",
         "NewTable/soulessence.rows[id=10052]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "soulessence-effect-skill-dynamic-unapplied",
-          "category": "not-implemented",
-          "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
-          "skillId": 1900910,
-          "reasons": [
-            "effect-skill-tag-condition-operator-unsupported"
-          ]
-        },
-        {
-          "code": "strict-soulessence-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied."
-        },
         {
           "code": "soulessence-visual-acceptance-not-published",
           "category": "not-implemented",
@@ -9339,7 +9328,7 @@
         "maximumRank": 6,
         "staticProfileApplied": true,
         "effectSkillId": 1900910,
-        "effectStatus": "source-indexed-runtime-unapplied",
+        "effectStatus": "runtime-applied",
         "sourceIdentity": "NewTable/soulessence.rows[id=10052]",
         "sourceEffectStatus": "effect-skill-dynamic-unapplied",
         "effectMechanics": {
@@ -9350,7 +9339,7 @@
             "skillLogicType": 6,
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900910]"
           },
-          "runtimeStatus": "source-indexed-runtime-unapplied",
+          "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
           "activationPrerequisites": [],
           "trigger": {
@@ -9362,9 +9351,15 @@
             "intervalMs": 10,
             "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
             "condition": {
-              "kind": "condition-group",
+              "kind": "event-element-type",
+              "conditionType": 8,
+              "skillSlotId": null,
+              "skillSlotName": null,
+              "skillTagId": null,
+              "skillTagName": null,
               "logic": "and",
               "logicValue": 0,
+              "logicName": "AND",
               "conditions": [
                 {
                   "kind": "event-element-type",
@@ -9373,14 +9368,141 @@
                   "conditionValue": 41,
                   "actionKinds": [],
                   "provenanceRequirement": null,
-                  "tuningProfiles": [],
-                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementType=8|condition-value-unresolved",
-                  "status": "static-evidence-gap"
+                  "tuningProfiles": [
+                    {
+                      "profileKey": "fire",
+                      "markId": 150,
+                      "overlimitPacketElementId": 199,
+                      "damageElementId": 196,
+                      "elementTypes": [
+                        31,
+                        41,
+                        1001
+                      ],
+                      "elementTypeSourceKind": "mark-container",
+                      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=-1498771669867596146.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)",
+                      "status": "applied"
+                    },
+                    {
+                      "profileKey": "thunder",
+                      "markId": 250,
+                      "overlimitPacketElementId": 299,
+                      "damageElementId": 296,
+                      "elementTypes": [
+                        37,
+                        41,
+                        1001
+                      ],
+                      "elementTypeSourceKind": "mark-container",
+                      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=-3809486317990090417.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)",
+                      "status": "applied"
+                    },
+                    {
+                      "profileKey": "ice",
+                      "markId": 350,
+                      "overlimitPacketElementId": 399,
+                      "damageElementId": 395,
+                      "elementTypes": [
+                        35,
+                        41,
+                        1001
+                      ],
+                      "elementTypeSourceKind": "mark-container",
+                      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=ice]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=350]|battle-element-assets.jsonl#path_id=-3481476500606266500|battle-element-assets.jsonl#path_id=3273457016050714061.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)",
+                      "status": "applied"
+                    },
+                    {
+                      "profileKey": "dark",
+                      "markId": 450,
+                      "overlimitPacketElementId": 499,
+                      "damageElementId": 498,
+                      "elementTypes": [
+                        32,
+                        41,
+                        1001
+                      ],
+                      "elementTypeSourceKind": "mark-container",
+                      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=dark]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=450]|battle-element-assets.jsonl#path_id=-2413896801629279110|battle-element-assets.jsonl#path_id=-5819740171084359278.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)",
+                      "status": "applied"
+                    },
+                    {
+                      "profileKey": "wood",
+                      "markId": 550,
+                      "overlimitPacketElementId": 599,
+                      "damageElementId": 596,
+                      "elementTypes": [
+                        34,
+                        41,
+                        1001
+                      ],
+                      "elementTypeSourceKind": "mark-container",
+                      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wood]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=550]|battle-element-assets.jsonl#path_id=2120617582505955581|battle-element-assets.jsonl#path_id=-669846950425800112.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)",
+                      "status": "applied"
+                    },
+                    {
+                      "profileKey": "earth",
+                      "markId": 650,
+                      "overlimitPacketElementId": 699,
+                      "damageElementId": 697,
+                      "elementTypes": [
+                        33,
+                        41,
+                        1001
+                      ],
+                      "elementTypeSourceKind": "mark-container",
+                      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=earth]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=650]|battle-element-assets.jsonl#path_id=-1242046641952436421|battle-element-assets.jsonl#path_id=2699138840966960245.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)",
+                      "status": "applied"
+                    },
+                    {
+                      "profileKey": "wind",
+                      "markId": 750,
+                      "overlimitPacketElementId": 799,
+                      "damageElementId": 796,
+                      "elementTypes": [
+                        32,
+                        41,
+                        1001
+                      ],
+                      "elementTypeSourceKind": "mark-container",
+                      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=1474042154774785480.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)",
+                      "status": "applied"
+                    },
+                    {
+                      "profileKey": "water",
+                      "markId": 850,
+                      "overlimitPacketElementId": 899,
+                      "damageElementId": 897,
+                      "elementTypes": [
+                        32,
+                        41,
+                        1001
+                      ],
+                      "elementTypeSourceKind": "mark-container",
+                      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=water]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=850]|battle-element-assets.jsonl#path_id=-3161718249097424629|battle-element-assets.jsonl#path_id=3107436379383955232.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)",
+                      "status": "applied"
+                    },
+                    {
+                      "profileKey": "light",
+                      "markId": 950,
+                      "overlimitPacketElementId": 999,
+                      "damageElementId": 997,
+                      "elementTypes": [
+                        38,
+                        41,
+                        1001
+                      ],
+                      "elementTypeSourceKind": "mark-container",
+                      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=light]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=950]|battle-element-assets.jsonl#path_id=1781318263043700654|battle-element-assets.jsonl#path_id=-8695654341717050083.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)",
+                      "status": "applied"
+                    }
+                  ],
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementType=8|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=-1498771669867596146.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=-3809486317990090417.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=ice]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=350]|battle-element-assets.jsonl#path_id=-3481476500606266500|battle-element-assets.jsonl#path_id=3273457016050714061.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=dark]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=450]|battle-element-assets.jsonl#path_id=-2413896801629279110|battle-element-assets.jsonl#path_id=-5819740171084359278.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wood]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=550]|battle-element-assets.jsonl#path_id=2120617582505955581|battle-element-assets.jsonl#path_id=-669846950425800112.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=earth]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=650]|battle-element-assets.jsonl#path_id=-1242046641952436421|battle-element-assets.jsonl#path_id=2699138840966960245.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=1474042154774785480.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=water]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=850]|battle-element-assets.jsonl#path_id=-3161718249097424629|battle-element-assets.jsonl#path_id=3107436379383955232.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=light]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=950]|battle-element-assets.jsonl#path_id=1781318263043700654|battle-element-assets.jsonl#path_id=-8695654341717050083.types|GameAssembly.dll#TriggerElement.CheckTriggerCondition@0x13B6A50/CheckElementType(8)->0x13B6ED6/ElementTriggerDataBase.elementParams.types.Contains(conditionParam2)",
+                  "status": "applied"
                 }
               ],
               "actionKinds": [],
-              "status": "static-evidence-gap",
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101.triggerConditionType|triggerConditionList"
+              "status": "applied",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101.triggerTargetType",
@@ -9522,13 +9644,11 @@
             "damageElementIds": [],
             "activationPrerequisiteElementIds": []
           },
-          "runtimeGaps": [
-            "effect-skill-tag-condition-operator-unsupported"
-          ],
+          "runtimeGaps": [],
           "sourceIdentity": "NewTable/soulessence.rows[id=10052].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900910.asset/MonoBehaviour/skill_control_1900910__2559169442837246188.json|battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101|battle-element-assets.jsonl#path_id=4769837230415874000;elementId=19009102"
         }
       },
-      "manifestHash": "fec25bff0f4e0821"
+      "manifestHash": "f2098b08d69bcdf0"
     },
     {
       "objectKind": "soul-essence",
@@ -13063,6 +13183,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
                       "status": "applied"
                     }
@@ -13221,7 +13342,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10123].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900590.asset/MonoBehaviour/skill_control_1900590__210735096432786726.json|battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900|battle-element-assets.jsonl#path_id=8480096044321114000;elementId=19005901"
         }
       },
-      "manifestHash": "2db4bb2901229a10"
+      "manifestHash": "f57dbf4e8ae68f57"
     },
     {
       "objectKind": "soul-essence",
@@ -13317,6 +13438,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=-5022202969777715803.types",
                       "status": "applied"
                     }
@@ -13475,7 +13597,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10124].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900410.asset/MonoBehaviour/skill_control_1900410__4820183586340899112.json|battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101|battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102"
         }
       },
-      "manifestHash": "b673bb3545c60e8f"
+      "manifestHash": "ed7264a816147360"
     },
     {
       "objectKind": "soul-essence",
@@ -13784,6 +13906,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=-5022202969777715803.types",
                       "status": "applied"
                     }
@@ -13942,7 +14065,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10130].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900280.asset/MonoBehaviour/skill_control_1900280__4588656220270570984.json|battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801|battle-element-assets.jsonl#path_id=7184896566896581000;elementId=19002802"
         }
       },
-      "manifestHash": "3665f0d51b06610e"
+      "manifestHash": "94276b241022d309"
     },
     {
       "objectKind": "soul-essence",
@@ -14023,6 +14146,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=-5022202969777715803.types",
                       "status": "applied"
                     }
@@ -14049,6 +14173,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=dark]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=450]|battle-element-assets.jsonl#path_id=-2413896801629279110|battle-element-assets.jsonl#path_id=-2413896801629279110|battle-element-assets.jsonl#path_id=2085743462064840077.types",
                       "status": "applied"
                     }
@@ -14205,7 +14330,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10131].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900270.asset/MonoBehaviour/skill_control_1900270__1514447479398424667.json|battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701|battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702"
         }
       },
-      "manifestHash": "202595d87d55235b"
+      "manifestHash": "400a9c952ad6dbef"
     },
     {
       "objectKind": "soul-essence",
@@ -14525,6 +14650,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=-310946560669858520.types",
                       "status": "applied"
                     },
@@ -14539,6 +14665,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=-5022202969777715803.types",
                       "status": "applied"
                     },
@@ -14553,6 +14680,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=ice]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=350]|battle-element-assets.jsonl#path_id=-3481476500606266500|battle-element-assets.jsonl#path_id=-3481476500606266500|battle-element-assets.jsonl#path_id=5756437106006428564.types",
                       "status": "applied"
                     },
@@ -14567,6 +14695,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=dark]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=450]|battle-element-assets.jsonl#path_id=-2413896801629279110|battle-element-assets.jsonl#path_id=-2413896801629279110|battle-element-assets.jsonl#path_id=2085743462064840077.types",
                       "status": "applied"
                     },
@@ -14581,6 +14710,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wood]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=550]|battle-element-assets.jsonl#path_id=2120617582505955581|battle-element-assets.jsonl#path_id=2120617582505955581|battle-element-assets.jsonl#path_id=6500867373616520947.types",
                       "status": "applied"
                     },
@@ -14595,6 +14725,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=earth]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=650]|battle-element-assets.jsonl#path_id=-1242046641952436421|battle-element-assets.jsonl#path_id=-1242046641952436421|battle-element-assets.jsonl#path_id=1920742622307174111.types",
                       "status": "applied"
                     },
@@ -14609,6 +14740,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
                       "status": "applied"
                     },
@@ -14623,6 +14755,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=water]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=850]|battle-element-assets.jsonl#path_id=-3161718249097424629|battle-element-assets.jsonl#path_id=-3161718249097424629|battle-element-assets.jsonl#path_id=3909034050250717657.types",
                       "status": "applied"
                     },
@@ -14637,6 +14770,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=light]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=950]|battle-element-assets.jsonl#path_id=1781318263043700654|battle-element-assets.jsonl#path_id=1781318263043700654|battle-element-assets.jsonl#path_id=9155281695412256774.types",
                       "status": "applied"
                     }
@@ -14678,6 +14812,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
                       "status": "applied"
                     }
@@ -14836,7 +14971,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10136].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900210.asset/MonoBehaviour/skill_control_1900210__4149299819814011094.json|battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101|battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102"
         }
       },
-      "manifestHash": "92559e425926bcfb"
+      "manifestHash": "21d49820d371d275"
     },
     {
       "objectKind": "soul-essence",
@@ -15282,6 +15417,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=-310946560669858520.types",
                       "status": "applied"
                     }
@@ -15438,7 +15574,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10149].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900220.asset/MonoBehaviour/skill_control_1900220__-6482979135949661655.json|battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201|battle-element-assets.jsonl#path_id=6856932050092692000;elementId=19002202"
         }
       },
-      "manifestHash": "4634a804908bb9d9"
+      "manifestHash": "0e2aa832bd52ca18"
     },
     {
       "objectKind": "soul-essence",
@@ -15519,6 +15655,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=-310946560669858520.types",
                       "status": "applied"
                     }
@@ -15545,6 +15682,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
                       "status": "applied"
                     }
@@ -15705,7 +15843,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10150].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900560.asset/MonoBehaviour/skill_control_1900560__1002074190257504026.json|battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600|battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601"
         }
       },
-      "manifestHash": "2f494d4c349531d5"
+      "manifestHash": "829afb3330e431d3"
     },
     {
       "objectKind": "soul-essence",
@@ -16937,6 +17075,7 @@
                         43,
                         307
                       ],
+                      "elementTypeSourceKind": "damage-template",
                       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=earth]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=650]|battle-element-assets.jsonl#path_id=-1242046641952436421|battle-element-assets.jsonl#path_id=-1242046641952436421|battle-element-assets.jsonl#path_id=1920742622307174111.types",
                       "status": "applied"
                     }
@@ -17008,7 +17147,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10170].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900740.asset/MonoBehaviour/skill_control_1900740__3612376006236613009.json|battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400"
         }
       },
-      "manifestHash": "aa9b135ac0afb61e"
+      "manifestHash": "6607782200a39bf3"
     },
     {
       "objectKind": "soul-essence",
@@ -18034,8 +18173,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 216,
-      "runtime-integrated": 49
+      "extracted": 215,
+      "runtime-integrated": 50
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -18046,5 +18185,5 @@
     },
     "optimizationReadyTotal": 0
   },
-  "manifestsHash": "21d4128d30115155"
+  "manifestsHash": "00238bad8e0d1b41"
 }

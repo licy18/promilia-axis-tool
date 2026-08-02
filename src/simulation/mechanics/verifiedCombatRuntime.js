@@ -98,8 +98,7 @@ export function createVerifiedCombatRuntime({
   const executionByActionId = new Map(
     (actionExecutionPlan?.actions ?? []).map(entry => [entry.actionId, entry])
   );
-  const nonDamageProjectionOnly =
-    runtimeMode === 'non-damage-event-projection';
+  const nonDamageProjectionOnly = runtimeMode === 'non-damage-event-projection';
   const actionResolutionById = new Map();
   const ordinaryDamageTransactionByKey = new Map(
     (damageEventGeneration?.transactions ?? [])
@@ -2461,6 +2460,8 @@ function resolveFriendlyRuntimeAttribute({
   timeMs,
   attributeId,
   fallbackRaw = null,
+  settlingActionId = null,
+  settlingSourceSequencePath = null,
 }) {
   const normalizedAttributeId = Number(attributeId);
   if (!Number.isInteger(normalizedAttributeId)) {
@@ -2493,6 +2494,8 @@ function resolveFriendlyRuntimeAttribute({
     attributeId: normalizedAttributeId,
     baseRaw:
       stateEntry.attributesById?.get(normalizedAttributeId) ?? fallbackRaw,
+    settlingActionId,
+    settlingSourceSequencePath,
   });
 }
 
@@ -2606,8 +2609,9 @@ function applyDirectHealDescriptor({ descriptor, state }) {
     timeMs: descriptor.timeMs,
   });
   const before = vital.currentHp;
+  const formula = resolveDirectHealFormula({ descriptor, state });
   vital.currentHp = clampNumber(
-    vital.currentHp + directEvent.value,
+    vital.currentHp + formula.requestedChange,
     0,
     vital.maximumHp
   );
@@ -2618,7 +2622,77 @@ function applyDirectHealDescriptor({ descriptor, state }) {
     after: vital.currentHp,
     maximum: vital.maximumHp,
     vital,
+    requestedChange: formula.requestedChange,
+    formulaPayload: formula.payload,
   });
+}
+
+function resolveDirectHealFormula({ descriptor, state }) {
+  const directEvent = descriptor.directEvent;
+  const sourceTarget = resolveDirectHealSourceTarget(directEvent);
+  const sourceAttributeId = state.attributeIdByKey.get('SHOOT_HEALUP') ?? 23;
+  const targetAttributeId = state.attributeIdByKey.get('SUFFER_HEALUP') ?? 24;
+  const resolutionOptions = {
+    state,
+    timeMs: descriptor.timeMs,
+    fallbackRaw: 0,
+    settlingActionId: directEvent.actionId,
+    settlingSourceSequencePath: descriptor.sourceSequencePath,
+  };
+  const sourceHealUp = resolveFriendlyRuntimeAttribute({
+    ...resolutionOptions,
+    target: sourceTarget,
+    attributeId: sourceAttributeId,
+  });
+  const targetHealUp = resolveFriendlyRuntimeAttribute({
+    ...resolutionOptions,
+    target: directEvent.target,
+    attributeId: targetAttributeId,
+  });
+  const baseRequestedChange = Number(directEvent.value);
+  const formulaReady = sourceHealUp.ready && targetHealUp.ready;
+  const sourceShootHealUpRaw = formulaReady ? Number(sourceHealUp.value) : 0;
+  const targetSufferHealUpRaw = formulaReady ? Number(targetHealUp.value) : 0;
+  const healUpFactor =
+    1 + (sourceShootHealUpRaw + targetSufferHealUpRaw) / 10000;
+  const baseRaw = qFromFloat(baseRequestedChange);
+  const factorRaw = qFromFloat(healUpFactor);
+  const resultRaw = qMul(baseRaw, factorRaw);
+  const requestedChange = Number(runtimeIntegerize(resultRaw));
+  return {
+    requestedChange,
+    payload: {
+      formulaStatus: formulaReady
+        ? 'verified-direct-heal-modifier-applied'
+        : 'verified-direct-heal-modifier-attribute-unresolved',
+      baseRequestedChange: roundValue(baseRequestedChange),
+      sourceShootHealUpRaw: roundValue(sourceShootHealUpRaw),
+      targetSufferHealUpRaw: roundValue(targetSufferHealUpRaw),
+      healUpFactor: roundValue(healUpFactor),
+      roundingPolicy: 'nearest-ties-to-even',
+      formulaAttributeTrace: {
+        sourceHealUp,
+        targetHealUp,
+      },
+      formulaQ16Trace: {
+        baseRaw: baseRaw.toString(),
+        factorRaw: factorRaw.toString(),
+        resultRaw: resultRaw.toString(),
+      },
+    },
+  };
+}
+
+function resolveDirectHealSourceTarget(directEvent) {
+  const sourceKind =
+    directEvent.resolution?.actionBinding?.ownerKind === 'kibo' ||
+    directEvent.action?.type === ACTION_TYPES.KIBO_EVENT
+      ? EFFECT_TARGET_KINDS.KIBO
+      : EFFECT_TARGET_KINDS.ACTOR;
+  return {
+    kind: sourceKind,
+    id: directEvent.actorId,
+  };
 }
 
 function applyDirectShieldDescriptor({ descriptor, state }) {
@@ -2672,12 +2746,16 @@ function createDirectVitalEvent({
   vital = null,
   applied = true,
   reason = null,
+  requestedChange: suppliedRequestedChange = null,
+  formulaPayload = null,
 }) {
   const directEvent = descriptor.directEvent;
   const requestedChange =
-    type === 'VERIFIED_DIRECT_HEAL'
-      ? Number(directEvent.value)
-      : Number(after) - Number(before);
+    type === 'VERIFIED_DIRECT_HEAL' && suppliedRequestedChange != null
+      ? Number(suppliedRequestedChange)
+      : type === 'VERIFIED_DIRECT_HEAL'
+        ? Number(directEvent.value)
+        : Number(after) - Number(before);
   const change = Number(after) - Number(before);
   return {
     type,
@@ -2717,6 +2795,7 @@ function createDirectVitalEvent({
       applied,
       reason,
       appliedToCalculators: applied,
+      ...(formulaPayload ?? {}),
     },
   };
 }
@@ -5251,13 +5330,16 @@ function annotateRuntimeDescriptorOrder(descriptors, frameRate) {
       descriptor.damageEventTransaction?.settlementSourceSequencePath;
     const tuningSourceSequencePath =
       descriptor.tuningEvent?.eventContext?.sourceSequencePath;
+    const directEffectSequencePath = descriptor.directEvent?.sourceSequencePath;
     descriptor.sourceSequencePath = Array.isArray(damageSettlementSequencePath)
       ? [...damageSettlementSequencePath]
       : Array.isArray(tuningSourceSequencePath)
         ? [...tuningSourceSequencePath]
-        : actionSourceSequencePath
-          ? [...actionSourceSequencePath, sourceSequence]
-          : [Number.MAX_SAFE_INTEGER, sourceSequence];
+        : Array.isArray(directEffectSequencePath)
+          ? [...directEffectSequencePath]
+          : actionSourceSequencePath
+            ? [...actionSourceSequencePath, sourceSequence]
+            : [Number.MAX_SAFE_INTEGER, sourceSequence];
   });
 }
 

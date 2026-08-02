@@ -614,8 +614,7 @@ function applyMarkConsumption({
   if (Array.isArray(descriptor.priorityCandidates)) {
     const candidates = descriptor.priorityCandidates.map(candidate => ({
       ...candidate,
-      current:
-        stateByMarkId.get(Number(candidate.markId))?.layers.length ?? 0,
+      current: stateByMarkId.get(Number(candidate.markId))?.layers.length ?? 0,
     }));
     const selected = candidates.find(
       candidate => candidate.current >= candidate.minimumStacks
@@ -1245,8 +1244,7 @@ function createCombatEvent({
       landed,
       judgmentGroupIdentity:
         descriptor.effect?.tuningOverlimit?.judgmentGroupIdentity ?? null,
-      selectedPriorityCandidate:
-        descriptor.selectedPriorityCandidate ?? null,
+      selectedPriorityCandidate: descriptor.selectedPriorityCandidate ?? null,
     },
     sourceIdentity: template?.sourceIdentity ?? profile.sourceIdentity,
     appliedToCalculators: true,
@@ -1335,9 +1333,7 @@ function createGetElementEvent({
   const sourceSequencePath = createTuningSourceSequencePath({
     descriptor,
     localKind:
-      phase === 'before-mutation'
-        ? 'get-element-before'
-        : 'get-element-after',
+      phase === 'before-mutation' ? 'get-element-before' : 'get-element-after',
     localIdentity: state.profile.markId,
   });
   const sourceHitIdentity = resolveTuningSourceHitIdentity(descriptor);
@@ -1357,6 +1353,11 @@ function createGetElementEvent({
     transactionSourceSequencePath,
     phaseSequenceIndex,
     elementId: Number(state.profile.markId),
+    elementTypes: [...(state.profile.markContainer?.elementTypes ?? [])],
+    elementTypeSourceIdentity:
+      state.profile.markContainer?.elementTypeSourceIdentity ?? null,
+    markContainerSourceIdentity:
+      state.profile.markContainer?.sourceIdentity ?? null,
     markId: Number(state.profile.markId),
     profileKey: state.profile.key,
     before,
@@ -1376,7 +1377,6 @@ function createGetElementEvent({
     sourceIdentity:
       descriptor.effect?.sourceIdentity ?? state.profile.sourceIdentity,
     landed: null,
-    elementTypes: [],
     targetElementIds: [],
     heldElementIds: [],
   };

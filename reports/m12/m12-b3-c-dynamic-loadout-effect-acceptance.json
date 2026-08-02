@@ -1,21 +1,22 @@
 {
-  "schemaVersion": 13,
-  "phase": "M12-B3-C7-R3",
+  "schemaVersion": 14,
+  "phase": "M12-B3-C8",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
+  "baseCommit": "f73b0ac6a457719ad0e24b98415f2f9d67c3e8a5",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
   "reviewedC7R2Commit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
+  "acceptedC7R3Commit": "f73b0ac6a457719ad0e24b98415f2f9d67c3e8a5",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
-    "phase": "M12-B3-C6",
-    "acceptanceBaseline": "5c5a33a21cce05fbf090af72c783bad475b55656",
+    "phase": "M12-B3-C7-R3",
+    "acceptanceBaseline": "f73b0ac6a457719ad0e24b98415f2f9d67c3e8a5",
     "status": "product-accepted"
   },
   "scope": {
-    "batch": "non-damage-event-transactions-and-event-target-propagation",
-    "soulEssenceIds": [10048, 10169, 10175, 10176],
-    "explicitlyExcludedSoulEssenceIds": [10018, 10052, 10101],
+    "batch": "native-tuning-mark-element-types-and-get-element-healing",
+    "soulEssenceIds": [10052],
+    "explicitlyExcludedSoulEssenceIds": [10018, 10101, 10169, 10170, 10176],
     "formalSearchExecuted": false,
     "m12cLocked": true,
     "fixedCultivationChanged": false,
@@ -33,8 +34,8 @@
       "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
       "bytes": 97428254,
       "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
-      "sourceIdentity": "EElementTriggerEventType.SwitchEnter=34|OnGotShield=40|AfterHeal=44|EElementTriggerTargetType.Self=0|ETriggerEffectTargetType.Target=1|AllHero=15",
-      "triggerContractHash": "2416cea566c45f94"
+      "sourceIdentity": "EElementTriggerEventType.AfterGetElement=10|SwitchEnter=34|OnGotShield=40|AfterHeal=44|EElementTriggerFixedConditionType.CheckElementType=8|EElementTriggerTargetType.Self=0|ETriggerEffectTargetType.Target=1|AllHero=15",
+      "triggerContractHash": "d68083acc3d5496d"
     },
     "nonDamageRuntimeEvidence": {
       "path": "scripts/optimization-qualification/evidence/soulessence-non-damage-runtime-evidence.json",
@@ -66,6 +67,17 @@
       "remoteHitRecoveryCall": "DamageElement.RecoverSP@0x138EEE0 called at 0x1318E52 after AddRemoteElement",
       "actorSpConsumer": "SPSystem.OnTransmit@0x14837F0|SPSystem.RecoverSP@0x1483F40"
     },
+    "getElementTypeRuntimeEvidence": {
+      "path": "scripts/optimization-qualification/evidence/soulessence-get-element-type-runtime-evidence.json",
+      "bytes": 3234,
+      "sha256": "4054d0d97a146faeb56f1fcb518126c1ca41edb698c3ed722fe5247e4ffff56a",
+      "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+      "binaryBytes": 222485544,
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "il2CppDumpPath": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+      "il2CppDumpBytes": 97428254,
+      "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+    },
     "soulControlClosure": {
       "skillCount": 62,
       "fileCount": 506,
@@ -75,9 +87,22 @@
   },
   "compiledContract": {
     "events": [
+      {
+        "eventId": 10,
+        "name": "AfterGetElement",
+        "frameAnchor": "mark-after-acquire"
+      },
       { "eventId": 34, "name": "SwitchEnter", "frameAnchor": "switch-enter" },
-      { "eventId": 40, "name": "OnGotShield", "frameAnchor": "shield-after-acquire" },
-      { "eventId": 44, "name": "AfterHeal", "frameAnchor": "heal-after-settlement" }
+      {
+        "eventId": 40,
+        "name": "OnGotShield",
+        "frameAnchor": "shield-after-acquire"
+      },
+      {
+        "eventId": 44,
+        "name": "AfterHeal",
+        "frameAnchor": "heal-after-settlement"
+      }
     ],
     "transactionFields": [
       "transactionIdentity",
@@ -115,6 +140,31 @@
     "periodicHealActionProvenance": "unavailable; no stale action tags are borrowed",
     "triggerIntervalUnit": "milliseconds"
   },
+  "c8NativeElementTypeContract": {
+    "condition": "CheckElementType(8) reads ElementTriggerDataBase.elementParams.types and calls List<int>.Contains(conditionParam2)",
+    "consumer": "TriggerElement.CheckTriggerCondition@0x13B6A50 -> type-8 branch 0x13B6ED6",
+    "eventSource": "verified tuning-mark acquisition publishes the acquired StackElement container identity and native types",
+    "markContainerCount": 9,
+    "markContainers": {
+      "150": [31, 41, 1001],
+      "250": [37, 41, 1001],
+      "350": [35, 41, 1001],
+      "450": [32, 41, 1001],
+      "550": [34, 41, 1001],
+      "650": [33, 41, 1001],
+      "750": [32, 41, 1001],
+      "850": [32, 41, 1001],
+      "950": [38, 41, 1001]
+    },
+    "windElementSeparation": {
+      "750": "StackElement acquisition source; publishes one paired BeforeGetElement/AfterGetElement transaction",
+      "751": "linked PropertyChange leaf; never synthesizes a GetElement transaction",
+      "752": "DamageElement packet; never aliases a GetElement transaction"
+    },
+    "directHealFormula": "round_q16(baseHeal * (1 + (source.SHOOT_HEALUP + target.SUFFER_HEALUP) / 10000)), followed by missing-HP clamp",
+    "sameFrameVisibility": "AfterGetElement applies only to settlements later in sourceSequencePath; right-open expiry remains authoritative",
+    "callerSuppliedProductionElementTypesAccepted": false
+  },
   "definitions": {
     "10048": {
       "name": "璇枢",
@@ -126,6 +176,20 @@
       "durationMs": 8000,
       "stackMode": "refresh",
       "valuesByStarRaw": [400, 500, 600, 700]
+    },
+    "10052": {
+      "name": "小小木雕",
+      "runtimeStatus": "runtime-applied",
+      "event": "AfterGetElement(10)",
+      "condition": "CheckElementType(8)=41",
+      "triggerTarget": "Self source acquisition",
+      "target": "Self",
+      "attributeId": 23,
+      "durationMs": 10000,
+      "triggerIntervalMs": 10,
+      "stackMode": "refresh",
+      "maxStacks": 1,
+      "valuesByStarRaw": [1070, 1340, 1600, 1870]
     },
     "10169": {
       "name": "软软棉花肉",
@@ -172,6 +236,20 @@
     "switchAndReplayStable": true,
     "cycleStateStable": true,
     "numericConsequences": "teammate attack damage and healed-target attack damage read the canonical modifiers within their lifetimes and return to baseline at expiry"
+  },
+  "c8RuntimeMatrix": {
+    "realWindAcquisition": "107002 star skill acquires StackElement 750, publishes native types [32,41,1001], and creates exactly one 10052 self command",
+    "nonWindAcquisition": "108001 star skill acquires StackElement 150 with native types [31,41,1001] and triggers the same generic condition",
+    "noDoubleDispatch": "linked leaf 751 and DamageElement 752 never appear as GetElement transaction identities",
+    "sourceScope": "teammate acquisition, inherited initial marks, consume, expire, failed and blocked actions do not trigger the equipped actor effect",
+    "intervalAndRefresh": "9ms is suppressed, 10ms is admitted, refresh-at-cap renews one instance",
+    "healingConsequences": {
+      "star1": { "base": 100, "requested": 111, "sourceHealUpRaw": 1070 },
+      "star4": { "base": 100, "requested": 119, "sourceHealUpRaw": 1870 },
+      "missingHpClamp": { "requested": 111, "actual": 50, "overheal": 61 }
+    },
+    "rightOpenExpiry": "a heal at the exact 10000ms expiry returns to the unmodified baseline",
+    "sameFrameSequence": "a settlement before the AfterGetElement source path remains base; a later settlement receives the modifier"
   },
   "r1ResourceExecutionProjection": {
     "rootCause": "non-damage-event-projection retained action costs and vital settlements while filtering earlier resource gains, so its executable action set diverged from the full runtime",
@@ -259,12 +337,12 @@
     "gameplayLogicChanged": false
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 25,
-    "runtimeUnappliedSoulEssenceCount": 37,
+    "runtimeAppliedSoulEssenceCount": 26,
+    "runtimeUnappliedSoulEssenceCount": 36,
     "runtimeAppliedSetSkillCount": 0,
-    "newlyAppliedSoulEssenceIds": [10048, 10175],
-    "preservedRuntimeAppliedSoulEssenceCount": 23,
-    "evidenceBlockedSoulEssenceIds": [10169, 10176]
+    "newlyAppliedSoulEssenceIds": [10052],
+    "preservedRuntimeAppliedSoulEssenceCount": 25,
+    "evidenceBlockedSoulEssenceIds": [10169, 10170, 10176]
   },
   "qualification": {
     "denominators": {
@@ -274,9 +352,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 420,
+    "blockingUniqueGapCount": 418,
     "blockingByCategory": {
-      "not-implemented": 402,
+      "not-implemented": 400,
       "evidence-insufficient": 18
     },
     "formalAdmissions": {
@@ -288,51 +366,55 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "6efb58d253a09e8c",
-    "rosterHash": "97681c274a2378d8",
-    "manifestsHash": "21d4128d30115155",
-    "ledgerHash": "4d9fcf43ce25d7ea",
-    "bindingMatrixHash": "a5c287ab514d2e74",
-    "qualificationCatalogHash": "e823cfedf6f00c14",
-    "dynamicLoadoutEffectCensusHash": "09b6f5835229c95f",
-    "soulEssenceEffectCatalogHash": "0b16807519898633",
-    "soulEssenceSourceSnapshotHash": "441aec3693b0eed1",
+    "sourceSnapshotHash": "350d89382b7021c0",
+    "rosterHash": "0f41c75dccd11ec7",
+    "manifestsHash": "00238bad8e0d1b41",
+    "ledgerHash": "9221c202c8f17948",
+    "bindingMatrixHash": "55ea73c34027041d",
+    "qualificationCatalogHash": "9bcee4c6e7f4450c",
+    "dynamicLoadoutEffectCensusHash": "0f1ceff2c159e7d8",
+    "soulEssenceEffectCatalogHash": "3630dd738d03a4d5",
+    "soulEssenceSourceSnapshotHash": "e7da9453d0a0325a",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
-    "soulEssenceTriggerContractHash": "2416cea566c45f94",
+    "soulEssenceTriggerContractHash": "d68083acc3d5496d",
     "machineAxisCanonicalHashes": {
-      "input": "c8bfd28dcb890f4f",
-      "data": "98deb78db6293f88",
-      "trace": "8586fe2ee148b0fe",
+      "input": "180a6bb0eae01697",
+      "data": "20b1f45842f156d0",
+      "trace": "b2710b5342548fde",
       "evaluation": "0b410dc9255d2654"
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "C7-R3 adds the missing landed-hit recovery evidence source to the qualification source snapshot and assert-clean chain. Runtime eligibility remains the accepted R2 contract; only qualification source-derived hashes change.",
-    "machineAxisCanonicalHashDrift": 0,
+    "reason": "C8 publishes native tuning-mark container types and the source-closed 10052 effect in the verified package, so current fixtures bind the new package identity. The standard Machine Axis evaluation remains numerically unchanged.",
+    "machineAxisCanonicalHashDrift": 3,
+    "machineAxisEvaluationHashDrift": 0,
     "gameplayAssertionDrift": 0,
     "c4ConsumeAndAfterDamageRegression": 0,
     "c5AcquireRegression": 0,
-    "c6BeforeDamageRegression": 0
+    "c6BeforeDamageRegression": 0,
+    "c7NonDamageAndResourceParityRegression": 0
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 5, "tests": 119, "status": "passed" },
-    "characterProfileAndMigration": { "files": 4, "tests": 38, "status": "passed", "gameplayAssertionDrift": 0 },
+    "focusedMechanics": { "files": 7, "tests": 158, "status": "passed" },
+    "characterProfileAndMigration": {
+      "files": 4,
+      "tests": 38,
+      "status": "passed",
+      "gameplayAssertionDrift": 0
+    },
     "machineAxis": { "files": 12, "tests": 157, "status": "passed" },
     "canonicalAndRuntime": {
       "files": 6,
-      "tests": 72,
-      "status": "accepted-predecessor-passed",
-      "baseline": "bea37f42b273e57e11ca248fbd37764babfcc98d",
-      "replayedInR3": false,
-      "reason": "R3 changes evidence, generation gates, tests, reports, and source-derived qualification hashes only; the production runtime has zero diff"
+      "tests": 24,
+      "status": "passed"
     },
     "audits": {
       "count": 9,
       "status": "clean",
-      "appliedSoulSourceCount": 25,
+      "appliedSoulSourceCount": 26,
       "appliedSoulSourceDriftCount": 0,
-      "tuningConditionSourceCount": 13,
+      "tuningConditionSourceCount": 14,
       "tuningConditionSourceDriftCount": 0,
       "tuningConsumePriorityGroupCount": 12,
       "tuningConsumePrioritySourceDriftCount": 0

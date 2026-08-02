@@ -7,8 +7,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 25,
-      runtimeUnappliedCount: 49,
+      runtimeAppliedCount: 26,
+      runtimeUnappliedCount: 48,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -193,7 +193,9 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       }),
       sourceIdentity: expect.stringContaining('TriggerSwitchEnter@0x1596740'),
     });
-    expect(soulCatalog.triggerContract.nonDamageRuntime.onGotShield).toMatchObject({
+    expect(
+      soulCatalog.triggerContract.nonDamageRuntime.onGotShield
+    ).toMatchObject({
       eventId: 40,
       frameAnchor: 'shield-after-acquire',
       refreshReplacementSemantics: 'evidence-insufficient',
@@ -228,9 +230,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
         }),
         target: expect.objectContaining({ kind: 'team-actors' }),
       },
-      runtimeGaps: [
-        'effect-shield-refresh-replacement-semantics-evidence-gap',
-      ],
+      runtimeGaps: ['effect-shield-refresh-replacement-semantics-evidence-gap'],
     });
     expect(definitions.get(10175)).toMatchObject({
       runtimeStatus: 'runtime-applied',
@@ -691,8 +691,70 @@ describe('M12-B3-C dynamic loadout effect census', () => {
         afterMutationEventId: 10,
         zeroDeltaRefreshDispatch: 'applied-acquisition-event',
         initialStateDispatch: false,
+        elementTypeCondition: expect.objectContaining({
+          status: 'applied',
+          selector:
+            'current-event-element-params-types-contains-condition-value',
+          conditionTypeIndex: 8,
+          conditionTypeTargetRva: '0x13B6ED6',
+        }),
       }),
     });
+
+    expect(definitions.get(10052)).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      trigger: {
+        eventId: 10,
+        frameAnchor: 'element-after-acquire',
+        triggerTarget: expect.objectContaining({
+          kind: 'equipped-actor-source-events',
+        }),
+        condition: {
+          logic: 'and',
+          conditions: [
+            expect.objectContaining({
+              kind: 'event-element-type',
+              conditionType: 8,
+              conditionValue: 41,
+              tuningProfiles: expect.arrayContaining([
+                expect.objectContaining({
+                  profileKey: 'wind',
+                  markId: 750,
+                  elementTypes: [32, 41, 1001],
+                  elementTypeSourceKind: 'mark-container',
+                }),
+                expect.objectContaining({
+                  profileKey: 'fire',
+                  markId: 150,
+                  elementTypes: [31, 41, 1001],
+                  elementTypeSourceKind: 'mark-container',
+                }),
+              ]),
+            }),
+          ],
+        },
+        target: expect.objectContaining({ kind: 'self-actor' }),
+      },
+      effect: expect.objectContaining({
+        attributeId: 23,
+        bucket: 'dynamicExtra',
+        durationMs: 10_000,
+        stackMode: 'refresh',
+        maxStacks: 1,
+        valuesByStar: [
+          expect.objectContaining({ star: 1, valueRaw: 1070 }),
+          expect.objectContaining({ star: 2, valueRaw: 1340 }),
+          expect.objectContaining({ star: 3, valueRaw: 1600 }),
+          expect.objectContaining({ star: 4, valueRaw: 1870 }),
+        ],
+      }),
+      runtimeGaps: [],
+    });
+
+    expect(definitions.get(10170)).toMatchObject({
+      runtimeStatus: 'source-indexed-runtime-unapplied',
+    });
+    expect(definitions.get(10170).runtimeGaps.length).toBeGreaterThan(0);
 
     expect(definitions.get(10043)).toMatchObject({
       runtimeStatus: 'runtime-applied',
@@ -915,6 +977,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       [10043, []],
       [10044, []],
       [10048, []],
+      [10052, []],
       [10149, []],
       [10123, [301]],
       [10130, [301]],
