@@ -125,8 +125,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 8,
-      unresolvedCount: 54,
+      runtimeAppliedCount: 9,
+      unresolvedCount: 53,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -141,6 +141,67 @@ describe('verified soul essence effect generation', () => {
       runtimeStatus: 'source-indexed-runtime-unapplied',
       runtimeGaps: expect.arrayContaining([
         'effect-formula-family-operator-unsupported',
+      ]),
+    });
+  });
+
+  it('binds the real 10098 AfterDamage charged-hit stacking contract', () => {
+    expect(
+      soulEssenceEffectCatalog.definitions.find(
+        definition => definition.soulEssenceId === 10098
+      )
+    ).toMatchObject({
+      name: '此身为枪',
+      effectSkillId: 1900670,
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'equipped-actor-skill-tag-property-after-damage',
+      trigger: {
+        elementId: 19006701,
+        eventId: 2,
+        event: 'AfterDamage',
+        frameAnchor: 'hit-after-damage',
+        condition: {
+          skillTagId: 2,
+          actionKinds: ['charged-attack'],
+        },
+      },
+      effect: {
+        elementId: 19006702,
+        attributeId: 21,
+        durationMs: 4000,
+        stackMode: 'stack',
+        maxStacks: 6,
+        valuesByStar: expect.arrayContaining([
+          expect.objectContaining({ star: 1, valueRaw: 190 }),
+          expect.objectContaining({ star: 4, valueRaw: 380 }),
+        ]),
+      },
+      activationPrerequisites: [],
+      runtimeGaps: [],
+    });
+  });
+
+  it('keeps 10018 blocked by its outer tuning-mark activation condition', () => {
+    expect(
+      soulEssenceEffectCatalog.definitions.find(
+        definition => definition.soulEssenceId === 10018
+      )
+    ).toMatchObject({
+      runtimeStatus: 'source-indexed-runtime-unapplied',
+      activationPrerequisites: [
+        expect.objectContaining({
+          elementId: 19004001,
+          triggerType: 0,
+          conditions: [
+            expect.objectContaining({
+              conditionType: 10000,
+              conditionValue: 1007,
+            }),
+          ],
+        }),
+      ],
+      runtimeGaps: expect.arrayContaining([
+        'effect-activation-condition-operator-unsupported',
       ]),
     });
   });
@@ -194,7 +255,9 @@ describe('verified soul essence effect generation', () => {
     );
 
     expect(appliedDefinitions.map(definition => definition.soulEssenceId)).toEqual(
-      APPLIED_SOUL_EFFECT_MATRIX.map(row => row.soulEssenceId)
+      [...APPLIED_SOUL_EFFECT_MATRIX.map(row => row.soulEssenceId), 10098].sort(
+        (left, right) => left - right
+      )
     );
     for (const expected of APPLIED_SOUL_EFFECT_MATRIX) {
       expect(
@@ -442,6 +505,273 @@ describe('verified soul essence effect generation', () => {
     ).toMatchObject({ stacks: 4, expiresAtMs: 9600 });
   });
 
+  it('applies a hit-triggered effect after each landed hit without buffing that same hit', () => {
+    const catalog = createSyntheticHitCatalog();
+    const action = {
+      id: 'synthetic-multi-hit',
+      actorId: 'actor-synthetic',
+      name: 'synthetic-multi-hit',
+      actionKind: 'charged-attack',
+      sourceSequenceIndex: 0,
+      sourceSequencePath: [0],
+      startMs: 100,
+      durationMs: 600,
+    };
+    const wrongAction = {
+      ...action,
+      id: 'synthetic-wrong-kind',
+      actionKind: 'normal-attack',
+      sourceSequenceIndex: 1,
+      sourceSequencePath: [1],
+      startMs: 1000,
+    };
+    const missedAction = {
+      ...action,
+      id: 'synthetic-missed-hit',
+      sourceSequenceIndex: 2,
+      sourceSequencePath: [2],
+      startMs: 2000,
+    };
+    const overriddenMissAction = {
+      ...action,
+      id: 'synthetic-overridden-miss',
+      sourceSequenceIndex: 3,
+      sourceSequencePath: [3],
+      startMs: 3000,
+      hitOverrides: {
+        'synthetic:hit:1': { willHit: false },
+        'synthetic:hit:2': { willHit: false },
+      },
+    };
+    const resolution = {
+      actionBinding: {
+        identity: 'synthetic:charged-binding',
+        actionKind: 'charged-attack',
+      },
+      controlBinding: { frameRate: 60 },
+      hits: [
+        {
+          hitIndex: 1,
+          elementId: 999101,
+          sourceIdentity: 'synthetic:hit:1',
+          trigger: { startFrame: 5 },
+        },
+        {
+          hitIndex: 2,
+          elementId: 999102,
+          sourceIdentity: 'synthetic:hit:2',
+          trigger: { startFrame: 5 },
+        },
+      ],
+    };
+    const scenario = {
+      time: { fps: 60, durationMs: 10_000 },
+      actors: [
+        createSoulMatrixActor({
+          actorId: 'actor-synthetic',
+          definition: catalog.definitions[0],
+        }),
+      ],
+      actions: [action, wrongAction, missedAction, overriddenMissAction],
+    };
+    const actionExecutionPlan = {
+      actions: scenario.actions.map(entry => ({
+        actionId: entry.id,
+        execute: true,
+      })),
+    };
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      actionResolutionById: new Map([
+        [action.id, resolution],
+        [
+          wrongAction.id,
+          {
+            ...resolution,
+            actionBinding: {
+              ...resolution.actionBinding,
+              actionKind: 'normal-attack',
+            },
+          },
+        ],
+        [missedAction.id, { ...resolution, hits: [] }],
+        [overriddenMissAction.id, resolution],
+      ]),
+      catalog,
+    });
+    const timeline = createEffectRuntimeTimeline({
+      scenario,
+      actionExecutionPlan,
+      generatedCommands: generation.effectCommands,
+    });
+    const hitTimeMs = 183.333333;
+
+    expect(generation.effectCommands).toHaveLength(2);
+    expect(generation.suppressions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actionId: wrongAction.id,
+          reason: 'soulessence-effect-action-kind-condition-not-matched',
+        }),
+        expect.objectContaining({
+          actionId: missedAction.id,
+          reason: 'soulessence-effect-no-landed-source-hit',
+        }),
+        expect.objectContaining({
+          actionId: overriddenMissAction.id,
+          reason: 'soulessence-effect-no-landed-source-hit',
+        }),
+      ])
+    );
+    expect(generation.effectCommands).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+        timeMs: hitTimeMs,
+        sourceHitIdentity: 'synthetic:hit:1',
+        sourceHitIndex: 1,
+        }),
+        expect.objectContaining({
+        timeMs: hitTimeMs,
+        sourceHitIdentity: 'synthetic:hit:2',
+        sourceHitIndex: 2,
+        }),
+      ])
+    );
+    expect(
+      resolveActiveEffectsAt(timeline, hitTimeMs, {
+        targetKind: 'actor',
+        targetId: 'actor-synthetic',
+        calculatorOnly: true,
+        settlingSourceSequencePath: [0, 1],
+      })
+    ).toEqual([]);
+    expect(
+      resolveActiveEffectsAt(timeline, hitTimeMs, {
+        targetKind: 'actor',
+        targetId: 'actor-synthetic',
+        calculatorOnly: true,
+        settlingSourceSequencePath: [0, 2],
+      })[0]
+    ).toMatchObject({ stacks: 1 });
+    expect(
+      resolveActiveEffectsAt(timeline, hitTimeMs, {
+        targetKind: 'actor',
+        targetId: 'actor-synthetic',
+        calculatorOnly: true,
+      })[0]
+    ).toMatchObject({ stacks: 2 });
+    expect(
+      resolveActiveEffectsAt(timeline, hitTimeMs + 4000, {
+        targetKind: 'actor',
+        targetId: 'actor-synthetic',
+        calculatorOnly: true,
+      })
+    ).toEqual([]);
+  });
+
+  it('inherits hit-triggered stacks across a replay boundary and refreshes from the inherited state', () => {
+    const catalog = createSyntheticHitCatalog();
+    const definition = catalog.definitions[0];
+    const actorId = 'actor-synthetic';
+    const action = {
+      id: 'cycle-hit-source',
+      actorId,
+      actionKind: 'charged-attack',
+      sourceSequenceIndex: 0,
+      sourceSequencePath: [0],
+      startMs: 100,
+      durationMs: 600,
+    };
+    const resolution = {
+      actionBinding: {
+        identity: 'synthetic:cycle-charged-binding',
+        actionKind: 'charged-attack',
+      },
+      controlBinding: { frameRate: 60 },
+      hits: [
+        {
+          hitIndex: 1,
+          elementId: 999101,
+          sourceIdentity: 'synthetic:cycle-hit:1',
+          trigger: { startFrame: 5 },
+        },
+      ],
+    };
+    const baseScenario = {
+      time: { fps: 60, durationMs: 1000 },
+      actors: [createSoulMatrixActor({ actorId, definition })],
+      actions: [action],
+    };
+    const executionPlan = {
+      actions: [{ actionId: action.id, execute: true }],
+    };
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario: baseScenario,
+      actionExecutionPlan: executionPlan,
+      actionResolutionById: new Map([[action.id, resolution]]),
+      catalog,
+    });
+    const firstTimeline = createEffectRuntimeTimeline({
+      scenario: baseScenario,
+      actionExecutionPlan: executionPlan,
+      generatedCommands: generation.effectCommands,
+    });
+    const boundaryFrameMs = 1000;
+    const boundaryEffect = resolveActiveEffectsAt(
+      firstTimeline,
+      boundaryFrameMs,
+      {
+        targetKind: 'actor',
+        targetId: actorId,
+        calculatorOnly: true,
+      }
+    )[0];
+    const inheritedRemainingMs =
+      boundaryEffect.expiresAtMs - boundaryFrameMs;
+    const secondScenario = {
+      ...baseScenario,
+      initialRuntimeState: {
+        activeEffects: [
+          {
+            ...boundaryEffect,
+            remainingDurationMs: inheritedRemainingMs,
+          },
+        ],
+      },
+    };
+    const secondTimeline = createEffectRuntimeTimeline({
+      scenario: secondScenario,
+      actionExecutionPlan: executionPlan,
+      generatedCommands: generation.effectCommands,
+    });
+    const triggerTimeMs = generation.effectCommands[0].timeMs;
+
+    expect(boundaryEffect).toMatchObject({
+      stacks: 1,
+      appliedToCalculators: true,
+    });
+    expect(inheritedRemainingMs).toBeCloseTo(3183.333, 3);
+    expect(secondTimeline.events[0]).toMatchObject({
+      type: 'EFFECT_INHERITED',
+      after: { stacks: 1, appliedToCalculators: true },
+    });
+    const refreshedEffect = resolveActiveEffectsAt(
+      secondTimeline,
+      triggerTimeMs,
+      {
+        targetKind: 'actor',
+        targetId: actorId,
+        calculatorOnly: true,
+      }
+    )[0];
+    expect(refreshedEffect).toMatchObject({ stacks: 2 });
+    expect(refreshedEffect.expiresAtMs).toBeCloseTo(
+      triggerTimeMs + 4000,
+      3
+    );
+  });
+
   it('runs the real source profile through compileProject and canonical simulation', () => {
     const result = createRealSoulScenario();
     const generation = result.verifiedSoulEssenceEffectGeneration;
@@ -512,6 +842,45 @@ describe('verified soul essence effect generation', () => {
     ).toEqual(expect.arrayContaining([1.112]));
   });
 
+  it('replays real 10098 hit stacks through canonical damage settlement order', () => {
+    const result = createRealSoulScenario({
+      soulEssenceId: 10098,
+      effectSkillId: 1900670,
+    });
+    const firstActionHits = result.verifiedCombatRuntime.damageEvents.filter(
+      event =>
+        event.type === 'VERIFIED_COMBAT_HIT' &&
+        event.actionId === 'pangpang-heavy-1'
+    );
+    const secondActionHits = result.verifiedCombatRuntime.damageEvents.filter(
+      event =>
+        event.type === 'VERIFIED_COMBAT_HIT' &&
+        event.actionId === 'pangpang-heavy-2'
+    );
+    const damageUpTrace = event =>
+      event.payload.dynamicPropertyTrace.source.find(
+        trace => trace.attributeId === 21
+      );
+
+    expect(firstActionHits).toHaveLength(8);
+    expect(secondActionHits).toHaveLength(8);
+    expect(damageUpTrace(firstActionHits[0])).toBeUndefined();
+    expect(damageUpTrace(firstActionHits[1])).toMatchObject({
+      dynamicExtraRaw: 190,
+    });
+    expect(damageUpTrace(firstActionHits.at(-1))).toMatchObject({
+      dynamicExtraRaw: 1140,
+    });
+    expect(damageUpTrace(secondActionHits[0])).toMatchObject({
+      dynamicExtraRaw: 1140,
+    });
+    expect(
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10098
+      )
+    ).toHaveLength(16);
+  });
+
   it('does not bind legacy loadouts that omit the strict runtime contract', () => {
     const definition = soulEssenceEffectCatalog.definitions.find(
       entry => entry.soulEssenceId === SOUL_ID
@@ -557,7 +926,10 @@ describe('verified soul essence effect generation', () => {
   });
 });
 
-function createRealSoulScenario() {
+function createRealSoulScenario({
+  soulEssenceId = SOUL_ID,
+  effectSkillId = SOUL_SKILL_ID,
+} = {}) {
   const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
     entry =>
       entry.ownerId === OWNER_ID &&
@@ -574,13 +946,13 @@ function createRealSoulScenario() {
           ...config,
           loadout: {
             ...config.loadout,
-            soulessenceId: SOUL_ID,
+            soulessenceId: soulEssenceId,
             soulessenceLevel: 80,
             soulessenceRank: 1,
             soulessenceStar: 1,
             soulessenceCultivation: {
               effectSkill: {
-                skillId: SOUL_SKILL_ID,
+                skillId: effectSkillId,
                 star: 1,
                 skillLevel: 1,
                 runtimeStatus: 'runtime-applied',
@@ -654,6 +1026,32 @@ function createSyntheticCatalog() {
           ],
         },
         sourceIdentity: 'synthetic:source',
+      },
+    ],
+  };
+}
+
+function createSyntheticHitCatalog() {
+  const catalog = createSyntheticCatalog();
+  const definition = catalog.definitions[0];
+  return {
+    ...catalog,
+    definitions: [
+      {
+        ...definition,
+        mechanismFamily: 'equipped-actor-skill-tag-property-after-damage',
+        trigger: {
+          ...definition.trigger,
+          eventId: 2,
+          event: 'AfterDamage',
+          frameAnchor: 'hit-after-damage',
+        },
+        effect: {
+          ...definition.effect,
+          attributeId: 21,
+          durationMs: 4000,
+          maxStacks: 6,
+        },
       },
     ],
   };

@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "phase": "M12-B3-C",
+  "status": "verification-complete-awaiting-product-acceptance",
+  "baseCommit": "f846161c4a71bbc2de2b5bed3f598f03344fc692",
+  "implementationCommit": "git-self",
+  "scope": {
+    "batch": "source-closed-landed-hit-after-damage-self-property-modifier",
+    "formalSearchExecuted": false,
+    "m12cLocked": true,
+    "fixedCultivationChanged": false,
+    "heroRankAttributeApplicationChanged": false,
+    "kiboDnaCanonicalValue": []
+  },
+  "sourceClosure": {
+    "battleElementsSha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
+    "soulControlClosure": {
+      "skillCount": 62,
+      "fileCount": 506,
+      "bytes": 458435,
+      "sha256": "fc30b3421db5c04a517a29f81e969c428b33ade9392ef806fad56a29cd1fcdfe"
+    },
+    "setSkillControlClosure": {
+      "skillCount": 12,
+      "fileCount": 108,
+      "bytes": 95734,
+      "sha256": "8985e7ce5fa74b703caf39430e29aa3a4db212348df6653b1529f58cf4b7c18d"
+    }
+  },
+  "batchResults": {
+    "newRuntimeAppliedObjects": [
+      {
+        "objectKind": "soul-essence",
+        "objectId": 10098,
+        "name": "此身为枪",
+        "effectSkillId": 1900670,
+        "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+        "contract": "each landed charged hit applies one self attribute-21 layer after that hit; duration 4000ms; maximum 6 layers"
+      }
+    ],
+    "explicitlyUnapplied": [
+      {
+        "objectKind": "soul-essence",
+        "objectId": 10018,
+        "reason": "effect-activation-condition-operator-unsupported",
+        "evidenceBoundary": "outer element 19004001 requires two thunder tuning marks"
+      },
+      {
+        "objectKind": "set-skill",
+        "objectCount": 12,
+        "reason": "set-skill-runtime-operator-not-implemented",
+        "thresholdActivationStatus": "source-indexed-separate-from-runtime-effect"
+      }
+    ],
+    "existingRuntimeAppliedSoulEssenceCount": 8,
+    "runtimeAppliedSoulEssenceCount": 9,
+    "runtimeUnappliedSoulEssenceCount": 53,
+    "runtimeAppliedSetSkillCount": 0
+  },
+  "qualification": {
+    "denominators": {
+      "characterOptimizationObjects": 11,
+      "kibos": 43,
+      "soulEssences": 62,
+      "equipment": 137,
+      "setSkills": 12
+    },
+    "blockingUniqueGapCountBefore": 454,
+    "blockingUniqueGapCountAfter": 452,
+    "blockingByCategoryAfter": {
+      "not-implemented": 436,
+      "evidence-insufficient": 16
+    },
+    "formalAdmissions": {
+      "characters": 0,
+      "kibos": 0,
+      "soulEssences": 0,
+      "equipment": 0,
+      "setSkills": 0
+    }
+  },
+  "hashes": {
+    "sourceSnapshotHash": "fcf7e135b22019c8",
+    "rosterHash": "49bec5654a1ec44f",
+    "manifestsHash": "3bc359f042bbc58c",
+    "ledgerHash": "c9a92aaa509afd32",
+    "bindingMatrixHash": "f8e14866b45921ed",
+    "qualificationCatalogHash": "0ea7aed97bffe949",
+    "dynamicLoadoutEffectCensusHash": "3fe66fdddd74a4c6",
+    "soulEssenceEffectCatalogHash": "93390d191dd4a1c0"
+  },
+  "verification": {
+    "focused": {
+      "files": 5,
+      "tests": 64,
+      "status": "passed"
+    },
+    "machineAxis": {
+      "files": 12,
+      "tests": 157,
+      "status": "passed"
+    },
+    "characterGoldenAndCombatRuntime": {
+      "files": 3,
+      "tests": 47,
+      "status": "passed",
+      "gameplayHashDrift": 0
+    },
+    "audits": {
+      "count": 9,
+      "status": "clean",
+      "names": [
+        "optimization-qualification",
+        "production-imports",
+        "workbench-data",
+        "action-status",
+        "applied-source-bindings",
+        "character-acceptance",
+        "character-combat",
+        "verified-combat",
+        "kibo-headless"
+      ]
+    },
+    "productionBuild": "passed"
+  },
+  "knownNonBlockingRisks": [
+    "Sass @import deprecation warning",
+    "existing circular chunk warnings",
+    "existing large chunk warning"
+  ]
+}

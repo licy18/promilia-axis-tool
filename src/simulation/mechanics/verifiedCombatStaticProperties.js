@@ -152,7 +152,7 @@ export function compileVerifiedStaticActorProperties({
     unresolved,
     unapplied,
   });
-  applyEquipmentSources({
+  const setSkillActivations = applyEquipmentSources({
     loadout: actor?.loadout,
     indexes,
     sources,
@@ -185,6 +185,7 @@ export function compileVerifiedStaticActorProperties({
     sources,
     unresolved,
     unapplied,
+    setSkillActivations,
     skillAvailability: (
       cultivation.levelBreakthroughSkillDeclarations ?? []
     ).map(entry => ({
@@ -748,20 +749,39 @@ function applyEquipmentSources({
       );
     }
   }
-  for (const setProfile of indexes.accessorySets) {
-    if ((selectedSetCounts.get(setProfile.setId) ?? 0) < setProfile.pieces) {
-      continue;
-    }
-    unapplied.push({
-      kind: 'accessory-set-skill',
-      sourceId: setProfile.skillId,
+  const setSkillActivations = indexes.accessorySets.map(setProfile => {
+    const selectedPieceCount = selectedSetCounts.get(setProfile.setId) ?? 0;
+    const thresholdMet = selectedPieceCount >= setProfile.pieces;
+    return {
+      kind: 'accessory-set-skill-threshold',
       setId: setProfile.setId,
       pieces: setProfile.pieces,
-      reason: setProfile.status,
+      skillId: setProfile.skillId,
+      selectedPieceCount,
+      thresholdMet,
+      thresholdStatus: thresholdMet
+        ? 'set-skill-piece-threshold-met'
+        : 'set-skill-piece-threshold-not-met',
+      runtimeEffectStatus: setProfile.status,
       sourceIdentity: setProfile.sourceIdentity,
+      appliedToCalculators: false,
+    };
+  });
+  for (const activation of setSkillActivations) {
+    if (!activation.thresholdMet) continue;
+    unapplied.push({
+      kind: 'accessory-set-skill',
+      sourceId: activation.skillId,
+      setId: activation.setId,
+      pieces: activation.pieces,
+      selectedPieceCount: activation.selectedPieceCount,
+      thresholdStatus: activation.thresholdStatus,
+      reason: activation.runtimeEffectStatus,
+      sourceIdentity: activation.sourceIdentity,
       appliedToStaticPanel: false,
     });
   }
+  return setSkillActivations;
 }
 
 function applyEquipmentTuningSource({

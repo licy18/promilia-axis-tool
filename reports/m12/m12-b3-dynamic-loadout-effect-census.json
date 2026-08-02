@@ -1,0 +1,3600 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrDynamicLoadoutEffectMechanismCensus",
+  "kind": "azpr-dynamic-loadout-effect-mechanism-census",
+  "generatedAt": "2026-08-01T00:00:00.000Z",
+  "sourceCatalogHash": "93390d191dd4a1c0",
+  "policy": {
+    "thresholdActivationIsNotRuntimeApplication": true,
+    "descriptionsAreDiscoveryOnly": true,
+    "unsupportedEffectsRemainBlocking": true
+  },
+  "records": [
+    {
+      "objectKind": "set-skill",
+      "objectId": "1:2",
+      "displayName": "set-1-2-piece",
+      "effectSkillId": 19998106,
+      "mechanismFamily": "set-skill-persistent-property",
+      "thresholdActivation": {
+        "selectedPieceCountRequired": 2,
+        "comparison": "selected-piece-count-greater-than-or-equal",
+        "status": "source-indexed",
+        "appliedToRuntimeEffect": false,
+        "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998106].skillType"
+      },
+      "trigger": [],
+      "activationPrerequisites": [
+        {
+          "elementId": 199999050,
+          "pathId": -3527131455290388000,
+          "conditions": [
+            {
+              "conditionType": 5,
+              "conditionValue": 19998106,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-3527131455290388000;elementId=199999050"
+        }
+      ],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "triggerTargetTypes": [],
+        "executeTargetTypes": [
+          0
+        ]
+      },
+      "lifecycle": {
+        "properties": [
+          {
+            "elementId": 199999034,
+            "pathId": 6873642074129583000,
+            "attributeId": 1,
+            "bucket": "dynamicPercent",
+            "calculateType": 2,
+            "durationMs": -1,
+            "combineType": 3,
+            "combineNumber": -1,
+            "executeTargetType": 0,
+            "inheritType": 0,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=6873642074129583000;elementId=199999034"
+          }
+        ],
+        "cooldowns": [],
+        "inheritTypes": [
+          0
+        ]
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied",
+        "reason": "set-skill-runtime-operator-not-implemented"
+      },
+      "evidenceStatus": "source-closure-indexed",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "set-skill-runtime-operator-not-implemented"
+      ],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998106].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998106.asset/MonoBehaviour/skill_control_19998106__-7273921800481425865.json"
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "1:4",
+      "displayName": "set-1-4-piece",
+      "effectSkillId": 19998006,
+      "mechanismFamily": "set-skill-composite-effect",
+      "thresholdActivation": {
+        "selectedPieceCountRequired": 4,
+        "comparison": "selected-piece-count-greater-than-or-equal",
+        "status": "source-indexed",
+        "appliedToRuntimeEffect": false,
+        "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998006].skillType"
+      },
+      "trigger": [
+        {
+          "elementId": 199999024,
+          "pathId": -2802459635003440600,
+          "eventId": 5,
+          "event": "BeforeSkill",
+          "frameAnchor": "action-start",
+          "triggerTargetType": 0,
+          "conditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 3,
+              "conditionExtra": 0
+            },
+            {
+              "conditionType": 14,
+              "conditionValue": 0,
+              "conditionExtra": 0
+            }
+          ],
+          "intervalMs": 12000,
+          "triggerCounter": -1,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024"
+        }
+      ],
+      "activationPrerequisites": [
+        {
+          "elementId": 199999024,
+          "pathId": -2802459635003440600,
+          "conditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 3,
+              "conditionExtra": 0
+            },
+            {
+              "conditionType": 14,
+              "conditionValue": 0,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024"
+        },
+        {
+          "elementId": 199999045,
+          "pathId": 6971292572954515000,
+          "conditions": [
+            {
+              "conditionType": 5,
+              "conditionValue": 19998006,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=6971292572954515000;elementId=199999045"
+        }
+      ],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "triggerTargetTypes": [
+          0
+        ],
+        "executeTargetTypes": [
+          0
+        ]
+      },
+      "lifecycle": {
+        "properties": [],
+        "cooldowns": [
+          {
+            "triggerElementId": 199999024,
+            "intervalMs": 12000,
+            "triggerCounter": -1
+          }
+        ],
+        "inheritTypes": [
+          0
+        ]
+      },
+      "resourceTransactions": [
+        {
+          "elementId": 199999026,
+          "recoverType": 0,
+          "shareType": 2,
+          "valueRaw": 16,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=5780315057243861000;elementId=199999026"
+        }
+      ],
+      "vitalChanges": [
+        {
+          "elementId": 199999085,
+          "damageType": 5,
+          "damageElementalType": 0,
+          "recoverSpRaw": 0,
+          "petRecoverSpRaw": 0,
+          "formula": {
+            "commonFunctionId": 1,
+            "baseFunctionId": 108,
+            "valueRaw": 400
+          },
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=892380267004970900;elementId=199999085"
+        }
+      ],
+      "delayedEvents": [
+        {
+          "triggerElementId": 199999024,
+          "delayOrIntervalMs": 12000,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024",
+          "status": "source-indexed-runtime-unapplied"
+        }
+      ],
+      "loopPersistence": {
+        "status": "runtime-unapplied",
+        "reason": "set-skill-runtime-operator-not-implemented"
+      },
+      "evidenceStatus": "source-closure-indexed",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "set-skill-runtime-operator-not-implemented"
+      ],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998006].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998006.asset/MonoBehaviour/skill_control_19998006__1459779804172427415.json"
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "2:2",
+      "displayName": "set-2-2-piece",
+      "effectSkillId": 19998104,
+      "mechanismFamily": "set-skill-persistent-property",
+      "thresholdActivation": {
+        "selectedPieceCountRequired": 2,
+        "comparison": "selected-piece-count-greater-than-or-equal",
+        "status": "source-indexed",
+        "appliedToRuntimeEffect": false,
+        "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998104].skillType"
+      },
+      "trigger": [],
+      "activationPrerequisites": [
+        {
+          "elementId": 199999041,
+          "pathId": 6163928498944921000,
+          "conditions": [
+            {
+              "conditionType": 5,
+              "conditionValue": 19998104,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=6163928498944921000;elementId=199999041"
+        }
+      ],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "triggerTargetTypes": [],
+        "executeTargetTypes": [
+          0
+        ]
+      },
+      "lifecycle": {
+        "properties": [
+          {
+            "elementId": 199999030,
+            "pathId": -547247735095652860,
+            "attributeId": 8,
+            "bucket": "dynamicExtra",
+            "calculateType": 1,
+            "durationMs": -1,
+            "combineType": 3,
+            "combineNumber": -1,
+            "executeTargetType": 0,
+            "inheritType": 0,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-547247735095652860;elementId=199999030"
+          }
+        ],
+        "cooldowns": [],
+        "inheritTypes": [
+          0
+        ]
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied",
+        "reason": "set-skill-runtime-operator-not-implemented"
+      },
+      "evidenceStatus": "source-closure-indexed",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "set-skill-runtime-operator-not-implemented"
+      ],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998104].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998104.asset/MonoBehaviour/skill_control_19998104__-777981310077937153.json"
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "2:4",
+      "displayName": "set-2-4-piece",
+      "effectSkillId": 19998004,
+      "mechanismFamily": "set-skill-beforedamage-effect",
+      "thresholdActivation": {
+        "selectedPieceCountRequired": 4,
+        "comparison": "selected-piece-count-greater-than-or-equal",
+        "status": "source-indexed",
+        "appliedToRuntimeEffect": false,
+        "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998004].skillType"
+      },
+      "trigger": [
+        {
+          "elementId": 199999020,
+          "pathId": -4719083164342722000,
+          "eventId": 1,
+          "event": "BeforeDamage",
+          "frameAnchor": "hit-before-damage",
+          "triggerTargetType": 0,
+          "conditions": [],
+          "intervalMs": 0,
+          "triggerCounter": -1,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4719083164342722000;elementId=199999020"
+        }
+      ],
+      "activationPrerequisites": [
+        {
+          "elementId": 199999039,
+          "pathId": 3305903183597273600,
+          "conditions": [
+            {
+              "conditionType": 5,
+              "conditionValue": 19998004,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=3305903183597273600;elementId=199999039"
+        }
+      ],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "triggerTargetTypes": [
+          0
+        ],
+        "executeTargetTypes": [
+          0
+        ]
+      },
+      "lifecycle": {
+        "properties": [
+          {
+            "elementId": 199999021,
+            "pathId": -2930048594441716700,
+            "attributeId": 7,
+            "bucket": "dynamicExtra",
+            "calculateType": 1,
+            "durationMs": 6000,
+            "combineType": 4,
+            "combineNumber": 5,
+            "executeTargetType": 0,
+            "inheritType": 0,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-2930048594441716700;elementId=199999021"
+          }
+        ],
+        "cooldowns": [
+          {
+            "triggerElementId": 199999020,
+            "intervalMs": 0,
+            "triggerCounter": -1
+          }
+        ],
+        "inheritTypes": [
+          0
+        ]
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied",
+        "reason": "set-skill-runtime-operator-not-implemented"
+      },
+      "evidenceStatus": "source-closure-indexed",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "set-skill-runtime-operator-not-implemented"
+      ],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998004].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998004.asset/MonoBehaviour/skill_control_19998004__-3432154940691725873.json"
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "3:2",
+      "displayName": "set-3-2-piece",
+      "effectSkillId": 19998105,
+      "mechanismFamily": "set-skill-persistent-property",
+      "thresholdActivation": {
+        "selectedPieceCountRequired": 2,
+        "comparison": "selected-piece-count-greater-than-or-equal",
+        "status": "source-indexed",
+        "appliedToRuntimeEffect": false,
+        "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998105].skillType"
+      },
+      "trigger": [],
+      "activationPrerequisites": [
+        {
+          "elementId": 199999047,
+          "pathId": 792546867767239700,
+          "conditions": [
+            {
+              "conditionType": 5,
+              "conditionValue": 19998105,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=792546867767239700;elementId=199999047"
+        }
+      ],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "triggerTargetTypes": [],
+        "executeTargetTypes": [
+          0
+        ]
+      },
+      "lifecycle": {
+        "properties": [
+          {
+            "elementId": 199999032,
+            "pathId": -7499379216637078000,
+            "attributeId": 5,
+            "bucket": "dynamicPercent",
+            "calculateType": 2,
+            "durationMs": -1,
+            "combineType": 3,
+            "combineNumber": -1,
+            "executeTargetType": 0,
+            "inheritType": 0,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-7499379216637078000;elementId=199999032"
+          }
+        ],
+        "cooldowns": [],
+        "inheritTypes": [
+          0
+        ]
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied",
+        "reason": "set-skill-runtime-operator-not-implemented"
+      },
+      "evidenceStatus": "source-closure-indexed",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "set-skill-runtime-operator-not-implemented"
+      ],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998105].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998105.asset/MonoBehaviour/skill_control_19998105__6900337914110806724.json"
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "3:4",
+      "displayName": "set-3-4-piece",
+      "effectSkillId": 19998005,
+      "mechanismFamily": "set-skill-trigger-event-source-indexed",
+      "thresholdActivation": {
+        "selectedPieceCountRequired": 4,
+        "comparison": "selected-piece-count-greater-than-or-equal",
+        "status": "source-indexed",
+        "appliedToRuntimeEffect": false,
+        "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998005].skillType"
+      },
+      "trigger": [
+        {
+          "elementId": 199999022,
+          "pathId": -3122175980655525000,
+          "eventId": 4,
+          "event": null,
+          "frameAnchor": null,
+          "triggerTargetType": 0,
+          "conditions": [],
+          "intervalMs": 0,
+          "triggerCounter": -1,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-3122175980655525000;elementId=199999022"
+        }
+      ],
+      "activationPrerequisites": [
+        {
+          "elementId": 199999043,
+          "pathId": 1357144959877628400,
+          "conditions": [
+            {
+              "conditionType": 5,
+              "conditionValue": 19998005,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=1357144959877628400;elementId=199999043"
+        }
+      ],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "triggerTargetTypes": [
+          0
+        ],
+        "executeTargetTypes": [
+          0
+        ]
+      },
+      "lifecycle": {
+        "properties": [
+          {
+            "elementId": 199999086,
+            "pathId": -5654239168115731000,
+            "attributeId": 5,
+            "bucket": "dynamicPercent",
+            "calculateType": 2,
+            "durationMs": -1,
+            "combineType": 3,
+            "combineNumber": 0,
+            "executeTargetType": 0,
+            "inheritType": 0,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-5654239168115731000;elementId=199999086"
+          },
+          {
+            "elementId": 199999023,
+            "pathId": -2059155062252145200,
+            "attributeId": 5,
+            "bucket": "dynamicPercent",
+            "calculateType": 2,
+            "durationMs": -1,
+            "combineType": 3,
+            "combineNumber": 0,
+            "executeTargetType": 0,
+            "inheritType": 0,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-2059155062252145200;elementId=199999023"
+          }
+        ],
+        "cooldowns": [
+          {
+            "triggerElementId": 199999022,
+            "intervalMs": 0,
+            "triggerCounter": -1
+          }
+        ],
+        "inheritTypes": [
+          0
+        ]
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied",
+        "reason": "set-skill-runtime-operator-not-implemented"
+      },
+      "evidenceStatus": "source-closure-indexed",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "set-skill-runtime-operator-not-implemented"
+      ],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998005].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/skill_control_19998005__-2339022120750825272.json"
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "4:2",
+      "displayName": "set-4-2-piece",
+      "effectSkillId": 19998103,
+      "mechanismFamily": "set-skill-persistent-property",
+      "thresholdActivation": {
+        "selectedPieceCountRequired": 2,
+        "comparison": "selected-piece-count-greater-than-or-equal",
+        "status": "source-indexed",
+        "appliedToRuntimeEffect": false,
+        "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998103].skillType"
+      },
+      "trigger": [],
+      "activationPrerequisites": [
+        {
+          "elementId": 199999037,
+          "pathId": -7501664485623029000,
+          "conditions": [
+            {
+              "conditionType": 5,
+              "conditionValue": 19998103,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-7501664485623029000;elementId=199999037"
+        }
+      ],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "triggerTargetTypes": [],
+        "executeTargetTypes": [
+          0
+        ]
+      },
+      "lifecycle": {
+        "properties": [
+          {
+            "elementId": 199999028,
+            "pathId": 6348192788412551000,
+            "attributeId": 1,
+            "bucket": "dynamicPercent",
+            "calculateType": 2,
+            "durationMs": -1,
+            "combineType": 3,
+            "combineNumber": -1,
+            "executeTargetType": 0,
+            "inheritType": 0,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=6348192788412551000;elementId=199999028"
+          }
+        ],
+        "cooldowns": [],
+        "inheritTypes": [
+          0
+        ]
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied",
+        "reason": "set-skill-runtime-operator-not-implemented"
+      },
+      "evidenceStatus": "source-closure-indexed",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "set-skill-runtime-operator-not-implemented"
+      ],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998103].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998103.asset/MonoBehaviour/skill_control_19998103__1339765042162713385.json"
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "4:4",
+      "displayName": "set-4-4-piece",
+      "effectSkillId": 19998003,
+      "mechanismFamily": "set-skill-beforedamage-effect",
+      "thresholdActivation": {
+        "selectedPieceCountRequired": 4,
+        "comparison": "selected-piece-count-greater-than-or-equal",
+        "status": "source-indexed",
+        "appliedToRuntimeEffect": false,
+        "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998003].skillType"
+      },
+      "trigger": [
+        {
+          "elementId": 199999018,
+          "pathId": 6898765742999895000,
+          "eventId": 1,
+          "event": "BeforeDamage",
+          "frameAnchor": "hit-before-damage",
+          "triggerTargetType": 0,
+          "conditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 1,
+              "conditionExtra": 0
+            }
+          ],
+          "intervalMs": 0,
+          "triggerCounter": -1,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=6898765742999895000;elementId=199999018"
+        }
+      ],
+      "activationPrerequisites": [
+        {
+          "elementId": 199999035,
+          "pathId": 2016069023922408200,
+          "conditions": [
+            {
+              "conditionType": 5,
+              "conditionValue": 19998003,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=2016069023922408200;elementId=199999035"
+        },
+        {
+          "elementId": 199999018,
+          "pathId": 6898765742999895000,
+          "conditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 1,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=6898765742999895000;elementId=199999018"
+        }
+      ],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "triggerTargetTypes": [
+          0
+        ],
+        "executeTargetTypes": [
+          0
+        ]
+      },
+      "lifecycle": {
+        "properties": [
+          {
+            "elementId": 199999019,
+            "pathId": -4495644276298113500,
+            "attributeId": 1,
+            "bucket": "dynamicPercent",
+            "calculateType": 2,
+            "durationMs": 24000,
+            "combineType": 4,
+            "combineNumber": 7,
+            "executeTargetType": 0,
+            "inheritType": 0,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4495644276298113500;elementId=199999019"
+          }
+        ],
+        "cooldowns": [
+          {
+            "triggerElementId": 199999018,
+            "intervalMs": 0,
+            "triggerCounter": -1
+          }
+        ],
+        "inheritTypes": [
+          0
+        ]
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied",
+        "reason": "set-skill-runtime-operator-not-implemented"
+      },
+      "evidenceStatus": "source-closure-indexed",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "set-skill-runtime-operator-not-implemented"
+      ],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998003].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998003.asset/MonoBehaviour/skill_control_19998003__-3103682062580946589.json"
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "5:2",
+      "displayName": "set-5-2-piece",
+      "effectSkillId": 19998107,
+      "mechanismFamily": "set-skill-persistent-property",
+      "thresholdActivation": {
+        "selectedPieceCountRequired": 2,
+        "comparison": "selected-piece-count-greater-than-or-equal",
+        "status": "source-indexed",
+        "appliedToRuntimeEffect": false,
+        "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998107].skillType"
+      },
+      "trigger": [],
+      "activationPrerequisites": [
+        {
+          "elementId": 199999061,
+          "pathId": 4935537508517976000,
+          "conditions": [
+            {
+              "conditionType": 5,
+              "conditionValue": 19998107,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=4935537508517976000;elementId=199999061"
+        }
+      ],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "triggerTargetTypes": [],
+        "executeTargetTypes": [
+          0
+        ]
+      },
+      "lifecycle": {
+        "properties": [
+          {
+            "elementId": 199999060,
+            "pathId": 4932404186359318000,
+            "attributeId": 23,
+            "bucket": "dynamicExtra",
+            "calculateType": 1,
+            "durationMs": -1,
+            "combineType": 3,
+            "combineNumber": -1,
+            "executeTargetType": 0,
+            "inheritType": 0,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4932404186359318000;elementId=199999060"
+          }
+        ],
+        "cooldowns": [],
+        "inheritTypes": [
+          0
+        ]
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied",
+        "reason": "set-skill-runtime-operator-not-implemented"
+      },
+      "evidenceStatus": "source-closure-indexed",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "set-skill-runtime-operator-not-implemented"
+      ],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998107].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998107.asset/MonoBehaviour/skill_control_19998107__-1110976143998619078.json"
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "5:4",
+      "displayName": "set-5-4-piece",
+      "effectSkillId": 19998007,
+      "mechanismFamily": "set-skill-trigger-event-source-indexed",
+      "thresholdActivation": {
+        "selectedPieceCountRequired": 4,
+        "comparison": "selected-piece-count-greater-than-or-equal",
+        "status": "source-indexed",
+        "appliedToRuntimeEffect": false,
+        "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998007].skillType"
+      },
+      "trigger": [
+        {
+          "elementId": 199999056,
+          "pathId": 1379284923835731500,
+          "eventId": 44,
+          "event": null,
+          "frameAnchor": null,
+          "triggerTargetType": 2,
+          "conditions": [],
+          "intervalMs": 0,
+          "triggerCounter": 999999,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=1379284923835731500;elementId=199999056"
+        }
+      ],
+      "activationPrerequisites": [
+        {
+          "elementId": 199999058,
+          "pathId": -4362329449039080400,
+          "conditions": [
+            {
+              "conditionType": 5,
+              "conditionValue": 19998007,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4362329449039080400;elementId=199999058"
+        }
+      ],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "triggerTargetTypes": [
+          2
+        ],
+        "executeTargetTypes": [
+          0
+        ]
+      },
+      "lifecycle": {
+        "properties": [
+          {
+            "elementId": 199999057,
+            "pathId": -1927426470474616000,
+            "attributeId": 1,
+            "bucket": "dynamicPercent",
+            "calculateType": 2,
+            "durationMs": 6000,
+            "combineType": 3,
+            "combineNumber": -1,
+            "executeTargetType": 0,
+            "inheritType": 0,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057"
+          }
+        ],
+        "cooldowns": [
+          {
+            "triggerElementId": 199999056,
+            "intervalMs": 0,
+            "triggerCounter": 999999
+          }
+        ],
+        "inheritTypes": [
+          0
+        ]
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied",
+        "reason": "set-skill-runtime-operator-not-implemented"
+      },
+      "evidenceStatus": "source-closure-indexed",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "set-skill-runtime-operator-not-implemented"
+      ],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998007].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998007.asset/MonoBehaviour/skill_control_19998007__-7613573473471366488.json"
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "6:2",
+      "displayName": "set-6-2-piece",
+      "effectSkillId": 19998108,
+      "mechanismFamily": "set-skill-persistent-property",
+      "thresholdActivation": {
+        "selectedPieceCountRequired": 2,
+        "comparison": "selected-piece-count-greater-than-or-equal",
+        "status": "source-indexed",
+        "appliedToRuntimeEffect": false,
+        "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998108].skillType"
+      },
+      "trigger": [],
+      "activationPrerequisites": [
+        {
+          "elementId": 199999068,
+          "pathId": 3634324802168512000,
+          "conditions": [
+            {
+              "conditionType": 5,
+              "conditionValue": 19998108,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=3634324802168512000;elementId=199999068"
+        }
+      ],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "triggerTargetTypes": [],
+        "executeTargetTypes": [
+          0
+        ]
+      },
+      "lifecycle": {
+        "properties": [
+          {
+            "elementId": 199999067,
+            "pathId": 5052602432412010000,
+            "attributeId": 222,
+            "bucket": "dynamicExtra",
+            "calculateType": 1,
+            "durationMs": -1,
+            "combineType": 3,
+            "combineNumber": -1,
+            "executeTargetType": 0,
+            "inheritType": 0,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=5052602432412010000;elementId=199999067"
+          }
+        ],
+        "cooldowns": [],
+        "inheritTypes": [
+          0
+        ]
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied",
+        "reason": "set-skill-runtime-operator-not-implemented"
+      },
+      "evidenceStatus": "source-closure-indexed",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "set-skill-runtime-operator-not-implemented"
+      ],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998108].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998108.asset/MonoBehaviour/skill_control_19998108__-8361284574940266563.json"
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "6:4",
+      "displayName": "set-6-4-piece",
+      "effectSkillId": 19998008,
+      "mechanismFamily": "set-skill-afterdamage-effect",
+      "thresholdActivation": {
+        "selectedPieceCountRequired": 4,
+        "comparison": "selected-piece-count-greater-than-or-equal",
+        "status": "source-indexed",
+        "appliedToRuntimeEffect": false,
+        "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType"
+      },
+      "trigger": [
+        {
+          "elementId": 199999063,
+          "pathId": -2660561195248504300,
+          "eventId": 2,
+          "event": "AfterDamage",
+          "frameAnchor": "hit-after-damage",
+          "triggerTargetType": 0,
+          "conditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 1,
+              "conditionExtra": 0
+            },
+            {
+              "conditionType": 11,
+              "conditionValue": 2,
+              "conditionExtra": 0
+            }
+          ],
+          "intervalMs": 0,
+          "triggerCounter": 999999,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2660561195248504300;elementId=199999063"
+        }
+      ],
+      "activationPrerequisites": [
+        {
+          "elementId": 199999065,
+          "pathId": -6224086841716568000,
+          "conditions": [
+            {
+              "conditionType": 5,
+              "conditionValue": 19998008,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-6224086841716568000;elementId=199999065"
+        },
+        {
+          "elementId": 199999063,
+          "pathId": -2660561195248504300,
+          "conditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 1,
+              "conditionExtra": 0
+            },
+            {
+              "conditionType": 11,
+              "conditionValue": 2,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2660561195248504300;elementId=199999063"
+        }
+      ],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "triggerTargetTypes": [
+          0
+        ],
+        "executeTargetTypes": [
+          0
+        ]
+      },
+      "lifecycle": {
+        "properties": [
+          {
+            "elementId": 199999064,
+            "pathId": -5884995951490395000,
+            "attributeId": 202,
+            "bucket": "dynamicExtra",
+            "calculateType": 1,
+            "durationMs": -1,
+            "combineType": 3,
+            "combineNumber": -1,
+            "executeTargetType": 0,
+            "inheritType": 0,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-5884995951490395000;elementId=199999064"
+          },
+          {
+            "elementId": 199999070,
+            "pathId": 7187107487063477000,
+            "attributeId": 203,
+            "bucket": "dynamicExtra",
+            "calculateType": 1,
+            "durationMs": -1,
+            "combineType": 3,
+            "combineNumber": -1,
+            "executeTargetType": 0,
+            "inheritType": 0,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=7187107487063477000;elementId=199999070"
+          }
+        ],
+        "cooldowns": [
+          {
+            "triggerElementId": 199999063,
+            "intervalMs": 0,
+            "triggerCounter": 999999
+          }
+        ],
+        "inheritTypes": [
+          0
+        ]
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied",
+        "reason": "set-skill-runtime-operator-not-implemented"
+      },
+      "evidenceStatus": "source-closure-indexed",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "set-skill-runtime-operator-not-implemented"
+      ],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998008.asset/MonoBehaviour/skill_control_19998008__3385592889625444843.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10001",
+      "displayName": "汁石就是力量",
+      "effectSkillId": 1900480,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+      "trigger": {
+        "elementId": 19004801,
+        "pathId": -4992960068897353000,
+        "eventId": 6,
+        "event": "AfterSkill",
+        "frameAnchor": "action-end",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 2,
+          "actionKinds": [
+            "charged-attack"
+          ]
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 5000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 4
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "canonical-effect-timeline-applied"
+      },
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10001].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900480.asset/MonoBehaviour/skill_control_1900480__-3360510152850789063.json|battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801|battle-element-assets.jsonl#path_id=7615727136823255000;elementId=19004802"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10002",
+      "displayName": "家书",
+      "effectSkillId": 1900610,
+      "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+      "trigger": {
+        "elementId": 19006100,
+        "pathId": 4614392219156132000,
+        "eventId": 5,
+        "event": "BeforeSkill",
+        "frameAnchor": "action-start",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 3,
+          "actionKinds": [
+            "star-skill"
+          ]
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 12000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "canonical-effect-timeline-applied"
+      },
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10002].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900610.asset/MonoBehaviour/skill_control_1900610__-5226631149718649563.json|battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100|battle-element-assets.jsonl#path_id=-131968735896823040;elementId=19006104"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10008",
+      "displayName": "可以吃吗",
+      "effectSkillId": 1900120,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10008].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900120.asset/MonoBehaviour/skill_control_1900120__672231505877738425.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10011",
+      "displayName": "功夫是这样的！",
+      "effectSkillId": 1900530,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10011].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900530.asset/MonoBehaviour/skill_control_1900530__7646815027927349175.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10018",
+      "displayName": "飞行试验",
+      "effectSkillId": 1900400,
+      "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+      "trigger": {
+        "elementId": 19004002,
+        "pathId": 6735504116185173000,
+        "eventId": 1,
+        "event": "BeforeDamage",
+        "frameAnchor": "hit-before-damage",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 2,
+          "actionKinds": [
+            "charged-attack"
+          ]
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002"
+      },
+      "activationPrerequisites": [
+        {
+          "elementId": 19004001,
+          "pathId": -8153693107315429000,
+          "triggerType": 0,
+          "conditions": [
+            {
+              "conditionType": 10000,
+              "conditionValue": 1007,
+              "conditionExtra": 0
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-8153693107315429000;elementId=19004001"
+        }
+      ],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 12000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 20
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-activation-condition-operator-unsupported",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10018].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900400.asset/MonoBehaviour/skill_control_1900400__-2587960116876469994.json|battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002|battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10032",
+      "displayName": "唤灵",
+      "effectSkillId": 1900340,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+      "trigger": {
+        "elementId": 19003401,
+        "pathId": -4873163209865115000,
+        "eventId": 6,
+        "event": "AfterSkill",
+        "frameAnchor": "action-end",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 8,
+          "actionKinds": []
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 24000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-damage-branch-unapplied",
+        "effect-formula-family-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10032].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900340.asset/MonoBehaviour/skill_control_1900340__-7674146641941054446.json|battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401|battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10033",
+      "displayName": "咕嘟咕嘟",
+      "effectSkillId": 1900360,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10033].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900360.asset/MonoBehaviour/skill_control_1900360__-440932271014106498.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10034",
+      "displayName": "五谷丰登",
+      "effectSkillId": 1900890,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10034].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900890.asset/MonoBehaviour/skill_control_1900890__5524612621614489939.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10037",
+      "displayName": "厨房的秘密",
+      "effectSkillId": 1900450,
+      "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+      "trigger": {
+        "elementId": 19004500,
+        "pathId": -5806624494324189000,
+        "eventId": 5,
+        "event": "BeforeSkill",
+        "frameAnchor": "action-start",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 3,
+          "actionKinds": [
+            "star-skill"
+          ]
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 11000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 3
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "canonical-effect-timeline-applied"
+      },
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10037].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900450.asset/MonoBehaviour/skill_control_1900450__2734482160659846208.json|battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500|battle-element-assets.jsonl#path_id=6108188296881701000;elementId=19004501"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10043",
+      "displayName": "宣告黎明之花",
+      "effectSkillId": 1900330,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": {
+        "elementId": 19003301,
+        "pathId": -2023989584562330600,
+        "eventId": 9,
+        "event": null,
+        "frameAnchor": null,
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 16000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 5
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-formula-family-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10043].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900330.asset/MonoBehaviour/skill_control_1900330__-3361609167118804129.json|battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301|battle-element-assets.jsonl#path_id=-4023729244501754000;elementId=19003302"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10044",
+      "displayName": "狩猎姿态",
+      "effectSkillId": 1900550,
+      "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+      "trigger": {
+        "elementId": 19005500,
+        "pathId": -4330459562266431000,
+        "eventId": 1,
+        "event": "BeforeDamage",
+        "frameAnchor": "hit-before-damage",
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 16000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10044].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900550.asset/MonoBehaviour/skill_control_1900550__-7653067718708357441.json|battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500|battle-element-assets.jsonl#path_id=1889171037961678300;elementId=19005503"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10047",
+      "displayName": "传承",
+      "effectSkillId": 1900810,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10047].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900810.asset/MonoBehaviour/skill_control_1900810__-876374953354589919.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10048",
+      "displayName": "璇枢",
+      "effectSkillId": 1900920,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": {
+        "elementId": 19009201,
+        "pathId": -6515773177271123000,
+        "eventId": 34,
+        "event": null,
+        "frameAnchor": null,
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 8000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-formula-family-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10048].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900920.asset/MonoBehaviour/skill_control_1900920__-4473087367283292344.json|battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201|battle-element-assets.jsonl#path_id=-5655228325641076000;elementId=19009202"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10050",
+      "displayName": "魂引",
+      "effectSkillId": 1900840,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10050].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900840.asset/MonoBehaviour/skill_control_1900840__-2378796549379110630.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10052",
+      "displayName": "小小木雕",
+      "effectSkillId": 1900910,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": {
+        "elementId": 19009101,
+        "pathId": -7255963679965377000,
+        "eventId": 10,
+        "event": null,
+        "frameAnchor": null,
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 10000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10052].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900910.asset/MonoBehaviour/skill_control_1900910__2559169442837246188.json|battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101|battle-element-assets.jsonl#path_id=4769837230415874000;elementId=19009102"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10055",
+      "displayName": "远古秘钥",
+      "effectSkillId": 1900930,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+      "trigger": {
+        "elementId": 19009301,
+        "pathId": 6322365379307683000,
+        "eventId": 6,
+        "event": "AfterSkill",
+        "frameAnchor": "action-end",
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 20000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-skill-tag-condition-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10055].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900930.asset/MonoBehaviour/skill_control_1900930__3135420117074848428.json|battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301|battle-element-assets.jsonl#path_id=-2274249246834308600;elementId=19009302"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10056",
+      "displayName": "淳朴之音",
+      "effectSkillId": 1900820,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10056].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900820.asset/MonoBehaviour/skill_control_1900820__1924228818353611560.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10057",
+      "displayName": "命土",
+      "effectSkillId": 1900860,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10057].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900860.asset/MonoBehaviour/skill_control_1900860__9138623509120075127.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10058",
+      "displayName": "往事",
+      "effectSkillId": 1900870,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10058].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900870.asset/MonoBehaviour/skill_control_1900870__1324522920890314377.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10059",
+      "displayName": "禁呪",
+      "effectSkillId": 1900850,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10059].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900850.asset/MonoBehaviour/skill_control_1900850__6970494516969606121.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10060",
+      "displayName": "宵祝",
+      "effectSkillId": 1900900,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+      "trigger": {
+        "elementId": 19009001,
+        "pathId": 3763334915368993000,
+        "eventId": 6,
+        "event": "AfterSkill",
+        "frameAnchor": "action-end",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 3,
+          "actionKinds": [
+            "star-skill"
+          ]
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 24000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "canonical-effect-timeline-applied"
+      },
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10060].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900900.asset/MonoBehaviour/skill_control_1900900__44735022036249210.json|battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001|battle-element-assets.jsonl#path_id=-2685633708192990000;elementId=19009002"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10061",
+      "displayName": "残局",
+      "effectSkillId": 1900800,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10061].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900800.asset/MonoBehaviour/skill_control_1900800__-6686526748891625587.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10062",
+      "displayName": "分道扬镳",
+      "effectSkillId": 1900830,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10062].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900830.asset/MonoBehaviour/skill_control_1900830__5312386218762302104.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10063",
+      "displayName": "屋嘟娃娃",
+      "effectSkillId": 1900880,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": {
+        "elementId": 19008801,
+        "pathId": 8121214350672122000,
+        "eventId": 32,
+        "event": null,
+        "frameAnchor": null,
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-damage-branch-unapplied",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10063].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900880.asset/MonoBehaviour/skill_control_1900880__3748949261925534020.json|battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10071",
+      "displayName": "羽夜的思念",
+      "effectSkillId": 1900650,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10071].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900650.asset/MonoBehaviour/skill_control_1900650__855217176283647622.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10076",
+      "displayName": "碧空之下",
+      "effectSkillId": 1900190,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10076].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900190.asset/MonoBehaviour/skill_control_1900190__947113783478568836.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10078",
+      "displayName": "星晚的追忆",
+      "effectSkillId": 1900460,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10078].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/skill_control_1900460__-8502177423078042080.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10084",
+      "displayName": "风语之愿",
+      "effectSkillId": 1900600,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10084].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/skill_control_1900600__6392545110535611621.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10093",
+      "displayName": "无法思考",
+      "effectSkillId": 1900230,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+      "trigger": {
+        "elementId": 19002301,
+        "pathId": -4157799704864835600,
+        "eventId": 6,
+        "event": "AfterSkill",
+        "frameAnchor": "action-end",
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 24000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-formula-family-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10093].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900230.asset/MonoBehaviour/skill_control_1900230__7491246200405412096.json|battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301|battle-element-assets.jsonl#path_id=475903754845527040;elementId=19002302"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10094",
+      "displayName": "陪伴",
+      "effectSkillId": 1900660,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+      "trigger": {
+        "elementId": 19006601,
+        "pathId": 1967620083657371400,
+        "eventId": 6,
+        "event": "AfterSkill",
+        "frameAnchor": "action-end",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 3,
+          "actionKinds": [
+            "star-skill"
+          ]
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 15000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "canonical-effect-timeline-applied"
+      },
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10094].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900660.asset/MonoBehaviour/skill_control_1900660__7785137375177341249.json|battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601|battle-element-assets.jsonl#path_id=8461738275188953000;elementId=19006602"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10095",
+      "displayName": "甜点时光",
+      "effectSkillId": 1900320,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10095].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900320.asset/MonoBehaviour/skill_control_1900320__-2637092768690775001.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10097",
+      "displayName": "玫瑰色午后",
+      "effectSkillId": 1900470,
+      "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+      "trigger": {
+        "elementId": 19004700,
+        "pathId": 4922202484723645000,
+        "eventId": 5,
+        "event": "BeforeSkill",
+        "frameAnchor": "action-start",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 11,
+          "actionKinds": [
+            "limit-counter"
+          ]
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 8000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-formula-family-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10097].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900470.asset/MonoBehaviour/skill_control_1900470__7648283824826147029.json|battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700|battle-element-assets.jsonl#path_id=-6749174475042234000;elementId=19004701"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10098",
+      "displayName": "此身为枪",
+      "effectSkillId": 1900670,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+      "trigger": {
+        "elementId": 19006701,
+        "pathId": 4493671040636124000,
+        "eventId": 2,
+        "event": "AfterDamage",
+        "frameAnchor": "hit-after-damage",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 2,
+          "actionKinds": [
+            "charged-attack"
+          ]
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 4000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 6
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "canonical-effect-timeline-applied"
+      },
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10098].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900670.asset/MonoBehaviour/skill_control_1900670__-3252376364471466317.json|battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701|battle-element-assets.jsonl#path_id=-5650259386971768000;elementId=19006702"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10101",
+      "displayName": "归来",
+      "effectSkillId": 1900200,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+      "trigger": {
+        "elementId": 19002001,
+        "pathId": -5029048619406844000,
+        "eventId": 2,
+        "event": "AfterDamage",
+        "frameAnchor": "hit-after-damage",
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 4000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 30
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-skill-tag-condition-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10101].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900200.asset/MonoBehaviour/skill_control_1900200__-1028192825404748457.json|battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001|battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10107",
+      "displayName": "药草大丰收",
+      "effectSkillId": 1900350,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+      "trigger": {
+        "elementId": 19003501,
+        "pathId": 1736025164143914200,
+        "eventId": 6,
+        "event": "AfterSkill",
+        "frameAnchor": "action-end",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 3,
+          "actionKinds": [
+            "star-skill"
+          ]
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-damage-branch-unapplied",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-star-values-incomplete"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10107].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900350.asset/MonoBehaviour/skill_control_1900350__715439430624416201.json|battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10121",
+      "displayName": "折纸寄情",
+      "effectSkillId": 1900580,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10121].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900580.asset/MonoBehaviour/skill_control_1900580__5994700394878693879.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10122",
+      "displayName": "花之舞",
+      "effectSkillId": 1900570,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10122].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900570.asset/MonoBehaviour/skill_control_1900570__334890856914764825.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10123",
+      "displayName": "桃芳春笺",
+      "effectSkillId": 1900590,
+      "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+      "trigger": {
+        "elementId": 19005900,
+        "pathId": -7832567119319180000,
+        "eventId": 1,
+        "event": "BeforeDamage",
+        "frameAnchor": "hit-before-damage",
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 8000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10123].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900590.asset/MonoBehaviour/skill_control_1900590__210735096432786726.json|battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900|battle-element-assets.jsonl#path_id=8480096044321114000;elementId=19005901"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10124",
+      "displayName": "夕阳下的约定",
+      "effectSkillId": 1900410,
+      "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+      "trigger": {
+        "elementId": 19004101,
+        "pathId": -2700117266412374500,
+        "eventId": 5,
+        "event": "BeforeSkill",
+        "frameAnchor": "action-start",
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 20000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-skill-tag-condition-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10124].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900410.asset/MonoBehaviour/skill_control_1900410__4820183586340899112.json|battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101|battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10125",
+      "displayName": "高手在此！",
+      "effectSkillId": 1900540,
+      "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+      "trigger": {
+        "elementId": 19005401,
+        "pathId": -8058605269236214000,
+        "eventId": 5,
+        "event": "BeforeSkill",
+        "frameAnchor": "action-start",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 1,
+          "actionKinds": [
+            "normal-attack"
+          ]
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 5000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 15
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "canonical-effect-timeline-applied"
+      },
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10125].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900540.asset/MonoBehaviour/skill_control_1900540__-5207417492774847545.json|battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401|battle-element-assets.jsonl#path_id=-3194128450977334000;elementId=19005402"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10130",
+      "displayName": "女仆的疗养日",
+      "effectSkillId": 1900280,
+      "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+      "trigger": {
+        "elementId": 19002801,
+        "pathId": -908628671126506600,
+        "eventId": 1,
+        "event": "BeforeDamage",
+        "frameAnchor": "hit-before-damage",
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 5000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10130].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900280.asset/MonoBehaviour/skill_control_1900280__4588656220270570984.json|battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801|battle-element-assets.jsonl#path_id=7184896566896581000;elementId=19002802"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10131",
+      "displayName": "节日佳肴",
+      "effectSkillId": 1900270,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+      "trigger": {
+        "elementId": 19002701,
+        "pathId": 1890390088406099200,
+        "eventId": 2,
+        "event": "AfterDamage",
+        "frameAnchor": "hit-after-damage",
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 3000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-skill-tag-condition-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10131].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900270.asset/MonoBehaviour/skill_control_1900270__1514447479398424667.json|battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701|battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10132",
+      "displayName": "暗中观察",
+      "effectSkillId": 1900430,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10132].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900430.asset/MonoBehaviour/skill_control_1900430__-3725567591603608227.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10133",
+      "displayName": "「森林女神」来访",
+      "effectSkillId": 1900440,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10133].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900440.asset/MonoBehaviour/skill_control_1900440__-6971828899594067906.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10136",
+      "displayName": "林间野餐",
+      "effectSkillId": 1900210,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+      "trigger": {
+        "elementId": 19002101,
+        "pathId": 7447841024087717000,
+        "eventId": 2,
+        "event": "AfterDamage",
+        "frameAnchor": "hit-after-damage",
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 8000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-skill-tag-condition-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10136].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900210.asset/MonoBehaviour/skill_control_1900210__4149299819814011094.json|battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101|battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10146",
+      "displayName": "新生",
+      "effectSkillId": 1900420,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10146].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900420.asset/MonoBehaviour/skill_control_1900420__-4853276219982639132.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10147",
+      "displayName": "充能时间",
+      "effectSkillId": 1900110,
+      "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+      "trigger": {
+        "elementId": 19001101,
+        "pathId": -246520716839985300,
+        "eventId": 5,
+        "event": "BeforeSkill",
+        "frameAnchor": "action-start",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 22,
+          "actionKinds": []
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": -1,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-property-duration-unresolved",
+        "effect-skill-tag-condition-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10147].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900110.asset/MonoBehaviour/skill_control_1900110__4798028882442525532.json|battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101|battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10149",
+      "displayName": "失控飞行",
+      "effectSkillId": 1900220,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": {
+        "elementId": 19002201,
+        "pathId": 2849866293729341000,
+        "eventId": 10,
+        "event": null,
+        "frameAnchor": null,
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 24000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10149].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900220.asset/MonoBehaviour/skill_control_1900220__-6482979135949661655.json|battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201|battle-element-assets.jsonl#path_id=6856932050092692000;elementId=19002202"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10150",
+      "displayName": "狼少女的心意",
+      "effectSkillId": 1900560,
+      "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+      "trigger": {
+        "elementId": 19005600,
+        "pathId": 4249731622778222600,
+        "eventId": 1,
+        "event": "BeforeDamage",
+        "frameAnchor": "hit-before-damage",
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 8000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 5
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10150].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900560.asset/MonoBehaviour/skill_control_1900560__1002074190257504026.json|battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600|battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10151",
+      "displayName": "非常规钓鱼",
+      "effectSkillId": 1900130,
+      "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+      "trigger": {
+        "elementId": 19001301,
+        "pathId": 756477731831644700,
+        "eventId": 5,
+        "event": "BeforeSkill",
+        "frameAnchor": "action-start",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 22,
+          "actionKinds": []
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 10000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-skill-tag-condition-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10151].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900130.asset/MonoBehaviour/skill_control_1900130__6614751741932084313.json|battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301|battle-element-assets.jsonl#path_id=3837107787407859700;elementId=19001302"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10152",
+      "displayName": "真正的宝藏",
+      "effectSkillId": 1900490,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10152].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/skill_control_1900490__6965820132206929978.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10154",
+      "displayName": "月下秘仪",
+      "effectSkillId": 1900240,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+      "trigger": {
+        "elementId": 19002401,
+        "pathId": -6345955383762432000,
+        "eventId": 6,
+        "event": "AfterSkill",
+        "frameAnchor": "action-end",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 1,
+          "actionKinds": [
+            "normal-attack"
+          ]
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 15000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 5
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "canonical-effect-timeline-applied"
+      },
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10154].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900240.asset/MonoBehaviour/skill_control_1900240__-7012870850065822120.json|battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401|battle-element-assets.jsonl#path_id=2209371490931731500;elementId=19002402"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10155",
+      "displayName": "恶作剧前奏",
+      "effectSkillId": 1900250,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+      "trigger": {
+        "elementId": 19002501,
+        "pathId": 7681111361882010000,
+        "eventId": 6,
+        "event": "AfterSkill",
+        "frameAnchor": "action-end",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 1,
+          "actionKinds": [
+            "normal-attack"
+          ]
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 15000,
+        "stackMode": "stack",
+        "stackDelta": 1,
+        "maxStacks": 5
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "canonical-effect-timeline-applied"
+      },
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10155].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900250.asset/MonoBehaviour/skill_control_1900250__-4475867281655653105.json|battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501|battle-element-assets.jsonl#path_id=6931937794752071000;elementId=19002502"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10156",
+      "displayName": "在勒布上空",
+      "effectSkillId": 1900260,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10156].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900260.asset/MonoBehaviour/skill_control_1900260__-4703645512991011607.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10169",
+      "displayName": "软软棉花肉",
+      "effectSkillId": 1900750,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": {
+        "elementId": 19007500,
+        "pathId": -7210722185016667000,
+        "eventId": 40,
+        "event": null,
+        "frameAnchor": null,
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 20000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-formula-family-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10169].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900750.asset/MonoBehaviour/skill_control_1900750__4791716372985824884.json|battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500|battle-element-assets.jsonl#path_id=-7968102161953321000;elementId=19007503"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10170",
+      "displayName": "攀高的幼崽",
+      "effectSkillId": 1900740,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": {
+        "elementId": 19007400,
+        "pathId": 1288282584316539400,
+        "eventId": 10,
+        "event": null,
+        "frameAnchor": null,
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10170].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900740.asset/MonoBehaviour/skill_control_1900740__3612376006236613009.json|battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10175",
+      "displayName": "一点都不痛",
+      "effectSkillId": 1900140,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": {
+        "elementId": 19001401,
+        "pathId": -5225606672832072000,
+        "eventId": 44,
+        "event": null,
+        "frameAnchor": null,
+        "condition": null,
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 2000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-formula-family-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10175].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900140.asset/MonoBehaviour/skill_control_1900140__2623401305453258783.json|battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401|battle-element-assets.jsonl#path_id=8237672842561680000;elementId=19001402"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10176",
+      "displayName": "温柔的照护",
+      "effectSkillId": 1900150,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": {
+        "elementId": 19001501,
+        "pathId": -100069638428322610,
+        "eventId": 44,
+        "event": null,
+        "frameAnchor": null,
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 1,
+          "actionKinds": [
+            "normal-attack"
+          ]
+        },
+        "targetKind": "self-actor",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "self-actor"
+      },
+      "lifecycle": {
+        "durationMs": 15000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-formula-family-operator-unsupported",
+        "effect-property-stack-operator-unsupported",
+        "effect-trigger-event-operator-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10176].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900150.asset/MonoBehaviour/skill_control_1900150__-6680374433071234951.json|battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501|battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10196",
+      "displayName": "热火朝天",
+      "effectSkillId": 1900790,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10196].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900790.asset/MonoBehaviour/skill_control_1900790__-7033315392035953286.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10197",
+      "displayName": "安睡吧，宝贝",
+      "effectSkillId": 1900770,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10197].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/skill_control_1900770__4036970557047763662.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10198",
+      "displayName": "星之种",
+      "effectSkillId": 1900760,
+      "mechanismFamily": "source-indexed-composite-effect",
+      "trigger": null,
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": null
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-active-trigger-not-unique",
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-event-operator-unsupported",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10198].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900760.asset/MonoBehaviour/skill_control_1900760__-7896113229959849353.json"
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10216",
+      "displayName": "耕种之时",
+      "effectSkillId": 1900780,
+      "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+      "trigger": {
+        "elementId": 19007801,
+        "pathId": -9208882666704061000,
+        "eventId": 5,
+        "event": "BeforeSkill",
+        "frameAnchor": "action-start",
+        "condition": {
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillTagId": 14,
+          "actionKinds": []
+        },
+        "targetKind": "unresolved",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801"
+      },
+      "activationPrerequisites": [],
+      "sourceTarget": {
+        "source": "equipped-actor",
+        "target": "unresolved"
+      },
+      "lifecycle": null,
+      "resourceTransactions": [],
+      "vitalChanges": [],
+      "delayedEvents": [],
+      "loopPersistence": {
+        "status": "runtime-unapplied"
+      },
+      "evidenceStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeGaps": [
+        "effect-formula-family-operator-unsupported",
+        "effect-property-bucket-unsupported",
+        "effect-property-duration-unresolved",
+        "effect-property-leaf-not-unique",
+        "effect-property-stack-operator-unsupported",
+        "effect-skill-tag-condition-operator-unsupported",
+        "effect-star-values-incomplete",
+        "effect-trigger-target-unsupported"
+      ],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10216].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900780.asset/MonoBehaviour/skill_control_1900780__6516213473126657462.json|battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801"
+    }
+  ],
+  "summary": {
+    "soulEssenceCount": 62,
+    "setSkillCount": 12,
+    "runtimeAppliedCount": 9,
+    "runtimeUnappliedCount": 65,
+    "byMechanismFamily": {
+      "equipped-actor-skill-tag-property-after-damage": 4,
+      "equipped-actor-skill-tag-property-after-skill": 9,
+      "equipped-actor-skill-tag-property-before-damage": 5,
+      "equipped-actor-skill-tag-property-before-skill": 8,
+      "set-skill-afterdamage-effect": 1,
+      "set-skill-beforedamage-effect": 2,
+      "set-skill-composite-effect": 1,
+      "set-skill-persistent-property": 6,
+      "set-skill-trigger-event-source-indexed": 2,
+      "source-indexed-composite-effect": 36
+    },
+    "byEvidenceStatus": {
+      "runtime-applied": 9,
+      "source-closure-indexed": 12,
+      "source-indexed-runtime-unapplied": 53
+    }
+  },
+  "censusHash": "3fe66fdddd74a4c6"
+}

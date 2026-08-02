@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "phase": "M12-B3-B",
+  "phase": "M12-B3-C",
   "sourceSnapshot": {
     "files": {
       "characters": {
@@ -257,9 +257,14 @@
         "path": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList",
         "sha256": "fc30b3421db5c04a517a29f81e969c428b33ade9392ef806fad56a29cd1fcdfe",
         "bytes": 458435
+      },
+      "setSkillEffectControlClosure": {
+        "path": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList",
+        "sha256": "8985e7ce5fa74b703caf39430e29aa3a4db212348df6653b1529f58cf4b7c18d",
+        "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "4c1259408e1d716c"
+    "sourceSnapshotHash": "fcf7e135b22019c8"
   },
   "filterContract": {
     "characterElements": [
@@ -1835,6 +1840,7 @@
         },
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19004801,
           "pathId": -4992960068897353000,
@@ -1920,7 +1926,8 @@
           "propertyElementIds": [
             19004802
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10001].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900480.asset/MonoBehaviour/skill_control_1900480__-3360510152850789063.json|battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801|battle-element-assets.jsonl#path_id=7615727136823255000;elementId=19004802"
@@ -1949,6 +1956,7 @@
         },
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19006100,
           "pathId": 4614392219156132000,
@@ -2034,7 +2042,8 @@
           "propertyElementIds": [
             19006104
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10002].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900610.asset/MonoBehaviour/skill_control_1900610__-5226631149718649563.json|battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100|battle-element-assets.jsonl#path_id=-131968735896823040;elementId=19006104"
@@ -2063,6 +2072,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -2093,7 +2103,8 @@
           "propertyElementIds": [
             19001108
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -2133,6 +2144,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -2163,7 +2175,8 @@
           "propertyElementIds": [
             19005303
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -2202,13 +2215,28 @@
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900400]"
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
-        "mechanismFamily": "source-indexed-composite-effect",
+        "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+        "activationPrerequisites": [
+          {
+            "elementId": 19004001,
+            "pathId": -8153693107315429000,
+            "triggerType": 0,
+            "conditions": [
+              {
+                "conditionType": 10000,
+                "conditionValue": 1007,
+                "conditionExtra": 0
+              }
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-8153693107315429000;elementId=19004001"
+          }
+        ],
         "trigger": {
           "elementId": 19004002,
           "pathId": 6735504116185173000,
           "eventId": 1,
-          "event": null,
-          "frameAnchor": null,
+          "event": "BeforeDamage",
+          "frameAnchor": "hit-before-damage",
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
@@ -2290,9 +2318,13 @@
           "propertyElementIds": [
             19004003
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": [
+            19004001
+          ]
         },
         "runtimeGaps": [
+          "effect-activation-condition-operator-unsupported",
           "effect-trigger-event-operator-unsupported"
         ],
         "sourceIdentity": "NewTable/soulessence.rows[id=10018].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900400.asset/MonoBehaviour/skill_control_1900400__-2587960116876469994.json|battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002|battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003"
@@ -2321,6 +2353,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19003401,
           "pathId": -4873163209865115000,
@@ -2408,7 +2441,8 @@
           ],
           "damageElementIds": [
             19003402
-          ]
+          ],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-damage-branch-unapplied",
@@ -2441,6 +2475,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -2464,7 +2499,8 @@
           "propertyElementIds": [
             19003602
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -2504,6 +2540,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -2527,7 +2564,8 @@
           "propertyElementIds": [
             19008901
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -2567,6 +2605,7 @@
         },
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19004500,
           "pathId": -5806624494324189000,
@@ -2652,7 +2691,8 @@
           "propertyElementIds": [
             19004501
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10037].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900450.asset/MonoBehaviour/skill_control_1900450__2734482160659846208.json|battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500|battle-element-assets.jsonl#path_id=6108188296881701000;elementId=19004501"
@@ -2681,6 +2721,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19003301,
           "pathId": -2023989584562330600,
@@ -2759,7 +2800,8 @@
           "propertyElementIds": [
             19003302
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-formula-family-operator-unsupported",
@@ -2791,13 +2833,14 @@
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900550]"
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
-        "mechanismFamily": "source-indexed-composite-effect",
+        "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19005500,
           "pathId": -4330459562266431000,
           "eventId": 1,
-          "event": null,
-          "frameAnchor": null,
+          "event": "BeforeDamage",
+          "frameAnchor": "hit-before-damage",
           "condition": null,
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500"
@@ -2870,7 +2913,8 @@
           "propertyElementIds": [
             19005503
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-skill-tag-condition-operator-unsupported",
@@ -2902,6 +2946,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -2925,7 +2970,8 @@
           "propertyElementIds": [
             19008101
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -2965,6 +3011,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19009201,
           "pathId": -6515773177271123000,
@@ -3043,7 +3090,8 @@
           "propertyElementIds": [
             19009202
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-formula-family-operator-unsupported",
@@ -3076,6 +3124,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -3099,7 +3148,8 @@
           "propertyElementIds": [
             19008401
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -3139,6 +3189,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19009101,
           "pathId": -7255963679965377000,
@@ -3217,7 +3268,8 @@
           "propertyElementIds": [
             19009102
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-skill-tag-condition-operator-unsupported",
@@ -3249,6 +3301,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19009301,
           "pathId": 6322365379307683000,
@@ -3327,7 +3380,8 @@
           "propertyElementIds": [
             19009302
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-skill-tag-condition-operator-unsupported"
@@ -3358,6 +3412,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -3381,7 +3436,8 @@
           "propertyElementIds": [
             19008201
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -3421,6 +3477,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -3444,7 +3501,8 @@
           "propertyElementIds": [
             19008601
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -3484,6 +3542,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -3507,7 +3566,8 @@
           "propertyElementIds": [
             19008701
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -3547,6 +3607,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -3570,7 +3631,8 @@
           "propertyElementIds": [
             19008501
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -3610,6 +3672,7 @@
         },
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19009001,
           "pathId": 3763334915368993000,
@@ -3695,7 +3758,8 @@
           "propertyElementIds": [
             19009002
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10060].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900900.asset/MonoBehaviour/skill_control_1900900__44735022036249210.json|battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001|battle-element-assets.jsonl#path_id=-2685633708192990000;elementId=19009002"
@@ -3724,6 +3788,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -3747,7 +3812,8 @@
           "propertyElementIds": [
             19008001
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -3787,6 +3853,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -3810,7 +3877,8 @@
           "propertyElementIds": [
             19008301
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -3850,6 +3918,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19008801,
           "pathId": 8121214350672122000,
@@ -3886,7 +3955,8 @@
           "propertyElementIds": [],
           "damageElementIds": [
             19008802
-          ]
+          ],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-damage-branch-unapplied",
@@ -3925,6 +3995,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -3955,7 +4026,8 @@
           "propertyElementIds": [
             19006502
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -3995,6 +4067,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -4030,7 +4103,8 @@
             19001902,
             19001908
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -4070,6 +4144,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -4095,7 +4170,8 @@
           "propertyElementIds": [
             19004601
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -4135,6 +4211,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -4160,7 +4237,8 @@
           "propertyElementIds": [
             19006001
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -4200,6 +4278,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19002301,
           "pathId": -4157799704864835600,
@@ -4278,7 +4357,8 @@
           "propertyElementIds": [
             19002302
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-formula-family-operator-unsupported",
@@ -4310,6 +4390,7 @@
         },
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19006601,
           "pathId": 1967620083657371400,
@@ -4395,7 +4476,8 @@
           "propertyElementIds": [
             19006602
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10094].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900660.asset/MonoBehaviour/skill_control_1900660__7785137375177341249.json|battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601|battle-element-assets.jsonl#path_id=8461738275188953000;elementId=19006602"
@@ -4424,6 +4506,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -4457,7 +4540,8 @@
             19003203,
             19003206
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -4497,6 +4581,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19004700,
           "pathId": 4922202484723645000,
@@ -4582,7 +4667,8 @@
           "propertyElementIds": [
             19004701
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-formula-family-operator-unsupported"
@@ -4600,7 +4686,7 @@
       "maximumRank": 6,
       "staticProfileApplied": true,
       "effectSkillId": 1900670,
-      "effectStatus": "source-indexed-runtime-unapplied",
+      "effectStatus": "runtime-applied",
       "sourceIdentity": "NewTable/soulessence.rows[id=10098]",
       "sourceEffectStatus": "effect-skill-dynamic-unapplied",
       "effectMechanics": {
@@ -4611,14 +4697,15 @@
           "skillLogicType": 6,
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900670]"
         },
-        "runtimeStatus": "source-indexed-runtime-unapplied",
-        "mechanismFamily": "source-indexed-composite-effect",
+        "runtimeStatus": "runtime-applied",
+        "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19006701,
           "pathId": 4493671040636124000,
           "eventId": 2,
-          "event": null,
-          "frameAnchor": null,
+          "event": "AfterDamage",
+          "frameAnchor": "hit-after-damage",
           "condition": {
             "kind": "skill-tag",
             "conditionType": 11,
@@ -4698,11 +4785,10 @@
           "propertyElementIds": [
             19006702
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
-        "runtimeGaps": [
-          "effect-trigger-event-operator-unsupported"
-        ],
+        "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10098].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900670.asset/MonoBehaviour/skill_control_1900670__-3252376364471466317.json|battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701|battle-element-assets.jsonl#path_id=-5650259386971768000;elementId=19006702"
       }
     },
@@ -4728,13 +4814,14 @@
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900200]"
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
-        "mechanismFamily": "source-indexed-composite-effect",
+        "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19002001,
           "pathId": -5029048619406844000,
           "eventId": 2,
-          "event": null,
-          "frameAnchor": null,
+          "event": "AfterDamage",
+          "frameAnchor": "hit-after-damage",
           "condition": null,
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001"
@@ -4807,11 +4894,11 @@
           "propertyElementIds": [
             19002002
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
-          "effect-skill-tag-condition-operator-unsupported",
-          "effect-trigger-event-operator-unsupported"
+          "effect-skill-tag-condition-operator-unsupported"
         ],
         "sourceIdentity": "NewTable/soulessence.rows[id=10101].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900200.asset/MonoBehaviour/skill_control_1900200__-1028192825404748457.json|battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001|battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002"
       }
@@ -4839,6 +4926,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19003501,
           "pathId": 1736025164143914200,
@@ -4884,7 +4972,8 @@
           "propertyElementIds": [],
           "damageElementIds": [
             19003503
-          ]
+          ],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-damage-branch-unapplied",
@@ -4921,6 +5010,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -4966,7 +5056,8 @@
             19005804,
             19005802
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -5006,6 +5097,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -5042,7 +5134,8 @@
             19005703,
             19005704
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -5081,13 +5174,14 @@
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900590]"
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
-        "mechanismFamily": "source-indexed-composite-effect",
+        "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19005900,
           "pathId": -7832567119319180000,
           "eventId": 1,
-          "event": null,
-          "frameAnchor": null,
+          "event": "BeforeDamage",
+          "frameAnchor": "hit-before-damage",
           "condition": null,
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900"
@@ -5160,7 +5254,8 @@
           "propertyElementIds": [
             19005901
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-skill-tag-condition-operator-unsupported",
@@ -5192,6 +5287,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19004101,
           "pathId": -2700117266412374500,
@@ -5270,7 +5366,8 @@
           "propertyElementIds": [
             19004102
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-skill-tag-condition-operator-unsupported"
@@ -5301,6 +5398,7 @@
         },
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19005401,
           "pathId": -8058605269236214000,
@@ -5386,7 +5484,8 @@
           "propertyElementIds": [
             19005402
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10125].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900540.asset/MonoBehaviour/skill_control_1900540__-5207417492774847545.json|battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401|battle-element-assets.jsonl#path_id=-3194128450977334000;elementId=19005402"
@@ -5414,13 +5513,14 @@
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900280]"
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
-        "mechanismFamily": "source-indexed-composite-effect",
+        "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19002801,
           "pathId": -908628671126506600,
           "eventId": 1,
-          "event": null,
-          "frameAnchor": null,
+          "event": "BeforeDamage",
+          "frameAnchor": "hit-before-damage",
           "condition": null,
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801"
@@ -5493,7 +5593,8 @@
           "propertyElementIds": [
             19002802
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-skill-tag-condition-operator-unsupported",
@@ -5524,13 +5625,14 @@
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900270]"
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
-        "mechanismFamily": "source-indexed-composite-effect",
+        "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19002701,
           "pathId": 1890390088406099200,
           "eventId": 2,
-          "event": null,
-          "frameAnchor": null,
+          "event": "AfterDamage",
+          "frameAnchor": "hit-after-damage",
           "condition": null,
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701"
@@ -5603,11 +5705,11 @@
           "propertyElementIds": [
             19002702
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
-          "effect-skill-tag-condition-operator-unsupported",
-          "effect-trigger-event-operator-unsupported"
+          "effect-skill-tag-condition-operator-unsupported"
         ],
         "sourceIdentity": "NewTable/soulessence.rows[id=10131].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900270.asset/MonoBehaviour/skill_control_1900270__1514447479398424667.json|battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701|battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702"
       }
@@ -5635,6 +5737,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -5668,7 +5771,8 @@
             19004306,
             19004303
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -5708,6 +5812,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -5736,7 +5841,8 @@
             19004403,
             19004401
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -5775,13 +5881,14 @@
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900210]"
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
-        "mechanismFamily": "source-indexed-composite-effect",
+        "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19002101,
           "pathId": 7447841024087717000,
           "eventId": 2,
-          "event": null,
-          "frameAnchor": null,
+          "event": "AfterDamage",
+          "frameAnchor": "hit-after-damage",
           "condition": null,
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101"
@@ -5854,11 +5961,11 @@
           "propertyElementIds": [
             19002102
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
-          "effect-skill-tag-condition-operator-unsupported",
-          "effect-trigger-event-operator-unsupported"
+          "effect-skill-tag-condition-operator-unsupported"
         ],
         "sourceIdentity": "NewTable/soulessence.rows[id=10136].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900210.asset/MonoBehaviour/skill_control_1900210__4149299819814011094.json|battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101|battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102"
       }
@@ -5886,6 +5993,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -5916,7 +6024,8 @@
           "propertyElementIds": [
             19004203
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -5956,6 +6065,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19001101,
           "pathId": -246520716839985300,
@@ -6041,7 +6151,8 @@
           "propertyElementIds": [
             19001002
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-property-duration-unresolved",
@@ -6073,6 +6184,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19002201,
           "pathId": 2849866293729341000,
@@ -6151,7 +6263,8 @@
           "propertyElementIds": [
             19002202
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-skill-tag-condition-operator-unsupported",
@@ -6182,13 +6295,14 @@
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900560]"
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
-        "mechanismFamily": "source-indexed-composite-effect",
+        "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19005600,
           "pathId": 4249731622778222600,
           "eventId": 1,
-          "event": null,
-          "frameAnchor": null,
+          "event": "BeforeDamage",
+          "frameAnchor": "hit-before-damage",
           "condition": null,
           "targetKind": "self-actor",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600"
@@ -6261,7 +6375,8 @@
           "propertyElementIds": [
             19005601
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-skill-tag-condition-operator-unsupported",
@@ -6293,6 +6408,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19001301,
           "pathId": 756477731831644700,
@@ -6376,7 +6492,8 @@
           "propertyElementIds": [
             19001302
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-skill-tag-condition-operator-unsupported"
@@ -6407,6 +6524,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -6432,7 +6550,8 @@
           "propertyElementIds": [
             19004902
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -6472,6 +6591,7 @@
         },
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19002401,
           "pathId": -6345955383762432000,
@@ -6557,7 +6677,8 @@
           "propertyElementIds": [
             19002402
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10154].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900240.asset/MonoBehaviour/skill_control_1900240__-7012870850065822120.json|battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401|battle-element-assets.jsonl#path_id=2209371490931731500;elementId=19002402"
@@ -6586,6 +6707,7 @@
         },
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19002501,
           "pathId": 7681111361882010000,
@@ -6671,7 +6793,8 @@
           "propertyElementIds": [
             19002502
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10155].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900250.asset/MonoBehaviour/skill_control_1900250__-4475867281655653105.json|battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501|battle-element-assets.jsonl#path_id=6931937794752071000;elementId=19002502"
@@ -6700,6 +6823,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -6723,7 +6847,8 @@
           "propertyElementIds": [
             19002602
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -6763,6 +6888,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19007500,
           "pathId": -7210722185016667000,
@@ -6841,7 +6967,8 @@
           "propertyElementIds": [
             19007503
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-formula-family-operator-unsupported",
@@ -6874,6 +7001,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19007400,
           "pathId": 1288282584316539400,
@@ -6913,7 +7041,8 @@
             19007403,
             19007404
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-formula-family-operator-unsupported",
@@ -6951,6 +7080,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19001401,
           "pathId": -5225606672832072000,
@@ -7029,7 +7159,8 @@
           "propertyElementIds": [
             19001402
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-formula-family-operator-unsupported",
@@ -7062,6 +7193,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19001501,
           "pathId": -100069638428322610,
@@ -7147,7 +7279,8 @@
           "propertyElementIds": [
             19001502
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-formula-family-operator-unsupported",
@@ -7180,6 +7313,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -7257,7 +7391,8 @@
             19007913,
             19007915
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -7297,6 +7432,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -7322,7 +7458,8 @@
           "propertyElementIds": [
             19007702
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -7362,6 +7499,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
+        "activationPrerequisites": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -7394,7 +7532,8 @@
           "propertyElementIds": [
             19007602
           ],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-active-trigger-not-unique",
@@ -7434,6 +7573,7 @@
         },
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+        "activationPrerequisites": [],
         "trigger": {
           "elementId": 19007801,
           "pathId": -9208882666704061000,
@@ -7473,7 +7613,8 @@
             19007803
           ],
           "propertyElementIds": [],
-          "damageElementIds": []
+          "damageElementIds": [],
+          "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
           "effect-formula-family-operator-unsupported",
@@ -10231,5 +10372,5 @@
       ]
     }
   },
-  "rosterHash": "a8f727dfd0288518"
+  "rosterHash": "49bec5654a1ec44f"
 }

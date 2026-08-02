@@ -4,7 +4,10 @@ import path from 'node:path';
 
 import { hashCanonicalValue } from '../../src/simulation/headless/canonicalSerialization.js';
 import { deriveOptimizationQualificationStageGate } from '../../src/optimization-qualification/optimizationQualificationStageGate.js';
-import { createSoulEssenceEffectMechanicsCatalog } from './soulessence-effect-generation.mjs';
+import {
+  createDynamicLoadoutEffectCensus,
+  createSoulEssenceEffectMechanicsCatalog,
+} from './soulessence-effect-generation.mjs';
 
 export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
   '2026-08-01T00:00:00.000Z';
@@ -61,6 +64,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346',
   soulEffectControlClosure:
     'fc30b3421db5c04a517a29f81e969c428b33ade9392ef806fad56a29cd1fcdfe',
+  setSkillEffectControlClosure:
+    '8985e7ce5fa74b703caf39430e29aa3a4db212348df6653b1529f58cf4b7c18d',
   equipmentInstanceTerms:
     '4b5ddb03534713fcecbbc41c911c88a3eb57c5f6f3d06cc68a7c3f08f39c34b7',
   il2cppRuntimeContracts:
@@ -256,6 +261,14 @@ export async function createOptimizationQualificationArtifacts({
         soulEssenceProfilesById.get(Number(item.id)) ?? null
       )
     );
+  const setSkills = (staticCatalog.accessorySets ?? [])
+    .slice()
+    .sort(
+      (left, right) =>
+        Number(left.setId) - Number(right.setId) ||
+        Number(left.pieces) - Number(right.pieces)
+    )
+    .map(projectSetSkillRosterRecord);
   const soulEssenceEffects = await createSoulEssenceEffectMechanicsCatalog({
     soulEssences: publicSoulEssences,
     soulDefinitionRows:
@@ -268,6 +281,7 @@ export async function createOptimizationQualificationArtifacts({
     skillControlRoot,
     generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
     projectRoot,
+    setSkills,
   });
   sources.battleElementAssets = {
     ...soulEssenceEffects.sourceSnapshot.battleElements,
@@ -280,6 +294,15 @@ export async function createOptimizationQualificationArtifacts({
     value: {
       skillCount: soulEssenceEffects.sourceSnapshot.controlClosure.skillCount,
       fileCount: soulEssenceEffects.sourceSnapshot.controlClosure.fileCount,
+    },
+  };
+  sources.setSkillEffectControlClosure = {
+    ...soulEssenceEffects.sourceSnapshot.setSkillControlClosure,
+    value: {
+      skillCount:
+        soulEssenceEffects.sourceSnapshot.setSkillControlClosure.skillCount,
+      fileCount:
+        soulEssenceEffects.sourceSnapshot.setSkillControlClosure.fileCount,
     },
   };
   assertFrozenSourceHashes(sources);
@@ -300,6 +323,8 @@ export async function createOptimizationQualificationArtifacts({
       effectMechanics,
     };
   });
+  const dynamicLoadoutEffectCensus =
+    createDynamicLoadoutEffectCensus(soulEssenceEffects);
   const equipmentProfilesById = new Map(
     (staticCatalog.equipment ?? []).map(profile => [
       Number(profile.equipmentId),
@@ -315,14 +340,6 @@ export async function createOptimizationQualificationArtifacts({
         equipmentProfilesById.get(Number(item.id)) ?? null
       )
     );
-  const setSkills = (staticCatalog.accessorySets ?? [])
-    .slice()
-    .sort((left, right) =>
-      Number(left.setId) - Number(right.setId) ||
-      Number(left.pieces) - Number(right.pieces)
-    )
-    .map(projectSetSkillRosterRecord);
-
   const denominators = {
     characterOptimizationObjects: characterObjects.length,
     sourceCharacterAliases:
@@ -374,7 +391,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-B',
+      phase: 'M12-B3-C',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -469,6 +486,7 @@ export async function createOptimizationQualificationArtifacts({
     bindingMatrix: bindingDocument,
     catalog,
     soulEssenceEffects,
+    dynamicLoadoutEffectCensus,
     summary,
     markdown: createMarkdownSummary(summary, catalog),
   };
@@ -1315,8 +1333,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-B-R1',
-    status: 'b3-b-r1-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C',
+    status: 'b3-c-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1750,7 +1768,7 @@ function createSourceSnapshot(sources) {
 function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
-  return `# M12-B3-B-R1 Fixed Cultivation Evidence Boundary\n\n` +
+  return '# M12-B3-C Dynamic Loadout Effect Family Closure\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1758,10 +1776,11 @@ function createMarkdownSummary(summary, catalog) {
     `- Denominators: characters ${summary.denominators.characterOptimizationObjects}, Kibo ${summary.denominators.kibos}, soul essence ${summary.denominators.soulEssences}, equipment ${summary.denominators.equipment}, set skills ${summary.denominators.setSkills}\n` +
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
-    `- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, and formal whole-stage rejection.\n` +
+    '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
+    '- Dynamic loadout batch: soul essence 10098 is runtime-applied through a generic landed charged-hit AfterDamage operator; soul essence 10018 remains blocked by its outer tuning-mark prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
-    `- Duplicate Kibo species across different actor slots: allowed; runtime owner is \`actorSlotId+kiboId\`.\n` +
-    `- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n`;
+    '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
+    '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n';
 }
 
 async function readSource(sourcePath, projectRoot) {

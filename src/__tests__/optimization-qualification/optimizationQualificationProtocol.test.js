@@ -186,14 +186,14 @@ describe('M12-B3 optimization qualification generation', () => {
           record =>
             record.code === 'soulessence-effect-skill-dynamic-unapplied'
         )
-      ).toHaveLength(54);
+      ).toHaveLength(53);
       expect(
         artifacts.manifests.records.filter(
           record =>
             record.objectKind === 'soul-essence' &&
             record.maturityState === 'runtime-integrated'
         )
-      ).toHaveLength(8);
+      ).toHaveLength(9);
       expect(
         artifacts.gaps.records.filter(
           record => record.code === 'set-skill-dynamic-unapplied'

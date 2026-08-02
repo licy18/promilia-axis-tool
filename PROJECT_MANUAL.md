@@ -1775,7 +1775,7 @@ M12-B-R2 已用候选动作的真实资源条件和 canonical 资源轨迹生成
 
 Machine Axis 的 `AzPrMachineAxisCycleDps` v1 与 CLI `cycle` 继续由唯一 canonical core 计算显式半开循环区间。R2 对 sampled 使用 cycle-local 共同随机数证明状态闭环，同时保留每个 seed 的独立伤害样本，并结构化输出样本数、均值、样本方差、分位数及 actor/action/hit 贡献守恒；自然暴击波动不再误判为循环泄漏。奇波触发次数由生成层统一分类：`-1` 与 `9999999` 为 unlimited，小正整数为 finite，未知语义保持 evidence-open；河狸仔 520082 与 520087 稳态刷新可闭环，驮驮龙 15 秒 ICD 和真实一次性触发仍拒绝。权威 expected 示例保持 `22.44996643`、4 hit、`cycleDps=4.48999329`。提交 `76530074f6c2fb1d2b88b4eee1d2fd558d01ce2b` 已通过产品验收，M12-B2 正式关闭且不做 R3；下一阶段为 M12-B3，M12-C 继续锁定。
 
-### M12-B3-A-R1 优化资格基线已通过产品验收，B3-B-R1 整改完成等待复验（2026-08-01）
+### M12-B3-B-R1 已通过产品验收，B3-C 首批动态装配机制族等待产品复验（2026-08-02）
 
 M12-B2 已通过产品验收并关闭，M12-B3-A 现从生成数据重算带来源 hash 的固定资格分母；本阶段只建立 optimization qualification，不执行正式配队、装配或输出轴搜索。计划快照包含 10 名带风或雷标签的角色，加上 1 个统一的 `STARBORN 星临者` 优化对象，共 11 个角色优化对象；底层 `199001/199002` 只作为来源身份和运行时外观别名。奇波按离散属性标签选出 22 只风/雷单属性奇波和 21 只含风/雷双属性奇波，共 43 只。装配门禁另包含全部 62 个灵子、137 件公开装备和 12 条套装技能门槛记录。完整 ID/名称清单、筛选与归一化规则和当前源文件 hash 见 `DEVELOPMENT_PLAN.md` 的 M12-B3 章节。
 
@@ -1785,7 +1785,7 @@ M12-C 首个末音优化场景的输入条件仍固定为：全体候选角色 8
 
 角色-装配-奇波组合还需证明静态和动态属性传播、来源/目标、前后台/切人、同帧顺序、状态隔离、保存重放及连续循环。11/11 角色优化对象、43/43 奇波、62/62 灵子、137/137 装备、12/12 套装技能和规定绑定场景未全部通过前，阶段不得部分放行，任何 `dynamic-unapplied` 必须结构化拒绝而非 warning，M12-C 保持锁定；UI 美化、包体和纯性能工作不作为资格阻断项。
 
-B3-A-R1 已纠正角色培养来源边界并在 `f902de10c42c2c4dc750be2316fabe3bc026f8cc` 通过产品验收。B3-B-R1 复核确认 `HeroData.Populate(HeroAttrInfo)` 与 `RefreshAttributes` 的调用链不能排除服务端 `AttrModuleInfo` 已含突破属性，因此撤销 `hero_rank.attribute` 的静态累加并把技能表声明、实际可用性和效果运行时分开；11 个角色培养 evidence blocker 恢复，`112001` 的错误技能 ID 继续单列。普通/缘星实例仍分别以 `bGoldSide/maxValue` 守住 100/110 上限，固定培养原值与解析值进入 schema、canonical、hash、replay 和 Workbench round-trip。最终分母仍为 11/43/62/137/12，阻断账本为 454 条（438 not-implemented、16 evidence-insufficient），五类准入仍为空，M12-C 继续锁定。聚焦回归共 `18 文件 / 222`，九道审计 clean 且 production build 通过；B3-B-R1 等待产品复验。
+B3-A-R1 已纠正角色培养来源边界并在 `f902de10c42c2c4dc750be2316fabe3bc026f8cc` 通过产品验收。B3-B-R1 进一步确认 `HeroData.Populate(HeroAttrInfo)` 与 `RefreshAttributes` 的调用链不能排除服务端 `AttrModuleInfo` 已含突破属性，因此撤销 `hero_rank.attribute` 的静态累加并把技能表声明、实际可用性和效果运行时分开；该阶段已在 `f846161c4a71bbc2de2b5bed3f598f03344fc692` 通过产品验收。普通/缘星实例、固定培养与 DNA=`[]` 合同保持不变。B3-C 首批只新增 `10098 此身为枪` 的来源闭合 landed-hit `AfterDamage` 通用算子；`10018` 的双雷印记前置和 12 个套装运行时效果继续结构化阻断。当前分母仍为 11/43/62/137/12，灵子为 9 applied / 53 unapplied，阻断账本为 452 条（436 not-implemented、16 evidence-insufficient），五类准入仍为空。整个 B3 尚未完成，M12-C 继续锁定。
 
 ### M10-A 小玉闭环缺口修复已通过独立机制验收（2026-07-28）
 

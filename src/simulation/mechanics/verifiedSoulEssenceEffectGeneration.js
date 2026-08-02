@@ -4,9 +4,18 @@ import {
   EFFECT_STACK_MODES,
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
+import { resolveActionHitWillHit } from '../../domain/actionHitOverrides';
+import { getActionSourceSequencePath } from '../../domain/actionSourceSequence';
+import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
 
 export const VERIFIED_SOULESSENCE_EFFECT_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedSoulEssenceEffectGeneration';
+
+const SOULESSENCE_TRIGGER_OPERATOR_REGISTRY = Object.freeze({
+  'action-start': resolveActionTriggerOccurrence,
+  'action-end': resolveActionTriggerOccurrence,
+  'hit-after-damage': resolveLandedHitTriggerOccurrences,
+});
 
 export function createVerifiedSoulEssenceEffectGeneration({
   scenario = {},
@@ -41,7 +50,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
       });
       continue;
     }
-    for (const action of scenario.actions ?? []) {
+    for (const [actionIndex, action] of (scenario.actions ?? []).entries()) {
       if (String(action.actorId) !== String(binding.actor.id)) continue;
       if (executionByActionId.get(action.id)?.execute === false) continue;
       const resolution = actionResolutionById?.get?.(action.id) ?? null;
@@ -65,14 +74,39 @@ export function createVerifiedSoulEssenceEffectGeneration({
         });
         continue;
       }
+      const triggerOperator =
+        SOULESSENCE_TRIGGER_OPERATOR_REGISTRY[
+          binding.definition.trigger.frameAnchor
+        ];
+      const occurrences = triggerOperator?.({
+        action,
+        resolution,
+        scenario,
+      });
+      if (!Array.isArray(occurrences) || occurrences.length === 0) {
+        suppressions.push({
+          actionId: action.id,
+          actorId: binding.actor.id,
+          soulEssenceId: binding.soulEssenceId,
+          effectSkillId: binding.definition.effectSkillId,
+          reason: triggerOperator
+            ? 'soulessence-effect-no-landed-source-hit'
+            : 'soulessence-effect-trigger-operator-unavailable',
+        });
+        continue;
+      }
       effectCommands.push(
-        createSoulEffectCommand({
+        ...occurrences.map(({ hit }) =>
+          createSoulEffectCommand({
           binding,
           action,
+          actionIndex,
           actionKind,
           resolution,
+          hit,
           catalog,
-        })
+          })
+        )
       );
     }
   }
@@ -95,6 +129,33 @@ export function createVerifiedSoulEssenceEffectGeneration({
       unresolvedCount: unresolved.length,
     },
   };
+}
+
+function resolveActionTriggerOccurrence() {
+  return [{ hit: null }];
+}
+
+function resolveLandedHitTriggerOccurrences({ action, resolution, scenario }) {
+  const defaultWillHit = scenario?.projectile?.defaultWillHit !== false;
+  return (resolution?.hits ?? [])
+    .filter(hit => isSoulTriggerHitWithinAction(action, resolution, hit))
+    .filter(hit =>
+      resolveActionHitWillHit(
+        action,
+        resolveSoulTriggerHitIdentity(hit),
+        defaultWillHit
+      )
+    )
+    .map(hit => ({ hit }));
+}
+
+function resolveSoulTriggerHitIdentity(hit) {
+  return String(
+    hit?.identity ??
+      hit?.hitIdentity ??
+      hit?.sourceIdentity ??
+      `${hit?.elementId ?? 'element'}|${hit?.hitIndex ?? 'hit'}`
+  );
 }
 
 function createEquippedSoulBinding(actor, definitionBySoulId) {
@@ -126,25 +187,42 @@ function createEquippedSoulBinding(actor, definitionBySoulId) {
 function createSoulEffectCommand({
   binding,
   action,
+  actionIndex,
   actionKind,
   resolution,
+  hit,
   catalog,
 }) {
   const { definition, starValue, actor } = binding;
   const effect = definition.effect;
   const frameAnchor = definition.trigger.frameAnchor;
+  const frameRate = positiveNumber(resolution?.controlBinding?.frameRate, 60);
+  const hitFrame = hit == null ? null : Number(hit.trigger?.startFrame);
   const timeMs = roundRuntimeTime(
     Number(action.startMs) +
-      (frameAnchor === 'action-end' ? Number(action.durationMs) : 0)
+      (frameAnchor === 'action-end'
+        ? Number(action.durationMs)
+        : frameAnchor === 'hit-after-damage'
+          ? (hitFrame * 1000) / frameRate
+          : 0)
   );
+  const actionSourceSequencePath =
+    getActionSourceSequencePath(action, actionIndex) ?? [actionIndex];
+  const triggerSequencePath =
+    hit == null
+      ? [...actionSourceSequencePath]
+      : [...actionSourceSequencePath, Number(hit.hitIndex)];
   const effectIdentity = `soulessence:${binding.soulEssenceId}:element:${effect.elementId}`;
   return {
-    id: `soulessence|${binding.soulEssenceId}|${action.id}|${effect.elementId}|${frameAnchor}`,
+    id: `soulessence|${binding.soulEssenceId}|${action.id}|${effect.elementId}|${frameAnchor}${hit == null ? '' : `|hit:${hit.hitIndex}`}`,
     sourceActionId: action.id,
     sourceActionName: action.name,
     sourceActorId: actor.id,
     sourceActorName: actor.name,
     sourceSoulEssenceId: binding.soulEssenceId,
+    sourceHitIdentity: hit?.sourceIdentity ?? null,
+    sourceHitIndex: hit?.hitIndex ?? null,
+    sourceHitElementId: hit?.elementId ?? null,
     effectId: effectIdentity,
     effectName: `${definition.name}-${effect.name ?? effect.elementId}`,
     operation: EFFECT_OPERATIONS.APPLY,
@@ -198,6 +276,10 @@ function createSoulEffectCommand({
       triggerPathId: definition.trigger.pathId,
       triggerEvent: definition.trigger.event,
       frameAnchor,
+      triggerSequencePath,
+      sourceHitIdentity: hit?.sourceIdentity ?? null,
+      sourceHitIndex: hit?.hitIndex ?? null,
+      sourceHitElementId: hit?.elementId ?? null,
       skillTagId: definition.trigger.condition.skillTagId,
       actionKind,
       actionBindingIdentity:
@@ -214,6 +296,15 @@ function createSoulEffectCommand({
   };
 }
 
+function isSoulTriggerHitWithinAction(action, resolution, hit) {
+  const frameRate = positiveNumber(resolution?.controlBinding?.frameRate, 60);
+  const hitFrame = Number(hit?.trigger?.startFrame);
+  return (
+    Number.isFinite(hitFrame) &&
+    isActionFrameWithinContextualOccupancy(action, hitFrame, frameRate)
+  );
+}
+
 function normalizeStackMode(value) {
   if (value === EFFECT_STACK_MODES.STACK) return EFFECT_STACK_MODES.STACK;
   if (value === EFFECT_STACK_MODES.REPLACE) return EFFECT_STACK_MODES.REPLACE;
@@ -222,4 +313,9 @@ function normalizeStackMode(value) {
 
 function roundRuntimeTime(value) {
   return Math.round(Number(value) * 1_000_000) / 1_000_000;
+}
+
+function positiveNumber(value, fallback) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : fallback;
 }

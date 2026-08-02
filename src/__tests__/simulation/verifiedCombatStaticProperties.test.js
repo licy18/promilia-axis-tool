@@ -155,6 +155,53 @@ describe('verified static combat properties', () => {
     expect(repeated).toEqual(after);
   });
 
+  it('projects set-piece thresholds separately from unapplied runtime effects', () => {
+    const result = compileVerifiedStaticActorProperties({
+      actor: {
+        characterId: 101007,
+        level: 80,
+        cultivation: { starGiftRank: 0, favorabilityLevel: 0 },
+        loadout: {
+          equipment: {
+            weapon: 1210421,
+            top: 1220221,
+            bottom: 1230221,
+          },
+        },
+      },
+    });
+
+    expect(result.setSkillActivations).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          setId: 1,
+          pieces: 2,
+          selectedPieceCount: 3,
+          thresholdMet: true,
+          thresholdStatus: 'set-skill-piece-threshold-met',
+          runtimeEffectStatus: 'effect-set-skill-dynamic-unapplied',
+          appliedToCalculators: false,
+        }),
+        expect.objectContaining({
+          setId: 1,
+          pieces: 4,
+          selectedPieceCount: 3,
+          thresholdMet: false,
+          thresholdStatus: 'set-skill-piece-threshold-not-met',
+          appliedToCalculators: false,
+        }),
+      ])
+    );
+    expect(
+      result.sources.some(source => source.kind === 'accessory-set-skill')
+    ).toBe(false);
+    expect(
+      result.unapplied.filter(source => source.kind === 'accessory-set-skill')
+    ).toEqual([
+      expect.objectContaining({ setId: 1, pieces: 2, sourceId: 19998106 }),
+    ]);
+  });
+
   it('propagates one three-actor loadout change through actor, kibo, and hit results', () => {
     const bare = simulateLoadoutScenario({});
     const equipped = simulateLoadoutScenario({

@@ -11,10 +11,18 @@ const PROPERTY_BUCKET_BY_CALCULATE_TYPE = Object.freeze({
 });
 
 const TRIGGER_EVENT_BY_ID = Object.freeze({
+  1: { name: 'BeforeDamage', frameAnchor: 'hit-before-damage' },
+  2: { name: 'AfterDamage', frameAnchor: 'hit-after-damage' },
   5: { name: 'BeforeSkill', frameAnchor: 'action-start' },
   6: { name: 'AfterSkill', frameAnchor: 'action-end' },
   36: { name: 'UnloadSkill', frameAnchor: 'loadout-uninstall' },
 });
+
+const SUPPORTED_FRAME_ANCHORS = new Set([
+  'action-start',
+  'action-end',
+  'hit-after-damage',
+]);
 
 const ACTION_KINDS_BY_SKILL_TAG = Object.freeze({
   1: ['normal-attack'],
@@ -41,6 +49,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   skillControlRoot,
   generatedAt,
   projectRoot,
+  setSkills = [],
 } = {}) {
   const definitionBySoulId = new Map(
     (soulDefinitionRows ?? []).map(row => [Number(row.id), row])
@@ -69,6 +78,11 @@ export async function createSoulEssenceEffectMechanicsCatalog({
     skillControlRoot,
     projectRoot,
   });
+  const setSkillControlSource = await readControlClosures({
+    effectSkillIds: (setSkills ?? []).map(item => Number(item.skillId)),
+    skillControlRoot,
+    projectRoot,
+  });
   const definitions = publicSouls.map(item =>
     compileSoulEffectDefinition({
       soul: item,
@@ -90,6 +104,13 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       reasons: definition.runtimeGaps,
       sourceIdentity: definition.sourceIdentity,
     }));
+  const setSkillDefinitions = (setSkills ?? []).map(item =>
+    compileSetSkillEffectDefinition({
+      setSkill: item,
+      battleElementsByPathId: battleSource.byPathId,
+      control: setSkillControlSource.bySkillId.get(Number(item.skillId)),
+    })
+  );
   const value = {
     schemaVersion: 1,
     contractName: SOULESSENCE_EFFECT_CATALOG_CONTRACT_NAME,
@@ -98,9 +119,11 @@ export async function createSoulEssenceEffectMechanicsCatalog({
     sourceSnapshot: {
       battleElements: battleSource.metadata,
       controlClosure: controlSource.metadata,
+      setSkillControlClosure: setSkillControlSource.metadata,
       sourceSnapshotHash: hashCanonicalValue({
         battleElements: battleSource.metadata,
         controlClosure: controlSource.metadata,
+        setSkillControlClosure: setSkillControlSource.metadata,
       }),
     },
     policy: {
@@ -110,9 +133,11 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       supportedOperatorFamilies: [
         'equipped-actor-skill-tag-property-after-skill',
         'equipped-actor-skill-tag-property-before-skill',
+        'equipped-actor-skill-tag-property-after-damage',
       ],
     },
     definitions,
+    setSkillDefinitions,
     unresolved,
     summary: {
       soulEssenceCount: definitions.length,
@@ -129,6 +154,13 @@ export async function createSoulEssenceEffectMechanicsCatalog({
         definition => definition.runtimeStatus === 'runtime-applied'
       ).length,
       unresolvedCount: unresolved.length,
+      setSkillCount: setSkillDefinitions.length,
+      setSkillThresholdIndexedCount: setSkillDefinitions.filter(
+        definition => definition.thresholdActivation.status === 'source-indexed'
+      ).length,
+      setSkillRuntimeAppliedCount: setSkillDefinitions.filter(
+        definition => definition.runtimeStatus === 'runtime-applied'
+      ).length,
       byMechanismFamily: countBy(
         definitions,
         definition => definition.mechanismFamily
@@ -140,6 +172,298 @@ export async function createSoulEssenceEffectMechanicsCatalog({
     },
   };
   return { ...value, catalogHash: hashCanonicalValue(value) };
+}
+
+export function createDynamicLoadoutEffectCensus(catalog) {
+  const records = [
+    ...(catalog?.definitions ?? []).map(definition => ({
+      objectKind: 'soul-essence',
+      objectId: String(definition.soulEssenceId),
+      displayName: definition.name,
+      effectSkillId: definition.effectSkillId,
+      mechanismFamily: definition.mechanismFamily,
+      trigger: definition.trigger,
+      activationPrerequisites: definition.activationPrerequisites ?? [],
+      sourceTarget: {
+        source: 'equipped-actor',
+        target: definition.trigger?.targetKind ?? null,
+      },
+      lifecycle: projectEffectLifecycle(definition.effect),
+      resourceTransactions: [],
+      vitalChanges: [],
+      delayedEvents: [],
+      loopPersistence: {
+        status:
+          definition.runtimeStatus === 'runtime-applied'
+            ? 'canonical-effect-timeline-applied'
+            : 'runtime-unapplied',
+      },
+      evidenceStatus:
+        definition.runtimeStatus === 'runtime-applied'
+          ? 'runtime-applied'
+          : 'source-indexed-runtime-unapplied',
+      runtimeStatus: definition.runtimeStatus,
+      runtimeGaps: definition.runtimeGaps,
+      sourceIdentity: definition.sourceIdentity,
+    })),
+    ...(catalog?.setSkillDefinitions ?? []).map(definition => ({
+      objectKind: 'set-skill',
+      objectId: `${definition.setId}:${definition.pieces}`,
+      displayName: `set-${definition.setId}-${definition.pieces}-piece`,
+      effectSkillId: definition.skillId,
+      mechanismFamily: definition.mechanismFamily,
+      thresholdActivation: definition.thresholdActivation,
+      trigger: definition.triggers,
+      activationPrerequisites: definition.activationPrerequisites,
+      sourceTarget: definition.sourceTarget,
+      lifecycle: definition.lifecycle,
+      resourceTransactions: definition.resourceTransactions,
+      vitalChanges: definition.vitalChanges,
+      delayedEvents: definition.delayedEvents,
+      loopPersistence: definition.loopPersistence,
+      evidenceStatus: definition.evidenceStatus,
+      runtimeStatus: definition.runtimeStatus,
+      runtimeGaps: definition.runtimeGaps,
+      sourceIdentity: definition.sourceIdentity,
+    })),
+  ].sort(
+    (left, right) =>
+      left.objectKind.localeCompare(right.objectKind) ||
+      left.objectId.localeCompare(right.objectId, 'en', { numeric: true })
+  );
+  const value = {
+    schemaVersion: 1,
+    contractName: 'AzPrDynamicLoadoutEffectMechanismCensus',
+    kind: 'azpr-dynamic-loadout-effect-mechanism-census',
+    generatedAt: catalog?.generatedAt ?? null,
+    sourceCatalogHash: catalog?.catalogHash ?? null,
+    policy: {
+      thresholdActivationIsNotRuntimeApplication: true,
+      descriptionsAreDiscoveryOnly: true,
+      unsupportedEffectsRemainBlocking: true,
+    },
+    records,
+    summary: {
+      soulEssenceCount: records.filter(row => row.objectKind === 'soul-essence')
+        .length,
+      setSkillCount: records.filter(row => row.objectKind === 'set-skill').length,
+      runtimeAppliedCount: records.filter(
+        row => row.runtimeStatus === 'runtime-applied'
+      ).length,
+      runtimeUnappliedCount: records.filter(
+        row => row.runtimeStatus !== 'runtime-applied'
+      ).length,
+      byMechanismFamily: countBy(records, row => row.mechanismFamily),
+      byEvidenceStatus: countBy(records, row => row.evidenceStatus),
+    },
+  };
+  return { ...value, censusHash: hashCanonicalValue(value) };
+}
+
+function compileSetSkillEffectDefinition({
+  setSkill,
+  battleElementsByPathId,
+  control,
+}) {
+  const resourcePathIds = uniqueNumbers(control?.resourcePathIds ?? []);
+  const missingPathIds = resourcePathIds.filter(
+    pathId => !battleElementsByPathId.has(pathId)
+  );
+  const closure = collectElementClosure({
+    rootPathIds: resourcePathIds,
+    battleElementsByPathId,
+  });
+  const triggerRows = closure.rows.filter(
+    row => Number(row.typetree?.triggerType) === 1
+  );
+  const activeTriggerRows = triggerRows.filter(
+    row => Number(row.typetree?.triggerParam1) !== 36
+  );
+  const propertyRows = closure.rows.filter(row =>
+    Number.isInteger(Number(row.typetree?.attributeID))
+  );
+  const damageRows = closure.rows.filter(row => isDamageElement(row.typetree));
+  const resourceRows = closure.rows.filter(row =>
+    Object.hasOwn(row.typetree ?? {}, 'recoverType')
+  );
+  const triggers = activeTriggerRows.map(projectTriggerEvidence);
+  const properties = propertyRows.map(projectPropertyEvidence);
+  const mechanismFamilies = uniqueStrings([
+    ...triggers.map(trigger =>
+      trigger.event == null
+        ? 'set-skill-trigger-event-source-indexed'
+        : `set-skill-${String(trigger.event).toLowerCase()}-effect`
+    ),
+    ...(triggers.length === 0 && properties.length > 0
+      ? ['set-skill-persistent-property']
+      : []),
+    ...(damageRows.length > 0 ? ['set-skill-vital-change'] : []),
+  ]);
+  const evidenceGaps = [];
+  if (!control) evidenceGaps.push('set-skill-control-source-missing');
+  if (missingPathIds.length) evidenceGaps.push('set-skill-resource-reference-missing');
+  if (closure.rows.length === 0) evidenceGaps.push('set-skill-element-closure-empty');
+  const runtimeGaps = uniqueStrings([
+    ...evidenceGaps,
+    'set-skill-runtime-operator-not-implemented',
+  ]);
+  const value = {
+    setId: Number(setSkill.setId),
+    pieces: Number(setSkill.pieces),
+    skillId: Number(setSkill.skillId),
+    thresholdActivation: {
+      selectedPieceCountRequired: Number(setSkill.pieces),
+      comparison: 'selected-piece-count-greater-than-or-equal',
+      status: 'source-indexed',
+      appliedToRuntimeEffect: false,
+      sourceIdentity: setSkill.sourceIdentity,
+    },
+    mechanismFamily:
+      mechanismFamilies.length === 1
+        ? mechanismFamilies[0]
+        : 'set-skill-composite-effect',
+    mechanismFamilies,
+    triggers,
+    activationPrerequisites: closure.rows
+      .filter(row =>
+        Array.isArray(row.typetree?.triggerConditionList) &&
+        row.typetree.triggerConditionList.length > 0
+      )
+      .map(row => ({
+        elementId: Number(row.typetree?.elementConfigId),
+        pathId: Number(row.path_id),
+        conditions: projectConditions(row.typetree.triggerConditionList),
+        sourceIdentity: createElementIdentity(row),
+      })),
+    sourceTarget: {
+      source: 'equipped-actor',
+      triggerTargetTypes: uniqueNumbers(
+        activeTriggerRows.map(row => Number(row.typetree?.triggerTargetType))
+      ),
+      executeTargetTypes: uniqueNumbers(
+        closure.rows.map(row => Number(row.typetree?.executeTargetType))
+      ),
+    },
+    lifecycle: {
+      properties,
+      cooldowns: triggers.map(trigger => ({
+        triggerElementId: trigger.elementId,
+        intervalMs: trigger.intervalMs,
+        triggerCounter: trigger.triggerCounter,
+      })),
+      inheritTypes: uniqueNumbers(
+        closure.rows.map(row => Number(row.typetree?.inheritType))
+      ),
+    },
+    resourceTransactions: resourceRows.map(row => ({
+      elementId: Number(row.typetree?.elementConfigId),
+      recoverType: numberOrNull(row.typetree?.recoverType),
+      shareType: numberOrNull(row.typetree?.shareType),
+      valueRaw: numberOrNull(
+        row.typetree?.formulaParams?.formulaParamValues?.[0] ??
+          row.typetree?.functionParams?.[0]
+      ),
+      sourceIdentity: createElementIdentity(row),
+    })),
+    vitalChanges: damageRows.map(row => ({
+      elementId: Number(row.typetree?.elementConfigId),
+      damageType: numberOrNull(row.typetree?.damageType),
+      damageElementalType: numberOrNull(row.typetree?.damageElementalType),
+      recoverSpRaw: numberOrNull(row.typetree?.recoverSP),
+      petRecoverSpRaw: numberOrNull(row.typetree?.petRecoverSP),
+      formula: {
+        commonFunctionId: numberOrNull(row.typetree?.formulaParams?.function_1),
+        baseFunctionId: numberOrNull(row.typetree?.formulaParams?.function_2),
+        valueRaw: numberOrNull(
+          row.typetree?.formulaParams?.formulaParamValues?.[0]
+        ),
+      },
+      sourceIdentity: createElementIdentity(row),
+    })),
+    delayedEvents: triggers
+      .filter(trigger => Number(trigger.intervalMs) > 0)
+      .map(trigger => ({
+        triggerElementId: trigger.elementId,
+        delayOrIntervalMs: trigger.intervalMs,
+        sourceIdentity: trigger.sourceIdentity,
+        status: 'source-indexed-runtime-unapplied',
+      })),
+    loopPersistence: {
+      status: 'runtime-unapplied',
+      reason: 'set-skill-runtime-operator-not-implemented',
+    },
+    sourceClosure: {
+      controlSkillId: Number(setSkill.skillId),
+      controlSourceIdentity: control?.sourceIdentity ?? null,
+      resourcePathIds,
+      missingPathIds,
+      reachablePathIds: closure.rows.map(row => Number(row.path_id)),
+      elementIds: closure.rows.map(row => Number(row.typetree?.elementConfigId)),
+    },
+    evidenceStatus:
+      evidenceGaps.length === 0
+        ? 'source-closure-indexed'
+        : 'static-evidence-gap',
+    runtimeStatus: 'source-indexed-runtime-unapplied',
+    runtimeGaps,
+    sourceIdentity: [setSkill.sourceIdentity, control?.sourceIdentity]
+      .filter(Boolean)
+      .join('|'),
+  };
+  return { ...value, mechanicsHash: hashCanonicalValue(value) };
+}
+
+function projectTriggerEvidence(row) {
+  const tree = row.typetree ?? {};
+  const event = TRIGGER_EVENT_BY_ID[Number(tree.triggerParam1)] ?? null;
+  return {
+    elementId: Number(tree.elementConfigId),
+    pathId: Number(row.path_id),
+    eventId: Number(tree.triggerParam1),
+    event: event?.name ?? null,
+    frameAnchor: event?.frameAnchor ?? null,
+    triggerTargetType: numberOrNull(tree.triggerTargetType),
+    conditions: projectConditions(tree.triggerConditionList),
+    intervalMs: numberOrNull(tree.triggerInv),
+    triggerCounter: numberOrNull(tree.triggerCounter),
+    sourceIdentity: createElementIdentity(row),
+  };
+}
+
+function projectPropertyEvidence(row) {
+  const tree = row.typetree ?? {};
+  return {
+    elementId: Number(tree.elementConfigId),
+    pathId: Number(row.path_id),
+    attributeId: Number(tree.attributeID),
+    bucket: PROPERTY_BUCKET_BY_CALCULATE_TYPE[Number(tree.calculateType)] ?? null,
+    calculateType: numberOrNull(tree.calculateType),
+    durationMs: numberOrNull(tree.time),
+    combineType: numberOrNull(tree.combineType),
+    combineNumber: numberOrNull(tree.combineNumber),
+    executeTargetType: numberOrNull(tree.executeTargetType),
+    inheritType: numberOrNull(tree.inheritType),
+    sourceIdentity: createElementIdentity(row),
+  };
+}
+
+function projectConditions(conditions) {
+  return (conditions ?? []).map(condition => ({
+    conditionType: numberOrNull(condition?.conditionParam1),
+    conditionValue: numberOrNull(condition?.conditionParam2),
+    conditionExtra: numberOrNull(condition?.conditionParam3),
+  }));
+}
+
+function projectEffectLifecycle(effect) {
+  return effect == null
+    ? null
+    : {
+        durationMs: effect.durationMs,
+        stackMode: effect.stackMode,
+        stackDelta: effect.stackDelta,
+        maxStacks: effect.maxStacks,
+      };
 }
 
 function compileSoulEffectDefinition({
@@ -176,6 +500,24 @@ function compileSoulEffectDefinition({
     isDamageElement(row.typetree)
   );
   const trigger = activeTriggers.length === 1 ? activeTriggers[0] : null;
+  const activationPrerequisiteRows = trigger
+    ? closure.rows.filter(row => {
+        if (Number(row.path_id) === Number(trigger.path_id)) return false;
+        const tree = row.typetree ?? {};
+        if (
+          Number(tree.triggerType) !== 0 ||
+          !Array.isArray(tree.triggerConditionList) ||
+          tree.triggerConditionList.length === 0
+        ) {
+          return false;
+        }
+        return collectReachableRows(
+          row.path_id,
+          closure.edges,
+          battleElementsByPathId
+        ).some(reachable => Number(reachable.path_id) === Number(trigger.path_id));
+      })
+    : [];
   const reachablePropertyRows = trigger
     ? collectReachableRows(trigger.path_id, closure.edges, battleElementsByPathId)
         .filter(row => propertyRows.some(property => property.path_id === row.path_id))
@@ -215,8 +557,11 @@ function compileSoulEffectDefinition({
   if (activeTriggers.length !== 1) {
     runtimeGaps.push('effect-active-trigger-not-unique');
   }
-  if (!triggerEvent || !['action-start', 'action-end'].includes(triggerEvent.frameAnchor)) {
+  if (!triggerEvent || !SUPPORTED_FRAME_ANCHORS.has(triggerEvent.frameAnchor)) {
     runtimeGaps.push('effect-trigger-event-operator-unsupported');
+  }
+  if (activationPrerequisiteRows.length > 0) {
+    runtimeGaps.push('effect-activation-condition-operator-unsupported');
   }
   if (!skillTagCondition || !actionKinds?.length) {
     runtimeGaps.push('effect-skill-tag-condition-operator-unsupported');
@@ -248,9 +593,7 @@ function compileSoulEffectDefinition({
   const runtimeStatus = runtimeGaps.length
     ? 'source-indexed-runtime-unapplied'
     : 'runtime-applied';
-  const mechanismFamily = triggerEvent?.frameAnchor
-    ? `equipped-actor-skill-tag-property-${triggerEvent.frameAnchor === 'action-end' ? 'after' : 'before'}-skill`
-    : 'source-indexed-composite-effect';
+  const mechanismFamily = createMechanismFamily(triggerEvent);
   return {
     soulEssenceId: soul.soulEssenceId,
     name: soul.name,
@@ -263,6 +606,19 @@ function compileSoulEffectDefinition({
       : null,
     runtimeStatus,
     mechanismFamily,
+    activationPrerequisites: activationPrerequisiteRows.map(row => ({
+      elementId: Number(row.typetree?.elementConfigId),
+      pathId: Number(row.path_id),
+      triggerType: Number(row.typetree?.triggerType),
+      conditions: (row.typetree?.triggerConditionList ?? []).map(condition => ({
+        conditionType: Number(condition?.conditionParam1),
+        conditionValue: Number(condition?.conditionParam2),
+        conditionExtra: Number.isFinite(Number(condition?.conditionParam3))
+          ? Number(condition.conditionParam3)
+          : null,
+      })),
+      sourceIdentity: createElementIdentity(row),
+    })),
     trigger:
       trigger == null
         ? null
@@ -336,6 +692,9 @@ function compileSoulEffectDefinition({
       damageElementIds: damageRows.map(row =>
         Number(row.typetree?.elementConfigId)
       ),
+      activationPrerequisiteElementIds: activationPrerequisiteRows.map(row =>
+        Number(row.typetree?.elementConfigId)
+      ),
     },
     runtimeGaps: uniqueStrings(runtimeGaps),
     sourceIdentity: [
@@ -347,6 +706,22 @@ function compileSoulEffectDefinition({
       .filter(Boolean)
       .join('|'),
   };
+}
+
+function createMechanismFamily(triggerEvent) {
+  if (triggerEvent?.frameAnchor === 'action-start') {
+    return 'equipped-actor-skill-tag-property-before-skill';
+  }
+  if (triggerEvent?.frameAnchor === 'action-end') {
+    return 'equipped-actor-skill-tag-property-after-skill';
+  }
+  if (triggerEvent?.frameAnchor === 'hit-before-damage') {
+    return 'equipped-actor-skill-tag-property-before-damage';
+  }
+  if (triggerEvent?.frameAnchor === 'hit-after-damage') {
+    return 'equipped-actor-skill-tag-property-after-damage';
+  }
+  return 'source-indexed-composite-effect';
 }
 
 async function readBattleElementAssets(sourcePath) {
@@ -551,4 +926,9 @@ function uniqueNumbers(values) {
 
 function uniqueStrings(values) {
   return [...new Set(values.filter(Boolean))].sort();
+}
+
+function numberOrNull(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }

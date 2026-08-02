@@ -9,6 +9,7 @@ import {
 } from './actionEffectRelationGraph';
 import { createEffectSourceDisplayLabel } from '../../domain/sourceDisplayText';
 import { isControlledActorEffectTargetKind } from '../../domain/effectTargetSemantics';
+import { compareSourceSequencePaths } from '../../domain/actionSourceSequence';
 
 export const ACTION_EFFECT_COMMAND_CONTRACT_NAME = 'AzPrActionEffectCommand';
 export const EFFECT_RUNTIME_TIMELINE_CONTRACT_NAME =
@@ -304,11 +305,19 @@ export function resolveActiveEffectsAt(
     targetId = null,
     calculatorOnly = false,
     settlingActionId = null,
+    settlingSourceSequencePath = null,
   } = {}
 ) {
   const activeByInstanceKey = new Map();
   for (const event of timeline?.events ?? []) {
     if (Number(event.timeMs) > Number(timeMs)) break;
+    if (
+      !isEffectEventVisibleToSettlement(event, timeMs, {
+        settlingSourceSequencePath,
+      })
+    ) {
+      continue;
+    }
     if (event.type === EFFECT_RUNTIME_EVENT_TYPES.TRANSFERRED) {
       activeByInstanceKey.delete(
         event.previousInstanceKey ?? event.before?.instanceKey
@@ -335,6 +344,33 @@ export function resolveActiveEffectsAt(
     }
     return !calculatorOnly || effect.appliedToCalculators === true;
   });
+}
+
+function isEffectEventVisibleToSettlement(
+  event,
+  timeMs,
+  { settlingSourceSequencePath = null } = {}
+) {
+  if (
+    Math.abs(Number(event?.timeMs) - Number(timeMs)) > 0.001 ||
+    !Array.isArray(settlingSourceSequencePath)
+  ) {
+    return true;
+  }
+  const state = event?.after ?? event?.before ?? null;
+  const triggerEvent = state?.sourceIdentity?.triggerEvent ?? null;
+  const triggerSequencePath = state?.sourceIdentity?.triggerSequencePath ?? null;
+  if (
+    !['BeforeDamage', 'AfterDamage'].includes(triggerEvent) ||
+    !Array.isArray(triggerSequencePath)
+  ) {
+    return true;
+  }
+  const comparison = compareSourceSequencePaths(
+    triggerSequencePath,
+    settlingSourceSequencePath
+  );
+  return triggerEvent === 'BeforeDamage' ? comparison <= 0 : comparison < 0;
 }
 
 function isInheritedEffectTargetAvailable(effect, scenario) {
