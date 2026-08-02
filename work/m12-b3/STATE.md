@@ -22,7 +22,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - B3-C4-R1 product acceptance baseline: `8bf0b3a77538102c1995dd5943e4a7275664ca0a`.
 - B3-C5 product acceptance baseline: `5c713e55ffdc46e5e75e9a4a4dcc1d0366201be0`.
 - B3-C6 product acceptance baseline: `5c5a33a21cce05fbf090af72c783bad475b55656`.
-- B3-C7 reviewed implementation baseline: `5647f1a74d74cb63b763ed06367ac8198084cab1`; C7-R1 repairs its non-damage projection resource ledger.
+- B3-C7 reviewed implementation baseline: `5647f1a74d74cb63b763ed06367ac8198084cab1`; C7-R1 reviewed baseline: `8760b14b448ff22290895736a6f7b19c077fe589`; C7-R2 repairs the remaining landed-hit recovery eligibility split.
 - The B3 contract was selectively synchronized from the dirty main-workspace plan on 2026-08-01; the main workspace was not modified.
 
 ## Frozen Plan Snapshot
@@ -58,8 +58,9 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - Current optimization-ready counts are zero for all five object kinds. M12-C remains locked.
 - Current maturity is `216 extracted / 49 runtime-integrated`; all five optimization-ready counts remain zero. Blocking gaps are `420` unique (`402 not-implemented`, `18 evidence-insufficient`).
 - C7-R1 resource parity covers manual resource, auto SP, direct SP, landed-hit actor/Kibo recovery and tuning overlimit direct SP. The projection emits direct heal/shield and periodic heal events only after the same resource cost gate as full runtime; it emits no damage/toughness events and consumes no critical samples.
-- Verification passed: focused mechanics `3 / 100`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, canonical/runtime `6 / 69`, nine deterministic audits, and production build.
-- Status: `B3-C7-R1 verification-complete-awaiting-product-acceptance`.
+- C7-R2 binds the shared recovery gate to action execution, contextual occupancy, parseable DamageElement recovery fields, exact landed transaction/context identities and recover interval. `DamageElement.RecoverSP@0x138EEE0` is called independently from `AliveElementSystem.ExecuteDamageElement` at `0x1319594` (remote branch `0x1318E52`), so formula-input gaps keep damage unresolved without suppressing verified recovery. Missing/drifted identities, misses, blocked actions and recovery-source gaps fail closed in both runtimes.
+- Verification passed: focused mechanics `3 / 103`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, canonical/runtime `6 / 72`, nine deterministic audits, and production build.
+- Status: `B3-C7-R2 verification-complete-awaiting-product-acceptance`.
 
 ## Remaining Blockers
 

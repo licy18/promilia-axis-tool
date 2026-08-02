@@ -417,12 +417,21 @@ export function createVerifiedCombatRuntime({
       continue;
     }
     if (['hit', 'passive-derived-hit'].includes(descriptor.kind)) {
+      const hitRecoveryEligibility =
+        descriptor.kind === 'hit'
+          ? resolveVerifiedHitRecoveryEligibility(descriptor)
+          : null;
       if (nonDamageProjectionOnly && descriptor.kind === 'hit') {
-        if (descriptor.damageEventTransaction) {
+        if (hitRecoveryEligibility.eligible) {
           applyHitRecovery({
             descriptor,
             hitResult: {
               hitKey: createVerifiedCombatHitKey(descriptor),
+            },
+            hitRecoveryEligibility,
+            damageSettlement: {
+              status: 'not-evaluated-in-non-damage-projection',
+              reason: null,
             },
             state,
             hitRecoveryAtByIdentity,
@@ -446,6 +455,23 @@ export function createVerifiedCombatRuntime({
           actorId: descriptor.action.actorId,
           payload: hitResult,
         });
+        if (descriptor.kind === 'hit' && hitRecoveryEligibility.eligible) {
+          applyHitRecovery({
+            descriptor,
+            hitResult: {
+              hitKey: createVerifiedCombatHitKey(descriptor),
+            },
+            hitRecoveryEligibility,
+            damageSettlement: {
+              status: 'unresolved',
+              reason: hitResult.reason ?? hitResult.status ?? null,
+            },
+            state,
+            hitRecoveryAtByIdentity,
+            resourceEvents,
+            kiboResourceEvents,
+          });
+        }
         continue;
       }
       appendRuntimeEvent(damageEvents, hitResult.damageEvent, state);
@@ -454,6 +480,7 @@ export function createVerifiedCombatRuntime({
         applyHitRecovery({
           descriptor,
           hitResult,
+          hitRecoveryEligibility,
           state,
           hitRecoveryAtByIdentity,
           resourceEvents,
@@ -3608,19 +3635,108 @@ function createVerifiedCombatHitKey(descriptor) {
   return `verified-hit-${descriptor?.hit?.hitIndex}-${descriptor?.hit?.elementId}`;
 }
 
+function resolveVerifiedHitRecoveryEligibility(descriptor) {
+  const { action, hit, resolution } = descriptor ?? {};
+  const recoverSp = numberOrNull(hit?.energy?.recoverSp);
+  const petRecoverSp = numberOrNull(hit?.energy?.petRecoverSp);
+  const recoverIntervalMs = numberOrNull(hit?.energy?.recoverIntervalMs);
+  const hasRecovery = (recoverSp ?? 0) > 0 || (petRecoverSp ?? 0) > 0;
+  if (!hasRecovery) {
+    return {
+      eligible: false,
+      status: 'verified-hit-recovery-not-applicable',
+    };
+  }
+  if (
+    recoverSp == null ||
+    petRecoverSp == null ||
+    recoverSp < 0 ||
+    petRecoverSp < 0 ||
+    recoverIntervalMs == null ||
+    recoverIntervalMs < 0
+  ) {
+    return {
+      eligible: false,
+      status: 'verified-hit-recovery-source-fields-unresolved',
+    };
+  }
+
+  const frameRate = positiveNumber(
+    resolution?.controlBinding?.frameRate,
+    FRAME_RATE
+  );
+  const hitFrame = numberOrNull(hit?.trigger?.startFrame);
+  if (
+    hitFrame == null ||
+    !isActionFrameWithinContextualOccupancy(action, hitFrame, frameRate)
+  ) {
+    return {
+      eligible: false,
+      status: 'verified-hit-recovery-outside-effective-occupancy',
+    };
+  }
+
+  const transaction = descriptor?.damageEventTransaction ?? null;
+  if (!transaction) {
+    return {
+      eligible: false,
+      status: 'verified-hit-recovery-landed-transaction-missing',
+    };
+  }
+  const hitIdentity = resolveCriticalHitIdentity(hit);
+  const transactionIdentity = `damage|hit|${action?.id}|${hitIdentity}`;
+  const beforeContext = transaction.beforeEvent?.eventContext ?? null;
+  const afterContext = transaction.afterEvent?.eventContext ?? null;
+  const transactionTimeMs = numberOrNull(transaction.timeMs);
+  const descriptorTimeMs = numberOrNull(descriptor.timeMs);
+  const identityMatches =
+    transaction.sourceKind === 'ordinary-hit' &&
+    String(transaction.sourceActionId ?? '') === String(action?.id ?? '') &&
+    String(transaction.sourceHitIdentity ?? '') === hitIdentity &&
+    String(transaction.transactionIdentity ?? '') === transactionIdentity &&
+    String(beforeContext?.transactionIdentity ?? '') === transactionIdentity &&
+    String(afterContext?.transactionIdentity ?? '') === transactionIdentity &&
+    beforeContext?.landed === true &&
+    afterContext?.landed === true &&
+    transactionTimeMs != null &&
+    descriptorTimeMs != null &&
+    Math.abs(transactionTimeMs - descriptorTimeMs) <= 0.000001;
+  if (!identityMatches) {
+    return {
+      eligible: false,
+      status: 'verified-hit-recovery-landed-transaction-identity-mismatch',
+      hitIdentity,
+      transactionIdentity: transaction.transactionIdentity ?? null,
+    };
+  }
+
+  return {
+    eligible: true,
+    status: 'verified-hit-recovery-eligible',
+    hitIdentity,
+    transactionIdentity,
+    recoverSp,
+    petRecoverSp,
+    recoverIntervalMs,
+  };
+}
+
 function applyHitRecovery({
   descriptor,
   hitResult,
+  hitRecoveryEligibility,
+  damageSettlement = null,
   state,
   hitRecoveryAtByIdentity,
   resourceEvents,
   kiboResourceEvents,
 }) {
   const { action, hit, resolution } = descriptor;
-  const recoverSp = Number(hit.energy.recoverSp) || 0;
-  const petRecoverSp = Number(hit.energy.petRecoverSp) || 0;
+  if (hitRecoveryEligibility?.eligible !== true) return;
+  const recoverSp = hitRecoveryEligibility.recoverSp;
+  const petRecoverSp = hitRecoveryEligibility.petRecoverSp;
   if (recoverSp <= 0 && petRecoverSp <= 0) return;
-  const intervalMs = Math.max(0, Number(hit.energy.recoverIntervalMs) || 0);
+  const intervalMs = hitRecoveryEligibility.recoverIntervalMs;
   const intervalIdentity = `damage-element:${
     hit.pathId ?? hit.elementId ?? 'unresolved'
   }`;
@@ -3680,6 +3796,13 @@ function applyHitRecovery({
             sourceIdentity: sourceActor.sourceIdentity,
             recoverIntervalIdentity: intervalIdentity,
             share,
+            ...(damageSettlement
+              ? {
+                  hitRecoveryTransactionIdentity:
+                    hitRecoveryEligibility.transactionIdentity,
+                  damageSettlement,
+                }
+              : {}),
           },
         }),
         state
@@ -3731,6 +3854,13 @@ function applyHitRecovery({
           sourceIdentity: source.sourceIdentity,
           recoverIntervalIdentity: intervalIdentity,
           share,
+          ...(damageSettlement
+            ? {
+                hitRecoveryTransactionIdentity:
+                  hitRecoveryEligibility.transactionIdentity,
+                damageSettlement,
+              }
+            : {}),
         },
       }),
       state
@@ -4573,6 +4703,17 @@ function createActorResourceEvent({
       recoverIntervalIdentity: source?.recoverIntervalIdentity ?? null,
       share: source?.share ?? null,
       formula: source?.formula ?? null,
+      ...(source?.damageSettlement
+        ? {
+            resourceSettlement: {
+              status: 'applied',
+              basis: 'verified-landed-hit-recovery-transaction',
+              transactionIdentity:
+                source.hitRecoveryTransactionIdentity ?? null,
+            },
+            damageSettlement: source.damageSettlement,
+          }
+        : {}),
       appliedToCalculators: true,
     },
   };
@@ -4623,6 +4764,17 @@ function createKiboResourceEvent({
       recoverIntervalIdentity: source?.recoverIntervalIdentity ?? null,
       share: source?.share ?? null,
       formula: source?.formula ?? null,
+      ...(source?.damageSettlement
+        ? {
+            resourceSettlement: {
+              status: 'applied',
+              basis: 'verified-landed-hit-recovery-transaction',
+              transactionIdentity:
+                source.hitRecoveryTransactionIdentity ?? null,
+            },
+            damageSettlement: source.damageSettlement,
+          }
+        : {}),
       appliedToCalculators: true,
     },
   };

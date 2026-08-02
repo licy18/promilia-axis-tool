@@ -32,6 +32,7 @@ import {
 
 const PANGPANG_CHARACTER_ID = 101007;
 const PANGPANG_SKILL_ID = 10100701;
+const PANGPANG_ULTIMATE_SKILL_ID = 10100713;
 const MUYIN_ULTIMATE_SKILL_ID = 10900113;
 const HEAVY_ROCK_HOOF_ID = 500469;
 const HEAVY_ROCK_HOOF_SKILL_ID = 50046903;
@@ -1388,6 +1389,332 @@ describe('verified combat mechanics runtime', () => {
     expect(kiboProjection.damageEvents).toEqual([]);
   });
 
+  it('settles a verified landed-hit recovery in both runtimes when damage inputs are unresolved', () => {
+    const prepared = simulatePangpangHitRecoveryParityScenario();
+    const scenario = structuredClone(prepared.effectiveActionTimeline.scenario);
+    scenario.enemy = {
+      ...scenario.enemy,
+      id: 999999999,
+      enemyId: 999999999,
+    };
+    const ultimateAction = scenario.actions.find(
+      action => action.id === 'pangpang-recovery-parity-ultimate'
+    );
+    const ultimateResolution =
+      prepared.verifiedActionVariantRuntime.actionResolutionById.get(
+        ultimateAction.id
+      );
+    const commonArguments = {
+      scenario,
+      actionExecutionPlan: prepared.actionExecutionPlan,
+      controlledActorTimeline: prepared.controlledActorTimeline,
+      effectGeneration: {
+        ...prepared.verifiedBattleEffectGeneration,
+        directHpEvents: [
+          createProjectionVitalFixture({
+            action: ultimateAction,
+            resolution: ultimateResolution,
+            timeMs: 1100,
+          }),
+        ],
+      },
+      tuningGeneration: prepared.verifiedTuningMarkGeneration,
+      damageEventGeneration: prepared.verifiedDamageEventGeneration,
+      effectTimeline: prepared.effectTimeline,
+      actionVariantRuntime: prepared.verifiedActionVariantRuntime,
+      kiboPassiveGeneration: prepared.verifiedKiboPassiveGeneration,
+    };
+    const full = createVerifiedCombatRuntime(commonArguments);
+    const projection = createVerifiedCombatRuntime({
+      ...commonArguments,
+      runtimeMode: 'non-damage-event-projection',
+    });
+
+    for (const runtime of [full, projection]) {
+      const recovery = runtime.resourceEvents.find(
+          event =>
+            event.actionId === 'pangpang-recovery-parity-normal' &&
+            event.actorId === `actor-${PANGPANG_CHARACTER_ID}` &&
+            event.payload.reason === 'verified-hit-sp-recovery'
+        )?.payload;
+      expect(recovery).toMatchObject({ afterValue: 100 });
+      expect(recovery.beforeValue).toBeGreaterThanOrEqual(99);
+      expect(recovery.beforeValue).toBeLessThan(100);
+      expect(
+        runtime.resourceEvents.find(
+          event =>
+            event.actionId === ultimateAction.id &&
+            event.payload.reason === 'verified-skill-cost'
+        )?.payload
+      ).toMatchObject({ beforeValue: 100, change: -100, afterValue: 0 });
+      expect(runtime.executionBlocks).toEqual([]);
+      expect(
+        runtime.vitalEvents.filter(
+          event => event.actionId === ultimateAction.id
+        )
+      ).toHaveLength(1);
+    }
+    expect(full.eventLog).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          type: 'VERIFIED_COMBAT_HIT_UNRESOLVED',
+          actionId: 'pangpang-recovery-parity-normal',
+          payload: expect.objectContaining({
+            ready: false,
+            applied: false,
+            reason: 'verified-enemy-break-profile-missing',
+          }),
+        }),
+      ])
+    );
+    expect(
+      full.damageEvents.some(
+        event =>
+          event.type === 'VERIFIED_COMBAT_HIT' &&
+          event.actionId === 'pangpang-recovery-parity-normal'
+      )
+    ).toBe(false);
+    expect(
+      full.resourceEvents.find(
+        event =>
+          event.actionId === 'pangpang-recovery-parity-normal' &&
+          event.actorId === `actor-${PANGPANG_CHARACTER_ID}` &&
+          event.payload.reason === 'verified-hit-sp-recovery'
+      )?.payload
+    ).toMatchObject({
+      resourceSettlement: {
+        status: 'applied',
+        basis: 'verified-landed-hit-recovery-transaction',
+      },
+      damageSettlement: {
+        status: 'unresolved',
+        reason: 'verified-enemy-break-profile-missing',
+      },
+    });
+    expect(
+      projection.resourceEvents.find(
+        event =>
+          event.actionId === 'pangpang-recovery-parity-normal' &&
+          event.actorId === `actor-${PANGPANG_CHARACTER_ID}` &&
+          event.payload.reason === 'verified-hit-sp-recovery'
+      )?.payload.damageSettlement
+    ).toEqual({
+      status: 'not-evaluated-in-non-damage-projection',
+      reason: null,
+    });
+    expect(projection.damageEvents).toEqual([]);
+  });
+
+  it('keeps hit-recovery eligibility identical across unresolved inputs and fail-closed boundaries', () => {
+    const cases = [
+      {
+        label: 'actor damage source missing',
+        expectRecovery: true,
+        expectedDamageReason: 'verified-actor-panel-attack-missing',
+        mutateScenario(scenario) {
+          const stripAttack = actor => {
+            actor.verifiedStaticProperties = {
+              ready: false,
+              status: 'fixture-static-source-missing',
+              attributes: [],
+            };
+            actor.baseAttributes = (actor.baseAttributes ?? []).filter(
+              attribute => attribute.key !== 'ATK'
+            );
+            actor.stats = { ...(actor.stats ?? {}), attack: null };
+          };
+          stripAttack(
+            scenario.actors.find(
+              actor => Number(actor.characterId) === PANGPANG_CHARACTER_ID
+            )
+          );
+          stripAttack(
+            scenario.actions.find(
+              action => action.id === 'pangpang-recovery-parity-normal'
+            ).actor
+          );
+        },
+      },
+      {
+        label: 'hit ratio missing',
+        expectRecovery: true,
+        expectedDamageReason: 'verified-hit-ratio-missing',
+        mutateResolution(resolution) {
+          resolution.hits[0].formula = {
+            ...resolution.hits[0].formula,
+            ratiosByLevel: {},
+          };
+        },
+      },
+      {
+        label: 'enemy defense missing',
+        expectRecovery: true,
+        expectedDamageReason: 'verified-enemy-defense-inputs-missing',
+        mutateScenario(scenario) {
+          scenario.enemy.stats = {
+            ...scenario.enemy.stats,
+            physicalDefense: null,
+            magicalDefense: null,
+          };
+        },
+      },
+      {
+        label: 'kibo damage source missing',
+        expectRecovery: false,
+        expectedDamageReason: 'verified-kibo-base-attack-missing',
+        mutateScenario(scenario) {
+          const action = scenario.actions.find(
+            entry => entry.id === 'pangpang-recovery-parity-normal'
+          );
+          action.kiboId = 999999999;
+          action.actor.loadout = {
+            ...(action.actor.loadout ?? {}),
+            kiboId: 999999999,
+          };
+        },
+        mutateResolution(resolution) {
+          resolution.actionBinding = {
+            ...resolution.actionBinding,
+            ownerKind: 'kibo',
+          };
+          resolution.hits[0].energy = {
+            ...resolution.hits[0].energy,
+            recoverSp: 0,
+          };
+        },
+      },
+      {
+        label: 'recovery source fields unresolved',
+        expectRecovery: false,
+        mutateResolution(resolution) {
+          resolution.hits[0].energy = {
+            ...resolution.hits[0].energy,
+            recoverIntervalMs: null,
+          };
+        },
+      },
+      {
+        label: 'landed transaction identity drift',
+        expectRecovery: false,
+        mutateDamageEventGeneration(generation) {
+          generation.transactions[0].transactionIdentity =
+            'damage|hit|drifted-action|drifted-hit';
+        },
+      },
+      {
+        label: 'missed hit transaction absent',
+        expectRecovery: false,
+        mutateDamageEventGeneration(generation) {
+          generation.transactions = [];
+        },
+      },
+      {
+        label: 'source action execute false',
+        expectRecovery: false,
+        mutateExecutionPlan(plan) {
+          plan.actions.find(
+            entry => entry.actionId === 'pangpang-recovery-parity-normal'
+          ).execute = false;
+        },
+      },
+      {
+        label: 'source action runtime blocked',
+        expectRecovery: false,
+        mutateActionVariantRuntime(runtime) {
+          runtime.executionBlocks = [
+            ...(runtime.executionBlocks ?? []),
+            {
+              actionId: 'pangpang-recovery-parity-normal',
+              reason: 'fixture-runtime-blocked',
+            },
+          ];
+        },
+      },
+    ];
+
+    for (const entry of cases) {
+      const { full, projection } = createPangpangHitRecoveryParityPair(entry);
+      const fullRecovery = findPangpangParityRecovery(full);
+      const projectionRecovery = findPangpangParityRecovery(projection);
+      expect(Boolean(fullRecovery), entry.label).toBe(entry.expectRecovery);
+      expect(Boolean(projectionRecovery), entry.label).toBe(
+        entry.expectRecovery
+      );
+      expect(
+        hasPangpangParityUltimateCost(full),
+        `${entry.label}: full cost`
+      ).toBe(entry.expectRecovery);
+      expect(
+        hasPangpangParityUltimateCost(projection),
+        `${entry.label}: projection cost`
+      ).toBe(entry.expectRecovery);
+      expect(
+        full.vitalEvents.some(
+          event => event.actionId === 'pangpang-recovery-parity-ultimate'
+        ),
+        `${entry.label}: full vital`
+      ).toBe(entry.expectRecovery);
+      expect(
+        projection.vitalEvents.some(
+          event => event.actionId === 'pangpang-recovery-parity-ultimate'
+        ),
+        `${entry.label}: projection vital`
+      ).toBe(entry.expectRecovery);
+      expect(
+        full.finalState.actorEnergy.find(
+          actor => actor.actorId === `actor-${PANGPANG_CHARACTER_ID}`
+        )?.currentValue,
+        `${entry.label}: final actor energy`
+      ).toBe(
+        projection.finalState.actorEnergy.find(
+          actor => actor.actorId === `actor-${PANGPANG_CHARACTER_ID}`
+        )?.currentValue
+      );
+      if (entry.expectedDamageReason) {
+        expect(
+          full.eventLog.find(
+            event =>
+              event.type === 'VERIFIED_COMBAT_HIT_UNRESOLVED' &&
+              event.actionId === 'pangpang-recovery-parity-normal'
+          )?.payload.reason,
+          `${entry.label}: damage diagnostic`
+        ).toBe(entry.expectedDamageReason);
+      }
+    }
+  });
+
+  it('uses the same DamageElement recover interval in full and projected runtimes', () => {
+    const prepared = simulateVerifiedAcceptanceScenario({
+      includeActor: true,
+      includeSecondPangpang: true,
+      includeKibo: false,
+      durationMs: 2500,
+    });
+    const full = prepared.verifiedCombatRuntime;
+    const projection = createNonDamageExecutionProjection(prepared);
+    const actorRecoveryActions = runtime =>
+      runtime.resourceEvents
+        .filter(
+          event =>
+            event.actorId === `actor-${PANGPANG_CHARACTER_ID}` &&
+            event.payload.reason === 'verified-hit-sp-recovery'
+        )
+        .map(event => event.actionId);
+    const kiboRecoveryActions = runtime =>
+      runtime.kiboResourceEvents
+        .filter(
+          event =>
+            event.payload.reason === 'verified-hit-pet-sp-shared-recovery'
+        )
+        .map(event => event.actionId);
+
+    expect(actorRecoveryActions(full)).toEqual(['verified-pangpang-normal']);
+    expect(actorRecoveryActions(projection)).toEqual(
+      actorRecoveryActions(full)
+    );
+    expect(kiboRecoveryActions(projection)).toEqual(kiboRecoveryActions(full));
+  });
+
   it('keeps direct and tuning SP transactions that fund later action costs in the projection', () => {
     const prepared = simulateVerifiedAcceptanceScenario({
       includeActor: false,
@@ -2376,6 +2703,132 @@ function createNonDamageExecutionProjection(result, overrides = {}) {
     runtimeMode: 'non-damage-event-projection',
     ...overrides,
   });
+}
+
+function simulatePangpangHitRecoveryParityScenario() {
+  const teamSlots = createDefaultWorkbenchTeamSlots();
+  const actorConfigs = createDefaultWorkbenchActorConfigs(
+    DEFAULT_WORKBENCH_SELECTION
+  ).map(config => ({
+    ...config,
+    initialSp:
+      Number(config.characterId) === PANGPANG_CHARACTER_ID ? 99 : 0,
+  }));
+  const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+    durationMs: 2200,
+    teamSlots,
+    actorConfigs,
+    actions: [
+      createWorkbenchActionDraft({
+        id: 'pangpang-recovery-parity-normal',
+        type: 'skill',
+        actorCharacterId: PANGPANG_CHARACTER_ID,
+        skillId: PANGPANG_SKILL_ID,
+        actionVariantIndex: 0,
+        startMs: 0,
+        durationMs: 600,
+        ...createPangpangAttackInputFields('pangpang-recovery-parity-chain'),
+      }),
+      createWorkbenchActionDraft({
+        id: 'pangpang-recovery-parity-ultimate',
+        type: 'skill',
+        actorCharacterId: PANGPANG_CHARACTER_ID,
+        skillId: PANGPANG_ULTIMATE_SKILL_ID,
+        actionVariantIndex: 0,
+        startMs: 1000,
+        durationMs: 1000,
+      }),
+    ],
+    mechanicsProfileSelection:
+      createVerifiedWorkbenchMechanicsProfileSelection(),
+  });
+  return simulateScenario(compileProject(project, getWorkbenchGameData()));
+}
+
+function createPangpangHitRecoveryParityPair({
+  mutateScenario = null,
+  mutateResolution = null,
+  mutateDamageEventGeneration = null,
+  mutateExecutionPlan = null,
+  mutateActionVariantRuntime = null,
+} = {}) {
+  const prepared = simulatePangpangHitRecoveryParityScenario();
+  const scenario = structuredClone(prepared.effectiveActionTimeline.scenario);
+  mutateScenario?.(scenario);
+
+  const actionExecutionPlan = structuredClone(prepared.actionExecutionPlan);
+  mutateExecutionPlan?.(actionExecutionPlan);
+  const actionResolutionById = new Map(
+    prepared.verifiedActionVariantRuntime.actionResolutionById
+  );
+  const normalResolution = structuredClone(
+    actionResolutionById.get('pangpang-recovery-parity-normal')
+  );
+  mutateResolution?.(normalResolution);
+  actionResolutionById.set(
+    'pangpang-recovery-parity-normal',
+    normalResolution
+  );
+  const actionVariantRuntime = {
+    ...prepared.verifiedActionVariantRuntime,
+    actionResolutionById,
+    executionBlocks: structuredClone(
+      prepared.verifiedActionVariantRuntime.executionBlocks ?? []
+    ),
+  };
+  mutateActionVariantRuntime?.(actionVariantRuntime);
+  const damageEventGeneration = structuredClone(
+    prepared.verifiedDamageEventGeneration
+  );
+  mutateDamageEventGeneration?.(damageEventGeneration);
+  const ultimateAction = scenario.actions.find(
+    action => action.id === 'pangpang-recovery-parity-ultimate'
+  );
+  const ultimateResolution = actionResolutionById.get(ultimateAction.id);
+  const commonArguments = {
+    scenario,
+    actionExecutionPlan,
+    controlledActorTimeline: prepared.controlledActorTimeline,
+    effectGeneration: {
+      ...prepared.verifiedBattleEffectGeneration,
+      directHpEvents: [
+        createProjectionVitalFixture({
+          action: ultimateAction,
+          resolution: ultimateResolution,
+          timeMs: 1100,
+        }),
+      ],
+    },
+    tuningGeneration: prepared.verifiedTuningMarkGeneration,
+    damageEventGeneration,
+    effectTimeline: prepared.effectTimeline,
+    actionVariantRuntime,
+    kiboPassiveGeneration: prepared.verifiedKiboPassiveGeneration,
+  };
+  return {
+    full: createVerifiedCombatRuntime(commonArguments),
+    projection: createVerifiedCombatRuntime({
+      ...commonArguments,
+      runtimeMode: 'non-damage-event-projection',
+    }),
+  };
+}
+
+function findPangpangParityRecovery(runtime) {
+  return runtime.resourceEvents.find(
+    event =>
+      event.actionId === 'pangpang-recovery-parity-normal' &&
+      event.actorId === `actor-${PANGPANG_CHARACTER_ID}` &&
+      event.payload.reason === 'verified-hit-sp-recovery'
+  );
+}
+
+function hasPangpangParityUltimateCost(runtime) {
+  return runtime.resourceEvents.some(
+    event =>
+      event.actionId === 'pangpang-recovery-parity-ultimate' &&
+      event.payload.reason === 'verified-skill-cost'
+  );
 }
 
 function createProjectionVitalFixture({ action, resolution, timeMs }) {

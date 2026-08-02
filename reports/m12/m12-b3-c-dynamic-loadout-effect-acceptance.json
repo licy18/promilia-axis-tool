@@ -1,9 +1,10 @@
 {
-  "schemaVersion": 11,
-  "phase": "M12-B3-C7-R1",
+  "schemaVersion": 12,
+  "phase": "M12-B3-C7-R2",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
+  "baseCommit": "8760b14b448ff22290895736a6f7b19c077fe589",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
+  "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
     "phase": "M12-B3-C6",
@@ -45,7 +46,13 @@
       "shieldConsumer": "ShieldElement.Execute@0x13A2040",
       "healConsumer": "DamageUtility.OnAfterHeal@0x1872130",
       "triggerIntervalParser": "TriggerElement.Parse@0x13BD9C0",
-      "triggerIntervalGate": "TriggerElement.CanTrigger@0x13B5770"
+      "triggerIntervalGate": "TriggerElement.CanTrigger@0x13B5770",
+      "damageElementParser": "DamageElement.Parse@0x138E5E0",
+      "damageElementRecovery": "DamageElement.RecoverSP@0x138EEE0",
+      "localDamageExecution": "AliveElementSystem.ExecuteDamageElement@0x131935A",
+      "localHitRecoveryCall": "DamageElement.RecoverSP@0x1319594",
+      "remoteHitRecoveryCall": "DamageElement.RecoverSP@0x1318E52",
+      "actorSpConsumer": "SPSystem.OnTransmit@0x14837F0|SPSystem.RecoverSP@0x1483F40"
     },
     "soulControlClosure": {
       "skillCount": 62,
@@ -180,6 +187,42 @@
     },
     "realPipelineAssertion": "manual +100 SP at 500ms funds a 100-SP ultimate settlement; direct heal and shield both project, AfterHeal dispatches once, and 10175 resolves Target(1) to the healed actor"
   },
+  "r2LandedHitRecoveryEligibility": {
+    "rootCause": "full runtime gated hit recovery on damage-formula readiness while non-damage projection gated it on transaction presence, so unresolved deterministic damage inputs produced different resource ledgers and downstream vital settlements",
+    "nativeConclusion": "DamageElement.Parse stores recoverSP, petRecoverSP and recoverInterval; AliveElementSystem calls DamageElement.RecoverSP as a separate landed DamageElement transaction after damage execution hooks, so missing simulator formula inputs leave damage unresolved without suppressing verified recovery",
+    "sharedEligibility": [
+      "source action executes and is not runtime-blocked",
+      "hit frame remains inside contextual occupancy",
+      "recoverSP/petRecoverSP/recoverInterval are parseable nonnegative source fields",
+      "ordinary landed damage transaction exists",
+      "action, hit, transaction, before/after context and timestamp identities agree",
+      "recover interval admits the transaction"
+    ],
+    "failClosedBoundaries": [
+      "missing or drifted landed transaction identity",
+      "missed hit",
+      "execute=false or runtime-blocked action",
+      "unresolved recovery source fields",
+      "hit outside effective occupancy"
+    ],
+    "resourceDamageSeparation": {
+      "resolvedDamage": "existing hit and recovery events remain byte-semantic compatible",
+      "unresolvedDamage": "VERIFIED_COMBAT_HIT_UNRESOLVED remains authoritative while recovery records resourceSettlement=applied and the unresolved damage reason",
+      "projection": "damage is explicitly not evaluated; no damage, toughness or critical random branch is executed"
+    },
+    "parityMatrix": [
+      "unknown or unapplied enemy profile",
+      "missing actor attack",
+      "missing hit ratio",
+      "missing enemy defense",
+      "missing Kibo damage source",
+      "recovery source field gap",
+      "transaction identity drift",
+      "miss, execute=false and runtime block",
+      "DamageElement recover interval deduplication"
+    ],
+    "realPipelineAssertion": "Pangpang starts at 99 SP, a verified landed A3 transaction reaches 100 despite unresolved damage inputs, the 100-SP ultimate executes and its direct heal materializes identically in full and projected runtimes; fail-closed cases block both paths"
+  },
   "batchResults": {
     "runtimeAppliedSoulEssenceCount": 25,
     "runtimeUnappliedSoulEssenceCount": 37,
@@ -229,7 +272,7 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "C7-R1 changes only the isolated preliminary resource/execution projection; generated qualification data and canonical full-runtime gameplay identities remain unchanged",
+    "reason": "C7-R2 unifies landed-hit recovery eligibility and only adds structured resource-versus-damage settlement metadata when damage is unresolved; resolved canonical gameplay, generated qualification data and authoritative golden assertions remain unchanged",
     "machineAxisCanonicalHashDrift": 0,
     "gameplayAssertionDrift": 0,
     "c4ConsumeAndAfterDamageRegression": 0,
@@ -238,10 +281,10 @@
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 3, "tests": 100, "status": "passed" },
+    "focusedMechanics": { "files": 3, "tests": 103, "status": "passed" },
     "characterProfileAndMigration": { "files": 4, "tests": 38, "status": "passed", "gameplayAssertionDrift": 0 },
     "machineAxis": { "files": 12, "tests": 157, "status": "passed" },
-    "canonicalAndRuntime": { "files": 6, "tests": 69, "status": "passed" },
+    "canonicalAndRuntime": { "files": 6, "tests": 72, "status": "passed" },
     "audits": {
       "count": 9,
       "status": "clean",

@@ -1,7 +1,8 @@
-# M12-B3-C7-R1 Non-Damage Resource Parity
+# M12-B3-C7-R2 Landed-Hit Recovery Parity
 
 - Status: `verification-complete-awaiting-product-acceptance`
 - Reviewed C7 base: `5647f1a74d74cb63b763ed06367ac8198084cab1`
+- Reviewed C7-R1 base: `8760b14b448ff22290895736a6f7b19c077fe589`
 - Scope: soul essences `10048`, `10169`, `10175`, and `10176`; `10018`, `10052`, and `10101` remain outside this batch.
 
 ## Source Contract
@@ -24,8 +25,16 @@ The rejected C7 build kept action costs in `non-damage-event-projection` but fil
 
 The real regression now proves `manual +100 SP -> cost 100 -> direct heal/shield`: full and preliminary runtimes both execute, AfterHeal is emitted exactly once, and `10175` still targets the healed actor. Resource-insufficient actor and Kibo actions emit neither heal nor shield. The isolated projection produces zero damage/toughness events and consumes zero sampled critical rolls; the final runtime starts from a fresh state and random source.
 
+## C7-R2 Landed Recovery Eligibility
+
+R1 still had two landed-hit gates: full runtime recovered only after the damage formula returned ready, while the non-damage projection recovered from transaction presence. Native evidence closes that split. `DamageElement.Parse@0x138E5E0` stores `recoverSP`, `petRecoverSP`, and `recoverInterval`; `AliveElementSystem.ExecuteDamageElement@0x131935A` calls `DamageElement.RecoverSP@0x138EEE0` at `0x1319594`, with the remote branch calling it at `0x1318E52`. Recovery is therefore an independent landed DamageElement transaction, not proof that the simulator has every numeric damage input.
+
+Full and projection runtimes now share one eligibility contract: the action must execute, the hit must remain inside contextual occupancy, recovery source fields must be parseable, and the landed transaction's action, hit, before/after context, timestamp, and transaction identities must agree. Missing or drifted identities, misses, blocked actions, unresolved recovery fields, and recover-interval duplicates fail closed. If damage inputs are unresolved, full runtime keeps `VERIFIED_COMBAT_HIT_UNRESOLVED` and records the recovery as a separate applied resource settlement; projection states that damage was not evaluated and executes no damage, toughness, or critical branch.
+
+The real regression starts Pangpang at 99 SP, lets a verified landed A3 transaction fund a 100-SP ultimate, and verifies the subsequent direct heal in both runtimes across missing enemy profile, actor attack, hit ratio, enemy defense, Kibo source, identity drift, miss/block, and interval boundaries. The projection still emits zero damage/toughness events and consumes zero sampled critical rolls.
+
 ## Qualification
 
 Soul effects are `25/62 runtime-applied` and `37/62 dynamic-unapplied`. The unique blocker ledger is `420` (`402 not-implemented`, `18 evidence-insufficient`). All 12 set effects remain unapplied; every formal admission count is zero and M12-C remains locked.
 
-Verification passed C7-R1 focused mechanics `3 files / 100 tests`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, canonical/runtime `6 / 69`, nine deterministic audits, and production build. Applied-source audit remains `25 property sources / 0 drift`, `13 tuning conditions / 0 drift`, and `12 priority consume groups / 0 drift`.
+Verification passed C7-R2 focused mechanics `3 files / 103 tests`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, canonical/runtime `6 / 72`, nine deterministic audits, and production build. Applied-source audit remains `25 property sources / 0 drift`, `13 tuning conditions / 0 drift`, and `12 priority consume groups / 0 drift`.
