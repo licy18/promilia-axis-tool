@@ -3,7 +3,7 @@
   "contractName": "AzPrDynamicLoadoutEffectMechanismCensus",
   "kind": "azpr-dynamic-loadout-effect-mechanism-census",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "sourceCatalogHash": "968fe1128b017dba",
+  "sourceCatalogHash": "9dc8eb099801619d",
   "propertyTagContract": {
     "sourceKind": "il2cpp-battle-property-tag-contract",
     "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag",
@@ -1283,12 +1283,12 @@
       "objectId": "2:4",
       "displayName": "set-2-4-piece",
       "effectSkillId": 19998004,
-      "mechanismFamily": "set-skill-beforedamage-effect",
+      "mechanismFamily": "set-skill-before-damage-stacking-property",
       "thresholdActivation": {
         "selectedPieceCountRequired": 4,
         "comparison": "selected-piece-count-greater-than-or-equal",
-        "status": "source-indexed",
-        "appliedToRuntimeEffect": false,
+        "status": "runtime-applied",
+        "appliedToRuntimeEffect": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998004].skillType"
       },
       "trigger": [
@@ -1372,15 +1372,13 @@
       "vitalChanges": [],
       "delayedEvents": [],
       "loopPersistence": {
-        "status": "runtime-unapplied",
-        "reason": "set-skill-runtime-operator-not-implemented"
+        "status": "canonical-effect-timeline-applied",
+        "reason": null
       },
-      "evidenceStatus": "source-closure-indexed",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "set-skill-runtime-operator-not-implemented"
-      ],
-      "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998004].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998004.asset/MonoBehaviour/skill_control_19998004__-3432154940691725873.json"
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998004].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998004.asset/MonoBehaviour/skill_control_19998004__-3432154940691725873.json|GameAssembly.dll#ChangePropertyElement.Combine/ChangePropertyConditionArrayObject.CombineLayer/DecreaseLayer/BaseElement.endTime|dump.cs#ECombineType.Overlying/EElementTriggerEventType.BeforeDamage/EElementTriggerFixedConditionType.CheckSkillType/ESkillTagType.NormalAttack|battle-element-assets.jsonl#path_id=-4719083164342722000;elementId=199999020|battle-element-assets.jsonl#path_id=-2930048594441716700;elementId=199999021|battle-element-assets.jsonl#path_id=3305903183597273600;elementId=199999039.triggerEffectList[0]|battle-element-assets.jsonl#path_id=4344962439394171400;elementId=199999040"
     },
     {
       "objectKind": "set-skill",
@@ -1872,12 +1870,12 @@
       "objectId": "4:4",
       "displayName": "set-4-4-piece",
       "effectSkillId": 19998003,
-      "mechanismFamily": "set-skill-beforedamage-effect",
+      "mechanismFamily": "set-skill-before-damage-stacking-property",
       "thresholdActivation": {
         "selectedPieceCountRequired": 4,
         "comparison": "selected-piece-count-greater-than-or-equal",
-        "status": "source-indexed",
-        "appliedToRuntimeEffect": false,
+        "status": "runtime-applied",
+        "appliedToRuntimeEffect": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998003].skillType"
       },
       "trigger": [
@@ -1979,15 +1977,13 @@
       "vitalChanges": [],
       "delayedEvents": [],
       "loopPersistence": {
-        "status": "runtime-unapplied",
-        "reason": "set-skill-runtime-operator-not-implemented"
+        "status": "canonical-effect-timeline-applied",
+        "reason": null
       },
-      "evidenceStatus": "source-closure-indexed",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "set-skill-runtime-operator-not-implemented"
-      ],
-      "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998003].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998003.asset/MonoBehaviour/skill_control_19998003__-3103682062580946589.json"
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998003].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998003.asset/MonoBehaviour/skill_control_19998003__-3103682062580946589.json|GameAssembly.dll#ChangePropertyElement.Combine/ChangePropertyConditionArrayObject.CombineLayer/DecreaseLayer/BaseElement.endTime|dump.cs#ECombineType.Overlying/EElementTriggerEventType.BeforeDamage/EElementTriggerFixedConditionType.CheckSkillType/ESkillTagType.NormalAttack|battle-element-assets.jsonl#path_id=6898765742999895000;elementId=199999018|battle-element-assets.jsonl#path_id=-4495644276298113500;elementId=199999019|battle-element-assets.jsonl#path_id=2016069023922408200;elementId=199999035.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-6915696019662809000;elementId=199999036"
     },
     {
       "objectKind": "set-skill",
@@ -10717,8 +10713,8 @@
   "summary": {
     "soulEssenceCount": 62,
     "setSkillCount": 12,
-    "runtimeAppliedCount": 44,
-    "runtimeUnappliedCount": 30,
+    "runtimeAppliedCount": 46,
+    "runtimeUnappliedCount": 28,
     "byMechanismFamily": {
       "equipped-actor-get-element-property-after-acquire": 3,
       "equipped-actor-get-element-property-before-acquire": 1,
@@ -10732,17 +10728,17 @@
       "equipped-actor-switch-enter-team-property": 1,
       "set-skill-afterdamage-effect": 1,
       "set-skill-afterheal-effect": 1,
-      "set-skill-beforedamage-effect": 2,
+      "set-skill-before-damage-stacking-property": 2,
       "set-skill-composite-effect": 1,
       "set-skill-persistent-property": 6,
       "set-skill-trigger-event-source-indexed": 1,
       "source-indexed-composite-effect": 16
     },
     "byEvidenceStatus": {
-      "runtime-applied": 44,
-      "source-closure-indexed": 6,
+      "runtime-applied": 46,
+      "source-closure-indexed": 4,
       "source-indexed-runtime-unapplied": 24
     }
   },
-  "censusHash": "91a15fb4e10c79ed"
+  "censusHash": "364a2e6c3cbd4f80"
 }

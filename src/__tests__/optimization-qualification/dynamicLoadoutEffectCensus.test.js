@@ -58,7 +58,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     }
   });
 
-  it('compiles the six evidence-closed two-piece persistent properties without admitting four-piece effects', () => {
+  it('compiles six two-piece roots and only the source-closed four-piece BeforeDamage stack family', () => {
     const definitions = new Map(
       soulCatalog.setSkillDefinitions.map(definition => [
         `${definition.setId}:${definition.pieces}`,
@@ -85,8 +85,64 @@ describe('M12-B3-C dynamic loadout effect census', () => {
         },
         runtimeGaps: [],
       });
+    }
+
+    expect(definitions.get('2:4')).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'set-skill-before-damage-stacking-property',
+      thresholdActivation: {
+        selectedPieceCountRequired: 4,
+        appliedToRuntimeEffect: true,
+      },
+      trigger: {
+        eventId: 1,
+        frameAnchor: 'hit-before-damage',
+        condition: { kind: 'always', status: 'applied' },
+        target: { kind: 'self-actor' },
+      },
+      effect: {
+        elementId: 199999021,
+        attributeId: 7,
+        bucket: 'dynamicExtra',
+        durationMs: 6000,
+        stackMode: 'stack',
+        stackDelta: 1,
+        maxStacks: 5,
+      },
+      runtimeGaps: [],
+    });
+    expect(definitions.get('4:4')).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'set-skill-before-damage-stacking-property',
+      thresholdActivation: {
+        selectedPieceCountRequired: 4,
+        appliedToRuntimeEffect: true,
+      },
+      trigger: {
+        eventId: 1,
+        frameAnchor: 'hit-before-damage',
+        condition: {
+          kind: 'skill-tag',
+          skillTagId: 1,
+          status: 'applied',
+        },
+        target: { kind: 'self-actor' },
+      },
+      effect: {
+        elementId: 199999019,
+        attributeId: 1,
+        bucket: 'dynamicPercent',
+        durationMs: 24000,
+        stackMode: 'stack',
+        stackDelta: 1,
+        maxStacks: 7,
+      },
+      runtimeGaps: [],
+    });
+    for (const setId of [1, 3, 5, 6]) {
       expect(definitions.get(`${setId}:4`)).toMatchObject({
         runtimeStatus: 'source-indexed-runtime-unapplied',
+        thresholdActivation: { appliedToRuntimeEffect: false },
       });
     }
   });
@@ -95,8 +151,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 44,
-      runtimeUnappliedCount: 30,
+      runtimeAppliedCount: 46,
+      runtimeUnappliedCount: 28,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -958,19 +1014,32 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       )
     ).toBe(true);
     expect(
-      fourPiece.every(
-        definition =>
-          definition.thresholdActivation.status === 'source-indexed' &&
-          definition.thresholdActivation.appliedToRuntimeEffect === false &&
-          definition.runtimeStatus === 'source-indexed-runtime-unapplied' &&
-          definition.runtimeGaps.includes(
-            'set-skill-runtime-operator-not-implemented'
-          )
-      )
+      fourPiece
+        .filter(definition => [2, 4].includes(definition.setId))
+        .every(
+          definition =>
+            definition.thresholdActivation.status === 'runtime-applied' &&
+            definition.thresholdActivation.appliedToRuntimeEffect === true &&
+            definition.runtimeStatus === 'runtime-applied' &&
+            definition.runtimeGaps.length === 0
+        )
+    ).toBe(true);
+    expect(
+      fourPiece
+        .filter(definition => ![2, 4].includes(definition.setId))
+        .every(
+          definition =>
+            definition.thresholdActivation.status === 'source-indexed' &&
+            definition.thresholdActivation.appliedToRuntimeEffect === false &&
+            definition.runtimeStatus === 'source-indexed-runtime-unapplied' &&
+            definition.runtimeGaps.includes(
+              'set-skill-runtime-operator-not-implemented'
+            )
+        )
     ).toBe(true);
     expect(soulCatalog.summary).toMatchObject({
       setSkillThresholdIndexedCount: 12,
-      setSkillRuntimeAppliedCount: 6,
+      setSkillRuntimeAppliedCount: 8,
     });
   });
 

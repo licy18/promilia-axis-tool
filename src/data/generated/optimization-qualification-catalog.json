@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "5b6d960755dd1b2c",
-  "manifestsHash": "2a3b8a97bbd414e7",
-  "gapLedgerHash": "350b93a9d62e8f66",
-  "bindingMatrixHash": "05d6d4922e1584cf",
-  "sourceSnapshotHash": "a67408542cc51aae",
+  "rosterHash": "567d220743475d95",
+  "manifestsHash": "a9d70ae361b5ec38",
+  "gapLedgerHash": "61ad6177831d5a97",
+  "bindingMatrixHash": "3b67fc5bfffd6bd8",
+  "sourceSnapshotHash": "1d5b5b30e0eab9c2",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -2196,7 +2196,7 @@
       "blockerCodes": [
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "15999f23eefaf9be"
+      "manifestHash": "5d6465c3e395d1eb"
     },
     {
       "objectKind": "set-skill",
@@ -2208,7 +2208,7 @@
         "set-skill-dynamic-unapplied",
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "4d26bb5f02b9a8db"
+      "manifestHash": "301c4514e0a7e493"
     },
     {
       "objectKind": "set-skill",
@@ -2219,19 +2219,18 @@
       "blockerCodes": [
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "9f6ce872833a6109"
+      "manifestHash": "7a533fa95ebf41ff"
     },
     {
       "objectKind": "set-skill",
       "objectId": "2:4",
       "displayName": "套装 2 4件",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "set-skill-dynamic-unapplied",
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "715fc26f332805a1"
+      "manifestHash": "fa8f4fd231f7d048"
     },
     {
       "objectKind": "set-skill",
@@ -2242,7 +2241,7 @@
       "blockerCodes": [
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "2642e8a6c066fdaf"
+      "manifestHash": "9a51120d64660bcc"
     },
     {
       "objectKind": "set-skill",
@@ -2254,7 +2253,7 @@
         "set-skill-dynamic-unapplied",
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "779c8e3999121b6f"
+      "manifestHash": "6082580b115ccf67"
     },
     {
       "objectKind": "set-skill",
@@ -2265,19 +2264,18 @@
       "blockerCodes": [
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "8cfd04cab237fd65"
+      "manifestHash": "6781609aaa17d1a8"
     },
     {
       "objectKind": "set-skill",
       "objectId": "4:4",
       "displayName": "套装 4 4件",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "set-skill-dynamic-unapplied",
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "e12c3caa2b2da85e"
+      "manifestHash": "467c46340954b3fd"
     },
     {
       "objectKind": "set-skill",
@@ -2288,7 +2286,7 @@
       "blockerCodes": [
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "55c4a593f4bd9bc6"
+      "manifestHash": "b37949c4d6714369"
     },
     {
       "objectKind": "set-skill",
@@ -2300,7 +2298,7 @@
         "set-skill-dynamic-unapplied",
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "322dd47730402924"
+      "manifestHash": "8fe715d0c57c95cd"
     },
     {
       "objectKind": "set-skill",
@@ -2311,7 +2309,7 @@
       "blockerCodes": [
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "e653083539bba5cc"
+      "manifestHash": "33ddfbfbf9cff0c1"
     },
     {
       "objectKind": "set-skill",
@@ -2323,7 +2321,7 @@
         "set-skill-dynamic-unapplied",
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "af56971a382428ee"
+      "manifestHash": "c5776c3547b15275"
     },
     {
       "objectKind": "soul-essence",
@@ -3068,7 +3066,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-01T00:00:00.000Z",
-    "rosterHash": "5b6d960755dd1b2c",
+    "rosterHash": "567d220743475d95",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24976,7 +24974,7 @@
       "setSkillThresholdQualifiedCount": 0,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "05d6d4922e1584cf"
+    "bindingMatrixHash": "3b67fc5bfffd6bd8"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44404,8 +44402,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 197,
-      "runtime-integrated": 68
+      "extracted": 195,
+      "runtime-integrated": 70
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -44415,7 +44413,7 @@
       "set-skill": 0
     },
     "optimizationReadyTotal": 0,
-    "gameplayBlockingGapCount": 388,
+    "gameplayBlockingGapCount": 386,
     "bindingQualifiedEdgeCount": 0,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44500,5 +44498,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "c822661eb91c9416"
+  "catalogHash": "845c4456697f9cfb"
 }

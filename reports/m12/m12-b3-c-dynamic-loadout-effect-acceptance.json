@@ -1,27 +1,28 @@
 {
-  "schemaVersion": 16,
-  "phase": "M12-B3-C9",
+  "schemaVersion": 17,
+  "phase": "M12-B3-C10",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "26a8125b2ca262777ff11b12f37e7d32b68eac91",
+  "baseCommit": "bd812d64226a371a55a01981a239e33c318c9e98",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
   "reviewedC7R2Commit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
   "acceptedC7R3Commit": "f73b0ac6a457719ad0e24b98415f2f9d67c3e8a5",
   "reviewedC8Commit": "1b16f2ddcbc3594a2c5de964ff11933d1da37c63",
   "acceptedC8R1Commit": "26a8125b2ca262777ff11b12f37e7d32b68eac91",
+  "acceptedC9Commit": "bd812d64226a371a55a01981a239e33c318c9e98",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
-    "phase": "M12-B3-C8-R1",
-    "acceptanceBaseline": "26a8125b2ca262777ff11b12f37e7d32b68eac91",
+    "phase": "M12-B3-C9",
+    "acceptanceBaseline": "bd812d64226a371a55a01981a239e33c318c9e98",
     "status": "product-accepted"
   },
   "scope": {
-    "batch": "persistent-loadout-property-roots-and-two-piece-set-properties",
-    "soulEssenceIds": [10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061, 10062, 10078, 10084, 10133, 10152, 10156, 10197],
-    "runtimeAppliedSoulEssenceIds": [10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061, 10062, 10133, 10156],
-    "evidenceBlockedSoulEssenceIds": [10078, 10084, 10152, 10197],
-    "setSkillIds": ["set-skill:1:2", "set-skill:2:2", "set-skill:3:2", "set-skill:4:2", "set-skill:5:2", "set-skill:6:2"],
-    "explicitlyExcludedSetSkillThresholds": ["set-skill:1:4", "set-skill:2:4", "set-skill:3:4", "set-skill:4:4", "set-skill:5:4", "set-skill:6:4"],
+    "batch": "four-piece-before-damage-stacking-properties",
+    "soulEssenceIds": [],
+    "runtimeAppliedSoulEssenceIds": [],
+    "evidenceBlockedSoulEssenceIds": [],
+    "setSkillIds": ["set-skill:2:4", "set-skill:4:4"],
+    "explicitlyExcludedSetSkillThresholds": ["set-skill:1:4", "set-skill:3:4", "set-skill:5:4", "set-skill:6:4"],
     "formalSearchExecuted": false,
     "m12cLocked": true,
     "fixedCultivationChanged": false,
@@ -87,6 +88,17 @@
       "path": "scripts/optimization-qualification/evidence/persistent-loadout-property-runtime-evidence.json",
       "bytes": 5615,
       "sha256": "c8b9205b959a241f284dcacb4a27cbe63fc62cd028766777f50cca8941ecea57",
+      "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+      "binaryBytes": 222485544,
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "il2CppDumpPath": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+      "il2CppDumpBytes": 97428254,
+      "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+    },
+    "fourPieceSetStackRuntimeEvidence": {
+      "path": "scripts/optimization-qualification/evidence/four-piece-set-stack-runtime-evidence.json",
+      "bytes": 6868,
+      "sha256": "ae357c59a494f724c9ce36fde79df3fd505f1434c01c4b87697d5770f9cc98dc",
       "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
       "binaryBytes": 222485544,
       "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
@@ -237,6 +249,54 @@
       "toughness": "set-skill:6:2 adds attr222=2000 and increases a real charged-hit toughness settlement",
       "twoPassReplay": "the same persistent source is installed once and produces equal first/second pass hit results"
     }
+  },
+  "c10FourPieceBeforeDamageStackContract": {
+    "nativeEvidence": "AliveElementSystem dispatches BeforeDamage before current packet settlement; ChangePropertyElement.Combine delegates Overlying(4) to one capped aggregate layer and refreshes one shared absolute end time",
+    "conditionSubject": "CheckSkillType(11)=NormalAttack(1) reads the final verified control binding skill tag; actionKind, localized name and set identity are not selectors",
+    "thresholds": {
+      "threePieces": "four-piece effect absent",
+      "fourPieces": "two-piece static source and four-piece dynamic source each installed once",
+      "fivePieces": "same two sources, never duplicate initialization",
+      "crossSetPieces": "counts remain isolated by setId"
+    },
+    "set-skill:2:4": {
+      "skillId": 19998004,
+      "triggerElementId": 199999020,
+      "propertyElementId": 199999021,
+      "condition": "always on each real landed BeforeDamage packet from the equipped actor",
+      "attributeId": 7,
+      "bucket": "dynamicExtra",
+      "sourceRawA": 200,
+      "durationMs": 6000,
+      "maxStacks": 5,
+      "currentPacketVisible": true
+    },
+    "set-skill:4:4": {
+      "skillId": 19998003,
+      "triggerElementId": 199999018,
+      "propertyElementId": 199999019,
+      "condition": "CheckSkillType(11)=NormalAttack(1)",
+      "attributeId": 1,
+      "bucket": "dynamicPercent",
+      "sourceRawA": 100,
+      "evaluatedValue": 0.0099945068359375,
+      "durationMs": 24000,
+      "maxStacks": 7,
+      "currentPacketVisible": true
+    },
+    "stackLifetime": "shared absolute expiry refreshed to the later application; right-open at expiry",
+    "ownership": "Self source and Self target remain on the equipped actor through switching",
+    "negativeGates": [
+      "miss",
+      "execute=false or runtime-blocked action",
+      "wrong final skill tag",
+      "fewer than four matching pieces",
+      "cross-set piece aggregation",
+      "duplicate fifth-piece initialization"
+    ],
+    "sourceOrdering": "effect commands inherit action/hit BeforeDamage sourceSequencePath and precede only their own settlement; descriptor order and IDs are not semantic tiebreakers",
+    "unload": "the reviewed UnloadSkill trigger removes the source graph; an already materialized timed layer keeps its source-bound absolute expiry",
+    "runtimeBranchesBySetOrSkillId": false
   },
   "definitions": {
     "10048": {
@@ -412,11 +472,13 @@
   "batchResults": {
     "runtimeAppliedSoulEssenceCount": 38,
     "runtimeUnappliedSoulEssenceCount": 24,
-    "runtimeAppliedSetSkillCount": 6,
-    "runtimeUnappliedSetSkillCount": 6,
-    "newlyAppliedSoulEssenceIds": [10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061, 10062, 10133, 10156],
-    "preservedRuntimeAppliedSoulEssenceCount": 26,
-    "evidenceBlockedC9SoulEssenceIds": [10078, 10084, 10152, 10197]
+    "runtimeAppliedSetSkillCount": 8,
+    "runtimeUnappliedSetSkillCount": 4,
+    "newlyAppliedSoulEssenceIds": [],
+    "newlyAppliedSetSkillIds": ["set-skill:2:4", "set-skill:4:4"],
+    "preservedRuntimeAppliedSoulEssenceCount": 38,
+    "preservedRuntimeAppliedSetSkillCount": 6,
+    "remainingBlockedFourPieceSetSkillIds": ["set-skill:1:4", "set-skill:3:4", "set-skill:5:4", "set-skill:6:4"]
   },
   "qualification": {
     "denominators": {
@@ -426,9 +488,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 388,
+    "blockingUniqueGapCount": 386,
     "blockingByCategory": {
-      "not-implemented": 370,
+      "not-implemented": 368,
       "evidence-insufficient": 18
     },
     "formalAdmissions": {
@@ -440,15 +502,15 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "a67408542cc51aae",
-    "rosterHash": "5b6d960755dd1b2c",
-    "manifestsHash": "2a3b8a97bbd414e7",
-    "ledgerHash": "350b93a9d62e8f66",
-    "bindingMatrixHash": "05d6d4922e1584cf",
-    "qualificationCatalogHash": "c822661eb91c9416",
-    "dynamicLoadoutEffectCensusHash": "91a15fb4e10c79ed",
-    "soulEssenceEffectCatalogHash": "968fe1128b017dba",
-    "soulEssenceSourceSnapshotHash": "3a8cf57e38b2ee37",
+    "sourceSnapshotHash": "1d5b5b30e0eab9c2",
+    "rosterHash": "567d220743475d95",
+    "manifestsHash": "a9d70ae361b5ec38",
+    "ledgerHash": "61ad6177831d5a97",
+    "bindingMatrixHash": "3b67fc5bfffd6bd8",
+    "qualificationCatalogHash": "845c4456697f9cfb",
+    "dynamicLoadoutEffectCensusHash": "364a2e6c3cbd4f80",
+    "soulEssenceEffectCatalogHash": "9dc8eb099801619d",
+    "soulEssenceSourceSnapshotHash": "b63efd861e6c17b4",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
     "soulEssenceTriggerContractHash": "d68083acc3d5496d",
     "verifiedMechanicsPackageHash": "20498c0f436fdcc3f0e86ebb6308ea75586d4b2379127d23ec4d971e81bb88e9",
@@ -461,7 +523,7 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "C9 adds source-bound static loadout properties without changing the verified mechanics package or the standard Machine Axis fixture loadout. C8-R1 canonical identities remain the expected baseline; C9-specific loadouts carry their own static source identities.",
+    "reason": "C10 adds source-bound four-piece runtime definitions to the loadout catalog without changing the verified mechanics package or the standard Machine Axis fixture loadout. Existing canonical fixture identities remain stable; C10 set loadouts carry their own trigger, formula and source-sequence identities.",
     "machineAxisCanonicalHashDrift": 0,
     "machineAxisEvaluationHashDrift": 0,
     "gameplayAssertionDrift": 0,
@@ -472,17 +534,17 @@
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 5, "tests": 125, "status": "passed" },
+    "focusedMechanics": { "files": 5, "tests": 115, "status": "passed" },
     "characterProfileAndMigration": {
       "files": 4,
-      "tests": 38,
+      "tests": 34,
       "status": "passed",
       "gameplayAssertionDrift": 0
     },
     "machineAxis": { "files": 12, "tests": 157, "status": "passed" },
     "canonicalAndRuntime": {
       "files": 5,
-      "tests": 52,
+      "tests": 88,
       "status": "passed"
     },
     "audits": {

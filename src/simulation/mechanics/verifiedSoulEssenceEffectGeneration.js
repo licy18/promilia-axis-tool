@@ -47,9 +47,23 @@ export function createVerifiedSoulEssenceEffectGeneration({
       )
       .map(definition => [Number(definition.soulEssenceId), definition])
   );
-  const bindings = (scenario.actors ?? [])
-    .map(actor => createEquippedSoulBinding(actor, definitionBySoulId))
-    .filter(Boolean);
+  const definitionBySetKey = new Map(
+    (catalog?.setSkillDefinitions ?? [])
+      .filter(
+        definition =>
+          definition.runtimeStatus === 'runtime-applied' &&
+          definition.trigger != null &&
+          definition.effect != null
+      )
+      .map(definition => [
+        `${Number(definition.setId)}:${Number(definition.pieces)}`,
+        definition,
+      ])
+  );
+  const bindings = (scenario.actors ?? []).flatMap(actor => [
+    createEquippedSoulBinding(actor, definitionBySoulId),
+    ...createEquippedSetSkillBindings(actor, definitionBySetKey),
+  ]).filter(Boolean);
   const effectCommands = [];
   const suppressions = [];
   const unresolved = [];
@@ -58,8 +72,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
     if (!binding.starValue) {
       unresolved.push({
         actorId: binding.actor.id,
-        soulEssenceId: binding.soulEssenceId,
-        effectSkillId: binding.definition.effectSkillId,
+        ...createBindingDiagnosticIdentity(binding),
         status: 'soulessence-effect-runtime-unresolved',
         reasons: ['soulessence-effect-star-value-unresolved'],
         sourceIdentity: binding.definition.sourceIdentity,
@@ -69,8 +82,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
     if (binding.formulaResult?.applied !== true) {
       unresolved.push({
         actorId: binding.actor.id,
-        soulEssenceId: binding.soulEssenceId,
-        effectSkillId: binding.definition.effectSkillId,
+        ...createBindingDiagnosticIdentity(binding),
         status: 'soulessence-effect-runtime-unresolved',
         reasons: [
           binding.formulaResult?.reason ??
@@ -113,8 +125,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
         suppressions.push({
           actionId: action.id,
           actorId: binding.actor.id,
-          soulEssenceId: binding.soulEssenceId,
-          effectSkillId: binding.definition.effectSkillId,
+          ...createBindingDiagnosticIdentity(binding),
           reason: triggerOperator
             ? resolveEmptyTriggerOccurrenceReason(
                 frameAnchor,
@@ -152,8 +163,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
         suppressions.push({
           actionId: action.id,
           actorId: binding.actor.id,
-          soulEssenceId: binding.soulEssenceId,
-          effectSkillId: binding.definition.effectSkillId,
+          ...createBindingDiagnosticIdentity(binding),
           reason: 'soulessence-effect-action-kind-condition-not-matched',
           expectedActionKinds:
             binding.definition.trigger?.condition?.actionKinds ?? [],
@@ -385,6 +395,8 @@ function createEquippedSoulBinding(actor, definitionBySoulId) {
     : null;
   return {
     actor,
+    ownerKind: 'soul-essence',
+    ownerIdentity: `soulessence:${soulEssenceId}`,
     soulEssenceId,
     definition,
     star: Number.isInteger(star) ? star : null,
@@ -392,6 +404,62 @@ function createEquippedSoulBinding(actor, definitionBySoulId) {
     formulaResult,
     cultivationSourceIdentity: effectSkill?.sourceIdentity ?? null,
   };
+}
+
+function createEquippedSetSkillBindings(actor, definitionBySetKey) {
+  return (actor?.verifiedStaticProperties?.setSkillActivations ?? [])
+    .filter(
+      activation =>
+        activation?.thresholdMet === true &&
+        activation?.appliedToRuntimeEffect === true
+    )
+    .map(activation => {
+      const key = `${Number(activation.setId)}:${Number(activation.pieces)}`;
+      const definition = definitionBySetKey.get(key);
+      if (!definition) return null;
+      const starValue = definition.effect?.valuesByStar?.find(
+        row => Number(row.star) === 1
+      ) ?? {
+        star: 1,
+        valueRaw: Number(definition.effect?.sourceRawA),
+        sourceIdentity: `${definition.effect?.sourceIdentity}.formulaParams.formulaParamValues[0]`,
+      };
+      const formulaResult = Number.isFinite(Number(starValue.valueRaw))
+        ? evaluateSoulEffectFormula({
+            definition,
+            starValue,
+            star: 1,
+            actor,
+          })
+        : null;
+      return {
+        actor,
+        ownerKind: 'set-skill',
+        ownerIdentity: `set-skill:${activation.setId}:${activation.pieces}`,
+        setId: Number(activation.setId),
+        pieces: Number(activation.pieces),
+        setSkillId: Number(activation.skillId),
+        definition,
+        star: 1,
+        starValue,
+        formulaResult,
+        cultivationSourceIdentity: activation.sourceIdentity ?? null,
+      };
+    })
+    .filter(Boolean);
+}
+
+function createBindingDiagnosticIdentity(binding) {
+  return binding.ownerKind === 'set-skill'
+    ? {
+        setId: binding.setId,
+        setPieces: binding.pieces,
+        setSkillId: binding.setSkillId,
+      }
+    : {
+        soulEssenceId: binding.soulEssenceId,
+        effectSkillId: binding.definition.effectSkillId,
+      };
 }
 
 function createSoulEffectCommand({
@@ -436,16 +504,25 @@ function createSoulEffectCommand({
       ? actionSourceSequencePath
       : [...actionSourceSequencePath, Number(hit.hitIndex)];
   const triggerSequencePath = [...occurrenceSequencePath, targetIndex];
-  const effectIdentity = `soulessence:${binding.soulEssenceId}:element:${effect.elementId}`;
+  const isSetSkill = binding.ownerKind === 'set-skill';
+  const effectIdentity = isSetSkill
+    ? `set-skill:${binding.setId}:${binding.pieces}:element:${effect.elementId}`
+    : `soulessence:${binding.soulEssenceId}:element:${effect.elementId}`;
   const sourceNonDamageEventIdentity =
     occurrence?.nonDamageEvent?.eventIdentity ?? null;
   return {
-    id: `soulessence|${binding.soulEssenceId}|${action.id}|${effect.elementId}|${frameAnchor}|target:${target.id}${hit == null ? '' : `|hit:${hit.hitIndex}`}${tuningEvent == null ? '' : `|tuning:${tuningEvent.eventIdentity}`}${sourceNonDamageEventIdentity == null ? '' : `|event:${sourceNonDamageEventIdentity}`}`,
+    id: `${isSetSkill ? `set-skill|${binding.setId}|${binding.pieces}` : `soulessence|${binding.soulEssenceId}`}|${action.id}|${effect.elementId}|${frameAnchor}|target:${target.id}${hit == null ? '' : `|hit:${hit.hitIndex}`}${tuningEvent == null ? '' : `|tuning:${tuningEvent.eventIdentity}`}${sourceNonDamageEventIdentity == null ? '' : `|event:${sourceNonDamageEventIdentity}`}`,
     sourceActionId: action.id,
     sourceActionName: action.name,
     sourceActorId: actor.id,
     sourceActorName: actor.name,
-    sourceSoulEssenceId: binding.soulEssenceId,
+    ...(isSetSkill
+      ? {
+          sourceSetId: binding.setId,
+          sourceSetPieces: binding.pieces,
+          sourceSetSkillId: binding.setSkillId,
+        }
+      : { sourceSoulEssenceId: binding.soulEssenceId }),
     sourceHitIdentity:
       eventContext?.sourceHitIdentity ?? hit?.sourceIdentity ?? null,
     sourceHitIndex: eventContext?.sourceHitIndex ?? hit?.hitIndex ?? null,
@@ -453,7 +530,7 @@ function createSoulEffectCommand({
     sourceTuningEventIdentity: tuningEvent?.eventIdentity ?? null,
     sourceNonDamageEventIdentity,
     effectId: effectIdentity,
-    effectName: `${definition.name}-${effect.name ?? effect.elementId}`,
+    effectName: `${definition.name ?? `set-${binding.setId}-${binding.pieces}-piece`}-${effect.name ?? effect.elementId}`,
     operation: EFFECT_OPERATIONS.APPLY,
     targetKind: EFFECT_TARGET_KINDS.ACTOR,
     targetId: String(target.id),
@@ -465,10 +542,10 @@ function createSoulEffectCommand({
     stackDelta: effect.stackDelta,
     maxStacks: effect.maxStacks,
     tags: [
-      'soulessence-effect',
+      isSetSkill ? 'set-skill-effect' : 'soulessence-effect',
       definition.mechanismFamily,
-      `soulessence:${binding.soulEssenceId}`,
-      `skill:${definition.effectSkillId}`,
+      binding.ownerIdentity,
+      `skill:${isSetSkill ? binding.setSkillId : definition.effectSkillId}`,
       `action-kind:${actionKind}`,
     ],
     sourceStatus: 'verified-loadout-effect-generated',
@@ -502,8 +579,16 @@ function createSoulEffectCommand({
       catalogKind: catalog?.kind ?? soulEssenceEffectCatalog.kind,
       catalogHash: catalog?.catalogHash ?? soulEssenceEffectCatalog.catalogHash,
       effectIdentity,
-      soulEssenceId: binding.soulEssenceId,
-      effectSkillId: definition.effectSkillId,
+      ...(isSetSkill
+        ? {
+            setId: binding.setId,
+            setPieces: binding.pieces,
+            setSkillId: binding.setSkillId,
+          }
+        : {
+            soulEssenceId: binding.soulEssenceId,
+            effectSkillId: definition.effectSkillId,
+          }),
       triggerElementId: definition.trigger.elementId,
       triggerPathId: definition.trigger.pathId,
       triggerEvent: definition.trigger.event,

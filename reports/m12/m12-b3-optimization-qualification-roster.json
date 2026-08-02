@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "phase": "M12-B3-C9",
+  "phase": "M12-B3-C10",
   "sourceSnapshot": {
     "files": {
       "characters": {
@@ -1051,6 +1051,224 @@
           }
         }
       },
+      "fourPieceSetStackRuntimeEvidence": {
+        "path": "scripts/optimization-qualification/evidence/four-piece-set-stack-runtime-evidence.json",
+        "sha256": "ae357c59a494f724c9ce36fde79df3fd505f1434c01c4b87697d5770f9cc98dc",
+        "bytes": 6868,
+        "value": {
+          "schemaVersion": 1,
+          "contractName": "AzPrFourPieceSetBeforeDamageStackRuntimeEvidence",
+          "reviewedBinary": {
+            "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+            "bytes": 222485544,
+            "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+          },
+          "reviewedIl2CppDump": {
+            "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+            "bytes": 97428254,
+            "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+          },
+          "dumpBindings": {
+            "methods": [
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.ChangePropertyElement.Combine",
+                "rva": "0x137A120",
+                "declaration": "public override void Combine(IElement element) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.ChangePropertyConditionArrayObject.CombineLayer",
+                "rva": "0x1383360",
+                "declaration": "public void CombineLayer(int addLayer) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.ChangePropertyConditionArrayObject.DecreaseLayer",
+                "rva": "0x13834A0",
+                "declaration": "public void DecreaseLayer(int reduceLayer) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.BaseElement.get_endTime",
+                "rva": "0x136E3E0",
+                "declaration": "public float get_endTime() { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.BaseElement.set_endTime",
+                "rva": "0x136F920",
+                "declaration": "public void set_endTime(float value) { }"
+              }
+            ],
+            "fields": [
+              {
+                "identity": "TElementParams.combineType",
+                "declaration": "public ECombineType combineType; // 0x38"
+              },
+              {
+                "identity": "TElementParams.combineNumber",
+                "declaration": "public int combineNumber; // 0x3C"
+              },
+              {
+                "identity": "TElementParams.inheritType",
+                "declaration": "public EElementInheritType inheritType; // 0x78"
+              },
+              {
+                "identity": "TChangePropertyElementParams.time",
+                "declaration": "public int time; // 0xD4"
+              },
+              {
+                "identity": "ChangePropertyConditionArrayObject.layer",
+                "declaration": "private int <layer>k__BackingField; // 0x60"
+              }
+            ],
+            "enums": [
+              {
+                "identity": "ECombineType.Overlying",
+                "declaration": "public const ECombineType Overlying = 4;",
+                "description": "[Description(\"叠加\")]"
+              },
+              {
+                "identity": "EElementTriggerEventType.BeforeDamage",
+                "declaration": "public const EElementTriggerEventType BeforeDamage = 1;",
+                "description": "[InspectorName(\"造成伤害前\")]"
+              },
+              {
+                "identity": "EElementTriggerFixedConditionType.CheckSkillType",
+                "declaration": "public const EElementTriggerFixedConditionType CheckSkillType = 11;",
+                "description": "[Description(\"事件技能Tag\")]"
+              },
+              {
+                "identity": "ESkillTagType.NormalAttack",
+                "declaration": "public const ESkillTagType NormalAttack = 1;",
+                "description": "[Description(\"角色普攻\")]"
+              }
+            ]
+          },
+          "binaryRanges": [
+            {
+              "identity": "shared-end-time-refresh",
+              "range": "0x137a29c-0x137a362",
+              "bytes": 198,
+              "sha256": "c9b44d20eb717cef1349d749d1f0e7936eb398df03d064e17ab7676432fc276e"
+            },
+            {
+              "identity": "overlying-branch-cap-delta",
+              "range": "0x137a40d-0x137a51f",
+              "bytes": 274,
+              "sha256": "68f76b96aa6fbcc85cd8f7f1397c009b23571920240f14f12763922fc2bcb2dc"
+            },
+            {
+              "identity": "positive-layer-delta-apply",
+              "range": "0x137a570-0x137a57d",
+              "bytes": 13,
+              "sha256": "25c2721127275dec57b7f9a01f9e1dc0eee7600bc35181b21594a5f62b64972c"
+            },
+            {
+              "identity": "single-aggregate-layer-increment",
+              "range": "0x13833f3-0x1383432",
+              "bytes": 63,
+              "sha256": "05781e39f68eef544c4f5fd5a05f6c92c0a464fbc3c680afe889125a4e735cd8"
+            },
+            {
+              "identity": "single-aggregate-layer-decrement",
+              "range": "0x1383537-0x1383575",
+              "bytes": 62,
+              "sha256": "138dd7ad457ee7e3524e754c8f39d27a9f762744e166e4b5fe553bb47805fef4"
+            }
+          ],
+          "reviewedDefinitions": [
+            {
+              "setId": 2,
+              "pieces": 4,
+              "skillId": 19998004,
+              "triggerElementId": 199999020,
+              "eventId": 1,
+              "triggerTargetType": 0,
+              "conditionLogicValue": 0,
+              "conditions": [],
+              "effectTargetType": 0,
+              "propertyElementId": 199999021,
+              "attributeId": 7,
+              "calculateType": 1,
+              "sourceRawA": 200,
+              "commonFunctionId": 1,
+              "baseFunctionId": 5,
+              "commonRatioRaw": 10000,
+              "durationMs": 6000,
+              "combineType": 4,
+              "combineNumber": 5,
+              "executeTargetType": 0,
+              "inheritType": 0,
+              "unloadTriggerElementId": 199999039,
+              "removerElementId": 199999040,
+              "removedElementIds": [
+                199999020,
+                199999039
+              ]
+            },
+            {
+              "setId": 4,
+              "pieces": 4,
+              "skillId": 19998003,
+              "triggerElementId": 199999018,
+              "eventId": 1,
+              "triggerTargetType": 0,
+              "conditionLogicValue": 0,
+              "conditions": [
+                {
+                  "conditionType": 11,
+                  "conditionValue": 1,
+                  "conditionExtra": 0
+                }
+              ],
+              "effectTargetType": 0,
+              "propertyElementId": 199999019,
+              "attributeId": 1,
+              "calculateType": 2,
+              "sourceRawA": 100,
+              "commonFunctionId": 1,
+              "baseFunctionId": 3,
+              "commonRatioRaw": 10000,
+              "durationMs": 24000,
+              "combineType": 4,
+              "combineNumber": 7,
+              "executeTargetType": 0,
+              "inheritType": 0,
+              "unloadTriggerElementId": 199999035,
+              "removerElementId": 199999036,
+              "removedElementIds": [
+                199999018,
+                199999035
+              ]
+            }
+          ],
+          "semantics": {
+            "triggerPhase": "before-damage-dispatch-before-current-packet-settlement",
+            "emptyConditionList": "reviewed-before-damage-trigger-always-matches",
+            "conditionSelector": "event-final-control-binding-skill-tags",
+            "sourceTarget": "equipped-self-actor",
+            "combineType": "overlying-capped-single-aggregate-layer",
+            "stackCapSource": "property-combine-number",
+            "stackLifetime": "shared-absolute-end-time-refreshed-to-later-expiry",
+            "expiryInterval": "right-open",
+            "duplicateInstallation": "one-runtime-binding-per-actor-set-threshold",
+            "threshold": "selected-valid-equipment-piece-count-greater-than-or-equal",
+            "unload": "remove-trigger-roots-and-let-existing-timed-property-expire-at-original-absolute-end",
+            "inheritance": "none"
+          },
+          "conclusion": {
+            "status": "applied",
+            "sourceIdentity": "GameAssembly.dll#ChangePropertyElement.Combine/ChangePropertyConditionArrayObject.CombineLayer/DecreaseLayer/BaseElement.endTime|dump.cs#ECombineType.Overlying/EElementTriggerEventType.BeforeDamage/EElementTriggerFixedConditionType.CheckSkillType/ESkillTagType.NormalAttack"
+          },
+          "verifiedBinary": {
+            "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+            "bytes": 222485544,
+            "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+          },
+          "verifiedIl2CppDump": {
+            "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+            "bytes": 97428254,
+            "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+          }
+        }
+      },
       "battleElementAssets": {
         "path": "C:/PC2/Codex/AzPr/work/combat-formulas/battle-element-assets.jsonl",
         "sha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
@@ -1067,7 +1285,7 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "a67408542cc51aae"
+    "sourceSnapshotHash": "1d5b5b30e0eab9c2"
   },
   "filterContract": {
     "characterElements": [
@@ -18028,5 +18246,5 @@
       ]
     }
   },
-  "rosterHash": "5b6d960755dd1b2c"
+  "rosterHash": "567d220743475d95"
 }

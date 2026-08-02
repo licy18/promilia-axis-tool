@@ -23,6 +23,11 @@ import {
   PERSISTENT_LOADOUT_PROPERTY_EVIDENCE_RELATIVE_PATH,
   readPersistentLoadoutPropertyRuntimeEvidenceSource,
 } from './persistent-loadout-property-evidence.mjs';
+import {
+  assertFourPieceSetStackRuntimeEvidenceReference,
+  FOUR_PIECE_SET_STACK_EVIDENCE_RELATIVE_PATH,
+  readFourPieceSetStackRuntimeEvidenceSource,
+} from './four-piece-set-stack-evidence.mjs';
 
 export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
   '2026-08-01T00:00:00.000Z';
@@ -98,6 +103,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '634c979cda572f8fff1509bbf888240aebe8fad7728f357ce06390fee364a248',
   persistentLoadoutPropertyRuntimeEvidence:
     'c8b9205b959a241f284dcacb4a27cbe63fc62cd028766777f50cca8941ecea57',
+  fourPieceSetStackRuntimeEvidence:
+    'ae357c59a494f724c9ce36fde79df3fd505f1434c01c4b87697d5770f9cc98dc',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
@@ -160,6 +167,7 @@ export async function createOptimizationQualificationArtifacts({
   soulEffectNonDamageRuntimeEvidencePath = null,
   landedHitRecoveryRuntimeEvidencePath = null,
   persistentLoadoutPropertyRuntimeEvidencePath = null,
+  fourPieceSetStackRuntimeEvidencePath = null,
   dynamicLoadoutAcceptanceReportPath = null,
   gameAssemblyPath = 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
 } = {}) {
@@ -292,6 +300,18 @@ export async function createOptimizationQualificationArtifacts({
       il2CppDumpPath: il2cppRuntimeContractsPath,
       projectRoot,
     });
+  sources.fourPieceSetStackRuntimeEvidence =
+    await readFourPieceSetStackRuntimeEvidenceSource({
+      sourcePath:
+        fourPieceSetStackRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          ...FOUR_PIECE_SET_STACK_EVIDENCE_RELATIVE_PATH.split('/')
+        ),
+      gameAssemblyPath,
+      il2CppDumpPath: il2cppRuntimeContractsPath,
+      projectRoot,
+    });
   const acceptanceReport = JSON.parse(
     await fs.readFile(
       dynamicLoadoutAcceptanceReportPath ??
@@ -316,6 +336,10 @@ export async function createOptimizationQualificationArtifacts({
     acceptanceReport?.sourceClosure
       ?.persistentLoadoutPropertyRuntimeEvidence,
     sources.persistentLoadoutPropertyRuntimeEvidence
+  );
+  assertFourPieceSetStackRuntimeEvidenceReference(
+    acceptanceReport?.sourceClosure?.fourPieceSetStackRuntimeEvidence,
+    sources.fourPieceSetStackRuntimeEvidence
   );
   sources.il2cppRuntimeContracts.value.soulEffectTriggers =
     attachSoulEffectGetElementRuntimeEvidence(
@@ -426,6 +450,8 @@ export async function createOptimizationQualificationArtifacts({
     tuningMechanicsCatalog: mechanics.tuningMechanicsCatalog,
     persistentLoadoutPropertyRuntimeEvidence:
       sources.persistentLoadoutPropertyRuntimeEvidence.value,
+    fourPieceSetStackRuntimeEvidence:
+      sources.fourPieceSetStackRuntimeEvidence.value,
   });
   sources.battleElementAssets = {
     ...soulEssenceEffects.sourceSnapshot.battleElements,
@@ -536,7 +562,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C9',
+      phase: 'M12-B3-C10',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1502,8 +1528,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C9',
-    status: 'b3-c9-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C10',
+    status: 'b3-c10-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1927,7 +1953,8 @@ function createSourceSnapshot(sources) {
         key === 'soulEffectBeforeDamageRuntimeEvidence' ||
         key === 'soulEffectNonDamageRuntimeEvidence' ||
         key === 'landedHitRecoveryRuntimeEvidence' ||
-        key === 'persistentLoadoutPropertyRuntimeEvidence'
+        key === 'persistentLoadoutPropertyRuntimeEvidence' ||
+        key === 'fourPieceSetStackRuntimeEvidence'
       ) {
         record.value = structuredClone(source.value);
       }
@@ -1944,7 +1971,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C9 Persistent Loadout Property Roots\n\n' +
+    '# M12-B3-C10 Four-Piece BeforeDamage Stack Effects\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1953,7 +1980,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2-C8 retain their accepted trigger, transaction, ordering and healing contracts. C9 compiles only source-closed frame-zero Self PropertyElement roots with time=-1, cover semantics and an explicit UnloadSkill path. Twelve soul roots and six two-piece set roots share one static loadout operator; 10133 keeps both leaves, while four conditional or finite wrapper outliers and all four-piece set effects remain blocked.\n' +
+    '- Dynamic loadout batches: C2-C9 retain their accepted trigger, transaction, ordering, healing and persistent-root contracts. C10 compiles only the two source-closed four-piece BeforeDamage graphs through one runtime operator. Set 2:4 stacks attr7 on every landed packet up to five layers for a shared refreshed 6s lifetime; set 4:4 additionally requires the final NormalAttack skill tag and stacks attr1 up to seven layers for a shared refreshed 24s lifetime. The current packet observes the BeforeDamage layer, while miss, blocked actions, wrong tags and unqualified equipment remain fail-closed.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'

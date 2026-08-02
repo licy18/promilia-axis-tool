@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "5b6d960755dd1b2c",
+  "rosterHash": "567d220743475d95",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "a67408542cc51aae",
-        "5b6d960755dd1b2c"
+        "1d5b5b30e0eab9c2",
+        "567d220743475d95"
       ]
     },
     {
@@ -4082,25 +4082,6 @@
       "gapHash": "8fe7ddba63928b97"
     },
     {
-      "gapIdentity": "set-skill:2:4:set-skill-dynamic-unapplied",
-      "objectKind": "set-skill",
-      "objectId": "2:4",
-      "code": "set-skill-dynamic-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "The accessory set skill is tracked but not applied by the dynamic runtime.",
-      "sourceIdentities": [
-        "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998004].skillType"
-      ],
-      "details": {
-        "skillId": 19998004,
-        "reasons": [
-          "set-skill-runtime-operator-not-implemented"
-        ]
-      },
-      "gapHash": "46e244d5b0de37d6"
-    },
-    {
       "gapIdentity": "set-skill:2:4:set-skill-visual-acceptance-not-published",
       "objectKind": "set-skill",
       "objectId": "2:4",
@@ -4174,25 +4155,6 @@
       ],
       "details": {},
       "gapHash": "baa34f7f71b1ffec"
-    },
-    {
-      "gapIdentity": "set-skill:4:4:set-skill-dynamic-unapplied",
-      "objectKind": "set-skill",
-      "objectId": "4:4",
-      "code": "set-skill-dynamic-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "The accessory set skill is tracked but not applied by the dynamic runtime.",
-      "sourceIdentities": [
-        "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998003].skillType"
-      ],
-      "details": {
-        "skillId": 19998003,
-        "reasons": [
-          "set-skill-runtime-operator-not-implemented"
-        ]
-      },
-      "gapHash": "e71c3b3e398bc7be"
     },
     {
       "gapIdentity": "set-skill:4:4:set-skill-visual-acceptance-not-published",
@@ -6222,10 +6184,10 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 388,
+    "blockingUniqueGapCount": 386,
     "byCategory": {
       "evidence-insufficient": 18,
-      "not-implemented": 370
+      "not-implemented": 368
     },
     "byCode": {
       "actor-static-profile-missing": 1,
@@ -6236,7 +6198,7 @@
       "kibo-passive-static-evidence-gap": 4,
       "kibo-visual-acceptance-not-published": 43,
       "level-breakthrough-skill-unlock-source-mismatch": 1,
-      "set-skill-dynamic-unapplied": 6,
+      "set-skill-dynamic-unapplied": 4,
       "set-skill-visual-acceptance-not-published": 12,
       "soulessence-effect-skill-dynamic-unapplied": 24,
       "soulessence-visual-acceptance-not-published": 62,
@@ -6247,9 +6209,9 @@
       "character": 33,
       "equipment": 137,
       "kibo": 90,
-      "set-skill": 18,
+      "set-skill": 16,
       "soul-essence": 110
     }
   },
-  "ledgerHash": "350b93a9d62e8f66"
+  "ledgerHash": "61ad6177831d5a97"
 }

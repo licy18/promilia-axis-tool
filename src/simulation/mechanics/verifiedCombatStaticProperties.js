@@ -887,6 +887,14 @@ function applyEquipmentSources({
       effectDefinition?.persistentRoot != null;
     const persistentApplied =
       persistentDeclared && persistentValidation.valid;
+    const dynamicRuntimeApplied =
+      thresholdMet &&
+      effectDefinition?.runtimeStatus === 'runtime-applied' &&
+      effectDefinition?.trigger?.frameAnchor != null &&
+      effectDefinition?.trigger?.condition?.status === 'applied' &&
+      effectDefinition?.trigger?.target?.kind != null &&
+      effectDefinition?.effect?.formula != null &&
+      Number(effectDefinition?.effect?.durationMs) > 0;
     if (persistentDeclared && !persistentValidation.valid) {
       unresolved.push({
         kind: 'accessory-set-persistent-property',
@@ -967,10 +975,19 @@ function applyEquipmentSources({
         effectDefinition?.runtimeStatus ?? setProfile.status,
       sourceIdentity: setProfile.sourceIdentity,
       appliedToCalculators: persistentApplied,
+      appliedToRuntimeEffect: dynamicRuntimeApplied,
+      runtimeEffectDefinitionIdentity:
+        dynamicRuntimeApplied ? effectDefinition.sourceIdentity : null,
     };
   });
   for (const activation of setSkillActivations) {
-    if (!activation.thresholdMet || activation.appliedToCalculators) continue;
+    if (
+      !activation.thresholdMet ||
+      activation.appliedToCalculators ||
+      activation.appliedToRuntimeEffect
+    ) {
+      continue;
+    }
     unapplied.push({
       kind: 'accessory-set-skill',
       sourceId: activation.skillId,

@@ -5758,6 +5758,345 @@ describe('verified soul essence effect generation', () => {
   });
 });
 
+describe('M12-B3-C10 four-piece BeforeDamage stacking properties', () => {
+  const set2Equipment = {
+    weapon: 1210321,
+    top: 1220231,
+    bottom: 1230231,
+    earring: 1240231,
+    ring: 1250231,
+  };
+  const set4Equipment = {
+    weapon: 1210221,
+    top: 1220131,
+    bottom: 1230131,
+    earring: 1240131,
+    ring: 1250131,
+  };
+
+  const createSetRun = ({
+    equipment,
+    actionPlan,
+    durationMs = 30_000,
+    combatScenario = null,
+    ownerInitialSp = 100,
+  }) =>
+    createRealSoulScenario({
+      soulEssenceId: null,
+      effectSkillId: 0,
+      equipment,
+      actionPlan,
+      durationMs,
+      combatScenario,
+      ownerInitialSp,
+      initialRuntimeState: {
+        enemy: {
+          hp: { currentValue: 1_000_000, maxValue: 1_000_000 },
+          toughness: { currentValue: 1_000_000, maxValue: 1_000_000 },
+        },
+      },
+    });
+
+  it('installs 2pc and 4pc once at four or five valid pieces, never at three', () => {
+    const actionPlan = [
+      { id: 'c10-threshold-normal', actionKind: 'normal-attack', startFrame: 0 },
+    ];
+    const run = count =>
+      createSetRun({
+        equipment: Object.fromEntries(
+          Object.entries(set2Equipment).slice(0, count)
+        ),
+        actionPlan,
+      });
+    const three = run(3);
+    const four = run(4);
+    const five = run(5);
+    const mixed = createSetRun({
+      equipment: {
+        weapon: set2Equipment.weapon,
+        top: set2Equipment.top,
+        bottom: set4Equipment.bottom,
+        earring: set4Equipment.earring,
+      },
+      actionPlan,
+    });
+    const commands = result =>
+      (result.verifiedSoulEssenceEffectGeneration?.effectCommands ?? []).filter(
+        command => command.sourceSetId === 2 && command.sourceSetPieces === 4
+      );
+    const activations = result =>
+      result.effectiveActionTimeline.scenario.actors
+        .find(actor => actor.characterId === OWNER_ID)
+        .verifiedStaticProperties.setSkillActivations.filter(
+          activation => activation.setId === 2
+        );
+
+    expect(commands(three)).toEqual([]);
+    expect(commands(four).length).toBeGreaterThan(0);
+    expect(commands(five)).toHaveLength(commands(four).length);
+    expect(
+      (mixed.verifiedSoulEssenceEffectGeneration?.effectCommands ?? []).filter(
+        command => command.sourceSetPieces === 4
+      )
+    ).toEqual([]);
+    expect(activations(four)).toEqual([
+      expect.objectContaining({
+        pieces: 2,
+        thresholdMet: true,
+        appliedToCalculators: true,
+        appliedToRuntimeEffect: false,
+      }),
+      expect.objectContaining({
+        pieces: 4,
+        thresholdMet: true,
+        appliedToCalculators: false,
+        appliedToRuntimeEffect: true,
+      }),
+    ]);
+    expect(activations(five)).toHaveLength(2);
+  });
+
+  it('applies set 2 CRI to its current packet and caps five shared-expiry layers', () => {
+    const actionPlan = Array.from({ length: 6 }, (_unused, index) => ({
+      id: `c10-set2-heavy-${index + 1}`,
+      actionKind: 'charged-attack',
+      startFrame: index * 360,
+    }));
+    const result = createSetRun({
+      equipment: set2Equipment,
+      actionPlan,
+      durationMs: 45_000,
+      combatScenario: { critical: { policy: 'expected', seed: null } },
+    });
+    const commands = result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+      command => command.sourceSetId === 2 && command.sourceSetPieces === 4
+    );
+    expect(commands.length).toBeGreaterThanOrEqual(6);
+    expect(commands.every(command => command.effectId === 'set-skill:2:4:element:199999021')).toBe(true);
+    expect(commands[0]).toMatchObject({
+      durationMs: 6000,
+      stackMode: 'stack',
+      stackDelta: 1,
+      maxStacks: 5,
+      modifiers: [
+        expect.objectContaining({
+          attributeId: 7,
+          bucket: 'dynamicExtra',
+          sourceRawA: 200,
+          evaluatedValue: 200,
+        }),
+      ],
+    });
+    const last = commands.at(-1);
+    const active = resolveActiveEffectsAt(
+      result.effectTimeline,
+      last.timeMs + 0.001,
+      { targetKind: 'actor', targetId: 'actor-101007' }
+    ).filter(effect => effect.effectId === last.effectId);
+    expect(active).toHaveLength(1);
+    expect(active[0]).toMatchObject({
+      stacks: 5,
+      maxStacks: 5,
+    });
+    expect(active[0].expiresAtMs).toBeCloseTo(last.timeMs + 6000, 3);
+    expect(
+      resolveActiveEffectsAt(result.effectTimeline, last.timeMs + 6000, {
+        targetKind: 'actor',
+        targetId: 'actor-101007',
+      }).filter(effect => effect.effectId === last.effectId)
+    ).toEqual([]);
+
+    const first = commands[0];
+    const replay = replayRealActionWithSoulCommands({
+      actorCharacterId: OWNER_ID,
+      soulEssenceId: null,
+      actionId: first.sourceActionId,
+      actionKind: 'charged-attack',
+      startFrame: 0,
+      commands: [first],
+      combatScenario: { critical: { policy: 'expected', seed: null } },
+    });
+    expect(totalHitDamage(replay.withCommands, first.sourceActionId)).toBeGreaterThan(
+      totalHitDamage(replay.withoutCommands, first.sourceActionId)
+    );
+    const withBranch = replay.withCommands.damageEvents.find(
+      event =>
+        event.type === 'VERIFIED_COMBAT_HIT' &&
+        event.actionId === first.sourceActionId
+    ).payload.formulaBreakdown.randomBranch;
+    const withoutBranch = replay.withoutCommands.damageEvents.find(
+      event =>
+        event.type === 'VERIFIED_COMBAT_HIT' &&
+        event.actionId === first.sourceActionId
+    ).payload.formulaBreakdown.randomBranch;
+    expect(withBranch.sourceCriticalRateBasisPoints).toBe(
+      withoutBranch.sourceCriticalRateBasisPoints + 200
+    );
+  });
+
+  it('matches set 4 only from final NormalAttack skill tags and buffs the current hit', () => {
+    const result = createSetRun({
+      equipment: set4Equipment,
+      actionPlan: [
+        { id: 'c10-set4-normal', actionKind: 'normal-attack', startFrame: 0 },
+        { id: 'c10-set4-heavy', actionKind: 'charged-attack', startFrame: 240 },
+        { id: 'c10-set4-star', actionKind: 'star-skill', startFrame: 480 },
+      ],
+    });
+    const commands = result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+      command => command.sourceSetId === 4 && command.sourceSetPieces === 4
+    );
+    expect(commands.length).toBeGreaterThan(0);
+    expect(new Set(commands.map(command => command.sourceActionId))).toEqual(
+      new Set(['c10-set4-normal'])
+    );
+    expect(commands[0]).toMatchObject({
+      durationMs: 24000,
+      maxStacks: 7,
+      modifiers: [
+        expect.objectContaining({
+          attributeId: 1,
+          bucket: 'dynamicPercent',
+          sourceRawA: 100,
+          valueRaw: 100,
+          evaluatedValue: 0.0099945068359375,
+        }),
+      ],
+      sourceIdentity: {
+        triggerCondition: {
+          kind: 'skill-tag',
+          skillTagId: 1,
+          status: 'applied',
+        },
+        actionSkillTagIds: expect.arrayContaining([1]),
+      },
+    });
+    const first = commands[0];
+    const replay = replayRealActionWithSoulCommands({
+      actorCharacterId: OWNER_ID,
+      soulEssenceId: null,
+      actionId: first.sourceActionId,
+      actionKind: 'normal-attack',
+      startFrame: 0,
+      commands: [first],
+    });
+    const findCurrentHit = runtime =>
+      runtime.damageEvents.find(
+        event =>
+          event.type === 'VERIFIED_COMBAT_HIT' &&
+          event.actionId === first.sourceActionId
+      );
+    const withCurrentHit = findCurrentHit(replay.withCommands);
+    const withoutCurrentHit = findCurrentHit(replay.withoutCommands);
+    expect(withCurrentHit).toBeTruthy();
+    expect(withoutCurrentHit).toBeTruthy();
+    expect(
+      BigInt(withCurrentHit.payload.formulaBreakdown.verifiedResult.raw)
+    ).toBeGreaterThan(
+      BigInt(withoutCurrentHit.payload.formulaBreakdown.verifiedResult.raw)
+    );
+    expect(withCurrentHit.payload.rawDamage).toBeGreaterThanOrEqual(
+      withoutCurrentHit.payload.rawDamage
+    );
+    expect(withCurrentHit.payload.dynamicPropertyTrace.source).toContainEqual(
+      expect.objectContaining({
+        attributeId: 1,
+        dynamicPercentRaw: 100,
+        effects: [
+          expect.objectContaining({
+            effectId: 'set-skill:4:4:element:199999019',
+            stacks: 1,
+          }),
+        ],
+      })
+    );
+  });
+
+  it('keeps Self ownership through switch and suppresses miss or blocked packets', () => {
+    const landedTemplate = createSetRun({
+      equipment: set4Equipment,
+      actionPlan: [
+        { id: 'c10-set4-miss-template', actionKind: 'normal-attack', startFrame: 0 },
+      ],
+    });
+    const allMissOverrides = Object.fromEntries(
+      landedTemplate.verifiedDamageEventGeneration.events
+        .filter(event => event.actionId === 'c10-set4-miss-template')
+        .map(event => event.eventContext?.sourceHitIdentity)
+        .filter(Boolean)
+        .map(identity => [identity, { willHit: false }])
+    );
+    const miss = createSetRun({
+      equipment: set4Equipment,
+      actionPlan: [
+        {
+          id: 'c10-set4-miss',
+          actionKind: 'normal-attack',
+          startFrame: 0,
+          hitOverrides: allMissOverrides,
+        },
+      ],
+    });
+    expect(
+      miss.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSetId === 4
+      )
+    ).toEqual([]);
+
+    const blocked = createSetRun({
+      equipment: set2Equipment,
+      ownerInitialSp: 0,
+      actionPlan: [
+        { id: 'c10-set2-blocked-ultimate', actionKind: 'ultimate', startFrame: 0 },
+      ],
+    });
+    expect(
+      blocked.actionExecutionPlan.actions.some(
+        action => action.id === 'c10-set2-blocked-ultimate'
+      )
+    ).toBe(false);
+    expect(
+      blocked.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSetId === 2
+      )
+    ).toEqual([]);
+
+    const switched = createSetRun({
+      equipment: set4Equipment,
+      actionPlan: [
+        { id: 'c10-set4-owner-hit', actionKind: 'normal-attack', startFrame: 0 },
+        {
+          id: 'c10-set4-switch-away',
+          actionKind: 'switch',
+          sourceCharacterId: OWNER_ID,
+          targetCharacterId: 101003,
+          startFrame: 120,
+        },
+      ],
+    });
+    const command = switched.verifiedSoulEssenceEffectGeneration.effectCommands.find(
+      entry => entry.sourceSetId === 4
+    );
+    expect(command).toMatchObject({
+      sourceActorId: 'actor-101007',
+      targetId: 'actor-101007',
+      semanticTargetKind: 'self-actor',
+    });
+    expect(
+      resolveActiveEffectsAt(switched.effectTimeline, frameToMs(180), {
+        targetKind: 'actor',
+        targetId: 'actor-101007',
+      }).some(effect => effect.effectId === command.effectId)
+    ).toBe(true);
+    expect(
+      resolveActiveEffectsAt(switched.effectTimeline, frameToMs(180), {
+        targetKind: 'actor',
+        targetId: 'actor-101003',
+      }).some(effect => effect.effectId === command.effectId)
+    ).toBe(false);
+  });
+});
+
 function createRealSoulScenario({
   actorCharacterId = OWNER_ID,
   soulEssenceId = SOUL_ID,
@@ -5769,6 +6108,7 @@ function createRealSoulScenario({
   combatScenario = null,
   ownerInitialSp = 100,
   soulEssenceStar = 1,
+  equipment = null,
 } = {}) {
   const requestedActions =
     actionPlan ??
@@ -5811,6 +6151,7 @@ function createRealSoulScenario({
             soulessenceLevel: soulEssenceId == null ? null : 80,
             soulessenceRank: soulEssenceId == null ? null : 1,
             soulessenceStar: soulEssenceId == null ? null : soulEssenceStar,
+            ...(equipment == null ? {} : { equipment }),
             soulessenceCultivation:
               soulEssenceId == null
                 ? null
@@ -6042,6 +6383,7 @@ function replayRealActionWithSoulCommands({
   startFrame,
   commands,
   initialRuntimeState = null,
+  combatScenario = null,
 }) {
   const replayTeamCharacterIds = [
     actorCharacterId,
@@ -6062,6 +6404,7 @@ function replayRealActionWithSoulCommands({
         toughness: { currentValue: 1_000_000, maxValue: 1_000_000 },
       },
     },
+    combatScenario,
     actionPlan: [
       {
         id: actionId,
@@ -6087,6 +6430,7 @@ function replayRealActionWithSoulCommands({
       actionExecutionPlan,
       controlledActorTimeline,
       actionVariantRuntime: projection.verifiedActionVariantRuntime,
+      damageEventGeneration: projection.verifiedDamageEventGeneration,
       tuningGeneration: projection.verifiedTuningMarkGeneration,
       effectTimeline: createEffectRuntimeTimeline({
         scenario,
@@ -6099,6 +6443,15 @@ function replayRealActionWithSoulCommands({
     withCommands: createRuntime(commands),
     withoutCommands: createRuntime([]),
   };
+}
+
+function totalHitDamage(runtime, actionId) {
+  return runtime.damageEvents
+    .filter(
+      event =>
+        event.type === 'VERIFIED_COMBAT_HIT' && event.actionId === actionId
+    )
+    .reduce((total, event) => total + Number(event.payload.rawDamage), 0);
 }
 
 function createCanonicalGetElementEvent({
