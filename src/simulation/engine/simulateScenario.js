@@ -19,6 +19,7 @@ import { createVerifiedActionVariantRuntime } from '../mechanics/verifiedActionV
 import { createVerifiedKiboPassiveGeneration } from '../mechanics/verifiedKiboPassiveGeneration';
 import { createVerifiedSoulEssenceEffectGeneration } from '../mechanics/verifiedSoulEssenceEffectGeneration';
 import { createVerifiedDamageEventGeneration } from '../mechanics/verifiedDamageEventGeneration';
+import { createVerifiedNonDamageEventGeneration } from '../mechanics/verifiedNonDamageEventGeneration';
 import { projectScenarioEffectiveActionTimeline } from '../mechanics/actionEffectiveTimeline';
 import { validateCombatCriticalScenario } from '../../domain/combatCriticalPolicy';
 import { createDeterministicCriticalRandomSource } from '../runtime/criticalRandomSource';
@@ -252,6 +253,8 @@ export function simulateScenario(
     verifiedSoulEssenceEffectGeneration:
       runtimeBundle.soulEssenceEffectGeneration,
     verifiedDamageEventGeneration: runtimeBundle.damageEventGeneration,
+    verifiedNonDamageEventGeneration:
+      runtimeBundle.nonDamageEventGeneration,
     verifiedTuningMarkGeneration: runtimeBundle.tuningGeneration,
     verifiedActionVariantRuntime: runtimeBundle.actionVariantRuntime,
     effectiveActionTimeline,
@@ -427,6 +430,54 @@ function createVerifiedRuntimeBundle({
         tuningGeneration,
       })
     : null;
+  const baselineSoulEssenceEffectGeneration = isVerifiedCombatMechanicsScenario(
+    scenario
+  )
+    ? createVerifiedSoulEssenceEffectGeneration({
+        scenario,
+        actionExecutionPlan,
+        actionResolutionById: actionVariantRuntime?.actionResolutionById,
+        tuningGeneration,
+        damageEventGeneration,
+      })
+    : null;
+  const baselineEffectTimeline = createEffectRuntimeTimeline({
+    scenario,
+    actionExecutionPlan,
+    controlledActorTimeline,
+    generatedCommands: [
+      ...(actionVariantRuntime?.effectCommands ?? []),
+      ...(effectGeneration?.effectCommands ?? []),
+      ...(tuningGeneration?.effectCommands ?? []),
+      ...(kiboPassiveGeneration?.effectCommands ?? []),
+      ...(baselineSoulEssenceEffectGeneration?.effectCommands ?? []),
+    ],
+  });
+  const preliminaryCombatRuntime = isVerifiedCombatMechanicsScenario(scenario)
+    ? createVerifiedCombatRuntime({
+        scenario,
+        actionExecutionPlan,
+        controlledActorTimeline,
+        effectGeneration,
+        tuningGeneration,
+        damageEventGeneration,
+        effectTimeline: baselineEffectTimeline,
+        actionVariantRuntime,
+        kiboPassiveGeneration,
+        soulEssenceEffectGeneration: baselineSoulEssenceEffectGeneration,
+        criticalRandomSource: null,
+        runtimeMode: 'non-damage-event-projection',
+      })
+    : null;
+  const nonDamageEventGeneration = isVerifiedCombatMechanicsScenario(scenario)
+    ? createVerifiedNonDamageEventGeneration({
+        scenario,
+        actionExecutionPlan,
+        controlledActorTimeline,
+        actionResolutionById: actionVariantRuntime?.actionResolutionById,
+        verifiedCombatRuntime: preliminaryCombatRuntime,
+      })
+    : null;
   const soulEssenceEffectGeneration = isVerifiedCombatMechanicsScenario(
     scenario
   )
@@ -436,6 +487,7 @@ function createVerifiedRuntimeBundle({
         actionResolutionById: actionVariantRuntime?.actionResolutionById,
         tuningGeneration,
         damageEventGeneration,
+        nonDamageEventGeneration,
       })
     : null;
   const effectTimeline = createEffectRuntimeTimeline({
@@ -461,6 +513,7 @@ function createVerifiedRuntimeBundle({
     actionVariantRuntime,
     kiboPassiveGeneration,
     soulEssenceEffectGeneration,
+    nonDamageEventGeneration,
     criticalRandomSource,
   });
   return {
@@ -468,6 +521,7 @@ function createVerifiedRuntimeBundle({
     effectGeneration,
     kiboPassiveGeneration,
     soulEssenceEffectGeneration,
+    nonDamageEventGeneration,
     damageEventGeneration,
     tuningGeneration,
     effectTimeline,

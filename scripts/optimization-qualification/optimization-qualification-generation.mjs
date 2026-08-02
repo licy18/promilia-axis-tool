@@ -135,6 +135,7 @@ export async function createOptimizationQualificationArtifacts({
   heroRankRuntimeEvidencePath = null,
   soulEffectGetElementRuntimeEvidencePath = null,
   soulEffectBeforeDamageRuntimeEvidencePath = null,
+  soulEffectNonDamageRuntimeEvidencePath = null,
   gameAssemblyPath = 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
 } = {}) {
   if (!projectRoot) throw new TypeError('projectRoot is required');
@@ -217,6 +218,19 @@ export async function createOptimizationQualificationArtifacts({
       gameAssemblyPath,
       projectRoot
     );
+  sources.soulEffectNonDamageRuntimeEvidence =
+    await readSoulEffectNonDamageRuntimeEvidenceSource(
+      soulEffectNonDamageRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          'scripts',
+          'optimization-qualification',
+          'evidence',
+          'soulessence-non-damage-runtime-evidence.json'
+        ),
+      gameAssemblyPath,
+      projectRoot
+    );
   sources.il2cppRuntimeContracts.value.soulEffectTriggers =
     attachSoulEffectGetElementRuntimeEvidence(
       sources.il2cppRuntimeContracts.value.soulEffectTriggers,
@@ -226,6 +240,11 @@ export async function createOptimizationQualificationArtifacts({
     attachSoulEffectBeforeDamageRuntimeEvidence(
       sources.il2cppRuntimeContracts.value.soulEffectTriggers,
       sources.soulEffectBeforeDamageRuntimeEvidence.value
+    );
+  sources.il2cppRuntimeContracts.value.soulEffectTriggers =
+    attachSoulEffectNonDamageRuntimeEvidence(
+      sources.il2cppRuntimeContracts.value.soulEffectTriggers,
+      sources.soulEffectNonDamageRuntimeEvidence.value
     );
   const characters = sources.characters.value.items ?? [];
   const kibos = sources.kibos.value.items ?? [];
@@ -427,7 +446,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C6',
+      phase: 'M12-B3-C7',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -720,24 +739,32 @@ function createQualificationManifests({
   for (const soul of publicSoulEssences) {
     const effectApplied =
       soul.effectMechanics?.runtimeStatus === 'runtime-applied';
+    const effectRuntimeGaps = soul.effectMechanics?.runtimeGaps ?? [
+      'effect-mechanics-profile-missing',
+    ];
+    const effectGapCategory =
+      effectRuntimeGaps.length > 0 &&
+      effectRuntimeGaps.every(reason =>
+        String(reason).endsWith('-evidence-gap')
+      )
+        ? 'evidence-insufficient'
+        : 'not-implemented';
     const blockers = [
       ...(effectApplied
         ? []
         : [
             blocker(
               'soulessence-effect-skill-dynamic-unapplied',
-              'not-implemented',
+              effectGapCategory,
               'The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.',
               {
                 skillId: soul.effectSkillId,
-                reasons: soul.effectMechanics?.runtimeGaps ?? [
-                  'effect-mechanics-profile-missing',
-                ],
+                reasons: effectRuntimeGaps,
               }
             ),
             blocker(
               'strict-soulessence-cultivation-runtime-partial',
-              'not-implemented',
+              effectGapCategory,
               'Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied.'
             ),
           ]),
@@ -1357,8 +1384,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C6',
-    status: 'b3-c6-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C7',
+    status: 'b3-c7-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1778,7 +1805,8 @@ function createSourceSnapshot(sources) {
       if (
         key === 'heroRankRuntimeEvidence' ||
         key === 'soulEffectGetElementRuntimeEvidence' ||
-        key === 'soulEffectBeforeDamageRuntimeEvidence'
+        key === 'soulEffectBeforeDamageRuntimeEvidence' ||
+        key === 'soulEffectNonDamageRuntimeEvidence'
       ) {
         record.value = structuredClone(source.value);
       }
@@ -1795,7 +1823,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C6 Before-Damage Event Bridge\n\n' +
+    '# M12-B3-C7 Non-Damage Event Transactions\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1804,7 +1832,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects; C3 adds source-bound EntrySkill(22) switch provenance and wrapper lifetimes for 10147/10151. C4 compiles tuning conditions and ordered ConsumePackElement candidate selection; C5 compiles paired BeforeGetElement/AfterGetElement transactions for 10043/10149. C6 compiles BeforeDamage(1), CheckElementId(13), and CheckElementType(8) from frozen consumer evidence, then dispatches exactly one before-damage transaction for each landed ordinary or tuning damage settlement. The command precedes its own settlement, while earlier same-frame source sequences and C4 AfterDamage remain isolated. Soul essence 10018 remains blocked by its outer prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
+    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects; C3 adds source-bound EntrySkill(22) switch provenance and wrapper lifetimes for 10147/10151. C4 compiles tuning conditions and ordered ConsumePackElement candidate selection; C5 compiles paired BeforeGetElement/AfterGetElement transactions for 10043/10149. C6 compiles the ordered BeforeDamage transaction. C7 projects source-bound SwitchEnter(34), OnGotShield(40), and AfterHeal(44) transactions from canonical switch and vital settlements: 10048 and 10175 are runtime-applied, 10169 remains evidence-insufficient because native shield refresh/replacement semantics are open, and 10176 remains unapplied because combineType 5 is not evidence-closed. Initial state, rejected descriptors, wrong event subjects, and borrowed periodic-heal action provenance cannot trigger these effects.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'
@@ -2136,7 +2164,10 @@ function createSoulEffectTriggerContract({
     [6, 'AfterSkill', 'action-end', '释放技能后'],
     [9, 'BeforeGetElement', 'element-before-acquire', '获取元素前'],
     [10, 'AfterGetElement', 'element-after-acquire', '获取元素后'],
+    [34, 'SwitchEnter', 'switch-enter', '切入'],
     [36, 'UnloadSkill', 'loadout-uninstall', '卸载技能'],
+    [40, 'OnGotShield', 'shield-after-acquire', '添加护盾时'],
+    [44, 'AfterHeal', 'heal-after-settlement', '造成治疗后'],
   ].map(([value, enumName, frameAnchor, description]) => {
     assertIl2CppEnumMember({
       block: triggerEventTypeBlock,
@@ -2182,6 +2213,12 @@ function createSoulEffectTriggerContract({
       enumName: 'Self',
       targetKind: 'self-actor',
       description: '自身',
+    },
+    {
+      value: 1,
+      enumName: 'Target',
+      targetKind: 'event-target-actor',
+      description: '目标',
     },
     {
       value: 15,
@@ -2591,6 +2628,88 @@ async function readSoulEffectBeforeDamageRuntimeEvidenceSource(
   };
 }
 
+async function readSoulEffectNonDamageRuntimeEvidenceSource(
+  sourcePath,
+  gameAssemblyPath,
+  projectRoot
+) {
+  const bytes = await fs.readFile(sourcePath);
+  const value = JSON.parse(bytes.toString('utf8'));
+  if (
+    value?.contractName !== 'AzPrSoulEssenceNonDamageRuntimeEvidence' ||
+    Number(value?.schemaVersion) !== 1 ||
+    value?.conclusion?.status !== 'applied'
+  ) {
+    throw new Error(
+      'optimization-qualification-non-damage-evidence-contract-invalid'
+    );
+  }
+  const binaryIdentity = await readBinaryIdentity(gameAssemblyPath);
+  if (
+    Number(value.reviewedBinary?.bytes) !== binaryIdentity.bytes ||
+    value.reviewedBinary?.sha256 !== binaryIdentity.sha256
+  ) {
+    throw new Error(
+      'optimization-qualification-non-damage-evidence-binary-mismatch'
+    );
+  }
+  const binary = await fs.readFile(gameAssemblyPath);
+  const ranges = [
+    value.consumer?.switchEnter,
+    value.consumer?.onGotShield,
+    value.consumer?.afterHeal,
+    value.consumer?.healSettlementOrder,
+    value.consumer?.triggerIntervalParse,
+    value.consumer?.triggerIntervalGate,
+    value.consumer?.triggerEventHandlerIntervalGate,
+  ];
+  for (const evidenceRange of ranges) {
+    const rangeBytes = readPortableExecutableRvaRange(
+      binary,
+      evidenceRange?.range
+    );
+    if (
+      createHash('sha256').update(rangeBytes).digest('hex') !==
+      evidenceRange?.sha256
+    ) {
+      throw new Error(
+        `optimization-qualification-non-damage-evidence-range-drift:${evidenceRange?.range ?? 'missing'}`
+      );
+    }
+  }
+  if (
+    Number(value.switchEnter?.eventId) !== 34 ||
+    value.switchEnter?.frameAnchor !== 'switch-enter' ||
+    value.switchEnter?.initialForegroundDispatch !== false ||
+    value.switchEnter?.noOpDispatch !== false ||
+    value.switchEnter?.failedOrUnexecutedDispatch !== false ||
+    value.switchEnter?.minimumIntervalUnit !== 'milliseconds' ||
+    Number(value.onGotShield?.eventId) !== 40 ||
+    value.onGotShield?.frameAnchor !== 'shield-after-acquire' ||
+    value.onGotShield?.zeroValueDispatch !== false ||
+    value.onGotShield?.inheritedStateDispatch !== false ||
+    value.onGotShield?.failedOrRejectedDispatch !== false ||
+    value.onGotShield?.refreshReplacementSemantics !==
+      'evidence-insufficient' ||
+    Number(value.afterHeal?.eventId) !== 44 ||
+    value.afterHeal?.frameAnchor !== 'heal-after-settlement' ||
+    value.afterHeal?.zeroEffectiveChangeDispatch !== true ||
+    value.afterHeal?.failedOrRejectedDispatch !== false ||
+    Number(value.effectTarget?.effectTargetType) !== 1 ||
+    value.effectTarget?.runtimeTargetKind !== 'event-target-actor'
+  ) {
+    throw new Error(
+      'optimization-qualification-non-damage-evidence-semantics-incomplete'
+    );
+  }
+  return {
+    path: normalizeSourcePath(sourcePath, projectRoot),
+    bytes: bytes.byteLength,
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+    value: { ...value, verifiedBinary: binaryIdentity },
+  };
+}
+
 function attachSoulEffectGetElementRuntimeEvidence(triggerContract, evidence) {
   const sourceVisibility = evidence?.sourceVisibility ?? {};
   const triggerTargetBinding = triggerContract.triggerTargetBindings?.find(
@@ -2680,6 +2799,51 @@ function attachSoulEffectBeforeDamageRuntimeEvidence(
       failedOrUnexecutedDispatch: semantics.failedOrUnexecutedDispatch,
       eventElementIdentity: semantics.eventElementIdentity,
       sourceVisibility: structuredClone(sourceVisibility),
+      consumer: structuredClone(evidence.consumer),
+      reviewedBinary: structuredClone(evidence.reviewedBinary),
+      sourceIdentity: evidence.conclusion.sourceIdentity,
+    },
+  };
+  const { contractHash: _contractHash, ...hashInput } = value;
+  return { ...hashInput, contractHash: hashCanonicalValue(hashInput) };
+}
+
+function attachSoulEffectNonDamageRuntimeEvidence(triggerContract, evidence) {
+  const switchEvent = triggerContract.eventBindings?.find(
+    binding => Number(binding.value) === Number(evidence.switchEnter?.eventId)
+  );
+  const shieldEvent = triggerContract.eventBindings?.find(
+    binding => Number(binding.value) === Number(evidence.onGotShield?.eventId)
+  );
+  const healEvent = triggerContract.eventBindings?.find(
+    binding => Number(binding.value) === Number(evidence.afterHeal?.eventId)
+  );
+  const effectTarget = triggerContract.targetBindings?.find(
+    binding =>
+      Number(binding.value) === Number(evidence.effectTarget?.effectTargetType)
+  );
+  if (
+    switchEvent?.frameAnchor !== evidence.switchEnter?.frameAnchor ||
+    shieldEvent?.frameAnchor !== evidence.onGotShield?.frameAnchor ||
+    healEvent?.frameAnchor !== evidence.afterHeal?.frameAnchor ||
+    effectTarget?.enumName !== evidence.effectTarget?.enumName ||
+    effectTarget?.targetKind !== evidence.effectTarget?.runtimeTargetKind
+  ) {
+    throw new Error(
+      'optimization-qualification-non-damage-source-binding-drift'
+    );
+  }
+  const value = {
+    ...triggerContract,
+    nonDamageRuntime: {
+      status: evidence.conclusion.status,
+      contractName: evidence.contractName,
+      switchEnter: structuredClone(evidence.switchEnter),
+      onGotShield: structuredClone(evidence.onGotShield),
+      afterHeal: structuredClone(evidence.afterHeal),
+      sourceVisibility: structuredClone(evidence.sourceVisibility),
+      effectTarget: structuredClone(evidence.effectTarget),
+      emptyConditionEvents: [...(evidence.emptyConditionEvents ?? [])],
       consumer: structuredClone(evidence.consumer),
       reviewedBinary: structuredClone(evidence.reviewedBinary),
       sourceIdentity: evidence.conclusion.sourceIdentity,

@@ -7,8 +7,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 23,
-      runtimeUnappliedCount: 51,
+      runtimeAppliedCount: 25,
+      runtimeUnappliedCount: 49,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -146,6 +146,119 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(definitions.get(10018)).toMatchObject({
       runtimeStatus: 'source-indexed-runtime-unapplied',
       runtimeGaps: ['effect-activation-condition-operator-unsupported'],
+    });
+  });
+
+  it('compiles source-bound non-damage event transactions and event-target propagation', () => {
+    const definitions = new Map(
+      soulCatalog.definitions.map(definition => [
+        definition.soulEssenceId,
+        definition,
+      ])
+    );
+
+    expect(soulCatalog.triggerContract.nonDamageRuntime).toMatchObject({
+      status: 'applied',
+      contractName: 'AzPrSoulEssenceNonDamageRuntimeEvidence',
+      switchEnter: expect.objectContaining({
+        eventId: 34,
+        frameAnchor: 'switch-enter',
+        sourceActorSemantic: 'entered-actor',
+        minimumIntervalUnit: 'milliseconds',
+      }),
+      onGotShield: expect.objectContaining({
+        eventId: 40,
+        frameAnchor: 'shield-after-acquire',
+        triggerSubjectSemantic: 'shield-recipient',
+        zeroValueDispatch: false,
+        inheritedStateDispatch: false,
+      }),
+      afterHeal: expect.objectContaining({
+        eventId: 44,
+        frameAnchor: 'heal-after-settlement',
+        triggerSubjectSemantic: 'heal-source-actor',
+        effectTargetSemantic: 'healed-actor',
+        zeroEffectiveChangeDispatch: true,
+      }),
+      consumer: expect.objectContaining({
+        switchEnter: expect.objectContaining({
+          rva: '0x1596740',
+        }),
+        onGotShield: expect.objectContaining({
+          rva: '0x13A2040',
+        }),
+        afterHeal: expect.objectContaining({
+          rva: '0x1872130',
+        }),
+      }),
+      sourceIdentity: expect.stringContaining('TriggerSwitchEnter@0x1596740'),
+    });
+    expect(soulCatalog.triggerContract.nonDamageRuntime.onGotShield).toMatchObject({
+      eventId: 40,
+      frameAnchor: 'shield-after-acquire',
+      refreshReplacementSemantics: 'evidence-insufficient',
+    });
+
+    expect(definitions.get(10048)).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'equipped-actor-switch-enter-team-property',
+      trigger: {
+        eventId: 34,
+        event: 'SwitchEnter',
+        frameAnchor: 'switch-enter',
+        intervalMs: 10,
+        condition: expect.objectContaining({
+          kind: 'always',
+          status: 'applied',
+        }),
+        target: expect.objectContaining({ kind: 'team-actors' }),
+      },
+      runtimeGaps: [],
+    });
+    expect(definitions.get(10169)).toMatchObject({
+      runtimeStatus: 'source-indexed-runtime-unapplied',
+      mechanismFamily: 'equipped-actor-shield-acquire-team-property',
+      trigger: {
+        eventId: 40,
+        event: 'OnGotShield',
+        frameAnchor: 'shield-after-acquire',
+        condition: expect.objectContaining({
+          kind: 'always',
+          status: 'applied',
+        }),
+        target: expect.objectContaining({ kind: 'team-actors' }),
+      },
+      runtimeGaps: [
+        'effect-shield-refresh-replacement-semantics-evidence-gap',
+      ],
+    });
+    expect(definitions.get(10175)).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'equipped-actor-heal-event-target-property',
+      trigger: {
+        eventId: 44,
+        event: 'AfterHeal',
+        frameAnchor: 'heal-after-settlement',
+        condition: expect.objectContaining({
+          kind: 'skill-slot',
+          skillSlotId: 4,
+        }),
+        target: expect.objectContaining({
+          kind: 'event-target-actor',
+          effectTargetType: 1,
+        }),
+      },
+      runtimeGaps: [],
+    });
+    expect(definitions.get(10176)).toMatchObject({
+      runtimeStatus: 'source-indexed-runtime-unapplied',
+      trigger: {
+        eventId: 44,
+        event: 'AfterHeal',
+        frameAnchor: 'heal-after-settlement',
+        target: expect.objectContaining({ kind: 'event-target-actor' }),
+      },
+      runtimeGaps: ['effect-property-stack-operator-unsupported'],
     });
   });
 
@@ -801,6 +914,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       [10136, []],
       [10043, []],
       [10044, []],
+      [10048, []],
       [10149, []],
       [10123, [301]],
       [10130, [301]],
@@ -808,6 +922,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       [10125, []],
       [10154, []],
       [10155, []],
+      [10175, []],
     ]);
     const appliedDefinitions = soulCatalog.definitions.filter(
       definition => definition.runtimeStatus === 'runtime-applied'

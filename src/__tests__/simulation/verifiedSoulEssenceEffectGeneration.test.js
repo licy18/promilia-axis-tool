@@ -25,6 +25,7 @@ import { createActionExecutionPlan } from '../../simulation/engine/actionExecuti
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createVerifiedCombatRuntime } from '../../simulation/mechanics/verifiedCombatRuntime';
 import { createVerifiedDamageEventGeneration } from '../../simulation/mechanics/verifiedDamageEventGeneration';
+import { createVerifiedNonDamageEventGeneration } from '../../simulation/mechanics/verifiedNonDamageEventGeneration';
 import { createVerifiedSoulEssenceEffectGeneration } from '../../simulation/mechanics/verifiedSoulEssenceEffectGeneration';
 import {
   matchesVerifiedBattlePropertyTags,
@@ -272,6 +273,28 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     maxStacks: 5,
     attributeId: 21,
   },
+  {
+    soulEssenceId: 10048,
+    contextual: true,
+    event: 'SwitchEnter',
+    frameAnchor: 'switch-enter',
+    actionKind: null,
+    durationMs: 8000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 1,
+  },
+  {
+    soulEssenceId: 10175,
+    contextual: true,
+    event: 'AfterHeal',
+    frameAnchor: 'heal-after-settlement',
+    actionKind: 'ultimate',
+    durationMs: 2000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 1,
+  },
 ];
 
 beforeEach(() => {
@@ -289,8 +312,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 23,
-      unresolvedCount: 39,
+      runtimeAppliedCount: 25,
+      unresolvedCount: 37,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -4477,6 +4500,336 @@ describe('verified soul essence effect generation', () => {
       );
     }
   );
+
+  it('projects real switch transactions into the 10048 team buff and refreshes on re-entry', () => {
+    const actionPlan = [
+      {
+        id: 'switch-into-10048-owner',
+        actionKind: 'switch',
+        sourceCharacterId: 101007,
+        targetCharacterId: 101010,
+        startFrame: 60,
+      },
+      {
+        id: 'switch-away-from-10048-owner',
+        actionKind: 'switch',
+        sourceCharacterId: 101010,
+        targetCharacterId: 101003,
+        startFrame: 120,
+      },
+      {
+        id: 'switch-back-into-10048-owner',
+        actionKind: 'switch',
+        sourceCharacterId: 101003,
+        targetCharacterId: 101010,
+        startFrame: 240,
+      },
+    ];
+    const simulate = soulEssenceId => createRealSoulScenario({
+      actorCharacterId: 101010,
+      soulEssenceId,
+      effectSkillId: soulEssenceId == null ? null : 1900920,
+      durationMs: 15_000,
+      teamCharacterIds: [101007, 101003, 101010],
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: 'actor-101007',
+          characterId: 101007,
+        },
+      },
+      actionPlan,
+    });
+    const result = simulate(10048);
+    const switchEvents =
+      result.verifiedNonDamageEventGeneration.events.filter(
+        event => event.eventId === 34
+      );
+    const commands =
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10048
+      );
+
+    expect(switchEvents.map(event => [event.absoluteFrame, event.actorId])).toEqual([
+      [60, 'actor-101010'],
+      [120, 'actor-101003'],
+      [240, 'actor-101010'],
+    ]);
+    expect(commands).toHaveLength(6);
+    expect(
+      commands.map(command => [command.timeMs, command.targetId])
+    ).toEqual([
+      [frameToMs(60), 'actor-101007'],
+      [frameToMs(60), 'actor-101003'],
+      [frameToMs(60), 'actor-101010'],
+      [frameToMs(240), 'actor-101007'],
+      [frameToMs(240), 'actor-101003'],
+      [frameToMs(240), 'actor-101010'],
+    ]);
+    expect(
+      result.effectTimeline.events.filter(
+        event =>
+          event.effectId === 'soulessence:10048:element:19009202' &&
+          event.timeMs === frameToMs(240)
+      )
+    ).toHaveLength(3);
+    expect(
+      resolveActiveEffectsAt(result.effectTimeline, frameToMs(241), {
+        targetKind: 'actor',
+        calculatorOnly: true,
+      }).filter(
+        effect => effect.effectId === 'soulessence:10048:element:19009202'
+      )
+    ).toHaveLength(3);
+    const replayAt = (actorCharacterId, actionId, startFrame) =>
+      replayRealActionWithSoulCommands({
+        actorCharacterId,
+        soulEssenceId: 10048,
+        actionId,
+        actionKind: 'normal-attack',
+        startFrame,
+        commands,
+      });
+    const active = replayAt(101003, 'c7-10048-team-active-hit', 130);
+    const expired = replayAt(101010, 'c7-10048-expired-hit', 721);
+    const damage = (runtime, actionId) =>
+      runtime.damageEvents
+        .filter(
+          event =>
+            event.type === 'VERIFIED_COMBAT_HIT' &&
+            event.actionId === actionId
+        )
+        .reduce((sum, event) => sum + Number(event.payload.rawDamage), 0);
+    expect(
+      damage(active.withCommands, 'c7-10048-team-active-hit')
+    ).toBeGreaterThan(
+      damage(active.withoutCommands, 'c7-10048-team-active-hit')
+    );
+    expect(
+      damage(expired.withCommands, 'c7-10048-expired-hit')
+    ).toBeCloseTo(
+      damage(expired.withoutCommands, 'c7-10048-expired-hit'),
+      6
+    );
+  });
+
+  it('applies 10175 to the healed actor and changes real damage only inside its right-open lifetime', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10175
+    );
+    const sourceActorId = 'actor-101007';
+    const targetActorId = 'actor-101003';
+    const sourceAction = {
+      ...createRealSoulActionDraft({
+        id: 'c7-ultimate-heal-source',
+        actionKind: 'ultimate',
+        startFrame: 0,
+        actorCharacterId: 101007,
+      }),
+      actorId: sourceActorId,
+      sourceSequenceIndex: 0,
+      sourceSequencePath: [0],
+    };
+    const sourceResolution = resolveVerifiedCombatActionMechanics(sourceAction);
+    const scenario = {
+      time: { fps: 60, durationMs: 12_000 },
+      actors: [
+        createSoulMatrixActor({
+          actorId: sourceActorId,
+          definition,
+          star: 1,
+        }),
+        { id: targetActorId, characterId: 101003, name: 'heal-target' },
+        { id: 'actor-101010', characterId: 101010, name: 'third-actor' },
+      ],
+      actions: [sourceAction],
+    };
+    const actionExecutionPlan = {
+      actions: [{ actionId: sourceAction.id, execute: true }],
+    };
+    const actionResolutionById = new Map([
+      [sourceAction.id, sourceResolution],
+    ]);
+    const healFrame = 300;
+    const healTimeMs = frameToMs(healFrame);
+    const nonDamageEventGeneration = createVerifiedNonDamageEventGeneration({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline: { transitions: [] },
+      actionResolutionById,
+      verifiedCombatRuntime: {
+        vitalEvents: [
+          {
+            type: 'VERIFIED_DIRECT_HEAL',
+            timeMs: healTimeMs,
+            absoluteFrame: healFrame,
+            actionId: sourceAction.id,
+            actorId: sourceActorId,
+            targetId: targetActorId,
+            runtimeSequenceIndex: 0,
+            payload: {
+              sourceEventIdentity: 'c7-native-ultimate-heal',
+              sourceActorId,
+              targetKind: 'actor',
+              before: 900,
+              requestedChange: 100,
+              change: 100,
+              after: 1000,
+              maximum: 1000,
+              applied: true,
+              appliedToCalculators: true,
+              afterHealDispatchEligible: true,
+              actionProvenanceAvailable: true,
+            },
+          },
+        ],
+      },
+    });
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      actionResolutionById,
+      nonDamageEventGeneration,
+    });
+    const commands = generation.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10175
+    );
+
+    expect(commands).toEqual([
+      expect.objectContaining({
+        sourceActionId: sourceAction.id,
+        sourceActorId,
+        targetId: targetActorId,
+        semanticTargetKind: 'event-target-actor',
+        timeMs: healTimeMs,
+        durationMs: 2000,
+        modifiers: [
+          expect.objectContaining({
+            attributeId: 1,
+            bucket: 'dynamicPercent',
+            sourceRawA: 900,
+          }),
+        ],
+      }),
+    ]);
+
+    const replayAt = (actionId, startFrame) =>
+      replayRealActionWithSoulCommands({
+        actorCharacterId: 101003,
+        soulEssenceId: null,
+        actionId,
+        actionKind: 'normal-attack',
+        startFrame,
+        commands,
+      });
+    const active = replayAt('c7-healed-target-active-hit', 310);
+    const expired = replayAt('c7-healed-target-expired-hit', 421);
+    const damage = (runtime, actionId) =>
+      runtime.damageEvents
+        .filter(
+          event =>
+            event.type === 'VERIFIED_COMBAT_HIT' &&
+            event.actionId === actionId
+        )
+        .reduce((sum, event) => sum + Number(event.payload.rawDamage), 0);
+
+    expect(
+      damage(active.withCommands, 'c7-healed-target-active-hit')
+    ).toBeGreaterThan(
+      damage(active.withoutCommands, 'c7-healed-target-active-hit')
+    );
+    expect(
+      damage(expired.withCommands, 'c7-healed-target-expired-hit')
+    ).toBeCloseTo(
+      damage(expired.withoutCommands, 'c7-healed-target-expired-hit'),
+      6
+    );
+  });
+
+  it('projects inherited wood-mark periodic healing without borrowing its source action skill tags', () => {
+    const sourceActionId = 'c7-inherited-wood-source-ultimate';
+    const result = createRealSoulScenario({
+      actorCharacterId: 101007,
+      soulEssenceId: 10175,
+      effectSkillId: 1900140,
+      durationMs: 6000,
+      teamCharacterIds: [101007, 101003, 101010],
+      actionPlan: [
+        {
+          id: sourceActionId,
+          actionKind: 'ultimate',
+          actorCharacterId: 101007,
+          startFrame: 0,
+        },
+      ],
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: 'actor-101007',
+          characterId: 101007,
+        },
+        actorVitalsByActor: [
+          {
+            actorId: 'actor-101007',
+            characterId: 101007,
+            currentValue: 1000,
+            maxValue: 2000,
+            valueShields: [],
+          },
+        ],
+        tuningMarks: [
+          {
+            markId: 550,
+            profileKey: 'wood',
+            decayRemainingMs: 10_000,
+            layers: [
+              {
+                sourceActionId,
+                sourceActorId: 'actor-101007',
+                sourceIdentity: 'fixture:c7-inherited-wood-mark',
+              },
+            ],
+          },
+        ],
+      },
+    });
+    const periodicHeal = result.verifiedCombatRuntime.vitalEvents.find(
+      event => event.type === 'VERIFIED_TUNING_PERIODIC_HEAL'
+    );
+    const afterHeal = result.verifiedNonDamageEventGeneration.events.find(
+      event =>
+        event.eventId === 44 &&
+        event.eventContext.sourceDescriptorIdentity ===
+          periodicHeal?.payload.sourceEventIdentity
+    );
+
+    expect(periodicHeal).toMatchObject({
+      timeMs: 5000,
+      actionId: sourceActionId,
+      targetId: 'actor-101007',
+      payload: {
+        actionProvenanceAvailable: false,
+        afterHealDispatchEligible: true,
+        change: expect.any(Number),
+      },
+    });
+    expect(periodicHeal.payload.change).toBeGreaterThan(0);
+    expect(afterHeal).toMatchObject({
+      eventId: 44,
+      actionId: sourceActionId,
+      actorId: 'actor-101007',
+      targetId: 'actor-101007',
+      eventContext: {
+        actionProvenanceAvailable: false,
+        skillSlotIds: [],
+        skillTagIds: [],
+        outcome: 'heal-applied',
+      },
+    });
+    expect(
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10175
+      )
+    ).toEqual([]);
+  });
 
   it('does not bind legacy loadouts that omit the strict runtime contract', () => {
     const definition = soulEssenceEffectCatalog.definitions.find(

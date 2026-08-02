@@ -1,18 +1,18 @@
 {
-  "schemaVersion": 9,
-  "phase": "M12-B3-C6",
+  "schemaVersion": 10,
+  "phase": "M12-B3-C7",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "5c713e55ffdc46e5e75e9a4a4dcc1d0366201be0",
+  "baseCommit": "5c5a33a21cce05fbf090af72c783bad475b55656",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
-    "phase": "M12-B3-C5",
-    "acceptanceBaseline": "5c713e55ffdc46e5e75e9a4a4dcc1d0366201be0",
+    "phase": "M12-B3-C6",
+    "acceptanceBaseline": "5c5a33a21cce05fbf090af72c783bad475b55656",
     "status": "product-accepted"
   },
   "scope": {
-    "batch": "before-damage-event-and-damage-element-context-bridge",
-    "soulEssenceIds": [10044, 10123, 10130, 10150],
-    "explicitlyExcludedSoulEssenceIds": [10018],
+    "batch": "non-damage-event-transactions-and-event-target-propagation",
+    "soulEssenceIds": [10048, 10169, 10175, 10176],
+    "explicitlyExcludedSoulEssenceIds": [10018, 10052, 10101],
     "formalSearchExecuted": false,
     "m12cLocked": true,
     "fixedCultivationChanged": false,
@@ -30,26 +30,21 @@
       "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
       "bytes": 97428254,
       "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
-      "sourceIdentity": "EElementTriggerEventType.BeforeDamage=1|AfterDamage=2|EElementTriggerFixedConditionType.CheckElementType=8|CheckElementId=13|EElementTriggerTargetType.Self=0",
-      "triggerContractHash": "ff74850293e0ab1b"
+      "sourceIdentity": "EElementTriggerEventType.SwitchEnter=34|OnGotShield=40|AfterHeal=44|EElementTriggerTargetType.Self=0|ETriggerEffectTargetType.Target=1|AllHero=15",
+      "triggerContractHash": "2416cea566c45f94"
     },
-    "beforeDamageRuntimeEvidence": {
-      "path": "scripts/optimization-qualification/evidence/soulessence-before-damage-runtime-evidence.json",
-      "bytes": 2984,
-      "sha256": "a1a30e0c70dbfaf49990bddb48bf97c1b9cca31f2a77a303fba9382c239a3f7f",
+    "nonDamageRuntimeEvidence": {
+      "path": "scripts/optimization-qualification/evidence/soulessence-non-damage-runtime-evidence.json",
+      "bytes": 5872,
+      "sha256": "1465c750e146825b4f4716e38051dcf06b1b897cefae0e55fb7cd6348b080552",
       "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
       "binaryBytes": 222485544,
       "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
-      "consumer": "AliveElementSystem.OnExecuteDamageElement@0x1318800",
-      "orderedDispatchRange": "0x1319260-0x13193D0",
-      "orderedDispatchSha256": "6ff8e96a6bfb84f825a2f6de65cbdc246649e7b78804be6d9eea944dfedfde43",
-      "beforeCall": "OnBeforeAttack@0x1319276,event=1@0x18727FA",
-      "settlementCall": "ExecuteDamageElement@0x131935A",
-      "afterCall": "OnAfterAttack@0x13193C7,event=2@0x187202F"
-    },
-    "tuningMechanics": {
-      "sourceIdentity": "combat-overlimit-mechanics-20260718.json",
-      "contractHash": "f39bf45155f12746"
+      "switchConsumer": "HeroSwitchSystem.TriggerSwitchEnter@0x1596740",
+      "shieldConsumer": "ShieldElement.Execute@0x13A2040",
+      "healConsumer": "DamageUtility.OnAfterHeal@0x1872130",
+      "triggerIntervalParser": "TriggerElement.Parse@0x13BD9C0",
+      "triggerIntervalGate": "TriggerElement.CanTrigger@0x13B5770"
     },
     "soulControlClosure": {
       "skillCount": 62,
@@ -59,124 +54,112 @@
     }
   },
   "compiledContract": {
-    "event": "BeforeDamage(1)",
-    "frameAnchor": "hit-before-damage",
-    "transactionContract": "before-settlement-after",
-    "ordinaryAndTuningShareContext": true,
-    "stableContextFields": [
+    "events": [
+      { "eventId": 34, "name": "SwitchEnter", "frameAnchor": "switch-enter" },
+      { "eventId": 40, "name": "OnGotShield", "frameAnchor": "shield-after-acquire" },
+      { "eventId": 44, "name": "AfterHeal", "frameAnchor": "heal-after-settlement" }
+    ],
+    "transactionFields": [
       "transactionIdentity",
       "eventIdentity",
-      "phase",
       "absoluteFrame",
       "sourceSequencePath",
-      "sourceActionId",
       "sourceActorId",
-      "sourceHitIdentity",
+      "eventSubjectActorId",
+      "eventTargetActorId",
+      "sourceActionId",
       "controlSkillId",
       "subSkillIndex",
+      "skillSlotIds",
       "skillTags",
-      "battlePropertyTags",
-      "damageElementId",
-      "elementTypes",
-      "damageType",
-      "markId",
-      "profileKey",
-      "judgmentIdentity",
-      "selectedCandidateMarkId",
-      "templateSourceIdentity"
+      "beforeValue",
+      "requestedValue",
+      "actualValue",
+      "afterValue",
+      "outcome",
+      "sourceDescriptorIdentity"
     ],
+    "sourceVisibility": "Self matches the native event subject, not the controlled actor",
+    "targetResolution": "Target(1) resolves to the healed actor for AfterHeal",
     "dispatchRules": {
-      "landedOrdinaryHit": true,
-      "landedTuningPacket": true,
-      "miss": false,
-      "executeFalse": false,
-      "packetNotMaterialized": false,
-      "initialMarkState": false
+      "successfulSwitchEnter": true,
+      "initialForeground": false,
+      "sameActorNoOpSwitch": false,
+      "successfulDirectHeal": true,
+      "successfulPeriodicHeal": true,
+      "fullHpExecutedHeal": true,
+      "rejectedDescriptor": false,
+      "inheritedInitialShield": false,
+      "zeroValueShield": false
     },
-    "phaseOrder": "before command -> matching damage settlement -> after event",
-    "samePacketBeforeDamageVisible": true,
-    "earlierSameFrameSourceSequenceIsolated": true,
-    "afterDamageDoesNotSelfApply": true
+    "periodicHealActionProvenance": "unavailable; no stale action tags are borrowed",
+    "triggerIntervalUnit": "milliseconds"
   },
   "definitions": {
-    "10044": {
-      "name": "狩猎姿态",
-      "condition": "CheckElementId(13)=196 OR 796",
-      "target": "Self",
-      "attributeId": 52,
-      "propertyTags": [],
-      "durationMs": 16000,
-      "stackMode": "refresh",
-      "maxStacks": 1,
-      "valuesByStarRaw": [1220, 1620, 2030, 2430]
-    },
-    "10123": {
-      "name": "桃芳春笺",
-      "condition": "CheckElementId(13)=796",
-      "target": "Self",
-      "attributeId": 21,
-      "propertyTags": [301],
+    "10048": {
+      "name": "璇枢",
+      "runtimeStatus": "runtime-applied",
+      "event": "SwitchEnter(34)",
+      "triggerIntervalMs": 10,
+      "target": "AllHero",
+      "attributeId": 1,
       "durationMs": 8000,
       "stackMode": "refresh",
-      "maxStacks": 1,
-      "valuesByStarRaw": [1130, 1500, 1880, 2250]
+      "valuesByStarRaw": [400, 500, 600, 700]
     },
-    "10130": {
-      "name": "女仆的疗养日",
-      "condition": "CheckElementType(8)=37",
-      "target": "Self",
-      "attributeId": 21,
-      "propertyTags": [301],
-      "durationMs": 5000,
-      "stackMode": "refresh",
-      "maxStacks": 1,
-      "valuesByStarRaw": [1130, 1500, 1880, 2250]
-    },
-    "10150": {
-      "name": "狼少女的心意",
-      "condition": "CheckElementId(13)=196 OR 796",
-      "target": "Self",
-      "attributeId": 21,
-      "propertyTags": [301],
-      "durationMs": 8000,
-      "stackMode": "stack",
-      "maxStacks": 5,
-      "valuesByStarRaw": [230, 300, 380, 450]
-    },
-    "10018": {
-      "name": "飞行试验",
+    "10169": {
+      "name": "软软棉花肉",
       "runtimeStatus": "source-indexed-runtime-unapplied",
-      "blockingReason": "effect-activation-condition-operator-unsupported",
-      "beforeDamageBridgeAloneDoesNotQualify": true
+      "event": "OnGotShield(40)",
+      "target": "AllHero",
+      "attributeId": 229,
+      "durationMs": 20000,
+      "stackMode": "refresh",
+      "valuesByStarRaw": [375000, 500000, 625000, 750000],
+      "blockingReason": "effect-shield-refresh-replacement-semantics-evidence-gap"
+    },
+    "10175": {
+      "name": "一点都不痛",
+      "runtimeStatus": "runtime-applied",
+      "event": "AfterHeal(44)",
+      "condition": "CheckSkillSlot(6)=UltraSkill(4)",
+      "target": "event-target-actor",
+      "attributeId": 1,
+      "durationMs": 2000,
+      "stackMode": "refresh",
+      "valuesByStarRaw": [900, 1200, 1500, 1800]
+    },
+    "10176": {
+      "name": "温柔的照护",
+      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "event": "AfterHeal(44)",
+      "condition": "CheckSkillType(11)=NormalAttack(1)",
+      "target": "event-target-actor",
+      "attributeId": 5,
+      "durationMs": 15000,
+      "combineType": 5,
+      "combineNumber": -1,
+      "valuesByStarRaw": [1460, 1940, 2430, 2910],
+      "blockingReason": "effect-property-stack-operator-unsupported"
     }
   },
   "runtimeMatrix": {
-    "fireOverlimit196": "10044 and 10150 trigger from the materialized landed packet",
-    "windOverlimit796": "10044, 10123 and 10150 trigger from the materialized landed packet",
-    "thunderType37": "10130 matches the real damage template types, not profile names",
-    "samePacket": "BeforeDamage command is visible to its own settlement when PropertyTag scope matches",
-    "wrongPropertyTag": "command may exist but does not modify the mismatched settlement",
-    "ordinaryHit": "one transaction per landed hit; no duplicate tuning transaction",
-    "sameFrameSequence": "earlier source sequence does not see a later command",
-    "missAndBlocked": "no BeforeDamage command",
-    "refreshAndExpiry": "right-open duration and source-defined stack semantics preserved",
-    "selfOwnership": "does not transfer when controlled actor changes",
-    "replayStable": true,
+    "10048": "A real switch into the equipped actor creates one event and three deterministically ordered AllHero commands; switch-out, initial foreground and same-actor no-op do not trigger",
+    "10175": "An executed ultimate heal creates one effect on the actual healed actor, including healer != target and full-HP zero-effective-heal cases; blocked descriptors do not trigger",
+    "periodicHeal": "Kibo and tuning periodic heals share the canonical AfterHeal transaction but cannot satisfy action-tag conditions without real action provenance",
+    "directShield": "Successful acquisition is projected once; rejected and zero-value descriptors do not dispatch; refresh/replacement qualification remains blocked",
+    "rightOpenExpiry": true,
+    "switchAndReplayStable": true,
     "cycleStateStable": true,
-    "c4AfterDamageRegression": "passed",
-    "c5AcquireRegression": "passed"
+    "numericConsequences": "teammate attack damage and healed-target attack damage read the canonical modifiers within their lifetimes and return to baseline at expiry"
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 23,
-    "runtimeUnappliedSoulEssenceCount": 39,
+    "runtimeAppliedSoulEssenceCount": 25,
+    "runtimeUnappliedSoulEssenceCount": 37,
     "runtimeAppliedSetSkillCount": 0,
-    "newlyAppliedSoulEssenceIds": [10044, 10123, 10130, 10150],
-    "preservedRuntimeAppliedSoulEssenceCount": 19,
-    "explicitlyUnapplied": {
-      "soulEssenceCount": 39,
-      "setSkillCount": 12,
-      "reason": "source evidence or canonical runtime operator remains incomplete"
-    }
+    "newlyAppliedSoulEssenceIds": [10048, 10175],
+    "preservedRuntimeAppliedSoulEssenceCount": 23,
+    "evidenceBlockedSoulEssenceIds": [10169, 10176]
   },
   "qualification": {
     "denominators": {
@@ -186,10 +169,10 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 424,
+    "blockingUniqueGapCount": 420,
     "blockingByCategory": {
-      "not-implemented": 408,
-      "evidence-insufficient": 16
+      "not-implemented": 402,
+      "evidence-insufficient": 18
     },
     "formalAdmissions": {
       "characters": 0,
@@ -200,17 +183,17 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "38214acbcfcd3bec",
-    "rosterHash": "8b862efb68f88445",
-    "manifestsHash": "1dd7a09ca04173dd",
-    "ledgerHash": "7b49c3b804c860f2",
-    "bindingMatrixHash": "fd76c55a6c4b4e24",
-    "qualificationCatalogHash": "0c97a0222e1f8f27",
-    "dynamicLoadoutEffectCensusHash": "15865c016a511f04",
-    "soulEssenceEffectCatalogHash": "5ded9fcb8005078b",
-    "soulEssenceSourceSnapshotHash": "d4eda61c780b1ee6",
+    "sourceSnapshotHash": "bad3205a3460c9d5",
+    "rosterHash": "641261e69a1be33b",
+    "manifestsHash": "9cf36adbb69c70e0",
+    "ledgerHash": "9beae8053233eeda",
+    "bindingMatrixHash": "4568dc485d378145",
+    "qualificationCatalogHash": "00fa04e110e78c23",
+    "dynamicLoadoutEffectCensusHash": "09b6f5835229c95f",
+    "soulEssenceEffectCatalogHash": "0b16807519898633",
+    "soulEssenceSourceSnapshotHash": "441aec3693b0eed1",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
-    "soulEssenceTriggerContractHash": "ff74850293e0ab1b",
+    "soulEssenceTriggerContractHash": "2416cea566c45f94",
     "machineAxisCanonicalHashes": {
       "input": "c8bfd28dcb890f4f",
       "data": "98deb78db6293f88",
@@ -219,38 +202,23 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "frozen BeforeDamage consumer evidence and damage-event context became first-class qualification data",
+    "reason": "frozen non-damage consumer evidence and event-target semantics became first-class qualification data",
     "machineAxisCanonicalHashDrift": 0,
     "gameplayAssertionDrift": 0,
-    "c4AfterDamageRegression": 0,
-    "c5AcquireRegression": 0
+    "c4ConsumeAndAfterDamageRegression": 0,
+    "c5AcquireRegression": 0,
+    "c6BeforeDamageRegression": 0
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 4, "tests": 115, "status": "passed" },
-    "characterProfileAndMigration": {
-      "files": 4,
-      "tests": 38,
-      "status": "passed",
-      "gameplayAssertionDrift": 0
-    },
+    "focusedMechanics": { "files": 3, "tests": 82, "status": "passed" },
+    "characterProfileAndMigration": { "files": 4, "tests": 38, "status": "passed", "gameplayAssertionDrift": 0 },
     "machineAxis": { "files": 12, "tests": 157, "status": "passed" },
-    "canonicalAndRuntime": { "files": 6, "tests": 62, "status": "passed" },
+    "canonicalAndRuntime": { "files": 6, "tests": 87, "status": "passed" },
     "audits": {
       "count": 9,
       "status": "clean",
-      "names": [
-        "optimization-qualification",
-        "production-imports",
-        "workbench-data",
-        "action-status",
-        "applied-source-bindings",
-        "character-acceptance",
-        "character-combat",
-        "verified-combat",
-        "kibo-headless"
-      ],
-      "appliedSoulSourceCount": 23,
+      "appliedSoulSourceCount": 25,
       "appliedSoulSourceDriftCount": 0,
       "tuningConditionSourceCount": 13,
       "tuningConditionSourceDriftCount": 0,
@@ -263,6 +231,7 @@
   "knownNonBlockingRisks": [
     "Sass @import deprecation warning",
     "existing circular chunk warnings",
-    "existing large chunk warning"
+    "existing large chunk warning",
+    "performance and package size are outside this stage gate"
   ]
 }

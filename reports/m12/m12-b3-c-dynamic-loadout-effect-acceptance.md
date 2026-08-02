@@ -1,23 +1,25 @@
-# M12-B3-C6 BeforeDamage Event Bridge
+# M12-B3-C7 Non-Damage Event Transactions
 
 - Status: `verification-complete-awaiting-product-acceptance`
-- Base: C5 product-accepted at `5c713e55ffdc46e5e75e9a4a4dcc1d0366201be0`
-- Scope: soul essences `10044`, `10123`, `10130`, and `10150`; `10018` remains blocked by its unresolved outer activation prerequisite.
+- Base: C6 product-accepted at `5c5a33a21cce05fbf090af72c783bad475b55656`
+- Scope: soul essences `10048`, `10169`, `10175`, and `10176`; `10018`, `10052`, and `10101` remain outside this batch.
 
 ## Source Contract
 
-`AliveElementSystem.OnExecuteDamageElement@0x1318800` calls `OnBeforeAttack` at `0x1319276`, settles the damage at `0x131935A`, then calls `OnAfterAttack` at `0x13193C7`. The frozen binary/range hashes prove event 1 is dispatched before settlement and event 2 after settlement. `CheckElementId(13)` reads the actual damage element ID, while `CheckElementType(8)` reads the damage template's real `types` collection.
+The frozen `GameAssembly.dll` (`222485544B`, SHA-256 `c60d1379...22b`) closes three native consumers: `HeroSwitchSystem.TriggerSwitchEnter@0x1596740`, `ShieldElement.Execute@0x13A2040`, and `DamageUtility.OnAfterHeal@0x1872130`. It also proves that `triggerInv` is parsed as milliseconds. The exact byte windows and source identities are stored in `scripts/optimization-qualification/evidence/soulessence-non-damage-runtime-evidence.json` (`5872B`, SHA-256 `1465c750...552`).
 
-Ordinary landed hits and verified tuning damage packets publish the same stable `before -> settlement -> after` transaction. Misses, blocked actions, absent packets, held marks without consumption, and initial-state restoration publish no triggerable BeforeDamage event. Each transaction retains action/actor/hit, final control binding, skill and property tags, damage element/types, tuning judgment/selected candidate, frame, and source sequence.
+Canonical non-damage transactions now project successful switches, direct and periodic heals, and direct shield acquisition from their existing settlements. `Self` observes the native event subject; `Target(1)` on AfterHeal resolves to the healed actor. Initial state, rejected descriptors, no-op switches, and zero-value shields do not emit triggerable events. Periodic heals retain their real source but do not borrow stale action tags.
 
 ## Runtime Result
 
-`10044` reacts to landed fire `196` or wind `796` packets and adds the source actor's fire damage property. `10123` reacts to wind `796`; `10130` matches real template type `37`; `10150` stacks on fire `196` or wind `796`. PropertyTag `[301]` remains an independent charged-damage scope: a trigger command may exist while an ordinary or otherwise mismatched settlement receives no modifier.
+`10048` is runtime-applied: a real switch into the equipped actor creates one SwitchEnter event and three deterministic AllHero attack modifiers for 8 seconds; initial foreground, switch-out, same-actor no-op, and invalid switches do not trigger. Its `triggerInv=10` is preserved as a 10ms interval gate.
 
-BeforeDamage is visible to its own matching settlement but never to an earlier same-frame source sequence. C4 AfterDamage remains post-settlement and cannot self-apply. Refresh, stack cap, right-open expiry, Self ownership, switch behavior, replay, and cycle state are covered by real ordinary/tuning runtime tests.
+`10175` is runtime-applied: an executed ultimate heal creates a 2-second attack modifier on the actual healed actor, including healer != target and full-HP zero-effective-heal cases. Blocked descriptors do not trigger, and numeric tests prove only the healed target receives the damage increase during the right-open lifetime.
+
+`10169` remains evidence-insufficient because native shield refresh/replacement dispatch has not been closed. `10176` remains unapplied because `combineType=5 / combineNumber=-1` semantics are unresolved. Neither is approximated by the runtime.
 
 ## Qualification
 
-Soul effects are `23/62 runtime-applied` and `39/62 dynamic-unapplied`. The unique blocker ledger is `424` (`408 not-implemented`, `16 evidence-insufficient`). All 12 set effects remain unapplied; every formal admission count is zero and M12-C remains locked.
+Soul effects are `25/62 runtime-applied` and `37/62 dynamic-unapplied`. The unique blocker ledger is `420` (`402 not-implemented`, `18 evidence-insufficient`). All 12 set effects remain unapplied; every formal admission count is zero and M12-C remains locked.
 
-Final verification passed C6 focused mechanics `4 files / 115 tests`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, canonical/runtime `6 / 62`, nine deterministic audits, and production build. Applied-source audit is `23 property sources / 0 drift`, `13 tuning conditions / 0 drift`, and `12 priority consume groups / 0 drift`.
+Verification passed C7 focused mechanics `3 files / 82 tests`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, canonical/runtime `6 / 87`, nine deterministic audits, and production build. Applied-source audit is `25 property sources / 0 drift`, `13 tuning conditions / 0 drift`, and `12 priority consume groups / 0 drift`.

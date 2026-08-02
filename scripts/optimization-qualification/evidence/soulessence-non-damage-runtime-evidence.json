@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrSoulEssenceNonDamageRuntimeEvidence",
+  "reviewedBinary": {
+    "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+    "bytes": 222485544,
+    "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+  },
+  "consumer": {
+    "switchEnter": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.HeroSwitchSystem.TriggerSwitchEnter",
+      "rva": "0x1596740",
+      "eventId": 34,
+      "dispatchCallRva": "0x15967B9",
+      "triggerInvoker": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElementHandle",
+      "triggerInvokerRva": "0x18B5D50",
+      "range": "0x1596798-0x15967C0",
+      "sha256": "46a00a3fd5371538f24084def8401ed1c84ef1f816d6cbf0251b6bed76395ce6"
+    },
+    "onGotShield": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.ShieldElement.Execute",
+      "rva": "0x13A2040",
+      "eventId": 40,
+      "dispatchCallRva": "0x13A22C0",
+      "setShieldRva": "0x13A33C0",
+      "triggerInvoker": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElementHandle",
+      "triggerInvokerRva": "0x18B5D50",
+      "range": "0x13A21D8-0x13A22CF",
+      "sha256": "35e822ad22f0c882ca6282195efa9a248b06b4617715cf8521d2eab2375aab4a"
+    },
+    "afterHeal": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.DamageUtility.OnAfterHeal",
+      "rva": "0x1872130",
+      "eventId": 44,
+      "dispatchCallRvas": [
+        "0x18722FA",
+        "0x1872338"
+      ],
+      "triggerInvoker": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElement_DamageHandle",
+      "triggerInvokerRva": "0x18B5F10",
+      "range": "0x1872277-0x187233D",
+      "sha256": "9d50ed9ffea589ba0f3eff85ab9f38a0d9a80e08e3fb80fa2e31bc39541f8148"
+    },
+    "healSettlementOrder": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.AliveElementSystem.OnExecuteDamageElement",
+      "rva": "0x1318800",
+      "settlementCallRva": "0x131935A",
+      "afterHealCallRvas": [
+        "0x13193C7",
+        "0x1319403"
+      ],
+      "range": "0x13192C8-0x1319408",
+      "sha256": "cdbf14a513b33b2af989ded534c3b8a428d33f4bf364bead890b90111d6c228f"
+    },
+    "triggerIntervalParse": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
+      "rva": "0x13BD9C0",
+      "range": "0x13BDBAE-0x13BDBF0",
+      "sha256": "be5d8ab83edb45324accc5c2a7e2f677bb0cf72ba1d5c6f93a3ab65fb5dee2d3"
+    },
+    "triggerIntervalGate": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.CanTrigger",
+      "rva": "0x13B5770",
+      "range": "0x13B5803-0x13B585C",
+      "sha256": "1271b625e70da5aaa882ab5fee10024637c71355f10411ea30c95aef1d9efa9a"
+    },
+    "triggerEventHandlerIntervalGate": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.TriggerEventElementHandler",
+      "rva": "0x13BFB50",
+      "range": "0x13BFC66-0x13BFCB5",
+      "sha256": "a9735e5b89842368cd6341a185406bba26688e11280fed56d33b9b8a89240c7e"
+    }
+  },
+  "switchEnter": {
+    "eventId": 34,
+    "frameAnchor": "switch-enter",
+    "sourceActorSemantic": "entered-actor",
+    "triggerSubjectSemantic": "entered-actor",
+    "initialForegroundDispatch": false,
+    "noOpDispatch": false,
+    "failedOrUnexecutedDispatch": false,
+    "minimumIntervalUnit": "milliseconds",
+    "reason": "TriggerSwitchEnter dispatches event 34 with the successfully entered hero as source and self. TriggerElement.Parse converts triggerInv milliseconds to runtime seconds before CanTrigger applies the interval gate."
+  },
+  "onGotShield": {
+    "eventId": 40,
+    "frameAnchor": "shield-after-acquire",
+    "sourceActorSemantic": "shield-source-actor",
+    "triggerSubjectSemantic": "shield-recipient",
+    "eventTargetSemantic": "shield-recipient",
+    "dispatchAfterAcquire": true,
+    "zeroValueDispatch": false,
+    "inheritedStateDispatch": false,
+    "failedOrRejectedDispatch": false,
+    "refreshReplacementSemantics": "evidence-insufficient",
+    "reason": "ShieldElement.Execute dispatches event 40 only on its successful new-shield path before SetShield. The reviewed branch does not close replacement or combine semantics for an already active shield instance."
+  },
+  "afterHeal": {
+    "eventId": 44,
+    "frameAnchor": "heal-after-settlement",
+    "sourceActorSemantic": "heal-source-actor",
+    "triggerSubjectSemantic": "heal-source-actor",
+    "eventTargetSemantic": "healed-actor",
+    "effectTargetSemantic": "healed-actor",
+    "dispatchAfterSettlement": true,
+    "zeroEffectiveChangeDispatch": true,
+    "failedOrRejectedDispatch": false,
+    "duplicateNativeObserversCanonicalized": true,
+    "reason": "OnExecuteDamageElement settles the heal before OnAfterHeal. OnAfterHeal forwards the executor as the event Target and contains no effective-delta gate, so an executed heal at full HP still dispatches while rejected descriptors do not."
+  },
+  "sourceVisibility": {
+    "triggerTargetType": 0,
+    "enumName": "Self",
+    "runtimeSourceKind": "native-event-subject-matches-equipped-actor",
+    "reason": "Self is evaluated against each native event subject: entered actor for SwitchEnter, shield recipient for OnGotShield, and heal source actor for AfterHeal."
+  },
+  "effectTarget": {
+    "effectTargetType": 1,
+    "enumName": "Target",
+    "runtimeTargetKind": "event-target-actor",
+    "supportedEvents": [44],
+    "reason": "InvokeTriggerElement_DamageHandle receives the healed executor as Target for AfterHeal; triggerEffectList.targetType=Target therefore resolves to that healed actor."
+  },
+  "emptyConditionEvents": [34, 40],
+  "conclusion": {
+    "status": "applied",
+    "eventContract": "canonical-non-damage-event-transaction",
+    "sourceIdentity": "GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.Parse@0x13BD9C0/TriggerElement.CanTrigger@0x13B5770"
+  }
+}

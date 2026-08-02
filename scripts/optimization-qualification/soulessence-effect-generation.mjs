@@ -17,7 +17,10 @@ const TRIGGER_EVENT_BY_ID = Object.freeze({
   6: { name: 'AfterSkill', frameAnchor: 'action-end' },
   9: { name: 'BeforeGetElement', frameAnchor: 'element-before-acquire' },
   10: { name: 'AfterGetElement', frameAnchor: 'element-after-acquire' },
+  34: { name: 'SwitchEnter', frameAnchor: 'switch-enter' },
   36: { name: 'UnloadSkill', frameAnchor: 'loadout-uninstall' },
+  40: { name: 'OnGotShield', frameAnchor: 'shield-after-acquire' },
+  44: { name: 'AfterHeal', frameAnchor: 'heal-after-settlement' },
 });
 
 const SUPPORTED_FRAME_ANCHORS = new Set([
@@ -27,6 +30,9 @@ const SUPPORTED_FRAME_ANCHORS = new Set([
   'hit-after-damage',
   'element-before-acquire',
   'element-after-acquire',
+  'switch-enter',
+  'shield-after-acquire',
+  'heal-after-settlement',
 ]);
 
 export const SOULESSENCE_EFFECT_CATALOG_CONTRACT_NAME =
@@ -553,6 +559,7 @@ function compileTriggerCondition({
       sourceIdentity: 'battle-element-trigger-source-not-unique',
     };
   }
+  const triggerEventId = Number(trigger.typetree?.triggerParam1);
   const logicBinding = triggerContract.logicBindings.find(
     binding => Number(binding.value) === Number(conditionLogicValue)
   );
@@ -613,6 +620,24 @@ function compileTriggerCondition({
     }
     return base;
   });
+  if (
+    compiledConditions.length === 0 &&
+    logicBinding &&
+    (triggerContract.nonDamageRuntime?.emptyConditionEvents ?? []).includes(
+      triggerEventId
+    )
+  ) {
+    return {
+      kind: 'always',
+      logic: logicBinding.runtimeLogic,
+      logicValue: Number(logicBinding.value),
+      logicName: logicBinding.enumName,
+      conditions: [],
+      actionKinds: [],
+      status: 'applied',
+      sourceIdentity: `${createElementIdentity(trigger)}.triggerConditionType|triggerConditionList|${logicBinding.sourceIdentity}|${triggerContract.nonDamageRuntime.sourceIdentity}`,
+    };
+  }
   if (
     !logicBinding ||
     compiledConditions.length === 0 ||
@@ -925,6 +950,15 @@ function compileSoulEffectDefinition({
   if (!triggerTargetBinding) {
     runtimeGaps.push('effect-trigger-source-target-unsupported');
   }
+  if (
+    triggerEvent?.frameAnchor === 'shield-after-acquire' &&
+    triggerContract.nonDamageRuntime?.onGotShield
+      ?.refreshReplacementSemantics !== 'applied'
+  ) {
+    runtimeGaps.push(
+      'effect-shield-refresh-replacement-semantics-evidence-gap'
+    );
+  }
   if (activationPrerequisiteRows.length > 0) {
     runtimeGaps.push('effect-activation-condition-operator-unsupported');
   }
@@ -1010,6 +1044,8 @@ function compileSoulEffectDefinition({
             eventId: Number(triggerTree.triggerParam1),
             event: triggerEvent?.name ?? null,
             frameAnchor: triggerEvent?.frameAnchor ?? null,
+            intervalMs: numberOrNull(triggerTree.triggerInv),
+            intervalSourceIdentity: `${createElementIdentity(trigger)}.triggerInv|${triggerContract.nonDamageRuntime?.consumer?.triggerIntervalParse?.identity ?? 'trigger-interval-contract-unresolved'}`,
             condition: compiledCondition,
             triggerTargetType: numberOrNull(triggerTree.triggerTargetType),
             triggerTargetTypeSourceIdentity: `${createElementIdentity(trigger)}.triggerTargetType`,
@@ -1150,6 +1186,15 @@ function createMechanismFamily(triggerEvent) {
   }
   if (triggerEvent?.frameAnchor === 'element-after-acquire') {
     return 'equipped-actor-get-element-property-after-acquire';
+  }
+  if (triggerEvent?.frameAnchor === 'switch-enter') {
+    return 'equipped-actor-switch-enter-team-property';
+  }
+  if (triggerEvent?.frameAnchor === 'shield-after-acquire') {
+    return 'equipped-actor-shield-acquire-team-property';
+  }
+  if (triggerEvent?.frameAnchor === 'heal-after-settlement') {
+    return 'equipped-actor-heal-event-target-property';
   }
   return 'source-indexed-composite-effect';
 }

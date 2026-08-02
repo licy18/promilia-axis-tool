@@ -4,7 +4,10 @@ import {
   EFFECT_STACK_MODES,
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
-import { getActionSourceSequencePath } from '../../domain/actionSourceSequence';
+import {
+  compareSourceSequencePaths,
+  getActionSourceSequencePath,
+} from '../../domain/actionSourceSequence';
 import { evaluateVerifiedBattleEffectFormula } from './verifiedBattleEffectFormulaRuntime';
 
 export const VERIFIED_SOULESSENCE_EFFECT_GENERATION_CONTRACT_NAME =
@@ -17,6 +20,9 @@ const SOULESSENCE_TRIGGER_OPERATOR_REGISTRY = Object.freeze({
   'hit-after-damage': resolveDamageTriggerOccurrences,
   'element-before-acquire': resolveGetElementTriggerOccurrences,
   'element-after-acquire': resolveGetElementTriggerOccurrences,
+  'switch-enter': resolveNonDamageTriggerOccurrences,
+  'shield-after-acquire': resolveNonDamageTriggerOccurrences,
+  'heal-after-settlement': resolveNonDamageTriggerOccurrences,
 });
 
 export function createVerifiedSoulEssenceEffectGeneration({
@@ -25,6 +31,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
   actionResolutionById = null,
   tuningGeneration = null,
   damageEventGeneration = null,
+  nonDamageEventGeneration = null,
   catalog = soulEssenceEffectCatalog,
 } = {}) {
   const executionByActionId = new Map(
@@ -69,28 +76,35 @@ export function createVerifiedSoulEssenceEffectGeneration({
       continue;
     }
     for (const [actionIndex, action] of (scenario.actions ?? []).entries()) {
-      if (String(action.actorId) !== String(binding.actor.id)) continue;
+      const frameAnchor = binding.definition.trigger.frameAnchor;
+      const nonDamageTrigger = isNonDamageTriggerAnchor(frameAnchor);
+      if (
+        !nonDamageTrigger &&
+        String(action.actorId) !== String(binding.actor.id)
+      ) {
+        continue;
+      }
       if (executionByActionId.get(action.id)?.execute !== true) continue;
       const resolution = actionResolutionById?.get?.(action.id) ?? null;
-      const actionContext = resolveSoulTriggerActionContext({
-        action,
-        resolution,
-      });
-      const actionKind = actionContext.actionKind;
       const triggerOperator =
-        SOULESSENCE_TRIGGER_OPERATOR_REGISTRY[
-          binding.definition.trigger.frameAnchor
-        ];
-      const occurrences = triggerOperator?.({
+        SOULESSENCE_TRIGGER_OPERATOR_REGISTRY[frameAnchor];
+      const rawOccurrences = triggerOperator?.({
         action,
         actionIndex,
         resolution,
         scenario,
         tuningGeneration,
         damageEventGeneration,
-        frameAnchor: binding.definition.trigger.frameAnchor,
+        nonDamageEventGeneration,
+        frameAnchor,
       });
-      if (!Array.isArray(occurrences) || occurrences.length === 0) {
+      const occurrences = (rawOccurrences ?? []).filter(
+        occurrence =>
+          !nonDamageTrigger ||
+          String(occurrence.eventContext?.triggerSubjectActorId) ===
+            String(binding.actor.id)
+      );
+      if (occurrences.length === 0) {
         suppressions.push({
           actionId: action.id,
           actorId: binding.actor.id,
@@ -98,24 +112,38 @@ export function createVerifiedSoulEssenceEffectGeneration({
           effectSkillId: binding.definition.effectSkillId,
           reason: triggerOperator
             ? resolveEmptyTriggerOccurrenceReason(
-                binding.definition.trigger.frameAnchor
+                frameAnchor,
+                rawOccurrences?.length > 0
               )
             : 'soulessence-effect-trigger-operator-unavailable',
-          triggerFrameAnchor: binding.definition.trigger.frameAnchor,
+          triggerFrameAnchor: frameAnchor,
         });
         continue;
       }
       const matchedOccurrences = occurrences
-        .map(occurrence => ({
-          ...occurrence,
-          conditionMatch: matchesSoulTriggerCondition(
-            binding.definition.trigger?.condition,
+        .map(occurrence => {
+          const actionContext = resolveSoulTriggerActionContext({
+            action,
+            resolution,
+            eventContext: occurrence.eventContext,
+          });
+          return {
+            ...occurrence,
             actionContext,
-            occurrence.eventContext
-          ),
-        }))
+            conditionMatch: matchesSoulTriggerCondition(
+              binding.definition.trigger?.condition,
+              actionContext,
+              occurrence.eventContext
+            ),
+          };
+        })
         .filter(occurrence => occurrence.conditionMatch.matched);
       if (matchedOccurrences.length === 0) {
+        const actionContext = resolveSoulTriggerActionContext({
+          action,
+          resolution,
+          eventContext: occurrences[0]?.eventContext,
+        });
         suppressions.push({
           actionId: action.id,
           actorId: binding.actor.id,
@@ -124,34 +152,41 @@ export function createVerifiedSoulEssenceEffectGeneration({
           reason: 'soulessence-effect-action-kind-condition-not-matched',
           expectedActionKinds:
             binding.definition.trigger?.condition?.actionKinds ?? [],
-          actualActionKind: actionKind,
+          actualActionKind: actionContext.actionKind,
           expectedCondition: binding.definition.trigger?.condition ?? null,
           actualSkillSlotIds: actionContext.skillSlotIds,
           actualSkillTagIds: actionContext.skillTagIds,
-          conditionReasons: occurrences.map(occurrence => ({
-            eventIdentity: occurrence.eventContext?.eventIdentity ?? null,
-            reasons: matchesSoulTriggerCondition(
-              binding.definition.trigger?.condition,
-              actionContext,
-              occurrence.eventContext
-            ).reasons,
-          })),
+          conditionReasons: occurrences.map(occurrence => {
+            const occurrenceActionContext = resolveSoulTriggerActionContext({
+              action,
+              resolution,
+              eventContext: occurrence.eventContext,
+            });
+            return {
+              eventIdentity: occurrence.eventContext?.eventIdentity ?? null,
+              reasons: matchesSoulTriggerCondition(
+                binding.definition.trigger?.condition,
+                occurrenceActionContext,
+                occurrence.eventContext
+              ).reasons,
+            };
+          }),
         });
         continue;
       }
-      const targets = resolveSoulEffectTargets({
-        binding,
-        scenario,
-      });
       effectCommands.push(
         ...matchedOccurrences.flatMap(occurrence =>
-          targets.map((target, targetIndex) =>
+          resolveSoulEffectTargets({
+            binding,
+            scenario,
+            occurrence,
+          }).map((target, targetIndex) =>
             createSoulEffectCommand({
               binding,
               action,
               actionIndex,
-              actionKind,
-              actionContext,
+              actionKind: occurrence.actionContext.actionKind,
+              actionContext: occurrence.actionContext,
               conditionMatch: occurrence.conditionMatch,
               resolution,
               occurrence,
@@ -165,6 +200,11 @@ export function createVerifiedSoulEssenceEffectGeneration({
     }
   }
 
+  const gatedEffectCommands = applySoulTriggerIntervalGates({
+    effectCommands,
+    suppressions,
+  });
+
   return {
     schemaVersion: 1,
     contractName: VERIFIED_SOULESSENCE_EFFECT_GENERATION_CONTRACT_NAME,
@@ -173,12 +213,12 @@ export function createVerifiedSoulEssenceEffectGeneration({
       ? 'verified-soulessence-effect-generation-partial'
       : 'verified-soulessence-effect-generation-ready',
     catalogHash: catalog?.catalogHash ?? null,
-    effectCommands,
+    effectCommands: gatedEffectCommands,
     suppressions,
     unresolved,
     summary: {
       equippedBindingCount: bindings.length,
-      effectCommandCount: effectCommands.length,
+      effectCommandCount: gatedEffectCommands.length,
       suppressionCount: suppressions.length,
       unresolvedCount: unresolved.length,
     },
@@ -229,7 +269,12 @@ function resolveActionTriggerOccurrence({
   ];
 }
 
-function resolveEmptyTriggerOccurrenceReason(frameAnchor) {
+function resolveEmptyTriggerOccurrenceReason(frameAnchor, subjectMismatch) {
+  if (isNonDamageTriggerAnchor(frameAnchor)) {
+    return subjectMismatch
+      ? 'soulessence-effect-non-damage-event-subject-not-matched'
+      : 'soulessence-effect-no-source-non-damage-transaction';
+  }
   if (String(frameAnchor).startsWith('hit-')) {
     return 'soulessence-effect-no-landed-source-hit';
   }
@@ -237,6 +282,31 @@ function resolveEmptyTriggerOccurrenceReason(frameAnchor) {
     return 'soulessence-effect-no-source-get-element-transaction';
   }
   return 'soulessence-effect-action-occurrence-unavailable';
+}
+
+function resolveNonDamageTriggerOccurrences({
+  action,
+  nonDamageEventGeneration,
+  frameAnchor,
+}) {
+  return (nonDamageEventGeneration?.events ?? [])
+    .filter(event => String(event.actionId) === String(action.id))
+    .filter(event => event.kind === frameAnchor)
+    .filter(
+      event =>
+        event.applied === true &&
+        event.eventContext?.applied === true &&
+        event.eventContext?.success === true &&
+        event.eventContext?.initialState !== true
+    )
+    .map(event => ({
+      hit: null,
+      tuningEvent: null,
+      nonDamageEvent: event,
+      timeMs: Number(event.timeMs),
+      triggerSequencePath: event.sourceSequencePath,
+      eventContext: event.eventContext,
+    }));
 }
 
 function resolveGetElementTriggerOccurrences({
@@ -362,8 +432,10 @@ function createSoulEffectCommand({
       : [...actionSourceSequencePath, Number(hit.hitIndex)];
   const triggerSequencePath = [...occurrenceSequencePath, targetIndex];
   const effectIdentity = `soulessence:${binding.soulEssenceId}:element:${effect.elementId}`;
+  const sourceNonDamageEventIdentity =
+    occurrence?.nonDamageEvent?.eventIdentity ?? null;
   return {
-    id: `soulessence|${binding.soulEssenceId}|${action.id}|${effect.elementId}|${frameAnchor}|target:${target.id}${hit == null ? '' : `|hit:${hit.hitIndex}`}${tuningEvent == null ? '' : `|tuning:${tuningEvent.eventIdentity}`}`,
+    id: `soulessence|${binding.soulEssenceId}|${action.id}|${effect.elementId}|${frameAnchor}|target:${target.id}${hit == null ? '' : `|hit:${hit.hitIndex}`}${tuningEvent == null ? '' : `|tuning:${tuningEvent.eventIdentity}`}${sourceNonDamageEventIdentity == null ? '' : `|event:${sourceNonDamageEventIdentity}`}`,
     sourceActionId: action.id,
     sourceActionName: action.name,
     sourceActorId: actor.id,
@@ -374,6 +446,7 @@ function createSoulEffectCommand({
     sourceHitIndex: eventContext?.sourceHitIndex ?? hit?.hitIndex ?? null,
     sourceHitElementId: eventContext?.damageElementId ?? hit?.elementId ?? null,
     sourceTuningEventIdentity: tuningEvent?.eventIdentity ?? null,
+    sourceNonDamageEventIdentity,
     effectId: effectIdentity,
     effectName: `${definition.name}-${effect.name ?? effect.elementId}`,
     operation: EFFECT_OPERATIONS.APPLY,
@@ -437,7 +510,11 @@ function createSoulEffectCommand({
       sourceHitElementId:
         eventContext?.damageElementId ?? hit?.elementId ?? null,
       sourceTuningEventIdentity: tuningEvent?.eventIdentity ?? null,
+      sourceNonDamageEventIdentity,
       triggerEventContext: eventContext,
+      triggerIntervalMs: definition.trigger.intervalMs ?? null,
+      triggerIntervalSourceIdentity:
+        definition.trigger.intervalSourceIdentity ?? null,
       triggerCondition: definition.trigger.condition,
       matchedConditionIdentities: conditionMatch.matchedConditionIdentities,
       actionSkillSlotIds: actionContext.skillSlotIds,
@@ -514,31 +591,60 @@ function evaluateSoulEffectFormula({ definition, starValue, star, actor }) {
   });
 }
 
-function resolveSoulEffectTargets({ binding, scenario }) {
+function resolveSoulEffectTargets({ binding, scenario, occurrence }) {
   if (binding.definition.trigger?.target?.kind === 'team-actors') {
     return (scenario.actors ?? []).map(actor => ({
       id: actor.id,
       name: actor.name ?? null,
     }));
   }
+  if (binding.definition.trigger?.target?.kind === 'event-target-actor') {
+    const targetId = String(
+      occurrence?.eventContext?.eventTargetActorId ?? ''
+    );
+    const actor = (scenario.actors ?? []).find(
+      candidate => String(candidate.id) === targetId
+    );
+    return actor ? [{ id: actor.id, name: actor.name ?? null }] : [];
+  }
   return [{ id: binding.actor.id, name: binding.actor.name ?? null }];
 }
 
-function resolveSoulTriggerActionContext({ action, resolution }) {
-  const actionBinding = resolution?.actionBinding ?? {};
-  const controlBinding = resolution?.controlBinding ?? {};
+function resolveSoulTriggerActionContext({ action, resolution, eventContext }) {
+  const actionProvenanceAvailable =
+    eventContext?.actionProvenanceAvailable !== false;
+  const actionBinding = actionProvenanceAvailable
+    ? (resolution?.actionBinding ?? {})
+    : {};
+  const controlBinding = actionProvenanceAvailable
+    ? (resolution?.controlBinding ?? {})
+    : {};
   return {
     actionKind:
-      actionBinding.actionKind ?? action.actionKind ?? action.eventType ?? null,
+      eventContext?.actionKind ??
+      actionBinding.actionKind ??
+      (actionProvenanceAvailable
+        ? (action.actionKind ?? action.eventType ?? null)
+        : null),
     skillSlotIds: uniqueFiniteIntegers([
-      actionBinding.skillSlotId,
-      actionBinding.skillSlotType,
-      action.skillSlotId,
-      ...extractSkillSlotIds(actionBinding.bindingSourceIdentity),
+      ...(eventContext?.skillSlotIds ?? []),
+      ...(actionProvenanceAvailable
+        ? [
+            actionBinding.skillSlotId,
+            actionBinding.skillSlotType,
+            action.skillSlotId,
+            ...extractSkillSlotIds(actionBinding.bindingSourceIdentity),
+          ]
+        : []),
     ]),
     skillTagIds: uniqueFiniteIntegers([
-      controlBinding.logic?.skillTagId,
-      ...parseDelimitedNumbers(controlBinding.logic?.skillTag),
+      ...(eventContext?.skillTagIds ?? []),
+      ...(actionProvenanceAvailable
+        ? [
+            controlBinding.logic?.skillTagId,
+            ...parseDelimitedNumbers(controlBinding.logic?.skillTag),
+          ]
+        : []),
     ]),
     switchTrigger: {
       kind: action.derivedAction?.kind ?? null,
@@ -553,6 +659,13 @@ function resolveSoulTriggerActionContext({ action, resolution }) {
 }
 
 function matchesSoulTriggerCondition(condition, actionContext, eventContext) {
+  if (condition?.kind === 'always' && condition?.status === 'applied') {
+    return {
+      matched: true,
+      matchedConditionIdentities: [condition.sourceIdentity].filter(Boolean),
+      reasons: [],
+    };
+  }
   const legacyConditionShape = !Array.isArray(condition?.conditions);
   const conditions = Array.isArray(condition?.conditions)
     ? condition.conditions
@@ -663,6 +776,92 @@ function matchesSoulTriggerProvenance(condition, actionContext) {
     );
   }
   return false;
+}
+
+function isNonDamageTriggerAnchor(frameAnchor) {
+  return [
+    'switch-enter',
+    'shield-after-acquire',
+    'heal-after-settlement',
+  ].includes(frameAnchor);
+}
+
+function applySoulTriggerIntervalGates({ effectCommands, suppressions }) {
+  const intervalGroups = new Map();
+  for (const [commandIndex, command] of effectCommands.entries()) {
+    const intervalMs = Number(command.sourceIdentity?.triggerIntervalMs);
+    if (!(intervalMs > 0)) continue;
+    const bindingKey = [
+      command.sourceActorId,
+      command.sourceSoulEssenceId,
+      command.sourceIdentity?.triggerElementId,
+    ].join('|');
+    if (!intervalGroups.has(bindingKey)) {
+      intervalGroups.set(bindingKey, {
+        intervalMs,
+        occurrences: new Map(),
+      });
+    }
+    const group = intervalGroups.get(bindingKey);
+    const occurrenceIdentity =
+      command.sourceNonDamageEventIdentity ??
+      command.sourceIdentity?.triggerEventContext?.eventIdentity ??
+      command.id;
+    if (!group.occurrences.has(occurrenceIdentity)) {
+      group.occurrences.set(occurrenceIdentity, {
+        occurrenceIdentity,
+        timeMs: Number(command.timeMs),
+        sourceSequencePath:
+          command.sourceIdentity?.triggerEventContext?.sourceSequencePath ??
+          command.sourceIdentity?.triggerSequencePath ??
+          [],
+        commandIndexes: [],
+        command,
+      });
+    }
+    group.occurrences.get(occurrenceIdentity).commandIndexes.push(commandIndex);
+  }
+
+  const suppressedCommandIndexes = new Set();
+  for (const group of intervalGroups.values()) {
+    let lastAcceptedAtMs = null;
+    const occurrences = [...group.occurrences.values()].sort(
+      (left, right) =>
+        left.timeMs - right.timeMs ||
+        compareSourceSequencePaths(
+          left.sourceSequencePath,
+          right.sourceSequencePath
+        ) ||
+        left.occurrenceIdentity.localeCompare(right.occurrenceIdentity)
+    );
+    for (const occurrence of occurrences) {
+      if (
+        lastAcceptedAtMs != null &&
+        occurrence.timeMs - lastAcceptedAtMs < group.intervalMs
+      ) {
+        for (const commandIndex of occurrence.commandIndexes) {
+          suppressedCommandIndexes.add(commandIndex);
+        }
+        suppressions.push({
+          actionId: occurrence.command.sourceActionId,
+          actorId: occurrence.command.sourceActorId,
+          soulEssenceId: occurrence.command.sourceSoulEssenceId,
+          effectSkillId:
+            occurrence.command.sourceIdentity?.effectSkillId ?? null,
+          eventIdentity: occurrence.occurrenceIdentity,
+          intervalMs: group.intervalMs,
+          lastAcceptedAtMs,
+          timeMs: occurrence.timeMs,
+          reason: 'soulessence-effect-trigger-interval-active',
+        });
+        continue;
+      }
+      lastAcceptedAtMs = occurrence.timeMs;
+    }
+  }
+  return effectCommands.filter(
+    (_command, commandIndex) => !suppressedCommandIndexes.has(commandIndex)
+  );
 }
 
 function extractSkillSlotIds(sourceIdentity) {

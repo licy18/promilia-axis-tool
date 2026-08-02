@@ -82,6 +82,7 @@ export function createVerifiedCombatRuntime({
   kiboPassiveGeneration = null,
   damageEventGeneration = null,
   criticalRandomSource = null,
+  runtimeMode = 'full',
 } = {}) {
   const enabled = isVerifiedCombatMechanicsScenario(scenario);
   const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
@@ -97,6 +98,8 @@ export function createVerifiedCombatRuntime({
   const executionByActionId = new Map(
     (actionExecutionPlan?.actions ?? []).map(entry => [entry.actionId, entry])
   );
+  const nonDamageProjectionOnly =
+    runtimeMode === 'non-damage-event-projection';
   const actionResolutionById = new Map();
   const ordinaryDamageTransactionByKey = new Map(
     (damageEventGeneration?.transactions ?? [])
@@ -302,6 +305,12 @@ export function createVerifiedCombatRuntime({
     ) {
       continue;
     }
+    if (
+      nonDamageProjectionOnly &&
+      !isNonDamageProjectionDescriptor(descriptor)
+    ) {
+      continue;
+    }
     if (descriptor.kind === 'manual-resource') {
       applyManualResourceDescriptor({ descriptor, state, resourceEvents });
       continue;
@@ -470,6 +479,7 @@ export function createVerifiedCombatRuntime({
     schemaVersion: 1,
     contractName: VERIFIED_COMBAT_RUNTIME_CONTRACT_NAME,
     sourceKind: 'azpr-verified-combat-runtime-from-generation-bindings',
+    runtimeMode,
     status: 'verified-combat-runtime-ready',
     packageId: mechanicsPackage.packageId,
     packageHash: mechanicsPackage.packageHash,
@@ -2494,6 +2504,10 @@ function createKiboPassivePeriodicHealEvent({
       ...payload,
       applied,
       reason,
+      afterHealDispatchEligible:
+        reason === 'periodic-heal-applied' ||
+        reason === 'periodic-heal-no-positive-effective-change',
+      actionProvenanceAvailable: false,
       sourceActorId: singleSource?.sourceActorId ?? null,
       sourceKiboId: singleSource?.sourceKiboId ?? null,
       sourceSlotId: singleSource?.sourceSlotId ?? null,
@@ -2567,6 +2581,17 @@ function applyDirectHealDescriptor({ descriptor, state }) {
 
 function applyDirectShieldDescriptor({ descriptor, state }) {
   const directEvent = descriptor.directEvent;
+  if (!(Number(directEvent.value) > 0)) {
+    return createDirectVitalEvent({
+      type: 'VERIFIED_DIRECT_SHIELD',
+      descriptor,
+      before: 0,
+      after: 0,
+      maximum: null,
+      applied: false,
+      reason: 'direct-shield-non-positive-value-rejected',
+    });
+  }
   if (directEvent.target.kind === EFFECT_TARGET_KINDS.ENEMY) {
     state.enemy.valueShields.push({
       raw: String(qFromFloat(directEvent.value)),
@@ -2603,6 +2628,8 @@ function createDirectVitalEvent({
   after,
   maximum,
   vital = null,
+  applied = true,
+  reason = null,
 }) {
   const directEvent = descriptor.directEvent;
   const requestedChange =
@@ -2616,6 +2643,7 @@ function createDirectVitalEvent({
     actionId: directEvent.actionId,
     actorId: directEvent.actorId,
     targetId: directEvent.target.id,
+    sourceSequencePath: descriptor.sourceSequencePath ?? null,
     payload: {
       before: roundValue(before),
       change: roundValue(change),
@@ -2630,6 +2658,13 @@ function createDirectVitalEvent({
           ? roundValue(Math.max(0, requestedChange - change))
           : 0,
       targetKind: directEvent.target.kind,
+      sourceActorId: directEvent.actorId,
+      sourceEventIdentity: directEvent.eventIdentity,
+      sourceActionId: directEvent.actionId,
+      sourceSequencePath: descriptor.sourceSequencePath ?? null,
+      afterHealDispatchEligible:
+        type === 'VERIFIED_DIRECT_HEAL' && applied === true,
+      actionProvenanceAvailable: true,
       targetSlotId: vital?.slotId ?? null,
       targetKiboId: vital?.kiboId ?? null,
       valueShields: vital
@@ -2637,9 +2672,28 @@ function createDirectVitalEvent({
         : [],
       effectIdentity: directEvent.effect.effectIdentity,
       sourceIdentity: directEvent.sourceIdentity,
-      appliedToCalculators: true,
+      applied,
+      reason,
+      appliedToCalculators: applied,
     },
   };
+}
+
+function isNonDamageProjectionDescriptor(descriptor) {
+  if (
+    descriptor?.kind === 'tuning-combat' &&
+    descriptor.tuningEvent?.kind === 'periodic-heal'
+  ) {
+    return true;
+  }
+  return [
+    'action-cost',
+    'direct-heal',
+    'direct-shield',
+    'passive-vital-change',
+    'passive-periodic-heal',
+    'passive-periodic-heal-contract-unresolved',
+  ].includes(descriptor?.kind);
 }
 
 function resolveFriendlyVitalState(state, target) {
@@ -3091,15 +3145,24 @@ function applyTuningPeriodicHeal({
     type: 'VERIFIED_TUNING_PERIODIC_HEAL',
     timeMs: tuningEvent.timeMs,
     actionId: tuningEvent.actionId,
-    actorId: controlledActor.actorId,
+    actorId: tuningEvent.actorId ?? null,
+    targetId: controlledActor.actorId,
     payload: {
       profileKey: tuningEvent.profile.key,
       markId: tuningEvent.profile.markId,
       markCount: tuningEvent.markCount,
       beforeValue: before,
+      requestedChange: roundValue(requested),
       change,
       afterValue: vital.currentHp,
       maxValue: vital.maximumHp,
+      targetKind: EFFECT_TARGET_KINDS.ACTOR,
+      sourceActorId: tuningEvent.actorId ?? null,
+      sourceEventIdentity: tuningEvent.eventIdentity,
+      sourceActionId: tuningEvent.actionId ?? null,
+      afterHealDispatchEligible: true,
+      actionProvenanceAvailable: false,
+      applied: true,
       sourceIdentity: tuningEvent.sourceIdentity,
       appliedToCalculators: true,
     },
