@@ -7,8 +7,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 14,
-      runtimeUnappliedCount: 60,
+      runtimeAppliedCount: 17,
+      runtimeUnappliedCount: 57,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -241,6 +241,169 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     });
   });
 
+  it('compiles tuning-mark and overlimit predicates from fixed-condition source evidence', () => {
+    const definitions = new Map(
+      soulCatalog.definitions.map(definition => [
+        definition.soulEssenceId,
+        definition,
+      ])
+    );
+
+    expect(soulCatalog.triggerContract.conditionTypeBindings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          enumName: 'CheckElementType',
+          value: 8,
+          selectorKind: 'event-element-type',
+          sourceIdentity: expect.stringContaining(
+            'EElementTriggerFixedConditionType.CheckElementType=8'
+          ),
+        }),
+        expect.objectContaining({
+          enumName: 'HasElementId',
+          value: 10,
+          selectorKind: 'held-element-id',
+          sourceIdentity: expect.stringContaining(
+            'EElementTriggerFixedConditionType.HasElementId=10'
+          ),
+        }),
+        expect.objectContaining({
+          enumName: 'CheckTargetElementId',
+          value: 12,
+          selectorKind: 'target-element-id',
+          sourceIdentity: expect.stringContaining(
+            'EElementTriggerFixedConditionType.CheckTargetElementId=12'
+          ),
+        }),
+      ])
+    );
+
+    expect(definitions.get(10124)).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      trigger: {
+        event: 'BeforeSkill',
+        frameAnchor: 'action-start',
+        condition: {
+          logic: 'and',
+          actionKinds: ['ultimate'],
+          conditions: [
+            expect.objectContaining({ kind: 'skill-tag', skillTagId: 4 }),
+            expect.objectContaining({
+              kind: 'held-element-id',
+              conditionValue: 250,
+              tuningProfiles: [
+                expect.objectContaining({
+                  profileKey: 'thunder',
+                  markId: 250,
+                }),
+              ],
+            }),
+          ],
+        },
+        target: expect.objectContaining({ kind: 'team-actors' }),
+      },
+      effect: expect.objectContaining({
+        attributeId: 8,
+        durationMs: 20000,
+        valuesByStar: [
+          expect.objectContaining({ star: 1, valueRaw: 2150 }),
+          expect.objectContaining({ star: 2, valueRaw: 2870 }),
+          expect.objectContaining({ star: 3, valueRaw: 3590 }),
+          expect.objectContaining({ star: 4, valueRaw: 4310 }),
+        ],
+      }),
+      runtimeGaps: [],
+    });
+
+    expect(definitions.get(10131)).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      trigger: {
+        event: 'AfterDamage',
+        frameAnchor: 'hit-after-damage',
+        condition: {
+          logic: 'or',
+          conditions: [
+            expect.objectContaining({
+              kind: 'target-element-id',
+              conditionValue: 299,
+              tuningProfiles: [
+                expect.objectContaining({
+                  profileKey: 'thunder',
+                  overlimitPacketElementId: 299,
+                }),
+              ],
+            }),
+            expect.objectContaining({
+              kind: 'target-element-id',
+              conditionValue: 499,
+              tuningProfiles: [
+                expect.objectContaining({
+                  profileKey: 'dark',
+                  overlimitPacketElementId: 499,
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      effect: expect.objectContaining({
+        attributeId: 222,
+        durationMs: 3000,
+        valuesByStar: expect.arrayContaining([
+          expect.objectContaining({ star: 1, valueRaw: 4460 }),
+          expect.objectContaining({ star: 4, valueRaw: 8930 }),
+        ]),
+      }),
+      runtimeGaps: [],
+    });
+
+    expect(definitions.get(10136)).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      trigger: {
+        event: 'AfterDamage',
+        frameAnchor: 'hit-after-damage',
+        condition: {
+          logic: 'and',
+          actionKinds: ['normal-attack'],
+          conditions: [
+            expect.objectContaining({
+              kind: 'event-element-type',
+              conditionValue: 43,
+              tuningProfiles: expect.arrayContaining([
+                expect.objectContaining({
+                  profileKey: 'wind',
+                  damageElementId: 796,
+                  elementTypes: [22, 32, 43, 307],
+                }),
+              ]),
+            }),
+            expect.objectContaining({ kind: 'skill-tag', skillTagId: 1 }),
+            expect.objectContaining({
+              kind: 'event-element-type',
+              conditionValue: 32,
+              tuningProfiles: [
+                expect.objectContaining({
+                  profileKey: 'wind',
+                  damageElementId: 796,
+                  elementTypes: [22, 32, 43, 307],
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+      effect: expect.objectContaining({
+        attributeId: 222,
+        durationMs: 8000,
+        valuesByStar: expect.arrayContaining([
+          expect.objectContaining({ star: 1, valueRaw: 3720 }),
+          expect.objectContaining({ star: 4, valueRaw: 7440 }),
+        ]),
+      }),
+      runtimeGaps: [],
+    });
+  });
+
   it('keeps threshold activation distinct from set-effect runtime qualification', () => {
     expect(
       soulCatalog.setSkillDefinitions.every(
@@ -359,6 +522,9 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       [10098, [301]],
       [10147, [301]],
       [10151, []],
+      [10124, []],
+      [10131, []],
+      [10136, []],
       [10125, []],
       [10154, []],
       [10155, []],

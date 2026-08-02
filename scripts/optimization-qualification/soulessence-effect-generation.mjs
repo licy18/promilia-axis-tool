@@ -39,6 +39,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   setSkills = [],
   propertyTagContract = null,
   triggerContract = null,
+  tuningMechanicsCatalog = null,
 } = {}) {
   if (
     propertyTagContract?.sourceKind !== 'il2cpp-battle-property-tag-contract' ||
@@ -52,6 +53,14 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   ) {
     throw new Error('soulessence-trigger-contract-missing');
   }
+  if (
+    tuningMechanicsCatalog?.contractName !==
+      'AzPrVerifiedTuningMechanicsCatalog' ||
+    tuningMechanicsCatalog?.applied !== true
+  ) {
+    throw new Error('soulessence-tuning-mechanics-contract-missing');
+  }
+  const tuningMechanicsHash = hashCanonicalValue(tuningMechanicsCatalog);
   const definitionBySoulId = new Map(
     (soulDefinitionRows ?? []).map(row => [Number(row.id), row])
   );
@@ -94,6 +103,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       battleElementsByPathId: battleSource.byPathId,
       propertyTagContract,
       triggerContract,
+      tuningMechanicsCatalog,
       control: controlSource.bySkillId.get(
         Number(definitionBySoulId.get(item.soulEssenceId)?.reishiSkill)
       ),
@@ -132,12 +142,17 @@ export async function createSoulEssenceEffectMechanicsCatalog({
         sourceIdentity: triggerContract.sourceIdentity,
         contractHash: triggerContract.contractHash,
       },
+      tuningMechanics: {
+        sourceIdentity: tuningMechanicsCatalog.sourceIdentity,
+        contractHash: tuningMechanicsHash,
+      },
       sourceSnapshotHash: hashCanonicalValue({
         battleElements: battleSource.metadata,
         controlClosure: controlSource.metadata,
         setSkillControlClosure: setSkillControlSource.metadata,
         propertyTagContractHash: propertyTagContract.contractHash,
         triggerContractHash: triggerContract.contractHash,
+        tuningMechanicsHash,
       }),
     },
     policy: {
@@ -519,6 +534,7 @@ function compileTriggerCondition({
   conditions,
   conditionLogicValue,
   triggerContract,
+  tuningMechanicsCatalog,
 }) {
   if (!trigger) {
     return {
@@ -549,6 +565,17 @@ function compileTriggerCondition({
     const valueBinding = valueBindings.find(
       binding => Number(binding.value) === conditionValue
     );
+    const tuningProfiles = resolveTuningConditionProfiles({
+      selectorKind: typeBinding?.selectorKind,
+      conditionValue,
+      tuningMechanicsCatalog,
+    });
+    const valueApplied =
+      valueBinding?.status === 'applied' || tuningProfiles.length > 0;
+    const conditionValueSourceIdentity =
+      valueBinding?.sourceIdentity ??
+      tuningProfiles.map(profile => profile.sourceIdentity).join('|') ??
+      'condition-value-unresolved';
     const base = {
       kind: typeBinding?.selectorKind ?? 'unresolved',
       conditionType,
@@ -556,9 +583,10 @@ function compileTriggerCondition({
       conditionValue,
       actionKinds: valueBinding?.actionKinds ?? [],
       provenanceRequirement: valueBinding?.provenanceRequirement ?? null,
-      sourceIdentity: `${createElementIdentity(trigger)}.triggerConditionList[${index}]|${typeBinding?.sourceIdentity ?? 'condition-type-unresolved'}|${valueBinding?.sourceIdentity ?? 'condition-value-unresolved'}`,
+      tuningProfiles,
+      sourceIdentity: `${createElementIdentity(trigger)}.triggerConditionList[${index}]|${typeBinding?.sourceIdentity ?? 'condition-type-unresolved'}|${conditionValueSourceIdentity || 'condition-value-unresolved'}`,
       status:
-        typeBinding?.status === 'applied' && valueBinding?.status === 'applied'
+        typeBinding?.status === 'applied' && valueApplied
           ? 'applied'
           : 'static-evidence-gap',
     };
@@ -618,9 +646,9 @@ function compileTriggerCondition({
 }
 
 function resolveConditionActionKinds({ logic, conditions }) {
-  const rows = conditions.map(
-    condition => new Set(condition.actionKinds ?? [])
-  );
+  const rows = conditions
+    .map(condition => new Set(condition.actionKinds ?? []))
+    .filter(row => row.size > 0);
   if (rows.length === 0) return [];
   if (logic === 'or') {
     return uniqueStrings(rows.flatMap(row => [...row]));
@@ -631,6 +659,52 @@ function resolveConditionActionKinds({ logic, conditions }) {
     );
   }
   return [];
+}
+
+function resolveTuningConditionProfiles({
+  selectorKind,
+  conditionValue,
+  tuningMechanicsCatalog,
+}) {
+  if (
+    !['event-element-type', 'held-element-id', 'target-element-id'].includes(
+      selectorKind
+    )
+  ) {
+    return [];
+  }
+  return (tuningMechanicsCatalog?.profiles ?? [])
+    .filter(profile => {
+      if (selectorKind === 'held-element-id') {
+        return Number(profile.markId) === conditionValue;
+      }
+      if (selectorKind === 'target-element-id') {
+        return Number(profile.overlimitPacket?.elementId) === conditionValue;
+      }
+      return (profile.overlimitDamage?.template?.elementTypes ?? []).includes(
+        conditionValue
+      );
+    })
+    .map(profile => ({
+      profileKey: profile.key,
+      markId: Number(profile.markId),
+      overlimitPacketElementId: Number(profile.overlimitPacket?.elementId),
+      damageElementId: Number(
+        profile.overlimitDamage?.template?.elementConfigId
+      ),
+      elementTypes: uniqueNumbers(
+        profile.overlimitDamage?.template?.elementTypes ?? []
+      ),
+      sourceIdentity: [
+        profile.sourceIdentity,
+        profile.overlimitPacket?.sourceIdentity,
+        profile.overlimitDamage?.template?.elementTypeSourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: 'applied',
+    }))
+    .sort((left, right) => left.markId - right.markId);
 }
 
 function resolveFormulaFamily({ commonFunctionId, baseFunctionId }) {
@@ -652,6 +726,7 @@ function compileSoulEffectDefinition({
   control,
   propertyTagContract,
   triggerContract,
+  tuningMechanicsCatalog,
 }) {
   const effectSkillId = Number(sourceDefinition?.reishiSkill);
   const resourcePathIds = uniqueNumbers(control?.resourcePathIds ?? []);
@@ -735,6 +810,7 @@ function compileSoulEffectDefinition({
     conditions,
     conditionLogicValue: Number(triggerTree.triggerConditionType),
     triggerContract,
+    tuningMechanicsCatalog,
   });
   const triggerEvent = TRIGGER_EVENT_BY_ID[Number(triggerTree.triggerParam1)];
   const triggerEffectRows = Array.isArray(triggerTree.triggerEffectList)

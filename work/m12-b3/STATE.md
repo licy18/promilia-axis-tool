@@ -17,6 +17,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - B3-C-R1 product acceptance baseline: `2804f201ac2a6ea4eebc1339703a9d40c0aba5a5`.
 - B3-C2 implementation baseline: `942639f07d5a417f8145f8c11aadf006646dfbee`.
 - B3-C2-R1 product acceptance baseline: `ba3422c722f8640857fa8fd9d19040e755c8484a`.
+- B3-C3 product acceptance baseline: `e05b10fd27a6c723a773a7680169a9180031c48e`.
 - The B3 contract was selectively synchronized from the dirty main-workspace plan on 2026-08-01; the main workspace was not modified.
 
 ## Frozen Plan Snapshot
@@ -26,14 +27,14 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - Soul essence: `62`.
 - Public equipment: `137`.
 - Set-skill threshold records: `12`.
-- Current known blockers include `48/62` soul-essence effect skills and `12/12` set skills classified as `dynamic-unapplied`; `14/62` source-closed soul effects are runtime-integrated but still lack complete qualification.
+- Current known blockers include `45/62` soul-essence effect skills and `12/12` set skills classified as `dynamic-unapplied`; `17/62` source-closed soul effects are runtime-integrated but still lack complete qualification.
 - Kibo DNA is outside the current product scope. The only canonical value is `dnaFactors: []`; omitted input normalizes to empty, non-empty input is rejected before compile/validate/search, and DNA evidence does not count as a qualification gap.
 
 ## Current Status
 
 - B2 product acceptance is closed.
 - B3-A-R1 is product-accepted at `f902de10c42c2c4dc750be2316fabe3bc026f8cc`. B3-B-R1 is product-accepted at `f846161c4a71bbc2de2b5bed3f598f03344fc692`; B3-C-R1 is product-accepted at `2804f201ac2a6ea4eebc1339703a9d40c0aba5a5`.
-- B3-C2 source and denominator recomputation is complete: source `fcf7e135b22019c8`, roster `ab1fe6bdba580f21`, manifests `ddd8540432f737bc`, ledger `44943aece7e05da0`, catalog `ca1a9dae97651348`, binding matrix `ef739ad3c350c724`; dynamic census `d67e16da316ccb87`, soul effect catalog `b3fd516e07fd6424`, trigger contract `3ea277c2d63e2d6d`, PropertyTag contract `146e6a9a7db86606`.
+- B3-C4 source and denominator recomputation is complete: source `8dcb0be1d668e31d`, roster `6e3bef78327971df`, manifests `7b91353ea59fd9ff`, ledger `15ea7c546ac035da`, catalog `6b55d6c04641b66f`, binding matrix `c4d2d2c7f5eed6b5`; dynamic census `188b2f8036236259`, soul effect catalog `e002776d999c842f`, soul source snapshot `87bc2d712a143bb9`, trigger contract `c381d1508e85d4fa`, PropertyTag contract `146e6a9a7db86606`.
 - Generated roster, consolidated manifests, gap ledger, binding matrix, summary, and runtime catalog are deterministic under `npm run audit:optimization-qualification`.
 - Strict cultivation profile v1 is wired into Machine Axis, canonical input hashing, and direct Workbench adapter round-trip. The frozen profile hash is `c432bd0a3f2d6415`: character `80 / star gift 7 / completed attributes through 6 / all current nodes / level breakthrough 3`; Kibo `80 / four talents 10 => 120 / bond 1 => 900 basis points / dnaFactors []`; soul essence `80 / rank 6 / star 1`; equipment `4-star / +9 / tuning 110 / starborn`.
 - Formal qualification derives one whole-stage gate from the `11/43/62/137/12` records, admissions, set-skill thresholds, actor-Kibo/soul/equipment bindings, equipment slots, and source hashes. Partial green catalogs are rejected before project/search; research scenarios remain compatible.
@@ -41,18 +42,20 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - The reviewed `GameAssembly.dll` is `222485544B / c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b`. Exact bindings include `HeroData.Populate(HeroAttrInfo)@0x2458520`, `RefreshAttributes@0x2458C00`, `RefreshHeroSkill@0x2458F50`, `AttrModuleInfo..ctor@0x244EE60`, `RefreshModules@0x244E9F0`, and `GameUtil.PackAttrInfoByFightAttr@0x39714F0`. These calls do not establish whether server-provided `HeroAttrInfo` already includes `hero_rank.attribute`; no adjacent-rank final-panel capture exists, so attribute application remains `runtime-evidence-required`.
 - All 12 source character identities have six `hero_rank` rows. Owner `112001` has two source unlock IDs that disagree with its passive slots; the mismatch remains evidence-blocked. Existing runtime passive effects are recorded separately and do not prove breakthrough availability.
 - Equipment instances preserve raw and resolved `instanceTier`, `bGoldSide`, and `maxValue`. Normal instances accept at most 100 tuning; starborn instances require the source-backed fixed maximum 110. Main and sub attributes use the same segmented `ceil` formula, and cultivation differences enter canonical input/build hashes without expanding search dimensions.
-- Runtime-applied soul effects are `10001 汁石就是力量`, `10002 家书`, `10037 厨房的秘密`, `10055 远古秘钥`, `10060 宵祝`, `10093 无法思考`, `10094 陪伴`, `10097 玫瑰色午后`, `10098 此身为枪`, `10125 高手在此！`, `10147 充能时间`, `10151 非常规钓鱼`, `10154 月下秘仪`, and `10155 恶作剧前奏`. Leaf `defaultPropertyTags` remain source-bound. `10055/10093` use verified UltraSkill selectors and AllHero targets; `10097` uses the real limit-counter binding. `10147/10151` require a real switch-triggered on-enter child with `controlBinding.logic.skillTag=22`; `10147` preserves its 6-second BuffElement wrapper and charged-only leaf, while `10151` uses its unscoped 10-second leaf duration. Formula base 3 remains A/10000 through Q16.16; base 5 remains A points. `10018 飞行试验` remains blocked by its outer two-thunder-mark prerequisite.
+- Runtime-applied soul effects are `10001 汁石就是力量`, `10002 家书`, `10037 厨房的秘密`, `10055 远古秘钥`, `10060 宵祝`, `10093 无法思考`, `10094 陪伴`, `10097 玫瑰色午后`, `10098 此身为枪`, `10124 夕阳下的约定`, `10125 高手在此！`, `10131 节日佳肴`, `10136 林间野餐`, `10147 充能时间`, `10151 非常规钓鱼`, `10154 月下秘仪`, and `10155 恶作剧前奏`. Leaf `defaultPropertyTags` remain source-bound. C4 adds source-compiled mark predicates and consumes only canonical tuning state/events: 10124 checks held thunder mark 250 at UltraSkill action-start, 10131 accepts landed thunder/dark overlimit packets 299/499, and 10136 accepts landed wind template 796 with types `[22,32,43,307]` plus final NormalAttack tag 1. AfterDamage layers are sequenced after their triggering packet and cannot affect it retroactively. `10018 飞行试验` remains blocked by its outer two-thunder-mark prerequisite.
 - The public schema requires `levelBreakthroughRank`; legacy `ascensionRank` is rejected. Previous completed star-gift ranks apply all nodes, while the current rank applies only explicit node IDs. All 12 source character identities have 7 star-gift ranks, 6 level-breakthrough rows, and no missing rune source identity.
 - C2-R1 separates source event semantics: BeforeSkill/AfterSkill require only `execute=true` and fire once even with no hits or all misses; BeforeDamage/AfterDamage still require landed hits; blocked actions fire neither. It is product-accepted at `ba3422c722f8640857fa8fd9d19040e755c8484a`.
-- C3 preserves EntrySkill trigger provenance, wrapper duration, unload paths, refresh/right-open expiry and replay inheritance. Real switch scenarios cover all-miss, CD suppression, exit tag rejection, forged standalone action rejection, switch-away/return and scoped toughness settlement.
-- Current C3 verification: focused mechanics `5 files / 110 tests`, Machine Axis `12 / 157`, three-character profile/golden `3 / 34`, canonical/runtime and switch/cycle boundaries `6 / 55`, nine audits and production build passed. Applied soul source audit is `14 / 0 drift`.
+- C3 preserves EntrySkill trigger provenance, wrapper duration, unload paths, refresh/right-open expiry and replay inheritance. It is product-accepted at `e05b10fd27a6c723a773a7680169a9180031c48e`.
+- C4 verification covers held-mark start/expiry, actual mark consume and landed overlimit packets, thunder/dark hidden branches, wind template element types, final skill tag, miss suppression, right-open expiry, refresh, same-packet no-self-benefit, numeric critical/toughness consequences and replay/cycle state.
+- Verification passed: focused mechanics `5 files / 99 tests`, Machine Axis `12 / 157`, three-character profile/golden `3 / 34`, canonical/runtime `6 / 104`, headless golden migration `1 / 4`, nine deterministic audits and production build. Applied-source audit is `17 property sources / 0 drift` and `5 tuning conditions / 0 drift`.
+- The current Machine Axis canonical hashes are `572695e45011465c / 35835e12c6a6e279 / 67802e753205e852 / 0b410dc9255d2654`. Identity changed because verified tuning event source metadata and packet element types became package data; evaluation and all authoritative numeric assertions are unchanged.
 - Current optimization-ready counts are zero for all five object kinds. M12-C remains locked.
-- Current maturity is `227 extracted / 38 runtime-integrated`; all five optimization-ready counts remain zero. Blocking gaps are `442` unique (`426 not-implemented`, `16 evidence-insufficient`).
-- Status: `B3-C3 verification-complete-awaiting-product-acceptance`.
+- Current maturity is `224 extracted / 41 runtime-integrated`; all five optimization-ready counts remain zero. Blocking gaps are `436` unique (`420 not-implemented`, `16 evidence-insufficient`).
+- Status: `B3-C4 verification-complete-awaiting-product-acceptance`.
 
 ## Remaining Blockers
 
-- Not implemented: `430` unique object-scoped blockers, including 50 unresolved soul-essence dynamic skills, 12 set skills, remaining runtime/visual qualification, and one missing STARBORN static actor profile. DNA contributes zero source or acceptance gaps.
+- Not implemented: `420` unique blockers, including 45 unresolved soul-essence dynamic skills, 12 set skills, remaining runtime/visual qualification, and one missing STARBORN static actor profile. DNA contributes zero source or acceptance gaps.
 - Evidence insufficient: `16` unique blockers: 11 character cultivation runtime boundaries, 4 selected Kibo passive gaps, and the owner `112001` level-breakthrough skill-unlock mismatch.
 - Formal admission remains empty. B3-B-R1 keeps the static equipment foundation but does not claim `hero_rank` attribute or skill-availability closure, and it does not qualify characters, Kibo, soul essence, equipment, set skills, or their binding matrix for optimization.
 

@@ -20,7 +20,9 @@ import { createWorkbenchAttackInputChainDrafts } from '../../domain/workbenchAtt
 import { frameToMs } from '../../domain/timebase';
 import { createSwitchAction } from '../../domain/projectSchema';
 import { compileProject } from '../../simulation/compiler/compileProject';
+import { createActionExecutionPlan } from '../../simulation/engine/actionExecutionPlan';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
+import { createVerifiedCombatRuntime } from '../../simulation/mechanics/verifiedCombatRuntime';
 import { createVerifiedSoulEssenceEffectGeneration } from '../../simulation/mechanics/verifiedSoulEssenceEffectGeneration';
 import {
   matchesVerifiedBattlePropertyTags,
@@ -30,6 +32,7 @@ import {
   createEffectRuntimeTimeline,
   resolveActiveEffectsAt,
 } from '../../simulation/runtime/effectRuntimeTimeline';
+import { createControlledActorTimeline } from '../../simulation/runtime/controlledActorTimeline';
 
 const SOUL_ID = 10001;
 const SOUL_SKILL_ID = 1900480;
@@ -168,6 +171,39 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     maxStacks: 1,
     attributeId: 222,
   },
+  {
+    soulEssenceId: 10124,
+    contextual: true,
+    event: 'BeforeSkill',
+    frameAnchor: 'action-start',
+    actionKind: 'ultimate',
+    durationMs: 20000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 8,
+  },
+  {
+    soulEssenceId: 10131,
+    contextual: true,
+    event: 'AfterDamage',
+    frameAnchor: 'hit-after-damage',
+    actionKind: null,
+    durationMs: 3000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 222,
+  },
+  {
+    soulEssenceId: 10136,
+    contextual: true,
+    event: 'AfterDamage',
+    frameAnchor: 'hit-after-damage',
+    actionKind: 'normal-attack',
+    durationMs: 8000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 222,
+  },
 ];
 
 beforeEach(() => {
@@ -185,8 +221,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 14,
-      unresolvedCount: 48,
+      runtimeAppliedCount: 17,
+      unresolvedCount: 45,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -333,7 +369,10 @@ describe('verified soul essence effect generation', () => {
         trigger: {
           event: expected.event,
           frameAnchor: expected.frameAnchor,
-          condition: { actionKinds: [expected.actionKind] },
+          condition: {
+            actionKinds:
+              expected.actionKind == null ? [] : [expected.actionKind],
+          },
         },
         effect: {
           durationMs: expected.durationMs,
@@ -476,6 +515,415 @@ describe('verified soul essence effect generation', () => {
       });
     }
   );
+
+  it('checks inherited thunder marks at 10124 action-start and applies real AllHero critical damage', () => {
+    const ownerCharacterId = 112001;
+    const ultimateStartFrame = 60;
+    const activeHitFrame = 500;
+    const expiredHitFrame = ultimateStartFrame + 1200;
+    const thunderMark = createInheritedTuningMark(250, 1, 30_000);
+    const actionPlan = [
+      {
+        id: 'tuning-state-ultimate',
+        actionKind: 'ultimate',
+        actorCharacterId: ownerCharacterId,
+        startFrame: ultimateStartFrame,
+      },
+      {
+        id: 'teammate-critical-active',
+        actionKind: 'normal-attack',
+        actorCharacterId: 101010,
+        startFrame: activeHitFrame,
+      },
+      {
+        id: 'teammate-critical-expired',
+        actionKind: 'normal-attack',
+        actorCharacterId: 101010,
+        startFrame: expiredHitFrame,
+      },
+    ];
+    const simulate = effectSkillId =>
+      createRealSoulScenario({
+        actorCharacterId: ownerCharacterId,
+        soulEssenceId: 10124,
+        effectSkillId,
+        durationMs: 30_000,
+        teamCharacterIds: [ownerCharacterId, 101010, 101007],
+        combatScenario: { critical: { policy: 'critical' } },
+        initialRuntimeState: { tuningMarks: [thunderMark] },
+        actionPlan,
+      });
+    const withSoul = simulate(1900410);
+    const withoutSoul = simulate(0);
+    const commands =
+      withSoul.verifiedSoulEssenceEffectGeneration.effectCommands;
+    const damage = (result, actionId) =>
+      result.verifiedCombatRuntime.damageEvents
+        .filter(
+          event =>
+            event.type === 'VERIFIED_COMBAT_HIT' && event.actionId === actionId
+        )
+        .reduce((sum, event) => sum + Number(event.payload.rawDamage), 0);
+
+    expect(commands).toHaveLength(3);
+    expect(commands.map(command => command.targetId).sort()).toEqual([
+      'actor-101007',
+      'actor-101010',
+      'actor-112001',
+    ]);
+    expect(commands[0]).toMatchObject({
+      sourceSoulEssenceId: 10124,
+      timeMs: frameToMs(ultimateStartFrame),
+      durationMs: 20000,
+      modifiers: [expect.objectContaining({ attributeId: 8, valueRaw: 2150 })],
+      sourceIdentity: expect.objectContaining({
+        triggerEventContext: expect.objectContaining({
+          heldElementIds: expect.arrayContaining([250]),
+        }),
+      }),
+    });
+    expect(damage(withSoul, 'teammate-critical-active')).toBeGreaterThan(
+      damage(withoutSoul, 'teammate-critical-active')
+    );
+    expect(damage(withSoul, 'teammate-critical-expired')).toBeCloseTo(
+      damage(withoutSoul, 'teammate-critical-expired'),
+      6
+    );
+
+    for (const tuningMarks of [
+      [],
+      [createInheritedTuningMark(750, 1, 30_000)],
+      [createInheritedTuningMark(250, 1, frameToMs(ultimateStartFrame))],
+    ]) {
+      const negative = createRealSoulScenario({
+        actorCharacterId: ownerCharacterId,
+        soulEssenceId: 10124,
+        effectSkillId: 1900410,
+        durationMs: 8_000,
+        teamCharacterIds: [ownerCharacterId, 101010, 101007],
+        initialRuntimeState: { tuningMarks },
+        actionPlan: [actionPlan[0]],
+      });
+      expect(
+        negative.verifiedSoulEssenceEffectGeneration.effectCommands
+      ).toEqual([]);
+    }
+
+    const blocked = createRealSoulScenario({
+      actorCharacterId: ownerCharacterId,
+      ownerInitialSp: 0,
+      soulEssenceId: 10124,
+      effectSkillId: 1900410,
+      durationMs: 8_000,
+      initialRuntimeState: { tuningMarks: [thunderMark] },
+      actionPlan: [actionPlan[0]],
+    });
+    expect(blocked.verifiedSoulEssenceEffectGeneration.effectCommands).toEqual(
+      []
+    );
+  });
+
+  it.each([
+    { markId: 250, profileKey: 'thunder', packetElementId: 299 },
+    { markId: 450, profileKey: 'dark', packetElementId: 499 },
+  ])(
+    'triggers 10131 only from a landed $profileKey overlimit packet and not its own settlement',
+    ({ markId, profileKey, packetElementId }) => {
+      const ownerCharacterId = 112001;
+      const sourceOnly = createRealSoulScenario({
+        actorCharacterId: ownerCharacterId,
+        soulEssenceId: null,
+        effectSkillId: null,
+        durationMs: 12_000,
+        initialRuntimeState: {
+          tuningMarks: [createInheritedTuningMark(markId, 2, 20_000)],
+        },
+        actionPlan: [
+          {
+            id: `overlimit-${profileKey}-source`,
+            actionKind: 'ultimate',
+            actorCharacterId: ownerCharacterId,
+            startFrame: 60,
+          },
+        ],
+      });
+      const packet = sourceOnly.verifiedTuningMarkGeneration.combatEvents.find(
+        event =>
+          event.kind === 'overlimit-damage' && event.profile.key === profileKey
+      );
+      expect(packet).toBeDefined();
+      const packetFrame = runtimeFrame(packet.timeMs);
+      const actionPlan = [
+        {
+          id: `overlimit-${profileKey}-source`,
+          actionKind: 'ultimate',
+          actorCharacterId: ownerCharacterId,
+          startFrame: 60,
+        },
+      ];
+      const simulate = effectSkillId =>
+        createRealSoulScenario({
+          actorCharacterId: ownerCharacterId,
+          soulEssenceId: 10131,
+          effectSkillId,
+          durationMs: 16_000,
+          initialRuntimeState: {
+            enemy: {
+              hp: { currentValue: 1_000_000, maxValue: 1_000_000 },
+              toughness: { currentValue: 1_000_000, maxValue: 1_000_000 },
+            },
+            tuningMarks: [createInheritedTuningMark(markId, 2, 20_000)],
+          },
+          actionPlan,
+        });
+      const withSoul = simulate(1900270);
+      const withoutSoul = simulate(0);
+      const command =
+        withSoul.verifiedSoulEssenceEffectGeneration.effectCommands.find(
+          entry => entry.sourceSoulEssenceId === 10131
+        );
+      const tuningDamage = result =>
+        result.verifiedCombatRuntime.damageEvents.find(
+          event =>
+            event.type === 'VERIFIED_TUNING_DAMAGE' &&
+            event.payload.profileKey === profileKey &&
+            event.payload.elementId === packet.template.elementConfigId
+        );
+      const toughness = (runtime, actionId) =>
+        runtime.damageEvents
+          .filter(event => event.actionId === actionId)
+          .reduce(
+            (sum, event) => sum + Number(event.payload.toughnessDamage ?? 0),
+            0
+          );
+      const activeChargedId = `overlimit-${profileKey}-active-charged`;
+      const activeReplay = replayRealActionWithSoulCommands({
+        actorCharacterId: ownerCharacterId,
+        soulEssenceId: 10131,
+        actionId: activeChargedId,
+        actionKind: 'charged-attack',
+        startFrame: packetFrame + 1,
+        commands: [command],
+      });
+      const expiredChargedId = `overlimit-${profileKey}-expired-charged`;
+      const expiredReplay = replayRealActionWithSoulCommands({
+        actorCharacterId: ownerCharacterId,
+        soulEssenceId: 10131,
+        actionId: expiredChargedId,
+        actionKind: 'charged-attack',
+        startFrame: packetFrame + 180,
+        commands: [command],
+      });
+
+      expect(packet).toMatchObject({
+        eventContext: expect.objectContaining({
+          elementId: packet.template.elementConfigId,
+          targetElementIds: [packetElementId],
+          profileKey,
+          landed: true,
+        }),
+      });
+      expect(command).toMatchObject({
+        sourceSoulEssenceId: 10131,
+        sourceTuningEventIdentity: packet.eventIdentity,
+        timeMs: packet.timeMs,
+        durationMs: 3000,
+        modifiers: [
+          expect.objectContaining({ attributeId: 222, valueRaw: 4460 }),
+        ],
+      });
+      expect(tuningDamage(withSoul).payload.rawDamage).toBeCloseTo(
+        tuningDamage(withoutSoul).payload.rawDamage,
+        6
+      );
+      expect(
+        activeReplay.withCommands.actionResolutionById.get(activeChargedId)
+      ).toMatchObject({
+        actionBinding: expect.objectContaining({
+          controlSkillId: 11200110,
+          selectedSubSkillIndex: 0,
+        }),
+      });
+      expect(
+        toughness(activeReplay.withCommands, activeChargedId)
+      ).toBeGreaterThan(
+        toughness(activeReplay.withoutCommands, activeChargedId)
+      );
+      expect(
+        toughness(expiredReplay.withCommands, expiredChargedId)
+      ).toBeCloseTo(
+        toughness(expiredReplay.withoutCommands, expiredChargedId),
+        6
+      );
+
+      const missed = createRealSoulScenario({
+        actorCharacterId: ownerCharacterId,
+        soulEssenceId: 10131,
+        effectSkillId: 1900270,
+        durationMs: 12_000,
+        combatScenario: {
+          projectile: { targetDistance: 0, defaultWillHit: false },
+        },
+        initialRuntimeState: {
+          tuningMarks: [createInheritedTuningMark(markId, 2, 20_000)],
+        },
+        actionPlan: [actionPlan[0]],
+      });
+      expect(missed.verifiedSoulEssenceEffectGeneration.effectCommands).toEqual(
+        []
+      );
+      expect(
+        missed.verifiedCombatRuntime.damageEvents.filter(
+          event =>
+            event.type === 'VERIFIED_TUNING_DAMAGE' &&
+            event.payload.profileKey === profileKey
+        )
+      ).toEqual([]);
+    }
+  );
+
+  it('requires the real wind overlimit element types and final normal-attack tag for 10136', () => {
+    const ownerCharacterId = 111001;
+    const initialWind = createInheritedTuningMark(750, 1, 20_000);
+    const sourceOnly = createRealSoulScenario({
+      actorCharacterId: ownerCharacterId,
+      soulEssenceId: null,
+      effectSkillId: null,
+      durationMs: 12_000,
+      initialRuntimeState: { tuningMarks: [initialWind] },
+      actionPlan: [
+        {
+          id: 'wind-normal-overlimit-source',
+          actionKind: 'normal-attack',
+          actorCharacterId: ownerCharacterId,
+          startFrame: 60,
+          controlSubSkillIndex: 4,
+        },
+      ],
+    });
+    const packet = sourceOnly.verifiedTuningMarkGeneration.combatEvents.find(
+      event => event.kind === 'overlimit-damage' && event.profile.key === 'wind'
+    );
+    expect(packet).toBeDefined();
+    const packetFrame = runtimeFrame(packet.timeMs);
+    const activeChargedFrame = 60 + 95;
+    const expiredFrame = Math.max(activeChargedFrame + 265, packetFrame + 480);
+    const actionPlan = [
+      {
+        id: 'wind-normal-overlimit-source',
+        actionKind: 'normal-attack',
+        actorCharacterId: ownerCharacterId,
+        startFrame: 60,
+        controlSubSkillIndex: 4,
+      },
+      {
+        id: 'wind-overlimit-active-charged',
+        actionKind: 'charged-attack',
+        actorCharacterId: ownerCharacterId,
+        startFrame: activeChargedFrame,
+      },
+      {
+        id: 'wind-overlimit-expired-charged',
+        actionKind: 'charged-attack',
+        actorCharacterId: ownerCharacterId,
+        startFrame: expiredFrame,
+      },
+    ];
+    const simulate = effectSkillId =>
+      createRealSoulScenario({
+        actorCharacterId: ownerCharacterId,
+        soulEssenceId: 10136,
+        effectSkillId,
+        durationMs: 20_000,
+        initialRuntimeState: {
+          enemy: {
+            hp: { currentValue: 1_000_000, maxValue: 1_000_000 },
+            toughness: { currentValue: 1_000_000, maxValue: 1_000_000 },
+          },
+          tuningMarks: [initialWind],
+        },
+        actionPlan,
+      });
+    const withSoul = simulate(1900210);
+    const withoutSoul = simulate(0);
+    const command =
+      withSoul.verifiedSoulEssenceEffectGeneration.effectCommands.find(
+        entry => entry.sourceSoulEssenceId === 10136
+      );
+    const toughness = (result, actionId) =>
+      result.verifiedCombatRuntime.damageEvents
+        .filter(event => event.actionId === actionId)
+        .reduce(
+          (sum, event) => sum + Number(event.payload.toughnessDamage ?? 0),
+          0
+        );
+
+    expect(packet).toMatchObject({
+      template: expect.objectContaining({
+        elementConfigId: 796,
+        elementTypes: [22, 32, 43, 307],
+      }),
+      eventContext: expect.objectContaining({
+        elementId: 796,
+        elementTypes: [22, 32, 43, 307],
+        targetElementIds: [799],
+        skillTagIds: [1],
+        landed: true,
+      }),
+    });
+    expect(command).toMatchObject({
+      sourceSoulEssenceId: 10136,
+      sourceTuningEventIdentity: packet.eventIdentity,
+      timeMs: packet.timeMs,
+      durationMs: 8000,
+    });
+    const sourcePacket = result =>
+      result.verifiedCombatRuntime.damageEvents.find(
+        event =>
+          event.type === 'VERIFIED_TUNING_DAMAGE' &&
+          event.actionId === 'wind-normal-overlimit-source' &&
+          event.payload.profileKey === 'wind'
+      );
+    expect(sourcePacket(withSoul).payload.toughnessDamage).toBeCloseTo(
+      sourcePacket(withoutSoul).payload.toughnessDamage,
+      6
+    );
+    expect(
+      withSoul.verifiedActionVariantRuntime.selectionByActionId.get(
+        'wind-normal-overlimit-source'
+      )
+    ).toMatchObject({
+      controlSkillId: 11100101,
+      selectedSubSkillIndex: 4,
+      actualDurationFrames: 95,
+    });
+    expect(
+      toughness(withSoul, 'wind-overlimit-active-charged')
+    ).toBeGreaterThan(toughness(withoutSoul, 'wind-overlimit-active-charged'));
+    expect(toughness(withSoul, 'wind-overlimit-expired-charged')).toBeCloseTo(
+      toughness(withoutSoul, 'wind-overlimit-expired-charged'),
+      6
+    );
+
+    const wrongSkillTag = createRealSoulScenario({
+      actorCharacterId: ownerCharacterId,
+      soulEssenceId: 10136,
+      effectSkillId: 1900210,
+      durationMs: 14_000,
+      initialRuntimeState: { tuningMarks: [initialWind] },
+      actionPlan: [
+        {
+          id: 'wind-ultimate-overlimit-source',
+          actionKind: 'ultimate',
+          actorCharacterId: ownerCharacterId,
+          startFrame: 60,
+        },
+      ],
+    });
+    expect(
+      wrongSkillTag.verifiedSoulEssenceEffectGeneration.effectCommands
+    ).toEqual([]);
+  });
 
   it('evaluates every 10097 star through the same base-3 Q16.16 formula', () => {
     const definition = soulEssenceEffectCatalog.definitions.find(
@@ -1263,7 +1711,7 @@ describe('verified soul essence effect generation', () => {
     expect(matchesVerifiedBattlePropertyTags([300, 301], [301])).toBe(false);
   });
 
-  it.each(APPLIED_SOUL_EFFECT_MATRIX)(
+  it.each(APPLIED_SOUL_EFFECT_MATRIX.filter(expected => !expected.contextual))(
     'applies, suppresses, stacks or refreshes, and expires soul $soulEssenceId',
     expected => {
       const definition = soulEssenceEffectCatalog.definitions.find(
@@ -2453,6 +2901,8 @@ function createRealSoulScenario({
   durationMs = 20_000,
   teamCharacterIds = null,
   initialRuntimeState = null,
+  combatScenario = null,
+  ownerInitialSp = 100,
 } = {}) {
   const requestedActions =
     actionPlan ??
@@ -2485,7 +2935,7 @@ function createRealSoulScenario({
     Number(config.characterId) === actorCharacterId
       ? {
           ...config,
-          initialSp: 100,
+          initialSp: ownerInitialSp,
           loadout: {
             ...config.loadout,
             kiboId: includesKiboAction
@@ -2533,6 +2983,8 @@ function createRealSoulScenario({
       actionKind: requested.actionKind,
       startFrame: requestedStartFrame,
       actorCharacterId: Number(requested.actorCharacterId) || actorCharacterId,
+      hitOverrides: requested.hitOverrides ?? null,
+      controlSubSkillIndex: requested.controlSubSkillIndex ?? null,
     });
     const actionDurationFrames =
       Number(action.durationFrames) ||
@@ -2560,6 +3012,7 @@ function createRealSoulScenario({
           }
         : {}),
     },
+    combatScenario,
     mechanicsProfileSelection:
       createVerifiedWorkbenchMechanicsProfileSelection(),
   });
@@ -2572,6 +3025,8 @@ function createRealSoulActionDraft({
   startFrame,
   actorCharacterId = OWNER_ID,
   mappingOverride = null,
+  hitOverrides = null,
+  controlSubSkillIndex = null,
 }) {
   if (actionKind === 'kibo-signature') {
     const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
@@ -2615,7 +3070,11 @@ function createRealSoulActionDraft({
         index === 0 ? id : `${id}-unused-${index + 1}`,
     });
     if (!action) throw new Error(`missing test attack input for ${actionKind}`);
-    return action;
+    return {
+      ...action,
+      hitOverrides,
+      ...(controlSubSkillIndex == null ? {} : { controlSubSkillIndex }),
+    };
   }
   const durationFrames = mapping.actionTiming.occupancy.durationFrames;
   return createWorkbenchActionDraft({
@@ -2627,7 +3086,85 @@ function createRealSoulActionDraft({
     startMs: frameToMs(startFrame),
     durationMs: frameToMs(durationFrames),
     durationFrames,
+    hitOverrides,
+    ...(controlSubSkillIndex == null ? {} : { controlSubSkillIndex }),
   });
+}
+
+function replayRealActionWithSoulCommands({
+  actorCharacterId,
+  soulEssenceId,
+  actionId,
+  actionKind,
+  startFrame,
+  commands,
+}) {
+  const projection = createRealSoulScenario({
+    actorCharacterId,
+    soulEssenceId,
+    effectSkillId: 0,
+    durationMs: frameToMs(startFrame + 480),
+    initialRuntimeState: {
+      enemy: {
+        hp: { currentValue: 1_000_000, maxValue: 1_000_000 },
+        toughness: { currentValue: 1_000_000, maxValue: 1_000_000 },
+      },
+    },
+    actionPlan: [
+      {
+        id: actionId,
+        actionKind,
+        actorCharacterId,
+        startFrame,
+      },
+    ],
+  });
+  const scenario = projection.effectiveActionTimeline.scenario;
+  const actionExecutionPlan =
+    projection.actionExecutionPlan ??
+    createActionExecutionPlan({
+      scenario,
+      actionRuleDiagnostics: projection.actionRuleDiagnostics,
+    });
+  const controlledActorTimeline =
+    projection.controlledActorTimeline ??
+    createControlledActorTimeline({ scenario, actionExecutionPlan });
+  const createRuntime = generatedCommands =>
+    createVerifiedCombatRuntime({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline,
+      actionVariantRuntime: projection.verifiedActionVariantRuntime,
+      effectTimeline: createEffectRuntimeTimeline({
+        scenario,
+        actionExecutionPlan,
+        controlledActorTimeline,
+        generatedCommands,
+      }),
+    });
+  return {
+    withCommands: createRuntime(commands),
+    withoutCommands: createRuntime([]),
+  };
+}
+
+function createInheritedTuningMark(markId, currentValue, decayRemainingMs) {
+  return {
+    markId,
+    currentValue,
+    maxValue: 5,
+    decayRemainingMs,
+    heldReadyRemainingMs: 0,
+    layers: Array.from({ length: currentValue }, (_value, index) => ({
+      sourceActionId: `fixture:tuning:${markId}:${index}`,
+      sourceActorId: null,
+      sourceIdentity: `fixture:tuning:${markId}:${index}`,
+    })),
+  };
+}
+
+function runtimeFrame(timeMs) {
+  return Math.round((Number(timeMs) * 60) / 1000);
 }
 
 function createSyntheticCatalog() {

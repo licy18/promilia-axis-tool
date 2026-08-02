@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "applied-source-binding-audit",
-  "generatedAt": "2026-08-02T04:11:01.384Z",
+  "generatedAt": "2026-08-02T05:44:43.386Z",
   "decision": {
     "status": "passed",
     "passed": true,
@@ -14,8 +14,10 @@
     "compatibleUnboundCount": 0,
     "unexplainedCompatibleUnboundCount": 0,
     "missingTrackCount": 0,
-    "loadoutPropertyTagSourceCount": 14,
-    "loadoutPropertyTagDriftCount": 0
+    "loadoutPropertyTagSourceCount": 17,
+    "loadoutPropertyTagDriftCount": 0,
+    "loadoutTuningConditionCount": 5,
+    "loadoutTuningConditionDriftCount": 0
   },
   "requiredTracks": [
     "enemyHpDamage",
@@ -58,11 +60,13 @@
       "expectedSha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
       "actualSha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
       "propertyTagContractHash": "146e6a9a7db86606",
-      "triggerContractHash": "e01501b913505ae7"
+      "triggerContractHash": "c381d1508e85d4fa"
     },
     "summary": {
-      "sourceCount": 14,
-      "driftCount": 0
+      "sourceCount": 17,
+      "driftCount": 0,
+      "tuningConditionCount": 5,
+      "tuningConditionDriftCount": 0
     },
     "records": [
       {
@@ -87,7 +91,8 @@
               "conditionValue": 2
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 0,
@@ -153,7 +158,8 @@
               "conditionValue": 3
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 0,
@@ -219,7 +225,8 @@
               "conditionValue": 3
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 0,
@@ -293,7 +300,8 @@
               "conditionValue": 4
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 15,
@@ -363,7 +371,8 @@
               "conditionValue": 3
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 15,
@@ -437,7 +446,8 @@
               "conditionValue": 4
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 15,
@@ -507,7 +517,8 @@
               "conditionValue": 3
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 0,
@@ -573,7 +584,8 @@
               "conditionValue": 11
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 0,
@@ -643,7 +655,8 @@
               "conditionValue": 2
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 0,
@@ -688,6 +701,122 @@
         "issueCodes": []
       },
       {
+        "soulEssenceId": 10124,
+        "effectElementId": 19004102,
+        "sourcePropertyTags": [],
+        "generatedPropertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102.defaultPropertyTags",
+        "triggerCondition": {
+          "sourceLogicValue": 0,
+          "generatedLogicValue": 0,
+          "sourceConditions": [
+            {
+              "conditionType": 10,
+              "conditionValue": 250
+            },
+            {
+              "conditionType": 11,
+              "conditionValue": 4
+            }
+          ],
+          "generatedConditions": [
+            {
+              "conditionType": 10,
+              "conditionValue": 250
+            },
+            {
+              "conditionType": 11,
+              "conditionValue": 4
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": [
+            {
+              "conditionType": 10,
+              "conditionTypeName": "HasElementId",
+              "conditionValue": 250,
+              "kind": "held-element-id",
+              "expectedProfiles": [
+                {
+                  "profileKey": "thunder",
+                  "markId": 250,
+                  "overlimitPacketElementId": 299,
+                  "damageElementId": 296,
+                  "elementTypes": [
+                    22,
+                    37,
+                    43,
+                    307
+                  ],
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                }
+              ],
+              "generatedProfiles": [
+                {
+                  "profileKey": "thunder",
+                  "markId": 250,
+                  "overlimitPacketElementId": 299,
+                  "damageElementId": 296,
+                  "elementTypes": [
+                    22,
+                    37,
+                    43,
+                    307
+                  ]
+                }
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.HasElementId=10|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=-5022202969777715803.types",
+              "status": "applied-source-tuning-condition-ready",
+              "issueCodes": []
+            }
+          ]
+        },
+        "triggerEffectTarget": {
+          "sourceTargetType": 15,
+          "generatedTargetType": 15,
+          "sourceTargetPathId": -4751821042418617000,
+          "generatedTargetPathId": -4751821042418617000,
+          "targetKind": "team-actors",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+        },
+        "formula": {
+          "sourceCommonFunctionId": 1,
+          "generatedCommonFunctionId": 1,
+          "sourceBaseFunctionId": 5,
+          "generatedBaseFunctionId": 5,
+          "formulaIdentity": "battle-effect-formula:soulessence:1900410:19004102:-4751821042418617000",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102.formulaParams|functionParams"
+        },
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 20000,
+          "leafDurationMs": 20000,
+          "wrapper": null,
+          "wrapperInjectedPathIds": [],
+          "removalPaths": [
+            {
+              "triggerElementId": 19004103,
+              "triggerPathId": -8265144590356460000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19004104,
+              "removerPathId": 944581446419746400,
+              "removedElementIds": [
+                19004103,
+                19004101
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-8265144590356460000;elementId=19004103.triggerEffectList[0]|battle-element-assets.jsonl#path_id=944581446419746400;elementId=19004104"
+            }
+          ]
+        },
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102",
+        "status": "applied-source-property-tags-ready",
+        "issueCodes": []
+      },
+      {
         "soulEssenceId": 10125,
         "effectElementId": 19005402,
         "sourcePropertyTags": [],
@@ -709,7 +838,8 @@
               "conditionValue": 1
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 0,
@@ -754,6 +884,542 @@
         "issueCodes": []
       },
       {
+        "soulEssenceId": 10131,
+        "effectElementId": 19002702,
+        "sourcePropertyTags": [],
+        "generatedPropertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702.defaultPropertyTags",
+        "triggerCondition": {
+          "sourceLogicValue": 1,
+          "generatedLogicValue": 1,
+          "sourceConditions": [
+            {
+              "conditionType": 12,
+              "conditionValue": 299
+            },
+            {
+              "conditionType": 12,
+              "conditionValue": 499
+            }
+          ],
+          "generatedConditions": [
+            {
+              "conditionType": 12,
+              "conditionValue": 299
+            },
+            {
+              "conditionType": 12,
+              "conditionValue": 499
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1",
+          "tuningConditions": [
+            {
+              "conditionType": 12,
+              "conditionTypeName": "CheckTargetElementId",
+              "conditionValue": 299,
+              "kind": "target-element-id",
+              "expectedProfiles": [
+                {
+                  "profileKey": "thunder",
+                  "markId": 250,
+                  "overlimitPacketElementId": 299,
+                  "damageElementId": 296,
+                  "elementTypes": [
+                    22,
+                    37,
+                    43,
+                    307
+                  ],
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                }
+              ],
+              "generatedProfiles": [
+                {
+                  "profileKey": "thunder",
+                  "markId": 250,
+                  "overlimitPacketElementId": 299,
+                  "damageElementId": 296,
+                  "elementTypes": [
+                    22,
+                    37,
+                    43,
+                    307
+                  ]
+                }
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckTargetElementId=12|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=-5022202969777715803.types",
+              "status": "applied-source-tuning-condition-ready",
+              "issueCodes": []
+            },
+            {
+              "conditionType": 12,
+              "conditionTypeName": "CheckTargetElementId",
+              "conditionValue": 499,
+              "kind": "target-element-id",
+              "expectedProfiles": [
+                {
+                  "profileKey": "dark",
+                  "markId": 450,
+                  "overlimitPacketElementId": 499,
+                  "damageElementId": 498,
+                  "elementTypes": [
+                    22,
+                    39,
+                    43,
+                    307
+                  ],
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                }
+              ],
+              "generatedProfiles": [
+                {
+                  "profileKey": "dark",
+                  "markId": 450,
+                  "overlimitPacketElementId": 499,
+                  "damageElementId": 498,
+                  "elementTypes": [
+                    22,
+                    39,
+                    43,
+                    307
+                  ]
+                }
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckTargetElementId=12|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=dark]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=450]|battle-element-assets.jsonl#path_id=-2413896801629279110|battle-element-assets.jsonl#path_id=-2413896801629279110|battle-element-assets.jsonl#path_id=2085743462064840077.types",
+              "status": "applied-source-tuning-condition-ready",
+              "issueCodes": []
+            }
+          ]
+        },
+        "triggerEffectTarget": {
+          "sourceTargetType": 0,
+          "generatedTargetType": 0,
+          "sourceTargetPathId": 8731924757452644000,
+          "generatedTargetPathId": 8731924757452644000,
+          "targetKind": "self-actor",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        },
+        "formula": {
+          "sourceCommonFunctionId": 1,
+          "generatedCommonFunctionId": 1,
+          "sourceBaseFunctionId": 5,
+          "generatedBaseFunctionId": 5,
+          "formulaIdentity": "battle-effect-formula:soulessence:1900270:19002702:8731924757452644000",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702.formulaParams|functionParams"
+        },
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 3000,
+          "leafDurationMs": 3000,
+          "wrapper": null,
+          "wrapperInjectedPathIds": [],
+          "removalPaths": [
+            {
+              "triggerElementId": 19002703,
+              "triggerPathId": 7692827483544024000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19002704,
+              "removerPathId": -2814982816242620400,
+              "removedElementIds": [
+                19002701,
+                19002703
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=7692827483544024000;elementId=19002703.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-2814982816242620400;elementId=19002704"
+            }
+          ]
+        },
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702",
+        "status": "applied-source-property-tags-ready",
+        "issueCodes": []
+      },
+      {
+        "soulEssenceId": 10136,
+        "effectElementId": 19002102,
+        "sourcePropertyTags": [],
+        "generatedPropertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102.defaultPropertyTags",
+        "triggerCondition": {
+          "sourceLogicValue": 0,
+          "generatedLogicValue": 0,
+          "sourceConditions": [
+            {
+              "conditionType": 8,
+              "conditionValue": 32
+            },
+            {
+              "conditionType": 8,
+              "conditionValue": 43
+            },
+            {
+              "conditionType": 11,
+              "conditionValue": 1
+            }
+          ],
+          "generatedConditions": [
+            {
+              "conditionType": 8,
+              "conditionValue": 32
+            },
+            {
+              "conditionType": 8,
+              "conditionValue": 43
+            },
+            {
+              "conditionType": 11,
+              "conditionValue": 1
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": [
+            {
+              "conditionType": 8,
+              "conditionTypeName": "CheckElementType",
+              "conditionValue": 43,
+              "kind": "event-element-type",
+              "expectedProfiles": [
+                {
+                  "profileKey": "dark",
+                  "markId": 450,
+                  "overlimitPacketElementId": 499,
+                  "damageElementId": 498,
+                  "elementTypes": [
+                    22,
+                    39,
+                    43,
+                    307
+                  ],
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                },
+                {
+                  "profileKey": "earth",
+                  "markId": 650,
+                  "overlimitPacketElementId": 699,
+                  "damageElementId": 697,
+                  "elementTypes": [
+                    22,
+                    33,
+                    43,
+                    307
+                  ],
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                },
+                {
+                  "profileKey": "fire",
+                  "markId": 150,
+                  "overlimitPacketElementId": 199,
+                  "damageElementId": 196,
+                  "elementTypes": [
+                    22,
+                    31,
+                    43,
+                    307
+                  ],
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                },
+                {
+                  "profileKey": "ice",
+                  "markId": 350,
+                  "overlimitPacketElementId": 399,
+                  "damageElementId": 395,
+                  "elementTypes": [
+                    22,
+                    35,
+                    43,
+                    307
+                  ],
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                },
+                {
+                  "profileKey": "light",
+                  "markId": 950,
+                  "overlimitPacketElementId": 999,
+                  "damageElementId": 997,
+                  "elementTypes": [
+                    22,
+                    38,
+                    43,
+                    307
+                  ],
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                },
+                {
+                  "profileKey": "thunder",
+                  "markId": 250,
+                  "overlimitPacketElementId": 299,
+                  "damageElementId": 296,
+                  "elementTypes": [
+                    22,
+                    37,
+                    43,
+                    307
+                  ],
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                },
+                {
+                  "profileKey": "water",
+                  "markId": 850,
+                  "overlimitPacketElementId": 899,
+                  "damageElementId": 897,
+                  "elementTypes": [
+                    22,
+                    36,
+                    43,
+                    307
+                  ],
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                },
+                {
+                  "profileKey": "wind",
+                  "markId": 750,
+                  "overlimitPacketElementId": 799,
+                  "damageElementId": 796,
+                  "elementTypes": [
+                    22,
+                    32,
+                    43,
+                    307
+                  ],
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                },
+                {
+                  "profileKey": "wood",
+                  "markId": 550,
+                  "overlimitPacketElementId": 599,
+                  "damageElementId": 596,
+                  "elementTypes": [
+                    22,
+                    34,
+                    43,
+                    307
+                  ],
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                }
+              ],
+              "generatedProfiles": [
+                {
+                  "profileKey": "dark",
+                  "markId": 450,
+                  "overlimitPacketElementId": 499,
+                  "damageElementId": 498,
+                  "elementTypes": [
+                    22,
+                    39,
+                    43,
+                    307
+                  ]
+                },
+                {
+                  "profileKey": "earth",
+                  "markId": 650,
+                  "overlimitPacketElementId": 699,
+                  "damageElementId": 697,
+                  "elementTypes": [
+                    22,
+                    33,
+                    43,
+                    307
+                  ]
+                },
+                {
+                  "profileKey": "fire",
+                  "markId": 150,
+                  "overlimitPacketElementId": 199,
+                  "damageElementId": 196,
+                  "elementTypes": [
+                    22,
+                    31,
+                    43,
+                    307
+                  ]
+                },
+                {
+                  "profileKey": "ice",
+                  "markId": 350,
+                  "overlimitPacketElementId": 399,
+                  "damageElementId": 395,
+                  "elementTypes": [
+                    22,
+                    35,
+                    43,
+                    307
+                  ]
+                },
+                {
+                  "profileKey": "light",
+                  "markId": 950,
+                  "overlimitPacketElementId": 999,
+                  "damageElementId": 997,
+                  "elementTypes": [
+                    22,
+                    38,
+                    43,
+                    307
+                  ]
+                },
+                {
+                  "profileKey": "thunder",
+                  "markId": 250,
+                  "overlimitPacketElementId": 299,
+                  "damageElementId": 296,
+                  "elementTypes": [
+                    22,
+                    37,
+                    43,
+                    307
+                  ]
+                },
+                {
+                  "profileKey": "water",
+                  "markId": 850,
+                  "overlimitPacketElementId": 899,
+                  "damageElementId": 897,
+                  "elementTypes": [
+                    22,
+                    36,
+                    43,
+                    307
+                  ]
+                },
+                {
+                  "profileKey": "wind",
+                  "markId": 750,
+                  "overlimitPacketElementId": 799,
+                  "damageElementId": 796,
+                  "elementTypes": [
+                    22,
+                    32,
+                    43,
+                    307
+                  ]
+                },
+                {
+                  "profileKey": "wood",
+                  "markId": 550,
+                  "overlimitPacketElementId": 599,
+                  "damageElementId": 596,
+                  "elementTypes": [
+                    22,
+                    34,
+                    43,
+                    307
+                  ]
+                }
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementType=8|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=2917355649561243897|battle-element-assets.jsonl#path_id=-310946560669858520.types|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=536980873299289094|battle-element-assets.jsonl#path_id=-5022202969777715803.types|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=ice]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=350]|battle-element-assets.jsonl#path_id=-3481476500606266500|battle-element-assets.jsonl#path_id=-3481476500606266500|battle-element-assets.jsonl#path_id=5756437106006428564.types|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=dark]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=450]|battle-element-assets.jsonl#path_id=-2413896801629279110|battle-element-assets.jsonl#path_id=-2413896801629279110|battle-element-assets.jsonl#path_id=2085743462064840077.types|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wood]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=550]|battle-element-assets.jsonl#path_id=2120617582505955581|battle-element-assets.jsonl#path_id=2120617582505955581|battle-element-assets.jsonl#path_id=6500867373616520947.types|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=earth]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=650]|battle-element-assets.jsonl#path_id=-1242046641952436421|battle-element-assets.jsonl#path_id=-1242046641952436421|battle-element-assets.jsonl#path_id=1920742622307174111.types|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=water]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=850]|battle-element-assets.jsonl#path_id=-3161718249097424629|battle-element-assets.jsonl#path_id=-3161718249097424629|battle-element-assets.jsonl#path_id=3909034050250717657.types|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=light]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=950]|battle-element-assets.jsonl#path_id=1781318263043700654|battle-element-assets.jsonl#path_id=1781318263043700654|battle-element-assets.jsonl#path_id=9155281695412256774.types",
+              "status": "applied-source-tuning-condition-ready",
+              "issueCodes": []
+            },
+            {
+              "conditionType": 8,
+              "conditionTypeName": "CheckElementType",
+              "conditionValue": 32,
+              "kind": "event-element-type",
+              "expectedProfiles": [
+                {
+                  "profileKey": "wind",
+                  "markId": 750,
+                  "overlimitPacketElementId": 799,
+                  "damageElementId": 796,
+                  "elementTypes": [
+                    22,
+                    32,
+                    43,
+                    307
+                  ],
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                }
+              ],
+              "generatedProfiles": [
+                {
+                  "profileKey": "wind",
+                  "markId": 750,
+                  "overlimitPacketElementId": 799,
+                  "damageElementId": 796,
+                  "elementTypes": [
+                    22,
+                    32,
+                    43,
+                    307
+                  ]
+                }
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerConditionList[2]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementType=8|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=4731523060341306954|battle-element-assets.jsonl#path_id=-7412029037550756065.types",
+              "status": "applied-source-tuning-condition-ready",
+              "issueCodes": []
+            }
+          ]
+        },
+        "triggerEffectTarget": {
+          "sourceTargetType": 0,
+          "generatedTargetType": 0,
+          "sourceTargetPathId": -5684518322628377000,
+          "generatedTargetPathId": -5684518322628377000,
+          "targetKind": "self-actor",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        },
+        "formula": {
+          "sourceCommonFunctionId": 1,
+          "generatedCommonFunctionId": 1,
+          "sourceBaseFunctionId": 5,
+          "generatedBaseFunctionId": 5,
+          "formulaIdentity": "battle-effect-formula:soulessence:1900210:19002102:-5684518322628377000",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102.formulaParams|functionParams"
+        },
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 8000,
+          "leafDurationMs": 8000,
+          "wrapper": null,
+          "wrapperInjectedPathIds": [],
+          "removalPaths": [
+            {
+              "triggerElementId": 19002103,
+              "triggerPathId": -3320725752405659000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19002104,
+              "removerPathId": 1232050123381959400,
+              "removedElementIds": [
+                19002103,
+                19002101
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-3320725752405659000;elementId=19002103.triggerEffectList[0]|battle-element-assets.jsonl#path_id=1232050123381959400;elementId=19002104"
+            }
+          ]
+        },
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102",
+        "status": "applied-source-property-tags-ready",
+        "issueCodes": []
+      },
+      {
         "soulEssenceId": 10147,
         "effectElementId": 19001002,
         "sourcePropertyTags": [
@@ -779,7 +1445,8 @@
               "conditionValue": 22
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 0,
@@ -858,7 +1525,8 @@
               "conditionValue": 22
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 0,
@@ -924,7 +1592,8 @@
               "conditionValue": 1
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 0,
@@ -990,7 +1659,8 @@
               "conditionValue": 1
             }
           ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
         },
         "triggerEffectTarget": {
           "sourceTargetType": 0,

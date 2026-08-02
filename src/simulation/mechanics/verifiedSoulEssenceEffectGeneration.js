@@ -22,6 +22,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
   scenario = {},
   actionExecutionPlan = null,
   actionResolutionById = null,
+  tuningGeneration = null,
   catalog = soulEssenceEffectCatalog,
 } = {}) {
   const executionByActionId = new Map(
@@ -74,35 +75,17 @@ export function createVerifiedSoulEssenceEffectGeneration({
         resolution,
       });
       const actionKind = actionContext.actionKind;
-      const conditionMatch = matchesSoulTriggerCondition(
-        binding.definition.trigger?.condition,
-        actionContext
-      );
-      if (!conditionMatch.matched) {
-        suppressions.push({
-          actionId: action.id,
-          actorId: binding.actor.id,
-          soulEssenceId: binding.soulEssenceId,
-          effectSkillId: binding.definition.effectSkillId,
-          reason: 'soulessence-effect-action-kind-condition-not-matched',
-          expectedActionKinds:
-            binding.definition.trigger?.condition?.actionKinds ?? [],
-          actualActionKind: actionKind,
-          expectedCondition: binding.definition.trigger?.condition ?? null,
-          actualSkillSlotIds: actionContext.skillSlotIds,
-          actualSkillTagIds: actionContext.skillTagIds,
-          conditionReasons: conditionMatch.reasons,
-        });
-        continue;
-      }
       const triggerOperator =
         SOULESSENCE_TRIGGER_OPERATOR_REGISTRY[
           binding.definition.trigger.frameAnchor
         ];
       const occurrences = triggerOperator?.({
         action,
+        actionIndex,
         resolution,
         scenario,
+        tuningGeneration,
+        frameAnchor: binding.definition.trigger.frameAnchor,
       });
       if (!Array.isArray(occurrences) || occurrences.length === 0) {
         suppressions.push({
@@ -119,12 +102,46 @@ export function createVerifiedSoulEssenceEffectGeneration({
         });
         continue;
       }
+      const matchedOccurrences = occurrences
+        .map(occurrence => ({
+          ...occurrence,
+          conditionMatch: matchesSoulTriggerCondition(
+            binding.definition.trigger?.condition,
+            actionContext,
+            occurrence.eventContext
+          ),
+        }))
+        .filter(occurrence => occurrence.conditionMatch.matched);
+      if (matchedOccurrences.length === 0) {
+        suppressions.push({
+          actionId: action.id,
+          actorId: binding.actor.id,
+          soulEssenceId: binding.soulEssenceId,
+          effectSkillId: binding.definition.effectSkillId,
+          reason: 'soulessence-effect-action-kind-condition-not-matched',
+          expectedActionKinds:
+            binding.definition.trigger?.condition?.actionKinds ?? [],
+          actualActionKind: actionKind,
+          expectedCondition: binding.definition.trigger?.condition ?? null,
+          actualSkillSlotIds: actionContext.skillSlotIds,
+          actualSkillTagIds: actionContext.skillTagIds,
+          conditionReasons: occurrences.map(occurrence => ({
+            eventIdentity: occurrence.eventContext?.eventIdentity ?? null,
+            reasons: matchesSoulTriggerCondition(
+              binding.definition.trigger?.condition,
+              actionContext,
+              occurrence.eventContext
+            ).reasons,
+          })),
+        });
+        continue;
+      }
       const targets = resolveSoulEffectTargets({
         binding,
         scenario,
       });
       effectCommands.push(
-        ...occurrences.flatMap(({ hit }) =>
+        ...matchedOccurrences.flatMap(occurrence =>
           targets.map((target, targetIndex) =>
             createSoulEffectCommand({
               binding,
@@ -132,9 +149,9 @@ export function createVerifiedSoulEssenceEffectGeneration({
               actionIndex,
               actionKind,
               actionContext,
-              conditionMatch,
+              conditionMatch: occurrence.conditionMatch,
               resolution,
-              hit,
+              occurrence,
               target,
               targetIndex,
               catalog,
@@ -165,8 +182,48 @@ export function createVerifiedSoulEssenceEffectGeneration({
   };
 }
 
-function resolveActionTriggerOccurrence() {
-  return [{ hit: null }];
+function resolveActionTriggerOccurrence({
+  action,
+  actionIndex,
+  tuningGeneration,
+  frameAnchor,
+}) {
+  const actionSourceSequencePath = getActionSourceSequencePath(
+    action,
+    actionIndex
+  ) ?? [actionIndex];
+  const timeMs = roundRuntimeTime(
+    Number(action.startMs) +
+      (frameAnchor === 'action-end' ? Number(action.durationMs) : 0)
+  );
+  const triggerSequencePath = [
+    ...actionSourceSequencePath,
+    frameAnchor === 'action-start' ? 0 : Number.MAX_SAFE_INTEGER - 1,
+  ];
+  return [
+    {
+      hit: null,
+      tuningEvent: null,
+      timeMs,
+      triggerSequencePath,
+      eventContext: {
+        eventIdentity: `${frameAnchor}|${action.id}|${timeMs}`,
+        eventKind: frameAnchor,
+        timeMs,
+        absoluteFrame: Math.round((timeMs * 60) / 1000),
+        sourceSequencePath: triggerSequencePath,
+        heldElementIds: resolveHeldTuningElementIdsAt({
+          tuningGeneration,
+          timeMs,
+          frameAnchor,
+        }),
+        elementId: null,
+        elementTypes: [],
+        targetElementIds: [],
+        landed: null,
+      },
+    },
+  ];
 }
 
 function resolveEmptyTriggerOccurrenceReason(frameAnchor) {
@@ -176,9 +233,21 @@ function resolveEmptyTriggerOccurrenceReason(frameAnchor) {
   return 'soulessence-effect-action-occurrence-unavailable';
 }
 
-function resolveLandedHitTriggerOccurrences({ action, resolution, scenario }) {
-  const defaultWillHit = scenario?.projectile?.defaultWillHit !== false;
-  return (resolution?.hits ?? [])
+function resolveLandedHitTriggerOccurrences({
+  action,
+  actionIndex,
+  resolution,
+  scenario,
+  tuningGeneration,
+}) {
+  const defaultWillHit =
+    (scenario?.combatScenario?.projectile?.defaultWillHit ??
+      scenario?.projectile?.defaultWillHit) !== false;
+  const actionSourceSequencePath = getActionSourceSequencePath(
+    action,
+    actionIndex
+  ) ?? [actionIndex];
+  const hitOccurrences = (resolution?.hits ?? [])
     .filter(hit => isSoulTriggerHitWithinAction(action, resolution, hit))
     .filter(hit =>
       resolveActionHitWillHit(
@@ -187,7 +256,54 @@ function resolveLandedHitTriggerOccurrences({ action, resolution, scenario }) {
         defaultWillHit
       )
     )
-    .map(hit => ({ hit }));
+    .map(hit => {
+      const frameRate = positiveNumber(
+        resolution?.controlBinding?.frameRate,
+        60
+      );
+      const timeMs = roundRuntimeTime(
+        Number(action.startMs) +
+          (Number(hit.trigger?.startFrame) * 1000) / frameRate
+      );
+      const triggerSequencePath = [
+        ...actionSourceSequencePath,
+        Number(hit.hitIndex),
+      ];
+      return {
+        hit,
+        tuningEvent: null,
+        timeMs,
+        triggerSequencePath,
+        eventContext: {
+          eventIdentity: `combat-hit|${action.id}|${resolveSoulTriggerHitIdentity(hit)}`,
+          eventKind: 'combat-hit',
+          timeMs,
+          absoluteFrame: Math.round((timeMs * 60) / 1000),
+          sourceSequencePath: triggerSequencePath,
+          heldElementIds: [],
+          elementId: Number.isInteger(Number(hit.elementId))
+            ? Number(hit.elementId)
+            : null,
+          elementTypes: uniqueFiniteIntegers(
+            hit.damage?.elementTypes ?? hit.damage?.types ?? []
+          ),
+          targetElementIds: [],
+          landed: true,
+        },
+      };
+    });
+  const tuningOccurrences = (tuningGeneration?.combatEvents ?? [])
+    .filter(event => String(event.actionId) === String(action.id))
+    .filter(event => event.eventContext?.landed === true)
+    .filter(event => event.kind === 'overlimit-damage')
+    .map(event => ({
+      hit: null,
+      tuningEvent: event,
+      timeMs: Number(event.timeMs),
+      triggerSequencePath: event.eventContext.sourceSequencePath,
+      eventContext: event.eventContext,
+    }));
+  return [...hitOccurrences, ...tuningOccurrences];
 }
 
 function resolveSoulTriggerHitIdentity(hit) {
@@ -243,7 +359,7 @@ function createSoulEffectCommand({
   actionContext,
   conditionMatch,
   resolution,
-  hit,
+  occurrence,
   target,
   targetIndex,
   catalog,
@@ -251,27 +367,34 @@ function createSoulEffectCommand({
   const { definition, starValue, formulaResult, actor } = binding;
   const effect = definition.effect;
   const frameAnchor = definition.trigger.frameAnchor;
+  const hit = occurrence?.hit ?? null;
+  const tuningEvent = occurrence?.tuningEvent ?? null;
+  const eventContext = occurrence?.eventContext ?? null;
   const frameRate = positiveNumber(resolution?.controlBinding?.frameRate, 60);
   const hitFrame = hit == null ? null : Number(hit.trigger?.startFrame);
-  const timeMs = roundRuntimeTime(
-    Number(action.startMs) +
-      (frameAnchor === 'action-end'
-        ? Number(action.durationMs)
-        : frameAnchor === 'hit-after-damage'
-          ? (hitFrame * 1000) / frameRate
-          : 0)
-  );
+  const timeMs = Number.isFinite(Number(occurrence?.timeMs))
+    ? roundRuntimeTime(occurrence.timeMs)
+    : roundRuntimeTime(
+        Number(action.startMs) +
+          (frameAnchor === 'action-end'
+            ? Number(action.durationMs)
+            : frameAnchor === 'hit-after-damage'
+              ? (hitFrame * 1000) / frameRate
+              : 0)
+      );
   const actionSourceSequencePath = getActionSourceSequencePath(
     action,
     actionIndex
   ) ?? [actionIndex];
-  const triggerSequencePath =
-    hit == null
-      ? [...actionSourceSequencePath, targetIndex]
-      : [...actionSourceSequencePath, Number(hit.hitIndex), targetIndex];
+  const occurrenceSequencePath = Array.isArray(occurrence?.triggerSequencePath)
+    ? occurrence.triggerSequencePath
+    : hit == null
+      ? actionSourceSequencePath
+      : [...actionSourceSequencePath, Number(hit.hitIndex)];
+  const triggerSequencePath = [...occurrenceSequencePath, targetIndex];
   const effectIdentity = `soulessence:${binding.soulEssenceId}:element:${effect.elementId}`;
   return {
-    id: `soulessence|${binding.soulEssenceId}|${action.id}|${effect.elementId}|${frameAnchor}|target:${target.id}${hit == null ? '' : `|hit:${hit.hitIndex}`}`,
+    id: `soulessence|${binding.soulEssenceId}|${action.id}|${effect.elementId}|${frameAnchor}|target:${target.id}${hit == null ? '' : `|hit:${hit.hitIndex}`}${tuningEvent == null ? '' : `|tuning:${tuningEvent.eventIdentity}`}`,
     sourceActionId: action.id,
     sourceActionName: action.name,
     sourceActorId: actor.id,
@@ -280,6 +403,7 @@ function createSoulEffectCommand({
     sourceHitIdentity: hit?.sourceIdentity ?? null,
     sourceHitIndex: hit?.hitIndex ?? null,
     sourceHitElementId: hit?.elementId ?? null,
+    sourceTuningEventIdentity: tuningEvent?.eventIdentity ?? null,
     effectId: effectIdentity,
     effectName: `${definition.name}-${effect.name ?? effect.elementId}`,
     operation: EFFECT_OPERATIONS.APPLY,
@@ -340,6 +464,8 @@ function createSoulEffectCommand({
       sourceHitIdentity: hit?.sourceIdentity ?? null,
       sourceHitIndex: hit?.hitIndex ?? null,
       sourceHitElementId: hit?.elementId ?? null,
+      sourceTuningEventIdentity: tuningEvent?.eventIdentity ?? null,
+      triggerEventContext: eventContext,
       triggerCondition: definition.trigger.condition,
       matchedConditionIdentities: conditionMatch.matchedConditionIdentities,
       actionSkillSlotIds: actionContext.skillSlotIds,
@@ -454,7 +580,7 @@ function resolveSoulTriggerActionContext({ action, resolution }) {
   };
 }
 
-function matchesSoulTriggerCondition(condition, actionContext) {
+function matchesSoulTriggerCondition(condition, actionContext, eventContext) {
   const legacyConditionShape = !Array.isArray(condition?.conditions);
   const conditions = Array.isArray(condition?.conditions)
     ? condition.conditions
@@ -485,6 +611,21 @@ function matchesSoulTriggerCondition(condition, actionContext) {
         matchesSoulTriggerProvenance(entry, actionContext)
       );
     }
+    if (entry.kind === 'held-element-id') {
+      return (eventContext?.heldElementIds ?? []).includes(
+        Number(entry.conditionValue)
+      );
+    }
+    if (entry.kind === 'event-element-type') {
+      return (eventContext?.elementTypes ?? []).includes(
+        Number(entry.conditionValue)
+      );
+    }
+    if (entry.kind === 'target-element-id') {
+      return (eventContext?.targetElementIds ?? []).includes(
+        Number(entry.conditionValue)
+      );
+    }
     return (
       (entry.actionKinds ?? []).includes(actionContext.actionKind) &&
       matchesSoulTriggerProvenance(entry, actionContext)
@@ -506,6 +647,35 @@ function matchesSoulTriggerCondition(condition, actionContext) {
           matched: results[index],
         })),
   };
+}
+
+function resolveHeldTuningElementIdsAt({
+  tuningGeneration,
+  timeMs,
+  frameAnchor,
+}) {
+  const countByMarkId = new Map(
+    (tuningGeneration?.initialState ?? []).map(state => [
+      Number(state.markId),
+      Number(state.currentValue) || 0,
+    ])
+  );
+  for (const event of tuningGeneration?.events ?? []) {
+    const eventTimeMs = Number(event.timeMs);
+    if (eventTimeMs > timeMs) continue;
+    if (
+      eventTimeMs === timeMs &&
+      frameAnchor === 'action-start' &&
+      event.kind !== 'expire'
+    ) {
+      continue;
+    }
+    countByMarkId.set(Number(event.markId), Number(event.after) || 0);
+  }
+  return [...countByMarkId.entries()]
+    .filter(([_markId, count]) => count > 0)
+    .map(([markId]) => markId)
+    .sort((left, right) => left - right);
 }
 
 function matchesSoulTriggerProvenance(condition, actionContext) {

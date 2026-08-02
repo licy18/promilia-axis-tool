@@ -424,6 +424,7 @@ function createVerifiedRuntimeBundle({
         scenario,
         actionExecutionPlan,
         actionResolutionById: actionVariantRuntime?.actionResolutionById,
+        tuningGeneration,
       })
     : null;
   const effectTimeline = createEffectRuntimeTimeline({

@@ -8,6 +8,11 @@ import {
   EFFECT_STACK_MODES,
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
+import { resolveActionHitWillHit } from '../../domain/actionHitOverrides';
+import {
+  compareSourceSequencePaths,
+  getActionSourceSequencePath,
+} from '../../domain/actionSourceSequence';
 import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
 
 export const VERIFIED_TUNING_MARK_GENERATION_CONTRACT_NAME =
@@ -70,8 +75,8 @@ export function createVerifiedTuningMarkGeneration({
     mechanicsPackage,
   });
 
-  for (const transaction of
-    actionVariantRuntime?.tuningMarkTransactions ?? []) {
+  for (const transaction of actionVariantRuntime?.tuningMarkTransactions ??
+    []) {
     if (
       transaction.applied !== true ||
       transaction.kind !== 'threshold-grant'
@@ -559,6 +564,7 @@ function applyMarkConsumption({
       profile: state.profile,
       markCount: consumedCount,
       template: state.profile.overlimitDamage.template,
+      scenario,
     })
   );
   createOverlimitExtraCombatEvents({
@@ -568,6 +574,7 @@ function applyMarkConsumption({
     combatEvents,
     unresolved,
     enqueue,
+    scenario,
   });
 }
 
@@ -596,6 +603,7 @@ function applyHeldMarkTriggers({
           profile: state.profile,
           markCount,
           template,
+          scenario,
         })
       );
     }
@@ -697,6 +705,7 @@ function createOverlimitExtraCombatEvents({
   combatEvents,
   unresolved,
   enqueue,
+  scenario,
 }) {
   const extra = profile.overlimitExtra;
   if (!extra) return;
@@ -721,6 +730,7 @@ function createOverlimitExtraCombatEvents({
               Number(extra.coefficientPerMark) * 10_000
             ),
           },
+          scenario,
         }),
       });
     }
@@ -742,6 +752,7 @@ function createOverlimitExtraCombatEvents({
           usesTuningStrength: false,
           sourceIdentity: profile.sourceIdentity,
         },
+        scenario,
       })
     );
   } else if (extra.kind === 'sp_recovery') {
@@ -755,6 +766,7 @@ function createOverlimitExtraCombatEvents({
           valuePerMark: Number(extra.spPerConsumedMark),
           sourceIdentity: profile.sourceIdentity,
         },
+        scenario,
       })
     );
   } else if (extra.kind === 'chain_lightning') {
@@ -978,20 +990,58 @@ function createModifier(attributeId, bucket, valueRaw, profile) {
   };
 }
 
-function createCombatEvent({ kind, descriptor, profile, markCount, template }) {
+function createCombatEvent({
+  kind,
+  descriptor,
+  profile,
+  markCount,
+  template,
+  scenario = null,
+}) {
+  const eventIdentity = [
+    kind,
+    descriptor.action?.id,
+    profile.markId,
+    template?.elementConfigId,
+    descriptor.timeMs,
+  ].join('|');
+  const sourceSequencePath = createTuningSourceSequencePath({
+    descriptor,
+    localKind: kind,
+    localIdentity: template?.elementConfigId,
+  });
+  const damageEvent = [
+    'held-damage',
+    'held-true-damage',
+    'overlimit-damage',
+    'overlimit-dot-damage',
+    'overlimit-true-damage',
+  ].includes(kind);
+  const sourceHitIdentity = resolveTuningSourceHitIdentity(descriptor);
+  const landed = damageEvent
+    ? resolveActionHitWillHit(
+        descriptor.action,
+        sourceHitIdentity ?? eventIdentity,
+        (scenario?.combatScenario?.projectile?.defaultWillHit ??
+          scenario?.projectile?.defaultWillHit) !== false
+      )
+    : null;
+  const elementTypes = uniqueIntegers(template?.elementTypes ?? []);
+  const targetElementIds = kind.startsWith('overlimit-')
+    ? uniqueIntegers([profile.overlimitPacket?.elementId])
+    : [];
+  const skillTagIds = uniqueIntegers([
+    descriptor.resolution?.controlBinding?.logic?.skillTagId,
+    ...parseIntegerList(descriptor.resolution?.controlBinding?.logic?.skillTag),
+  ]);
   return {
     schemaVersion: 1,
     sourceKind: 'azpr-verified-tuning-combat-event',
     status: `verified-tuning-${kind}-ready`,
     kind,
-    eventIdentity: [
-      kind,
-      descriptor.action?.id,
-      profile.markId,
-      template?.elementConfigId,
-      descriptor.timeMs,
-    ].join('|'),
+    eventIdentity,
     timeMs: roundValue(descriptor.timeMs),
+    absoluteFrame: Math.round((descriptor.timeMs * FRAME_RATE) / 1000),
     action: descriptor.action ?? null,
     actionId: descriptor.action?.id ?? null,
     actorId: descriptor.action?.actorId ?? null,
@@ -1000,6 +1050,28 @@ function createCombatEvent({ kind, descriptor, profile, markCount, template }) {
     profile,
     markCount,
     template,
+    eventContext: {
+      eventIdentity,
+      eventKind: kind,
+      timeMs: roundValue(descriptor.timeMs),
+      absoluteFrame: Math.round((descriptor.timeMs * FRAME_RATE) / 1000),
+      sourceSequencePath,
+      elementId: Number.isInteger(Number(template?.elementConfigId))
+        ? Number(template.elementConfigId)
+        : null,
+      elementTypes,
+      targetElementIds,
+      heldElementIds: [],
+      markId: Number(profile.markId),
+      profileKey: profile.key,
+      overlimitPacketElementId:
+        Number(profile.overlimitPacket?.elementId) || null,
+      sourceActionId: descriptor.action?.id ?? null,
+      sourceActorId: descriptor.action?.actorId ?? null,
+      sourceHitIdentity,
+      skillTagIds,
+      landed,
+    },
     sourceIdentity: template?.sourceIdentity ?? profile.sourceIdentity,
     appliedToCalculators: true,
     applied: true,
@@ -1015,6 +1087,11 @@ function createMarkEvent({
   delta,
   layerIds,
 }) {
+  const sourceSequencePath = createTuningSourceSequencePath({
+    descriptor,
+    localKind: kind,
+    localIdentity: state.profile.markId,
+  });
   return {
     schemaVersion: 1,
     sourceKind: 'azpr-verified-tuning-mark-event',
@@ -1030,6 +1107,8 @@ function createMarkEvent({
     type: `VERIFIED_TUNING_MARK_${kind.toUpperCase()}`,
     timeMs: roundValue(descriptor.timeMs),
     frameIndex: Math.round((descriptor.timeMs * FRAME_RATE) / 1000),
+    absoluteFrame: Math.round((descriptor.timeMs * FRAME_RATE) / 1000),
+    sourceSequencePath,
     actionId: descriptor.action?.id ?? descriptor.layer?.sourceActionId ?? null,
     actorId:
       descriptor.action?.actorId ?? descriptor.layer?.sourceActorId ?? null,
@@ -1054,6 +1133,60 @@ function createMarkEvent({
     appliedToCalculators: true,
     applied: true,
   };
+}
+
+function createTuningSourceSequencePath({
+  descriptor,
+  localKind,
+  localIdentity,
+}) {
+  const actionPath = getActionSourceSequencePath(descriptor.action);
+  const kindOrder = {
+    expire: 10,
+    acquire: 20,
+    consume: 30,
+    'held-trigger': 40,
+    'held-damage': 50,
+    'held-true-damage': 51,
+    'overlimit-damage': 60,
+    'overlimit-dot-damage': 61,
+    'overlimit-true-damage': 62,
+    'overlimit-direct-sp': 63,
+    'periodic-heal': 70,
+  };
+  const suffix = [
+    kindOrder[localKind] ?? 90,
+    Number(descriptor.queueSequence) || 0,
+    Math.max(0, Number(localIdentity) || 0),
+  ];
+  return actionPath
+    ? [...actionPath, ...suffix]
+    : [Number.MAX_SAFE_INTEGER, ...suffix];
+}
+
+function resolveTuningSourceHitIdentity(descriptor) {
+  const hit = descriptor.hit;
+  if (!hit) return null;
+  return String(
+    hit.identity ??
+      hit.hitIdentity ??
+      hit.sourceIdentity ??
+      `${hit.elementId ?? 'element'}|${hit.hitIndex ?? 'hit'}`
+  );
+}
+
+function parseIntegerList(value) {
+  if (Array.isArray(value)) return value.map(Number);
+  return String(value ?? '')
+    .split(/[^\d-]+/u)
+    .filter(Boolean)
+    .map(Number);
+}
+
+function uniqueIntegers(values) {
+  return [...new Set(values.map(Number).filter(Number.isInteger))].sort(
+    (left, right) => left - right
+  );
 }
 
 function createDescriptorSource(descriptor) {
@@ -1193,6 +1326,10 @@ function compareGenerationDescriptors(left, right) {
 function compareGeneratedEvents(left, right) {
   return (
     Number(left.timeMs) - Number(right.timeMs) ||
+    compareSourceSequencePaths(
+      left.sourceSequencePath ?? left.eventContext?.sourceSequencePath,
+      right.sourceSequencePath ?? right.eventContext?.sourceSequencePath
+    ) ||
     String(left.eventIdentity ?? left.id ?? '').localeCompare(
       String(right.eventIdentity ?? right.id ?? '')
     )

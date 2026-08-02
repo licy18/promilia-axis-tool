@@ -9,15 +9,15 @@
 - 去重语义效果：3428
 - 最终玩法效果：1805
 - 结构包装/条件：1623
-- 语义可计算：373
+- 语义可计算：409
 - 语义明确零：2
-- 语义未解析：1430
+- 语义未解析：1394
 
 ## 语义放置
 
 - runtime-dependent: 115
-- static-evidence-gap: 504
-- static-resolved: 1186
+- static-evidence-gap: 468
+- static-resolved: 1222
 
 ## 公式族
 
@@ -53,9 +53,9 @@
 ## 原始边审计
 
 - 效果绑定：3686
-- 可计算：336
+- 可计算：372
 - 明确零：2
-- 未解析：3348
+- 未解析：3312
 
 ## 元素类型
 
@@ -71,7 +71,7 @@
 
 ## 未解析原因
 
-- effect-target-static-evidence-gap: 514
+- effect-target-static-evidence-gap: 478
 - effect-trigger-frame-static-evidence-gap: 425
 - heal-formula-not-literal-function-5: 52
 - nested-damage-runtime-family-unimplemented: 473
@@ -85,7 +85,7 @@
 - sp-formula-not-literal-function-5: 95
 - sp-recover-type-not-direct-sp: 12
 - tuning-consume-judgment-missing: 9
-- tuning-consume-mark-identity-ambiguous: 45
+- tuning-consume-mark-identity-ambiguous: 9
 - tuning-consume-success-branch-unresolved: 9
 - tuning-mark-max-mismatch: 46
 - tuning-mark-relation-elementDataList-unresolved: 2

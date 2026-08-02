@@ -4,7 +4,7 @@
   "ownerId": 103002,
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "992f1ef347f53672e0e870a3d9c17fef9a9f70638d864cd27d915d0de0ead0de"
+    "packageHash": "8c3dad80578b9b8e908523890709053bd4005da56eb46d7d224c52484624c761"
   },
   "recipeIdentity": "scripts/character-combat/profile-recipes/103002.json",
   "recipeHash": "f2b4874c7fcdbb6ac9cce4280604cc3204b6f8d32cf9fec4df2c23a49526d752",
@@ -12745,31 +12745,31 @@
       "status": "evidence-indexed"
     },
     {
-      "identity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152",
-      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152",
-      "identityHash": "da9055a182b8dde988a5225cfb3292478af78d0b5379a1cd11c3f7b5f756b56b",
-      "sourceKind": "other",
+      "identity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152|battle-element-assets.jsonl#path_id=3879285143630828198.types",
+      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152|battle-element-assets.jsonl#path_id=3879285143630828198.types",
+      "identityHash": "5a239a8081a0015969ac58712f995c238cd5153639a653c66bb2a915d8072c7f",
+      "sourceKind": "battle-element",
       "status": "evidence-indexed"
     },
     {
-      "identity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196",
-      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196",
-      "identityHash": "c58829a20fe2ac2e3d2634a2d2e3af19be03ecf249c4908f75bb42b302f1659a",
-      "sourceKind": "other",
+      "identity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196|battle-element-assets.jsonl#path_id=-310946560669858520.types",
+      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196|battle-element-assets.jsonl#path_id=-310946560669858520.types",
+      "identityHash": "2e23fd827457f2532c0880677ad36026351a2929fce3e9b841670685d8b0379d",
+      "sourceKind": "battle-element",
       "status": "evidence-indexed"
     },
     {
-      "identity": "combat-overlimit-mechanics-20260718.json#elementConfigId=251",
-      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=251",
-      "identityHash": "0e8fbf68dcb170964a10d8940b8ee4164a039ba00372f9b2630c1b23e71d92a1",
-      "sourceKind": "other",
+      "identity": "combat-overlimit-mechanics-20260718.json#elementConfigId=251|battle-element-assets.jsonl#path_id=-637110086033006477.types",
+      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=251|battle-element-assets.jsonl#path_id=-637110086033006477.types",
+      "identityHash": "22f4f4ecdbd5f57a833011596796bae9acbe02026bdb580a0695cc8b25c4d0ee",
+      "sourceKind": "battle-element",
       "status": "evidence-indexed"
     },
     {
-      "identity": "combat-overlimit-mechanics-20260718.json#elementConfigId=296",
-      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=296",
-      "identityHash": "c81a094facd69daa9d7ea6ef368fcfe8c51062d4904b5e5af37be2bda1285342",
-      "sourceKind": "other",
+      "identity": "combat-overlimit-mechanics-20260718.json#elementConfigId=296|battle-element-assets.jsonl#path_id=-5022202969777715803.types",
+      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=296|battle-element-assets.jsonl#path_id=-5022202969777715803.types",
+      "identityHash": "7e92a06fc9283a9b725b7c818b5018973c8df7278c3f2f08649cd3ac4ce4e417",
+      "sourceKind": "battle-element",
       "status": "evidence-indexed"
     },
     {
@@ -12923,13 +12923,13 @@
   "summary": {
     "identityCount": 1800,
     "sourceKindCounts": {
-      "battle-element": 59,
+      "battle-element": 63,
       "client-code": 3,
       "new-table": 64,
-      "other": 262,
+      "other": 258,
       "runtime-contract": 27,
       "skill-control": 1385
     }
   },
-  "profileHash": "59019f3abfc4135e767786132f919fbb041e17d196ecd398b3ae71496d0b8d03"
+  "profileHash": "8afdea9a6dcd56e3cc25d311c731b09cc31ce221ec68cf4b037dd0911c7203e2"
 }

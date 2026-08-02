@@ -4,7 +4,7 @@
   "ownerId": 101003,
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "992f1ef347f53672e0e870a3d9c17fef9a9f70638d864cd27d915d0de0ead0de"
+    "packageHash": "8c3dad80578b9b8e908523890709053bd4005da56eb46d7d224c52484624c761"
   },
   "recipeIdentity": "scripts/character-combat/profile-recipes/101003.json",
   "recipeHash": "ae56f58b9dacec98ab6f84419fce6645a8dc2d9961943a7a87a1ce2767980ecb",
@@ -3568,17 +3568,17 @@
       "status": "evidence-indexed"
     },
     {
-      "identity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152",
-      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152",
-      "identityHash": "da9055a182b8dde988a5225cfb3292478af78d0b5379a1cd11c3f7b5f756b56b",
-      "sourceKind": "other",
+      "identity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152|battle-element-assets.jsonl#path_id=3879285143630828198.types",
+      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152|battle-element-assets.jsonl#path_id=3879285143630828198.types",
+      "identityHash": "5a239a8081a0015969ac58712f995c238cd5153639a653c66bb2a915d8072c7f",
+      "sourceKind": "battle-element",
       "status": "evidence-indexed"
     },
     {
-      "identity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196",
-      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196",
-      "identityHash": "c58829a20fe2ac2e3d2634a2d2e3af19be03ecf249c4908f75bb42b302f1659a",
-      "sourceKind": "other",
+      "identity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196|battle-element-assets.jsonl#path_id=-310946560669858520.types",
+      "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196|battle-element-assets.jsonl#path_id=-310946560669858520.types",
+      "identityHash": "2e23fd827457f2532c0880677ad36026351a2929fce3e9b841670685d8b0379d",
+      "sourceKind": "battle-element",
       "status": "evidence-indexed"
     },
     {
@@ -3725,12 +3725,12 @@
   "summary": {
     "identityCount": 486,
     "sourceKindCounts": {
-      "battle-element": 32,
+      "battle-element": 34,
       "client-code": 6,
       "new-table": 60,
-      "other": 64,
+      "other": 62,
       "skill-control": 324
     }
   },
-  "profileHash": "74a3faacb0851c2fb1f1920a9b7ce5180325d01790d5fbaa09246d2aaf1bc2e0"
+  "profileHash": "0d09756bb850e8c9dfe380044dca2cd0430e23511b8bd990b51d57e39c8be487"
 }

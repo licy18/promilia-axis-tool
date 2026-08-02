@@ -3704,97 +3704,83 @@ function collectBulletLaunchContracts(
     behaviorLineIndex,
     behavior,
   } of gameplayGraph?.behaviors ?? []) {
-          const configs = behavior?.value?.bulletShootDataConfigs;
-          const startFrame = integerOrNull(behavior?.value?.startFrame);
-          if (!Array.isArray(configs) || startFrame == null || startFrame < 0) {
-            continue;
-          }
-          for (const [configIndex, config] of configs.entries()) {
-            const repeatCount = Math.max(
-              1,
-              integerOrNull(config.bulletCount) ?? 1
-            );
-            for (const [bulletIndex, bullet] of (
-              config.bullets ?? []
-            ).entries()) {
-              const bulletId = positiveIntegerOrNull(bullet?.bulletId);
-              const delayMs = nonNegativeNumberOrNull(bullet?.delayTime) ?? 0;
-              if (!bulletId) continue;
-              const injection = readBulletInjectionContract(bulletId);
-              const injectedElements =
-                runtimePolicy?.bulletInjectionMode === 'recursive-static-timed'
-                  ? collectStaticTimedBulletInjectionElements(bulletId)
-                  : runtimePolicy?.bulletInjectionMode === 'recursive-immediate'
-                    ? collectImmediateBulletInjectionElements(bulletId)
-                    : (injection.elements ?? []);
-              for (
-                let repeatIndex = 0;
-                repeatIndex < repeatCount;
-                repeatIndex += 1
-              ) {
-                for (const [
-                  elementIndex,
-                  element,
-                ] of injectedElements.entries()) {
-                  const totalDelayMs =
-                    delayMs + (nonNegativeNumberOrNull(element.delayMs) ?? 0);
-                  const delayFrames = Math.round(
-                    (totalDelayMs / 1000) * frameRate
-                  );
-                  const launchFrame = startFrame + delayFrames;
-                  launches.push({
-                    subSkillIndex,
-                    trackIndex,
-                    behaviorLineIndex,
-                    behaviorPathId: behavior.pathId,
-                    configIndex,
-                    bulletIndex,
-                    repeatIndex,
-                    elementIndex,
-                    bulletId: element.bulletId ?? bulletId,
-                    rootBulletId: bulletId,
-                    elementId: element.elementId,
-                    startFrame,
-                    delayMs: totalDelayMs,
-                    delayFrames,
-                    launchFrame,
-                    targetType: element.targetType ?? injection.targetType,
-                    targetKind:
-                      (element.targetType ?? injection.targetType) === 1
-                        ? 'skill-target'
-                        : 'runtime-target',
-                    launchIdentity: [
-                      `control:${skillControl.skillControlData.skillId}`,
-                      `sub:${subSkillIndex}`,
-                      `behavior:${behavior.pathId}`,
-                      `config:${configIndex}`,
-                      `bullet:${bulletId}:${bulletIndex}:${repeatIndex}`,
-                      ...(element.bulletId && element.bulletId !== bulletId
-                        ? [`nested-bullet:${element.bulletId}`]
-                        : []),
-                      ...(element.executionIdentity
-                        ? [`execution:${element.executionIdentity}`]
-                        : []),
-                      `element:${element.elementId}:${elementIndex}`,
-                    ].join('|'),
-                    sourceIdentity: [
-                      `${relativeExternalPath(behavior.filePath)}#startFrame|bulletShootDataConfigs[${configIndex}].bullets[${bulletIndex}]`,
-                      injection.sourceIdentity,
-                      element.sourceIdentity,
-                    ]
-                      .filter(Boolean)
-                      .join('|'),
-                    status:
-                      (element.targetType ?? injection.targetType) === 1
-                        ? 'verified-projectile-launch-ready'
-                        : (element.executionStatus ??
-                          'runtime-projectile-target-dependent'),
-                  });
-                }
-              }
-            }
+    const configs = behavior?.value?.bulletShootDataConfigs;
+    const startFrame = integerOrNull(behavior?.value?.startFrame);
+    if (!Array.isArray(configs) || startFrame == null || startFrame < 0) {
+      continue;
+    }
+    for (const [configIndex, config] of configs.entries()) {
+      const repeatCount = Math.max(1, integerOrNull(config.bulletCount) ?? 1);
+      for (const [bulletIndex, bullet] of (config.bullets ?? []).entries()) {
+        const bulletId = positiveIntegerOrNull(bullet?.bulletId);
+        const delayMs = nonNegativeNumberOrNull(bullet?.delayTime) ?? 0;
+        if (!bulletId) continue;
+        const injection = readBulletInjectionContract(bulletId);
+        const injectedElements =
+          runtimePolicy?.bulletInjectionMode === 'recursive-static-timed'
+            ? collectStaticTimedBulletInjectionElements(bulletId)
+            : runtimePolicy?.bulletInjectionMode === 'recursive-immediate'
+              ? collectImmediateBulletInjectionElements(bulletId)
+              : (injection.elements ?? []);
+        for (let repeatIndex = 0; repeatIndex < repeatCount; repeatIndex += 1) {
+          for (const [elementIndex, element] of injectedElements.entries()) {
+            const totalDelayMs =
+              delayMs + (nonNegativeNumberOrNull(element.delayMs) ?? 0);
+            const delayFrames = Math.round((totalDelayMs / 1000) * frameRate);
+            const launchFrame = startFrame + delayFrames;
+            launches.push({
+              subSkillIndex,
+              trackIndex,
+              behaviorLineIndex,
+              behaviorPathId: behavior.pathId,
+              configIndex,
+              bulletIndex,
+              repeatIndex,
+              elementIndex,
+              bulletId: element.bulletId ?? bulletId,
+              rootBulletId: bulletId,
+              elementId: element.elementId,
+              startFrame,
+              delayMs: totalDelayMs,
+              delayFrames,
+              launchFrame,
+              targetType: element.targetType ?? injection.targetType,
+              targetKind:
+                (element.targetType ?? injection.targetType) === 1
+                  ? 'skill-target'
+                  : 'runtime-target',
+              launchIdentity: [
+                `control:${skillControl.skillControlData.skillId}`,
+                `sub:${subSkillIndex}`,
+                `behavior:${behavior.pathId}`,
+                `config:${configIndex}`,
+                `bullet:${bulletId}:${bulletIndex}:${repeatIndex}`,
+                ...(element.bulletId && element.bulletId !== bulletId
+                  ? [`nested-bullet:${element.bulletId}`]
+                  : []),
+                ...(element.executionIdentity
+                  ? [`execution:${element.executionIdentity}`]
+                  : []),
+                `element:${element.elementId}:${elementIndex}`,
+              ].join('|'),
+              sourceIdentity: [
+                `${relativeExternalPath(behavior.filePath)}#startFrame|bulletShootDataConfigs[${configIndex}].bullets[${bulletIndex}]`,
+                injection.sourceIdentity,
+                element.sourceIdentity,
+              ]
+                .filter(Boolean)
+                .join('|'),
+              status:
+                (element.targetType ?? injection.targetType) === 1
+                  ? 'verified-projectile-launch-ready'
+                  : (element.executionStatus ??
+                    'runtime-projectile-target-dependent'),
+            });
           }
         }
+      }
+    }
+  }
   return dedupeBy(launches, launch => launch.launchIdentity).sort(
     (left, right) =>
       left.subSkillIndex - right.subSkillIndex ||
@@ -4163,10 +4149,7 @@ function createRuntimeControlElementRefs(control) {
   return refs;
 }
 
-function collectSkillPlayerEventBridges(
-  skillControl,
-  gameplayGraph = null
-) {
+function collectSkillPlayerEventBridges(skillControl, gameplayGraph = null) {
   const result = (skillControl.skillControlData?.skillPlayers ?? []).map(
     () => []
   );
@@ -4194,7 +4177,8 @@ function collectSkillPlayerEventBridges(
       trackIndex,
       behaviorLineIndex,
       behaviorLineName:
-        String(behaviorLine.name ?? behaviorLine.trackName ?? '').trim() || null,
+        String(behaviorLine.name ?? behaviorLine.trackName ?? '').trim() ||
+        null,
       trackPathId: track?.pathId ?? null,
       behaviorPathId: behavior.pathId,
       startFrame,
@@ -4510,7 +4494,10 @@ function resolveBehaviorElementTarget(value, pathId) {
   }
   for (const field of ['elementIdDatas', 'elementBaseDatas']) {
     if (arrayContainsPathId(value?.[field], pathId)) {
-      return createBehaviorTarget(integerOrNull(value.targetType), 'targetType');
+      return createBehaviorTarget(
+        integerOrNull(value.targetType),
+        'targetType'
+      );
     }
   }
   return {
@@ -4659,8 +4646,7 @@ function selectBehaviorTriggersForSubSkill(
   if (scopeMode !== 'skill-player') return entries;
   const scopedEntries = entries.filter(
     entry =>
-      Array.isArray(entry.subSkillIndexes) &&
-      entry.subSkillIndexes.length > 0
+      Array.isArray(entry.subSkillIndexes) && entry.subSkillIndexes.length > 0
   );
   if (scopedEntries.length === 0) return entries;
   return scopedEntries.filter(entry =>
@@ -6233,10 +6219,7 @@ function resolveTuningEffectBindingContract({
   if (judgment && !judgment.consume) {
     reasons.push('tuning-consume-disabled');
   }
-  if (
-    markIds.length !== 1 ||
-    markIds[0] !== Number(node.tuningOverlimit.markId)
-  ) {
+  if (!markIds.includes(Number(node.tuningOverlimit.markId))) {
     reasons.push('tuning-consume-mark-identity-ambiguous');
   }
   if (
@@ -6265,6 +6248,11 @@ function resolveTuningEffectBindingContract({
       judgmentElementId: integerOrNull(judgmentNode?.elementId),
       judgmentPathId: judgmentNode?.pathId ?? null,
       judgmentSourceIdentity: judgmentNode?.sourceIdentity ?? null,
+      judgmentCandidateMarkIds: markIds,
+      runtimeSelectionMode:
+        markIds.length > 1
+          ? 'active-mark-state-selects-packet'
+          : 'single-mark-packet',
     },
     reasons: dedupeBy(reasons, value => value),
     applied: reasons.length === 0,
@@ -6541,7 +6529,13 @@ function createTuningMechanicsCatalog({
     const markId = Number(template.markElementId);
     heldTemplatesByMarkId.set(markId, [
       ...(heldTemplatesByMarkId.get(markId) ?? []),
-      createPublishedTuningDamageTemplate(template),
+      createPublishedTuningDamageTemplate(
+        template,
+        resolveTuningDamageSourceRecord({
+          elementId: template.elementConfigId,
+          allIndexedElementsById,
+        })
+      ),
     ]);
   }
 
@@ -6622,6 +6616,11 @@ function createTuningMechanicsCatalog({
     if (!overlimitTemplate) {
       throw new Error(`verified tuning damage template missing: ${markId}`);
     }
+    const overlimitDamageSourceRecord = resolveTuningDamageSourceRecord({
+      elementId: profile.primaryDamageId,
+      allIndexedElementsById,
+      required: true,
+    });
     return {
       key: String(profile.key),
       element: String(profile.element),
@@ -6638,7 +6637,10 @@ function createTuningMechanicsCatalog({
       heldEffect: profile.heldEffect ?? null,
       overlimitDamage: {
         ...profile.overlimitDamage,
-        template: createPublishedTuningDamageTemplate(overlimitTemplate),
+        template: createPublishedTuningDamageTemplate(
+          overlimitTemplate,
+          overlimitDamageSourceRecord
+        ),
       },
       overlimitExtra: profile.overlimitExtra ?? null,
       overlimitPacket: {
@@ -6758,7 +6760,36 @@ function resolveTuningPersistentModifiers({ profile, discovered }) {
   );
 }
 
-function createPublishedTuningDamageTemplate(template = {}) {
+function resolveTuningDamageSourceRecord({
+  elementId,
+  allIndexedElementsById,
+  required = false,
+}) {
+  const candidates = dedupeBy(
+    allIndexedElementsById.get(Number(elementId)) ?? [],
+    record => String(record.pathId)
+  );
+  if (candidates.length === 1) return candidates[0];
+  if (required) {
+    throw new Error(
+      `verified tuning damage source not unique: ${elementId} (${candidates.length})`
+    );
+  }
+  return null;
+}
+
+function createPublishedTuningDamageTemplate(
+  template = {},
+  sourceRecord = null
+) {
+  const elementTypes = [
+    ...new Set(
+      (sourceRecord?.typetree?.types ?? []).map(Number).filter(Number.isInteger)
+    ),
+  ].sort((left, right) => left - right);
+  const elementTypeSourceIdentity = sourceRecord
+    ? `battle-element-assets.jsonl#path_id=${sourceRecord.pathId}.types`
+    : null;
   return {
     elementConfigId: integerOrNull(template.elementConfigId),
     damageType: integerOrNull(template.damageType),
@@ -6777,7 +6808,14 @@ function createPublishedTuningDamageTemplate(template = {}) {
     physicalRatioBasisPoints: integerOrNull(template.physicalRatio),
     magicRatioBasisPoints: integerOrNull(template.magicRatio),
     usesTuningStrength: template.usesTuningStrength !== false,
-    sourceIdentity: `combat-overlimit-mechanics-20260718.json#elementConfigId=${template.elementConfigId}`,
+    elementTypes,
+    elementTypeSourceIdentity,
+    sourceIdentity: [
+      `combat-overlimit-mechanics-20260718.json#elementConfigId=${template.elementConfigId}`,
+      elementTypeSourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
   };
 }
 

@@ -11,12 +11,12 @@ const GOLDENS = [
     report: xiaoyuGolden,
     assertionCount: 118,
     replayHash:
-      'e5554f9784c187379bf116bd61745fc553d73d3cd1ccbec9d77f3ce261b31c8f',
+      '01fb85c9b3309dab076a7e222dc4f490beb6e4168e2ea50302df65db7de697e9',
     summaryHash:
-      '414b19d2ff6a15b55dd9db8bbfdcf5721ee247818df24f5acb14afefec1d26db',
-    inputHash: '72ca4938941bc6cf',
-    dataHash: '4dc4a209fd7e89ec',
-    traceHash: '04b5be4588776815',
+      '6fa24e7026a9372b1eb57c094b5b3c726bf012953b92cc965359f8072b350cb3',
+    inputHash: 'c71617234bd88301',
+    dataHash: '00ba996d67716c26',
+    traceHash: '9fb18c979b5ef08d',
   },
   {
     identity: 'ruby-main',
@@ -27,9 +27,9 @@ const GOLDENS = [
       'c16d0d7d0f2648b8d83f7219a8ad886e4eb85fbb8dcca7fd1610472ae6ec9f35',
     summaryHash:
       'f9144e8d2724b63653363556774ce8d5f64e33439edd39a684e18f12f3f0e2bd',
-    inputHash: '2fe4cbd1ab781ea4',
-    dataHash: 'c61cf000dddae67b',
-    traceHash: '0a73ff9507f643b7',
+    inputHash: '9b33c2b5fa3079da',
+    dataHash: '3b1911c4f7179fe5',
+    traceHash: 'f0f2756690278bd5',
   },
   {
     identity: 'han-main',
@@ -37,12 +37,12 @@ const GOLDENS = [
     report: hanGolden,
     assertionCount: 76,
     replayHash:
-      '959ef025317d708d58aa7a18a1314c59639ad87545e590ef5121306d8fb2b822',
+      'c0ea863d0c558be4998e4f0cb1399aa6998d92539d74ec3127f0d408f221a649',
     summaryHash:
-      'f0d7a64facfc7226a82d9c1413bc9e56a6b7507b96a5827836cff992ec54d397',
-    inputHash: '011ce71e135bc69f',
-    dataHash: '7599ed503c1d0c06',
-    traceHash: 'dca80f3e3439a43d',
+      '69d7c6c48099766121656ba8e52a26b9e1244e1ed33f80fef4b7d0f965fe4c36',
+    inputHash: 'd24d606b90a01735',
+    dataHash: '706ad6217a6f01c4',
+    traceHash: '94a21ca0fe026577',
   },
   {
     identity: 'han-controlled-buff-switch',
@@ -50,12 +50,12 @@ const GOLDENS = [
     report: hanSwitchGolden,
     assertionCount: 34,
     replayHash:
-      'da81d2d42159e3763872ea6ce885cfb04838c6049da368aae5bb8ea41ac1a62f',
+      '624a48308aafea9cedb9d81db624377ce1620fbc0795ecadc99da8113571cdf6',
     summaryHash:
-      '381b5f437e61be54bc6daccf1a0acdcda88f2f6f5ea2510c88f0bc9e6071193f',
-    inputHash: 'f7aac189e3dfee8e',
-    dataHash: '75e283bd81aac633',
-    traceHash: '688ca4efcac33fa5',
+      '5b6de79f7b816c6749f8bc7cbc5d394db8a43ae030ae7febf4647f59c0c5dc14',
+    inputHash: '4b2da76ac2128126',
+    dataHash: '94c5cec9551d8b1b',
+    traceHash: '92956bc8deef90ff',
   },
 ];
 

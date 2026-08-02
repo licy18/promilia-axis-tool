@@ -65,8 +65,22 @@ try {
       'utf8'
     )
   );
-  const loadoutPropertyTagAudit =
-    await createLoadoutPropertyTagAudit(soulEssenceCatalog);
+  const mechanicsPackage = JSON.parse(
+    await readFile(
+      path.join(
+        repositoryRoot,
+        'src',
+        'data',
+        'generated',
+        'verified-combat-mechanics-package.json'
+      ),
+      'utf8'
+    )
+  );
+  const loadoutPropertyTagAudit = await createLoadoutPropertyTagAudit(
+    soulEssenceCatalog,
+    mechanicsPackage
+  );
   const deltas = result.threeValueGenerationLayer.deltas
     .filter(delta => delta.layerKey === 'applied')
     .map(delta => ({
@@ -125,6 +139,10 @@ try {
       loadoutPropertyTagSourceCount:
         loadoutPropertyTagAudit.summary.sourceCount,
       loadoutPropertyTagDriftCount: loadoutPropertyTagAudit.summary.driftCount,
+      loadoutTuningConditionCount:
+        loadoutPropertyTagAudit.summary.tuningConditionCount,
+      loadoutTuningConditionDriftCount:
+        loadoutPropertyTagAudit.summary.tuningConditionDriftCount,
     },
     requiredTracks,
     missingTracks,
@@ -199,7 +217,7 @@ function readArgument(name) {
   return index >= 0 ? process.argv[index + 1] : null;
 }
 
-async function createLoadoutPropertyTagAudit(catalog) {
+async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
   const sourcePath = catalog?.sourceSnapshot?.battleElements?.path;
   const expectedSourceSha256 =
     catalog?.sourceSnapshot?.battleElements?.sha256 ?? null;
@@ -220,6 +238,13 @@ async function createLoadoutPropertyTagAudit(catalog) {
         Number(path.removerElementId),
         ...(path.removedElementIds ?? []).map(Number),
       ]),
+      ...(definition.trigger?.condition?.conditions ?? []).flatMap(condition =>
+        (condition.tuningProfiles ?? []).flatMap(profile => [
+          Number(profile.markId),
+          Number(profile.overlimitPacketElementId),
+          Number(profile.damageElementId),
+        ])
+      ),
     ])
   );
   const sourceRowsByElementId = new Map();
@@ -238,6 +263,8 @@ async function createLoadoutPropertyTagAudit(catalog) {
       .filter(binding => binding.status === 'applied')
       .map(binding => Number(binding.propertyTag))
   );
+  const tuningProfiles =
+    mechanicsPackage?.tuningMechanicsCatalog?.profiles ?? [];
   const records = definitions.map(definition => {
     const elementId = Number(definition.effect?.elementId);
     const sourceRow = sourceRowsByElementId.get(elementId);
@@ -312,6 +339,17 @@ async function createLoadoutPropertyTagAudit(catalog) {
       path =>
         sourceRowsByElementId.has(Number(path.triggerElementId)) &&
         sourceRowsByElementId.has(Number(path.removerElementId))
+    );
+    const tuningConditions = createTuningConditionAuditRows({
+      conditions: definition.trigger?.condition?.conditions ?? [],
+      tuningProfiles,
+      sourceRowsByElementId,
+    });
+    const tuningConditionIssueCodes = tuningConditions.flatMap(condition =>
+      condition.issueCodes.map(
+        code =>
+          `${code}:condition-${condition.conditionType}-${condition.conditionValue}`
+      )
     );
     const issueCodes = [
       ...(sourceRow ? [] : ['loadout-property-tag-source-row-missing']),
@@ -388,6 +426,7 @@ async function createLoadoutPropertyTagAudit(catalog) {
       ...(removalPaths.length === 0 || removalSourceRowsPresent
         ? []
         : ['loadout-effect-removal-source-row-missing']),
+      ...tuningConditionIssueCodes,
     ];
     return {
       soulEssenceId: Number(definition.soulEssenceId),
@@ -403,6 +442,7 @@ async function createLoadoutPropertyTagAudit(catalog) {
         sourceConditions,
         generatedConditions,
         sourceIdentity: definition.trigger?.condition?.sourceIdentity ?? null,
+        tuningConditions,
       },
       triggerEffectTarget: {
         sourceTargetType,
@@ -448,9 +488,138 @@ async function createLoadoutPropertyTagAudit(catalog) {
     summary: {
       sourceCount: records.length,
       driftCount: records.filter(record => record.issueCodes.length > 0).length,
+      tuningConditionCount: records.reduce(
+        (sum, record) =>
+          sum + Number(record.triggerCondition.tuningConditions?.length ?? 0),
+        0
+      ),
+      tuningConditionDriftCount: records.reduce(
+        (sum, record) =>
+          sum +
+          (record.triggerCondition.tuningConditions ?? []).filter(
+            condition => condition.issueCodes.length > 0
+          ).length,
+        0
+      ),
     },
     records,
   };
+}
+
+function createTuningConditionAuditRows({
+  conditions,
+  tuningProfiles,
+  sourceRowsByElementId,
+}) {
+  const fixedConditionContract = new Map([
+    [8, { kind: 'event-element-type', name: 'CheckElementType' }],
+    [10, { kind: 'held-element-id', name: 'HasElementId' }],
+    [12, { kind: 'target-element-id', name: 'CheckTargetElementId' }],
+  ]);
+  return conditions
+    .filter(condition =>
+      fixedConditionContract.has(Number(condition.conditionType))
+    )
+    .map(condition => {
+      const conditionType = Number(condition.conditionType);
+      const conditionValue = Number(condition.conditionValue);
+      const contract = fixedConditionContract.get(conditionType);
+      const expectedProfiles = tuningProfiles
+        .filter(profile => {
+          if (conditionType === 8) {
+            return (profile.overlimitDamage?.template?.elementTypes ?? [])
+              .map(Number)
+              .includes(conditionValue);
+          }
+          if (conditionType === 10) {
+            return Number(profile.markId) === conditionValue;
+          }
+          return Number(profile.overlimitPacket?.elementId) === conditionValue;
+        })
+        .map(profile =>
+          normalizeTuningConditionProfile(profile, sourceRowsByElementId)
+        )
+        .sort(compareTuningConditionProfiles);
+      const generatedProfiles = (condition.tuningProfiles ?? [])
+        .map(profile => ({
+          profileKey: String(profile.profileKey),
+          markId: Number(profile.markId),
+          overlimitPacketElementId: Number(profile.overlimitPacketElementId),
+          damageElementId: Number(profile.damageElementId),
+          elementTypes: normalizeIntegerTags(profile.elementTypes),
+        }))
+        .sort(compareTuningConditionProfiles);
+      const rawSourceRowsPresent = expectedProfiles.every(
+        profile =>
+          profile.markSourcePresent &&
+          profile.packetSourcePresent &&
+          profile.damageSourcePresent
+      );
+      const expectedGeneratedProfiles = expectedProfiles.map(profile => ({
+        profileKey: profile.profileKey,
+        markId: profile.markId,
+        overlimitPacketElementId: profile.overlimitPacketElementId,
+        damageElementId: profile.damageElementId,
+        elementTypes: profile.elementTypes,
+      }));
+      const issueCodes = [
+        ...(condition.kind === contract.kind
+          ? []
+          : ['loadout-tuning-condition-kind-drift']),
+        ...(condition.conditionTypeName === contract.name
+          ? []
+          : ['loadout-tuning-condition-enum-name-drift']),
+        ...(String(condition.sourceIdentity ?? '').includes(
+          `EElementTriggerFixedConditionType.${contract.name}=${conditionType}`
+        )
+          ? []
+          : ['loadout-tuning-condition-enum-source-identity-missing']),
+        ...(rawSourceRowsPresent
+          ? []
+          : ['loadout-tuning-condition-raw-source-row-missing']),
+        ...(JSON.stringify(generatedProfiles) ===
+        JSON.stringify(expectedGeneratedProfiles)
+          ? []
+          : ['loadout-tuning-condition-profile-drift']),
+      ];
+      return {
+        conditionType,
+        conditionTypeName: condition.conditionTypeName ?? null,
+        conditionValue,
+        kind: condition.kind ?? null,
+        expectedProfiles,
+        generatedProfiles,
+        sourceIdentity: condition.sourceIdentity ?? null,
+        status:
+          issueCodes.length === 0
+            ? 'applied-source-tuning-condition-ready'
+            : 'applied-source-tuning-condition-drift',
+        issueCodes,
+      };
+    });
+}
+
+function normalizeTuningConditionProfile(profile, sourceRowsByElementId) {
+  const markId = Number(profile.markId);
+  const overlimitPacketElementId = Number(profile.overlimitPacket?.elementId);
+  const damageElementId = Number(
+    profile.overlimitDamage?.template?.elementConfigId
+  );
+  const damageSourceRow = sourceRowsByElementId.get(damageElementId);
+  return {
+    profileKey: String(profile.key),
+    markId,
+    overlimitPacketElementId,
+    damageElementId,
+    elementTypes: normalizeIntegerTags(damageSourceRow?.typetree?.types),
+    markSourcePresent: sourceRowsByElementId.has(markId),
+    packetSourcePresent: sourceRowsByElementId.has(overlimitPacketElementId),
+    damageSourcePresent: Boolean(damageSourceRow),
+  };
+}
+
+function compareTuningConditionProfiles(left, right) {
+  return String(left.profileKey).localeCompare(String(right.profileKey), 'en');
 }
 
 function normalizeIntegerTags(values) {

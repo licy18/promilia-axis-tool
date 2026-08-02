@@ -20,7 +20,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   soulessences:
     '385dbb96cf0feca4b42c7d3d63040c506c310beeb62ed7f9f37ac68fd012dcbe',
   verifiedMechanics:
-    'f38a6c56ad1c7113bd87caa66be27118c0f3fe793e7f0c91e5a76ba80c3cca49',
+    'e9e8a3b7f5af3a3cb51a0bef6b9338b59e62f2660acc61b3eaad9c67010f17c4',
   'newTable:accessory.json':
     '449ed58b7e0d034c7c1fb48114468078810a97e4a61fe596cea53c19208c4b39',
   'newTable:accessory_customed.json':
@@ -275,6 +275,7 @@ export async function createOptimizationQualificationArtifacts({
     propertyTagContract:
       sources.il2cppRuntimeContracts.value.battlePropertyTags,
     triggerContract: sources.il2cppRuntimeContracts.value.soulEffectTriggers,
+    tuningMechanicsCatalog: mechanics.tuningMechanicsCatalog,
   });
   sources.battleElementAssets = {
     ...soulEssenceEffects.sourceSnapshot.battleElements,
@@ -384,7 +385,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C3',
+      phase: 'M12-B3-C4',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1314,8 +1315,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C3',
-    status: 'b3-c3-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C4',
+    status: 'b3-c4-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1748,7 +1749,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C3 Entry Skill Wrapper Effect Closure\n\n' +
+    '# M12-B3-C4 Tuning-Mark Condition Bridge Closure\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1757,7 +1758,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects. C3 adds source-bound EntrySkill(22) switch provenance for 10147/10151, preserves the 19001001 wrapper lifetime and unload path, and keeps non-entry or blocked actions from triggering. Soul essence 10018 remains blocked by its outer tuning-mark prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
+    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects; C3 adds source-bound EntrySkill(22) switch provenance and wrapper lifetimes for 10147/10151. C4 compiles CheckElementType(8), HasElementId(10), CheckSkillType(11), and CheckTargetElementId(12) into the shared trigger predicate registry, consuming the canonical tuning-mark state and landed overlimit event context for 10124/10131/10136. Soul essence 10018 remains blocked by its outer prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'
@@ -1968,6 +1969,18 @@ function createSoulEffectTriggerContract({
   });
   const conditionTypeBindings = [
     {
+      value: 8,
+      enumName: 'CheckElementType',
+      selectorKind: 'event-element-type',
+      description: '事件元素类型',
+    },
+    {
+      value: 10,
+      enumName: 'HasElementId',
+      selectorKind: 'held-element-id',
+      description: '任意触发目标拥有元素ID',
+    },
+    {
       value: 6,
       enumName: 'CheckSkillSlot',
       selectorKind: 'skill-slot',
@@ -1978,6 +1991,12 @@ function createSoulEffectTriggerContract({
       enumName: 'CheckSkillType',
       selectorKind: 'skill-tag',
       description: '事件技能Tag',
+    },
+    {
+      value: 12,
+      enumName: 'CheckTargetElementId',
+      selectorKind: 'target-element-id',
+      description: 'Target拥有元素ID',
     },
   ].map(binding => {
     assertIl2CppEnumMember({

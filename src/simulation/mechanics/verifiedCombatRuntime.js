@@ -248,10 +248,7 @@ export function createVerifiedCombatRuntime({
   });
   annotateRuntimeDescriptorOrder(
     descriptors,
-    positiveNumber(
-      scenario?.time?.fps ?? scenario?.time?.frameRate,
-      FRAME_RATE
-    )
+    positiveNumber(scenario?.time?.fps ?? scenario?.time?.frameRate, FRAME_RATE)
   );
   descriptors.sort(compareDescriptors);
 
@@ -2754,6 +2751,7 @@ function applyTuningCombatDescriptor({
   resourceEvents,
 }) {
   const tuningEvent = descriptor.tuningEvent;
+  if (tuningEvent.eventContext?.landed === false) return null;
   if (tuningEvent.kind === 'periodic-heal') {
     return {
       event: applyTuningPeriodicHeal({
@@ -2810,6 +2808,7 @@ function applyTuningCombatDescriptor({
     hit: { damage: template },
     state,
     timeMs: tuningEvent.timeMs,
+    settlingSourceSequencePath: descriptor.sourceSequencePath,
   });
   if (!source.ready || !state.enemy.profile?.applied) {
     return {
@@ -2960,6 +2959,10 @@ function applyTuningCombatDescriptor({
         elementId: template.elementConfigId,
         attack: source.attack,
         mastery: source.mastery,
+        dynamicPropertyTrace: {
+          source: source.dynamicPropertyTrace ?? [],
+          target: [],
+        },
         rawDamage: hpDamage,
         toughnessDamage,
         hpLossPercent: ratioOrZero(hpDamage, enemy.maxHp),
@@ -3062,8 +3065,10 @@ function applyHitDescriptor({
   const settlingSourceSequencePath = actionSourceSequencePath
     ? [...actionSourceSequencePath, Number(hit.hitIndex)]
     : null;
-  const propertyTagResolution =
-    resolveVerifiedBattlePropertyTagsForHit({ action, resolution });
+  const propertyTagResolution = resolveVerifiedBattlePropertyTagsForHit({
+    action,
+    resolution,
+  });
   const propertyTags = propertyTagResolution.propertyTags;
   const source = resolveHitSource({
     action,
@@ -4895,11 +4900,14 @@ function annotateRuntimeDescriptorOrder(descriptors, frameRate) {
     descriptor.runtimePhasePriority = order.phasePriority;
     descriptor.runtimePriority = order.priority;
     descriptor.sourceSequence = sourceSequence;
-    descriptor.sourceSequenceIndex =
-      actionSourceSequencePath?.[0] ?? null;
-    descriptor.sourceSequencePath = actionSourceSequencePath
-      ? [...actionSourceSequencePath, sourceSequence]
-      : [Number.MAX_SAFE_INTEGER, sourceSequence];
+    descriptor.sourceSequenceIndex = actionSourceSequencePath?.[0] ?? null;
+    const tuningSourceSequencePath =
+      descriptor.tuningEvent?.eventContext?.sourceSequencePath;
+    descriptor.sourceSequencePath = Array.isArray(tuningSourceSequencePath)
+      ? [...tuningSourceSequencePath]
+      : actionSourceSequencePath
+        ? [...actionSourceSequencePath, sourceSequence]
+        : [Number.MAX_SAFE_INTEGER, sourceSequence];
   });
 }
 

@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
   "durationMs": 30000,
   "frameRate": 60,
-  "sourcePackageHash": "55a275658a36358b490ba9730f214e15cf48e0e816912f6f92d263a1986a89f9",
+  "sourcePackageHash": "1d7cc2a0e376d081ccfcb7c3815098e6f8885a052281004ca44201fc83a6745b",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "f7aac189e3dfee8e",
-    "traceHash": "688ca4efcac33fa5",
-    "dataHash": "75e283bd81aac633",
+    "inputHash": "4b2da76ac2128126",
+    "traceHash": "92956bc8deef90ff",
+    "dataHash": "94c5cec9551d8b1b",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -508,18 +508,6 @@
       "specialResourceTrace": [],
       "tuningMarkTrace": [
         {
-          "eventIdentity": "tuning-held|150|4216.666667|10100313|0|elements|0|2114308111398669772|193|3",
-          "actionId": "han-ultimate",
-          "frame": 253,
-          "kind": "held-trigger",
-          "profileKey": "fire",
-          "markId": 150,
-          "before": 1,
-          "delta": 0,
-          "after": 1,
-          "maximum": 5
-        },
-        {
           "eventIdentity": "tuning-mark|150|acquire|4216.666667|2",
           "actionId": "han-ultimate",
           "frame": 253,
@@ -528,6 +516,18 @@
           "markId": 150,
           "before": 0,
           "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|4216.666667|10100313|0|elements|0|2114308111398669772|193|3",
+          "actionId": "han-ultimate",
+          "frame": 253,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 0,
           "after": 1,
           "maximum": 5
         },
@@ -2741,18 +2741,6 @@
       "specialResources": [],
       "tuningMarks": [
         {
-          "eventIdentity": "tuning-held|150|4216.666667|10100313|0|elements|0|2114308111398669772|193|3",
-          "actionId": "han-ultimate",
-          "frame": 253,
-          "kind": "held-trigger",
-          "profileKey": "fire",
-          "markId": 150,
-          "before": 1,
-          "delta": 0,
-          "after": 1,
-          "maximum": 5
-        },
-        {
           "eventIdentity": "tuning-mark|150|acquire|4216.666667|2",
           "actionId": "han-ultimate",
           "frame": 253,
@@ -2761,6 +2749,18 @@
           "markId": 150,
           "before": 0,
           "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|150|4216.666667|10100313|0|elements|0|2114308111398669772|193|3",
+          "actionId": "han-ultimate",
+          "frame": 253,
+          "kind": "held-trigger",
+          "profileKey": "fire",
+          "markId": 150,
+          "before": 1,
+          "delta": 0,
           "after": 1,
           "maximum": 5
         },
@@ -3469,7 +3469,7 @@
         }
       ]
     },
-    "summaryHash": "381b5f437e61be54bc6daccf1a0acdcda88f2f6f5ea2510c88f0bc9e6071193f"
+    "summaryHash": "5b6de79f7b816c6749f8bc7cbc5d394db8a43ae030ae7febf4647f59c0c5dc14"
   },
   "expected": {
     "exact": {
@@ -3824,5 +3824,5 @@
       }
     ]
   },
-  "replayHash": "da81d2d42159e3763872ea6ce885cfb04838c6049da368aae5bb8ea41ac1a62f"
+  "replayHash": "624a48308aafea9cedb9d81db624377ce1620fbc0795ecadc99da8113571cdf6"
 }

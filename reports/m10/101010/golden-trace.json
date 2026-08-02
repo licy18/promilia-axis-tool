@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "992f1ef347f53672e0e870a3d9c17fef9a9f70638d864cd27d915d0de0ead0de",
+  "sourcePackageHash": "8c3dad80578b9b8e908523890709053bd4005da56eb46d7d224c52484624c761",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "72ca4938941bc6cf",
-    "traceHash": "04b5be4588776815",
-    "dataHash": "4dc4a209fd7e89ec",
+    "inputHash": "c71617234bd88301",
+    "traceHash": "9fb18c979b5ef08d",
+    "dataHash": "00ba996d67716c26",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -4842,18 +4842,6 @@
       ],
       "tuningMarkTrace": [
         {
-          "eventIdentity": "tuning-held|750|716.666667|10101010|0|elements|0|-8304317819766733523|43|1",
-          "actionId": "threshold-charged",
-          "frame": 43,
-          "kind": "held-trigger",
-          "profileKey": "wind",
-          "markId": 750,
-          "before": 2,
-          "delta": 0,
-          "after": 2,
-          "maximum": 5
-        },
-        {
           "eventIdentity": "tuning-mark|750|acquire|716.6666666666666|0",
           "actionId": "threshold-charged",
           "frame": 43,
@@ -4862,6 +4850,18 @@
           "markId": 750,
           "before": 0,
           "delta": 2,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|750|716.666667|10101010|0|elements|0|-8304317819766733523|43|1",
+          "actionId": "threshold-charged",
+          "frame": 43,
+          "kind": "held-trigger",
+          "profileKey": "wind",
+          "markId": 750,
+          "before": 2,
+          "delta": 0,
           "after": 2,
           "maximum": 5
         },
@@ -4950,18 +4950,6 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-held|250|23450|10100322|0|elements|1|8048974219024052735|57|5",
-          "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
-          "frame": 1407,
-          "kind": "held-trigger",
-          "profileKey": "thunder",
-          "markId": 250,
-          "before": 1,
-          "delta": 0,
-          "after": 1,
-          "maximum": 5
-        },
-        {
           "eventIdentity": "tuning-mark|150|acquire|23450|99",
           "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
           "frame": 1407,
@@ -4971,6 +4959,18 @@
           "before": 2,
           "delta": 1,
           "after": 3,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|23450|10100322|0|elements|1|8048974219024052735|57|5",
+          "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
+          "frame": 1407,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
           "maximum": 5
         },
         {
@@ -5046,6 +5046,18 @@
           "maximum": 5
         },
         {
+          "eventIdentity": "tuning-mark|750|acquire|41050|153",
+          "actionId": "normal-a5",
+          "frame": 2463,
+          "kind": "acquire",
+          "profileKey": "wind",
+          "markId": 750,
+          "before": 0,
+          "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
           "eventIdentity": "tuning-held|150|41050|10101005|0|elements|0|8067044185683392805|31|1",
           "actionId": "normal-a5",
           "frame": 2463,
@@ -5078,18 +5090,6 @@
           "markId": 750,
           "before": 1,
           "delta": 0,
-          "after": 1,
-          "maximum": 5
-        },
-        {
-          "eventIdentity": "tuning-mark|750|acquire|41050|153",
-          "actionId": "normal-a5",
-          "frame": 2463,
-          "kind": "acquire",
-          "profileKey": "wind",
-          "markId": 750,
-          "before": 0,
-          "delta": 1,
           "after": 1,
           "maximum": 5
         },
@@ -11329,18 +11329,6 @@
       ],
       "tuningMarks": [
         {
-          "eventIdentity": "tuning-held|750|716.666667|10101010|0|elements|0|-8304317819766733523|43|1",
-          "actionId": "threshold-charged",
-          "frame": 43,
-          "kind": "held-trigger",
-          "profileKey": "wind",
-          "markId": 750,
-          "before": 2,
-          "delta": 0,
-          "after": 2,
-          "maximum": 5
-        },
-        {
           "eventIdentity": "tuning-mark|750|acquire|716.6666666666666|0",
           "actionId": "threshold-charged",
           "frame": 43,
@@ -11349,6 +11337,18 @@
           "markId": 750,
           "before": 0,
           "delta": 2,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|750|716.666667|10101010|0|elements|0|-8304317819766733523|43|1",
+          "actionId": "threshold-charged",
+          "frame": 43,
+          "kind": "held-trigger",
+          "profileKey": "wind",
+          "markId": 750,
+          "before": 2,
+          "delta": 0,
           "after": 2,
           "maximum": 5
         },
@@ -11437,18 +11437,6 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-held|250|23450|10100322|0|elements|1|8048974219024052735|57|5",
-          "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
-          "frame": 1407,
-          "kind": "held-trigger",
-          "profileKey": "thunder",
-          "markId": 250,
-          "before": 1,
-          "delta": 0,
-          "after": 1,
-          "maximum": 5
-        },
-        {
           "eventIdentity": "tuning-mark|150|acquire|23450|99",
           "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
           "frame": 1407,
@@ -11458,6 +11446,18 @@
           "before": 2,
           "delta": 1,
           "after": 3,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|23450|10100322|0|elements|1|8048974219024052735|57|5",
+          "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
+          "frame": 1407,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
           "maximum": 5
         },
         {
@@ -11533,6 +11533,18 @@
           "maximum": 5
         },
         {
+          "eventIdentity": "tuning-mark|750|acquire|41050|153",
+          "actionId": "normal-a5",
+          "frame": 2463,
+          "kind": "acquire",
+          "profileKey": "wind",
+          "markId": 750,
+          "before": 0,
+          "delta": 1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
           "eventIdentity": "tuning-held|150|41050|10101005|0|elements|0|8067044185683392805|31|1",
           "actionId": "normal-a5",
           "frame": 2463,
@@ -11565,18 +11577,6 @@
           "markId": 750,
           "before": 1,
           "delta": 0,
-          "after": 1,
-          "maximum": 5
-        },
-        {
-          "eventIdentity": "tuning-mark|750|acquire|41050|153",
-          "actionId": "normal-a5",
-          "frame": 2463,
-          "kind": "acquire",
-          "profileKey": "wind",
-          "markId": 750,
-          "before": 0,
-          "delta": 1,
           "after": 1,
           "maximum": 5
         },
@@ -13369,7 +13369,7 @@
         }
       ]
     },
-    "summaryHash": "414b19d2ff6a15b55dd9db8bbfdcf5721ee247818df24f5acb14afefec1d26db"
+    "summaryHash": "6fa24e7026a9372b1eb57c094b5b3c726bf012953b92cc965359f8072b350cb3"
   },
   "expected": {
     "exact": {
@@ -14428,6 +14428,6 @@
       }
     ]
   },
-  "replayHash": "e5554f9784c187379bf116bd61745fc553d73d3cd1ccbec9d77f3ce261b31c8f",
-  "profileHash": "8e3936cd24c7919b26c3c82ec89441847cc774db90d3dc593d9051d30ecfea45"
+  "replayHash": "01fb85c9b3309dab076a7e222dc4f490beb6e4168e2ea50302df65db7de697e9",
+  "profileHash": "e08af83c1164458e2a7fc6300a685245e66ca97c5c09f74e1d1bb8c8be1e9e1c"
 }

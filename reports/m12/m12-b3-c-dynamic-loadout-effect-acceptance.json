@@ -1,18 +1,17 @@
 {
-  "schemaVersion": 5,
-  "phase": "M12-B3-C3",
+  "schemaVersion": 6,
+  "phase": "M12-B3-C4",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "ba3422c722f8640857fa8fd9d19040e755c8484a",
+  "baseCommit": "e05b10fd27a6c723a773a7680169a9180031c48e",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
-    "phase": "M12-B3-C2-R1",
-    "implementationBaseline": "942639f07d5a417f8145f8c11aadf006646dfbee",
-    "acceptanceBaseline": "ba3422c722f8640857fa8fd9d19040e755c8484a",
+    "phase": "M12-B3-C3",
+    "acceptanceBaseline": "e05b10fd27a6c723a773a7680169a9180031c48e",
     "status": "product-accepted"
   },
   "scope": {
-    "batch": "entry-skill-self-buffs-and-buff-wrapper-lifecycle",
-    "soulEssenceIds": [10147, 10151],
+    "batch": "tuning-mark-state-and-overlimit-event-condition-bridge",
+    "soulEssenceIds": [10124, 10131, 10136],
     "formalSearchExecuted": false,
     "m12cLocked": true,
     "fixedCultivationChanged": false,
@@ -26,12 +25,18 @@
       "sha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
       "rowCount": 14781
     },
-    "il2cppTriggerContract": {
+    "il2cppConditionContract": {
       "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
       "bytes": 97428254,
       "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
-      "sourceIdentity": "EElementTriggerEventType.BeforeSkill=5|EElementTriggerFixedConditionType.CheckSkillType=11|ESkillTagType.EntrySkill=22|ESkillTagType.ExitSkill=8|TBuffElementParams.time|injectElementDataList|notDelElementDataList",
-      "triggerContractHash": "e01501b913505ae7"
+      "sourceIdentity": "EElementTriggerConditionType.AND=0|OR=1|EElementTriggerFixedConditionType.CheckElementType=8|HasElementId=10|CheckSkillType=11|CheckTargetElementId=12",
+      "triggerContractHash": "c381d1508e85d4fa"
+    },
+    "tuningMechanics": {
+      "sourceIdentity": "combat-overlimit-mechanics-20260718.json",
+      "contractHash": "f39bf45155f12746",
+      "verifiedPackageFileSha256": "e9e8a3b7f5af3a3cb51a0bef6b9338b59e62f2660acc61b3eaad9c67010f17c4",
+      "verifiedPackageHash": "1d7cc2a0e376d081ccfcb7c3815098e6f8885a052281004ca44201fc83a6745b"
     },
     "soulControlClosure": {
       "skillCount": 62,
@@ -41,78 +46,120 @@
     }
   },
   "compiledContracts": {
-    "trigger": {
-      "condition": "CheckSkillType(11)=EntrySkill(22)",
+    "conditionOperators": [
+      {
+        "conditionType": 8,
+        "name": "CheckElementType",
+        "selector": "canonical tuning event elementTypes"
+      },
+      {
+        "conditionType": 10,
+        "name": "HasElementId",
+        "selector": "action-start held tuning mark state"
+      },
+      {
+        "conditionType": 11,
+        "name": "CheckSkillType",
+        "selector": "resolved control binding skillTag"
+      },
+      {
+        "conditionType": 12,
+        "name": "CheckTargetElementId",
+        "selector": "landed overlimit packet targetElementIds"
+      }
+    ],
+    "10124": {
+      "name": "夕阳下的约定",
+      "triggerElementId": 19004101,
+      "event": "BeforeSkill",
       "frameAnchor": "action-start",
-      "executionGate": "execute=true-independent-of-hit-outcome",
-      "provenanceRequirement": "switch-triggered-on-enter",
-      "bindingSource": "resolved controlBinding.logic.skillTag",
-      "rejectedSources": [
-        "ExitSkill(8)",
-        "standalone-forged-star-carry",
-        "switch-child-suppressed-by-cooldown",
-        "execution-plan-blocked"
-      ]
+      "condition": "CheckSkillType(11)=UltraSkill(4) AND HasElementId(10)=250",
+      "target": "AllHero(15)",
+      "attributeId": 8,
+      "durationMs": 20000,
+      "stackMode": "refresh",
+      "valuesByStarRaw": [2150, 2870, 3590, 4310]
     },
-    "10147": {
-      "effectSkillId": 1900110,
-      "triggerElementId": 19001101,
-      "wrapperElementId": 19001001,
-      "leafElementId": 19001002,
+    "10131": {
+      "name": "节日佳肴",
+      "triggerElementId": 19002701,
+      "event": "AfterDamage",
+      "frameAnchor": "hit-after-damage",
+      "condition": "CheckTargetElementId(12)=299 OR CheckTargetElementId(12)=499",
+      "hiddenStructuralBranch": "dark overlimit packet 499 is source-present although public text names thunder",
       "target": "Self(0)",
       "attributeId": 222,
-      "durationMs": 6000,
-      "leafDurationMs": -1,
-      "durationSource": "BuffElement wrapper 19001001.time",
-      "propertyTags": [301],
+      "durationMs": 3000,
       "stackMode": "refresh",
-      "valuesByStarRaw": [8930, 11910, 14880, 17860],
-      "formula": "A with G/10000",
-      "removalPath": "19001105 -> 19001106"
+      "valuesByStarRaw": [4460, 5950, 7440, 8930]
     },
-    "10151": {
-      "effectSkillId": 1900130,
-      "triggerElementId": 19001301,
-      "leafElementId": 19001302,
+    "10136": {
+      "name": "林间野餐",
+      "triggerElementId": 19002101,
+      "event": "AfterDamage",
+      "frameAnchor": "hit-after-damage",
+      "condition": "CheckElementType(8)=43 AND CheckSkillType(11)=NormalAttack(1) AND CheckElementType(8)=32",
+      "windDamageElementId": 796,
+      "windElementTypes": [22, 32, 43, 307],
       "target": "Self(0)",
       "attributeId": 222,
-      "durationMs": 10000,
-      "propertyTags": [],
+      "durationMs": 8000,
       "stackMode": "refresh",
-      "valuesByStarRaw": [3720, 4960, 6200, 7440],
-      "formula": "A with G/10000",
-      "removalPath": "19001303 -> 19001304"
+      "valuesByStarRaw": [3720, 4960, 6200, 7440]
     }
   },
   "runtimeMatrix": {
-    "realSwitchEntry": true,
-    "allMissExecutedActionTriggers": true,
-    "blockedExecutionTriggers": false,
-    "cooldownSuppressedChildTriggers": false,
-    "exitSkillTriggers": false,
-    "forgedStandaloneStarCarryTriggers": false,
-    "switchAwayAndReturnPreservesActiveEffect": true,
-    "refreshUsesOneEffectInstance": true,
-    "rightOpenExpiry": true,
-    "replayAndCycleInheritance": true,
-    "toughnessConsequences": {
-      "10147": "charged hit only through leaf PropertyTag 301",
-      "10151": "unscoped modifier; attribute 222 retains its verified charged-toughness calculator scope",
-      "normalAttackGain": false,
-      "expiredGain": false
-    }
+    "usesCanonicalTuningGeneration": true,
+    "duplicatesTuningStateMachine": false,
+    "stableEventContextFields": [
+      "eventIdentity",
+      "elementId",
+      "elementTypes",
+      "targetElementIds",
+      "markId",
+      "profileKey",
+      "sourceActionId",
+      "sourceHitIdentity",
+      "absoluteFrame",
+      "sourceSequencePath"
+    ],
+    "10124": {
+      "inheritedThunderMarkTriggers": true,
+      "zeroOrExpiredOrOtherMarkTriggers": false,
+      "blockedUltimateTriggers": false,
+      "allHeroCommands": 3,
+      "nonSourceTeammateCriticalDamageIncreases": true,
+      "rightOpenExpiryRestoresBaseline": true
+    },
+    "10131": {
+      "landedThunderPacket299Triggers": true,
+      "landedDarkPacket499Triggers": true,
+      "ordinaryElementDamageTriggers": false,
+      "unconsumedOrMissedPacketTriggers": false,
+      "samePacketReceivesNewLayer": false,
+      "laterToughnessDamageIncreases": true,
+      "rightOpenExpiryRestoresBaseline": true
+    },
+    "10136": {
+      "landedNormalAttackWindPacket796Triggers": true,
+      "chargedOrSkillWindPacketTriggers": false,
+      "normalAttackWithoutWindConsumeTriggers": false,
+      "otherOverlimitOrMissTriggers": false,
+      "samePacketReceivesNewLayer": false,
+      "laterToughnessDamageIncreases": true,
+      "rightOpenExpiryRestoresBaseline": true
+    },
+    "refreshAndReplayStable": true,
+    "cycleInheritanceStable": true
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 14,
-    "runtimeUnappliedSoulEssenceCount": 48,
+    "runtimeAppliedSoulEssenceCount": 17,
+    "runtimeUnappliedSoulEssenceCount": 45,
     "runtimeAppliedSetSkillCount": 0,
-    "newlyAppliedSoulEssenceIds": [10147, 10151],
-    "preservedRuntimeAppliedSoulEssenceIds": [
-      10001, 10002, 10037, 10055, 10060, 10093, 10094, 10097, 10098, 10125,
-      10154, 10155
-    ],
+    "newlyAppliedSoulEssenceIds": [10124, 10131, 10136],
+    "preservedRuntimeAppliedSoulEssenceCount": 14,
     "explicitlyUnapplied": {
-      "soulEssenceCount": 48,
+      "soulEssenceCount": 45,
       "setSkillCount": 12,
       "reason": "source evidence or canonical runtime operator remains incomplete"
     }
@@ -125,9 +172,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 442,
+    "blockingUniqueGapCount": 436,
     "blockingByCategory": {
-      "not-implemented": 426,
+      "not-implemented": 420,
       "evidence-insufficient": 16
     },
     "formalAdmissions": {
@@ -139,23 +186,36 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "fcf7e135b22019c8",
-    "rosterHash": "64b1c6784ffb275d",
-    "manifestsHash": "1e912bb39722dcb0",
-    "ledgerHash": "04a3e6f06609ac86",
-    "bindingMatrixHash": "f94164d5eacc341f",
-    "qualificationCatalogHash": "7ba75142e06a5b86",
-    "dynamicLoadoutEffectCensusHash": "1086f724a63921d7",
-    "soulEssenceEffectCatalogHash": "3ea9c341d3801bf2",
-    "soulEssenceSourceSnapshotHash": "c71a86551be01189",
+    "sourceSnapshotHash": "8dcb0be1d668e31d",
+    "rosterHash": "6e3bef78327971df",
+    "manifestsHash": "7b91353ea59fd9ff",
+    "ledgerHash": "15ea7c546ac035da",
+    "bindingMatrixHash": "c4d2d2c7f5eed6b5",
+    "qualificationCatalogHash": "6b55d6c04641b66f",
+    "dynamicLoadoutEffectCensusHash": "188b2f8036236259",
+    "soulEssenceEffectCatalogHash": "e002776d999c842f",
+    "soulEssenceSourceSnapshotHash": "87bc2d712a143bb9",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
-    "soulEssenceTriggerContractHash": "e01501b913505ae7"
+    "soulEssenceTriggerContractHash": "c381d1508e85d4fa",
+    "machineAxisCanonicalHashes": {
+      "input": "572695e45011465c",
+      "data": "35835e12c6a6e279",
+      "trace": "67802e753205e852",
+      "evaluation": "0b410dc9255d2654"
+    }
+  },
+  "canonicalIdentityImpact": {
+    "reason": "verified tuning event source identities and packet elementTypes became first-class package data",
+    "gameplayAssertionDrift": 0,
+    "rubyReplayAndSummaryHashDrift": 0,
+    "xiaoyuAndHanReplayHashChange": "metadata-only; all authoritative numeric assertions pass",
+    "cycleEvaluationHashUnchanged": "412605349bbf2fe3"
   },
   "verification": {
     "status": "passed",
     "focusedMechanics": {
       "files": 5,
-      "tests": 110,
+      "tests": 99,
       "status": "passed"
     },
     "machineAxis": {
@@ -167,13 +227,17 @@
       "files": 3,
       "tests": 34,
       "status": "passed",
-      "gameplayHashDrift": 0
+      "gameplayAssertionDrift": 0
     },
     "canonicalAndRuntime": {
       "files": 6,
-      "tests": 55,
-      "status": "passed",
-      "gameplayAssertionDrift": 0
+      "tests": 104,
+      "status": "passed"
+    },
+    "headlessGoldenMigration": {
+      "files": 1,
+      "tests": 4,
+      "status": "passed"
     },
     "audits": {
       "count": 9,
@@ -189,8 +253,10 @@
         "verified-combat",
         "kibo-headless"
       ],
-      "appliedSoulSourceCount": 14,
-      "appliedSoulSourceDriftCount": 0
+      "appliedSoulSourceCount": 17,
+      "appliedSoulSourceDriftCount": 0,
+      "tuningConditionSourceCount": 5,
+      "tuningConditionSourceDriftCount": 0
     },
     "productionBuild": "passed",
     "gitDiffCheck": "passed"

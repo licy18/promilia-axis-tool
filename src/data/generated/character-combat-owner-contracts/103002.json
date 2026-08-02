@@ -36791,7 +36791,11 @@
               "consumeMode": 0,
               "judgmentElementId": 103002277,
               "judgmentPathId": "4460567758519354701",
-              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701"
+              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701",
+              "judgmentCandidateMarkIds": [
+                150
+              ],
+              "runtimeSelectionMode": "single-mark-packet"
             },
             "formula": {
               "commonFunctionId": 1,
@@ -40218,7 +40222,13 @@
                   "physicalRatioBasisPoints": 10000,
                   "magicRatioBasisPoints": 0,
                   "usesTuningStrength": true,
-                  "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152"
+                  "elementTypes": [
+                    22,
+                    32,
+                    41
+                  ],
+                  "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=3879285143630828198.types",
+                  "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152|battle-element-assets.jsonl#path_id=3879285143630828198.types"
                 }
               ],
               "heldEffect": {
@@ -40251,7 +40261,14 @@
                   "physicalRatioBasisPoints": null,
                   "magicRatioBasisPoints": null,
                   "usesTuningStrength": true,
-                  "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196"
+                  "elementTypes": [
+                    22,
+                    31,
+                    43,
+                    307
+                  ],
+                  "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-310946560669858520.types",
+                  "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196|battle-element-assets.jsonl#path_id=-310946560669858520.types"
                 }
               },
               "overlimitExtra": {
@@ -45215,7 +45232,11 @@
               "consumeMode": 0,
               "judgmentElementId": 103002274,
               "judgmentPathId": "-6187686510236149564",
-              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=-6187686510236149564"
+              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=-6187686510236149564",
+              "judgmentCandidateMarkIds": [
+                150
+              ],
+              "runtimeSelectionMode": "single-mark-packet"
             },
             "formula": {
               "commonFunctionId": 1,
@@ -45328,7 +45349,11 @@
               "consumeMode": 0,
               "judgmentElementId": 103002274,
               "judgmentPathId": "-6187686510236149564",
-              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=-6187686510236149564"
+              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=-6187686510236149564",
+              "judgmentCandidateMarkIds": [
+                150
+              ],
+              "runtimeSelectionMode": "single-mark-packet"
             },
             "formula": {
               "commonFunctionId": 1,
@@ -47608,7 +47633,12 @@
                   "physicalRatioBasisPoints": 0,
                   "magicRatioBasisPoints": 0,
                   "usesTuningStrength": true,
-                  "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=251"
+                  "elementTypes": [
+                    22,
+                    37
+                  ],
+                  "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-637110086033006477.types",
+                  "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=251|battle-element-assets.jsonl#path_id=-637110086033006477.types"
                 }
               ],
               "heldEffect": {
@@ -47648,7 +47678,14 @@
                   "physicalRatioBasisPoints": null,
                   "magicRatioBasisPoints": null,
                   "usesTuningStrength": true,
-                  "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=296"
+                  "elementTypes": [
+                    22,
+                    37,
+                    43,
+                    307
+                  ],
+                  "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-5022202969777715803.types",
+                  "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=296|battle-element-assets.jsonl#path_id=-5022202969777715803.types"
                 }
               },
               "overlimitExtra": {
@@ -54843,7 +54880,11 @@
               "consumeMode": 0,
               "judgmentElementId": 103002277,
               "judgmentPathId": "4460567758519354701",
-              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701"
+              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701",
+              "judgmentCandidateMarkIds": [
+                150
+              ],
+              "runtimeSelectionMode": "single-mark-packet"
             },
             "formula": {
               "commonFunctionId": 1,
@@ -60527,7 +60568,11 @@
               "consumeMode": 0,
               "judgmentElementId": 103002277,
               "judgmentPathId": "4460567758519354701",
-              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701"
+              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701",
+              "judgmentCandidateMarkIds": [
+                150
+              ],
+              "runtimeSelectionMode": "single-mark-packet"
             },
             "formula": {
               "commonFunctionId": 1,
@@ -66326,7 +66371,11 @@
               "consumeMode": 0,
               "judgmentElementId": 103002277,
               "judgmentPathId": "4460567758519354701",
-              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701"
+              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701",
+              "judgmentCandidateMarkIds": [
+                150
+              ],
+              "runtimeSelectionMode": "single-mark-packet"
             },
             "formula": {
               "commonFunctionId": 1,
@@ -74705,7 +74754,11 @@
               "consumeMode": 0,
               "judgmentElementId": 103002271,
               "judgmentPathId": "2099292417798859923",
-              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=2099292417798859923"
+              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=2099292417798859923",
+              "judgmentCandidateMarkIds": [
+                150
+              ],
+              "runtimeSelectionMode": "single-mark-packet"
             },
             "formula": {
               "commonFunctionId": 1,
@@ -75780,7 +75833,11 @@
               "consumeMode": 0,
               "judgmentElementId": 103002271,
               "judgmentPathId": "2099292417798859923",
-              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=2099292417798859923"
+              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=2099292417798859923",
+              "judgmentCandidateMarkIds": [
+                150
+              ],
+              "runtimeSelectionMode": "single-mark-packet"
             },
             "formula": {
               "commonFunctionId": 1,
@@ -96257,7 +96314,13 @@
               "physicalRatioBasisPoints": 10000,
               "magicRatioBasisPoints": 0,
               "usesTuningStrength": true,
-              "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152"
+              "elementTypes": [
+                22,
+                32,
+                41
+              ],
+              "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=3879285143630828198.types",
+              "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152|battle-element-assets.jsonl#path_id=3879285143630828198.types"
             }
           ],
           "heldEffect": {
@@ -96290,7 +96353,14 @@
               "physicalRatioBasisPoints": null,
               "magicRatioBasisPoints": null,
               "usesTuningStrength": true,
-              "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196"
+              "elementTypes": [
+                22,
+                31,
+                43,
+                307
+              ],
+              "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-310946560669858520.types",
+              "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196|battle-element-assets.jsonl#path_id=-310946560669858520.types"
             }
           },
           "overlimitExtra": {
@@ -96382,7 +96452,12 @@
               "physicalRatioBasisPoints": 0,
               "magicRatioBasisPoints": 0,
               "usesTuningStrength": true,
-              "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=251"
+              "elementTypes": [
+                22,
+                37
+              ],
+              "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-637110086033006477.types",
+              "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=251|battle-element-assets.jsonl#path_id=-637110086033006477.types"
             }
           ],
           "heldEffect": {
@@ -96422,7 +96497,14 @@
               "physicalRatioBasisPoints": null,
               "magicRatioBasisPoints": null,
               "usesTuningStrength": true,
-              "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=296"
+              "elementTypes": [
+                22,
+                37,
+                43,
+                307
+              ],
+              "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-5022202969777715803.types",
+              "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=296|battle-element-assets.jsonl#path_id=-5022202969777715803.types"
             }
           },
           "overlimitExtra": {
@@ -108293,7 +108375,11 @@
             "consumeMode": 0,
             "judgmentElementId": 103002277,
             "judgmentPathId": "4460567758519354701",
-            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701"
+            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701",
+            "judgmentCandidateMarkIds": [
+              150
+            ],
+            "runtimeSelectionMode": "single-mark-packet"
           },
           "formula": {
             "commonFunctionId": 1,
@@ -111289,7 +111375,11 @@
             "consumeMode": 0,
             "judgmentElementId": 103002277,
             "judgmentPathId": "4460567758519354701",
-            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701"
+            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701",
+            "judgmentCandidateMarkIds": [
+              150
+            ],
+            "runtimeSelectionMode": "single-mark-packet"
           },
           "formula": {
             "commonFunctionId": 1,
@@ -114285,7 +114375,11 @@
             "consumeMode": 0,
             "judgmentElementId": 103002277,
             "judgmentPathId": "4460567758519354701",
-            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701"
+            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701",
+            "judgmentCandidateMarkIds": [
+              150
+            ],
+            "runtimeSelectionMode": "single-mark-packet"
           },
           "formula": {
             "commonFunctionId": 1,
@@ -117374,7 +117468,11 @@
             "consumeMode": 0,
             "judgmentElementId": 103002277,
             "judgmentPathId": "4460567758519354701",
-            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701"
+            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=4460567758519354701",
+            "judgmentCandidateMarkIds": [
+              150
+            ],
+            "runtimeSelectionMode": "single-mark-packet"
           },
           "formula": {
             "commonFunctionId": 1,
@@ -120626,7 +120724,13 @@
                 "physicalRatioBasisPoints": 10000,
                 "magicRatioBasisPoints": 0,
                 "usesTuningStrength": true,
-                "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152"
+                "elementTypes": [
+                  22,
+                  32,
+                  41
+                ],
+                "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=3879285143630828198.types",
+                "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152|battle-element-assets.jsonl#path_id=3879285143630828198.types"
               }
             ],
             "heldEffect": {
@@ -120659,7 +120763,14 @@
                 "physicalRatioBasisPoints": null,
                 "magicRatioBasisPoints": null,
                 "usesTuningStrength": true,
-                "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196"
+                "elementTypes": [
+                  22,
+                  31,
+                  43,
+                  307
+                ],
+                "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-310946560669858520.types",
+                "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=196|battle-element-assets.jsonl#path_id=-310946560669858520.types"
               }
             },
             "overlimitExtra": {
@@ -122654,7 +122765,11 @@
             "consumeMode": 0,
             "judgmentElementId": 103002274,
             "judgmentPathId": "-6187686510236149564",
-            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=-6187686510236149564"
+            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=-6187686510236149564",
+            "judgmentCandidateMarkIds": [
+              150
+            ],
+            "runtimeSelectionMode": "single-mark-packet"
           },
           "formula": {
             "commonFunctionId": 1,
@@ -122767,7 +122882,11 @@
             "consumeMode": 0,
             "judgmentElementId": 103002274,
             "judgmentPathId": "-6187686510236149564",
-            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=-6187686510236149564"
+            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=-6187686510236149564",
+            "judgmentCandidateMarkIds": [
+              150
+            ],
+            "runtimeSelectionMode": "single-mark-packet"
           },
           "formula": {
             "commonFunctionId": 1,
@@ -124733,7 +124852,12 @@
                 "physicalRatioBasisPoints": 0,
                 "magicRatioBasisPoints": 0,
                 "usesTuningStrength": true,
-                "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=251"
+                "elementTypes": [
+                  22,
+                  37
+                ],
+                "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-637110086033006477.types",
+                "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=251|battle-element-assets.jsonl#path_id=-637110086033006477.types"
               }
             ],
             "heldEffect": {
@@ -124773,7 +124897,14 @@
                 "physicalRatioBasisPoints": null,
                 "magicRatioBasisPoints": null,
                 "usesTuningStrength": true,
-                "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=296"
+                "elementTypes": [
+                  22,
+                  37,
+                  43,
+                  307
+                ],
+                "elementTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-5022202969777715803.types",
+                "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=296|battle-element-assets.jsonl#path_id=-5022202969777715803.types"
               }
             },
             "overlimitExtra": {
@@ -127100,7 +127231,11 @@
             "consumeMode": 0,
             "judgmentElementId": 103002271,
             "judgmentPathId": "2099292417798859923",
-            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=2099292417798859923"
+            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=2099292417798859923",
+            "judgmentCandidateMarkIds": [
+              150
+            ],
+            "runtimeSelectionMode": "single-mark-packet"
           },
           "formula": {
             "commonFunctionId": 1,
@@ -127946,7 +128081,11 @@
             "consumeMode": 0,
             "judgmentElementId": 103002271,
             "judgmentPathId": "2099292417798859923",
-            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=2099292417798859923"
+            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=2099292417798859923",
+            "judgmentCandidateMarkIds": [
+              150
+            ],
+            "runtimeSelectionMode": "single-mark-packet"
           },
           "formula": {
             "commonFunctionId": 1,
@@ -138812,7 +138951,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=103002].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|battle-effect:10300203:1:4227003560910032429:-1496705248257481635:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-2222897544586480824__-2222897544586480824.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[19]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[20]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_1259665864203226846__1259665864203226846.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[25]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[26]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[27]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-7783775984244194322"
     }
   },
-  "contractHash": "c5f8b81a3007ff0bdbd5816bd76450e819bd665df381c7a8dc55ca0aebcc4f98",
+  "contractHash": "f1a490e09aa1833d54940a5286b7c60966660baacea322caddd0e0b3429cc9d1",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 1,
@@ -138834,5 +138973,5 @@
     "thresholdTransitionCount": 0,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "0fdcbe2089f171e8e95200acb0068d9f099c775122befc724264b12151eeec74"
+  "recipeContractHash": "c63e970925bf6f604caefd08663e4afd52f887a90c08193c86cf3f36759c3b3a"
 }
