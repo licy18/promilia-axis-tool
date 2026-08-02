@@ -67,7 +67,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
     }
     for (const [actionIndex, action] of (scenario.actions ?? []).entries()) {
       if (String(action.actorId) !== String(binding.actor.id)) continue;
-      if (executionByActionId.get(action.id)?.execute === false) continue;
+      if (executionByActionId.get(action.id)?.execute !== true) continue;
       const resolution = actionResolutionById?.get?.(action.id) ?? null;
       const actionContext = resolveSoulTriggerActionContext({
         action,
@@ -112,8 +112,11 @@ export function createVerifiedSoulEssenceEffectGeneration({
           soulEssenceId: binding.soulEssenceId,
           effectSkillId: binding.definition.effectSkillId,
           reason: triggerOperator
-            ? 'soulessence-effect-no-landed-source-hit'
+            ? resolveEmptyTriggerOccurrenceReason(
+                binding.definition.trigger.frameAnchor
+              )
             : 'soulessence-effect-trigger-operator-unavailable',
+          triggerFrameAnchor: binding.definition.trigger.frameAnchor,
         });
         continue;
       }
@@ -163,20 +166,15 @@ export function createVerifiedSoulEssenceEffectGeneration({
   };
 }
 
-function resolveActionTriggerOccurrence({ action, resolution, scenario }) {
-  const hits = Array.isArray(resolution?.hits) ? resolution.hits : [];
-  if (hits.length > 0) {
-    const defaultWillHit = scenario?.projectile?.defaultWillHit !== false;
-    const hasLandedHit = hits.some(hit =>
-      resolveActionHitWillHit(
-        action,
-        resolveSoulTriggerHitIdentity(hit),
-        defaultWillHit
-      )
-    );
-    if (!hasLandedHit) return [];
-  }
+function resolveActionTriggerOccurrence() {
   return [{ hit: null }];
+}
+
+function resolveEmptyTriggerOccurrenceReason(frameAnchor) {
+  if (String(frameAnchor).startsWith('hit-')) {
+    return 'soulessence-effect-no-landed-source-hit';
+  }
+  return 'soulessence-effect-action-occurrence-unavailable';
 }
 
 function resolveLandedHitTriggerOccurrences({ action, resolution, scenario }) {

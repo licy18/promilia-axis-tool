@@ -1,13 +1,23 @@
 {
-  "schemaVersion": 3,
-  "phase": "M12-B3-C2",
+  "schemaVersion": 4,
+  "phase": "M12-B3-C2-R1",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "2804f201ac2a6ea4eebc1339703a9d40c0aba5a5",
+  "baseCommit": "942639f07d5a417f8145f8c11aadf006646dfbee",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
     "phase": "M12-B3-C-R1",
     "commit": "2804f201ac2a6ea4eebc1339703a9d40c0aba5a5",
     "status": "product-accepted"
+  },
+  "remediation": {
+    "reviewedC2Commit": "942639f07d5a417f8145f8c11aadf006646dfbee",
+    "issue": "BeforeSkill/AfterSkill action events incorrectly required a landed source hit",
+    "contract": {
+      "actionStartAndEnd": "executed-action-event-independent-of-hit-outcome",
+      "hitBeforeAndAfterDamage": "landed-hit-event-required",
+      "blockedExecution": "no-action-or-hit-event"
+    },
+    "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs:244300-244311#EElementTriggerEventType:1,2,5,6"
   },
   "scope": {
     "batch": "ultimate-all-hero-point-buffs-and-limit-counter-self-buff",
@@ -110,10 +120,25 @@
       "stackMode": "refresh",
       "rightOpenExpiry": true
     },
-    "suppression": {
-      "nonMatchingActionKinds": true,
-      "blockedExecution": true,
-      "allVerifiedHitsMissed": true
+    "eventGate": {
+      "nonMatchingActionKindsSuppressed": true,
+      "blockedExecutionSuppressed": true,
+      "executedActionWithNoHitsTriggersBeforeAfterSkill": true,
+      "executedActionWithAllHitsMissedTriggersBeforeAfterSkill": true,
+      "allHitsMissedSuppressesBeforeAfterDamage": true,
+      "actionEventsNeverReportNoLandedSourceHit": true,
+      "hitEventMissReason": "soulessence-effect-no-landed-source-hit"
+    },
+    "tuningDamageConsequence": {
+      "sourceActorCharacterId": 101007,
+      "targetActorCharacterId": 101003,
+      "eventType": "VERIFIED_TUNING_DAMAGE",
+      "masteryGainBySoulEssenceId": {
+        "10055": 60,
+        "10093": 93.8
+      },
+      "rawDamageIncreasedWhileActive": true,
+      "masteryAndRawDamageReturnToNoSoulBaselineAfterExpiry": true
     },
     "persistence": {
       "canonicalReplay": true,
@@ -176,7 +201,7 @@
   "verification": {
     "focusedMechanics": {
       "files": 5,
-      "tests": 77,
+      "tests": 83,
       "status": "passed"
     },
     "machineAxis": {

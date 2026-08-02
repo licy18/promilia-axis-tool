@@ -803,7 +803,7 @@ describe('verified soul essence effect generation', () => {
     }
   );
 
-  it('settles real 10097 limit-counter hits with the action-start layer and suppresses blocked execution', () => {
+  it('settles real 10097 limit-counter hits with the action-start layer while executed misses still trigger', () => {
     const result = createRealSoulScenario({
       actorCharacterId: 101010,
       soulEssenceId: 10097,
@@ -904,14 +904,244 @@ describe('verified soul essence effect generation', () => {
         definitions: [definition],
       },
     });
-    expect(blockedGeneration.effectCommands).toEqual([]);
-    expect(blockedGeneration.suppressions).toEqual([
+    expect(blockedGeneration.effectCommands).toEqual([
       expect.objectContaining({
-        actionId: missedAction.id,
-        reason: 'soulessence-effect-no-landed-source-hit',
+        sourceActionId: missedAction.id,
+        sourceSoulEssenceId: 10097,
+        timeMs: missedAction.startMs,
       }),
     ]);
+    expect(
+      blockedGeneration.effectCommands.some(
+        command => command.sourceActionId === blockedAction.id
+      )
+    ).toBe(false);
+    expect(blockedGeneration.suppressions).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actionId: missedAction.id,
+          reason: 'soulessence-effect-no-landed-source-hit',
+        }),
+      ])
+    );
   });
+
+  it.each([
+    {
+      soulEssenceId: 10055,
+      actionKind: 'ultimate',
+      actorCharacterId: 101010,
+      commandCount: 3,
+    },
+    {
+      soulEssenceId: 10093,
+      actionKind: 'ultimate',
+      actorCharacterId: 101010,
+      commandCount: 3,
+    },
+    {
+      soulEssenceId: 10060,
+      actionKind: 'star-skill',
+      actorCharacterId: 101007,
+      commandCount: 3,
+    },
+    {
+      soulEssenceId: 10094,
+      actionKind: 'star-skill',
+      actorCharacterId: 101007,
+      commandCount: 1,
+    },
+  ])(
+    'fires the $soulEssenceId action event after an executed all-miss $actionKind',
+    ({ soulEssenceId, actionKind, actorCharacterId, commandCount }) => {
+      const definition = soulEssenceEffectCatalog.definitions.find(
+        entry => entry.soulEssenceId === soulEssenceId
+      );
+      const actor = createSoulMatrixActor({
+        actorId: 'actor-action-event-source',
+        definition,
+      });
+      const sourceAction = {
+        ...createRealSoulActionDraft({
+          id: `executed-miss-${soulEssenceId}`,
+          actionKind,
+          startFrame: 60,
+          actorCharacterId,
+        }),
+        actorId: actor.id,
+      };
+      const resolution = resolveVerifiedCombatActionMechanics(sourceAction);
+      expect(resolution.hits.length).toBeGreaterThan(0);
+      const allMissAction = {
+        ...sourceAction,
+        hitOverrides: Object.fromEntries(
+          resolution.hits.map(hit => [
+            String(
+              hit.identity ??
+                hit.hitIdentity ??
+                hit.sourceIdentity ??
+                `${hit.elementId ?? 'element'}|${hit.hitIndex ?? 'hit'}`
+            ),
+            { willHit: false },
+          ])
+        ),
+      };
+      const blockedAction = {
+        ...allMissAction,
+        id: `blocked-miss-${soulEssenceId}`,
+        startMs: allMissAction.startMs + allMissAction.durationMs + 1000,
+      };
+      const scenario = {
+        time: { fps: 60, durationMs: 20_000 },
+        actors: [
+          actor,
+          { id: 'actor-action-event-team-2', loadout: {} },
+          { id: 'actor-action-event-team-3', loadout: {} },
+        ],
+        actions: [allMissAction, blockedAction],
+      };
+      const generation = createVerifiedSoulEssenceEffectGeneration({
+        scenario,
+        actionExecutionPlan: {
+          actions: [
+            { actionId: allMissAction.id, execute: true },
+            { actionId: blockedAction.id, execute: false },
+          ],
+        },
+        actionResolutionById: new Map([
+          [allMissAction.id, resolution],
+          [blockedAction.id, resolution],
+        ]),
+        catalog: {
+          ...soulEssenceEffectCatalog,
+          definitions: [definition],
+        },
+      });
+
+      expect(generation.effectCommands).toHaveLength(commandCount);
+      expect(
+        new Set(generation.effectCommands.map(command => command.sourceActionId))
+      ).toEqual(new Set([allMissAction.id]));
+      expect(generation.suppressions).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            actionId: allMissAction.id,
+            reason: 'soulessence-effect-no-landed-source-hit',
+          }),
+        ])
+      );
+    }
+  );
+
+  it.each([
+    [10055, 1900930, 60],
+    [10093, 1900230, 93.8],
+  ])(
+    'raises non-source teammate tuning damage for soul %s and expires cleanly',
+    (soulEssenceId, effectSkillId, expectedMasteryGain) => {
+      const fireProfile =
+        verifiedCombatMechanicsPackage.tuningMechanicsCatalog.profiles.find(
+          profile => profile.key === 'fire'
+        );
+      const initialRuntimeState = {
+        tuningMarks: [
+          {
+            markId: fireProfile.markId,
+            profileKey: fireProfile.key,
+            elementName: fireProfile.element,
+            decayRemainingMs: 60_000,
+            heldReadyRemainingMs: 0,
+            layers: [
+              {
+                sourceActionId: 'inherited-fire-mark',
+                sourceActorId: 'actor-101003',
+                sourceIdentity: { profile: fireProfile.sourceIdentity },
+              },
+            ],
+          },
+        ],
+      };
+      const actionPlan = [
+        {
+          id: 'tuning-buff-source-ultimate',
+          actionKind: 'ultimate',
+          actorCharacterId: 101007,
+          startFrame: 0,
+        },
+        {
+          id: 'tuning-buff-switch',
+          actionKind: 'switch',
+          sourceCharacterId: 101007,
+          targetCharacterId: 101003,
+          startFrame: 600,
+        },
+        {
+          id: 'tuning-buff-active-hit',
+          actionKind: 'normal-attack',
+          actorCharacterId: 101003,
+          startFrame: 900,
+        },
+        {
+          id: 'tuning-buff-expired-hit',
+          actionKind: 'normal-attack',
+          actorCharacterId: 101003,
+          startFrame: 2200,
+        },
+      ];
+      const simulate = equippedSoulEssenceId =>
+        createRealSoulScenario({
+          soulEssenceId: equippedSoulEssenceId,
+          effectSkillId:
+            equippedSoulEssenceId == null ? null : effectSkillId,
+          durationMs: 42_000,
+          teamCharacterIds: [101007, 101003, 101010],
+          initialRuntimeState,
+          actionPlan,
+        });
+      const withSoul = simulate(soulEssenceId);
+      const withoutSoul = simulate(null);
+      const tuningPayload = (result, actionId) =>
+        result.verifiedCombatRuntime.damageEvents.find(
+          event =>
+            event.type === 'VERIFIED_TUNING_DAMAGE' &&
+            event.actionId === actionId
+        )?.payload;
+      const activeWithSoul = tuningPayload(
+        withSoul,
+        'tuning-buff-active-hit'
+      );
+      const activeWithoutSoul = tuningPayload(
+        withoutSoul,
+        'tuning-buff-active-hit'
+      );
+      const expiredWithSoul = tuningPayload(
+        withSoul,
+        'tuning-buff-expired-hit'
+      );
+      const expiredWithoutSoul = tuningPayload(
+        withoutSoul,
+        'tuning-buff-expired-hit'
+      );
+
+      expect(activeWithSoul).toBeTruthy();
+      expect(activeWithoutSoul).toBeTruthy();
+      expect(activeWithSoul.mastery - activeWithoutSoul.mastery).toBeCloseTo(
+        expectedMasteryGain,
+        3
+      );
+      expect(activeWithSoul.rawDamage).toBeGreaterThan(
+        activeWithoutSoul.rawDamage
+      );
+      expect(expiredWithSoul.mastery).toBeCloseTo(
+        expiredWithoutSoul.mastery,
+        6
+      );
+      expect(expiredWithSoul.rawDamage).toBeCloseTo(
+        expiredWithoutSoul.rawDamage,
+        6
+      );
+    }
+  );
 
   it('derives only verified normal and charged hit property tags from the action binding', () => {
     const resolutions = new Map(
@@ -1785,6 +2015,7 @@ function createRealSoulScenario({
   actionPlan = null,
   durationMs = 20_000,
   teamCharacterIds = null,
+  initialRuntimeState = null,
 } = {}) {
   const requestedActions =
     actionPlan ??
@@ -1824,18 +2055,21 @@ function createRealSoulScenario({
               ? PROPERTY_TAG_TEST_KIBO_ID
               : config.loadout?.kiboId,
             soulessenceId: soulEssenceId,
-            soulessenceLevel: 80,
-            soulessenceRank: 1,
-            soulessenceStar: 1,
-            soulessenceCultivation: {
-              effectSkill: {
-                skillId: effectSkillId,
-                star: 1,
-                skillLevel: 1,
-                runtimeStatus: 'runtime-applied',
-                sourceIdentity: 'fixture:strict-soulessence-star-1',
-              },
-            },
+            soulessenceLevel: soulEssenceId == null ? null : 80,
+            soulessenceRank: soulEssenceId == null ? null : 1,
+            soulessenceStar: soulEssenceId == null ? null : 1,
+            soulessenceCultivation:
+              soulEssenceId == null
+                ? null
+                : {
+                    effectSkill: {
+                      skillId: effectSkillId,
+                      star: 1,
+                      skillLevel: 1,
+                      runtimeStatus: 'runtime-applied',
+                      sourceIdentity: 'fixture:strict-soulessence-star-1',
+                    },
+                  },
           },
         }
       : config
@@ -1874,8 +2108,9 @@ function createRealSoulScenario({
     teamSlots,
     actorConfigs,
     actions,
-    initialRuntimeState:
-      includesKiboAction && ownerSlotId
+    initialRuntimeState: {
+      ...(initialRuntimeState ?? {}),
+      ...(includesKiboAction && ownerSlotId
         ? {
             kiboEnergyBySlot: [
               {
@@ -1886,7 +2121,8 @@ function createRealSoulScenario({
               },
             ],
           }
-        : {},
+        : {}),
+    },
     mechanicsProfileSelection:
       createVerifiedWorkbenchMechanicsProfileSelection(),
   });
