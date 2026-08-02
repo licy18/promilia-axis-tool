@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrLandedHitRecoveryRuntimeEvidence",
+  "reviewedBinary": {
+    "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+    "bytes": 222485544,
+    "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+  },
+  "reviewedIl2CppDump": {
+    "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+    "bytes": 97428254,
+    "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+  },
+  "dumpBindings": {
+    "methods": [
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.DamageElement.Parse",
+        "rva": "0x138E5E0",
+        "declaration": "public override void Parse(TElementParams param, int skillId, CustomBattleVerifyInfo verifyInfo) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.DamageElement.RecoverSP",
+        "rva": "0x138EEE0",
+        "declaration": "public void RecoverSP() { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.AliveElementSystem.OnExecuteDamageElement",
+        "rva": "0x1318800",
+        "declaration": "public virtual void OnExecuteDamageElement(DamageElement damageElement) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.AliveElementSystem.ExecuteDamageElement",
+        "rva": "0x13151F0",
+        "declaration": "private FormulaUtility.OutputDamageData ExecuteDamageElement(DamageElement element) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.AliveEntity.get_isMainControl",
+        "rva": "0x1293A40",
+        "declaration": "public bool get_isMainControl() { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.SPSystem.OnTransmit",
+        "rva": "0x14837F0",
+        "declaration": "public void OnTransmit(ETransmitType type, ITransmitArgs args) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.SPSystem.RecoverSP",
+        "rva": "0x1483F40",
+        "declaration": "private void RecoverSP(TSpElementParams.ERecoverTagType recoverTagType, float baseDelta, float delta) { }"
+      }
+    ],
+    "fields": [
+      {
+        "identity": "DamageElement.m_recoverSP",
+        "declaration": "private int m_recoverSP; // 0x240"
+      },
+      {
+        "identity": "DamageElement.m_petRecoverSP",
+        "declaration": "private int m_petRecoverSP; // 0x244"
+      },
+      {
+        "identity": "DamageElement.m_recoverInterval",
+        "declaration": "private int m_recoverInterval; // 0x248"
+      },
+      {
+        "identity": "TDamageElementParams.recoverSP",
+        "declaration": "public int recoverSP; // 0x12C"
+      },
+      {
+        "identity": "TDamageElementParams.petRecoverSP",
+        "declaration": "public int petRecoverSP; // 0x130"
+      },
+      {
+        "identity": "TDamageElementParams.recoverInterval",
+        "declaration": "public int recoverInterval; // 0x134"
+      }
+    ],
+    "enums": [
+      {
+        "identity": "EPlayerNetworkState.LocalControlled",
+        "declaration": "public const EPlayerNetworkState LocalControlled = 0;"
+      },
+      {
+        "identity": "EPlayerNetworkState.RemoteControlled",
+        "declaration": "public const EPlayerNetworkState RemoteControlled = 1;"
+      },
+      {
+        "identity": "EPlayerNetworkState.LocalAIControlled",
+        "declaration": "public const EPlayerNetworkState LocalAIControlled = 2;"
+      }
+    ]
+  },
+  "binaryRanges": [
+    {
+      "identity": "damage-element-parse-recovery-fields",
+      "range": "0x138E5E0-0x138E830",
+      "bytes": 592,
+      "sha256": "e737b61250a072be4921e4acb37517faf14fa9689c35b583949bdae71fef67d2"
+    },
+    {
+      "identity": "damage-element-recover-sp",
+      "range": "0x138EEE0-0x138F610",
+      "bytes": 1840,
+      "sha256": "6772fcc07b9bd09bc7c354a4c72bb6f8c2db80034739c00737bfd947ea6e0958"
+    },
+    {
+      "identity": "element-executor-source-resolution",
+      "range": "0x1318B3E-0x1318B79",
+      "bytes": 59,
+      "sha256": "a510b8fcc408a058a7124f71f6bf4abbacbdaa11ef47a7faf614c325212793a5"
+    },
+    {
+      "identity": "remote-recovery-branch",
+      "range": "0x1318E02-0x1318E57",
+      "bytes": 85,
+      "sha256": "44bf4ecc167ca62f2a5e666ede933a208cc90269a27d64bd72521e48990b96ac"
+    },
+    {
+      "identity": "local-damage-settlement-call",
+      "range": "0x131932C-0x1319360",
+      "bytes": 52,
+      "sha256": "dc12ad1cfcb0f39a891b4c2b117b1109b7cdc0da2730db690cadc3359628de20"
+    },
+    {
+      "identity": "local-main-control-gates-and-recovery-call",
+      "range": "0x1319559-0x1319599",
+      "bytes": 64,
+      "sha256": "c71ee84e6a02fa8fff89c218c0d6e5fbe912f68224fb07db29f7119a9cb21f18"
+    },
+    {
+      "identity": "alive-entity-is-main-control",
+      "range": "0x1293A40-0x1293A91",
+      "bytes": 81,
+      "sha256": "7652ab35e9d4ff29dc2dd89982618d72de93258c963f53219bbdd68f56188378"
+    },
+    {
+      "identity": "sp-system-on-transmit",
+      "range": "0x14837F0-0x1483F40",
+      "bytes": 1872,
+      "sha256": "0fdd9a3a02d9eb6caf31bf99805c9fcfbf325362d2bdbebbe1de29f9c4ae2cff"
+    },
+    {
+      "identity": "sp-system-recover-sp",
+      "range": "0x1483F40-0x1484260",
+      "bytes": 800,
+      "sha256": "67a7b086f9e911b622c7dcb9cea2334cc4ceece9689ef14f89c384813d094650"
+    },
+    {
+      "identity": "sp-system-actor-recover-dispatch",
+      "range": "0x1483A50-0x1483A70",
+      "bytes": 32,
+      "sha256": "9e95670343fb32fbc2cbdbf87b80520d505b63c228a40e86b74886bdeb052ac5"
+    },
+    {
+      "identity": "sp-system-kibo-recover-dispatch",
+      "range": "0x1483E00-0x1483E20",
+      "bytes": 32,
+      "sha256": "a25dca5c6cf172b97884b3594d784667d484dc324318b56ea18fe2cd9bfe8fd8"
+    }
+  ],
+  "callGraph": {
+    "parseCopies": [
+      {
+        "callSiteRva": "0x138E7F5",
+        "sourceOffset": "0x12C",
+        "destinationOffset": "0x240",
+        "field": "recoverSP"
+      },
+      {
+        "callSiteRva": "0x138E801",
+        "sourceOffset": "0x130",
+        "destinationOffset": "0x244",
+        "field": "petRecoverSP"
+      },
+      {
+        "callSiteRva": "0x138E80D",
+        "sourceOffset": "0x134",
+        "destinationOffset": "0x248",
+        "field": "recoverInterval"
+      }
+    ],
+    "localBranch": {
+      "damageSettlementCallRva": "0x131935A",
+      "damageSettlementTargetRva": "0x13151F0",
+      "executorMainControlCallRva": "0x1319567",
+      "sourceMainControlCallRva": "0x1319582",
+      "mainControlTargetRva": "0x1293A40",
+      "recoveryCallRva": "0x1319594",
+      "recoveryTargetRva": "0x138EEE0"
+    },
+    "remoteBranch": {
+      "addRemoteElementCallRva": "0x1318E48",
+      "recoveryCallRva": "0x1318E52",
+      "recoveryTargetRva": "0x138EEE0"
+    },
+    "spSystem": {
+      "onTransmitRva": "0x14837F0",
+      "recoverSpRva": "0x1483F40",
+      "actorRecoverDispatchCallRva": "0x1483A64",
+      "kiboRecoverDispatchCallRva": "0x1483E14"
+    }
+  },
+  "runtimeSemantics": {
+    "isMainControlField": "AliveData.playerNetworkState@0x348",
+    "isMainControlCondition": "EPlayerNetworkState.LocalControlled=0",
+    "localExecutorGateRequired": true,
+    "localSourceGateRequired": true,
+    "remoteBranchKind": "replicated-remote-element",
+    "canonicalBranchKind": "local-authored-action",
+    "canonicalExecutorAuthority": "execution-plan-local-action-provenance",
+    "canonicalSourceAuthority": "execution-plan-local-source-provenance",
+    "controlledActorTimelineRepresentsActiveActorNotNetworkAuthority": true,
+    "controlledActorTimelineRecoveryGate": false,
+    "damageFormulaReadinessIndependentAfterAuthorityGates": true,
+    "unresolvedDamageMayStillRecoverAfterAuthorityGates": true,
+    "unknownOrDriftedLandedTransactionFailsClosed": true,
+    "reason": "The local OnExecuteDamageElement branch settles damage, then requires both executor and source AliveEntity data to report EPlayerNetworkState.LocalControlled before calling DamageElement.RecoverSP. This is local-versus-remote-or-AI network authority, not the active-character identity tracked by controlledActorTimeline. The remote branch is a replicated-element path and is not a public Machine Axis input. Canonical descriptors are locally authored execution-plan actions, so executor and source authority are supplied by that provenance; no reviewed call edge proves that a party switch rewrites this network state."
+  },
+  "conclusion": {
+    "status": "applied",
+    "contract": "landed-hit-recovery-after-local-authority-gates",
+    "sourceIdentity": "GameAssembly.dll#DamageElement.Parse@0x138E5E0/AliveElementSystem.OnExecuteDamageElement@0x1318800/DamageElement.RecoverSP@0x138EEE0/SPSystem.OnTransmit@0x14837F0"
+  }
+}

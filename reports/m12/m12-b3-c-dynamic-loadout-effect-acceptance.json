@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 12,
-  "phase": "M12-B3-C7-R2",
+  "schemaVersion": 13,
+  "phase": "M12-B3-C7-R3",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "8760b14b448ff22290895736a6f7b19c077fe589",
+  "baseCommit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
+  "reviewedC7R2Commit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
     "phase": "M12-B3-C6",
@@ -46,12 +47,23 @@
       "shieldConsumer": "ShieldElement.Execute@0x13A2040",
       "healConsumer": "DamageUtility.OnAfterHeal@0x1872130",
       "triggerIntervalParser": "TriggerElement.Parse@0x13BD9C0",
-      "triggerIntervalGate": "TriggerElement.CanTrigger@0x13B5770",
-      "damageElementParser": "DamageElement.Parse@0x138E5E0",
-      "damageElementRecovery": "DamageElement.RecoverSP@0x138EEE0",
-      "localDamageExecution": "AliveElementSystem.ExecuteDamageElement@0x131935A",
-      "localHitRecoveryCall": "DamageElement.RecoverSP@0x1319594",
-      "remoteHitRecoveryCall": "DamageElement.RecoverSP@0x1318E52",
+      "triggerIntervalGate": "TriggerElement.CanTrigger@0x13B5770"
+    },
+    "landedHitRecoveryRuntimeEvidence": {
+      "path": "scripts/optimization-qualification/evidence/landed-hit-recovery-runtime-evidence.json",
+      "bytes": 8635,
+      "sha256": "634c979cda572f8fff1509bbf888240aebe8fad7728f357ce06390fee364a248",
+      "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+      "binaryBytes": 222485544,
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "il2CppDumpPath": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+      "il2CppDumpBytes": 97428254,
+      "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+      "rangeCount": 11,
+      "localDamageSettlement": "AliveElementSystem.ExecuteDamageElement@0x13151F0 called at 0x131935A",
+      "localAuthorityGates": "AliveEntity.get_isMainControl@0x1293A40 reads EPlayerNetworkState.LocalControlled for executor at 0x1319567 and source at 0x1319582; this is execution provenance, not controlledActorTimeline active identity",
+      "localHitRecoveryCall": "DamageElement.RecoverSP@0x138EEE0 called at 0x1319594",
+      "remoteHitRecoveryCall": "DamageElement.RecoverSP@0x138EEE0 called at 0x1318E52 after AddRemoteElement",
       "actorSpConsumer": "SPSystem.OnTransmit@0x14837F0|SPSystem.RecoverSP@0x1483F40"
     },
     "soulControlClosure": {
@@ -189,7 +201,7 @@
   },
   "r2LandedHitRecoveryEligibility": {
     "rootCause": "full runtime gated hit recovery on damage-formula readiness while non-damage projection gated it on transaction presence, so unresolved deterministic damage inputs produced different resource ledgers and downstream vital settlements",
-    "nativeConclusion": "DamageElement.Parse stores recoverSP, petRecoverSP and recoverInterval; AliveElementSystem calls DamageElement.RecoverSP as a separate landed DamageElement transaction after damage execution hooks, so missing simulator formula inputs leave damage unresolved without suppressing verified recovery",
+    "nativeConclusion": "DamageElement.Parse stores recoverSP, petRecoverSP and recoverInterval; the local AliveElementSystem branch calls ExecuteDamageElement@0x13151F0 at 0x131935A, verifies executor and source EPlayerNetworkState.LocalControlled, then calls DamageElement.RecoverSP@0x138EEE0 at 0x1319594. Missing simulator formula inputs leave damage unresolved without suppressing verified recovery after those authority gates.",
     "sharedEligibility": [
       "source action executes and is not runtime-blocked",
       "hit frame remains inside contextual occupancy",
@@ -223,6 +235,29 @@
     ],
     "realPipelineAssertion": "Pangpang starts at 99 SP, a verified landed A3 transaction reaches 100 despite unresolved damage inputs, the 100-SP ultimate executes and its direct heal materializes identically in full and projected runtimes; fail-closed cases block both paths"
   },
+  "r3EvidenceClosure": {
+    "rootCause": "the R2 report manually listed DamageElement and SP recovery RVAs under the older non-damage evidence reference, but the referenced 5872-byte artifact contained none of those methods, callsites, ranges or authority gates",
+    "dedicatedEvidenceArtifact": "scripts/optimization-qualification/evidence/landed-hit-recovery-runtime-evidence.json",
+    "recomputedByAssertClean": true,
+    "boundEvidence": [
+      "GameAssembly and IL2CPP dump identities",
+      "DamageElement Parse recovery fields",
+      "local and remote recovery callsites",
+      "executor and source isMainControl gates",
+      "EPlayerNetworkState LocalControlled/RemoteControlled/LocalAIControlled",
+      "SPSystem OnTransmit and actor/Kibo RecoverSP dispatch"
+    ],
+    "authorityMapping": "isMainControl reads AliveData.playerNetworkState and tests LocalControlled=0. It does not read the active actor represented by controlledActorTimeline. Canonical action descriptors are locally authored execution-plan transactions; no reviewed call edge proves that switching the active party actor rewrites network authority, so R2 shared eligibility remains unchanged.",
+    "tamperGuards": [
+      "binary hash",
+      "dump hash and method RVA",
+      "every required callsite group",
+      "every required RVA range hash",
+      "gate semantic",
+      "acceptance report path/bytes/hash reference"
+    ],
+    "gameplayLogicChanged": false
+  },
   "batchResults": {
     "runtimeAppliedSoulEssenceCount": 25,
     "runtimeUnappliedSoulEssenceCount": 37,
@@ -253,12 +288,12 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "bad3205a3460c9d5",
-    "rosterHash": "641261e69a1be33b",
-    "manifestsHash": "9cf36adbb69c70e0",
-    "ledgerHash": "9beae8053233eeda",
-    "bindingMatrixHash": "4568dc485d378145",
-    "qualificationCatalogHash": "00fa04e110e78c23",
+    "sourceSnapshotHash": "6efb58d253a09e8c",
+    "rosterHash": "97681c274a2378d8",
+    "manifestsHash": "21d4128d30115155",
+    "ledgerHash": "4d9fcf43ce25d7ea",
+    "bindingMatrixHash": "a5c287ab514d2e74",
+    "qualificationCatalogHash": "e823cfedf6f00c14",
     "dynamicLoadoutEffectCensusHash": "09b6f5835229c95f",
     "soulEssenceEffectCatalogHash": "0b16807519898633",
     "soulEssenceSourceSnapshotHash": "441aec3693b0eed1",
@@ -272,7 +307,7 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "C7-R2 unifies landed-hit recovery eligibility and only adds structured resource-versus-damage settlement metadata when damage is unresolved; resolved canonical gameplay, generated qualification data and authoritative golden assertions remain unchanged",
+    "reason": "C7-R3 adds the missing landed-hit recovery evidence source to the qualification source snapshot and assert-clean chain. Runtime eligibility remains the accepted R2 contract; only qualification source-derived hashes change.",
     "machineAxisCanonicalHashDrift": 0,
     "gameplayAssertionDrift": 0,
     "c4ConsumeAndAfterDamageRegression": 0,
@@ -281,10 +316,17 @@
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 3, "tests": 103, "status": "passed" },
+    "focusedMechanics": { "files": 5, "tests": 119, "status": "passed" },
     "characterProfileAndMigration": { "files": 4, "tests": 38, "status": "passed", "gameplayAssertionDrift": 0 },
     "machineAxis": { "files": 12, "tests": 157, "status": "passed" },
-    "canonicalAndRuntime": { "files": 6, "tests": 72, "status": "passed" },
+    "canonicalAndRuntime": {
+      "files": 6,
+      "tests": 72,
+      "status": "accepted-predecessor-passed",
+      "baseline": "bea37f42b273e57e11ca248fbd37764babfcc98d",
+      "replayedInR3": false,
+      "reason": "R3 changes evidence, generation gates, tests, reports, and source-derived qualification hashes only; the production runtime has zero diff"
+    },
     "audits": {
       "count": 9,
       "status": "clean",

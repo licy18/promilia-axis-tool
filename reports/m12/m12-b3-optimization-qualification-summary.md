@@ -1,9 +1,9 @@
 # M12-B3-C7 Non-Damage Event Transactions
 
 - Status: `b3-c7-verification-complete-awaiting-product-acceptance`
-- Source snapshot: `bad3205a3460c9d5`
-- Roster: `641261e69a1be33b`
-- Catalog: `00fa04e110e78c23`
+- Source snapshot: `6efb58d253a09e8c`
+- Roster: `97681c274a2378d8`
+- Catalog: `e823cfedf6f00c14`
 - Denominators: characters 11, Kibo 43, soul essence 62, equipment 137, set skills 12
 - Optimization ready: characters 0, Kibo 0, soul essence 0, equipment 0, set skills 0
 - Blocking gaps: not implemented 402, evidence insufficient 18

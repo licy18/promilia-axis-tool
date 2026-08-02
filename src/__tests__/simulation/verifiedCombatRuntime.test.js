@@ -1683,6 +1683,37 @@ describe('verified combat mechanics runtime', () => {
     }
   });
 
+  it('does not reinterpret the active actor timeline as native network authority', () => {
+    const { full, projection } = createPangpangHitRecoveryParityPair({
+      mutateControlledActorTimeline(timeline) {
+        timeline.transitions = [
+          {
+            transitionId: 'fixture-switch-before-delayed-hit',
+            actionId: 'fixture-switch-before-delayed-hit',
+            timeMs: 1,
+            frameIndex: 1,
+            applied: true,
+            beforeActor: timeline.initialActor,
+            afterActor: {
+              actorId: 'actor-101010',
+              characterId: 101010,
+              name: '涂山小玉',
+            },
+          },
+        ];
+      },
+    });
+
+    for (const runtime of [full, projection]) {
+      expect(findPangpangParityRecovery(runtime)).toMatchObject({
+        payload: {
+          reason: 'verified-hit-sp-recovery',
+          afterValue: 100,
+        },
+      });
+    }
+  });
+
   it('uses the same DamageElement recover interval in full and projected runtimes', () => {
     const prepared = simulateVerifiedAcceptanceScenario({
       includeActor: true,
@@ -2751,6 +2782,7 @@ function createPangpangHitRecoveryParityPair({
   mutateDamageEventGeneration = null,
   mutateExecutionPlan = null,
   mutateActionVariantRuntime = null,
+  mutateControlledActorTimeline = null,
 } = {}) {
   const prepared = simulatePangpangHitRecoveryParityScenario();
   const scenario = structuredClone(prepared.effectiveActionTimeline.scenario);
@@ -2781,6 +2813,10 @@ function createPangpangHitRecoveryParityPair({
     prepared.verifiedDamageEventGeneration
   );
   mutateDamageEventGeneration?.(damageEventGeneration);
+  const controlledActorTimeline = structuredClone(
+    prepared.controlledActorTimeline
+  );
+  mutateControlledActorTimeline?.(controlledActorTimeline);
   const ultimateAction = scenario.actions.find(
     action => action.id === 'pangpang-recovery-parity-ultimate'
   );
@@ -2788,7 +2824,7 @@ function createPangpangHitRecoveryParityPair({
   const commonArguments = {
     scenario,
     actionExecutionPlan,
-    controlledActorTimeline: prepared.controlledActorTimeline,
+    controlledActorTimeline,
     effectGeneration: {
       ...prepared.verifiedBattleEffectGeneration,
       directHpEvents: [

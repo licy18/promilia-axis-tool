@@ -22,7 +22,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - B3-C4-R1 product acceptance baseline: `8bf0b3a77538102c1995dd5943e4a7275664ca0a`.
 - B3-C5 product acceptance baseline: `5c713e55ffdc46e5e75e9a4a4dcc1d0366201be0`.
 - B3-C6 product acceptance baseline: `5c5a33a21cce05fbf090af72c783bad475b55656`.
-- B3-C7 reviewed implementation baseline: `5647f1a74d74cb63b763ed06367ac8198084cab1`; C7-R1 reviewed baseline: `8760b14b448ff22290895736a6f7b19c077fe589`; C7-R2 repairs the remaining landed-hit recovery eligibility split.
+- B3-C7 reviewed implementation baseline: `5647f1a74d74cb63b763ed06367ac8198084cab1`; C7-R1 reviewed baseline: `8760b14b448ff22290895736a6f7b19c077fe589`; C7-R2 reviewed baseline: `bea37f42b273e57e11ca248fbd37764babfcc98d`; C7-R3 closes the landed-hit recovery evidence chain without changing production runtime semantics.
 - The B3 contract was selectively synchronized from the dirty main-workspace plan on 2026-08-01; the main workspace was not modified.
 
 ## Frozen Plan Snapshot
@@ -39,7 +39,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 
 - B2 product acceptance is closed.
 - B3-A-R1 is product-accepted at `f902de10c42c2c4dc750be2316fabe3bc026f8cc`. B3-B-R1 is product-accepted at `f846161c4a71bbc2de2b5bed3f598f03344fc692`; B3-C-R1 is product-accepted at `2804f201ac2a6ea4eebc1339703a9d40c0aba5a5`.
-- B3-C7 source and denominator recomputation is complete: source `bad3205a3460c9d5`, roster `641261e69a1be33b`, manifests `9cf36adbb69c70e0`, ledger `9beae8053233eeda`, catalog `00fa04e110e78c23`, binding matrix `4568dc485d378145`. The non-damage evidence contract is `5872B / 1465c750e146825b4f4716e38051dcf06b1b897cefae0e55fb7cd6348b080552` against GameAssembly `222485544B / c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b`.
+- B3-C7-R3 source and denominator recomputation is complete: source `6efb58d253a09e8c`, roster `97681c274a2378d8`, manifests `21d4128d30115155`, ledger `4d9fcf43ce25d7ea`, catalog `e823cfedf6f00c14`, binding matrix `a5c287ab514d2e74`. The non-damage evidence contract remains `5872B / 1465c750e146825b4f4716e38051dcf06b1b897cefae0e55fb7cd6348b080552`; landed recovery now has a dedicated `8635B / 634c979cda572f8fff1509bbf888240aebe8fad7728f357ce06390fee364a248` artifact against GameAssembly `222485544B / c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b` and the frozen IL2CPP dump.
 - Generated roster, consolidated manifests, gap ledger, binding matrix, summary, and runtime catalog are deterministic under `npm run audit:optimization-qualification`.
 - Strict cultivation profile v1 is wired into Machine Axis, canonical input hashing, and direct Workbench adapter round-trip. The frozen profile hash is `c432bd0a3f2d6415`: character `80 / star gift 7 / completed attributes through 6 / all current nodes / level breakthrough 3`; Kibo `80 / four talents 10 => 120 / bond 1 => 900 basis points / dnaFactors []`; soul essence `80 / rank 6 / star 1`; equipment `4-star / +9 / tuning 110 / starborn`.
 - Formal qualification derives one whole-stage gate from the `11/43/62/137/12` records, admissions, set-skill thresholds, actor-Kibo/soul/equipment bindings, equipment slots, and source hashes. Partial green catalogs are rejected before project/search; research scenarios remain compatible.
@@ -59,8 +59,9 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - Current maturity is `216 extracted / 49 runtime-integrated`; all five optimization-ready counts remain zero. Blocking gaps are `420` unique (`402 not-implemented`, `18 evidence-insufficient`).
 - C7-R1 resource parity covers manual resource, auto SP, direct SP, landed-hit actor/Kibo recovery and tuning overlimit direct SP. The projection emits direct heal/shield and periodic heal events only after the same resource cost gate as full runtime; it emits no damage/toughness events and consumes no critical samples.
 - C7-R2 binds the shared recovery gate to action execution, contextual occupancy, parseable DamageElement recovery fields, exact landed transaction/context identities and recover interval. `DamageElement.RecoverSP@0x138EEE0` is called independently from `AliveElementSystem.ExecuteDamageElement` at `0x1319594` (remote branch `0x1318E52`), so formula-input gaps keep damage unresolved without suppressing verified recovery. Missing/drifted identities, misses, blocked actions and recovery-source gaps fail closed in both runtimes.
-- Verification passed: focused mechanics `3 / 103`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, canonical/runtime `6 / 72`, nine deterministic audits, and production build.
-- Status: `B3-C7-R2 verification-complete-awaiting-product-acceptance`.
+- C7-R3 stores the recovery fields, local/remote callsites, executor/source `isMainControl` gates, `EPlayerNetworkState` semantics, SPSystem dispatch and 11 exact binary ranges in a versioned artifact. The generator revalidates its binary/dump/range hashes and the acceptance report reference. `isMainControl` is local network authority, not the active actor timeline, so production runtime remains unchanged.
+- R3 verification passed: focused evidence/runtime `5 / 119`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, nine deterministic audits, and production build. The accepted R2 canonical/runtime `6 / 72` remains applicable with zero production runtime diff.
+- Status: `B3-C7-R3 verification-complete-awaiting-product-acceptance`.
 
 ## Remaining Blockers
 

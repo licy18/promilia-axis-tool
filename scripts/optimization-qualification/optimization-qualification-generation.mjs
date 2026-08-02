@@ -8,6 +8,11 @@ import {
   createDynamicLoadoutEffectCensus,
   createSoulEssenceEffectMechanicsCatalog,
 } from './soulessence-effect-generation.mjs';
+import {
+  assertLandedHitRecoveryRuntimeEvidenceReference,
+  LANDED_HIT_RECOVERY_EVIDENCE_RELATIVE_PATH,
+  readLandedHitRecoveryRuntimeEvidenceSource,
+} from './landed-hit-recovery-evidence.mjs';
 
 export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
   '2026-08-01T00:00:00.000Z';
@@ -77,6 +82,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '06db8dd699ccad3a5b28b1099b5879ff6dd0990620d230918342d5ee80988ab3',
   soulEffectBeforeDamageRuntimeEvidence:
     'a1a30e0c70dbfaf49990bddb48bf97c1b9cca31f2a77a303fba9382c239a3f7f',
+  landedHitRecoveryRuntimeEvidence:
+    '634c979cda572f8fff1509bbf888240aebe8fad7728f357ce06390fee364a248',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
@@ -136,6 +143,8 @@ export async function createOptimizationQualificationArtifacts({
   soulEffectGetElementRuntimeEvidencePath = null,
   soulEffectBeforeDamageRuntimeEvidencePath = null,
   soulEffectNonDamageRuntimeEvidencePath = null,
+  landedHitRecoveryRuntimeEvidencePath = null,
+  dynamicLoadoutAcceptanceReportPath = null,
   gameAssemblyPath = 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
 } = {}) {
   if (!projectRoot) throw new TypeError('projectRoot is required');
@@ -231,6 +240,34 @@ export async function createOptimizationQualificationArtifacts({
       gameAssemblyPath,
       projectRoot
     );
+  sources.landedHitRecoveryRuntimeEvidence =
+    await readLandedHitRecoveryRuntimeEvidenceSource({
+      sourcePath:
+        landedHitRecoveryRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          ...LANDED_HIT_RECOVERY_EVIDENCE_RELATIVE_PATH.split('/')
+        ),
+      gameAssemblyPath,
+      il2CppDumpPath: il2cppRuntimeContractsPath,
+      projectRoot,
+    });
+  const acceptanceReport = JSON.parse(
+    await fs.readFile(
+      dynamicLoadoutAcceptanceReportPath ??
+        path.join(
+          projectRoot,
+          'reports',
+          'm12',
+          'm12-b3-c-dynamic-loadout-effect-acceptance.json'
+        ),
+      'utf8'
+    )
+  );
+  assertLandedHitRecoveryRuntimeEvidenceReference(
+    acceptanceReport?.sourceClosure?.landedHitRecoveryRuntimeEvidence,
+    sources.landedHitRecoveryRuntimeEvidence
+  );
   sources.il2cppRuntimeContracts.value.soulEffectTriggers =
     attachSoulEffectGetElementRuntimeEvidence(
       sources.il2cppRuntimeContracts.value.soulEffectTriggers,
@@ -1806,7 +1843,8 @@ function createSourceSnapshot(sources) {
         key === 'heroRankRuntimeEvidence' ||
         key === 'soulEffectGetElementRuntimeEvidence' ||
         key === 'soulEffectBeforeDamageRuntimeEvidence' ||
-        key === 'soulEffectNonDamageRuntimeEvidence'
+        key === 'soulEffectNonDamageRuntimeEvidence' ||
+        key === 'landedHitRecoveryRuntimeEvidence'
       ) {
         record.value = structuredClone(source.value);
       }
