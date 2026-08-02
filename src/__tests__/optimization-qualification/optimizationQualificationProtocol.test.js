@@ -195,11 +195,67 @@ describe('M12-B3 optimization qualification generation', () => {
           record.maturityState === 'runtime-integrated'
       )
     ).toHaveLength(38);
+    const unappliedSetSkillGaps = artifacts.gaps.records.filter(
+      record => record.code === 'set-skill-dynamic-unapplied'
+    );
     expect(
-      artifacts.gaps.records.filter(
-        record => record.code === 'set-skill-dynamic-unapplied'
+      unappliedSetSkillGaps.map(record => `set-skill:${record.objectId}`).sort()
+    ).toEqual([
+      'set-skill:1:4',
+      'set-skill:3:4',
+      'set-skill:5:4',
+      'set-skill:6:4',
+    ]);
+    const setSkillManifests = artifacts.manifests.records.filter(
+      record => record.objectKind === 'set-skill'
+    );
+    expect(
+      setSkillManifests.filter(
+        record => record.maturityState === 'runtime-integrated'
       )
-    ).toHaveLength(6);
+    ).toHaveLength(8);
+    for (const objectId of ['2:4', '4:4']) {
+      const manifest = setSkillManifests.find(
+        record => record.objectId === objectId
+      );
+      expect(manifest).toMatchObject({
+        objectKind: 'set-skill',
+        objectId,
+        maturityState: 'runtime-integrated',
+        optimizationReady: false,
+        evidence: {
+          effectMechanics: {
+            mechanismFamily: 'set-skill-before-damage-stacking-property',
+            runtimeStatus: 'runtime-applied',
+            thresholdActivation: {
+              status: 'runtime-applied',
+              appliedToRuntimeEffect: true,
+            },
+          },
+        },
+      });
+      expect(manifest.blockers.map(blocker => blocker.code)).not.toContain(
+        'set-skill-dynamic-unapplied'
+      );
+      expect(
+        unappliedSetSkillGaps.some(record => record.objectId === objectId)
+      ).toBe(false);
+    }
+    expect(artifacts.summary.gapCounts).toMatchObject({
+      blockingUniqueGapCount: 386,
+      byCategory: {
+        'not-implemented': 368,
+        'evidence-insufficient': 18,
+      },
+    });
+    expect(artifacts.summary.optimizationReadyCounts).toEqual({
+      character: 0,
+      kibo: 0,
+      'soul-essence': 0,
+      equipment: 0,
+      'set-skill': 0,
+    });
+    expect(artifacts.summary.m12cLocked).toBe(true);
     expect(
       artifacts.gaps.records.filter(
         record => record.code === 'kibo-passive-static-evidence-gap'

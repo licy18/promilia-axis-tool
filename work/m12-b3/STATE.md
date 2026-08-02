@@ -26,6 +26,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - B3-C8 reviewed implementation baseline: `1b16f2ddcbc3594a2c5de964ff11933d1da37c63`.
 - B3-C8-R1 product acceptance baseline: `26a8125b2ca262777ff11b12f37e7d32b68eac91`.
 - B3-C9 product acceptance baseline: `bd812d64226a371a55a01981a239e33c318c9e98`.
+- B3-C10 reviewed implementation baseline: `785cc9b8c20b1cb995b4fe4f565a6e94101f8531`; C10-R1 product re-review is pending.
 - The B3 contract was selectively synchronized from the dirty main-workspace plan on 2026-08-01; the main workspace was not modified.
 
 ## Frozen Plan Snapshot
@@ -42,7 +43,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 
 - B2 product acceptance is closed.
 - B3-A-R1 is product-accepted at `f902de10c42c2c4dc750be2316fabe3bc026f8cc`. B3-B-R1 is product-accepted at `f846161c4a71bbc2de2b5bed3f598f03344fc692`; B3-C-R1 is product-accepted at `2804f201ac2a6ea4eebc1339703a9d40c0aba5a5`.
-- B3-C9 is product-accepted at `bd812d64226a371a55a01981a239e33c318c9e98`. C10 four-piece BeforeDamage stacking properties have completed self-verification and await product acceptance. Current generated hashes are source `1d5b5b30e0eab9c2`, roster `567d220743475d95`, manifests `a9d70ae361b5ec38`, ledger `61ad6177831d5a97`, catalog `845c4456697f9cfb`, binding matrix `3b67fc5bfffd6bd8`.
+- B3-C9 is product-accepted at `bd812d64226a371a55a01981a239e33c318c9e98`. C10 production mechanics remain frozen at `785cc9b8c20b1cb995b4fe4f565a6e94101f8531`; C10-R1 closes its stale qualification-test gate and awaits product re-review. Current generated hashes are source `1d5b5b30e0eab9c2`, roster `567d220743475d95`, manifests `a9d70ae361b5ec38`, ledger `61ad6177831d5a97`, catalog `845c4456697f9cfb`, binding matrix `3b67fc5bfffd6bd8`.
 - Generated roster, consolidated manifests, gap ledger, binding matrix, summary, and runtime catalog are deterministic under `npm run audit:optimization-qualification`.
 - Strict cultivation profile v1 is wired into Machine Axis, canonical input hashing, and direct Workbench adapter round-trip. The frozen profile hash is `c432bd0a3f2d6415`: character `80 / star gift 7 / completed attributes through 6 / all current nodes / level breakthrough 3`; Kibo `80 / four talents 10 => 120 / bond 1 => 900 basis points / dnaFactors []`; soul essence `80 / rank 6 / star 1`; equipment `4-star / +9 / tuning 110 / starborn`.
 - Formal qualification derives one whole-stage gate from the `11/43/62/137/12` records, admissions, set-skill thresholds, actor-Kibo/soul/equipment bindings, equipment slots, and source hashes. Partial green catalogs are rejected before project/search; research scenarios remain compatible.
@@ -61,7 +62,8 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - C4-R1 binds Priority mode to `ConsumePackElement.CalculateConsumeCount@0x1385260` and `DoInject@0x1386950`; it is product-accepted at `8bf0b3a77538102c1995dd5943e4a7275664ca0a`. C5 and C6 are product-accepted at `5c713e55ffdc46e5e75e9a4a4dcc1d0366201be0` and `5c5a33a21cce05fbf090af72c783bad475b55656`. C7 freezes switch, shield, heal and trigger interval consumers; direct/Kibo/tuning periodic heals share one event transaction without borrowing stale action tags.
 - C8-R1 verification passes focused source/runtime `8 files / 148 tests`, three-character profile/migration `4 / 26`, canonical/package boundary `3 / 27`, Machine Axis `12 / 157` with a 30-second process-heavy test budget, nine deterministic audits, and production build.
 - C9 verification passes persistent-source/runtime `5 files / 125 tests`, three-character profile/migration `4 / 38`, canonical/runtime/cycle `5 / 52`, Machine Axis `12 / 157`, nine deterministic audits, production build, and `git diff --check`.
-- C10 verification passes source/runtime `5 files / 115 tests`, three-character profile/migration `4 / 34`, canonical/runtime/cycle `5 / 88`, Machine Axis `12 / 157`, nine deterministic audits, production build, and `git diff --check`.
+- C10-R1 verification passes focused source/protocol/runtime `5 files / 121 tests`, the complete optimization-qualification directory `6 / 53`, three-character profile/migration `4 / 34`, canonical/runtime/cycle `5 / 88`, Machine Axis `12 / 157`, nine deterministic audits, production build, and `git diff --check`.
+- C10-R1 replaces the stale count-only set-skill assertion with exact remaining gap keys `set-skill:1:4/3:4/5:4/6:4`, exact runtime-integrated keys `set-skill:2:4/4:4`, and guards for the 12-item denominator, 8 runtime-applied set skills, `386 = 368 + 18`, empty formal admissions, `dnaFactors: []` and the M12-C lock. Its focused command passes `5 / 121`, and the complete optimization-qualification directory passes `6 / 53`.
 - The current standard Machine Axis canonical hashes are `ed57d06444210db0 / 5c21e09cba3bab55 / 40a0e5018a43c3ae / 0b410dc9255d2654`. Input/data/trace identities change with the C8-R1 verified package; evaluation and authoritative numeric assertions remain unchanged.
 - Current optimization-ready counts are zero for all five object kinds. M12-C remains locked.
 - Current maturity is `195 extracted / 70 runtime-integrated`; all five optimization-ready counts remain zero. Blocking gaps are `386` unique (`368 not-implemented`, `18 evidence-insufficient`).
@@ -69,7 +71,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - C7-R2 binds the shared recovery gate to action execution, contextual occupancy, parseable DamageElement recovery fields, exact landed transaction/context identities and recover interval. `DamageElement.RecoverSP@0x138EEE0` is called independently from `AliveElementSystem.ExecuteDamageElement` at `0x1319594` (remote branch `0x1318E52`), so formula-input gaps keep damage unresolved without suppressing verified recovery. Missing/drifted identities, misses, blocked actions and recovery-source gaps fail closed in both runtimes.
 - C7-R3 stores the recovery fields, local/remote callsites, executor/source `isMainControl` gates, `EPlayerNetworkState` semantics, SPSystem dispatch and 11 exact binary ranges in a versioned artifact. The generator revalidates its binary/dump/range hashes and the acceptance report reference. `isMainControl` is local network authority, not the active actor timeline, so production runtime remains unchanged.
 - R3 verification passed: focused evidence/runtime `5 / 119`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, nine deterministic audits, and production build. The accepted R2 canonical/runtime `6 / 72` remains applicable with zero production runtime diff.
-- Status: `B3-C10 verification-complete-awaiting-product-acceptance`.
+- Status: `B3-C10-R1 verification-complete-awaiting-product-reacceptance`.
 
 ## Remaining Blockers
 

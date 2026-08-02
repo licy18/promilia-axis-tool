@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 17,
-  "phase": "M12-B3-C10",
+  "schemaVersion": 18,
+  "phase": "M12-B3-C10-R1",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "bd812d64226a371a55a01981a239e33c318c9e98",
+  "baseCommit": "785cc9b8c20b1cb995b4fe4f565a6e94101f8531",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
   "reviewedC7R2Commit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
@@ -10,11 +10,33 @@
   "reviewedC8Commit": "1b16f2ddcbc3594a2c5de964ff11933d1da37c63",
   "acceptedC8R1Commit": "26a8125b2ca262777ff11b12f37e7d32b68eac91",
   "acceptedC9Commit": "bd812d64226a371a55a01981a239e33c318c9e98",
+  "reviewedC10Commit": "785cc9b8c20b1cb995b4fe4f565a6e94101f8531",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
     "phase": "M12-B3-C9",
     "acceptanceBaseline": "bd812d64226a371a55a01981a239e33c318c9e98",
     "status": "product-accepted"
+  },
+  "r1ProtocolGuard": {
+    "rootCause": "The frozen optimization qualification test still expected all six four-piece set skills to remain dynamic-unapplied after C10 correctly promoted set-skill:2:4 and set-skill:4:4.",
+    "productionMechanicsChanged": false,
+    "remainingDynamicUnappliedSetKeys": [
+      "set-skill:1:4",
+      "set-skill:3:4",
+      "set-skill:5:4",
+      "set-skill:6:4"
+    ],
+    "c10RuntimeIntegratedSetKeys": ["set-skill:2:4", "set-skill:4:4"],
+    "guardedFacts": {
+      "setSkillDenominator": 12,
+      "runtimeAppliedSetSkillCount": 8,
+      "blockingUniqueGapCount": 386,
+      "notImplementedGapCount": 368,
+      "evidenceInsufficientGapCount": 18,
+      "formalAdmissionCount": 0,
+      "m12cLocked": true,
+      "kiboDnaCanonicalValue": []
+    }
   },
   "scope": {
     "batch": "four-piece-before-damage-stacking-properties",
@@ -534,7 +556,12 @@
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 5, "tests": 115, "status": "passed" },
+    "focusedMechanics": { "files": 5, "tests": 121, "status": "passed" },
+    "optimizationQualificationDirectory": {
+      "files": 6,
+      "tests": 53,
+      "status": "passed"
+    },
     "characterProfileAndMigration": {
       "files": 4,
       "tests": 34,
