@@ -7,8 +7,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 12,
-      runtimeUnappliedCount: 62,
+      runtimeAppliedCount: 14,
+      runtimeUnappliedCount: 60,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -131,6 +131,116 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.triggerContract).toEqual(soulCatalog.triggerContract);
   });
 
+  it('compiles EntrySkill 22 and preserves direct versus BuffElement-wrapped lifecycles', () => {
+    const definitions = new Map(
+      soulCatalog.definitions.map(definition => [
+        definition.soulEssenceId,
+        definition,
+      ])
+    );
+
+    expect(soulCatalog.triggerContract.skillTagBindings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          enumName: 'EntrySkill',
+          value: 22,
+          actionKinds: ['star-carry'],
+          status: 'applied',
+          sourceIdentity: expect.stringContaining(
+            'ESkillTagType.EntrySkill=22'
+          ),
+        }),
+      ])
+    );
+    expect(definitions.get(10147)).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      trigger: {
+        elementId: 19001101,
+        condition: {
+          conditions: [
+            expect.objectContaining({
+              kind: 'skill-tag',
+              skillTagId: 22,
+              skillTagName: 'EntrySkill',
+            }),
+          ],
+          status: 'applied',
+        },
+        target: expect.objectContaining({
+          kind: 'self-actor',
+          targetElementPathId: expect.any(Number),
+        }),
+      },
+      effect: {
+        elementId: 19001002,
+        attributeId: 222,
+        durationMs: 6000,
+        leafDurationMs: -1,
+        propertyTags: [301],
+        lifecycle: {
+          sourceKind: 'battle-buff-element-wrapper',
+          durationMs: 6000,
+          wrapper: expect.objectContaining({
+            elementId: 19001001,
+            durationMs: 6000,
+            injectedElementIds: [19001002],
+            sourceIdentity: expect.stringContaining('elementId=19001001'),
+          }),
+          removalPaths: expect.arrayContaining([
+            expect.objectContaining({
+              triggerElementId: 19001105,
+              removerElementId: 19001106,
+            }),
+          ]),
+        },
+        valuesByStar: [
+          expect.objectContaining({ star: 1, valueRaw: 8930 }),
+          expect.objectContaining({ star: 2, valueRaw: 11910 }),
+          expect.objectContaining({ star: 3, valueRaw: 14880 }),
+          expect.objectContaining({ star: 4, valueRaw: 17860 }),
+        ],
+      },
+      runtimeGaps: [],
+      sourceIdentity: expect.stringMatching(
+        /elementId=19001101.*elementId=19001001.*elementId=19001002/u
+      ),
+    });
+    expect(definitions.get(10151)).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      trigger: {
+        elementId: 19001301,
+        condition: {
+          conditions: [
+            expect.objectContaining({
+              skillTagId: 22,
+              skillTagName: 'EntrySkill',
+            }),
+          ],
+        },
+        target: expect.objectContaining({ kind: 'self-actor' }),
+      },
+      effect: {
+        elementId: 19001302,
+        attributeId: 222,
+        durationMs: 10000,
+        leafDurationMs: 10000,
+        propertyTags: [],
+        lifecycle: {
+          sourceKind: 'property-leaf-duration',
+          durationMs: 10000,
+          wrapper: null,
+        },
+        valuesByStar: [
+          expect.objectContaining({ star: 1, valueRaw: 3720 }),
+          expect.objectContaining({ star: 2, valueRaw: 4960 }),
+          expect.objectContaining({ star: 3, valueRaw: 6200 }),
+          expect.objectContaining({ star: 4, valueRaw: 7440 }),
+        ],
+      },
+      runtimeGaps: [],
+    });
+  });
+
   it('keeps threshold activation distinct from set-effect runtime qualification', () => {
     expect(
       soulCatalog.setSkillDefinitions.every(
@@ -192,8 +302,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     });
     expect(
       census.records.find(
-        record =>
-          record.objectKind === 'set-skill' && record.objectId === '1:4'
+        record => record.objectKind === 'set-skill' && record.objectId === '1:4'
       )
     ).toMatchObject({
       resourceTransactions: [
@@ -236,9 +345,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
         }),
       ],
     });
-    expect(census.propertyTagContract).toEqual(
-      soulCatalog.propertyTagContract
-    );
+    expect(census.propertyTagContract).toEqual(soulCatalog.propertyTagContract);
 
     const expectedTagsBySoulEssenceId = new Map([
       [10001, []],
@@ -250,6 +357,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       [10094, [301]],
       [10097, []],
       [10098, [301]],
+      [10147, [301]],
+      [10151, []],
       [10125, []],
       [10154, []],
       [10155, []],

@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "ab1fe6bdba580f21",
+  "rosterHash": "64b1c6784ffb275d",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
         "fcf7e135b22019c8",
-        "ab1fe6bdba580f21"
+        "64b1c6784ffb275d"
       ]
     },
     {
@@ -6553,43 +6553,6 @@
       "gapHash": "66066b9f3d3c7806"
     },
     {
-      "gapIdentity": "soul-essence:10147:soulessence-effect-skill-dynamic-unapplied",
-      "objectKind": "soul-essence",
-      "objectId": "10147",
-      "code": "soulessence-effect-skill-dynamic-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
-      "sourceIdentities": [
-        "generated/soulessences.json#items[id=10147]",
-        "NewTable/soulessence.rows[id=10147]"
-      ],
-      "details": {
-        "skillId": 1900110,
-        "reasons": [
-          "effect-property-duration-unresolved",
-          "effect-skill-tag-condition-operator-unsupported",
-          "effect-trigger-target-unsupported"
-        ]
-      },
-      "gapHash": "9f86f7bd67c42d1b"
-    },
-    {
-      "gapIdentity": "soul-essence:10147:strict-soulessence-cultivation-runtime-partial",
-      "objectKind": "soul-essence",
-      "objectId": "10147",
-      "code": "strict-soulessence-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied.",
-      "sourceIdentities": [
-        "generated/soulessences.json#items[id=10147]",
-        "NewTable/soulessence.rows[id=10147]"
-      ],
-      "details": {},
-      "gapHash": "17db31382e6d9c18"
-    },
-    {
       "gapIdentity": "soul-essence:10147:soulessence-visual-acceptance-not-published",
       "objectKind": "soul-essence",
       "objectId": "10147",
@@ -6705,41 +6668,6 @@
       ],
       "details": {},
       "gapHash": "e8124cc8683f8c80"
-    },
-    {
-      "gapIdentity": "soul-essence:10151:soulessence-effect-skill-dynamic-unapplied",
-      "objectKind": "soul-essence",
-      "objectId": "10151",
-      "code": "soulessence-effect-skill-dynamic-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
-      "sourceIdentities": [
-        "generated/soulessences.json#items[id=10151]",
-        "NewTable/soulessence.rows[id=10151]"
-      ],
-      "details": {
-        "skillId": 1900130,
-        "reasons": [
-          "effect-skill-tag-condition-operator-unsupported"
-        ]
-      },
-      "gapHash": "9b24c092356421db"
-    },
-    {
-      "gapIdentity": "soul-essence:10151:strict-soulessence-cultivation-runtime-partial",
-      "objectKind": "soul-essence",
-      "objectId": "10151",
-      "code": "strict-soulessence-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied.",
-      "sourceIdentities": [
-        "generated/soulessences.json#items[id=10151]",
-        "NewTable/soulessence.rows[id=10151]"
-      ],
-      "details": {},
-      "gapHash": "1b30261c356d2f7a"
     },
     {
       "gapIdentity": "soul-essence:10151:soulessence-visual-acceptance-not-published",
@@ -7352,10 +7280,10 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 446,
+    "blockingUniqueGapCount": 442,
     "byCategory": {
       "evidence-insufficient": 16,
-      "not-implemented": 430
+      "not-implemented": 426
     },
     "byCode": {
       "actor-static-profile-missing": 1,
@@ -7368,18 +7296,18 @@
       "level-breakthrough-skill-unlock-source-mismatch": 1,
       "set-skill-dynamic-unapplied": 12,
       "set-skill-visual-acceptance-not-published": 12,
-      "soulessence-effect-skill-dynamic-unapplied": 50,
+      "soulessence-effect-skill-dynamic-unapplied": 48,
       "soulessence-visual-acceptance-not-published": 62,
       "strict-character-cultivation-runtime-partial": 11,
-      "strict-soulessence-cultivation-runtime-partial": 50
+      "strict-soulessence-cultivation-runtime-partial": 48
     },
     "byObjectKind": {
       "character": 33,
       "equipment": 137,
       "kibo": 90,
       "set-skill": 24,
-      "soul-essence": 162
+      "soul-essence": 158
     }
   },
-  "ledgerHash": "44943aece7e05da0"
+  "ledgerHash": "04a3e6f06609ac86"
 }

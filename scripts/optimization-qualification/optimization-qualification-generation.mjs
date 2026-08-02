@@ -13,7 +13,8 @@ export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
   '2026-08-01T00:00:00.000Z';
 
 export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
-  characters: '4a73f5e393f7410f5af80a811cac604d97ca6bf74ca8e0be66445ca932fb5052',
+  characters:
+    '4a73f5e393f7410f5af80a811cac604d97ca6bf74ca8e0be66445ca932fb5052',
   kibos: '1cca2e3d0d1cb5a0a984164ab0c6b05ef0b6c5416b0e9872f0c8ab36394519c4',
   equipment: 'd718604a7b28f84163c175f7f7d0b4d26f891606bb18acf22939e2ef16eaf593',
   soulessences:
@@ -122,19 +123,13 @@ const CULTIVATION_SOURCE_FILES = Object.freeze([
 
 export async function createOptimizationQualificationArtifacts({
   projectRoot,
-  newTableRoot =
-    'C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable',
-  battleElementAssetsPath =
-    'C:/PC2/Codex/AzPr/work/combat-formulas/battle-element-assets.jsonl',
-  skillControlRoot =
-    'C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList',
-  equipmentInstanceTermsPath =
-    'C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_words.json',
-  il2cppRuntimeContractsPath =
-    'C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs',
+  newTableRoot = 'C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable',
+  battleElementAssetsPath = 'C:/PC2/Codex/AzPr/work/combat-formulas/battle-element-assets.jsonl',
+  skillControlRoot = 'C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList',
+  equipmentInstanceTermsPath = 'C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_words.json',
+  il2cppRuntimeContractsPath = 'C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs',
   heroRankRuntimeEvidencePath = null,
-  gameAssemblyPath =
-    'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
+  gameAssemblyPath = 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
 } = {}) {
   if (!projectRoot) throw new TypeError('projectRoot is required');
   const generatedRoot = path.join(projectRoot, 'src', 'data', 'generated');
@@ -151,10 +146,7 @@ export async function createOptimizationQualificationArtifacts({
       generatedRoot,
       'character-acceptance-catalog.json'
     ),
-    kiboPassives: path.join(
-      generatedRoot,
-      'kibo-passive-mechanics.json'
-    ),
+    kiboPassives: path.join(generatedRoot, 'kibo-passive-mechanics.json'),
     kiboMaturity: path.join(
       projectRoot,
       'reports',
@@ -271,10 +263,8 @@ export async function createOptimizationQualificationArtifacts({
     .map(projectSetSkillRosterRecord);
   const soulEssenceEffects = await createSoulEssenceEffectMechanicsCatalog({
     soulEssences: publicSoulEssences,
-    soulDefinitionRows:
-      sources['newTable:soulessence.json'].value.rows ?? [],
-    skillLogicRows:
-      sources['newTable:skillsub_logic.json'].value.rows ?? [],
+    soulDefinitionRows: sources['newTable:soulessence.json'].value.rows ?? [],
+    skillLogicRows: sources['newTable:skillsub_logic.json'].value.rows ?? [],
     skillElementValueRows:
       sources['newTable:skillsub_ele_value.json'].value.rows ?? [],
     battleElementAssetsPath,
@@ -284,8 +274,7 @@ export async function createOptimizationQualificationArtifacts({
     setSkills,
     propertyTagContract:
       sources.il2cppRuntimeContracts.value.battlePropertyTags,
-    triggerContract:
-      sources.il2cppRuntimeContracts.value.soulEffectTriggers,
+    triggerContract: sources.il2cppRuntimeContracts.value.soulEffectTriggers,
   });
   sources.battleElementAssets = {
     ...soulEssenceEffects.sourceSnapshot.battleElements,
@@ -395,7 +384,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C2',
+      phase: 'M12-B3-C3',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -584,9 +573,7 @@ function createQualificationManifests({
       );
     }
     const skillUnlockGaps = sourceIds.flatMap(characterId =>
-      (
-        cultivationCharacterById.get(characterId)?.levelBreakthroughRanks ?? []
-      )
+      (cultivationCharacterById.get(characterId)?.levelBreakthroughRanks ?? [])
         .filter(
           row => row.skillUnlock?.availabilityStatus === 'static-evidence-gap'
         )
@@ -801,8 +788,7 @@ function createCultivationCatalog({
   publicEquipment,
 }) {
   const talentRows = sources['newTable:pet_talent_upgrade.json'].value.rows;
-  const favorabilityRows =
-    sources['newTable:pet_favorability.json'].value.rows;
+  const favorabilityRows = sources['newTable:pet_favorability.json'].value.rows;
   const talentValues = Object.fromEntries(
     [1, 3, 4, 5].map(attributeId => [
       attributeId,
@@ -934,8 +920,8 @@ function createCultivationCatalog({
         status:
           starLevels.length === 4 &&
           starLevels.every((row, index) => row.star === index + 1)
-            ? item.effectMechanics?.runtimeStatus ??
-              'source-indexed-runtime-unapplied'
+            ? (item.effectMechanics?.runtimeStatus ??
+              'source-indexed-runtime-unapplied')
             : 'static-evidence-gap',
         mechanismFamily: item.effectMechanics?.mechanismFamily ?? null,
         catalogDefinitionHash: item.effectMechanics
@@ -954,10 +940,9 @@ function createCultivationCatalog({
         .map(item => item.equipmentId),
     ])
   );
-  const equipmentScoreFormula =
-    sources['newTable:game.json'].value.rows.find(
-      row => row.title === 'EQUIPMENT_SCORE_FORMULA_PARAM'
-    );
+  const equipmentScoreFormula = sources['newTable:game.json'].value.rows.find(
+    row => row.title === 'EQUIPMENT_SCORE_FORMULA_PARAM'
+  );
   const equipmentScoreFormulaParameters = String(
     equipmentScoreFormula?.value ?? ''
   )
@@ -1019,9 +1004,7 @@ function createCultivationCatalog({
           'table-declaration-separate-from-availability-and-runtime-effect',
         sourceIdentity:
           'NewTable/hero_rank.rankLevelLimit|attribute|skill|scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json',
-        runtimeEvidence: structuredClone(
-          sources.heroRankRuntimeEvidence.value
-        ),
+        runtimeEvidence: structuredClone(sources.heroRankRuntimeEvidence.value),
       },
       profiles: characterProfiles,
     },
@@ -1051,12 +1034,11 @@ function createCultivationCatalog({
       star: { minimum: 1, maximum: 4 },
       profiles: soulEssenceProfiles,
       effectStatus: {
-        status:
-          publicSoulEssences.every(
-            item => item.effectMechanics?.runtimeStatus === 'runtime-applied'
-          )
-            ? 'runtime-applied'
-            : 'partially-runtime-applied',
+        status: publicSoulEssences.every(
+          item => item.effectMechanics?.runtimeStatus === 'runtime-applied'
+        )
+          ? 'runtime-applied'
+          : 'partially-runtime-applied',
         runtimeAppliedCount: publicSoulEssences.filter(
           item => item.effectMechanics?.runtimeStatus === 'runtime-applied'
         ).length,
@@ -1098,8 +1080,7 @@ function createCultivationCatalog({
             ? 'source-indexed-static-runtime-applied'
             : 'evidence-insufficient',
         parameters: equipmentScoreFormulaParameters,
-        expression:
-          'ceil(base*0.85)+ceil(base*0.6*0.0125*(tuningScore-20))',
+        expression: 'ceil(base*0.85)+ceil(base*0.6*0.0125*(tuningScore-20))',
         sourceIdentity:
           'NewTable/game.rows[title=EQUIPMENT_SCORE_FORMULA_PARAM]',
       },
@@ -1107,9 +1088,7 @@ function createCultivationCatalog({
         runtimeFields: structuredClone(
           sources.il2cppRuntimeContracts.value.equipmentInstance
         ),
-        productTerms: structuredClone(
-          sources.equipmentInstanceTerms.value
-        ),
+        productTerms: structuredClone(sources.equipmentInstanceTerms.value),
       },
       instanceTiers: [
         {
@@ -1142,10 +1121,7 @@ function createBindingMatrix({
   manifests,
 }) {
   const manifestByKey = new Map(
-    manifests.map(record => [
-      `${record.objectKind}:${record.objectId}`,
-      record,
-    ])
+    manifests.map(record => [`${record.objectKind}:${record.objectId}`, record])
   );
   const actorKibo = characterObjects.flatMap(actor =>
     targetKibos.map(kibo => ({
@@ -1161,8 +1137,7 @@ function createBindingMatrix({
   );
   const actorSoulEssence = characterObjects.flatMap(actor =>
     publicSoulEssences.map(soul => {
-      const compatible =
-        !soul.profession || soul.profession === actor.position;
+      const compatible = !soul.profession || soul.profession === actor.position;
       return {
         actorObjectId: String(actor.optimizationObjectId),
         soulEssenceId: soul.soulEssenceId,
@@ -1272,7 +1247,9 @@ function createQualificationCatalog({
       )
       .map(record => record.objectId),
     kibos: records
-      .filter(record => record.objectKind === 'kibo' && record.optimizationReady)
+      .filter(
+        record => record.objectKind === 'kibo' && record.optimizationReady
+      )
       .map(record => Number(record.objectId)),
     soulEssences: records
       .filter(
@@ -1337,8 +1314,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C2',
-    status: 'b3-c2-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C3',
+    status: 'b3-c3-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1395,18 +1372,14 @@ function createLevelBreakthroughRanks(
                     : 'source-indexed-separate-runtime-contract',
               ...(!skillBelongsToCharacter
                 ? {
-                    reason:
-                      'hero-rank-skill-id-not-in-character-passive-slots',
-                    expectedPassiveSkillIds: [
-                      ...characterPassiveSkillIds,
-                    ],
+                    reason: 'hero-rank-skill-id-not-in-character-passive-slots',
+                    expectedPassiveSkillIds: [...characterPassiveSkillIds],
                   }
                 : {}),
               ...(productBoundary
                 ? {
                     reason: productBoundary.reason,
-                    productBoundaryIdentity:
-                      productBoundary.boundaryIdentity,
+                    productBoundaryIdentity: productBoundary.boundaryIdentity,
                   }
                 : {}),
             },
@@ -1428,7 +1401,9 @@ function projectCharacterOptimizationObject(character) {
     elements: splitTags(character.element?.abbrName),
     position: character.position?.name ?? null,
     weaponType: character.weaponType?.name ?? null,
-    mechanismHash: hashCanonicalValue(projectCharacterSourceMechanics(character)),
+    mechanismHash: hashCanonicalValue(
+      projectCharacterSourceMechanics(character)
+    ),
     sourceIdentity: `generated/characters.json#items[id=${character.id}]`,
   };
 }
@@ -1562,7 +1537,8 @@ function qualificationRecord({
     displayName,
     sourceIdentities,
     maturityState,
-    optimizationReady: blockers.length === 0 && maturityState === 'optimization-ready',
+    optimizationReady:
+      blockers.length === 0 && maturityState === 'optimization-ready',
     blockers,
     evidence,
   };
@@ -1651,9 +1627,8 @@ function createImplementationCapabilities({
       capabilityIdentity: 'b3-kibo-four-talent-source-mapping',
       status: 'implemented',
       evidence: [
-        cultivationCatalog.kibo.talentValues['1'].find(
-          row => row.level === 10
-        ).sourceIdentity,
+        cultivationCatalog.kibo.talentValues['1'].find(row => row.level === 10)
+          .sourceIdentity,
       ],
     },
     {
@@ -1772,7 +1747,8 @@ function createSourceSnapshot(sources) {
 function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
-  return '# M12-B3-C2 Dynamic Loadout Effect Family Closure\n\n' +
+  return (
+    '# M12-B3-C3 Entry Skill Wrapper Effect Closure\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1781,10 +1757,11 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098. C2 additionally compiles verified OR skill-slot/skill-tag selectors, trigger-effect AllHero targets, and Q16.16 point formulas for 10055/10093 ultimate-end team buffs plus the 10097 limit-counter-start self buff. Soul essence 10018 remains blocked by its outer tuning-mark prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
+    '- Dynamic loadout batches: leaf defaultPropertyTags remain source-bound effect scope for 10060/10094/10098; C2 compiles verified ultimate and limit-counter effects. C3 adds source-bound EntrySkill(22) switch provenance for 10147/10151, preserves the 19001001 wrapper lifetime and unload path, and keeps non-entry or blocked actions from triggering. Soul essence 10018 remains blocked by its outer tuning-mark prerequisite; all 12 set-skill thresholds are source-indexed separately from their still-unapplied runtime effects.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
-    '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n';
+    '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'
+  );
 }
 
 async function readSource(sourcePath, projectRoot) {
@@ -1801,10 +1778,11 @@ async function readEquipmentInstanceTermsSource(sourcePath, projectRoot) {
   const bytes = await fs.readFile(sourcePath);
   const text = bytes.toString('utf8');
   const sourceId = '-2424279961521123336';
-  const value =
-    '缘星装备固定拥有110的同调评分上限，普通装备上限最多为100';
+  const value = '缘星装备固定拥有110的同调评分上限，普通装备上限最多为100';
   if (!text.includes(`"id": ${sourceId}`) || !text.includes(value)) {
-    throw new Error('optimization-qualification-equipment-instance-terms-missing');
+    throw new Error(
+      'optimization-qualification-equipment-instance-terms-missing'
+    );
   }
   return {
     path: normalizeSourcePath(sourcePath, projectRoot),
@@ -1859,6 +1837,10 @@ async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
     namespace: 'Lens.Gameplay.Modules.BigWorld',
     declaration: 'public enum ETriggerEffectTargetType',
   });
+  const buffElementParamsBlock = extractIl2CppTypeBlock(text, {
+    namespace: 'Lens.Gameplay.Modules.BigWorld.Config',
+    declaration: 'public class TBuffElementParams : TElementParams',
+  });
   const battlePropertyTags = createBattlePropertyTagContract({
     sourcePath: normalizeSourcePath(sourcePath, projectRoot),
     skillTagBlock,
@@ -1871,6 +1853,7 @@ async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
     triggerConditionLogicBlock,
     triggerFixedConditionBlock,
     triggerEffectTargetBlock,
+    buffElementParamsBlock,
   });
   const heroRuntimeDeclarations = {
     fields: ['public int lv;', 'public int heroRank;'].map(declaration => ({
@@ -1901,7 +1884,8 @@ async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
           'private void RefreshHeroSkill(AttrModuleInfo info, bool isBattle = False) { }',
       }),
       createIl2CppMethodRecord({
-        identity: 'Azur.Gameplay.PlayerModule.AttrModuleInfo..ctor(HeroAttrInfo)',
+        identity:
+          'Azur.Gameplay.PlayerModule.AttrModuleInfo..ctor(HeroAttrInfo)',
         typeBlock: attrModuleInfoBlock,
         declaration: 'public void .ctor(HeroAttrInfo info) { }',
       }),
@@ -1964,6 +1948,7 @@ function createSoulEffectTriggerContract({
   triggerConditionLogicBlock,
   triggerFixedConditionBlock,
   triggerEffectTargetBlock,
+  buffElementParamsBlock,
 }) {
   const logicBindings = [
     { value: 0, enumName: 'AND', runtimeLogic: 'and' },
@@ -2040,9 +2025,10 @@ function createSoulEffectTriggerContract({
     ['ExtremityAttack', 11, 'limit-counter', '角色极限反击'],
     ['PerfectDodge', 12, 'perfect-parry', '角色完美闪避'],
     ['HeroJointStrikeSkill', 17, 'star-combo', '角色合击技能'],
+    ['EntrySkill', 22, 'star-carry', '角色入场技', 'switch-triggered-on-enter'],
   ];
   const skillTagBindings = skillTagDeclarations.map(
-    ([enumName, value, actionKind, description]) => {
+    ([enumName, value, actionKind, description, provenanceRequirement]) => {
       assertIl2CppEnumMember({
         block: skillTagBlock,
         enumName: 'ESkillTagType',
@@ -2054,6 +2040,7 @@ function createSoulEffectTriggerContract({
         value,
         enumName,
         actionKinds: [actionKind],
+        provenanceRequirement: provenanceRequirement ?? null,
         status: 'applied',
         sourceIdentity: `${sourcePath}#ESkillTagType.${enumName}=${value}`,
       };
@@ -2102,8 +2089,39 @@ function createSoulEffectTriggerContract({
     skillSlotBindings,
     skillTagBindings,
     targetBindings,
+    buffElementWrapper: createBuffElementWrapperContract({
+      sourcePath,
+      buffElementParamsBlock,
+    }),
   };
   return { ...value, contractHash: hashCanonicalValue(value) };
+}
+
+function createBuffElementWrapperContract({
+  sourcePath,
+  buffElementParamsBlock,
+}) {
+  const fields = [
+    'public int time;',
+    'public List<TElementParams> injectElementDataList;',
+    'public List<TElementParams> notDelElementDataList;',
+  ].map(declaration => ({
+    declaration,
+    present: buffElementParamsBlock.includes(declaration),
+  }));
+  if (fields.some(field => !field.present)) {
+    throw new Error('soulessence-buff-element-wrapper-contract-incomplete');
+  }
+  return {
+    runtimeType: 'TBuffElementParams',
+    elementType: 'BuffElement',
+    durationField: 'time',
+    attachedChildrenField: 'injectElementDataList',
+    detachedChildrenField: 'notDelElementDataList',
+    fields,
+    status: 'applied',
+    sourceIdentity: `${sourcePath}#TBuffElementParams.time|injectElementDataList|notDelElementDataList`,
+  };
 }
 
 function createBattlePropertyTagContract({
@@ -2214,7 +2232,10 @@ function assertIl2CppEnumMember({
       `optimization-qualification-il2cpp-enum-member-missing:${enumName}.${memberName}=${value}`
     );
   }
-  if (description != null && !block.includes(`[Description("${description}")]`)) {
+  if (
+    description != null &&
+    !block.includes(`[Description("${description}")]`)
+  ) {
     throw new Error(
       `optimization-qualification-il2cpp-enum-description-missing:${enumName}.${memberName}`
     );
@@ -2561,10 +2582,12 @@ function groupBy(records, selector) {
 
 function countBy(records, selector) {
   return Object.fromEntries(
-    [...records.reduce((map, record) => {
-      const key = String(selector(record));
-      map.set(key, (map.get(key) ?? 0) + 1);
-      return map;
-    }, new Map())].sort(([left], [right]) => left.localeCompare(right, 'en'))
+    [
+      ...records.reduce((map, record) => {
+        const key = String(selector(record));
+        map.set(key, (map.get(key) ?? 0) + 1);
+        return map;
+      }, new Map()),
+    ].sort(([left], [right]) => left.localeCompare(right, 'en'))
   );
 }

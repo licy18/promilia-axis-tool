@@ -47,9 +47,10 @@ function createCultivationProfile({
     profileId: 'm12-b3-strict-profile-test',
     actors: ['slot-1', 'slot-2', 'slot-3'].map((slotId, index) => {
       const characterId = TEST_CHARACTER_IDS[index];
-      const sourceProfile = qualificationCatalog.cultivation.character.profiles.find(
-        entry => Number(entry.characterId) === characterId
-      );
+      const sourceProfile =
+        qualificationCatalog.cultivation.character.profiles.find(
+          entry => Number(entry.characterId) === characterId
+        );
       const sourceRank = sourceProfile?.starGiftRanks.find(
         entry => Number(entry.rank) === Number(starGiftRank)
       );
@@ -64,38 +65,41 @@ function createCultivationProfile({
           starGiftNodeIds: selectedNodeIds,
           levelBreakthroughRank,
         },
-      kibo: {
-        level: 80,
-        talents: [1, 3, 4, 5].map(attributeId => ({
-          attributeId,
-          level: 10,
-        })),
-        dnaFactors: structuredClone(dnaFactors),
-        bondLevel,
-      },
-      soulEssence: {
-        level: soulEssenceLevel,
-        rank: soulEssenceRank,
-        star: soulEssenceStar,
-      },
-      equipment: Object.fromEntries(
-        ['weapon', 'top', 'bottom', 'earring', 'ring'].map(equipmentSlot => [
-          equipmentSlot,
-          {
-            rarity: 4,
-            enhancementLevel,
-            tuningScore,
-            instanceTier: equipmentInstanceTier,
-            maxValue: equipmentMaxValue,
-          },
-        ])
-      ),
+        kibo: {
+          level: 80,
+          talents: [1, 3, 4, 5].map(attributeId => ({
+            attributeId,
+            level: 10,
+          })),
+          dnaFactors: structuredClone(dnaFactors),
+          bondLevel,
+        },
+        soulEssence: {
+          level: soulEssenceLevel,
+          rank: soulEssenceRank,
+          star: soulEssenceStar,
+        },
+        equipment: Object.fromEntries(
+          ['weapon', 'top', 'bottom', 'earring', 'ring'].map(equipmentSlot => [
+            equipmentSlot,
+            {
+              rarity: 4,
+              enhancementLevel,
+              tuningScore,
+              instanceTier: equipmentInstanceTier,
+              maxValue: equipmentMaxValue,
+            },
+          ])
+        ),
       };
     }),
   };
 }
 
-function createAxis({ profile = createCultivationProfile(), mode = 'research' } = {}) {
+function createAxis({
+  profile = createCultivationProfile(),
+  mode = 'research',
+} = {}) {
   const equipmentRecords = equipmentCatalog.items.filter(
     record => record.rarity === '4星'
   );
@@ -155,320 +159,307 @@ function createAxis({ profile = createCultivationProfile(), mode = 'research' } 
 }
 
 describe('M12-B3 optimization qualification generation', () => {
-  it(
-    'recomputes the frozen 11/43/62/137/12 roster and honest blockers',
-    async () => {
-      const artifacts = await createOptimizationQualificationArtifacts({
-        projectRoot,
-      });
+  it('recomputes the frozen 11/43/62/137/12 roster and honest blockers', async () => {
+    const artifacts = await createOptimizationQualificationArtifacts({
+      projectRoot,
+    });
 
-      expect(artifacts.summary.denominators).toEqual({
-        characterOptimizationObjects: 11,
-        sourceCharacterAliases: 12,
-        kibos: 43,
-        soulEssences: 62,
-        equipment: 137,
-        setSkills: 12,
-      });
-      expect(artifacts.roster.starborn).toMatchObject({
-        sourceCharacterIds: [199001, 199002],
-        aliasHashesEqual: true,
-      });
-      expect(artifacts.catalog.admission).toEqual({
-        characters: [],
-        kibos: [],
-        soulEssences: [],
-        equipment: [],
-        setSkills: [],
-      });
+    expect(artifacts.summary.denominators).toEqual({
+      characterOptimizationObjects: 11,
+      sourceCharacterAliases: 12,
+      kibos: 43,
+      soulEssences: 62,
+      equipment: 137,
+      setSkills: 12,
+    });
+    expect(artifacts.roster.starborn).toMatchObject({
+      sourceCharacterIds: [199001, 199002],
+      aliasHashesEqual: true,
+    });
+    expect(artifacts.catalog.admission).toEqual({
+      characters: [],
+      kibos: [],
+      soulEssences: [],
+      equipment: [],
+      setSkills: [],
+    });
+    expect(
+      artifacts.gaps.records.filter(
+        record => record.code === 'soulessence-effect-skill-dynamic-unapplied'
+      )
+    ).toHaveLength(48);
+    expect(
+      artifacts.manifests.records.filter(
+        record =>
+          record.objectKind === 'soul-essence' &&
+          record.maturityState === 'runtime-integrated'
+      )
+    ).toHaveLength(14);
+    expect(
+      artifacts.gaps.records.filter(
+        record => record.code === 'set-skill-dynamic-unapplied'
+      )
+    ).toHaveLength(12);
+    expect(
+      artifacts.gaps.records.filter(
+        record => record.code === 'kibo-passive-static-evidence-gap'
+      )
+    ).toHaveLength(4);
+    expect(artifacts.catalog.cultivation.equipment.tuningFormula).toEqual({
+      status: 'source-indexed-static-runtime-applied',
+      parameters: [8500, 6000, 125, 200000],
+      expression: 'ceil(base*0.85)+ceil(base*0.6*0.0125*(tuningScore-20))',
+      sourceIdentity: 'NewTable/game.rows[title=EQUIPMENT_SCORE_FORMULA_PARAM]',
+    });
+    expect(artifacts.catalog.cultivation.kibo.dnaFactors).toEqual({
+      status: 'not-applicable',
+      reason: 'kibo-dna-out-of-scope-current-version',
+      normalizedValue: [],
+      acceptedInput: 'empty-only',
+      nonEmptyInputCode:
+        'machine-axis-cultivation-kibo-dna-unsupported-in-current-version',
+    });
+    expect(artifacts.roster.productScope.kiboDna).toEqual({
+      status: 'not-applicable',
+      reason: 'kibo-dna-out-of-scope-current-version',
+      canonicalValue: [],
+    });
+    expect(
+      artifacts.manifests.records.flatMap(record => record.blockers)
+    ).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: expect.stringContaining('dna') }),
+      ])
+    );
+    expect(
+      artifacts.gaps.records.some(record => String(record.code).includes('dna'))
+    ).toBe(false);
+    const { fixedProfileHash, ...fixedOptimizationProfile } =
+      artifacts.catalog.cultivation.fixedOptimizationProfile;
+    expect(fixedOptimizationProfile).toEqual({
+      character: {
+        level: 80,
+        starGiftRank: 7,
+        completedStarGiftAttributeRank: 6,
+        currentRankNodeSelection: 'all',
+        levelBreakthroughRank: 3,
+      },
+      kibo: {
+        level: 80,
+        talentLevelsByAttributeId: { 1: 10, 3: 10, 4: 10, 5: 10 },
+        resolvedTalentValuesByAttributeId: { 1: 120, 3: 120, 4: 120, 5: 120 },
+        bondLevel: 1,
+        inheritanceBasisPoints: 900,
+        dnaFactors: [],
+      },
+      soulEssence: { level: 80, rank: 6, star: 1 },
+      equipment: {
+        rarity: 4,
+        enhancementLevel: 9,
+        tuningScore: 110,
+        instanceTier: 'starborn',
+        bGoldSide: true,
+        maxValue: 110,
+      },
+      optimizationEnumeratedDimensions: [],
+    });
+    expect(fixedProfileHash).toBe(hashCanonicalValue(fixedOptimizationProfile));
+    expect(
+      artifacts.catalog.cultivation.character.levelBreakthrough
+    ).toMatchObject({
+      status: 'source-indexed-legality-applied-runtime-evidence-required',
+      levelTemplateIncludesBreakthroughAttributes: null,
+      applicationMode: 'unresolved',
+      attributeApplicationStatus: 'runtime-evidence-required',
+    });
+    expect(artifacts.catalog.cultivation.character.profiles).toHaveLength(12);
+    for (const profile of artifacts.catalog.cultivation.character.profiles) {
+      expect(profile.levelBreakthroughRanks).toHaveLength(6);
       expect(
-        artifacts.gaps.records.filter(
-          record =>
-            record.code === 'soulessence-effect-skill-dynamic-unapplied'
+        profile.levelBreakthroughRanks.every(
+          row =>
+            row.runtimeApplicationStatus ===
+            'source-indexed-legality-applied-attributes-unapplied'
         )
-      ).toHaveLength(50);
-      expect(
-        artifacts.manifests.records.filter(
-          record =>
-            record.objectKind === 'soul-essence' &&
-            record.maturityState === 'runtime-integrated'
-        )
-      ).toHaveLength(12);
-      expect(
-        artifacts.gaps.records.filter(
-          record => record.code === 'set-skill-dynamic-unapplied'
-        )
-      ).toHaveLength(12);
-      expect(
-        artifacts.gaps.records.filter(
-          record => record.code === 'kibo-passive-static-evidence-gap'
-        )
-      ).toHaveLength(4);
-      expect(artifacts.catalog.cultivation.equipment.tuningFormula).toEqual({
-        status: 'source-indexed-static-runtime-applied',
-        parameters: [8500, 6000, 125, 200000],
-        expression:
-          'ceil(base*0.85)+ceil(base*0.6*0.0125*(tuningScore-20))',
-        sourceIdentity:
-          'NewTable/game.rows[title=EQUIPMENT_SCORE_FORMULA_PARAM]',
-      });
-      expect(artifacts.catalog.cultivation.kibo.dnaFactors).toEqual({
-        status: 'not-applicable',
-        reason: 'kibo-dna-out-of-scope-current-version',
-        normalizedValue: [],
-        acceptedInput: 'empty-only',
-        nonEmptyInputCode:
-          'machine-axis-cultivation-kibo-dna-unsupported-in-current-version',
-      });
-      expect(artifacts.roster.productScope.kiboDna).toEqual({
-        status: 'not-applicable',
-        reason: 'kibo-dna-out-of-scope-current-version',
-        canonicalValue: [],
-      });
-      expect(
-        artifacts.manifests.records.flatMap(record => record.blockers)
-      ).not.toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({ code: expect.stringContaining('dna') }),
-        ])
-      );
-      expect(
-        artifacts.gaps.records.some(record =>
-          String(record.code).includes('dna')
-        )
-      ).toBe(false);
-      const {
-        fixedProfileHash,
-        ...fixedOptimizationProfile
-      } = artifacts.catalog.cultivation.fixedOptimizationProfile;
-      expect(fixedOptimizationProfile).toEqual({
-        character: {
-          level: 80,
-          starGiftRank: 7,
-          completedStarGiftAttributeRank: 6,
-          currentRankNodeSelection: 'all',
-          levelBreakthroughRank: 3,
-        },
-        kibo: {
-          level: 80,
-          talentLevelsByAttributeId: { 1: 10, 3: 10, 4: 10, 5: 10 },
-          resolvedTalentValuesByAttributeId: { 1: 120, 3: 120, 4: 120, 5: 120 },
-          bondLevel: 1,
-          inheritanceBasisPoints: 900,
-          dnaFactors: [],
-        },
-        soulEssence: { level: 80, rank: 6, star: 1 },
-        equipment: {
-          rarity: 4,
-          enhancementLevel: 9,
-          tuningScore: 110,
-          instanceTier: 'starborn',
-          bGoldSide: true,
-          maxValue: 110,
-        },
-        optimizationEnumeratedDimensions: [],
-      });
-      expect(fixedProfileHash).toBe(
-        hashCanonicalValue(fixedOptimizationProfile)
-      );
-      expect(artifacts.catalog.cultivation.character.levelBreakthrough).toMatchObject({
-        status: 'source-indexed-legality-applied-runtime-evidence-required',
-        levelTemplateIncludesBreakthroughAttributes: null,
-        applicationMode: 'unresolved',
-        attributeApplicationStatus: 'runtime-evidence-required',
-      });
-      expect(artifacts.catalog.cultivation.character.profiles).toHaveLength(12);
-      for (const profile of artifacts.catalog.cultivation.character.profiles) {
-        expect(profile.levelBreakthroughRanks).toHaveLength(6);
-        expect(
-          profile.levelBreakthroughRanks.every(
-            row =>
-              row.runtimeApplicationStatus ===
-              'source-indexed-legality-applied-attributes-unapplied'
-          )
-        ).toBe(true);
-      }
-      expect(
-        artifacts.manifests.records
-          .filter(record => record.objectKind === 'character')
-          .every(record =>
-            record.blockers.some(
-              blocker =>
-                blocker.code ===
-                  'strict-character-cultivation-runtime-partial' &&
-                blocker.category === 'evidence-insufficient'
-            )
-          )
       ).toBe(true);
-      const mismatchedUnlockProfile =
-        artifacts.catalog.cultivation.character.profiles.find(
-          profile => profile.characterId === 112001
-        );
-      expect(
-        mismatchedUnlockProfile.levelBreakthroughRanks
-          .filter(row => row.unlockedSkillId)
-          .map(row => row.skillUnlock)
-      ).toEqual([
-        expect.objectContaining({
-          skillId: 10300261,
-          declarationStatus: 'source-indexed-table-declaration',
-          availabilityStatus: 'static-evidence-gap',
-          effectRuntimeStatus: 'static-evidence-gap',
-          expectedPassiveSkillIds: expect.arrayContaining([11200161]),
-        }),
-        expect.objectContaining({
-          skillId: 10300262,
-          declarationStatus: 'source-indexed-table-declaration',
-          availabilityStatus: 'static-evidence-gap',
-          effectRuntimeStatus: 'static-evidence-gap',
-          expectedPassiveSkillIds: expect.arrayContaining([11200162]),
-        }),
-      ]);
-      expect(
-        artifacts.manifests.records.find(
-          record =>
-            record.objectKind === 'character' && record.objectId === '112001'
-        ).blockers
-      ).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            code: 'level-breakthrough-skill-unlock-source-mismatch',
-            category: 'evidence-insufficient',
-          }),
-        ])
+    }
+    expect(
+      artifacts.manifests.records
+        .filter(record => record.objectKind === 'character')
+        .every(record =>
+          record.blockers.some(
+            blocker =>
+              blocker.code === 'strict-character-cultivation-runtime-partial' &&
+              blocker.category === 'evidence-insufficient'
+          )
+        )
+    ).toBe(true);
+    const mismatchedUnlockProfile =
+      artifacts.catalog.cultivation.character.profiles.find(
+        profile => profile.characterId === 112001
       );
-      expect(
-        artifacts.roster.sourceSnapshot.files.il2cppRuntimeContracts
-      ).toMatchObject({
-        sha256:
-          '0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a',
-      });
-      expect(
-        artifacts.roster.sourceSnapshot.files.heroRankRuntimeEvidence
-      ).toMatchObject({
-        value: {
-          reviewedBinary: {
-            sha256:
-              'c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b',
-          },
-          methodBodyObservations: expect.arrayContaining([
-            expect.objectContaining({
-              identity:
-                'Azur.Gameplay.PlayerModule.HeroData.Populate(HeroAttrInfo)',
-              rva: '0x2458520',
-              callEdges: expect.arrayContaining([
-                expect.objectContaining({
-                  target:
-                    'Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes',
-                  targetRva: '0x2458C00',
-                }),
-              ]),
-            }),
-            expect.objectContaining({
-              identity:
-                'Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes',
-              rva: '0x2458C00',
-              rankTableLookupObserved: false,
-            }),
-          ]),
-          adjacentRankCapture: {
-            status: 'not-captured',
-            captureIdentity: null,
-            comparisons: [],
-          },
-          conclusion: {
-            attributeApplicationStatus: 'runtime-evidence-required',
-            levelTemplateIncludesBreakthroughAttributes: 'unresolved',
-            applicationMode: 'unresolved',
-          },
+    expect(
+      mismatchedUnlockProfile.levelBreakthroughRanks
+        .filter(row => row.unlockedSkillId)
+        .map(row => row.skillUnlock)
+    ).toEqual([
+      expect.objectContaining({
+        skillId: 10300261,
+        declarationStatus: 'source-indexed-table-declaration',
+        availabilityStatus: 'static-evidence-gap',
+        effectRuntimeStatus: 'static-evidence-gap',
+        expectedPassiveSkillIds: expect.arrayContaining([11200161]),
+      }),
+      expect.objectContaining({
+        skillId: 10300262,
+        declarationStatus: 'source-indexed-table-declaration',
+        availabilityStatus: 'static-evidence-gap',
+        effectRuntimeStatus: 'static-evidence-gap',
+        expectedPassiveSkillIds: expect.arrayContaining([11200162]),
+      }),
+    ]);
+    expect(
+      artifacts.manifests.records.find(
+        record =>
+          record.objectKind === 'character' && record.objectId === '112001'
+      ).blockers
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'level-breakthrough-skill-unlock-source-mismatch',
+          category: 'evidence-insufficient',
+        }),
+      ])
+    );
+    expect(
+      artifacts.roster.sourceSnapshot.files.il2cppRuntimeContracts
+    ).toMatchObject({
+      sha256:
+        '0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a',
+    });
+    expect(
+      artifacts.roster.sourceSnapshot.files.heroRankRuntimeEvidence
+    ).toMatchObject({
+      value: {
+        reviewedBinary: {
+          sha256:
+            'c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b',
         },
-      });
-      expect(
-        artifacts.roster.sourceSnapshot.files.equipmentInstanceTerms
-      ).toMatchObject({
-        sha256:
-          '4b5ddb03534713fcecbbc41c911c88a3eb57c5f6f3d06cc68a7c3f08f39c34b7',
-      });
-      expect(artifacts.catalog.cultivation.equipment.tuningScore).toMatchObject({
-        ordinaryMaximum: 100,
-        starbornMaximum: 110,
-        status: 'source-indexed-instance-runtime-applied',
-      });
-      expect(artifacts.catalog.cultivation.equipment.instanceTiers).toEqual(
-        expect.arrayContaining([
+        methodBodyObservations: expect.arrayContaining([
           expect.objectContaining({
-            identity: 'normal',
-            bGoldSide: false,
-            maximum: 100,
+            identity:
+              'Azur.Gameplay.PlayerModule.HeroData.Populate(HeroAttrInfo)',
+            rva: '0x2458520',
+            callEdges: expect.arrayContaining([
+              expect.objectContaining({
+                target: 'Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes',
+                targetRva: '0x2458C00',
+              }),
+            ]),
           }),
           expect.objectContaining({
-            identity: 'starborn',
-            bGoldSide: true,
-            maximum: 110,
-          }),
-        ])
-      );
-      expect(
-        artifacts.gaps.records.some(record =>
-          [
-            'strict-equipment-cultivation-runtime-partial',
-            'equipment-instance-tier-source-evidence-missing',
-          ].includes(record.code)
-        )
-      ).toBe(false);
-      expect(
-        artifacts.gaps.records.filter(
-          record =>
-            record.code === 'strict-character-cultivation-runtime-partial'
-        )
-      ).toHaveLength(11);
-      expect(artifacts.catalog.cultivation.soulEssence).toMatchObject({
-        star: { minimum: 1, maximum: 4 },
-        profiles: expect.arrayContaining([
-          expect.objectContaining({
-            soulEssenceId: 10001,
-            effectSkill: expect.objectContaining({
-              skillId: 1900480,
-              starLevels: [
-                expect.objectContaining({ star: 1, skillLevel: 1 }),
-                expect.objectContaining({ star: 2, skillLevel: 2 }),
-                expect.objectContaining({ star: 3, skillLevel: 3 }),
-                expect.objectContaining({ star: 4, skillLevel: 4 }),
-              ],
-            }),
+            identity: 'Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes',
+            rva: '0x2458C00',
+            rankTableLookupObserved: false,
           }),
         ]),
-      });
-      expect(artifacts.gaps.implementedCapabilities).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            capabilityIdentity: 'b3-equipment-tuning-formula-source-index',
-            status: 'implemented',
+        adjacentRankCapture: {
+          status: 'not-captured',
+          captureIdentity: null,
+          comparisons: [],
+        },
+        conclusion: {
+          attributeApplicationStatus: 'runtime-evidence-required',
+          levelTemplateIncludesBreakthroughAttributes: 'unresolved',
+          applicationMode: 'unresolved',
+        },
+      },
+    });
+    expect(
+      artifacts.roster.sourceSnapshot.files.equipmentInstanceTerms
+    ).toMatchObject({
+      sha256:
+        '4b5ddb03534713fcecbbc41c911c88a3eb57c5f6f3d06cc68a7c3f08f39c34b7',
+    });
+    expect(artifacts.catalog.cultivation.equipment.tuningScore).toMatchObject({
+      ordinaryMaximum: 100,
+      starbornMaximum: 110,
+      status: 'source-indexed-instance-runtime-applied',
+    });
+    expect(artifacts.catalog.cultivation.equipment.instanceTiers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          identity: 'normal',
+          bGoldSide: false,
+          maximum: 100,
+        }),
+        expect.objectContaining({
+          identity: 'starborn',
+          bGoldSide: true,
+          maximum: 110,
+        }),
+      ])
+    );
+    expect(
+      artifacts.gaps.records.some(record =>
+        [
+          'strict-equipment-cultivation-runtime-partial',
+          'equipment-instance-tier-source-evidence-missing',
+        ].includes(record.code)
+      )
+    ).toBe(false);
+    expect(
+      artifacts.gaps.records.filter(
+        record => record.code === 'strict-character-cultivation-runtime-partial'
+      )
+    ).toHaveLength(11);
+    expect(artifacts.catalog.cultivation.soulEssence).toMatchObject({
+      star: { minimum: 1, maximum: 4 },
+      profiles: expect.arrayContaining([
+        expect.objectContaining({
+          soulEssenceId: 10001,
+          effectSkill: expect.objectContaining({
+            skillId: 1900480,
+            starLevels: [
+              expect.objectContaining({ star: 1, skillLevel: 1 }),
+              expect.objectContaining({ star: 2, skillLevel: 2 }),
+              expect.objectContaining({ star: 3, skillLevel: 3 }),
+              expect.objectContaining({ star: 4, skillLevel: 4 }),
+            ],
           }),
-          expect.objectContaining({
-            capabilityIdentity: 'b3-formal-catalog-hard-rejection',
-            status: 'implemented',
-          }),
-          expect.objectContaining({
-            capabilityIdentity: 'b3-hero-rank-legality-and-evidence-boundary',
-            status: 'implemented',
-          }),
-          expect.objectContaining({
-            capabilityIdentity: 'b3-equipment-instance-tier-runtime',
-            status: 'implemented',
-          }),
-        ])
-      );
-    },
-    30_000
-  );
+        }),
+      ]),
+    });
+    expect(artifacts.gaps.implementedCapabilities).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          capabilityIdentity: 'b3-equipment-tuning-formula-source-index',
+          status: 'implemented',
+        }),
+        expect.objectContaining({
+          capabilityIdentity: 'b3-formal-catalog-hard-rejection',
+          status: 'implemented',
+        }),
+        expect.objectContaining({
+          capabilityIdentity: 'b3-hero-rank-legality-and-evidence-boundary',
+          status: 'implemented',
+        }),
+        expect.objectContaining({
+          capabilityIdentity: 'b3-equipment-instance-tier-runtime',
+          status: 'implemented',
+        }),
+      ])
+    );
+  }, 30_000);
 
   it('rejects catalog tampering even when an admission row is manually added', () => {
     const tampered = structuredClone(qualificationCatalog);
-    tampered.records.find(record => record.objectKind === 'character').optimizationReady =
-      true;
+    tampered.records.find(
+      record => record.objectKind === 'character'
+    ).optimizationReady = true;
     tampered.admission.characters.push(
-      tampered.records.find(record => record.objectKind === 'character').objectId
+      tampered.records.find(record => record.objectKind === 'character')
+        .objectId
     );
 
     expect(validateOptimizationQualificationCatalog(tampered)).toMatchObject({
@@ -479,65 +470,61 @@ describe('M12-B3 optimization qualification generation', () => {
     });
   });
 
-  it(
-    'rejects hero-rank evidence records missing a critical call edge or capture boundary',
-    async () => {
-      const sourcePath = path.join(
-        projectRoot,
-        'scripts',
-        'optimization-qualification',
-        'evidence',
-        'hero-rank-runtime-evidence.json'
-      );
-      const source = JSON.parse(await fs.readFile(sourcePath, 'utf8'));
-      const tempRoot = await fs.mkdtemp(
-        path.join(os.tmpdir(), 'azpr-hero-rank-evidence-')
-      );
-      try {
-        const missingCall = structuredClone(source);
-        missingCall.methodBodyObservations[0].callEdges =
-          missingCall.methodBodyObservations[0].callEdges.filter(
-            edge =>
-              edge.target !==
-              'Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes'
-          );
-        const missingCallPath = path.join(tempRoot, 'missing-call.json');
-        await fs.writeFile(
-          missingCallPath,
-          `${JSON.stringify(missingCall, null, 2)}\n`,
-          'utf8'
+  it('rejects hero-rank evidence records missing a critical call edge or capture boundary', async () => {
+    const sourcePath = path.join(
+      projectRoot,
+      'scripts',
+      'optimization-qualification',
+      'evidence',
+      'hero-rank-runtime-evidence.json'
+    );
+    const source = JSON.parse(await fs.readFile(sourcePath, 'utf8'));
+    const tempRoot = await fs.mkdtemp(
+      path.join(os.tmpdir(), 'azpr-hero-rank-evidence-')
+    );
+    try {
+      const missingCall = structuredClone(source);
+      missingCall.methodBodyObservations[0].callEdges =
+        missingCall.methodBodyObservations[0].callEdges.filter(
+          edge =>
+            edge.target !==
+            'Azur.Gameplay.PlayerModule.HeroData.RefreshAttributes'
         );
-        await expect(
-          createOptimizationQualificationArtifacts({
-            projectRoot,
-            heroRankRuntimeEvidencePath: missingCallPath,
-          })
-        ).rejects.toThrow(
-          'optimization-qualification-hero-rank-evidence-call-edge-missing'
-        );
+      const missingCallPath = path.join(tempRoot, 'missing-call.json');
+      await fs.writeFile(
+        missingCallPath,
+        `${JSON.stringify(missingCall, null, 2)}\n`,
+        'utf8'
+      );
+      await expect(
+        createOptimizationQualificationArtifacts({
+          projectRoot,
+          heroRankRuntimeEvidencePath: missingCallPath,
+        })
+      ).rejects.toThrow(
+        'optimization-qualification-hero-rank-evidence-call-edge-missing'
+      );
 
-        const missingCaptureBoundary = structuredClone(source);
-        delete missingCaptureBoundary.adjacentRankCapture;
-        const missingCapturePath = path.join(tempRoot, 'missing-capture.json');
-        await fs.writeFile(
-          missingCapturePath,
-          `${JSON.stringify(missingCaptureBoundary, null, 2)}\n`,
-          'utf8'
-        );
-        await expect(
-          createOptimizationQualificationArtifacts({
-            projectRoot,
-            heroRankRuntimeEvidencePath: missingCapturePath,
-          })
-        ).rejects.toThrow(
-          'optimization-qualification-hero-rank-evidence-capture-boundary-missing'
-        );
-      } finally {
-        await fs.rm(tempRoot, { recursive: true, force: true });
-      }
-    },
-    30_000
-  );
+      const missingCaptureBoundary = structuredClone(source);
+      delete missingCaptureBoundary.adjacentRankCapture;
+      const missingCapturePath = path.join(tempRoot, 'missing-capture.json');
+      await fs.writeFile(
+        missingCapturePath,
+        `${JSON.stringify(missingCaptureBoundary, null, 2)}\n`,
+        'utf8'
+      );
+      await expect(
+        createOptimizationQualificationArtifacts({
+          projectRoot,
+          heroRankRuntimeEvidencePath: missingCapturePath,
+        })
+      ).rejects.toThrow(
+        'optimization-qualification-hero-rank-evidence-capture-boundary-missing'
+      );
+    } finally {
+      await fs.rm(tempRoot, { recursive: true, force: true });
+    }
+  }, 30_000);
 });
 
 describe('M12-B3 strict cultivation profile', () => {
@@ -649,7 +636,9 @@ describe('M12-B3 strict cultivation profile', () => {
     } catch (error) {
       compileError = error;
     }
-    expect(compileError?.issues).toEqual(expect.arrayContaining([expectedIssue]));
+    expect(compileError?.issues).toEqual(
+      expect.arrayContaining([expectedIssue])
+    );
     await expect(service.search({ contract: axis })).rejects.toMatchObject({
       issues: expect.arrayContaining([expectedIssue]),
     });
@@ -661,7 +650,8 @@ describe('M12-B3 strict cultivation profile', () => {
       soulEssenceLevel: 80,
       soulEssenceRank: 1,
     });
-    const team = createAxis({ profile: createCultivationProfile() }).scenario.team;
+    const team = createAxis({ profile: createCultivationProfile() }).scenario
+      .team;
 
     expect(
       validateOptimizationCultivationProfile(invalidStar, { team }).issues
@@ -718,13 +708,11 @@ describe('M12-B3 strict cultivation profile', () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: 'machine-axis-schema-required',
-          path:
-            'scenario.cultivationProfile.actors.0.character.levelBreakthroughRank',
+          path: 'scenario.cultivationProfile.actors.0.character.levelBreakthroughRank',
         }),
         expect.objectContaining({
           code: 'machine-axis-schema-additional-property',
-          path:
-            'scenario.cultivationProfile.actors.0.character.ascensionRank',
+          path: 'scenario.cultivationProfile.actors.0.character.ascensionRank',
         }),
       ])
     );
@@ -742,8 +730,7 @@ describe('M12-B3 strict cultivation profile', () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: 'machine-axis-cultivation-star-gift-node-not-in-selected-rank',
-          path:
-            'scenario.cultivationProfile.actors.0.character.starGiftNodeIds.0',
+          path: 'scenario.cultivationProfile.actors.0.character.starGiftNodeIds.0',
           characterId: 101010,
           starGiftRank: 7,
           runeId: 999999,
@@ -754,12 +741,16 @@ describe('M12-B3 strict cultivation profile', () => {
 
   it('puts raw and resolved cultivation into the canonical input hash', () => {
     const service = createMachineAxisService();
-    const first = service.compile(createAxis({
-      profile: createCultivationProfile({ actorLevel: 80 }),
-    }));
-    const second = service.compile(createAxis({
-      profile: createCultivationProfile({ actorLevel: 79 }),
-    }));
+    const first = service.compile(
+      createAxis({
+        profile: createCultivationProfile({ actorLevel: 80 }),
+      })
+    );
+    const second = service.compile(
+      createAxis({
+        profile: createCultivationProfile({ actorLevel: 79 }),
+      })
+    );
 
     expect(first.project.optimizationCultivationProfile).toMatchObject({
       contractName: 'AzPrOptimizationCultivationProfile',
@@ -783,7 +774,9 @@ describe('M12-B3 strict cultivation profile', () => {
       star: 4,
       skillLevel: 4,
     });
-    const compilation = createMachineAxisService().compile(createAxis({ profile }));
+    const compilation = createMachineAxisService().compile(
+      createAxis({ profile })
+    );
     expect(
       compilation.project.metadata.actorConfigs[0]
         .optimizationCultivationApplication.unresolvedDimensions
@@ -854,7 +847,9 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(
       actorConfig.optimizationCultivationApplication.unresolvedDimensions
     ).not.toContain('kibo.dnaFactorRuntime');
-    expect(actor.verifiedStaticProperties.sources.map(source => source.kind)).toEqual(
+    expect(
+      actor.verifiedStaticProperties.sources.map(source => source.kind)
+    ).toEqual(
       expect.arrayContaining([
         'star-gift-completed-rank',
         'star-gift-node',
@@ -951,9 +946,10 @@ describe('M12-B3 strict cultivation profile', () => {
         source => source.kind === 'star-gift-node'
       )
     ).toHaveLength(34);
-    const completedRankSources = fullActor.verifiedStaticProperties.sources.filter(
-      source => source.kind === 'star-gift-completed-rank'
-    );
+    const completedRankSources =
+      fullActor.verifiedStaticProperties.sources.filter(
+        source => source.kind === 'star-gift-completed-rank'
+      );
     expect(completedRankSources).toHaveLength(6);
     expect(completedRankSources.map(source => source.sourceId)).not.toContain(
       '101010:7'
@@ -1124,10 +1120,12 @@ describe('M12-B3 strict cultivation profile', () => {
       equipmentMaxValue: 110,
     });
 
-    expect(validateOptimizationCultivationProfile(normalAtCap, { team }).valid).toBe(
-      true
-    );
-    expect(validateOptimizationCultivationProfile(normalOverCap, { team }).issues).toEqual(
+    expect(
+      validateOptimizationCultivationProfile(normalAtCap, { team }).valid
+    ).toBe(true);
+    expect(
+      validateOptimizationCultivationProfile(normalOverCap, { team }).issues
+    ).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           code: 'machine-axis-cultivation-equipment-tuning-score-exceeds-instance-max',
@@ -1136,16 +1134,16 @@ describe('M12-B3 strict cultivation profile', () => {
         }),
       ])
     );
-    expect(validateOptimizationCultivationProfile(starborn, { team }).valid).toBe(
-      true
-    );
+    expect(
+      validateOptimizationCultivationProfile(starborn, { team }).valid
+    ).toBe(true);
 
     const compilation = createMachineAxisService().compile(
       createAxis({ profile: starborn })
     );
     expect(
-      compilation.project.optimizationCultivationProfile.actors[0].equipment.weapon
-        .instance
+      compilation.project.optimizationCultivationProfile.actors[0].equipment
+        .weapon.instance
     ).toMatchObject({
       identity: 'starborn',
       bGoldSide: true,
@@ -1227,12 +1225,14 @@ describe('M12-B3 strict cultivation profile', () => {
     const rankFourCompilation = service.compile(rankFourAxis);
     const rankThree = service.simulate(rankThreeAxis);
     const rankFour = service.simulate(rankFourAxis);
-    const rankThreeActor = rankThreeCompilation.canonicalCompilation.scenario.actors.find(
-      entry => entry.characterId === 101010
-    );
-    const rankFourActor = rankFourCompilation.canonicalCompilation.scenario.actors.find(
-      entry => entry.characterId === 101010
-    );
+    const rankThreeActor =
+      rankThreeCompilation.canonicalCompilation.scenario.actors.find(
+        entry => entry.characterId === 101010
+      );
+    const rankFourActor =
+      rankFourCompilation.canonicalCompilation.scenario.actors.find(
+        entry => entry.characterId === 101010
+      );
 
     expect(rankFourActor.stats).toEqual(rankThreeActor.stats);
     expect(rankFourActor.verifiedStaticKiboProperties.stats).toEqual(
@@ -1378,9 +1378,9 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(
       prepared.issues.some(issue => issue.code.includes('kibo-duplicate'))
     ).toBe(false);
-    expect(
-      service.catalog().optimizationQualification.summary.m12cLocked
-    ).toBe(true);
+    expect(service.catalog().optimizationQualification.summary.m12cLocked).toBe(
+      true
+    );
   });
 });
 
@@ -1463,8 +1463,7 @@ function finalizeSyntheticQualificationCatalog(catalog) {
       actorKiboQualifiedEdgeCount: catalog.bindingMatrix.actorKibo.filter(
         edge => edge.qualificationReady
       ).length,
-      actorSoulEssenceEdgeCount:
-        catalog.bindingMatrix.actorSoulEssence.length,
+      actorSoulEssenceEdgeCount: catalog.bindingMatrix.actorSoulEssence.length,
       actorSoulEssenceCompatibleEdgeCount:
         catalog.bindingMatrix.actorSoulEssence.filter(edge => edge.compatible)
           .length,
@@ -1477,8 +1476,7 @@ function finalizeSyntheticQualificationCatalog(catalog) {
         catalog.bindingMatrix.actorEquipment.filter(
           edge => edge.qualificationReady
         ).length,
-      setSkillThresholdCount:
-        catalog.bindingMatrix.setSkillThresholds.length,
+      setSkillThresholdCount: catalog.bindingMatrix.setSkillThresholds.length,
       setSkillThresholdQualifiedCount:
         catalog.bindingMatrix.setSkillThresholds.filter(
           edge => edge.qualificationReady
@@ -1494,10 +1492,9 @@ function finalizeSyntheticQualificationCatalog(catalog) {
     }
   }
   catalog.summary.optimizationReadyCounts = Object.fromEntries(
-    ['character', 'kibo', 'soul-essence', 'equipment', 'set-skill'].map(kind => [
-      kind,
-      readyByKind(kind).length,
-    ])
+    ['character', 'kibo', 'soul-essence', 'equipment', 'set-skill'].map(
+      kind => [kind, readyByKind(kind).length]
+    )
   );
   catalog.summary.optimizationReadyTotal = Object.values(
     catalog.summary.optimizationReadyCounts

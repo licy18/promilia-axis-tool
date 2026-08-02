@@ -1,27 +1,18 @@
 {
-  "schemaVersion": 4,
-  "phase": "M12-B3-C2-R1",
+  "schemaVersion": 5,
+  "phase": "M12-B3-C3",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "942639f07d5a417f8145f8c11aadf006646dfbee",
+  "baseCommit": "ba3422c722f8640857fa8fd9d19040e755c8484a",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
-    "phase": "M12-B3-C-R1",
-    "commit": "2804f201ac2a6ea4eebc1339703a9d40c0aba5a5",
+    "phase": "M12-B3-C2-R1",
+    "implementationBaseline": "942639f07d5a417f8145f8c11aadf006646dfbee",
+    "acceptanceBaseline": "ba3422c722f8640857fa8fd9d19040e755c8484a",
     "status": "product-accepted"
   },
-  "remediation": {
-    "reviewedC2Commit": "942639f07d5a417f8145f8c11aadf006646dfbee",
-    "issue": "BeforeSkill/AfterSkill action events incorrectly required a landed source hit",
-    "contract": {
-      "actionStartAndEnd": "executed-action-event-independent-of-hit-outcome",
-      "hitBeforeAndAfterDamage": "landed-hit-event-required",
-      "blockedExecution": "no-action-or-hit-event"
-    },
-    "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs:244300-244311#EElementTriggerEventType:1,2,5,6"
-  },
   "scope": {
-    "batch": "ultimate-all-hero-point-buffs-and-limit-counter-self-buff",
-    "soulEssenceIds": [10055, 10093, 10097],
+    "batch": "entry-skill-self-buffs-and-buff-wrapper-lifecycle",
+    "soulEssenceIds": [10147, 10151],
     "formalSearchExecuted": false,
     "m12cLocked": true,
     "fixedCultivationChanged": false,
@@ -39,127 +30,89 @@
       "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
       "bytes": 97428254,
       "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
-      "sourceIdentity": "EElementTriggerConditionType|EElementTriggerFixedConditionType|ESkillSlotType|ESkillTagType|ETriggerEffectTargetType",
-      "contractHash": "3ea277c2d63e2d6d"
+      "sourceIdentity": "EElementTriggerEventType.BeforeSkill=5|EElementTriggerFixedConditionType.CheckSkillType=11|ESkillTagType.EntrySkill=22|ESkillTagType.ExitSkill=8|TBuffElementParams.time|injectElementDataList|notDelElementDataList",
+      "triggerContractHash": "e01501b913505ae7"
     },
     "soulControlClosure": {
       "skillCount": 62,
       "fileCount": 506,
       "bytes": 458435,
       "sha256": "fc30b3421db5c04a517a29f81e969c428b33ade9392ef806fad56a29cd1fcdfe"
-    },
-    "setSkillControlClosure": {
-      "skillCount": 12,
-      "fileCount": 108,
-      "bytes": 95734,
-      "sha256": "8985e7ce5fa74b703caf39430e29aa3a4db212348df6653b1529f58cf4b7c18d"
     }
   },
   "compiledContracts": {
-    "conditionLogic": {
-      "10055": "CheckSkillSlot(6)=UltraSkill(4) OR CheckSkillType(11)=UltraSkill(4)",
-      "10093": "CheckSkillSlot(6)=UltraSkill(4) OR CheckSkillType(11)=UltraSkill(4)",
-      "10097": "CheckSkillType(11)=ExtremityAttack(11)"
+    "trigger": {
+      "condition": "CheckSkillType(11)=EntrySkill(22)",
+      "frameAnchor": "action-start",
+      "executionGate": "execute=true-independent-of-hit-outcome",
+      "provenanceRequirement": "switch-triggered-on-enter",
+      "bindingSource": "resolved controlBinding.logic.skillTag",
+      "rejectedSources": [
+        "ExitSkill(8)",
+        "standalone-forged-star-carry",
+        "switch-child-suppressed-by-cooldown",
+        "execution-plan-blocked"
+      ]
     },
-    "targetSource": "triggerEffectList[].targetType",
-    "targets": {
-      "10055": "AllHero(15)",
-      "10093": "AllHero(15)",
-      "10097": "Self(0)"
+    "10147": {
+      "effectSkillId": 1900110,
+      "triggerElementId": 19001101,
+      "wrapperElementId": 19001001,
+      "leafElementId": 19001002,
+      "target": "Self(0)",
+      "attributeId": 222,
+      "durationMs": 6000,
+      "leafDurationMs": -1,
+      "durationSource": "BuffElement wrapper 19001001.time",
+      "propertyTags": [301],
+      "stackMode": "refresh",
+      "valuesByStarRaw": [8930, 11910, 14880, 17860],
+      "formula": "A with G/10000",
+      "removalPath": "19001105 -> 19001106"
     },
-    "formulaRegistry": "AzPrVerifiedBattleEffectFormulaRegistry",
-    "formulas": {
-      "10055": {
-        "base": "A",
-        "common": "G/10000",
-        "valuesByStar": [60, 75, 90, 105]
-      },
-      "10093": {
-        "base": "A/10000",
-        "common": "G/10000",
-        "sourceRawAByStar": [938000, 1250000, 1563000, 1875000],
-        "valuesByStar": [93.8, 125, 156.3, 187.5]
-      },
-      "10097": {
-        "base": "A/10000",
-        "common": "G/10000",
-        "sourceRawAByStar": [1125000, 1500000, 1875000, 2250000],
-        "valuesByStar": [112.5, 150, 187.5, 225]
-      }
-    },
-    "traceFields": [
-      "sourceRawA",
-      "formulaIdentity",
-      "q16Trace",
-      "evaluatedValue",
-      "sourceActorId",
-      "formulaSourceActorId",
-      "effectAdderActorId",
-      "targetId"
-    ]
+    "10151": {
+      "effectSkillId": 1900130,
+      "triggerElementId": 19001301,
+      "leafElementId": 19001302,
+      "target": "Self(0)",
+      "attributeId": 222,
+      "durationMs": 10000,
+      "propertyTags": [],
+      "stackMode": "refresh",
+      "valuesByStarRaw": [3720, 4960, 6200, 7440],
+      "formula": "A with G/10000",
+      "removalPath": "19001303 -> 19001304"
+    }
   },
   "runtimeMatrix": {
-    "ultimateTeamBuffs": {
-      "sourceSoulEssenceIds": [10055, 10093],
-      "frameAnchor": "action-end",
-      "commandCountPerTrigger": 3,
-      "targetKind": "team-actors",
-      "directKiboTargetCommandCount": 0,
-      "triggeringUltimateReceivesOwnBuff": false,
-      "switchPreservesRemainingDuration": true,
-      "stackMode": "refresh",
-      "rightOpenExpiry": true
-    },
-    "limitCounterBuff": {
-      "sourceSoulEssenceId": 10097,
-      "verifiedActionKind": "limit-counter",
-      "verifiedControl": "10101025/sub0",
-      "verifiedSkillTag": 11,
-      "frameAnchor": "action-start",
-      "sameActionHitsReceiveBuff": true,
-      "stackMode": "refresh",
-      "rightOpenExpiry": true
-    },
-    "eventGate": {
-      "nonMatchingActionKindsSuppressed": true,
-      "blockedExecutionSuppressed": true,
-      "executedActionWithNoHitsTriggersBeforeAfterSkill": true,
-      "executedActionWithAllHitsMissedTriggersBeforeAfterSkill": true,
-      "allHitsMissedSuppressesBeforeAfterDamage": true,
-      "actionEventsNeverReportNoLandedSourceHit": true,
-      "hitEventMissReason": "soulessence-effect-no-landed-source-hit"
-    },
-    "tuningDamageConsequence": {
-      "sourceActorCharacterId": 101007,
-      "targetActorCharacterId": 101003,
-      "eventType": "VERIFIED_TUNING_DAMAGE",
-      "masteryGainBySoulEssenceId": {
-        "10055": 60,
-        "10093": 93.8
-      },
-      "rawDamageIncreasedWhileActive": true,
-      "masteryAndRawDamageReturnToNoSoulBaselineAfterExpiry": true
-    },
-    "persistence": {
-      "canonicalReplay": true,
-      "cycleEffectInheritance": true,
-      "sourceAndTargetIdentityPreserved": true
+    "realSwitchEntry": true,
+    "allMissExecutedActionTriggers": true,
+    "blockedExecutionTriggers": false,
+    "cooldownSuppressedChildTriggers": false,
+    "exitSkillTriggers": false,
+    "forgedStandaloneStarCarryTriggers": false,
+    "switchAwayAndReturnPreservesActiveEffect": true,
+    "refreshUsesOneEffectInstance": true,
+    "rightOpenExpiry": true,
+    "replayAndCycleInheritance": true,
+    "toughnessConsequences": {
+      "10147": "charged hit only through leaf PropertyTag 301",
+      "10151": "unscoped modifier; attribute 222 retains its verified charged-toughness calculator scope",
+      "normalAttackGain": false,
+      "expiredGain": false
     }
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 12,
-    "runtimeUnappliedSoulEssenceCount": 50,
+    "runtimeAppliedSoulEssenceCount": 14,
+    "runtimeUnappliedSoulEssenceCount": 48,
     "runtimeAppliedSetSkillCount": 0,
-    "newlyAppliedSoulEssenceIds": [10055, 10093, 10097],
-    "preservedRuntimeAppliedSoulEssenceIds": [10001, 10002, 10037, 10060, 10094, 10098, 10125, 10154, 10155],
-    "propertyTagRegression": {
-      "10060": [300],
-      "10094": [301],
-      "10098": [301],
-      "driftCount": 0
-    },
+    "newlyAppliedSoulEssenceIds": [10147, 10151],
+    "preservedRuntimeAppliedSoulEssenceIds": [
+      10001, 10002, 10037, 10055, 10060, 10093, 10094, 10097, 10098, 10125,
+      10154, 10155
+    ],
     "explicitlyUnapplied": {
-      "soulEssenceCount": 50,
+      "soulEssenceCount": 48,
       "setSkillCount": 12,
       "reason": "source evidence or canonical runtime operator remains incomplete"
     }
@@ -172,9 +125,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 446,
+    "blockingUniqueGapCount": 442,
     "blockingByCategory": {
-      "not-implemented": 430,
+      "not-implemented": 426,
       "evidence-insufficient": 16
     },
     "formalAdmissions": {
@@ -187,21 +140,22 @@
   },
   "hashes": {
     "sourceSnapshotHash": "fcf7e135b22019c8",
-    "rosterHash": "ab1fe6bdba580f21",
-    "manifestsHash": "ddd8540432f737bc",
-    "ledgerHash": "44943aece7e05da0",
-    "bindingMatrixHash": "ef739ad3c350c724",
-    "qualificationCatalogHash": "ca1a9dae97651348",
-    "dynamicLoadoutEffectCensusHash": "d67e16da316ccb87",
-    "soulEssenceEffectCatalogHash": "b3fd516e07fd6424",
-    "soulEssenceSourceSnapshotHash": "a820d6ec9704f111",
+    "rosterHash": "64b1c6784ffb275d",
+    "manifestsHash": "1e912bb39722dcb0",
+    "ledgerHash": "04a3e6f06609ac86",
+    "bindingMatrixHash": "f94164d5eacc341f",
+    "qualificationCatalogHash": "7ba75142e06a5b86",
+    "dynamicLoadoutEffectCensusHash": "1086f724a63921d7",
+    "soulEssenceEffectCatalogHash": "3ea9c341d3801bf2",
+    "soulEssenceSourceSnapshotHash": "c71a86551be01189",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
-    "soulEssenceTriggerContractHash": "3ea277c2d63e2d6d"
+    "soulEssenceTriggerContractHash": "e01501b913505ae7"
   },
   "verification": {
+    "status": "passed",
     "focusedMechanics": {
       "files": 5,
-      "tests": 83,
+      "tests": 110,
       "status": "passed"
     },
     "machineAxis": {
@@ -215,9 +169,9 @@
       "status": "passed",
       "gameplayHashDrift": 0
     },
-    "canonicalMigrationAndCombatRuntime": {
-      "files": 3,
-      "tests": 39,
+    "canonicalAndRuntime": {
+      "files": 6,
+      "tests": 55,
       "status": "passed",
       "gameplayAssertionDrift": 0
     },
@@ -235,7 +189,7 @@
         "verified-combat",
         "kibo-headless"
       ],
-      "appliedSoulSourceCount": 12,
+      "appliedSoulSourceCount": 14,
       "appliedSoulSourceDriftCount": 0
     },
     "productionBuild": "passed",

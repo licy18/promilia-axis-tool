@@ -88,8 +88,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
           expectedActionKinds:
             binding.definition.trigger?.condition?.actionKinds ?? [],
           actualActionKind: actionKind,
-          expectedCondition:
-            binding.definition.trigger?.condition ?? null,
+          expectedCondition: binding.definition.trigger?.condition ?? null,
           actualSkillSlotIds: actionContext.skillSlotIds,
           actualSkillTagIds: actionContext.skillTagIds,
           conditionReasons: conditionMatch.reasons,
@@ -205,7 +204,8 @@ function createEquippedSoulBinding(actor, definitionBySoulId) {
   if (!Number.isInteger(soulEssenceId) || soulEssenceId <= 0) return null;
   const definition = definitionBySoulId.get(soulEssenceId);
   if (!definition) return null;
-  const effectSkill = actor.loadout?.soulessenceCultivation?.effectSkill ?? null;
+  const effectSkill =
+    actor.loadout?.soulessenceCultivation?.effectSkill ?? null;
   if (
     effectSkill?.runtimeStatus !== 'runtime-applied' ||
     Number(effectSkill.skillId) !== Number(definition.effectSkillId)
@@ -261,8 +261,10 @@ function createSoulEffectCommand({
           ? (hitFrame * 1000) / frameRate
           : 0)
   );
-  const actionSourceSequencePath =
-    getActionSourceSequencePath(action, actionIndex) ?? [actionIndex];
+  const actionSourceSequencePath = getActionSourceSequencePath(
+    action,
+    actionIndex
+  ) ?? [actionIndex];
   const triggerSequencePath =
     hit == null
       ? [...actionSourceSequencePath, targetIndex]
@@ -319,8 +321,7 @@ function createSoulEffectCommand({
         sourceElementPathId: effect.pathId,
         propertyTags: [...(effect.propertyTags ?? [])],
         propertyTagMatchMode: effect.propertyTagMatchMode ?? 'unscoped',
-        propertyTagSourceIdentity:
-          effect.propertyTagSourceIdentity ?? null,
+        propertyTagSourceIdentity: effect.propertyTagSourceIdentity ?? null,
         sourceIdentity: effect.sourceIdentity,
       },
     ],
@@ -351,10 +352,14 @@ function createSoulEffectCommand({
       effectElementId: effect.elementId,
       effectPathId: effect.pathId,
       effectPropertyTags: [...(effect.propertyTags ?? [])],
-      effectPropertyTagMatchMode:
-        effect.propertyTagMatchMode ?? 'unscoped',
-      effectPropertyTagSourceIdentity:
-        effect.propertyTagSourceIdentity ?? null,
+      effectPropertyTagMatchMode: effect.propertyTagMatchMode ?? 'unscoped',
+      effectPropertyTagSourceIdentity: effect.propertyTagSourceIdentity ?? null,
+      switchTrigger: actionContext.switchTrigger,
+      lifecycle: effect.lifecycle ?? {
+        sourceKind: 'property-leaf-duration',
+        durationMs: effect.durationMs,
+        leafDurationMs: effect.durationMs,
+      },
       star: binding.star,
       starValueSourceIdentity: starValue.sourceIdentity,
       formulaIdentity: formulaResult.formulaIdentity,
@@ -426,10 +431,7 @@ function resolveSoulTriggerActionContext({ action, resolution }) {
   const controlBinding = resolution?.controlBinding ?? {};
   return {
     actionKind:
-      actionBinding.actionKind ??
-      action.actionKind ??
-      action.eventType ??
-      null,
+      actionBinding.actionKind ?? action.actionKind ?? action.eventType ?? null,
     skillSlotIds: uniqueFiniteIntegers([
       actionBinding.skillSlotId,
       actionBinding.skillSlotType,
@@ -440,6 +442,15 @@ function resolveSoulTriggerActionContext({ action, resolution }) {
       controlBinding.logic?.skillTagId,
       ...parseDelimitedNumbers(controlBinding.logic?.skillTag),
     ]),
+    switchTrigger: {
+      kind: action.derivedAction?.kind ?? null,
+      parentActionId:
+        action.derivedAction?.parentActionId ?? action.parentActionId ?? null,
+      triggerPhase: action.switchTriggerBinding?.triggerPhase ?? null,
+      resolutionStatus: action.switchTriggerBinding?.resolutionStatus ?? null,
+      applied: action.switchTriggerBinding?.applied === true,
+      sourceIdentity: action.switchTriggerBinding?.sourceIdentity ?? null,
+    },
   };
 }
 
@@ -459,19 +470,29 @@ function matchesSoulTriggerCondition(condition, actionContext) {
   }
   const results = conditions.map(entry => {
     if (entry.kind === 'skill-slot') {
-      return actionContext.skillSlotIds.includes(Number(entry.skillSlotId)) ||
-        (legacyConditionShape &&
-          (entry.actionKinds ?? []).includes(actionContext.actionKind));
+      return (
+        (actionContext.skillSlotIds.includes(Number(entry.skillSlotId)) ||
+          (legacyConditionShape &&
+            (entry.actionKinds ?? []).includes(actionContext.actionKind))) &&
+        matchesSoulTriggerProvenance(entry, actionContext)
+      );
     }
     if (entry.kind === 'skill-tag') {
-      return actionContext.skillTagIds.includes(Number(entry.skillTagId)) ||
-        (legacyConditionShape &&
-          (entry.actionKinds ?? []).includes(actionContext.actionKind));
+      return (
+        (actionContext.skillTagIds.includes(Number(entry.skillTagId)) ||
+          (legacyConditionShape &&
+            (entry.actionKinds ?? []).includes(actionContext.actionKind))) &&
+        matchesSoulTriggerProvenance(entry, actionContext)
+      );
     }
-    return (entry.actionKinds ?? []).includes(actionContext.actionKind);
+    return (
+      (entry.actionKinds ?? []).includes(actionContext.actionKind) &&
+      matchesSoulTriggerProvenance(entry, actionContext)
+    );
   });
   const logic = condition?.logic ?? 'and';
-  const matched = logic === 'or' ? results.some(Boolean) : results.every(Boolean);
+  const matched =
+    logic === 'or' ? results.some(Boolean) : results.every(Boolean);
   return {
     matched,
     matchedConditionIdentities: conditions
@@ -487,9 +508,24 @@ function matchesSoulTriggerCondition(condition, actionContext) {
   };
 }
 
+function matchesSoulTriggerProvenance(condition, actionContext) {
+  if (!condition?.provenanceRequirement) return true;
+  if (condition.provenanceRequirement === 'switch-triggered-on-enter') {
+    return (
+      actionContext.switchTrigger?.kind === 'switch-triggered-star-carry' &&
+      actionContext.switchTrigger?.triggerPhase === 'on-enter' &&
+      actionContext.switchTrigger?.applied === true
+    );
+  }
+  return false;
+}
+
 function extractSkillSlotIds(sourceIdentity) {
-  return [...String(sourceIdentity ?? '').matchAll(/skillSlots\[[^\]]*slot=(\d+)\]/gu)]
-    .map(match => Number(match[1]));
+  return [
+    ...String(sourceIdentity ?? '').matchAll(
+      /skillSlots\[[^\]]*slot=(\d+)\]/gu
+    ),
+  ].map(match => Number(match[1]));
 }
 
 function parseDelimitedNumbers(value) {

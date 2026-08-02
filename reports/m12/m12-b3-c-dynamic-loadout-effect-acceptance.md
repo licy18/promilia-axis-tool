@@ -1,27 +1,22 @@
-# M12-B3-C2-R1 Action/Hit Event Gate Remediation
+# M12-B3-C3 Entry Skill Wrapper Effect Closure
 
 - Status: `verification-complete-awaiting-product-acceptance`
-- Repair base: `942639f07d5a417f8145f8c11aadf006646dfbee`; M12-B3-C-R1 remains product-accepted at `2804f201ac2a6ea4eebc1339703a9d40c0aba5a5`.
-- Dynamic census: `d67e16da316ccb87`; soul effect catalog: `b3fd516e07fd6424`.
+- Base: `ba3422c722f8640857fa8fd9d19040e755c8484a` (C2-R1 product acceptance)
+- C2 implementation baseline: `942639f07d5a417f8145f8c11aadf006646dfbee`
 - Formal admissions: `0 / 0 / 0 / 0 / 0`; M12-C remains locked.
 
 ## Contract
 
-`10055` and `10093` preserve the raw `OR` group `CheckSkillSlot(6)=UltraSkill(4) OR CheckSkillType(11)=UltraSkill(4)`. Runtime selection reads the final verified slot/tag binding. Their target comes from `triggerEffectList[].targetType=AllHero(15)`, not `triggerTargetType`, and creates one deterministic command per hero while preserving the carrier as source/formula/effect adder. Kibo receives no direct AllHero command.
+`10147` and `10151` compile `CheckSkillType(11)=EntrySkill(22)` from the Battle trigger and IL2CPP enum. Runtime reads the final `controlBinding.logic.skillTag` and additionally requires the action to be the materialized `on-enter` child of a real switch. ExitSkill(8), a standalone action merely named star-carry, a cooldown-suppressed child, or any `execute=false` action cannot trigger. An executed entry action still triggers when it has no landed hit.
 
-`10055` uses base `A`; `10093` and `10097` use base `A/10000`. All three pass through `AzPrVerifiedBattleEffectFormulaRegistry` and Q16.16, preserving raw A, formula identity, Q16 trace, and evaluated point value. `10093` star 1 is approximately `93.8`, not `938000`; `10097` spans `112.5 / 150 / 187.5 / 225`.
+`10151` follows `19001301 -> 19001302`, applies attribute 222 to self for 10 seconds, refreshes one instance, and keeps no additional PropertyTag filter. `10147` preserves `19001101 -> 19001001 -> 19001002`: wrapper `19001001.time=6000` owns the six-second lifecycle even though leaf `19001002.time=-1`; the leaf retains PropertyTag 301, and unload `19001105 -> 19001106` remains source-visible. Both star tables retain their raw A values and shared `G/10000` formula contract.
 
 ## Runtime Matrix
 
-- `10055/10093`: apply at ultimate action-end. Earlier ultimate hits do not receive the layer; all three heroes do, and two controlled-actor switches preserve the original absolute expiry.
-- `10097`: uses the real `10101025/sub0` limit-counter binding and skill tag 11. It applies at action-start, so later verified hits in that action consume the layer.
-- `BeforeSkill/AfterSkill` are action events: an execution-plan entry with `execute=true` fires once even when the action has no hit or every verified hit is disabled/missed. `execute=false` remains suppressed. `BeforeDamage/AfterDamage` remain landed-hit events and keep `soulessence-effect-no-landed-source-hit` for miss suppression.
-- Repeated triggers refresh one effect per target; right-open expiry and canonical cycle inheritance remain on the shared effect timeline.
-- The prior 10060/10094/10098 PropertyTag 300/301 cross-action matrix remains unchanged.
-- A real three-actor replay proves that the non-source teammate's `VERIFIED_TUNING_DAMAGE` receives the active AllHero mastery value in both `payload.mastery` and `rawDamage`, then returns to the no-soul baseline after expiry.
+Real switch scenarios prove on-enter materialization, all-miss triggering, cooldown suppression, ExitSkill rejection, forged-action rejection, switch-away/return persistence, refresh, right-open expiry, replay inheritance and charged-toughness settlement. `10147` applies only to tag-301 charged hits. `10151` adds no PropertyTag restriction, while attribute 222 itself remains on the verified charged-toughness calculator; normal attacks and post-expiry charged attacks remain at the same-loadout baseline.
 
 ## Result
 
-Soul effects are now `12/62 runtime-applied` and `50/62 dynamic-unapplied`. The unique blocker ledger is `446` (`430 not-implemented`, `16 evidence-insufficient`). All 12 set effects remain unapplied; no formal qualification was granted.
+Soul effects are `14/62 runtime-applied` and `48/62 dynamic-unapplied`. The unique blocker ledger is `442` (`426 not-implemented`, `16 evidence-insufficient`). All 12 set effects remain unapplied; no formal qualification was granted.
 
-Verification passed: focused mechanics `5 files / 83 tests`, Machine Axis `12 / 157`, three-character profile/golden `3 / 34`, canonical migration/combat runtime `3 / 39`, nine deterministic audits, and production build. Existing Sass, circular-chunk, and large-chunk warnings remain non-blocking.
+Verification passed: focused mechanics `5 files / 110 tests`, Machine Axis `12 / 157`, three-character profile/golden `3 / 34`, canonical/runtime and switch/cycle boundaries `6 / 55`, nine deterministic audits, and production build. Existing Sass, circular-chunk and large-chunk warnings remain non-blocking.

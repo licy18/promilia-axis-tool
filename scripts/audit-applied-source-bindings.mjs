@@ -65,9 +65,8 @@ try {
       'utf8'
     )
   );
-  const loadoutPropertyTagAudit = await createLoadoutPropertyTagAudit(
-    soulEssenceCatalog
-  );
+  const loadoutPropertyTagAudit =
+    await createLoadoutPropertyTagAudit(soulEssenceCatalog);
   const deltas = result.threeValueGenerationLayer.deltas
     .filter(delta => delta.layerKey === 'applied')
     .map(delta => ({
@@ -215,6 +214,12 @@ async function createLoadoutPropertyTagAudit(catalog) {
     definitions.flatMap(definition => [
       Number(definition.effect?.elementId),
       Number(definition.trigger?.elementId),
+      ...(definition.sourceClosure?.wrapperElementIds ?? []).map(Number),
+      ...(definition.sourceClosure?.removalPaths ?? []).flatMap(path => [
+        Number(path.triggerElementId),
+        Number(path.removerElementId),
+        ...(path.removedElementIds ?? []).map(Number),
+      ]),
     ])
   );
   const sourceRowsByElementId = new Map();
@@ -265,10 +270,15 @@ async function createLoadoutPropertyTagAudit(catalog) {
         conditionParam2: condition.conditionValue,
       }))
     );
+    const generatedTargetPathId = Number(
+      definition.trigger?.target?.targetElementPathId
+    );
     const sourceTargetEffect = (triggerTree.triggerEffectList ?? []).find(
       effect =>
-        Number(effect?.targetElement?.m_PathID) ===
-        Number(definition.effect?.pathId)
+        Number(effect?.targetElement?.m_PathID) === generatedTargetPathId
+    );
+    const sourceTargetPathId = Number(
+      sourceTargetEffect?.targetElement?.m_PathID
     );
     const sourceTargetType = Number(sourceTargetEffect?.targetType);
     const generatedTargetType = Number(
@@ -288,11 +298,24 @@ async function createLoadoutPropertyTagAudit(catalog) {
     const generatedBaseFunctionId = Number(
       definition.effect?.formula?.baseFunctionId
     );
+    const lifecycle = definition.effect?.lifecycle ?? null;
+    const wrapper = lifecycle?.wrapper ?? null;
+    const wrapperSourceRow = wrapper
+      ? sourceRowsByElementId.get(Number(wrapper.elementId))
+      : null;
+    const wrapperTree = wrapperSourceRow?.typetree ?? null;
+    const wrapperInjectedPathIds = normalizePathIds(
+      wrapperTree?.injectElementDataList
+    );
+    const removalPaths = definition.sourceClosure?.removalPaths ?? [];
+    const removalSourceRowsPresent = removalPaths.every(
+      path =>
+        sourceRowsByElementId.has(Number(path.triggerElementId)) &&
+        sourceRowsByElementId.has(Number(path.removerElementId))
+    );
     const issueCodes = [
       ...(sourceRow ? [] : ['loadout-property-tag-source-row-missing']),
-      ...(triggerSourceRow
-        ? []
-        : ['loadout-trigger-source-row-missing']),
+      ...(triggerSourceRow ? [] : ['loadout-trigger-source-row-missing']),
       ...(actualSourceSha256 === expectedSourceSha256
         ? []
         : ['loadout-property-tag-source-hash-drift']),
@@ -319,6 +342,9 @@ async function createLoadoutPropertyTagAudit(catalog) {
       sourceTargetType === generatedTargetType
         ? []
         : ['loadout-trigger-effect-target-drift']),
+      ...(sourceTargetPathId === generatedTargetPathId
+        ? []
+        : ['loadout-trigger-effect-target-path-drift']),
       ...(sourceCommonFunctionId === generatedCommonFunctionId &&
       sourceBaseFunctionId === generatedBaseFunctionId
         ? []
@@ -341,6 +367,27 @@ async function createLoadoutPropertyTagAudit(catalog) {
       )
         ? []
         : ['loadout-effect-formula-source-identity-missing']),
+      ...(wrapper == null || wrapperSourceRow
+        ? []
+        : ['loadout-effect-wrapper-source-row-missing']),
+      ...(wrapper == null ||
+      (Number(wrapperTree?.time) === Number(wrapper.durationMs) &&
+        Number(lifecycle?.durationMs) === Number(wrapper.durationMs))
+        ? []
+        : ['loadout-effect-wrapper-duration-drift']),
+      ...(wrapper == null ||
+      wrapperInjectedPathIds.includes(Number(definition.effect?.pathId))
+        ? []
+        : ['loadout-effect-wrapper-injected-leaf-drift']),
+      ...(wrapper == null ||
+      String(definition.sourceIdentity ?? '').includes(
+        `elementId=${Number(wrapper.elementId)}`
+      )
+        ? []
+        : ['loadout-effect-wrapper-source-identity-missing']),
+      ...(removalPaths.length === 0 || removalSourceRowsPresent
+        ? []
+        : ['loadout-effect-removal-source-row-missing']),
     ];
     return {
       soulEssenceId: Number(definition.soulEssenceId),
@@ -360,6 +407,8 @@ async function createLoadoutPropertyTagAudit(catalog) {
       triggerEffectTarget: {
         sourceTargetType,
         generatedTargetType,
+        sourceTargetPathId,
+        generatedTargetPathId,
         targetKind: definition.trigger?.target?.kind ?? null,
         sourceIdentity: definition.trigger?.target?.sourceIdentity ?? null,
       },
@@ -370,6 +419,14 @@ async function createLoadoutPropertyTagAudit(catalog) {
         generatedBaseFunctionId,
         formulaIdentity: definition.effect?.formula?.formulaIdentity ?? null,
         sourceIdentity: definition.effect?.formula?.sourceIdentity ?? null,
+      },
+      lifecycle: {
+        sourceKind: lifecycle?.sourceKind ?? null,
+        durationMs: lifecycle?.durationMs ?? null,
+        leafDurationMs: lifecycle?.leafDurationMs ?? null,
+        wrapper,
+        wrapperInjectedPathIds,
+        removalPaths,
       },
       sourceIdentity: definition.effect?.sourceIdentity ?? null,
       status:
@@ -390,8 +447,7 @@ async function createLoadoutPropertyTagAudit(catalog) {
     },
     summary: {
       sourceCount: records.length,
-      driftCount: records.filter(record => record.issueCodes.length > 0)
-        .length,
+      driftCount: records.filter(record => record.issueCodes.length > 0).length,
     },
     records,
   };
@@ -400,6 +456,12 @@ async function createLoadoutPropertyTagAudit(catalog) {
 function normalizeIntegerTags(values) {
   return [...new Set((values ?? []).map(Number))]
     .filter(Number.isInteger)
+    .sort((left, right) => left - right);
+}
+
+function normalizePathIds(values) {
+  return [...new Set((values ?? []).map(value => Number(value?.m_PathID)))]
+    .filter(Number.isFinite)
     .sort((left, right) => left - right);
 }
 

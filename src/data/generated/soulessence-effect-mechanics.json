@@ -30,9 +30,9 @@
     },
     "triggerContract": {
       "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType",
-      "contractHash": "3ea277c2d63e2d6d"
+      "contractHash": "e01501b913505ae7"
     },
-    "sourceSnapshotHash": "a820d6ec9704f111"
+    "sourceSnapshotHash": "c71a86551be01189"
   },
   "policy": {
     "descriptionUsage": "discovery-and-cross-check-only",
@@ -236,6 +236,7 @@
         "actionKinds": [
           "normal-attack"
         ],
+        "provenanceRequirement": null,
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1"
       },
@@ -245,6 +246,7 @@
         "actionKinds": [
           "charged-attack"
         ],
+        "provenanceRequirement": null,
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.WhackAttack=2"
       },
@@ -254,6 +256,7 @@
         "actionKinds": [
           "star-skill"
         ],
+        "provenanceRequirement": null,
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalSkill=3"
       },
@@ -263,6 +266,7 @@
         "actionKinds": [
           "ultimate"
         ],
+        "provenanceRequirement": null,
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.UltraSkill=4"
       },
@@ -272,6 +276,7 @@
         "actionKinds": [
           "dodge-attack"
         ],
+        "provenanceRequirement": null,
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.Dodge=6"
       },
@@ -281,6 +286,7 @@
         "actionKinds": [
           "plunging-attack"
         ],
+        "provenanceRequirement": null,
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.Jump=7"
       },
@@ -290,6 +296,7 @@
         "actionKinds": [
           "plunging-attack"
         ],
+        "provenanceRequirement": null,
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.AerialAttack=9"
       },
@@ -299,6 +306,7 @@
         "actionKinds": [
           "limit-counter"
         ],
+        "provenanceRequirement": null,
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.ExtremityAttack=11"
       },
@@ -308,6 +316,7 @@
         "actionKinds": [
           "perfect-parry"
         ],
+        "provenanceRequirement": null,
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.PerfectDodge=12"
       },
@@ -317,8 +326,19 @@
         "actionKinds": [
           "star-combo"
         ],
+        "provenanceRequirement": null,
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.HeroJointStrikeSkill=17"
+      },
+      {
+        "value": 22,
+        "enumName": "EntrySkill",
+        "actionKinds": [
+          "star-carry"
+        ],
+        "provenanceRequirement": "switch-triggered-on-enter",
+        "status": "applied",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.EntrySkill=22"
       }
     ],
     "targetBindings": [
@@ -339,7 +359,30 @@
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
       }
     ],
-    "contractHash": "3ea277c2d63e2d6d"
+    "buffElementWrapper": {
+      "runtimeType": "TBuffElementParams",
+      "elementType": "BuffElement",
+      "durationField": "time",
+      "attachedChildrenField": "injectElementDataList",
+      "detachedChildrenField": "notDelElementDataList",
+      "fields": [
+        {
+          "declaration": "public int time;",
+          "present": true
+        },
+        {
+          "declaration": "public List<TElementParams> injectElementDataList;",
+          "present": true
+        },
+        {
+          "declaration": "public List<TElementParams> notDelElementDataList;",
+          "present": true
+        }
+      ],
+      "status": "applied",
+      "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TBuffElementParams.time|injectElementDataList|notDelElementDataList"
+    },
+    "contractHash": "e01501b913505ae7"
   },
   "definitions": [
     {
@@ -378,6 +421,7 @@
               "actionKinds": [
                 "charged-attack"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.WhackAttack=2",
               "status": "applied",
               "skillTagId": 2,
@@ -425,6 +469,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=7615727136823255000;elementId=19004802.formulaParams|functionParams"
         },
         "durationMs": 5000,
+        "leafDurationMs": 5000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 5000,
+          "leafDurationMs": 5000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=7615727136823255000;elementId=19004802.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19004803,
+              "triggerPathId": 3540232498743749600,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19004804,
+              "removerPathId": 924731619841596300,
+              "removedElementIds": [
+                19004801,
+                19004803
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=3540232498743749600;elementId=19004803.triggerEffectList[0]|battle-element-assets.jsonl#path_id=924731619841596300;elementId=19004804"
+            }
+          ]
+        },
         "stackMode": "stack",
         "stackDelta": 1,
         "maxStacks": 4,
@@ -479,6 +546,25 @@
         "propertyElementIds": [
           19004802
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19004802
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19004803,
+            "triggerPathId": 3540232498743749600,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19004804,
+            "removerPathId": 924731619841596300,
+            "removedElementIds": [
+              19004801,
+              19004803
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=3540232498743749600;elementId=19004803.triggerEffectList[0]|battle-element-assets.jsonl#path_id=924731619841596300;elementId=19004804"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -521,6 +607,7 @@
               "actionKinds": [
                 "star-skill"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalSkill=3",
               "status": "applied",
               "skillTagId": 3,
@@ -568,6 +655,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-131968735896823040;elementId=19006104.formulaParams|functionParams"
         },
         "durationMs": 12000,
+        "leafDurationMs": 12000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 12000,
+          "leafDurationMs": 12000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-131968735896823040;elementId=19006104.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19006102,
+              "triggerPathId": -586518395524324900,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19006103,
+              "removerPathId": 9117994074405074000,
+              "removedElementIds": [
+                19006102,
+                19006100
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-586518395524324900;elementId=19006102.triggerEffectList[0]|battle-element-assets.jsonl#path_id=9117994074405074000;elementId=19006103"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -622,6 +732,25 @@
         "propertyElementIds": [
           19006104
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19006104
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19006102,
+            "triggerPathId": -586518395524324900,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19006103,
+            "removerPathId": 9117994074405074000,
+            "removedElementIds": [
+              19006102,
+              19006100
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-586518395524324900;elementId=19006102.triggerEffectList[0]|battle-element-assets.jsonl#path_id=9117994074405074000;elementId=19006103"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -669,6 +798,9 @@
         "propertyElementIds": [
           19001108
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -727,6 +859,9 @@
         "propertyElementIds": [
           19005303
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -794,6 +929,7 @@
               "actionKinds": [
                 "charged-attack"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.WhackAttack=2",
               "status": "applied",
               "skillTagId": 2,
@@ -841,6 +977,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003.formulaParams|functionParams"
         },
         "durationMs": 12000,
+        "leafDurationMs": 12000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 12000,
+          "leafDurationMs": 12000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19004004,
+              "triggerPathId": -5965205261606050000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19004005,
+              "removerPathId": 7099609182927284000,
+              "removedElementIds": [
+                19004001,
+                19004004
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-5965205261606050000;elementId=19004004.triggerEffectList[0]|battle-element-assets.jsonl#path_id=7099609182927284000;elementId=19004005"
+            }
+          ]
+        },
         "stackMode": "stack",
         "stackDelta": 1,
         "maxStacks": 20,
@@ -897,6 +1056,25 @@
         "propertyElementIds": [
           19004003
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19004003
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19004004,
+            "triggerPathId": -5965205261606050000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19004005,
+            "removerPathId": 7099609182927284000,
+            "removedElementIds": [
+              19004001,
+              19004004
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-5965205261606050000;elementId=19004004.triggerEffectList[0]|battle-element-assets.jsonl#path_id=7099609182927284000;elementId=19004005"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": [
           19004001
@@ -936,6 +1114,7 @@
               "conditionTypeName": "CheckSkillType",
               "conditionValue": 8,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|condition-value-unresolved",
               "status": "static-evidence-gap",
               "skillTagId": 8,
@@ -981,6 +1160,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403.formulaParams|functionParams"
         },
         "durationMs": 24000,
+        "leafDurationMs": 24000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 24000,
+          "leafDurationMs": 24000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19003405,
+              "triggerPathId": 5427396134452986000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19003406,
+              "removerPathId": 8968385713706110000,
+              "removedElementIds": [
+                19003401,
+                19003405
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=5427396134452986000;elementId=19003405.triggerEffectList[0]|battle-element-assets.jsonl#path_id=8968385713706110000;elementId=19003406"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -1037,6 +1239,25 @@
         "propertyElementIds": [
           19003403
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19003403
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19003405,
+            "triggerPathId": 5427396134452986000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19003406,
+            "removerPathId": 8968385713706110000,
+            "removedElementIds": [
+              19003401,
+              19003405
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=5427396134452986000;elementId=19003405.triggerEffectList[0]|battle-element-assets.jsonl#path_id=8968385713706110000;elementId=19003406"
+          }
+        ],
         "damageElementIds": [
           19003402
         ],
@@ -1082,6 +1303,9 @@
         "propertyElementIds": [
           19003602
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -1133,6 +1357,9 @@
         "propertyElementIds": [
           19008901
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -1186,6 +1413,7 @@
               "actionKinds": [
                 "star-skill"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalSkill=3",
               "status": "applied",
               "skillTagId": 3,
@@ -1233,6 +1461,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=6108188296881701000;elementId=19004501.formulaParams|functionParams"
         },
         "durationMs": 11000,
+        "leafDurationMs": 11000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 11000,
+          "leafDurationMs": 11000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=6108188296881701000;elementId=19004501.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19004502,
+              "triggerPathId": -7145523878264672000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19004503,
+              "removerPathId": 4750093517218540000,
+              "removedElementIds": [
+                19004502,
+                19004500
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-7145523878264672000;elementId=19004502.triggerEffectList[0]|battle-element-assets.jsonl#path_id=4750093517218540000;elementId=19004503"
+            }
+          ]
+        },
         "stackMode": "stack",
         "stackDelta": 1,
         "maxStacks": 3,
@@ -1287,6 +1538,25 @@
         "propertyElementIds": [
           19004501
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19004501
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19004502,
+            "triggerPathId": -7145523878264672000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19004503,
+            "removerPathId": 4750093517218540000,
+            "removedElementIds": [
+              19004502,
+              19004500
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-7145523878264672000;elementId=19004502.triggerEffectList[0]|battle-element-assets.jsonl#path_id=4750093517218540000;elementId=19004503"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -1321,6 +1591,7 @@
               "conditionTypeName": null,
               "conditionValue": 750,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             }
@@ -1364,6 +1635,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-4023729244501754000;elementId=19003302.formulaParams|functionParams"
         },
         "durationMs": 16000,
+        "leafDurationMs": 16000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 16000,
+          "leafDurationMs": 16000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-4023729244501754000;elementId=19003302.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19003303,
+              "triggerPathId": 8345606802078422000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19003304,
+              "removerPathId": 384910675516213060,
+              "removedElementIds": [
+                19003301,
+                19003303
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=8345606802078422000;elementId=19003303.triggerEffectList[0]|battle-element-assets.jsonl#path_id=384910675516213060;elementId=19003304"
+            }
+          ]
+        },
         "stackMode": "stack",
         "stackDelta": 1,
         "maxStacks": 5,
@@ -1418,6 +1712,25 @@
         "propertyElementIds": [
           19003302
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19003302
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19003303,
+            "triggerPathId": 8345606802078422000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19003304,
+            "removerPathId": 384910675516213060,
+            "removedElementIds": [
+              19003301,
+              19003303
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=8345606802078422000;elementId=19003303.triggerEffectList[0]|battle-element-assets.jsonl#path_id=384910675516213060;elementId=19003304"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -1455,6 +1768,7 @@
               "conditionTypeName": null,
               "conditionValue": 196,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             },
@@ -1464,6 +1778,7 @@
               "conditionTypeName": null,
               "conditionValue": 796,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500.triggerConditionList[1]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             }
@@ -1507,6 +1822,30 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=1889171037961678300;elementId=19005503.formulaParams|functionParams"
         },
         "durationMs": 16000,
+        "leafDurationMs": 16000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 16000,
+          "leafDurationMs": 16000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=1889171037961678300;elementId=19005503.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19005501,
+              "triggerPathId": -4399865725648617500,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19005502,
+              "removerPathId": 3754040156341870000,
+              "removedElementIds": [
+                19005501,
+                19005500,
+                19005503
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-4399865725648617500;elementId=19005501.triggerEffectList[0]|battle-element-assets.jsonl#path_id=3754040156341870000;elementId=19005502"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -1561,6 +1900,26 @@
         "propertyElementIds": [
           19005503
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19005503
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19005501,
+            "triggerPathId": -4399865725648617500,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19005502,
+            "removerPathId": 3754040156341870000,
+            "removedElementIds": [
+              19005501,
+              19005500,
+              19005503
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4399865725648617500;elementId=19005501.triggerEffectList[0]|battle-element-assets.jsonl#path_id=3754040156341870000;elementId=19005502"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -1604,6 +1963,9 @@
         "propertyElementIds": [
           19008101
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -1682,6 +2044,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-5655228325641076000;elementId=19009202.formulaParams|functionParams"
         },
         "durationMs": 8000,
+        "leafDurationMs": 8000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 8000,
+          "leafDurationMs": 8000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-5655228325641076000;elementId=19009202.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19009203,
+              "triggerPathId": -4367699657717201000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19009204,
+              "removerPathId": -2147379834560092000,
+              "removedElementIds": [
+                19009201,
+                19009203
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-4367699657717201000;elementId=19009203.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-2147379834560092000;elementId=19009204"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -1736,6 +2121,25 @@
         "propertyElementIds": [
           19009202
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19009202
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19009203,
+            "triggerPathId": -4367699657717201000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19009204,
+            "removerPathId": -2147379834560092000,
+            "removedElementIds": [
+              19009201,
+              19009203
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4367699657717201000;elementId=19009203.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-2147379834560092000;elementId=19009204"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -1779,6 +2183,9 @@
         "propertyElementIds": [
           19008401
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -1824,6 +2231,7 @@
               "conditionTypeName": null,
               "conditionValue": 41,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             }
@@ -1867,6 +2275,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=4769837230415874000;elementId=19009102.formulaParams|functionParams"
         },
         "durationMs": 10000,
+        "leafDurationMs": 10000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 10000,
+          "leafDurationMs": 10000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=4769837230415874000;elementId=19009102.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19009103,
+              "triggerPathId": -3445039949594947000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19009104,
+              "removerPathId": -8533015542964227000,
+              "removedElementIds": [
+                19009101,
+                19009103
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-3445039949594947000;elementId=19009103.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-8533015542964227000;elementId=19009104"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -1921,6 +2352,25 @@
         "propertyElementIds": [
           19009102
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19009102
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19009103,
+            "triggerPathId": -3445039949594947000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19009104,
+            "removerPathId": -8533015542964227000,
+            "removedElementIds": [
+              19009101,
+              19009103
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-3445039949594947000;elementId=19009103.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-8533015542964227000;elementId=19009104"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -1966,6 +2416,7 @@
               "actionKinds": [
                 "ultimate"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillSlot=6|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType.UltraSkill=4",
               "status": "applied",
               "skillSlotId": 4,
@@ -1979,6 +2430,7 @@
               "actionKinds": [
                 "ultimate"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.UltraSkill=4",
               "status": "applied",
               "skillTagId": 4,
@@ -2026,6 +2478,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-2274249246834308600;elementId=19009302.formulaParams|functionParams"
         },
         "durationMs": 20000,
+        "leafDurationMs": 20000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 20000,
+          "leafDurationMs": 20000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-2274249246834308600;elementId=19009302.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19009303,
+              "triggerPathId": 5351292391925197000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19009304,
+              "removerPathId": -38305952935310960,
+              "removedElementIds": [
+                19009303,
+                19009301
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=5351292391925197000;elementId=19009303.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-38305952935310960;elementId=19009304"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -2080,6 +2555,25 @@
         "propertyElementIds": [
           19009302
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19009302
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19009303,
+            "triggerPathId": 5351292391925197000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19009304,
+            "removerPathId": -38305952935310960,
+            "removedElementIds": [
+              19009303,
+              19009301
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=5351292391925197000;elementId=19009303.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-38305952935310960;elementId=19009304"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -2120,6 +2614,9 @@
         "propertyElementIds": [
           19008201
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -2171,6 +2668,9 @@
         "propertyElementIds": [
           19008601
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -2222,6 +2722,9 @@
         "propertyElementIds": [
           19008701
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -2273,6 +2776,9 @@
         "propertyElementIds": [
           19008501
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -2326,6 +2832,7 @@
               "actionKinds": [
                 "star-skill"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalSkill=3",
               "status": "applied",
               "skillTagId": 3,
@@ -2375,6 +2882,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-2685633708192990000;elementId=19009002.formulaParams|functionParams"
         },
         "durationMs": 24000,
+        "leafDurationMs": 24000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 24000,
+          "leafDurationMs": 24000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-2685633708192990000;elementId=19009002.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19009003,
+              "triggerPathId": -205856549124100740,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19009004,
+              "removerPathId": -2962143974706669000,
+              "removedElementIds": [
+                19009003,
+                19009001
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-205856549124100740;elementId=19009003.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-2962143974706669000;elementId=19009004"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -2429,6 +2959,25 @@
         "propertyElementIds": [
           19009002
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19009002
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19009003,
+            "triggerPathId": -205856549124100740,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19009004,
+            "removerPathId": -2962143974706669000,
+            "removedElementIds": [
+              19009003,
+              19009001
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-205856549124100740;elementId=19009003.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-2962143974706669000;elementId=19009004"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -2469,6 +3018,9 @@
         "propertyElementIds": [
           19008001
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -2520,6 +3072,9 @@
         "propertyElementIds": [
           19008301
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -2593,6 +3148,9 @@
           19008803
         ],
         "propertyElementIds": [],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [
           19008802
         ],
@@ -2653,6 +3211,9 @@
         "propertyElementIds": [
           19006502
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -2716,6 +3277,9 @@
           19001902,
           19001908
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -2769,6 +3333,9 @@
         "propertyElementIds": [
           19004601
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -2822,6 +3389,9 @@
         "propertyElementIds": [
           19006001
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -2875,6 +3445,7 @@
               "actionKinds": [
                 "ultimate"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillSlot=6|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType.UltraSkill=4",
               "status": "applied",
               "skillSlotId": 4,
@@ -2888,6 +3459,7 @@
               "actionKinds": [
                 "ultimate"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.UltraSkill=4",
               "status": "applied",
               "skillTagId": 4,
@@ -2935,6 +3507,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=475903754845527040;elementId=19002302.formulaParams|functionParams"
         },
         "durationMs": 24000,
+        "leafDurationMs": 24000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 24000,
+          "leafDurationMs": 24000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=475903754845527040;elementId=19002302.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19002303,
+              "triggerPathId": -7235947898045361000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19002304,
+              "removerPathId": 3369733273761218000,
+              "removedElementIds": [
+                19002303,
+                19002301
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-7235947898045361000;elementId=19002303.triggerEffectList[0]|battle-element-assets.jsonl#path_id=3369733273761218000;elementId=19002304"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -2989,6 +3584,25 @@
         "propertyElementIds": [
           19002302
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19002302
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19002303,
+            "triggerPathId": -7235947898045361000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19002304,
+            "removerPathId": 3369733273761218000,
+            "removedElementIds": [
+              19002303,
+              19002301
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-7235947898045361000;elementId=19002303.triggerEffectList[0]|battle-element-assets.jsonl#path_id=3369733273761218000;elementId=19002304"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -3031,6 +3645,7 @@
               "actionKinds": [
                 "star-skill"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalSkill=3",
               "status": "applied",
               "skillTagId": 3,
@@ -3080,6 +3695,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=8461738275188953000;elementId=19006602.formulaParams|functionParams"
         },
         "durationMs": 15000,
+        "leafDurationMs": 15000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 15000,
+          "leafDurationMs": 15000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=8461738275188953000;elementId=19006602.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19006603,
+              "triggerPathId": -8036893766653860000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19006604,
+              "removerPathId": -1757536058529027000,
+              "removedElementIds": [
+                19006603,
+                19006601
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-8036893766653860000;elementId=19006603.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-1757536058529027000;elementId=19006604"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -3134,6 +3772,25 @@
         "propertyElementIds": [
           19006602
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19006602
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19006603,
+            "triggerPathId": -8036893766653860000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19006604,
+            "removerPathId": -1757536058529027000,
+            "removedElementIds": [
+              19006603,
+              19006601
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-8036893766653860000;elementId=19006603.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-1757536058529027000;elementId=19006604"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -3184,6 +3841,9 @@
           19003203,
           19003206
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -3237,6 +3897,7 @@
               "actionKinds": [
                 "limit-counter"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.ExtremityAttack=11",
               "status": "applied",
               "skillTagId": 11,
@@ -3284,6 +3945,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-6749174475042234000;elementId=19004701.formulaParams|functionParams"
         },
         "durationMs": 8000,
+        "leafDurationMs": 8000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 8000,
+          "leafDurationMs": 8000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-6749174475042234000;elementId=19004701.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19004702,
+              "triggerPathId": -2104999658291692500,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19004703,
+              "removerPathId": -3100482819455307300,
+              "removedElementIds": [
+                19004702,
+                19004700
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-2104999658291692500;elementId=19004702.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-3100482819455307300;elementId=19004703"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -3338,6 +4022,25 @@
         "propertyElementIds": [
           19004701
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19004701
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19004702,
+            "triggerPathId": -2104999658291692500,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19004703,
+            "removerPathId": -3100482819455307300,
+            "removedElementIds": [
+              19004702,
+              19004700
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-2104999658291692500;elementId=19004702.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-3100482819455307300;elementId=19004703"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -3380,6 +4083,7 @@
               "actionKinds": [
                 "charged-attack"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.WhackAttack=2",
               "status": "applied",
               "skillTagId": 2,
@@ -3429,6 +4133,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-5650259386971768000;elementId=19006702.formulaParams|functionParams"
         },
         "durationMs": 4000,
+        "leafDurationMs": 4000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 4000,
+          "leafDurationMs": 4000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-5650259386971768000;elementId=19006702.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19006703,
+              "triggerPathId": -5317438612348948000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19006704,
+              "removerPathId": -5531579820576181000,
+              "removedElementIds": [
+                19006703,
+                19006701
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-5317438612348948000;elementId=19006703.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-5531579820576181000;elementId=19006704"
+            }
+          ]
+        },
         "stackMode": "stack",
         "stackDelta": 1,
         "maxStacks": 6,
@@ -3482,6 +4209,25 @@
         ],
         "propertyElementIds": [
           19006702
+        ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19006702
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19006703,
+            "triggerPathId": -5317438612348948000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19006704,
+            "removerPathId": -5531579820576181000,
+            "removedElementIds": [
+              19006703,
+              19006701
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-5317438612348948000;elementId=19006703.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-5531579820576181000;elementId=19006704"
+          }
         ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
@@ -3550,6 +4296,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002.formulaParams|functionParams"
         },
         "durationMs": 4000,
+        "leafDurationMs": 4000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 4000,
+          "leafDurationMs": 4000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19002003,
+              "triggerPathId": -4555595480637739000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19002004,
+              "removerPathId": -3749110526543835600,
+              "removedElementIds": [
+                19002001,
+                19002003
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-4555595480637739000;elementId=19002003.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-3749110526543835600;elementId=19002004"
+            }
+          ]
+        },
         "stackMode": "stack",
         "stackDelta": 1,
         "maxStacks": 30,
@@ -3604,6 +4373,25 @@
         "propertyElementIds": [
           19002002
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19002002
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19002003,
+            "triggerPathId": -4555595480637739000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19002004,
+            "removerPathId": -3749110526543835600,
+            "removedElementIds": [
+              19002001,
+              19002003
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4555595480637739000;elementId=19002003.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-3749110526543835600;elementId=19002004"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -3648,6 +4436,7 @@
               "actionKinds": [
                 "star-skill"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalSkill=3",
               "status": "applied",
               "skillTagId": 3,
@@ -3692,6 +4481,9 @@
           19003504
         ],
         "propertyElementIds": [],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [
           19003503
         ],
@@ -3765,6 +4557,9 @@
           19005804,
           19005802
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -3829,6 +4624,9 @@
           19005703,
           19005704
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -3874,6 +4672,7 @@
               "conditionTypeName": null,
               "conditionValue": 796,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             }
@@ -3919,6 +4718,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=8480096044321114000;elementId=19005901.formulaParams|functionParams"
         },
         "durationMs": 8000,
+        "leafDurationMs": 8000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 8000,
+          "leafDurationMs": 8000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=8480096044321114000;elementId=19005901.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19005902,
+              "triggerPathId": 9068157119378917000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19005903,
+              "removerPathId": 7848872638825181000,
+              "removedElementIds": [
+                19005900,
+                19005902
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=9068157119378917000;elementId=19005902.triggerEffectList[0]|battle-element-assets.jsonl#path_id=7848872638825181000;elementId=19005903"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -3973,6 +4795,25 @@
         "propertyElementIds": [
           19005901
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19005901
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19005902,
+            "triggerPathId": 9068157119378917000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19005903,
+            "removerPathId": 7848872638825181000,
+            "removedElementIds": [
+              19005900,
+              19005902
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=9068157119378917000;elementId=19005902.triggerEffectList[0]|battle-element-assets.jsonl#path_id=7848872638825181000;elementId=19005903"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -4012,6 +4853,7 @@
               "actionKinds": [
                 "ultimate"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.UltraSkill=4",
               "status": "applied",
               "skillTagId": 4,
@@ -4023,6 +4865,7 @@
               "conditionTypeName": null,
               "conditionValue": 250,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101.triggerConditionList[1]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             }
@@ -4066,6 +4909,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102.formulaParams|functionParams"
         },
         "durationMs": 20000,
+        "leafDurationMs": 20000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 20000,
+          "leafDurationMs": 20000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19004103,
+              "triggerPathId": -8265144590356460000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19004104,
+              "removerPathId": 944581446419746400,
+              "removedElementIds": [
+                19004103,
+                19004101
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-8265144590356460000;elementId=19004103.triggerEffectList[0]|battle-element-assets.jsonl#path_id=944581446419746400;elementId=19004104"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -4120,6 +4986,25 @@
         "propertyElementIds": [
           19004102
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19004102
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19004103,
+            "triggerPathId": -8265144590356460000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19004104,
+            "removerPathId": 944581446419746400,
+            "removedElementIds": [
+              19004103,
+              19004101
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-8265144590356460000;elementId=19004103.triggerEffectList[0]|battle-element-assets.jsonl#path_id=944581446419746400;elementId=19004104"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -4164,6 +5049,7 @@
               "actionKinds": [
                 "normal-attack"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1",
               "status": "applied",
               "skillTagId": 1,
@@ -4211,6 +5097,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-3194128450977334000;elementId=19005402.formulaParams|functionParams"
         },
         "durationMs": 5000,
+        "leafDurationMs": 5000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 5000,
+          "leafDurationMs": 5000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-3194128450977334000;elementId=19005402.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19005403,
+              "triggerPathId": 5364908935820874000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19005404,
+              "removerPathId": -1485206947117001200,
+              "removedElementIds": [
+                19005401,
+                19005403
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=5364908935820874000;elementId=19005403.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-1485206947117001200;elementId=19005404"
+            }
+          ]
+        },
         "stackMode": "stack",
         "stackDelta": 1,
         "maxStacks": 15,
@@ -4265,6 +5174,25 @@
         "propertyElementIds": [
           19005402
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19005402
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19005403,
+            "triggerPathId": 5364908935820874000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19005404,
+            "removerPathId": -1485206947117001200,
+            "removedElementIds": [
+              19005401,
+              19005403
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=5364908935820874000;elementId=19005403.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-1485206947117001200;elementId=19005404"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -4299,6 +5227,7 @@
               "conditionTypeName": null,
               "conditionValue": 37,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             }
@@ -4344,6 +5273,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=7184896566896581000;elementId=19002802.formulaParams|functionParams"
         },
         "durationMs": 5000,
+        "leafDurationMs": 5000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 5000,
+          "leafDurationMs": 5000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=7184896566896581000;elementId=19002802.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19002803,
+              "triggerPathId": 4809548416992624000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19002804,
+              "removerPathId": -5776540755657732000,
+              "removedElementIds": [
+                19002801,
+                19002803
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4809548416992624000;elementId=19002803.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-5776540755657732000;elementId=19002804"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -4398,6 +5350,25 @@
         "propertyElementIds": [
           19002802
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19002802
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19002803,
+            "triggerPathId": 4809548416992624000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19002804,
+            "removerPathId": -5776540755657732000,
+            "removedElementIds": [
+              19002801,
+              19002803
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4809548416992624000;elementId=19002803.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-5776540755657732000;elementId=19002804"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -4435,6 +5406,7 @@
               "conditionTypeName": null,
               "conditionValue": 299,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             },
@@ -4444,6 +5416,7 @@
               "conditionTypeName": null,
               "conditionValue": 499,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701.triggerConditionList[1]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             }
@@ -4487,6 +5460,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702.formulaParams|functionParams"
         },
         "durationMs": 3000,
+        "leafDurationMs": 3000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 3000,
+          "leafDurationMs": 3000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19002703,
+              "triggerPathId": 7692827483544024000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19002704,
+              "removerPathId": -2814982816242620400,
+              "removedElementIds": [
+                19002701,
+                19002703
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=7692827483544024000;elementId=19002703.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-2814982816242620400;elementId=19002704"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -4541,6 +5537,25 @@
         "propertyElementIds": [
           19002702
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19002702
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19002703,
+            "triggerPathId": 7692827483544024000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19002704,
+            "removerPathId": -2814982816242620400,
+            "removedElementIds": [
+              19002701,
+              19002703
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=7692827483544024000;elementId=19002703.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-2814982816242620400;elementId=19002704"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -4593,6 +5608,9 @@
           19004306,
           19004303
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -4649,6 +5667,9 @@
           19004403,
           19004401
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -4694,6 +5715,7 @@
               "conditionTypeName": null,
               "conditionValue": 43,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             },
@@ -4705,6 +5727,7 @@
               "actionKinds": [
                 "normal-attack"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1",
               "status": "applied",
               "skillTagId": 1,
@@ -4716,6 +5739,7 @@
               "conditionTypeName": null,
               "conditionValue": 32,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101.triggerConditionList[2]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             }
@@ -4759,6 +5783,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102.formulaParams|functionParams"
         },
         "durationMs": 8000,
+        "leafDurationMs": 8000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 8000,
+          "leafDurationMs": 8000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19002103,
+              "triggerPathId": -3320725752405659000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19002104,
+              "removerPathId": 1232050123381959400,
+              "removedElementIds": [
+                19002103,
+                19002101
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-3320725752405659000;elementId=19002103.triggerEffectList[0]|battle-element-assets.jsonl#path_id=1232050123381959400;elementId=19002104"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -4813,6 +5860,25 @@
         "propertyElementIds": [
           19002102
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19002102
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19002103,
+            "triggerPathId": -3320725752405659000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19002104,
+            "removerPathId": 1232050123381959400,
+            "removedElementIds": [
+              19002103,
+              19002101
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-3320725752405659000;elementId=19002103.triggerEffectList[0]|battle-element-assets.jsonl#path_id=1232050123381959400;elementId=19002104"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -4862,6 +5928,9 @@
         "propertyElementIds": [
           19004203
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -4887,7 +5956,7 @@
         "skillLogicType": 6,
         "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900110]"
       },
-      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "activationPrerequisites": [],
       "trigger": {
@@ -4897,30 +5966,48 @@
         "event": "BeforeSkill",
         "frameAnchor": "action-start",
         "condition": {
-          "kind": "condition-group",
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillSlotId": null,
+          "skillSlotName": null,
+          "skillTagId": 22,
+          "skillTagName": "EntrySkill",
           "logic": "and",
           "logicValue": 0,
+          "logicName": "AND",
           "conditions": [
             {
               "kind": "skill-tag",
               "conditionType": 11,
               "conditionTypeName": "CheckSkillType",
               "conditionValue": 22,
-              "actionKinds": [],
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|condition-value-unresolved",
-              "status": "static-evidence-gap",
+              "actionKinds": [
+                "star-carry"
+              ],
+              "provenanceRequirement": "switch-triggered-on-enter",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.EntrySkill=22",
+              "status": "applied",
               "skillTagId": 22,
-              "skillTagName": null
+              "skillTagName": "EntrySkill"
             }
           ],
-          "actionKinds": [],
-          "status": "static-evidence-gap",
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101.triggerConditionType|triggerConditionList"
+          "actionKinds": [
+            "star-carry"
+          ],
+          "status": "applied",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
         },
         "triggerTargetType": 0,
         "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101.triggerTargetType",
-        "target": null,
-        "targetKind": "unresolved",
+        "target": {
+          "kind": "self-actor",
+          "effectTargetType": 0,
+          "effectTargetTypeName": "Self",
+          "effectListIndex": 0,
+          "targetElementPathId": 2200502015063215000,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        },
+        "targetKind": "self-actor",
         "sourceIdentity": "battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101"
       },
       "effect": {
@@ -4946,7 +6033,41 @@
           "family": "literal-a-with-common-ratio",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002.formulaParams|functionParams"
         },
-        "durationMs": -1,
+        "durationMs": 6000,
+        "leafDurationMs": -1,
+        "lifecycle": {
+          "sourceKind": "battle-buff-element-wrapper",
+          "durationMs": 6000,
+          "leafDurationMs": -1,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=2200502015063215000;elementId=19001001.time|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TBuffElementParams.time|injectElementDataList|notDelElementDataList",
+          "wrapper": {
+            "elementId": 19001001,
+            "pathId": 2200502015063215000,
+            "durationMs": 6000,
+            "inheritType": 1,
+            "isTeamElement": true,
+            "injectedElementIds": [
+              19001002
+            ],
+            "detachedElementIds": [],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=2200502015063215000;elementId=19001001|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TBuffElementParams.time|injectElementDataList|notDelElementDataList"
+          },
+          "removalPaths": [
+            {
+              "triggerElementId": 19001105,
+              "triggerPathId": -4879556858062219000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19001106,
+              "removerPathId": 7128754736433594000,
+              "removedElementIds": [
+                19001105,
+                19001101
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-4879556858062219000;elementId=19001105.triggerEffectList[0]|battle-element-assets.jsonl#path_id=7128754736433594000;elementId=19001106"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -5003,15 +6124,33 @@
         "propertyElementIds": [
           19001002
         ],
+        "wrapperElementIds": [
+          19001001
+        ],
+        "effectPathElementIds": [
+          19001001,
+          19001002
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19001105,
+            "triggerPathId": -4879556858062219000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19001106,
+            "removerPathId": 7128754736433594000,
+            "removedElementIds": [
+              19001105,
+              19001101
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4879556858062219000;elementId=19001105.triggerEffectList[0]|battle-element-assets.jsonl#path_id=7128754736433594000;elementId=19001106"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
-      "runtimeGaps": [
-        "effect-property-duration-unresolved",
-        "effect-skill-tag-condition-operator-unsupported",
-        "effect-trigger-target-unsupported"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10147].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900110.asset/MonoBehaviour/skill_control_1900110__4798028882442525532.json|battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101|battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002"
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10147].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900110.asset/MonoBehaviour/skill_control_1900110__4798028882442525532.json|battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101|battle-element-assets.jsonl#path_id=2200502015063215000;elementId=19001001|battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002"
     },
     {
       "soulEssenceId": 10149,
@@ -5041,6 +6180,7 @@
               "conditionTypeName": null,
               "conditionValue": 150,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             }
@@ -5084,6 +6224,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=6856932050092692000;elementId=19002202.formulaParams|functionParams"
         },
         "durationMs": 24000,
+        "leafDurationMs": 24000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 24000,
+          "leafDurationMs": 24000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=6856932050092692000;elementId=19002202.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19002203,
+              "triggerPathId": 8734108486225751000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19002204,
+              "removerPathId": -8795550585474545000,
+              "removedElementIds": [
+                19002201,
+                19002203
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=8734108486225751000;elementId=19002203.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-8795550585474545000;elementId=19002204"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -5138,6 +6301,25 @@
         "propertyElementIds": [
           19002202
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19002202
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19002203,
+            "triggerPathId": 8734108486225751000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19002204,
+            "removerPathId": -8795550585474545000,
+            "removedElementIds": [
+              19002201,
+              19002203
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=8734108486225751000;elementId=19002203.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-8795550585474545000;elementId=19002204"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -5175,6 +6357,7 @@
               "conditionTypeName": null,
               "conditionValue": 196,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             },
@@ -5184,6 +6367,7 @@
               "conditionTypeName": null,
               "conditionValue": 796,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600.triggerConditionList[1]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             }
@@ -5229,6 +6413,30 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601.formulaParams|functionParams"
         },
         "durationMs": 8000,
+        "leafDurationMs": 8000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 8000,
+          "leafDurationMs": 8000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19005602,
+              "triggerPathId": -6871140308236108000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19005603,
+              "removerPathId": -4475238469482280000,
+              "removedElementIds": [
+                19005602,
+                19005600,
+                19005601
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-6871140308236108000;elementId=19005602.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-4475238469482280000;elementId=19005603"
+            }
+          ]
+        },
         "stackMode": "stack",
         "stackDelta": 1,
         "maxStacks": 5,
@@ -5283,6 +6491,26 @@
         "propertyElementIds": [
           19005601
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19005601
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19005602,
+            "triggerPathId": -6871140308236108000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19005603,
+            "removerPathId": -4475238469482280000,
+            "removedElementIds": [
+              19005602,
+              19005600,
+              19005601
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-6871140308236108000;elementId=19005602.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-4475238469482280000;elementId=19005603"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -5300,7 +6528,7 @@
         "skillLogicType": 6,
         "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900130]"
       },
-      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "activationPrerequisites": [],
       "trigger": {
@@ -5310,25 +6538,36 @@
         "event": "BeforeSkill",
         "frameAnchor": "action-start",
         "condition": {
-          "kind": "condition-group",
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillSlotId": null,
+          "skillSlotName": null,
+          "skillTagId": 22,
+          "skillTagName": "EntrySkill",
           "logic": "or",
           "logicValue": 1,
+          "logicName": "OR",
           "conditions": [
             {
               "kind": "skill-tag",
               "conditionType": 11,
               "conditionTypeName": "CheckSkillType",
               "conditionValue": 22,
-              "actionKinds": [],
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|condition-value-unresolved",
-              "status": "static-evidence-gap",
+              "actionKinds": [
+                "star-carry"
+              ],
+              "provenanceRequirement": "switch-triggered-on-enter",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.EntrySkill=22",
+              "status": "applied",
               "skillTagId": 22,
-              "skillTagName": null
+              "skillTagName": "EntrySkill"
             }
           ],
-          "actionKinds": [],
-          "status": "static-evidence-gap",
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301.triggerConditionType|triggerConditionList"
+          "actionKinds": [
+            "star-carry"
+          ],
+          "status": "applied",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1"
         },
         "triggerTargetType": 0,
         "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301.triggerTargetType",
@@ -5365,6 +6604,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=3837107787407859700;elementId=19001302.formulaParams|functionParams"
         },
         "durationMs": 10000,
+        "leafDurationMs": 10000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 10000,
+          "leafDurationMs": 10000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=3837107787407859700;elementId=19001302.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19001303,
+              "triggerPathId": -1224296198400584400,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19001304,
+              "removerPathId": -1452328729141503000,
+              "removedElementIds": [
+                19001303,
+                19001301
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-1224296198400584400;elementId=19001303.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-1452328729141503000;elementId=19001304"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -5419,12 +6681,29 @@
         "propertyElementIds": [
           19001302
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19001302
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19001303,
+            "triggerPathId": -1224296198400584400,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19001304,
+            "removerPathId": -1452328729141503000,
+            "removedElementIds": [
+              19001303,
+              19001301
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-1224296198400584400;elementId=19001303.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-1452328729141503000;elementId=19001304"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
-      "runtimeGaps": [
-        "effect-skill-tag-condition-operator-unsupported"
-      ],
+      "runtimeGaps": [],
       "sourceIdentity": "NewTable/soulessence.rows[id=10151].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900130.asset/MonoBehaviour/skill_control_1900130__6614751741932084313.json|battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301|battle-element-assets.jsonl#path_id=3837107787407859700;elementId=19001302"
     },
     {
@@ -5463,6 +6742,9 @@
         "propertyElementIds": [
           19004902
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -5516,6 +6798,7 @@
               "actionKinds": [
                 "normal-attack"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1",
               "status": "applied",
               "skillTagId": 1,
@@ -5563,6 +6846,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=2209371490931731500;elementId=19002402.formulaParams|functionParams"
         },
         "durationMs": 15000,
+        "leafDurationMs": 15000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 15000,
+          "leafDurationMs": 15000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=2209371490931731500;elementId=19002402.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19002403,
+              "triggerPathId": -290953566564089340,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19002404,
+              "removerPathId": 352098071069106750,
+              "removedElementIds": [
+                19002401,
+                19002403
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-290953566564089340;elementId=19002403.triggerEffectList[0]|battle-element-assets.jsonl#path_id=352098071069106750;elementId=19002404"
+            }
+          ]
+        },
         "stackMode": "stack",
         "stackDelta": 1,
         "maxStacks": 5,
@@ -5617,6 +6923,25 @@
         "propertyElementIds": [
           19002402
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19002402
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19002403,
+            "triggerPathId": -290953566564089340,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19002404,
+            "removerPathId": 352098071069106750,
+            "removedElementIds": [
+              19002401,
+              19002403
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-290953566564089340;elementId=19002403.triggerEffectList[0]|battle-element-assets.jsonl#path_id=352098071069106750;elementId=19002404"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -5659,6 +6984,7 @@
               "actionKinds": [
                 "normal-attack"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1",
               "status": "applied",
               "skillTagId": 1,
@@ -5706,6 +7032,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=6931937794752071000;elementId=19002502.formulaParams|functionParams"
         },
         "durationMs": 15000,
+        "leafDurationMs": 15000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 15000,
+          "leafDurationMs": 15000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=6931937794752071000;elementId=19002502.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19002503,
+              "triggerPathId": 6398542354332833000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19002504,
+              "removerPathId": 6908420661756801000,
+              "removedElementIds": [
+                19002503,
+                19002501
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=6398542354332833000;elementId=19002503.triggerEffectList[0]|battle-element-assets.jsonl#path_id=6908420661756801000;elementId=19002504"
+            }
+          ]
+        },
         "stackMode": "stack",
         "stackDelta": 1,
         "maxStacks": 5,
@@ -5760,6 +7109,25 @@
         "propertyElementIds": [
           19002502
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19002502
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19002503,
+            "triggerPathId": 6398542354332833000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19002504,
+            "removerPathId": 6908420661756801000,
+            "removedElementIds": [
+              19002503,
+              19002501
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=6398542354332833000;elementId=19002503.triggerEffectList[0]|battle-element-assets.jsonl#path_id=6908420661756801000;elementId=19002504"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -5800,6 +7168,9 @@
         "propertyElementIds": [
           19002602
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -5878,6 +7249,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-7968102161953321000;elementId=19007503.formulaParams|functionParams"
         },
         "durationMs": 20000,
+        "leafDurationMs": 20000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 20000,
+          "leafDurationMs": 20000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-7968102161953321000;elementId=19007503.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19007501,
+              "triggerPathId": -58941686336343010,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19007502,
+              "removerPathId": 8982902866550055000,
+              "removedElementIds": [
+                19007500,
+                19007501
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-58941686336343010;elementId=19007501.triggerEffectList[0]|battle-element-assets.jsonl#path_id=8982902866550055000;elementId=19007502"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -5932,6 +7326,25 @@
         "propertyElementIds": [
           19007503
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19007503
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19007501,
+            "triggerPathId": -58941686336343010,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19007502,
+            "removerPathId": 8982902866550055000,
+            "removedElementIds": [
+              19007500,
+              19007501
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-58941686336343010;elementId=19007501.triggerEffectList[0]|battle-element-assets.jsonl#path_id=8982902866550055000;elementId=19007502"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -5969,6 +7382,7 @@
               "conditionTypeName": null,
               "conditionValue": 650,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400.triggerConditionList[0]|condition-type-unresolved|condition-value-unresolved",
               "status": "static-evidence-gap"
             }
@@ -6012,6 +7426,9 @@
           19007403,
           19007404
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -6064,6 +7481,7 @@
               "actionKinds": [
                 "ultimate"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillSlot=6|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType.UltraSkill=4",
               "status": "applied",
               "skillSlotId": 4,
@@ -6104,6 +7522,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=8237672842561680000;elementId=19001402.formulaParams|functionParams"
         },
         "durationMs": 2000,
+        "leafDurationMs": 2000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 2000,
+          "leafDurationMs": 2000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=8237672842561680000;elementId=19001402.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19001403,
+              "triggerPathId": -3770338219727486000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19001404,
+              "removerPathId": -134977893005118030,
+              "removedElementIds": [
+                19001401,
+                19001403
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-3770338219727486000;elementId=19001403.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-134977893005118030;elementId=19001404"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -6158,6 +7599,25 @@
         "propertyElementIds": [
           19001402
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19001402
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19001403,
+            "triggerPathId": -3770338219727486000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19001404,
+            "removerPathId": -134977893005118030,
+            "removedElementIds": [
+              19001401,
+              19001403
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-3770338219727486000;elementId=19001403.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-134977893005118030;elementId=19001404"
+          }
+        ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -6203,6 +7663,7 @@
               "actionKinds": [
                 "normal-attack"
               ],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1",
               "status": "applied",
               "skillTagId": 1,
@@ -6243,6 +7704,29 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502.formulaParams|functionParams"
         },
         "durationMs": 15000,
+        "leafDurationMs": 15000,
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 15000,
+          "leafDurationMs": 15000,
+          "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502.time",
+          "wrapper": null,
+          "removalPaths": [
+            {
+              "triggerElementId": 19001503,
+              "triggerPathId": 5037932307766098000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19001504,
+              "removerPathId": 7457526910130286000,
+              "removedElementIds": [
+                19001501,
+                19001503
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=5037932307766098000;elementId=19001503.triggerEffectList[0]|battle-element-assets.jsonl#path_id=7457526910130286000;elementId=19001504"
+            }
+          ]
+        },
         "stackMode": "refresh",
         "stackDelta": 1,
         "maxStacks": 1,
@@ -6296,6 +7780,25 @@
         ],
         "propertyElementIds": [
           19001502
+        ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [
+          19001502
+        ],
+        "removalPaths": [
+          {
+            "triggerElementId": 19001503,
+            "triggerPathId": 5037932307766098000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19001504,
+            "removerPathId": 7457526910130286000,
+            "removedElementIds": [
+              19001501,
+              19001503
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=5037932307766098000;elementId=19001503.triggerEffectList[0]|battle-element-assets.jsonl#path_id=7457526910130286000;elementId=19001504"
+          }
         ],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
@@ -6395,6 +7898,9 @@
           19007913,
           19007915
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -6448,6 +7954,9 @@
         "propertyElementIds": [
           19007702
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -6508,6 +8017,9 @@
         "propertyElementIds": [
           19007602
         ],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -6553,6 +8065,7 @@
               "conditionTypeName": "CheckSkillType",
               "conditionValue": 14,
               "actionKinds": [],
+              "provenanceRequirement": null,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|condition-value-unresolved",
               "status": "static-evidence-gap",
               "skillTagId": 14,
@@ -6593,6 +8106,9 @@
           19007803
         ],
         "propertyElementIds": [],
+        "wrapperElementIds": [],
+        "effectPathElementIds": [],
+        "removalPaths": [],
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
@@ -8640,17 +10156,6 @@
       "sourceIdentity": "NewTable/soulessence.rows[id=10146].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900420.asset/MonoBehaviour/skill_control_1900420__-4853276219982639132.json"
     },
     {
-      "soulEssenceId": 10147,
-      "effectSkillId": 1900110,
-      "status": "source-indexed-runtime-unapplied",
-      "reasons": [
-        "effect-property-duration-unresolved",
-        "effect-skill-tag-condition-operator-unsupported",
-        "effect-trigger-target-unsupported"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10147].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900110.asset/MonoBehaviour/skill_control_1900110__4798028882442525532.json|battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101|battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002"
-    },
-    {
       "soulEssenceId": 10149,
       "effectSkillId": 1900220,
       "status": "source-indexed-runtime-unapplied",
@@ -8669,15 +10174,6 @@
         "effect-trigger-event-operator-unsupported"
       ],
       "sourceIdentity": "NewTable/soulessence.rows[id=10150].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900560.asset/MonoBehaviour/skill_control_1900560__1002074190257504026.json|battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600|battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601"
-    },
-    {
-      "soulEssenceId": 10151,
-      "effectSkillId": 1900130,
-      "status": "source-indexed-runtime-unapplied",
-      "reasons": [
-        "effect-skill-tag-condition-operator-unsupported"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10151].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900130.asset/MonoBehaviour/skill_control_1900130__6614751741932084313.json|battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301|battle-element-assets.jsonl#path_id=3837107787407859700;elementId=19001302"
     },
     {
       "soulEssenceId": 10152,
@@ -8839,8 +10335,8 @@
     "controlClosureCount": 62,
     "resourceReferenceCount": 282,
     "missingResourceReferenceCount": 0,
-    "runtimeAppliedCount": 12,
-    "unresolvedCount": 50,
+    "runtimeAppliedCount": 14,
+    "unresolvedCount": 48,
     "setSkillCount": 12,
     "setSkillThresholdIndexedCount": 12,
     "setSkillRuntimeAppliedCount": 0,
@@ -8852,9 +10348,9 @@
       "source-indexed-composite-effect": 36
     },
     "byRuntimeStatus": {
-      "runtime-applied": 12,
-      "source-indexed-runtime-unapplied": 50
+      "runtime-applied": 14,
+      "source-indexed-runtime-unapplied": 48
     }
   },
-  "catalogHash": "b3fd516e07fd6424"
+  "catalogHash": "3ea9c341d3801bf2"
 }
