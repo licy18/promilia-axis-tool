@@ -1,6 +1,7 @@
 # M12-B3-C15 Periodic Persistent Property Roots
 
-- Status: `verification-complete-awaiting-product-acceptance`.
+- Status: `product-accepted-stage-paused`.
+- Product acceptance baseline: `aafb6aa6c645b7b7490fdba0f71b8941da311f6e`.
 - Base: C14 product acceptance `a5434a1e0b01c2d70db1832064e34f63fb44e279`.
 - Scope: only the persistent installation root, periodic condition evaluation, and finite property-leaf lifecycle shared by `10078/10084/10152/10197`. M12-C, formal search, UI, package, performance, and later mechanism batches remain locked.
 
@@ -35,3 +36,5 @@ Final generated hashes are source `661271d99b9e9b9e`, roster `93b5f932243f030b`,
 - Production build passed with 1875 modules; generation assert-clean and `git diff --check` passed.
 - Standard Machine Axis hashes remain `ed57d06444210db0 / 5c21e09cba3bab55 / 416b4a015702f1b2 / 0b410dc9255d2654`.
 - Existing Sass deprecation, circular chunk, large chunk, package-size, and performance warnings remain non-blocking and are outside C15.
+
+C15 passed product acceptance at the recorded baseline. Work remains paused until an explicit user instruction; C16, M12-C, formal search, and any new mechanism batch have not started.

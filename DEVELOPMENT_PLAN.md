@@ -379,7 +379,7 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 状态：已完成。Workbench project/draft v1-v16 可直接生成六资源计划，自动继承 3 个角色槽、各自奇波、敌人及兼容来源动作；动作候选唯一时直接锁定，有歧义时必须按槽显式选择。缺奇波、owner 不兼容、重复身份或旧/未来不支持 schema 均在写文件前拒绝。生成后继续复用同一六 owner 预检、受控命令和 production 批次守门，不新增 UI 或公式。
 
-当前里程碑：**M12-B3-C14 已在 `a5434a1e0b01c2d70db1832064e34f63fb44e279` 通过产品验收；C15 已完成实现与来源闭包，等待产品复验**。C15 以版本化原生证据闭合持久安装根、周期条件复评和有限叶生命周期，接入 `10084/10152/10197`；`10078` 因 `[302,303]` 多 PropertyTag 的原生匹配语义未闭合而继续 fail-closed。当前为 42/62 灵子、11/12 套装技能运行时接入，375 条阻断（354 not-implemented、21 evidence-insufficient）；五类 admission、M12-C 与正式搜索继续锁定。
+当前里程碑：**M12-B3-C15 已在 `aafb6aa6c645b7b7490fdba0f71b8941da311f6e` 通过产品验收，阶段暂停待命**。C15 以版本化原生证据闭合持久安装根、周期条件复评和有限叶生命周期，接入 `10084/10152/10197`；`10078` 因 `[302,303]` 多 PropertyTag 的原生匹配语义未闭合而继续 fail-closed。当前为 42/62 灵子、11/12 套装技能运行时接入，375 条阻断（354 not-implemented、21 evidence-insufficient）；五类 admission、M12-C 与正式搜索继续锁定。未收到用户明确恢复指令前，不启动 C16 或任何新机制批次。
 
 ### M2-R1：时间轴直接装配表面（已完成并通过产品验收）
 
@@ -885,7 +885,7 @@ Workbench 草稿快照与项目重建路径现在持久化并恢复 Machine Axis
 
 M12-B-R1 已关闭原五项主体缺口；R2 进一步把资源等待从逐整数事件改为候选动作真实费用驱动的最早可执行阈值，并让多 seed 的角色、动作与 hit 贡献按稳定 identity 聚合且与排序指标守恒。独立验收确认 SP 90→100 在 `2886F` 达阈值、`2887F` 释放星决技，405/425 两个样本的总指标和三层贡献均为 415；聚焦回归 6 文件/62 测试、相关无头回归 6 文件/66 测试及 production build 均通过。M12-B 正式关闭且不做 R3，当前进入 M12-B2；M12-C 继续锁定。
 
-#### M12-B3：风/雷体系、星临者与装配优化资格阶段（B3-C15 等待产品复验）
+#### M12-B3：风/雷体系、星临者与装配优化资格阶段（B3-C15 已通过产品验收，阶段暂停）
 
 - 本阶段只建立并验收优化资格，不执行正式配队搜索；M12-B2 已通过并关闭，当前从 B3-A 固定分母、资格产物和严格培养合同开始，M12-C 在本阶段整体通过前继续锁定。
 - B3-A-R1 已在 `f902de10c42c2c4dc750be2316fabe3bc026f8cc` 通过产品验收。B3-B-R1 唯一生成命令继续重算 `11/43/62/137/12`，source/roster/manifests/ledger/catalog/binding hash 分别为 `4c1259408e1d716c`、`a8f727dfd0288518`、`8f8feddcd152890a`、`d6dcd25e48632b9e`、`14e8c20e2a6ab41c`、`79777849b22eeb65`。固定培养输入 profile hash 仍为 `c432bd0a3f2d6415`；当前版本仍不研究或应用奇波 DNA，`dnaFactors` 省略时规范为 `[]`，非空输入在 compile/validate/search 前拒绝，DNA 不进入资格缺口。
@@ -895,7 +895,7 @@ M12-B-R1 已关闭原五项主体缺口；R2 进一步把资源等待从逐整�
 - B3-C-R1 已在 `2804f201ac2a6ea4eebc1339703a9d40c0aba5a5` 通过产品验收：Battle element 叶节点 `defaultPropertyTags` 已保留到 census、effect definition、modifier、来源审计和 hit 结算；`10060` 仅增强普攻，`10094/10098` 仅增强重击，未知、缺失或多标签不会扩大成全伤害。
 - B3-C2 进一步闭合 `10055/10093` 的 AfterSkill 星决技 OR 选择器、`AllHero` 独立目标命令和 action-end 时序，以及 `10097` 的真实极限反击 BeforeSkill/action-start 路径。`baseFunctionId=3` 的 `dynamicExtra` 经统一 Q16.16 公式注册表按 `A/10000` 结算，`baseFunctionId=5` 保持 A 点数；来源角色、目标角色、刷新、右开到期与循环继承均进入 canonical trace。C2-R1 明确将 BeforeSkill/AfterSkill 绑定为 `execute=true` 的动作事件，无 hit 或全部 miss 仍触发；BeforeDamage/AfterDamage 继续只由 landed hit 触发，blocked 动作两类事件均不生成。当前灵子为 12/62 `runtime-applied`、50/62 `dynamic-unapplied`，阻断账本为 446 条（430 `not-implemented`、16 `evidence-insufficient`），五类 formal admission 为空，M12-C 继续锁定。census/hash 与验证结论见 `reports/m12/m12-b3-c-dynamic-loadout-effect-acceptance.json`。
 - C2 功能提交为 `942639f07d5a417f8145f8c11aadf006646dfbee`，C2-R1 产品验收基线为 `ba3422c722f8640857fa8fd9d19040e755c8484a`。C3 从 verified `controlBinding.logic.skillTag` 识别真实切入派生 `EntrySkill=22`：`10151` 以叶节点 10 秒生命周期刷新；`10147` 保留 `19001101 -> 19001001 -> 19001002` 三层来源，由 BuffElement 包装层 6 秒控制生命周期，叶节点 `time=-1` 不会扩成常驻，且 `defaultPropertyTags=[301]` 继续只匹配重击。退场 tag、伪造独立星携技和未执行/CD 阻断动作均不触发；全 miss 的已执行入场动作仍触发。当前灵子为 14/62 `runtime-applied`、48/62 `dynamic-unapplied`，阻断账本为 442 条（426 `not-implemented`、16 `evidence-insufficient`），五类 formal admission 为空，M12-C 继续锁定。
-- C3 已在 `e05b10fd27a6c723a773a7680169a9180031c48e` 通过产品验收。C4 至 C13 均已按各自产品基线通过；C14 在 `a5434a1e0b01c2d70db1832064e34f63fb44e279` 通过来源身份核查，`set-skill:3:4` 因正式文本与唯一可达旧图冲突而保持 `evidence-insufficient`。C15 由 `periodic-persistent-property-runtime-evidence.json` 闭合持久根的周期复评、失败条件消耗周期、有限 Cover 叶和卸载边界，并接入 `10084/10152/10197`；`10078` 的 `[302,303]` 多 PropertyTag 匹配仍缺原生证据。当前为 42/62 灵子、11/12 套装技能 `runtime-applied`、375 条阻断（354 `not-implemented`、21 `evidence-insufficient`）；五类 formal admission 为空，M12-C 继续锁定。
+- C3 已在 `e05b10fd27a6c723a773a7680169a9180031c48e` 通过产品验收。C4 至 C13 均已按各自产品基线通过；C14 在 `a5434a1e0b01c2d70db1832064e34f63fb44e279` 通过来源身份核查，`set-skill:3:4` 因正式文本与唯一可达旧图冲突而保持 `evidence-insufficient`。C15 由 `periodic-persistent-property-runtime-evidence.json` 闭合持久根的周期复评、失败条件消耗周期、有限 Cover 叶和卸载边界，并接入 `10084/10152/10197`；`10078` 的 `[302,303]` 多 PropertyTag 匹配仍缺原生证据。C15 已在 `aafb6aa6c645b7b7490fdba0f71b8941da311f6e` 通过产品验收。当前为 42/62 灵子、11/12 套装技能 `runtime-applied`、375 条阻断（354 `not-implemented`、21 `evidence-insufficient`）；五类 formal admission 为空，M12-C 继续锁定，阶段暂停等待用户明确恢复。
 - 资格分母由生成数据按规则确定，而不是手写后静默漂移。角色范围为 `element.abbrName` 的离散属性标签中包含 `风` 或 `雷` 的全部角色，再额外并入一个统一的星临者优化对象；底层 `199001/199002` 只作为该对象的来源身份别名，不分别进入优化分母。奇波同样将 `element` 按 `、` 等分隔符拆成离散属性标签，纳入标签中包含 `风` 或 `雷` 的全部单属性及双属性奇波。装配范围为当前公开目录的全部灵子和五部位装备，并以 verified 静态目录中的套装技能门槛记录为动态效果分母。阶段启动时必须生成并提交 `reports/m12/m12-b3-optimization-qualification-roster.json`，记录筛选与归一化规则、生成时间、源文件 SHA-256、优化对象 ID/名称、来源别名、装配兼容关系与各分母计数；源数据变化必须显式重定基线并重新验收，不能自动增删分母。
 - 当前生成快照为 `2026-07-08T03:35:51.289Z`。角色源 `characters.json` SHA-256 为 `4A73F5E393F7410F5AF80A811CAC604D97CA6BF74CA8E0BE66445CA932FB5052`，奇波源 `kibos.json` SHA-256 为 `1CCA2E3D0D1CB5A0A984164AB0C6B05EF0B6C5416B0E9872F0C8AB36394519C4`，装备源 `equipment.json` SHA-256 为 `D718604A7B28F84163C175F7F7D0B4D26F891606BB18ACF22939E2EF16EAF593`，灵子源 `soulessences.json` SHA-256 为 `385DBB96CF0FECA4B42C7D3D63040C506C310BEEB62ED7F9F37AC68FD012DCBE`，当前 verified mechanics package 文件 SHA-256 为 `B84AACA9CD3FE1384DF62CBDDE5DB531A0339E1C6A988F3FB6C9088D7953A971`。
 - 当前角色分母为 11 个优化对象：`101010 涂山小玉`、`102001 莉莉`、`103002 红宝石`、`107001 西芙莉雅`、`107002 米砂`、`108001 忒拉拉`、`108003 米蒂`、`109001 末音`、`111001 法兰塔`、`112001 姬瑟贝露`，以及统一的 `STARBORN 星临者`。星临者只生成一份资格 manifest、一个优化候选和一个队伍对象；`199001 女主角`、`199002 男主角` 作为 `sourceCharacterIds`/运行时外观别名映射到它，别名一致性只做适配回归，不形成两份产品签收，也不得被优化器枚举两次。
@@ -1040,7 +1040,7 @@ M12-B-R1 已关闭原五项主体缺口；R2 进一步把资源等待从逐整�
 63. 已通过产品验收：M11-C 在 `308dd07` 完成 canonical trace 可视编辑与复验闭环。
 64. 已完成协议实现：M11-D-R1 在 `899edea0c5a1f718153ebe86712ecd8c31aabf7d` 完成 committed source-of-truth、可执行 scenario case、精确 coverage edge、去重 ledger 与 manifest/catalog 发布索引门禁；该角色单边可视签收未带入最终合并外审基线，当前 `visually-accepted=0`、`optimization-ready=0`。M12、第四角色、包体优化和未验收奇波机制接入均未启动。
 65. 已完成并通过最终外部短复核：M11 无头核心外审在 `64603640bda82d6ab3d869e98d70696f73caeef7` 关闭，M11-01..09 与 R2 CLI/path 跟进项无新增 P0-P3；现有审计包和 SHA 不变。此结论不授予角色/奇波视觉验收或优化资格，M12 保持锁定，等待用户明确解锁。
-66. C14 已在 `a5434a1e0b01c2d70db1832064e34f63fb44e279` 通过产品验收；C15 已完成 `10084/10152/10197` 的周期持久根与有限叶接入并等待产品复验，`10078` 继续以多 PropertyTag 原生语义缺口阻断。五类 formal admission、M12-C 与正式搜索继续锁定。
+66. C15 已在 `aafb6aa6c645b7b7490fdba0f71b8941da311f6e` 通过产品验收；`10084/10152/10197` 的周期持久根与有限叶接入保持生效，`10078` 继续以多 PropertyTag 原生语义缺口阻断。当前阶段暂停待命，五类 formal admission、M12-C、正式搜索、C16 与新机制批次继续锁定。
 
 ## 8. 风险和取舍
 

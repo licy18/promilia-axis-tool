@@ -1,6 +1,6 @@
 # M12-B3-C15 Periodic Persistent Property Roots
 
-- Status: `b3-c15-verification-complete-awaiting-product-acceptance`
+- Status: `b3-c15-product-accepted-stage-paused`
 - Source snapshot: `661271d99b9e9b9e`
 - Roster: `93b5f932243f030b`
 - Catalog: `fd4eb4442b914a17`

@@ -1708,7 +1708,7 @@ function createSummary({
 }) {
   return {
     phase: 'M12-B3-C15',
-    status: 'b3-c15-verification-complete-awaiting-product-acceptance',
+    status: 'b3-c15-product-accepted-stage-paused',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
