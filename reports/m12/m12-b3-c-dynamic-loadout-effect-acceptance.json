@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 22,
-  "phase": "M12-B3-C12-R1",
+  "schemaVersion": 23,
+  "phase": "M12-B3-C13",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "8f01dba447106b03783582d58e80badb8a571b8e",
+  "baseCommit": "5537e5a59f9776d7045b0ce8ad9915738715a9a4",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
   "reviewedC7R2Commit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
@@ -15,11 +15,12 @@
   "reviewedC11Commit": "02935223e914af18cb0bf10abf324edbdd373e17",
   "acceptedC11R1Commit": "8f01dba447106b03783582d58e80badb8a571b8e",
   "reviewedC12Commit": "a432467d4322ee0dae58e3d47df3b5c2eb55447a",
+  "acceptedC12R1Commit": "5537e5a59f9776d7045b0ce8ad9915738715a9a4",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
-    "phase": "M12-B3-C11-R1",
-    "productionMechanicsCommit": "02935223e914af18cb0bf10abf324edbdd373e17",
-    "acceptanceBaseline": "8f01dba447106b03783582d58e80badb8a571b8e",
+    "phase": "M12-B3-C12-R1",
+    "productionMechanicsCommit": "a432467d4322ee0dae58e3d47df3b5c2eb55447a",
+    "acceptanceBaseline": "5537e5a59f9776d7045b0ce8ad9915738715a9a4",
     "status": "product-accepted"
   },
   "r1ProtocolGuard": {
@@ -94,13 +95,13 @@
     ]
   },
   "scope": {
-    "batch": "before-skill-controlled-normal-skill-composite-team-recovery",
+    "batch": "after-damage-event-target-weakness-absorption-debuff",
     "soulEssenceIds": [],
     "runtimeAppliedSoulEssenceIds": [],
     "evidenceBlockedSoulEssenceIds": [],
-    "setSkillIds": ["set-skill:1:4"],
-    "runtimeAppliedSetSkillIds": ["set-skill:1:4"],
-    "explicitlyExcludedSetSkillThresholds": ["set-skill:3:4", "set-skill:6:4"],
+    "setSkillIds": ["set-skill:6:4"],
+    "runtimeAppliedSetSkillIds": ["set-skill:6:4"],
+    "explicitlyExcludedSetSkillThresholds": ["set-skill:3:4"],
     "formalSearchExecuted": false,
     "m12cLocked": true,
     "fixedCultivationChanged": false,
@@ -201,6 +202,26 @@
       "elementFormulaPath": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
       "elementFormulaBytes": 15113,
       "elementFormulaSha256": "ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e"
+    },
+    "afterDamageTargetPropertyRuntimeEvidence": {
+      "path": "scripts/optimization-qualification/evidence/after-damage-target-property-runtime-evidence.json",
+      "bytes": 12185,
+      "sha256": "c60a582cda07b5e017cb47751a323f8958a6b1e292dc1a7f5bb34e7904374447",
+      "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+      "binaryBytes": 222485544,
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "il2CppDumpPath": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+      "il2CppDumpBytes": 97428254,
+      "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+      "localizationPath": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_skill.json",
+      "localizationBytes": 228442,
+      "localizationSha256": "7c2cc08450e352fd02aa199acbeca90e71ce598ba3a31c9c343e5cf49d73c551",
+      "battleElementAssetsPath": "C:/PC2/Codex/AzPr/work/combat-formulas/battle-element-assets.jsonl",
+      "battleElementAssetsBytes": 43759616,
+      "battleElementAssetsSha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
+      "skillControlPath": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998008.asset/MonoBehaviour/skill_control_19998008__3385592889625444843.json",
+      "skillControlBytes": 1920,
+      "skillControlSha256": "c0450ec3810066062c395cac2d68298a8b7118ae0dc3107e53a6cea6fe05d62d"
     },
     "soulControlClosure": {
       "skillCount": 62,
@@ -498,6 +519,64 @@
       "runtimeBranchesBySetSkillId": false
     }
   },
+  "c13AfterDamageTargetWeaknessAbsorptionContract": {
+    "nativeEvidence": {
+      "afterDamageDispatch": "AliveElementSystem.OnExecuteDamageElement settles the current damage packet before DamageEventTriggerUtility.OnAfterAttack dispatches AfterDamage(2)",
+      "observerAndCondition": "Self(0) observes only the equipped source actor; OR(1) accepts final verified NormalAttack(1) or WhackAttack(2) skill tags",
+      "target": "TriggerElement.GetTriggerTarget Target(1) resolves target+0x20, the real event target entity",
+      "wrapper": "BuffElement 199999071 executes both injected PropertyElement leaves and Cover(3) refreshes one target instance",
+      "properties": "199999064/199999070 apply attr202/203 from A=2000 through common 1 and base 5",
+      "triggerCounter": "TriggerElement.Parse initializes m_triggerCount=0 and copies triggerCounter; TriggerEvent(1) get_triggerCount resolves configured 999999, CanTrigger blocks at the finite limit, and Trigger increments then frees the source at that positive limit",
+      "unload": "199999066 removes only source roots 199999065/199999063; an already materialized target wrapper keeps its original absolute expiry"
+    },
+    "evidenceArtifact": {
+      "path": "scripts/optimization-qualification/evidence/after-damage-target-property-runtime-evidence.json",
+      "bytes": 12185,
+      "sha256": "c60a582cda07b5e017cb47751a323f8958a6b1e292dc1a7f5bb34e7904374447",
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "dumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+      "localizationSha256": "7c2cc08450e352fd02aa199acbeca90e71ce598ba3a31c9c343e5cf49d73c551",
+      "battleElementAssetsSha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
+      "skillControlSha256": "c0450ec3810066062c395cac2d68298a8b7118ae0dc3107e53a6cea6fe05d62d",
+      "rvaRangeCount": 9
+    },
+    "sourceConflict": {
+      "localizedSkill": "30 percent for 8 seconds",
+      "triggerDescribe": "30 percent for 24 seconds",
+      "executableWrapperAndLeaves": "20 percent for 24 seconds",
+      "resolution": "the executable wrapper, linked leaves, formulas and native consumers are authoritative: attr202/203 +2000 for 24000ms"
+    },
+    "set-skill:6:4": {
+      "skillId": 19998008,
+      "triggerElementId": 199999063,
+      "wrapperElementId": 199999071,
+      "propertyElementIds": [199999064, 199999070],
+      "threshold": "at least four valid same-set equipment slots; one runtime installation at four or five pieces",
+      "trigger": "AfterDamage(2), Self observer, NormalAttack(1) OR WhackAttack(2), landed verified transaction only",
+      "effectTarget": "native event target enemy",
+      "durationMs": 24000,
+      "stackMode": "refresh",
+      "maxStacks": 1,
+      "triggerCounter": 999999,
+      "triggerCounterSemantics": "finite TriggerEvent lifetime; one count per accepted native trigger occurrence, persisted in canonical cycle state",
+      "currentPacketVisible": false,
+      "laterPacketWeaknessTypeMultiplierDelta": 0.2
+    },
+    "negativeGates": [
+      "fewer than four matching pieces or cross-set pieces",
+      "miss, execute=false or runtime-blocked action",
+      "wrong or missing final skill tag",
+      "wrong source actor or missing event target",
+      "unmaterialized damage packet",
+      "non-damage-event projection"
+    ],
+    "remainingSetSkillConflict": {
+      "setSkillId": "set-skill:3:4",
+      "status": "source-indexed-runtime-unapplied",
+      "reason": "accessory_set text describes normal-attack attack stacking while the reachable resource graph identifies Iron-Mane Overlord, five received-hit state and maximum-HP semantics; reserved for independent C14 evidence closure"
+    },
+    "runtimeBranchesBySetSkillId": false
+  },
   "definitions": {
     "10048": {
       "name": "璇枢",
@@ -678,13 +757,13 @@
   "batchResults": {
     "runtimeAppliedSoulEssenceCount": 39,
     "runtimeUnappliedSoulEssenceCount": 23,
-    "runtimeAppliedSetSkillCount": 10,
-    "runtimeUnappliedSetSkillCount": 2,
+    "runtimeAppliedSetSkillCount": 11,
+    "runtimeUnappliedSetSkillCount": 1,
     "newlyAppliedSoulEssenceIds": [],
-    "newlyAppliedSetSkillIds": ["set-skill:1:4"],
+    "newlyAppliedSetSkillIds": ["set-skill:6:4"],
     "preservedRuntimeAppliedSoulEssenceCount": 39,
-    "preservedRuntimeAppliedSetSkillCount": 9,
-    "remainingBlockedFourPieceSetSkillIds": ["set-skill:3:4", "set-skill:6:4"]
+    "preservedRuntimeAppliedSetSkillCount": 10,
+    "remainingBlockedFourPieceSetSkillIds": ["set-skill:3:4"]
   },
   "qualification": {
     "denominators": {
@@ -694,9 +773,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 382,
+    "blockingUniqueGapCount": 381,
     "blockingByCategory": {
-      "not-implemented": 364,
+      "not-implemented": 363,
       "evidence-insufficient": 18
     },
     "formalAdmissions": {
@@ -708,15 +787,15 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "2b7d7760b80761b1",
-    "rosterHash": "c9e288a29b05d17b",
-    "manifestsHash": "ee74913560aec624",
-    "ledgerHash": "5f9784e737be583f",
-    "bindingMatrixHash": "66607a402069b8bc",
-    "qualificationCatalogHash": "6623bb969daea122",
-    "dynamicLoadoutEffectCensusHash": "015aa4b6cfd788a1",
-    "soulEssenceEffectCatalogHash": "1e3b8c4d4cecaf84",
-    "soulEssenceSourceSnapshotHash": "eb75b9cb48c5bbf2",
+    "sourceSnapshotHash": "52aefbcdd3136e43",
+    "rosterHash": "fd752ae90abcb097",
+    "manifestsHash": "6eedb0da6923c0c1",
+    "ledgerHash": "afad67326a28035d",
+    "bindingMatrixHash": "4eccbccddb161a51",
+    "qualificationCatalogHash": "64a821822e0362fa",
+    "dynamicLoadoutEffectCensusHash": "59553fb7be3d86fb",
+    "soulEssenceEffectCatalogHash": "1648903a7e038e2c",
+    "soulEssenceSourceSnapshotHash": "3a5cdd3fce685b76",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
     "soulEssenceTriggerContractHash": "ee74f6284b3b5118",
     "verifiedMechanicsPackageHash": "20498c0f436fdcc3f0e86ebb6308ea75586d4b2379127d23ec4d971e81bb88e9",
@@ -729,7 +808,7 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "C12-R1 corrects generic actor-target direct-SP Kibo sharing; the standard Machine Axis fixture does not execute this set transaction, so its canonical hashes and numeric evaluation remain unchanged.",
+    "reason": "C13 adds source-closed AfterDamage enemy-target weakness absorption for set-skill:6:4; the standard Machine Axis fixture does not equip or execute this set transaction, so its canonical hashes and numeric evaluation remain unchanged.",
     "machineAxisCanonicalHashDrift": 0,
     "machineAxisTraceMetadataHash": "416b4a015702f1b2",
     "machineAxisEvaluationHashDrift": 0,
@@ -742,14 +821,15 @@
     "c7NonDamageAndResourceParityRegression": 0,
     "c11ActionlessPeriodicAfterHealRegression": 0,
     "c12BeforeSkillCompositeRegression": 0,
-    "c12R1DirectSpRoutingRegression": 0
+    "c12R1DirectSpRoutingRegression": 0,
+    "c13AfterDamageTargetDebuffRegression": 0
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 7, "tests": 179, "status": "passed" },
+    "focusedMechanics": { "files": 6, "tests": 178, "status": "passed" },
     "optimizationQualificationDirectory": {
-      "files": 8,
-      "tests": 60,
+      "files": 9,
+      "tests": 63,
       "status": "passed"
     },
     "characterProfileAndMigration": {
@@ -760,12 +840,12 @@
     },
     "machineAxis": {
       "files": 12,
-      "tests": 158,
+      "tests": 159,
       "status": "passed-with-established-30s-process-test-budget"
     },
     "canonicalAndRuntime": {
-      "files": 5,
-      "tests": 167,
+      "files": 6,
+      "tests": 190,
       "status": "passed"
     },
     "audits": {

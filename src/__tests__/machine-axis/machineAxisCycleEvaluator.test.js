@@ -507,6 +507,54 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
+  it('rejects a loop that consumes a finite loadout trigger lifetime', () => {
+    const createBoundary = ({ acceptedCount, remainingTriggerCount }) => ({
+      activeActorId: 'actor-1',
+      actors: [{ actorId: 'actor-1', sp: 100, max: 100 }],
+      kibos: [],
+      tuningMarks: [],
+      specialResources: [],
+      actorVitals: [],
+      kiboVitals: [],
+      cooldowns: [],
+      effects: [],
+      soulTriggerCounters: [
+        {
+          bindingKey: 'actor-1|set-skill:6:4|199999063',
+          triggerType: 1,
+          configuredTriggerCounter: 999999,
+          triggerCounterLimit: 999999,
+          acceptedCount,
+          remainingTriggerCount,
+          exhausted: false,
+          sourceIdentityHash: 'c13-source',
+        },
+      ],
+      kiboPassiveRuntime: [],
+      targetStates: [],
+      shields: [],
+      pendingEvents: [],
+    });
+    const result = compareCycleBoundaryStates(
+      createBoundary({ acceptedCount: 4, remainingTriggerCount: 999995 }),
+      createBoundary({ acceptedCount: 6, remainingTriggerCount: 999993 })
+    );
+
+    expect(result.closed).toBe(false);
+    expect(result.stateDiffs).toContainEqual(
+      expect.objectContaining({
+        dimension: 'soulTriggerCounters',
+        equal: false,
+      })
+    );
+    expect(result.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-state-not-closed',
+        path: 'state.soulTriggerCounters',
+      })
+    );
+  });
+
   it('keeps cooldown charge identity in the closure proof', () => {
     const start = {
       activeActorId: 'actor-1',

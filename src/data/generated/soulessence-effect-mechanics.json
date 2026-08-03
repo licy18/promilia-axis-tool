@@ -48,7 +48,11 @@
       "sourceIdentity": "GameAssembly.dll#BeforeSkill/TriggerElement.conditions+interval/SpElement+SPSystem/FormulaUtility.GetOutputHeal+ChangeHP/GetTriggerTarget.AllHero|dump.cs#NormalSkill/Control/ShareAll|NewTable/element_formula#108",
       "contractHash": "42580d9af5b05dfe"
     },
-    "sourceSnapshotHash": "eb75b9cb48c5bbf2"
+    "afterDamageTargetPropertyRuntimeEvidence": {
+      "sourceIdentity": "GameAssembly.dll#AliveElementSystem.OnExecuteDamageElement/DamageEventTriggerUtility.OnAfterAttack/TriggerElement.GetTriggerTarget/Parse/CanTrigger/Trigger/get_triggerCount/BuffElement.Execute/ExecuteInjectElements/Combine|dump.cs#AfterDamage/TriggerEvent/Target/Cover/WDM_PHYSICAL/WDM_MAGIC",
+      "contractHash": "ad70fda482e60e98"
+    },
+    "sourceSnapshotHash": "3a5cdd3fce685b76"
   },
   "policy": {
     "descriptionUsage": "discovery-and-cross-check-only",
@@ -60,7 +64,8 @@
       "equipped-actor-persistent-property-root",
       "set-skill-persistent-property",
       "set-skill-before-damage-stacking-property",
-      "set-skill-before-skill-composite-immediate"
+      "set-skill-before-skill-composite-immediate",
+      "set-skill-after-damage-target-property"
     ]
   },
   "propertyTagContract": {
@@ -13071,6 +13076,7 @@
         {
           "elementId": 199999024,
           "pathId": -2802459635003440600,
+          "triggerType": 1,
           "eventId": 5,
           "event": "BeforeSkill",
           "frameAnchor": "action-start",
@@ -13393,7 +13399,7 @@
       "runtimeStatus": "runtime-applied",
       "runtimeGaps": [],
       "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998006].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998006.asset/MonoBehaviour/skill_control_19998006__1459779804172427415.json|GameAssembly.dll#BeforeSkill/TriggerElement.conditions+interval/SpElement+SPSystem/FormulaUtility.GetOutputHeal+ChangeHP/GetTriggerTarget.AllHero|dump.cs#NormalSkill/Control/ShareAll|NewTable/element_formula#108|battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024|battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5780315057243861000;elementId=199999026|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0|GameAssembly.dll#BeforeSkill/TriggerElement.conditions+interval/SpElement+SPSystem/FormulaUtility.GetOutputHeal+ChangeHP/GetTriggerTarget.AllHero|dump.cs#NormalSkill/Control/ShareAll|NewTable/element_formula#108|battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024.triggerEffectList[1]|battle-element-assets.jsonl#path_id=892380267004970900;elementId=199999085|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15|GameAssembly.dll#BeforeSkill/TriggerElement.conditions+interval/SpElement+SPSystem/FormulaUtility.GetOutputHeal+ChangeHP/GetTriggerTarget.AllHero|dump.cs#NormalSkill/Control/ShareAll|NewTable/element_formula#108|battle-element-assets.jsonl#path_id=6971292572954515000;elementId=199999045.triggerEffectList[0]|battle-element-assets.jsonl#path_id=7930539322231180000;elementId=199999046",
-      "mechanicsHash": "0326870043f16cf3"
+      "mechanicsHash": "f1922576eeab2ae8"
     },
     {
       "setId": 2,
@@ -13674,6 +13680,7 @@
         {
           "elementId": 199999020,
           "pathId": -4719083164342722000,
+          "triggerType": 1,
           "eventId": 1,
           "event": "BeforeDamage",
           "frameAnchor": "hit-before-damage",
@@ -13944,7 +13951,7 @@
       "runtimeStatus": "runtime-applied",
       "runtimeGaps": [],
       "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998004].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998004.asset/MonoBehaviour/skill_control_19998004__-3432154940691725873.json|GameAssembly.dll#ChangePropertyElement.Combine/ChangePropertyConditionArrayObject.CombineLayer/DecreaseLayer/BaseElement.endTime|dump.cs#ECombineType.Overlying/EElementTriggerEventType.BeforeDamage/EElementTriggerFixedConditionType.CheckSkillType/ESkillTagType.NormalAttack|battle-element-assets.jsonl#path_id=-4719083164342722000;elementId=199999020|battle-element-assets.jsonl#path_id=-2930048594441716700;elementId=199999021|battle-element-assets.jsonl#path_id=3305903183597273600;elementId=199999039.triggerEffectList[0]|battle-element-assets.jsonl#path_id=4344962439394171400;elementId=199999040",
-      "mechanicsHash": "dccb517ab9c90e47"
+      "mechanicsHash": "b32e1affff19bf8c"
     },
     {
       "setId": 3,
@@ -14225,6 +14232,7 @@
         {
           "elementId": 199999022,
           "pathId": -3122175980655525000,
+          "triggerType": 1,
           "eventId": 4,
           "event": null,
           "frameAnchor": null,
@@ -14430,7 +14438,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998005].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/skill_control_19998005__-2339022120750825272.json",
-      "mechanicsHash": "a43ca2f86301c25a"
+      "mechanicsHash": "04b48229e5c94e85"
     },
     {
       "setId": 4,
@@ -14711,6 +14719,7 @@
         {
           "elementId": 199999018,
           "pathId": 6898765742999895000,
+          "triggerType": 1,
           "eventId": 1,
           "event": "BeforeDamage",
           "frameAnchor": "hit-before-damage",
@@ -15024,7 +15033,7 @@
       "runtimeStatus": "runtime-applied",
       "runtimeGaps": [],
       "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998003].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998003.asset/MonoBehaviour/skill_control_19998003__-3103682062580946589.json|GameAssembly.dll#ChangePropertyElement.Combine/ChangePropertyConditionArrayObject.CombineLayer/DecreaseLayer/BaseElement.endTime|dump.cs#ECombineType.Overlying/EElementTriggerEventType.BeforeDamage/EElementTriggerFixedConditionType.CheckSkillType/ESkillTagType.NormalAttack|battle-element-assets.jsonl#path_id=6898765742999895000;elementId=199999018|battle-element-assets.jsonl#path_id=-4495644276298113500;elementId=199999019|battle-element-assets.jsonl#path_id=2016069023922408200;elementId=199999035.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-6915696019662809000;elementId=199999036",
-      "mechanicsHash": "0043b9430c16ac4b"
+      "mechanicsHash": "42639a6759d54d18"
     },
     {
       "setId": 5,
@@ -15305,6 +15314,7 @@
         {
           "elementId": 199999056,
           "pathId": 1379284923835731500,
+          "triggerType": 1,
           "eventId": 44,
           "event": "AfterHeal",
           "frameAnchor": "heal-after-settlement",
@@ -15576,7 +15586,7 @@
       "runtimeStatus": "runtime-applied",
       "runtimeGaps": [],
       "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998007].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998007.asset/MonoBehaviour/skill_control_19998007__-7613573473471366488.json|GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.GetTriggerTarget@0x13BBF50/TriggerElement.CheckCondition@0x13B58F0/AliveElementSystem.OnExecuteNormalElement.Block@0x131A545|battle-element-assets.jsonl#path_id=1379284923835731500;elementId=199999056|battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057|battle-element-assets.jsonl#path_id=-4362329449039080400;elementId=199999058.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5058843380839846000;elementId=199999059",
-      "mechanicsHash": "e749462df4c9565c"
+      "mechanicsHash": "b3efe1b401d1b14b"
     },
     {
       "setId": 6,
@@ -15845,11 +15855,11 @@
       "thresholdActivation": {
         "selectedPieceCountRequired": 4,
         "comparison": "selected-piece-count-greater-than-or-equal",
-        "status": "source-indexed",
-        "appliedToRuntimeEffect": false,
+        "status": "runtime-applied",
+        "appliedToRuntimeEffect": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType"
       },
-      "mechanismFamily": "set-skill-afterdamage-effect",
+      "mechanismFamily": "set-skill-after-damage-target-property",
       "mechanismFamilies": [
         "set-skill-afterdamage-effect"
       ],
@@ -15857,6 +15867,7 @@
         {
           "elementId": 199999063,
           "pathId": -2660561195248504300,
+          "triggerType": 1,
           "eventId": 2,
           "event": "AfterDamage",
           "frameAnchor": "hit-after-damage",
@@ -15888,8 +15899,341 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-2660561195248504300;elementId=199999063"
         }
       ],
-      "trigger": null,
-      "effect": null,
+      "trigger": {
+        "elementId": 199999063,
+        "pathId": -2660561195248504300,
+        "eventId": 2,
+        "event": "AfterDamage",
+        "frameAnchor": "hit-after-damage",
+        "triggerType": 1,
+        "intervalMs": 0,
+        "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=-2660561195248504300;elementId=199999063.triggerInv",
+        "triggerCounter": 999999,
+        "condition": {
+          "kind": "condition-group",
+          "conditionType": null,
+          "skillSlotId": null,
+          "skillSlotName": null,
+          "skillTagId": null,
+          "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
+          "logic": "or",
+          "logicValue": 1,
+          "logicName": "OR",
+          "conditions": [
+            {
+              "kind": "skill-tag",
+              "conditionType": 11,
+              "conditionTypeName": "CheckSkillType",
+              "conditionValue": 1,
+              "actionKinds": [
+                "normal-attack"
+              ],
+              "provenanceRequirement": null,
+              "tuningProfiles": [],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-2660561195248504300;elementId=199999063.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalAttack=1",
+              "status": "applied",
+              "skillTagId": 1,
+              "skillTagName": "NormalAttack"
+            },
+            {
+              "kind": "skill-tag",
+              "conditionType": 11,
+              "conditionTypeName": "CheckSkillType",
+              "conditionValue": 2,
+              "actionKinds": [
+                "charged-attack"
+              ],
+              "provenanceRequirement": null,
+              "tuningProfiles": [],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-2660561195248504300;elementId=199999063.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.WhackAttack=2",
+              "status": "applied",
+              "skillTagId": 2,
+              "skillTagName": "WhackAttack"
+            }
+          ],
+          "actionKinds": [
+            "charged-attack",
+            "normal-attack"
+          ],
+          "status": "applied",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2660561195248504300;elementId=199999063.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1"
+        },
+        "triggerTargetType": 0,
+        "triggerTarget": {
+          "kind": "equipped-actor-source-events",
+          "triggerTargetType": 0,
+          "triggerTargetTypeName": "Self",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2660561195248504300;elementId=199999063.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+        },
+        "target": {
+          "kind": "event-target-entity",
+          "effectTargetType": 1,
+          "effectTargetTypeName": "Target",
+          "effectListIndex": 0,
+          "targetElementPathId": 6349252756564460000,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2660561195248504300;elementId=199999063.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Target=1|GameAssembly.dll#AliveElementSystem.OnExecuteDamageElement/DamageEventTriggerUtility.OnAfterAttack/TriggerElement.GetTriggerTarget/Parse/CanTrigger/Trigger/get_triggerCount/BuffElement.Execute/ExecuteInjectElements/Combine|dump.cs#AfterDamage/TriggerEvent/Target/Cover/WDM_PHYSICAL/WDM_MAGIC"
+        },
+        "targetKind": "event-target-entity",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-2660561195248504300;elementId=199999063"
+      },
+      "effect": {
+        "elementId": 199999071,
+        "pathId": 6349252756564460000,
+        "name": "装备 - debuff ",
+        "durationMs": 24000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1,
+        "combineType": 3,
+        "combineNumber": 0,
+        "propertyEffects": [
+          {
+            "elementId": 199999064,
+            "pathId": -5884995951490395000,
+            "name": "装备-怯影之翼 5",
+            "attributeId": 202,
+            "bucket": "dynamicExtra",
+            "calculateType": 1,
+            "propertyTags": [],
+            "propertyTagMatchMode": "unscoped",
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-5884995951490395000;elementId=199999064.defaultPropertyTags",
+            "formula": {
+              "formulaIdentity": "battle-effect-formula:set-skill:19998008:199999064:-5884995951490395000",
+              "commonFunctionId": 1,
+              "commonExpression": "G/10000",
+              "baseFunctionId": 5,
+              "baseExpression": "A",
+              "commonRatioRaw": 10000,
+              "sourceParameterEncoding": "battle-element-raw-a",
+              "family": "literal-a-with-common-ratio",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-5884995951490395000;elementId=199999064.formulaParams|functionParams"
+            },
+            "sourceRawA": 2000,
+            "valuesByStar": [
+              {
+                "star": 1,
+                "valueRaw": 2000,
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-5884995951490395000;elementId=199999064.formulaParams.formulaParamValues[0]"
+              }
+            ],
+            "leafDurationMs": -1,
+            "lifecycle": {
+              "sourceKind": "battle-buff-element-wrapper",
+              "durationMs": 24000,
+              "leafDurationMs": -1,
+              "durationSourceIdentity": "battle-element-assets.jsonl#path_id=6349252756564460000;elementId=199999071.time|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TBuffElementParams.time|injectElementDataList|notDelElementDataList",
+              "wrapper": {
+                "elementId": 199999071,
+                "pathId": 6349252756564460000,
+                "durationMs": 24000,
+                "inheritType": 0,
+                "isTeamElement": false,
+                "injectedElementIds": [
+                  199999064,
+                  199999070
+                ],
+                "detachedElementIds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=6349252756564460000;elementId=199999071|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TBuffElementParams.time|injectElementDataList|notDelElementDataList"
+              },
+              "removalPaths": [
+                {
+                  "triggerElementId": 199999065,
+                  "triggerPathId": -6224086841716568000,
+                  "triggerEventId": 36,
+                  "effectIndex": 0,
+                  "removerElementId": 199999066,
+                  "removerPathId": 5596010208760866000,
+                  "removedElementIds": [
+                    199999065,
+                    199999063
+                  ],
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-6224086841716568000;elementId=199999065.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5596010208760866000;elementId=199999066"
+                }
+              ]
+            },
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-5884995951490395000;elementId=199999064"
+          },
+          {
+            "elementId": 199999070,
+            "pathId": 7187107487063477000,
+            "name": "装备-怯影之翼 5",
+            "attributeId": 203,
+            "bucket": "dynamicExtra",
+            "calculateType": 1,
+            "propertyTags": [],
+            "propertyTagMatchMode": "unscoped",
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=7187107487063477000;elementId=199999070.defaultPropertyTags",
+            "formula": {
+              "formulaIdentity": "battle-effect-formula:set-skill:19998008:199999070:7187107487063477000",
+              "commonFunctionId": 1,
+              "commonExpression": "G/10000",
+              "baseFunctionId": 5,
+              "baseExpression": "A",
+              "commonRatioRaw": 10000,
+              "sourceParameterEncoding": "battle-element-raw-a",
+              "family": "literal-a-with-common-ratio",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=7187107487063477000;elementId=199999070.formulaParams|functionParams"
+            },
+            "sourceRawA": 2000,
+            "valuesByStar": [
+              {
+                "star": 1,
+                "valueRaw": 2000,
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=7187107487063477000;elementId=199999070.formulaParams.formulaParamValues[0]"
+              }
+            ],
+            "leafDurationMs": -1,
+            "lifecycle": {
+              "sourceKind": "battle-buff-element-wrapper",
+              "durationMs": 24000,
+              "leafDurationMs": -1,
+              "durationSourceIdentity": "battle-element-assets.jsonl#path_id=6349252756564460000;elementId=199999071.time|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TBuffElementParams.time|injectElementDataList|notDelElementDataList",
+              "wrapper": {
+                "elementId": 199999071,
+                "pathId": 6349252756564460000,
+                "durationMs": 24000,
+                "inheritType": 0,
+                "isTeamElement": false,
+                "injectedElementIds": [
+                  199999064,
+                  199999070
+                ],
+                "detachedElementIds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=6349252756564460000;elementId=199999071|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TBuffElementParams.time|injectElementDataList|notDelElementDataList"
+              },
+              "removalPaths": [
+                {
+                  "triggerElementId": 199999065,
+                  "triggerPathId": -6224086841716568000,
+                  "triggerEventId": 36,
+                  "effectIndex": 0,
+                  "removerElementId": 199999066,
+                  "removerPathId": 5596010208760866000,
+                  "removedElementIds": [
+                    199999065,
+                    199999063
+                  ],
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-6224086841716568000;elementId=199999065.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5596010208760866000;elementId=199999066"
+                }
+              ]
+            },
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=7187107487063477000;elementId=199999070"
+          }
+        ],
+        "lifecycle": {
+          "sourceKind": "battle-buff-element-wrapper",
+          "durationMs": 24000,
+          "wrapper": {
+            "elementId": 199999071,
+            "pathId": 6349252756564460000,
+            "durationMs": 24000,
+            "inheritType": 0,
+            "isTeamElement": false,
+            "injectedElementIds": [
+              199999064,
+              199999070
+            ],
+            "detachedElementIds": [],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=6349252756564460000;elementId=199999071|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TBuffElementParams.time|injectElementDataList|notDelElementDataList"
+          },
+          "propertyLifecycles": [
+            {
+              "sourceKind": "battle-buff-element-wrapper",
+              "durationMs": 24000,
+              "leafDurationMs": -1,
+              "durationSourceIdentity": "battle-element-assets.jsonl#path_id=6349252756564460000;elementId=199999071.time|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TBuffElementParams.time|injectElementDataList|notDelElementDataList",
+              "wrapper": {
+                "elementId": 199999071,
+                "pathId": 6349252756564460000,
+                "durationMs": 24000,
+                "inheritType": 0,
+                "isTeamElement": false,
+                "injectedElementIds": [
+                  199999064,
+                  199999070
+                ],
+                "detachedElementIds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=6349252756564460000;elementId=199999071|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TBuffElementParams.time|injectElementDataList|notDelElementDataList"
+              },
+              "removalPaths": [
+                {
+                  "triggerElementId": 199999065,
+                  "triggerPathId": -6224086841716568000,
+                  "triggerEventId": 36,
+                  "effectIndex": 0,
+                  "removerElementId": 199999066,
+                  "removerPathId": 5596010208760866000,
+                  "removedElementIds": [
+                    199999065,
+                    199999063
+                  ],
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-6224086841716568000;elementId=199999065.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5596010208760866000;elementId=199999066"
+                }
+              ]
+            },
+            {
+              "sourceKind": "battle-buff-element-wrapper",
+              "durationMs": 24000,
+              "leafDurationMs": -1,
+              "durationSourceIdentity": "battle-element-assets.jsonl#path_id=6349252756564460000;elementId=199999071.time|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TBuffElementParams.time|injectElementDataList|notDelElementDataList",
+              "wrapper": {
+                "elementId": 199999071,
+                "pathId": 6349252756564460000,
+                "durationMs": 24000,
+                "inheritType": 0,
+                "isTeamElement": false,
+                "injectedElementIds": [
+                  199999064,
+                  199999070
+                ],
+                "detachedElementIds": [],
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=6349252756564460000;elementId=199999071|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TBuffElementParams.time|injectElementDataList|notDelElementDataList"
+              },
+              "removalPaths": [
+                {
+                  "triggerElementId": 199999065,
+                  "triggerPathId": -6224086841716568000,
+                  "triggerEventId": 36,
+                  "effectIndex": 0,
+                  "removerElementId": 199999066,
+                  "removerPathId": 5596010208760866000,
+                  "removedElementIds": [
+                    199999065,
+                    199999063
+                  ],
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-6224086841716568000;elementId=199999065.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5596010208760866000;elementId=199999066"
+                }
+              ]
+            }
+          ],
+          "unload": {
+            "triggerElementId": 199999065,
+            "triggerPathId": -6224086841716568000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 199999066,
+            "removerPathId": 5596010208760866000,
+            "removedElementIds": [
+              199999065,
+              199999063
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-6224086841716568000;elementId=199999065.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5596010208760866000;elementId=199999066"
+          },
+          "unloadDisposition": "remove-source-trigger-roots-only-existing-target-wrapper-expires-at-original-end",
+          "expiryInterval": "right-open"
+        },
+        "sourceConflict": {
+          "localizedSkillText": "5件套 携带者的普攻或者重击命中为目标添加debuff，break槽吸收增加30%,持续8秒",
+          "triggerDescribe": "携带者的普攻或者重击命中为目标添加debuff，break槽吸收增加30%,持续24秒",
+          "wrapperDescribe": "break槽吸收增加20%,持续24秒",
+          "resolution": "executable-wrapper-and-property-leaves-control-value-and-duration",
+          "resolvedValueBasisPoints": 2000,
+          "resolvedDurationMs": 24000
+        },
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=6349252756564460000;elementId=199999071"
+      },
       "immediateEffects": [],
       "activationPrerequisites": [
         {
@@ -15980,8 +16324,8 @@
       "vitalChanges": [],
       "delayedEvents": [],
       "loopPersistence": {
-        "status": "runtime-unapplied",
-        "reason": "set-skill-runtime-operator-not-implemented"
+        "status": "canonical-effect-timeline-applied",
+        "reason": null
       },
       "sourceClosure": {
         "controlSkillId": 19998008,
@@ -16064,13 +16408,11 @@
           }
         ]
       },
-      "evidenceStatus": "source-closure-indexed",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "set-skill-runtime-operator-not-implemented"
-      ],
-      "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998008.asset/MonoBehaviour/skill_control_19998008__3385592889625444843.json",
-      "mechanicsHash": "1645f7a9113fe0f6"
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998008.asset/MonoBehaviour/skill_control_19998008__3385592889625444843.json|GameAssembly.dll#AliveElementSystem.OnExecuteDamageElement/DamageEventTriggerUtility.OnAfterAttack/TriggerElement.GetTriggerTarget/Parse/CanTrigger/Trigger/get_triggerCount/BuffElement.Execute/ExecuteInjectElements/Combine|dump.cs#AfterDamage/TriggerEvent/Target/Cover/WDM_PHYSICAL/WDM_MAGIC|battle-element-assets.jsonl#path_id=-2660561195248504300;elementId=199999063|battle-element-assets.jsonl#path_id=6349252756564460000;elementId=199999071|battle-element-assets.jsonl#path_id=-5884995951490395000;elementId=199999064|battle-element-assets.jsonl#path_id=7187107487063477000;elementId=199999070|battle-element-assets.jsonl#path_id=-6224086841716568000;elementId=199999065.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5596010208760866000;elementId=199999066",
+      "mechanicsHash": "0776cec94c8e2c58"
     }
   ],
   "unresolved": [
@@ -16439,7 +16781,7 @@
     "unresolvedCount": 23,
     "setSkillCount": 12,
     "setSkillThresholdIndexedCount": 12,
-    "setSkillRuntimeAppliedCount": 10,
+    "setSkillRuntimeAppliedCount": 11,
     "byMechanismFamily": {
       "equipped-actor-get-element-property-after-acquire": 3,
       "equipped-actor-get-element-property-before-acquire": 1,
@@ -16458,5 +16800,5 @@
       "source-indexed-runtime-unapplied": 23
     }
   },
-  "catalogHash": "1e3b8c4d4cecaf84"
+  "catalogHash": "1648903a7e038e2c"
 }

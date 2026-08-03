@@ -1,6 +1,6 @@
 {
-  "phase": "M12-B3-C12",
-  "status": "b3-c12-verification-complete-awaiting-product-acceptance",
+  "phase": "M12-B3-C13",
+  "status": "b3-c13-verification-complete-awaiting-product-acceptance",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -9,15 +9,15 @@
     "equipment": 137,
     "setSkills": 12
   },
-  "sourceSnapshotHash": "2b7d7760b80761b1",
-  "rosterHash": "c9e288a29b05d17b",
-  "manifestsHash": "ee74913560aec624",
-  "ledgerHash": "5f9784e737be583f",
-  "bindingMatrixHash": "66607a402069b8bc",
-  "catalogHash": "6623bb969daea122",
+  "sourceSnapshotHash": "52aefbcdd3136e43",
+  "rosterHash": "fd752ae90abcb097",
+  "manifestsHash": "6eedb0da6923c0c1",
+  "ledgerHash": "afad67326a28035d",
+  "bindingMatrixHash": "4eccbccddb161a51",
+  "catalogHash": "64a821822e0362fa",
   "maturityCounts": {
-    "extracted": 192,
-    "runtime-integrated": 73
+    "extracted": 191,
+    "runtime-integrated": 74
   },
   "optimizationReadyCounts": {
     "character": 0,
@@ -27,10 +27,10 @@
     "set-skill": 0
   },
   "gapCounts": {
-    "blockingUniqueGapCount": 382,
+    "blockingUniqueGapCount": 381,
     "byCategory": {
       "evidence-insufficient": 18,
-      "not-implemented": 364
+      "not-implemented": 363
     },
     "byCode": {
       "actor-static-profile-missing": 1,
@@ -41,7 +41,7 @@
       "kibo-passive-static-evidence-gap": 4,
       "kibo-visual-acceptance-not-published": 43,
       "level-breakthrough-skill-unlock-source-mismatch": 1,
-      "set-skill-dynamic-unapplied": 2,
+      "set-skill-dynamic-unapplied": 1,
       "set-skill-visual-acceptance-not-published": 12,
       "soulessence-effect-skill-dynamic-unapplied": 23,
       "soulessence-visual-acceptance-not-published": 62,
@@ -52,7 +52,7 @@
       "character": 33,
       "equipment": 137,
       "kibo": 90,
-      "set-skill": 14,
+      "set-skill": 13,
       "soul-essence": 108
     }
   },

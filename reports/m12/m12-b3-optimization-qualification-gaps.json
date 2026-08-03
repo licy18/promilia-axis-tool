@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "c9e288a29b05d17b",
+  "rosterHash": "fd752ae90abcb097",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "2b7d7760b80761b1",
-        "c9e288a29b05d17b"
+        "52aefbcdd3136e43",
+        "fd752ae90abcb097"
       ]
     },
     {
@@ -4194,25 +4194,6 @@
       "gapHash": "94f023b76dc1a3b7"
     },
     {
-      "gapIdentity": "set-skill:6:4:set-skill-dynamic-unapplied",
-      "objectKind": "set-skill",
-      "objectId": "6:4",
-      "code": "set-skill-dynamic-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "The accessory set skill is tracked but not applied by the dynamic runtime.",
-      "sourceIdentities": [
-        "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType"
-      ],
-      "details": {
-        "skillId": 19998008,
-        "reasons": [
-          "set-skill-runtime-operator-not-implemented"
-        ]
-      },
-      "gapHash": "04ed39e5be964a82"
-    },
-    {
       "gapIdentity": "set-skill:6:4:set-skill-visual-acceptance-not-published",
       "objectKind": "set-skill",
       "objectId": "6:4",
@@ -6111,10 +6092,10 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 382,
+    "blockingUniqueGapCount": 381,
     "byCategory": {
       "evidence-insufficient": 18,
-      "not-implemented": 364
+      "not-implemented": 363
     },
     "byCode": {
       "actor-static-profile-missing": 1,
@@ -6125,7 +6106,7 @@
       "kibo-passive-static-evidence-gap": 4,
       "kibo-visual-acceptance-not-published": 43,
       "level-breakthrough-skill-unlock-source-mismatch": 1,
-      "set-skill-dynamic-unapplied": 2,
+      "set-skill-dynamic-unapplied": 1,
       "set-skill-visual-acceptance-not-published": 12,
       "soulessence-effect-skill-dynamic-unapplied": 23,
       "soulessence-visual-acceptance-not-published": 62,
@@ -6136,9 +6117,9 @@
       "character": 33,
       "equipment": 137,
       "kibo": 90,
-      "set-skill": 14,
+      "set-skill": 13,
       "soul-essence": 108
     }
   },
-  "ledgerHash": "5f9784e737be583f"
+  "ledgerHash": "afad67326a28035d"
 }

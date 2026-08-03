@@ -903,13 +903,18 @@ function applyEquipmentSources({
       effectDefinition?.runtimeStatus === 'runtime-applied' &&
       effectDefinition?.persistentRoot != null;
     const persistentApplied = persistentDeclared && persistentValidation.valid;
+    const dynamicPropertyEffects =
+      effectDefinition?.effect?.propertyEffects?.length > 0
+        ? effectDefinition.effect.propertyEffects
+        : [effectDefinition?.effect].filter(Boolean);
     const dynamicPropertyRuntimeApplied =
       thresholdMet &&
       effectDefinition?.runtimeStatus === 'runtime-applied' &&
       effectDefinition?.trigger?.frameAnchor != null &&
       effectDefinition?.trigger?.condition?.status === 'applied' &&
       effectDefinition?.trigger?.target?.kind != null &&
-      effectDefinition?.effect?.formula != null &&
+      dynamicPropertyEffects.length > 0 &&
+      dynamicPropertyEffects.every(effect => effect?.formula != null) &&
       Number(effectDefinition?.effect?.durationMs) > 0;
     const immediateEffectRuntimeApplied =
       thresholdMet &&

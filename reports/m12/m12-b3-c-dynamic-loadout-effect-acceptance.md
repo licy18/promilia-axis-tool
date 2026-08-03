@@ -1,36 +1,37 @@
-# M12-B3-C11-R1 Actionless Periodic AfterHeal Entry
+# M12-B3-C13 AfterDamage Target Weakness Debuff
 
-- Status: `verification-complete-awaiting-product-acceptance`
-- Base: reviewed C11 implementation `02935223e914af18cb0bf10abf324edbdd373e17`; C10-R1 product acceptance remains `ad27e7762fcc8ac96a47d00361cef08fe6dbc959`.
-- Scope: `set-skill:5:4` and soul essence `10176`; no C12, M12-C, formal search, UI, package, performance, character, Kibo, or other loadout-effect work.
+- Status: `verification-complete-awaiting-product-acceptance`.
+- Base: C12-R1 product acceptance `5537e5a59f9776d7045b0ce8ad9915738715a9a4`.
+- Scope: only `set-skill:6:4`; `set-skill:3:4`, C14, M12-C, formal search, UI, package, and performance work remain locked.
 
 ## Evidence Contract
 
-The versioned evidence artifact is `scripts/optimization-qualification/evidence/soulessence-non-damage-runtime-evidence.json`, `10853B`, SHA-256 `70035b60930cc755abbff484494c370abbdb306f0af05895f7479f59c050f1e6`. It binds 12 exact ranges to GameAssembly `222485544B / c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b` and dump `97428254B / 0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a`.
+The versioned artifact is `scripts/optimization-qualification/evidence/after-damage-target-property-runtime-evidence.json`, `12185B`, SHA-256 `c60a582cda07b5e017cb47751a323f8958a6b1e292dc1a7f5bb34e7904374447`. It binds 9 exact RVA ranges to GameAssembly `222485544B / c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b` and dump `97428254B / 0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a`.
 
-`TriggerElement.GetTriggerTarget@0x13BBF50` routes Self to `self+0x28`, Target to `target+0x20`, and Source to `source+0x18`. `DamageUtility.OnAfterHeal@0x1872130` dispatches after settlement with distinct heal source and actual healed target. `TriggerElement.CheckCondition@0x13B58F0` proves empty OR is true. `AliveElementSystem.OnExecuteNormalElement.Block@0x131A545` proves an active same-config Block(5) duplicate is freed without stack or refresh; a later instance can apply after removal or the right-open expiry.
+The executable graph is `199999063 -> 199999071 -> 199999064/199999070`. It proves AfterDamage(2), Self observation, OR selection of final verified NormalAttack(1) or WhackAttack(2), native Target(1), Cover refresh, and two PropertyElement leaves for attr202/203. The localized skill says 30% for 8 seconds, the trigger description says 30% for 24 seconds, while the executable wrapper and leaves resolve to `A=2000` through common function 1/base function 5 for 20% over 24000ms. The executable graph, formulas, and native consumers are authoritative.
+
+`TriggerElement.Parse`, `CanTrigger`, `Trigger`, and `get_triggerCount` prove `triggerCounter=999999` is a finite TriggerEvent lifetime: one count is consumed per accepted trigger occurrence, not per target or property leaf. The counter and remaining lifetime enter canonical cycle state. The unload remover deletes only the source roots; an already materialized target wrapper keeps its original absolute expiry.
 
 ## Runtime Contract
 
-Four or five valid set-5 pieces install `set-skill:5:4` once; three pieces and cross-set mixtures do not. An executed direct or periodic AfterHeal from the wearer applies attr1 `dynamicPercent +700` to the actual healed actor for `[apply, apply+6000ms)`. Full-health zero-effective healing still dispatches; rejected settlement, wrong source, or missing owner does not. A real teammate hit gains damage inside the interval and returns to baseline at the exact expiry frame.
+Four or five valid same-set pieces install one trigger. A landed normal or charged attack applies one enemy-target debuff after the current packet settles, so the triggering packet is unchanged. Later legal hits inside `[apply, apply+24000ms)` receive the source-backed +20% physical and magical weakness-absorption modifiers; refresh does not stack, and the exact expiry frame restores the baseline.
 
-C11-R1 closes the production-shaped actionless periodic path. Native Kibo periodic healing keeps `actionId/sourceActionId=null` and is accepted only with one verified root source, a calculator settlement, a stable event identity and a stable `sourceSequencePath`; it is never attached to a nearby action. The before case had one accepted non-damage event but zero effect commands with `soulessence-effect-no-source-non-damage-transaction`; the same event now yields exactly one set-5 command to the healed target. Unknown/multi-source, rejected and incomplete settlements remain fail-closed, while action-linked direct healing remains single-fire.
+Miss, `execute=false`, runtime block, wrong or missing final skill tag, wrong source, missing target, unmaterialized damage, and non-damage projection all fail closed. Source actors and enemy targets remain isolated; same-frame ordering follows stable source sequence; repeated initialization, switch, replay, and two-cycle state do not duplicate or lose the effect. Finite trigger counters that decrease across a proposed loop correctly fail the closure gate.
 
-Soul `10176` observes AfterHeal from its wearer only when the verified source skill tag is NormalAttack. It applies attr5 for 15000ms with star raw values `1460/1940/2430/2910`. Repeated healing while active is blocked without refreshing; the expiry-frame trigger starts a new instance. Periodic healing has no action provenance and cannot borrow a stale NormalAttack tag.
+`set-skill:3:4` remains blocked: its accessory text describes normal-attack attack stacking, while the reachable graph identifies Iron-Mane Overlord, a five-received-hit state, and max-HP semantics. C13 does not infer across that identity conflict.
 
 ## Qualification
 
-The denominator remains `11/43/62/137/12`. Runtime integration is `39/62` soul essences and `9/12` set skills. The unique ledger is `383 = 365 not-implemented + 18 evidence-insufficient`; remaining four-piece set gaps are exactly `set-skill:1:4`, `set-skill:3:4`, and `set-skill:6:4`. All five formal admission counts remain zero, `dnaFactors=[]`, and M12-C remains locked.
+The denominator remains `11/43/62/137/12`. Runtime integration is `39/62` soul essences and `11/12` set skills. The unique ledger is `381 = 363 not-implemented + 18 evidence-insufficient`; the sole remaining dynamic set gap is `set-skill:3:4`. All five formal admission counts remain zero, `dnaFactors=[]`, and M12-C remains locked.
 
-Final qualification hashes are source `132db3813d6f0e30`, roster `ee9c2f26717eb9a9`, manifests `b09e331ee024d724`, ledger `d2ee3867d75ddf13`, binding `aa6b08a6d79712e3`, and catalog `fc2623a2ba726407`. Dynamic census/catalog/source hashes are `6d37f034f4f64ea0 / 0a5b0311ef1281f4 / 4ef729b9b56d4f9e`.
+Final qualification hashes are source `52aefbcdd3136e43`, roster `fd752ae90abcb097`, manifests `6eedb0da6923c0c1`, ledger `afad67326a28035d`, binding `4eccbccddb161a51`, and catalog `64a821822e0362fa`. Dynamic census/catalog/source hashes are `59553fb7be3d86fb / 1648903a7e038e2c / 3a5cdd3fce685b76`.
 
 ## Verification
 
-- C11-R1 focused: `7 files / 162 tests`.
-- Complete optimization qualification: `7 / 56`.
-- Three-character profile/golden/migration: `4 / 38`; replay/profile hashes and gameplay assertions unchanged.
-- Canonical/runtime/cycle: `5 / 87`; Machine Axis: `12 / 157` with the established 30-second process-test budget. The default 5-second run had one 5.19-second timeout after 156 passing assertions; that case passed alone in 1.47 seconds and had no assertion mismatch.
-- Nine deterministic audits, production build, generation assert-clean, and `git diff --check`: passed.
-- Standard Machine Axis hashes: `ed57d06444210db0 / 5c21e09cba3bab55 / 416b4a015702f1b2 / 0b410dc9255d2654`.
-- C11 catalog metadata updates canonical trace hashes, including the B2 cycle report; input/data/evaluation, cycle damage, and authoritative replay semantics remain unchanged.
+- C13 focused: `6 files / 178 tests`.
+- Complete optimization qualification: `9 / 63`.
+- Three-character profile/golden/migration: `4 / 38`; gameplay assertions and replay semantics unchanged.
+- Canonical/runtime/cycle: `6 / 190`; Machine Axis: `12 / 159` with the established 30-second process-test budget.
+- Nine deterministic audits, production build (`1875` modules), generation assert-clean, and `git diff --check`: passed.
+- Standard Machine Axis hashes remain `ed57d06444210db0 / 5c21e09cba3bab55 / 416b4a015702f1b2 / 0b410dc9255d2654`.
 - Existing Sass deprecation, circular chunk, large chunk, package-size, and performance warnings remain non-blocking and were not worked on.

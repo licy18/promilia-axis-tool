@@ -6138,6 +6138,577 @@ describe('M12-B3-C10 four-piece BeforeDamage stacking properties', () => {
   });
 });
 
+describe('M12-B3-C13 AfterDamage target weakness absorption', () => {
+  const set6Equipment = {
+    weapon: 1210611,
+    top: 1220321,
+    bottom: 1230321,
+    earring: 1240321,
+    ring: 1250321,
+  };
+
+  const createSet6Run = ({ actionPlan, equipment = set6Equipment } = {}) =>
+    createRealSoulScenario({
+      soulEssenceId: null,
+      effectSkillId: 0,
+      equipment,
+      durationMs: 35_000,
+      actionPlan: actionPlan ?? [
+        {
+          id: 'c13-normal-first',
+          actionKind: 'normal-attack',
+          startFrame: 0,
+        },
+        {
+          id: 'c13-heavy-second',
+          actionKind: 'charged-attack',
+          startFrame: 240,
+        },
+      ],
+      initialRuntimeState: {
+        enemy: {
+          hp: { currentValue: 1_000_000, maxValue: 1_000_000 },
+          toughness: { currentValue: 1_000_000, maxValue: 1_000_000 },
+        },
+      },
+    });
+
+  it('compiles the wrapper and both physical and magic target leaves from the source graph', () => {
+    const definition = soulEssenceEffectCatalog.setSkillDefinitions.find(
+      entry => entry.setId === 6 && entry.pieces === 4
+    );
+    expect(definition).toMatchObject({
+      skillId: 19998008,
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'set-skill-after-damage-target-property',
+      trigger: {
+        elementId: 199999063,
+        triggerType: 1,
+        triggerCounter: 999999,
+        frameAnchor: 'hit-after-damage',
+        targetKind: 'event-target-entity',
+        condition: {
+          logic: 'or',
+          conditions: [
+            expect.objectContaining({ kind: 'skill-tag', skillTagId: 1 }),
+            expect.objectContaining({ kind: 'skill-tag', skillTagId: 2 }),
+          ],
+        },
+      },
+      effect: {
+        elementId: 199999071,
+        durationMs: 24000,
+        stackMode: 'refresh',
+        maxStacks: 1,
+        propertyEffects: [
+          expect.objectContaining({
+            elementId: 199999064,
+            attributeId: 202,
+            sourceRawA: 2000,
+          }),
+          expect.objectContaining({
+            elementId: 199999070,
+            attributeId: 203,
+            sourceRawA: 2000,
+          }),
+        ],
+      },
+    });
+  });
+
+  it('counts one native trigger occurrence and fail-closes after a finite event-trigger limit', () => {
+    const template = createSet6Run({
+      actionPlan: [
+        { id: 'c13-counter-first', actionKind: 'normal-attack', startFrame: 0 },
+        {
+          id: 'c13-counter-second',
+          actionKind: 'charged-attack',
+          startFrame: 240,
+        },
+      ],
+    });
+    const catalog = structuredClone(soulEssenceEffectCatalog);
+    const definition = catalog.setSkillDefinitions.find(
+      entry => entry.setId === 6 && entry.pieces === 4
+    );
+    definition.trigger.triggerType = 1;
+    definition.trigger.triggerCounter = 1;
+    const actionResolutionById = new Map(
+      template.verifiedActionVariantRuntime.actionResolutions.map(
+        resolution => [resolution.actionId, resolution]
+      )
+    );
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario: template.effectiveActionTimeline.scenario,
+      actionExecutionPlan: template.actionExecutionPlan,
+      controlledActorTimeline: template.controlledActorTimeline,
+      actionResolutionById,
+      damageEventGeneration: template.verifiedDamageEventGeneration,
+      tuningGeneration: template.verifiedTuningMarkGeneration,
+      catalog,
+    });
+    const commands = generation.effectCommands.filter(
+      command => command.sourceSetId === 6 && command.sourceSetPieces === 4
+    );
+
+    expect(commands).toHaveLength(1);
+    expect(generation.triggerCounterStates).toEqual([
+      expect.objectContaining({
+        configuredTriggerCounter: 1,
+        triggerCounterLimit: 1,
+        acceptedCount: 1,
+        remainingTriggerCount: 0,
+        exhausted: true,
+      }),
+    ]);
+    expect(generation.acceptedTriggerOccurrences).toEqual([
+      expect.objectContaining({
+        triggerType: 1,
+        configuredTriggerCounter: 1,
+        triggerCountAfter: 1,
+        remainingTriggerCount: 0,
+      }),
+    ]);
+    expect(generation.suppressions).toContainEqual(
+      expect.objectContaining({
+        reason: 'soulessence-effect-trigger-counter-exhausted',
+        acceptedCount: 1,
+        triggerCounterLimit: 1,
+      })
+    );
+  });
+
+  it('routes landed normal and charged AfterDamage transactions to one enemy debuff', () => {
+    const result = createSet6Run();
+    const commands =
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSetId === 6 && command.sourceSetPieces === 4
+      );
+    expect(commands.length).toBeGreaterThan(1);
+    expect(new Set(commands.map(command => command.sourceActionId))).toEqual(
+      new Set(['c13-normal-first', 'c13-heavy-second'])
+    );
+    expect(commands[0]).toMatchObject({
+      effectId: 'set-skill:6:4:element:199999071',
+      targetKind: 'enemy',
+      targetId: 'enemy-300032',
+      semanticTargetKind: 'event-target-entity',
+      durationMs: 24000,
+      stackMode: 'refresh',
+      maxStacks: 1,
+      modifiers: [
+        expect.objectContaining({ attributeId: 202, valueRaw: 2000 }),
+        expect.objectContaining({ attributeId: 203, valueRaw: 2000 }),
+      ],
+    });
+    expect(
+      result.verifiedSoulEssenceEffectGeneration.triggerCounterStates
+    ).toEqual([
+      expect.objectContaining({
+        triggerType: 1,
+        configuredTriggerCounter: 999999,
+        triggerCounterLimit: 999999,
+        acceptedCount: commands.length,
+        remainingTriggerCount: 999999 - commands.length,
+        exhausted: false,
+      }),
+    ]);
+  });
+
+  it('installs the four-piece trigger once at four or five pieces and rejects partial or mixed sets', () => {
+    const actionPlan = [
+      {
+        id: 'c13-threshold-normal',
+        actionKind: 'normal-attack',
+        startFrame: 0,
+      },
+    ];
+    const run = count =>
+      createSet6Run({
+        equipment: Object.fromEntries(
+          Object.entries(set6Equipment).slice(0, count)
+        ),
+        actionPlan,
+      });
+    const three = run(3);
+    const four = run(4);
+    const five = run(5);
+    const mixed = createSet6Run({
+      equipment: {
+        weapon: set6Equipment.weapon,
+        top: set6Equipment.top,
+        bottom: 1230311,
+        earring: 1240311,
+      },
+      actionPlan,
+    });
+    const commands = result =>
+      (result.verifiedSoulEssenceEffectGeneration?.effectCommands ?? []).filter(
+        command => command.sourceSetId === 6 && command.sourceSetPieces === 4
+      );
+    const activations = result =>
+      result.effectiveActionTimeline.scenario.actors
+        .find(actor => actor.characterId === OWNER_ID)
+        .verifiedStaticProperties.setSkillActivations.filter(
+          activation => activation.setId === 6
+        );
+
+    expect(commands(three)).toEqual([]);
+    expect(commands(four).length).toBeGreaterThan(0);
+    expect(commands(five)).toHaveLength(commands(four).length);
+    expect(commands(mixed)).toEqual([]);
+    expect(activations(four)).toEqual([
+      expect.objectContaining({
+        pieces: 2,
+        thresholdMet: true,
+        appliedToCalculators: true,
+        appliedToRuntimeEffect: false,
+      }),
+      expect.objectContaining({
+        pieces: 4,
+        thresholdMet: true,
+        appliedToCalculators: false,
+        appliedToRuntimeEffect: true,
+      }),
+    ]);
+    expect(activations(five)).toHaveLength(2);
+  });
+
+  it('matches only landed final NormalAttack or WhackAttack skill tags', () => {
+    const result = createSet6Run({
+      actionPlan: [
+        { id: 'c13-tag-normal', actionKind: 'normal-attack', startFrame: 0 },
+        {
+          id: 'c13-tag-heavy',
+          actionKind: 'charged-attack',
+          startFrame: 240,
+        },
+        { id: 'c13-tag-star', actionKind: 'star-skill', startFrame: 480 },
+        { id: 'c13-tag-ultimate', actionKind: 'ultimate', startFrame: 720 },
+        {
+          id: 'c13-tag-kibo',
+          actionKind: 'kibo-signature',
+          startFrame: 1080,
+        },
+      ],
+    });
+    const commands =
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSetId === 6
+      );
+
+    expect(new Set(commands.map(command => command.sourceActionId))).toEqual(
+      new Set(['c13-tag-normal', 'c13-tag-heavy'])
+    );
+    expect(
+      commands.every(command =>
+        command.sourceIdentity.actionSkillTagIds.some(tagId =>
+          [1, 2].includes(Number(tagId))
+        )
+      )
+    ).toBe(true);
+  });
+
+  it('suppresses miss and non-executable transactions without inventing target effects', () => {
+    const actionPlan = [
+      {
+        id: 'c13-miss-normal',
+        actionKind: 'normal-attack',
+        startFrame: 0,
+      },
+    ];
+    const template = createSet6Run({ actionPlan });
+    const hitOverrides = Object.fromEntries(
+      template.verifiedDamageEventGeneration.events
+        .filter(event => event.actionId === 'c13-miss-normal')
+        .map(event => event.eventContext?.sourceHitIdentity)
+        .filter(Boolean)
+        .map(identity => [identity, { willHit: false }])
+    );
+    const missed = createSet6Run({
+      actionPlan: [{ ...actionPlan[0], hitOverrides }],
+    });
+    expect(
+      missed.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSetId === 6
+      )
+    ).toEqual([]);
+
+    const actionResolutionById = new Map(
+      template.verifiedActionVariantRuntime.actionResolutions.map(
+        resolution => [resolution.actionId, resolution]
+      )
+    );
+    const blocked = createVerifiedSoulEssenceEffectGeneration({
+      scenario: template.effectiveActionTimeline.scenario,
+      actionExecutionPlan: {
+        ...template.actionExecutionPlan,
+        actions: [],
+      },
+      controlledActorTimeline: template.controlledActorTimeline,
+      actionResolutionById,
+      damageEventGeneration: template.verifiedDamageEventGeneration,
+      tuningGeneration: template.verifiedTuningMarkGeneration,
+    });
+    expect(
+      blocked.effectCommands.filter(command => command.sourceSetId === 6)
+    ).toEqual([]);
+  });
+
+  it('keeps the triggering packet unchanged, buffs later toughness by 20%, and expires right-open', () => {
+    const actionPlan = [
+      {
+        id: 'c13-order-trigger',
+        actionKind: 'normal-attack',
+        startFrame: 0,
+      },
+      {
+        id: 'c13-order-follow-up',
+        actionKind: 'charged-attack',
+        startFrame: 240,
+      },
+    ];
+    const withSet = createSet6Run({ actionPlan });
+    const withoutFourPiece = createSet6Run({
+      equipment: Object.fromEntries(Object.entries(set6Equipment).slice(0, 3)),
+      actionPlan,
+    });
+    const combatHits = (result, actionId) =>
+      result.verifiedCombatRuntime.damageEvents.filter(
+        event =>
+          event.type === 'VERIFIED_COMBAT_HIT' && event.actionId === actionId
+      );
+    const triggerWith = combatHits(withSet, 'c13-order-trigger')[0];
+    const triggerWithout = combatHits(withoutFourPiece, 'c13-order-trigger')[0];
+    const followUpWith = combatHits(withSet, 'c13-order-follow-up')[0];
+    const followUpWithout = combatHits(
+      withoutFourPiece,
+      'c13-order-follow-up'
+    )[0];
+
+    expect(
+      triggerWith.payload.formulaBreakdown.weaknessInput.typeMultiplier
+    ).toBeCloseTo(
+      triggerWithout.payload.formulaBreakdown.weaknessInput.typeMultiplier,
+      6
+    );
+    expect(followUpWith.payload.toughnessDamage).toBeGreaterThan(
+      followUpWithout.payload.toughnessDamage
+    );
+    expect(
+      followUpWith.payload.formulaBreakdown.weaknessInput.typeMultiplier
+    ).toBeCloseTo(
+      followUpWithout.payload.formulaBreakdown.weaknessInput.typeMultiplier +
+        0.2,
+      6
+    );
+
+    const command =
+      withSet.verifiedSoulEssenceEffectGeneration.effectCommands.find(
+        entry => entry.sourceActionId === 'c13-order-trigger'
+      );
+    const activeActionId = 'c13-active-heavy';
+    const activeReplay = replayRealActionWithSoulCommands({
+      actorCharacterId: OWNER_ID,
+      soulEssenceId: null,
+      actionId: activeActionId,
+      actionKind: 'charged-attack',
+      startFrame: runtimeFrame(command.timeMs) + 1,
+      commands: [command],
+    });
+    const expiredActionId = 'c13-expired-heavy';
+    const expiredReplay = replayRealActionWithSoulCommands({
+      actorCharacterId: OWNER_ID,
+      soulEssenceId: null,
+      actionId: expiredActionId,
+      actionKind: 'charged-attack',
+      startFrame: runtimeFrame(command.timeMs + command.durationMs),
+      commands: [command],
+    });
+    const toughness = (runtime, actionId) =>
+      runtime.damageEvents
+        .filter(
+          event =>
+            event.type === 'VERIFIED_COMBAT_HIT' && event.actionId === actionId
+        )
+        .reduce(
+          (sum, event) => sum + Number(event.payload.toughnessDamage ?? 0),
+          0
+        );
+    expect(
+      toughness(activeReplay.withCommands, activeActionId)
+    ).toBeGreaterThan(toughness(activeReplay.withoutCommands, activeActionId));
+    const activeWithHit = activeReplay.withCommands.damageEvents.find(
+      event =>
+        event.type === 'VERIFIED_COMBAT_HIT' &&
+        event.actionId === activeActionId
+    );
+    const activeWithoutHit = activeReplay.withoutCommands.damageEvents.find(
+      event =>
+        event.type === 'VERIFIED_COMBAT_HIT' &&
+        event.actionId === activeActionId
+    );
+    expect(
+      activeWithHit.payload.formulaBreakdown.weaknessInput.typeMultiplier
+    ).toBeCloseTo(
+      activeWithoutHit.payload.formulaBreakdown.weaknessInput.typeMultiplier +
+        0.2,
+      6
+    );
+    expect(toughness(expiredReplay.withCommands, expiredActionId)).toBeCloseTo(
+      toughness(expiredReplay.withoutCommands, expiredActionId),
+      6
+    );
+  });
+
+  it('refreshes one target instance and preserves the original target debuff after source switch', () => {
+    const result = createSet6Run({
+      actionPlan: [
+        {
+          id: 'c13-refresh-first',
+          actionKind: 'normal-attack',
+          startFrame: 0,
+        },
+        {
+          id: 'c13-refresh-second',
+          actionKind: 'charged-attack',
+          startFrame: 240,
+        },
+        {
+          id: 'c13-switch-away',
+          actionKind: 'switch',
+          sourceCharacterId: OWNER_ID,
+          targetCharacterId: 101003,
+          startFrame: 480,
+        },
+      ],
+    });
+    const commands =
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSetId === 6
+      );
+    const last = commands.at(-1);
+    const active = resolveActiveEffectsAt(
+      result.effectTimeline,
+      last.timeMs + 0.001,
+      { targetKind: 'enemy', targetId: 'enemy-300032' }
+    ).filter(effect => effect.effectId === last.effectId);
+
+    expect(active).toHaveLength(1);
+    expect(active[0]).toMatchObject({
+      targetKind: 'enemy',
+      targetId: 'enemy-300032',
+      stacks: 1,
+      sourceActorId: 'actor-101007',
+    });
+    expect(active[0].expiresAtMs).toBeCloseTo(last.timeMs + 24000, 3);
+    expect(
+      result.effectTimeline.events.filter(
+        event =>
+          event.effectId === last.effectId && event.type === 'EFFECT_REFRESHED'
+      ).length
+    ).toBeGreaterThan(0);
+    expect(
+      resolveActiveEffectsAt(result.effectTimeline, last.timeMs + 24000, {
+        targetKind: 'enemy',
+        targetId: 'enemy-300032',
+      }).filter(effect => effect.effectId === last.effectId)
+    ).toEqual([]);
+  });
+
+  it('keeps non-damage projection free of damage, toughness, and AfterDamage side effects', () => {
+    const result = createSet6Run({
+      actionPlan: [
+        {
+          id: 'c13-projection-normal',
+          actionKind: 'normal-attack',
+          startFrame: 0,
+        },
+      ],
+      combatScenario: { critical: { policy: 'sampled', seed: 'c13-seed' } },
+    });
+    const projection = createVerifiedCombatRuntime({
+      scenario: result.effectiveActionTimeline.scenario,
+      actionExecutionPlan: result.actionExecutionPlan,
+      controlledActorTimeline: result.controlledActorTimeline,
+      actionVariantRuntime: result.verifiedActionVariantRuntime,
+      damageEventGeneration: result.verifiedDamageEventGeneration,
+      tuningGeneration: result.verifiedTuningMarkGeneration,
+      effectTimeline: createEffectRuntimeTimeline({
+        scenario: result.effectiveActionTimeline.scenario,
+        actionExecutionPlan: result.actionExecutionPlan,
+        controlledActorTimeline: result.controlledActorTimeline,
+        generatedCommands: [],
+      }),
+      runtimeMode: 'non-damage-event-projection',
+    });
+
+    expect(projection.damageEvents).toEqual([]);
+    expect(projection.toughnessEvents ?? []).toEqual([]);
+    expect(
+      projection.events?.filter(event =>
+        ['VERIFIED_COMBAT_HIT', 'VERIFIED_TOUGHNESS_DAMAGE'].includes(
+          event.type
+        )
+      ) ?? []
+    ).toEqual([]);
+  });
+
+  it('replays two repeated rounds with stable target effects and numeric outcomes', () => {
+    const actionPlan = [
+      { id: 'c13-warmup', actionKind: 'normal-attack', startFrame: 0 },
+      { id: 'c13-r1-normal', actionKind: 'normal-attack', startFrame: 300 },
+      {
+        id: 'c13-r1-heavy',
+        actionKind: 'charged-attack',
+        startFrame: 540,
+      },
+      { id: 'c13-r2-normal', actionKind: 'normal-attack', startFrame: 900 },
+      {
+        id: 'c13-r2-heavy',
+        actionKind: 'charged-attack',
+        startFrame: 1140,
+      },
+    ];
+    const first = createSet6Run({ actionPlan });
+    const second = createSet6Run({ actionPlan });
+    const toughness = (result, actionId) =>
+      result.verifiedCombatRuntime.damageEvents
+        .filter(
+          event =>
+            event.type === 'VERIFIED_COMBAT_HIT' && event.actionId === actionId
+        )
+        .map(event => Number(event.payload.toughnessDamage));
+    const commands = result =>
+      result.verifiedSoulEssenceEffectGeneration.effectCommands
+        .filter(command => command.sourceSetId === 6)
+        .map(command => ({
+          sourceActionId: command.sourceActionId,
+          sourceHitIdentity: command.sourceHitIdentity,
+          targetId: command.targetId,
+          timeMs: command.timeMs,
+          sourceSequencePath: command.sourceSequencePath,
+        }));
+
+    expect(toughness(first, 'c13-r1-normal')).toEqual(
+      toughness(first, 'c13-r2-normal')
+    );
+    expect(toughness(first, 'c13-r1-heavy')).toEqual(
+      toughness(first, 'c13-r2-heavy')
+    );
+    expect(commands(first)).toEqual(commands(second));
+    expect(
+      first.effectTimeline.events.filter(
+        event => event.effectId === 'set-skill:6:4:element:199999071'
+      )
+    ).toEqual(
+      second.effectTimeline.events.filter(
+        event => event.effectId === 'set-skill:6:4:element:199999071'
+      )
+    );
+  });
+});
+
 describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
   const sourceActorId = 'actor-101007';
   const targetActorId = 'actor-101003';

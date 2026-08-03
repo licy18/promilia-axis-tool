@@ -525,15 +525,26 @@ export function compareCycleBoundaryStates(startSnapshot, endSnapshot) {
     ['shields', normalizeShieldState],
     ['pendingEvents', normalizePendingState],
   ];
+  const soulTriggerDimensions = [];
   if (
     (startSnapshot.soulTriggerIntervals?.length ?? 0) > 0 ||
     (endSnapshot.soulTriggerIntervals?.length ?? 0) > 0
   ) {
-    stateDimensions.splice(2, 0, [
+    soulTriggerDimensions.push([
       'soulTriggerIntervals',
       normalizeSoulTriggerIntervalState,
     ]);
   }
+  if (
+    (startSnapshot.soulTriggerCounters?.length ?? 0) > 0 ||
+    (endSnapshot.soulTriggerCounters?.length ?? 0) > 0
+  ) {
+    soulTriggerDimensions.push([
+      'soulTriggerCounters',
+      normalizeSoulTriggerCounterState,
+    ]);
+  }
+  stateDimensions.splice(2, 0, ...soulTriggerDimensions);
   const stateDiffs = [];
   for (const [dimension, normalize] of stateDimensions) {
     const startValue = normalize(startSnapshot);
@@ -1755,6 +1766,31 @@ function projectCanonicalBoundaryState({ snapshot, boundaryRun, frame }) {
       .filter(row => row.remainingFrames > 0)
       .sort(compareCanonicalRows);
   }
+  const soulTriggerCounterStates =
+    boundaryRun.simulation?.verifiedSoulEssenceEffectGeneration
+      ?.triggerCounterStates;
+  if (Array.isArray(soulTriggerCounterStates)) {
+    snapshot.soulTriggerCounters = soulTriggerCounterStates
+      .map(row => ({
+        bindingKey: row.bindingKey ?? null,
+        triggerType: integerOrNull(row.triggerType),
+        configuredTriggerCounter: integerOrNull(row.configuredTriggerCounter),
+        triggerCounterLimit: integerOrNull(row.triggerCounterLimit),
+        acceptedCount: Math.max(0, Number(row.acceptedCount) || 0),
+        remainingTriggerCount: Math.max(
+          0,
+          Number(row.remainingTriggerCount) || 0
+        ),
+        exhausted: row.exhausted === true,
+        sourceIdentityHash: hashCanonicalValue({
+          bindingKey: row.bindingKey ?? null,
+          triggerType: integerOrNull(row.triggerType),
+          configuredTriggerCounter: integerOrNull(row.configuredTriggerCounter),
+        }),
+      }))
+      .filter(row => row.bindingKey && row.triggerCounterLimit != null)
+      .sort(compareCanonicalRows);
+  }
   const tuningState = verifiedRuntime.tuningMarkRuntime?.finalState;
   if (Array.isArray(tuningState)) {
     snapshot.tuningMarks = tuningState
@@ -1988,6 +2024,25 @@ function normalizeSoulTriggerIntervalState(snapshot) {
       sourceIdentityHash: row.sourceIdentityHash ?? null,
     }))
     .filter(row => row.bindingKey && row.remainingFrames > 0)
+    .sort(compareCanonicalRows);
+}
+
+function normalizeSoulTriggerCounterState(snapshot) {
+  return (snapshot.soulTriggerCounters ?? [])
+    .map(row => ({
+      bindingKey: row.bindingKey ?? null,
+      triggerType: integerOrNull(row.triggerType),
+      configuredTriggerCounter: integerOrNull(row.configuredTriggerCounter),
+      triggerCounterLimit: integerOrNull(row.triggerCounterLimit),
+      acceptedCount: Math.max(0, Number(row.acceptedCount) || 0),
+      remainingTriggerCount: Math.max(
+        0,
+        Number(row.remainingTriggerCount) || 0
+      ),
+      exhausted: row.exhausted === true,
+      sourceIdentityHash: row.sourceIdentityHash ?? null,
+    }))
+    .filter(row => row.bindingKey && row.triggerCounterLimit != null)
     .sort(compareCanonicalRows);
 }
 

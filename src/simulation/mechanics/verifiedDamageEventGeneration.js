@@ -83,6 +83,11 @@ export function createVerifiedDamageEventGeneration({
           propertyTags: propertyTagResolution.propertyTags ?? [],
           skillTagIds: resolveSkillTagIds(resolution),
           targetElementIds: [],
+          target: {
+            kind: 'enemy',
+            id: scenario.enemy?.id ?? null,
+            name: scenario.enemy?.name ?? null,
+          },
           sourceIdentity: hit.sourceIdentity ?? null,
         })
       );
@@ -133,6 +138,11 @@ export function createVerifiedDamageEventGeneration({
         targetElementIds: uniqueFiniteIntegers(
           eventContext.targetElementIds ?? []
         ),
+        target: {
+          kind: 'enemy',
+          id: scenario.enemy?.id ?? null,
+          name: scenario.enemy?.name ?? null,
+        },
         sourceIdentity: tuningEvent.sourceIdentity ?? null,
       })
     );
@@ -182,6 +192,7 @@ function createDamageTransaction({
   propertyTags,
   skillTagIds,
   targetElementIds,
+  target,
   sourceIdentity,
 }) {
   const sourceHitIdentity =
@@ -220,6 +231,9 @@ function createDamageTransaction({
     elementTypes: [...elementTypes],
     damageType,
     targetElementIds: [...targetElementIds],
+    eventTargetKind: target?.kind ?? null,
+    eventTargetId: target?.id == null ? null : String(target.id),
+    eventTargetName: target?.name ?? null,
     markId: finiteIntegerOrNull(tuningEvent?.profile?.markId),
     profileKey: tuningEvent?.profile?.key ?? null,
     overlimitPacketElementId: finiteIntegerOrNull(

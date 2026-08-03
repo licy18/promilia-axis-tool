@@ -33,6 +33,11 @@ import {
   BEFORE_SKILL_COMPOSITE_EVIDENCE_RELATIVE_PATH,
   readBeforeSkillCompositeRuntimeEvidenceSource,
 } from './before-skill-composite-evidence.mjs';
+import {
+  AFTER_DAMAGE_TARGET_PROPERTY_EVIDENCE_RELATIVE_PATH,
+  assertAfterDamageTargetPropertyRuntimeEvidenceReference,
+  readAfterDamageTargetPropertyRuntimeEvidenceSource,
+} from './after-damage-target-property-evidence.mjs';
 
 export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
   '2026-08-01T00:00:00.000Z';
@@ -114,6 +119,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     'ae357c59a494f724c9ce36fde79df3fd505f1434c01c4b87697d5770f9cc98dc',
   beforeSkillCompositeRuntimeEvidence:
     '165b87b2d5ea01f1a2f7f72a828b6a1eeeca19ef1f429003b2dccca457686212',
+  afterDamageTargetPropertyRuntimeEvidence:
+    'c60a582cda07b5e017cb47751a323f8958a6b1e292dc1a7f5bb34e7904374447',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
@@ -178,8 +185,10 @@ export async function createOptimizationQualificationArtifacts({
   persistentLoadoutPropertyRuntimeEvidencePath = null,
   fourPieceSetStackRuntimeEvidencePath = null,
   beforeSkillCompositeRuntimeEvidencePath = null,
+  afterDamageTargetPropertyRuntimeEvidencePath = null,
   dynamicLoadoutAcceptanceReportPath = null,
   gameAssemblyPath = 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
+  skillLocalizationPath = 'C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_skill.json',
 } = {}) {
   if (!projectRoot) throw new TypeError('projectRoot is required');
   const generatedRoot = path.join(projectRoot, 'src', 'data', 'generated');
@@ -337,6 +346,26 @@ export async function createOptimizationQualificationArtifacts({
       elementFormulaPath: path.join(newTableRoot, 'element_formula.json'),
       projectRoot,
     });
+  sources.afterDamageTargetPropertyRuntimeEvidence =
+    await readAfterDamageTargetPropertyRuntimeEvidenceSource({
+      sourcePath:
+        afterDamageTargetPropertyRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          ...AFTER_DAMAGE_TARGET_PROPERTY_EVIDENCE_RELATIVE_PATH.split('/')
+        ),
+      gameAssemblyPath,
+      il2CppDumpPath: il2cppRuntimeContractsPath,
+      localizationPath: skillLocalizationPath,
+      battleElementAssetsPath,
+      skillControlPath: path.join(
+        skillControlRoot,
+        'skill_control_19998008.asset',
+        'MonoBehaviour',
+        'skill_control_19998008__3385592889625444843.json'
+      ),
+      projectRoot,
+    });
   const acceptanceReport = JSON.parse(
     await fs.readFile(
       dynamicLoadoutAcceptanceReportPath ??
@@ -372,6 +401,10 @@ export async function createOptimizationQualificationArtifacts({
   assertBeforeSkillCompositeRuntimeEvidenceReference(
     acceptanceReport?.sourceClosure?.beforeSkillCompositeRuntimeEvidence,
     sources.beforeSkillCompositeRuntimeEvidence
+  );
+  assertAfterDamageTargetPropertyRuntimeEvidenceReference(
+    acceptanceReport?.sourceClosure?.afterDamageTargetPropertyRuntimeEvidence,
+    sources.afterDamageTargetPropertyRuntimeEvidence
   );
   sources.il2cppRuntimeContracts.value.soulEffectTriggers =
     attachSoulEffectGetElementRuntimeEvidence(
@@ -486,6 +519,8 @@ export async function createOptimizationQualificationArtifacts({
       sources.fourPieceSetStackRuntimeEvidence.value,
     beforeSkillCompositeRuntimeEvidence:
       sources.beforeSkillCompositeRuntimeEvidence.value,
+    afterDamageTargetPropertyRuntimeEvidence:
+      sources.afterDamageTargetPropertyRuntimeEvidence.value,
   });
   sources.battleElementAssets = {
     ...soulEssenceEffects.sourceSnapshot.battleElements,
@@ -596,7 +631,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C12',
+      phase: 'M12-B3-C13',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1562,8 +1597,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C12',
-    status: 'b3-c12-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C13',
+    status: 'b3-c13-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1989,7 +2024,8 @@ function createSourceSnapshot(sources) {
         key === 'landedHitRecoveryRuntimeEvidence' ||
         key === 'persistentLoadoutPropertyRuntimeEvidence' ||
         key === 'fourPieceSetStackRuntimeEvidence' ||
-        key === 'beforeSkillCompositeRuntimeEvidence'
+        key === 'beforeSkillCompositeRuntimeEvidence' ||
+        key === 'afterDamageTargetPropertyRuntimeEvidence'
       ) {
         record.value = structuredClone(source.value);
       }
@@ -2006,7 +2042,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C12 BeforeSkill Composite Team Recovery\n\n' +
+    '# M12-B3-C13 AfterDamage Target Weakness Absorption\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -2015,7 +2051,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: C2-C11 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece BeforeDamage, AfterHeal Source-to-Target and Block(5) contracts. C12 adds the source-closed set 1:4 BeforeSkill composite transaction: an executed controlled NormalSkill emits one ShareAll actor-SP effect followed by one AllHero max-HP-ratio heal per player actor, shares nothing to Kibo, and keeps the 12-second interval as canonical cycle state.\n' +
+    '- Dynamic loadout batches: C2-C12 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece BeforeDamage, AfterHeal Source-to-Target, Block(5), and BeforeSkill composite contracts. C13 adds source-closed set 6:4: a landed NormalAttack or WhackAttack AfterDamage transaction refreshes one 24-second target wrapper with physical and magic weakness-absorption modifiers, while the current packet remains unchanged and the native finite trigger counter enters canonical cycle state.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'

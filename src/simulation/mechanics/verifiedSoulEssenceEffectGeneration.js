@@ -76,7 +76,12 @@ export function createVerifiedSoulEssenceEffectGeneration({
 
   for (const binding of bindings) {
     const hasPropertyEffect = binding.definition.effect != null;
-    if (hasPropertyEffect && !binding.starValue) {
+    const propertyFormulaResults = binding.propertyFormulaResults ?? [];
+    if (
+      hasPropertyEffect &&
+      (propertyFormulaResults.length === 0 ||
+        propertyFormulaResults.some(entry => !entry.starValue))
+    ) {
       unresolved.push({
         actorId: binding.actor.id,
         ...createBindingDiagnosticIdentity(binding),
@@ -86,13 +91,16 @@ export function createVerifiedSoulEssenceEffectGeneration({
       });
       continue;
     }
-    if (hasPropertyEffect && binding.formulaResult?.applied !== true) {
+    const unresolvedFormula = propertyFormulaResults.find(
+      entry => entry.formulaResult?.applied !== true
+    );
+    if (hasPropertyEffect && unresolvedFormula) {
       unresolved.push({
         actorId: binding.actor.id,
         ...createBindingDiagnosticIdentity(binding),
         status: 'soulessence-effect-runtime-unresolved',
         reasons: [
-          binding.formulaResult?.reason ??
+          unresolvedFormula.formulaResult?.reason ??
             'soulessence-effect-formula-evaluation-unresolved',
         ],
         sourceIdentity: binding.definition.sourceIdentity,
@@ -277,6 +285,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
     directSpEvents: gated.directSpEvents,
     directHpEvents: gated.directHpEvents,
     triggerIntervalStates: gated.triggerIntervalStates,
+    triggerCounterStates: gated.triggerCounterStates,
     acceptedTriggerOccurrences: gated.acceptedTriggerOccurrences,
     suppressions,
     unresolved,
@@ -285,6 +294,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
       effectCommandCount: gated.effectCommands.length,
       directSpEventCount: gated.directSpEvents.length,
       directHpEventCount: gated.directHpEvents.length,
+      triggerCounterStateCount: gated.triggerCounterStates.length,
       suppressionCount: suppressions.length,
       unresolvedCount: unresolved.length,
     },
@@ -497,6 +507,10 @@ function createEquippedSoulBinding(actor, definitionBySoulId) {
     star: Number.isInteger(star) ? star : null,
     starValue: starValue ?? null,
     formulaResult,
+    propertyFormulaResults:
+      starValue == null
+        ? []
+        : [{ effect: definition.effect, starValue, formulaResult }],
     cultivationSourceIdentity: effectSkill?.sourceIdentity ?? null,
   };
 }
@@ -512,21 +526,33 @@ function createEquippedSetSkillBindings(actor, definitionBySetKey) {
       const key = `${Number(activation.setId)}:${Number(activation.pieces)}`;
       const definition = definitionBySetKey.get(key);
       if (!definition) return null;
-      const starValue = definition.effect?.valuesByStar?.find(
-        row => Number(row.star) === 1
-      ) ?? {
-        star: 1,
-        valueRaw: Number(definition.effect?.sourceRawA),
-        sourceIdentity: `${definition.effect?.sourceIdentity}.formulaParams.formulaParamValues[0]`,
-      };
-      const formulaResult = Number.isFinite(Number(starValue.valueRaw))
-        ? evaluateSoulEffectFormula({
-            definition,
-            starValue,
-            star: 1,
-            actor,
-          })
-        : null;
+      const propertyEffects =
+        definition.effect?.propertyEffects?.length > 0
+          ? definition.effect.propertyEffects
+          : [definition.effect];
+      const propertyFormulaResults = propertyEffects.map(effect => {
+        const starValue = effect?.valuesByStar?.find(
+          row => Number(row.star) === 1
+        ) ?? {
+          star: 1,
+          valueRaw: Number(effect?.sourceRawA),
+          sourceIdentity: `${effect?.sourceIdentity}.formulaParams.formulaParamValues[0]`,
+        };
+        return {
+          effect,
+          starValue,
+          formulaResult: Number.isFinite(Number(starValue.valueRaw))
+            ? evaluateSoulEffectFormula({
+                definition,
+                effect,
+                starValue,
+                star: 1,
+                actor,
+              })
+            : null,
+        };
+      });
+      const primary = propertyFormulaResults[0] ?? {};
       return {
         actor,
         ownerKind: 'set-skill',
@@ -536,8 +562,9 @@ function createEquippedSetSkillBindings(actor, definitionBySetKey) {
         setSkillId: Number(activation.skillId),
         definition,
         star: 1,
-        starValue,
-        formulaResult,
+        starValue: primary.starValue ?? null,
+        formulaResult: primary.formulaResult ?? null,
+        propertyFormulaResults,
         cultivationSourceIdentity: activation.sourceIdentity ?? null,
       };
     })
@@ -570,7 +597,12 @@ function createSoulEffectCommand({
   targetIndex,
   catalog,
 }) {
-  const { definition, starValue, formulaResult, actor } = binding;
+  const { definition, actor } = binding;
+  const propertyFormulaResults = binding.propertyFormulaResults ?? [];
+  const primaryPropertyFormula = propertyFormulaResults[0] ?? {};
+  const starValue = primaryPropertyFormula.starValue ?? binding.starValue;
+  const formulaResult =
+    primaryPropertyFormula.formulaResult ?? binding.formulaResult;
   const effect = definition.effect;
   const frameAnchor = definition.trigger.frameAnchor;
   const hit = occurrence?.hit ?? null;
@@ -630,10 +662,12 @@ function createSoulEffectCommand({
     effectId: effectIdentity,
     effectName: `${definition.name ?? `set-${binding.setId}-${binding.pieces}-piece`}-${effect.name ?? effect.elementId}`,
     operation: EFFECT_OPERATIONS.APPLY,
-    targetKind: EFFECT_TARGET_KINDS.ACTOR,
+    targetKind: target.kind,
     targetId: String(target.id),
     targetName: target.name ?? null,
     semanticTargetKind: definition.trigger.target?.kind ?? 'self-actor',
+    triggerType: definition.trigger.triggerType ?? null,
+    triggerCounter: definition.trigger.triggerCounter ?? null,
     timeMs,
     durationMs: effect.durationMs,
     stackMode: normalizeStackMode(effect.stackMode),
@@ -653,25 +687,26 @@ function createSoulEffectCommand({
     appliedToCalculators: true,
     formulaSourceActorId: actor.id,
     effectAdderActorId: actor.id,
-    modifiers: [
-      {
+    modifiers: propertyFormulaResults.map(
+      ({ effect: propertyEffect, formulaResult: propertyFormulaResult }) => ({
         kind: 'battle-property',
-        attributeId: effect.attributeId,
-        bucket: effect.bucket,
-        valueRaw: formulaResult.value,
-        value: formulaResult.value,
-        sourceRawA: formulaResult.sourceRawA,
-        evaluatedValue: formulaResult.evaluatedValue,
-        formulaIdentity: formulaResult.formulaIdentity,
-        formulaResult,
-        sourceElementId: effect.elementId,
-        sourceElementPathId: effect.pathId,
-        propertyTags: [...(effect.propertyTags ?? [])],
-        propertyTagMatchMode: effect.propertyTagMatchMode ?? 'unscoped',
-        propertyTagSourceIdentity: effect.propertyTagSourceIdentity ?? null,
-        sourceIdentity: effect.sourceIdentity,
-      },
-    ],
+        attributeId: propertyEffect.attributeId,
+        bucket: propertyEffect.bucket,
+        valueRaw: propertyFormulaResult.value,
+        value: propertyFormulaResult.value,
+        sourceRawA: propertyFormulaResult.sourceRawA,
+        evaluatedValue: propertyFormulaResult.evaluatedValue,
+        formulaIdentity: propertyFormulaResult.formulaIdentity,
+        formulaResult: propertyFormulaResult,
+        sourceElementId: propertyEffect.elementId,
+        sourceElementPathId: propertyEffect.pathId,
+        propertyTags: [...(propertyEffect.propertyTags ?? [])],
+        propertyTagMatchMode: propertyEffect.propertyTagMatchMode ?? 'unscoped',
+        propertyTagSourceIdentity:
+          propertyEffect.propertyTagSourceIdentity ?? null,
+        sourceIdentity: propertyEffect.sourceIdentity,
+      })
+    ),
     sourceIdentity: {
       packageId: catalog?.kind ?? soulEssenceEffectCatalog.kind,
       catalogKind: catalog?.kind ?? soulEssenceEffectCatalog.kind,
@@ -700,6 +735,8 @@ function createSoulEffectCommand({
       sourceTuningEventIdentity: tuningEvent?.eventIdentity ?? null,
       sourceNonDamageEventIdentity,
       triggerEventContext: eventContext,
+      triggerType: definition.trigger.triggerType ?? null,
+      triggerCounter: definition.trigger.triggerCounter ?? null,
       triggerIntervalMs: definition.trigger.intervalMs ?? null,
       triggerIntervalSourceIdentity:
         definition.trigger.intervalSourceIdentity ?? null,
@@ -717,6 +754,17 @@ function createSoulEffectCommand({
       effectPropertyTags: [...(effect.propertyTags ?? [])],
       effectPropertyTagMatchMode: effect.propertyTagMatchMode ?? 'unscoped',
       effectPropertyTagSourceIdentity: effect.propertyTagSourceIdentity ?? null,
+      propertyFormulaResults: propertyFormulaResults.map(entry => ({
+        effectElementId: entry.effect.elementId,
+        effectPathId: entry.effect.pathId,
+        attributeId: entry.effect.attributeId,
+        starValueSourceIdentity: entry.starValue.sourceIdentity,
+        formulaIdentity: entry.formulaResult.formulaIdentity,
+        formulaSourceIdentity: entry.effect.formula.sourceIdentity ?? null,
+        sourceRawA: entry.formulaResult.sourceRawA,
+        evaluatedValue: entry.formulaResult.evaluatedValue,
+        sourceIdentity: entry.effect.sourceIdentity,
+      })),
       switchTrigger: actionContext.switchTrigger,
       lifecycle: effect.lifecycle ?? {
         sourceKind: 'property-leaf-duration',
@@ -726,7 +774,8 @@ function createSoulEffectCommand({
       star: binding.star,
       starValueSourceIdentity: starValue.sourceIdentity,
       formulaIdentity: formulaResult.formulaIdentity,
-      formulaSourceIdentity: effect.formula.sourceIdentity ?? null,
+      formulaSourceIdentity:
+        primaryPropertyFormula.effect?.formula?.sourceIdentity ?? null,
       sourceRawA: formulaResult.sourceRawA,
       evaluatedValue: formulaResult.evaluatedValue,
       targetIdentity: {
@@ -795,6 +844,8 @@ function createSoulImmediateEvents({
         transactionRootIdentity,
         triggerOccurrenceIdentity,
         triggerElementId: binding.definition.trigger.elementId,
+        triggerType: binding.definition.trigger.triggerType ?? null,
+        triggerCounter: binding.definition.trigger.triggerCounter ?? null,
         triggerIntervalMs: binding.definition.trigger.intervalMs ?? null,
         triggerSourceSequencePath: [...triggerSequencePath],
         ownerIdentity: binding.ownerIdentity,
@@ -873,13 +924,19 @@ function createSoulImmediateEvents({
   return { directSpEvents, directHpEvents };
 }
 
-function evaluateSoulEffectFormula({ definition, starValue, star, actor }) {
+function evaluateSoulEffectFormula({
+  definition,
+  effect = definition.effect,
+  starValue,
+  star,
+  actor,
+}) {
   if (
-    !Number.isInteger(Number(definition.effect.formula?.commonFunctionId)) ||
-    !Number.isInteger(Number(definition.effect.formula?.baseFunctionId))
+    !Number.isInteger(Number(effect.formula?.commonFunctionId)) ||
+    !Number.isInteger(Number(effect.formula?.baseFunctionId))
   ) {
     return {
-      family: definition.effect.formula?.family ?? 'legacy-literal-a',
+      family: effect.formula?.family ?? 'legacy-literal-a',
       status: 'applied',
       evaluator: 'legacy-synthetic-literal-a',
       applied: true,
@@ -896,13 +953,13 @@ function evaluateSoulEffectFormula({ definition, starValue, star, actor }) {
   }
   const params = Array.from({ length: 26 }, () => 0);
   params[0] = Number(starValue.valueRaw);
-  params[6] = Number(definition.effect.formula.commonRatioRaw);
+  params[6] = Number(effect.formula.commonRatioRaw);
   return evaluateVerifiedBattleEffectFormula({
     effect: {
-      ...definition.effect,
-      property: { bucket: definition.effect.bucket },
+      ...effect,
+      property: { bucket: effect.bucket },
       formula: {
-        ...definition.effect.formula,
+        ...effect.formula,
         paramsByLevel: { [star]: params },
       },
     },
@@ -914,6 +971,7 @@ function evaluateSoulEffectFormula({ definition, starValue, star, actor }) {
 function resolveSoulEffectTargets({ binding, scenario, occurrence }) {
   if (binding.definition.trigger?.target?.kind === 'team-actors') {
     return (scenario.actors ?? []).map(actor => ({
+      kind: EFFECT_TARGET_KINDS.ACTOR,
       id: actor.id,
       name: actor.name ?? null,
     }));
@@ -923,9 +981,54 @@ function resolveSoulEffectTargets({ binding, scenario, occurrence }) {
     const actor = (scenario.actors ?? []).find(
       candidate => String(candidate.id) === targetId
     );
-    return actor ? [{ id: actor.id, name: actor.name ?? null }] : [];
+    return actor
+      ? [
+          {
+            kind: EFFECT_TARGET_KINDS.ACTOR,
+            id: actor.id,
+            name: actor.name ?? null,
+          },
+        ]
+      : [];
   }
-  return [{ id: binding.actor.id, name: binding.actor.name ?? null }];
+  if (binding.definition.trigger?.target?.kind === 'event-target-entity') {
+    const targetKind = occurrence?.eventContext?.eventTargetKind;
+    const targetId = String(occurrence?.eventContext?.eventTargetId ?? '');
+    if (
+      targetKind === EFFECT_TARGET_KINDS.ENEMY &&
+      String(scenario.enemy?.id) === targetId
+    ) {
+      return [
+        {
+          kind: EFFECT_TARGET_KINDS.ENEMY,
+          id: scenario.enemy.id,
+          name: scenario.enemy.name ?? null,
+        },
+      ];
+    }
+    if (targetKind === EFFECT_TARGET_KINDS.ACTOR) {
+      const actor = (scenario.actors ?? []).find(
+        candidate => String(candidate.id) === targetId
+      );
+      return actor
+        ? [
+            {
+              kind: EFFECT_TARGET_KINDS.ACTOR,
+              id: actor.id,
+              name: actor.name ?? null,
+            },
+          ]
+        : [];
+    }
+    return [];
+  }
+  return [
+    {
+      kind: EFFECT_TARGET_KINDS.ACTOR,
+      id: binding.actor.id,
+      name: binding.actor.name ?? null,
+    },
+  ];
 }
 
 function resolveSoulTriggerActionContext({ action, resolution, eventContext }) {
@@ -1135,7 +1238,7 @@ function applySoulTriggerIntervalGates({
   directHpEvents,
   suppressions,
 }) {
-  const intervalGroups = new Map();
+  const triggerGroups = new Map();
   const artifacts = [
     ...effectCommands.map((value, index) => ({
       kind: 'effect-command',
@@ -1158,7 +1261,17 @@ function applySoulTriggerIntervalGates({
     const intervalMs = Number(
       command.triggerIntervalMs ?? command.sourceIdentity?.triggerIntervalMs
     );
-    if (!(intervalMs > 0)) continue;
+    const triggerType = Number(
+      command.triggerType ?? command.sourceIdentity?.triggerType
+    );
+    const configuredTriggerCounter = Number(
+      command.triggerCounter ?? command.sourceIdentity?.triggerCounter
+    );
+    const triggerCounterLimit = resolveEventTriggerCounterLimit({
+      triggerType,
+      configuredTriggerCounter,
+    });
+    if (!(intervalMs > 0) && triggerCounterLimit == null) continue;
     const ownerIdentity =
       command.ownerIdentity ??
       (command.sourceSetId != null
@@ -1169,13 +1282,18 @@ function applySoulTriggerIntervalGates({
       ownerIdentity,
       command.triggerElementId ?? command.sourceIdentity?.triggerElementId,
     ].join('|');
-    if (!intervalGroups.has(bindingKey)) {
-      intervalGroups.set(bindingKey, {
+    if (!triggerGroups.has(bindingKey)) {
+      triggerGroups.set(bindingKey, {
         intervalMs,
+        triggerType: Number.isInteger(triggerType) ? triggerType : null,
+        configuredTriggerCounter: Number.isInteger(configuredTriggerCounter)
+          ? configuredTriggerCounter
+          : null,
+        triggerCounterLimit,
         occurrences: new Map(),
       });
     }
-    const group = intervalGroups.get(bindingKey);
+    const group = triggerGroups.get(bindingKey);
     const occurrenceIdentity =
       command.triggerOccurrenceIdentity ??
       command.sourceNonDamageEventIdentity ??
@@ -1204,8 +1322,10 @@ function applySoulTriggerIntervalGates({
   };
   const acceptedTriggerOccurrences = [];
   const triggerIntervalStates = [];
-  for (const [bindingKey, group] of intervalGroups) {
+  const triggerCounterStates = [];
+  for (const [bindingKey, group] of triggerGroups) {
     let lastAcceptedAtMs = null;
+    let acceptedCount = 0;
     const occurrences = [...group.occurrences.values()].sort(
       (left, right) =>
         left.timeMs - right.timeMs ||
@@ -1216,6 +1336,33 @@ function applySoulTriggerIntervalGates({
         left.occurrenceIdentity.localeCompare(right.occurrenceIdentity)
     );
     for (const occurrence of occurrences) {
+      if (
+        group.triggerCounterLimit != null &&
+        acceptedCount >= group.triggerCounterLimit
+      ) {
+        for (const artifact of occurrence.artifacts) {
+          suppressed[artifact.kind].add(artifact.index);
+        }
+        suppressions.push({
+          actionId:
+            occurrence.command.sourceActionId ?? occurrence.command.actionId,
+          actorId:
+            occurrence.command.sourceActorId ?? occurrence.command.actorId,
+          soulEssenceId: occurrence.command.sourceSoulEssenceId,
+          setId: occurrence.command.sourceSetId ?? null,
+          setPieces: occurrence.command.sourceSetPieces ?? null,
+          effectSkillId:
+            occurrence.command.sourceIdentity?.effectSkillId ?? null,
+          eventIdentity: occurrence.occurrenceIdentity,
+          triggerType: group.triggerType,
+          configuredTriggerCounter: group.configuredTriggerCounter,
+          triggerCounterLimit: group.triggerCounterLimit,
+          acceptedCount,
+          timeMs: occurrence.timeMs,
+          reason: 'soulessence-effect-trigger-counter-exhausted',
+        });
+        continue;
+      }
       if (
         lastAcceptedAtMs != null &&
         occurrence.timeMs - lastAcceptedAtMs < group.intervalMs
@@ -1242,24 +1389,49 @@ function applySoulTriggerIntervalGates({
         continue;
       }
       lastAcceptedAtMs = occurrence.timeMs;
+      acceptedCount += 1;
       acceptedTriggerOccurrences.push({
         bindingKey,
         eventIdentity: occurrence.occurrenceIdentity,
         timeMs: occurrence.timeMs,
         intervalMs: group.intervalMs,
+        triggerType: group.triggerType,
+        configuredTriggerCounter: group.configuredTriggerCounter,
+        triggerCounterLimit: group.triggerCounterLimit,
+        triggerCountAfter: acceptedCount,
+        remainingTriggerCount:
+          group.triggerCounterLimit == null
+            ? null
+            : Math.max(0, group.triggerCounterLimit - acceptedCount),
         sourceSequencePath: occurrence.sourceSequencePath,
         actionId:
           occurrence.command.sourceActionId ?? occurrence.command.actionId,
         actorId: occurrence.command.sourceActorId ?? occurrence.command.actorId,
       });
     }
-    triggerIntervalStates.push({
-      bindingKey,
-      intervalMs: group.intervalMs,
-      lastAcceptedAtMs,
-      readyAtMs:
-        lastAcceptedAtMs == null ? null : lastAcceptedAtMs + group.intervalMs,
-    });
+    if (group.intervalMs > 0) {
+      triggerIntervalStates.push({
+        bindingKey,
+        intervalMs: group.intervalMs,
+        lastAcceptedAtMs,
+        readyAtMs:
+          lastAcceptedAtMs == null ? null : lastAcceptedAtMs + group.intervalMs,
+      });
+    }
+    if (group.triggerCounterLimit != null) {
+      triggerCounterStates.push({
+        bindingKey,
+        triggerType: group.triggerType,
+        configuredTriggerCounter: group.configuredTriggerCounter,
+        triggerCounterLimit: group.triggerCounterLimit,
+        acceptedCount,
+        remainingTriggerCount: Math.max(
+          0,
+          group.triggerCounterLimit - acceptedCount
+        ),
+        exhausted: acceptedCount >= group.triggerCounterLimit,
+      });
+    }
   }
   return {
     effectCommands: effectCommands.filter(
@@ -1273,7 +1445,22 @@ function applySoulTriggerIntervalGates({
     ),
     acceptedTriggerOccurrences,
     triggerIntervalStates,
+    triggerCounterStates,
   };
+}
+
+function resolveEventTriggerCounterLimit({
+  triggerType,
+  configuredTriggerCounter,
+}) {
+  if (
+    Number(triggerType) !== 1 ||
+    !Number.isInteger(configuredTriggerCounter) ||
+    configuredTriggerCounter < 0
+  ) {
+    return null;
+  }
+  return configuredTriggerCounter === 0 ? 1 : configuredTriggerCounter;
 }
 
 function extractSkillSlotIds(sourceIdentity) {

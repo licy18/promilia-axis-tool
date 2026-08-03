@@ -3269,6 +3269,8 @@ function applyTuningCombatDescriptor({
       state,
       scenario,
       timeMs: tuningEvent.timeMs,
+      propertyTags,
+      settlingSourceSequencePath,
     }),
     elementMultiplier: resolveWeaknessElementMultiplier(enemyProfile, {
       damage: template,
@@ -3631,6 +3633,7 @@ function applyHitDescriptor({
     scenario,
     timeMs: descriptor.timeMs,
     propertyTags,
+    settlingSourceSequencePath,
   });
   const weaknessElementMultiplier = resolveWeaknessElementMultiplier(
     enemyProfile,
@@ -5114,6 +5117,7 @@ function resolveRuntimeWeaknessTypeMultiplier({
   scenario,
   timeMs,
   propertyTags = [],
+  settlingSourceSequencePath = null,
 }) {
   const physical = Number(damage?.physicalRatioBasisPoints) > 0;
   const attributeId = physical ? 202 : 203;
@@ -5128,6 +5132,7 @@ function resolveRuntimeWeaknessTypeMultiplier({
     attributeId,
     baseRaw,
     propertyTags,
+    settlingSourceSequencePath,
   });
   return basisPoints(result.value, 1);
 }

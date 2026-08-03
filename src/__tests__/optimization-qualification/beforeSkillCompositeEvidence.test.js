@@ -157,7 +157,7 @@ describe('BeforeSkill composite SP and team-heal native evidence', () => {
     }
   }, 30_000);
 
-  it('keeps the C12-R1 acceptance report synchronized with generated qualification artifacts', async () => {
+  it('keeps the current acceptance report synchronized with generated qualification artifacts', async () => {
     const [summary, dynamicCensus, soulCatalog] = await Promise.all(
       [
         'reports/m12/m12-b3-optimization-qualification-summary.json',
@@ -171,17 +171,15 @@ describe('BeforeSkill composite SP and team-heal native evidence', () => {
     );
 
     expect(report).toMatchObject({
-      phase: 'M12-B3-C12-R1',
+      phase: 'M12-B3-C13',
       status: 'verification-complete-awaiting-product-acceptance',
-      baseCommit: '8f01dba447106b03783582d58e80badb8a571b8e',
+      baseCommit: '5537e5a59f9776d7045b0ce8ad9915738715a9a4',
       reviewedC12Commit: 'a432467d4322ee0dae58e3d47df3b5c2eb55447a',
+      acceptedC12R1Commit: '5537e5a59f9776d7045b0ce8ad9915738715a9a4',
       batchResults: {
         runtimeAppliedSoulEssenceCount: 39,
-        runtimeAppliedSetSkillCount: 10,
-        remainingBlockedFourPieceSetSkillIds: [
-          'set-skill:3:4',
-          'set-skill:6:4',
-        ],
+        runtimeAppliedSetSkillCount: 11,
+        remainingBlockedFourPieceSetSkillIds: ['set-skill:3:4'],
       },
       qualification: {
         blockingUniqueGapCount: summary.gapCounts.blockingUniqueGapCount,

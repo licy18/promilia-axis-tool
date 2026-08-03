@@ -237,7 +237,33 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       ],
       runtimeGaps: [],
     });
-    for (const setId of [3, 6]) {
+    expect(definitions.get('6:4')).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'set-skill-after-damage-target-property',
+      thresholdActivation: { appliedToRuntimeEffect: true },
+      trigger: {
+        frameAnchor: 'hit-after-damage',
+        targetKind: 'event-target-entity',
+        condition: {
+          logic: 'or',
+          conditions: [
+            expect.objectContaining({ kind: 'skill-tag', skillTagId: 1 }),
+            expect.objectContaining({ kind: 'skill-tag', skillTagId: 2 }),
+          ],
+        },
+      },
+      effect: {
+        durationMs: 24000,
+        stackMode: 'refresh',
+        maxStacks: 1,
+        propertyEffects: [
+          expect.objectContaining({ attributeId: 202, sourceRawA: 2000 }),
+          expect.objectContaining({ attributeId: 203, sourceRawA: 2000 }),
+        ],
+      },
+      runtimeGaps: [],
+    });
+    for (const setId of [3]) {
       expect(definitions.get(`${setId}:4`)).toMatchObject({
         runtimeStatus: 'source-indexed-runtime-unapplied',
         thresholdActivation: { appliedToRuntimeEffect: false },
@@ -249,8 +275,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 49,
-      runtimeUnappliedCount: 25,
+      runtimeAppliedCount: 50,
+      runtimeUnappliedCount: 24,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -1140,7 +1166,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     ).toBe(true);
     expect(
       fourPiece
-        .filter(definition => [1, 2, 4, 5].includes(definition.setId))
+        .filter(definition => [1, 2, 4, 5, 6].includes(definition.setId))
         .every(
           definition =>
             definition.thresholdActivation.status === 'runtime-applied' &&
@@ -1151,7 +1177,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     ).toBe(true);
     expect(
       fourPiece
-        .filter(definition => ![1, 2, 4, 5].includes(definition.setId))
+        .filter(definition => ![1, 2, 4, 5, 6].includes(definition.setId))
         .every(
           definition =>
             definition.thresholdActivation.status === 'source-indexed' &&
@@ -1164,7 +1190,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     ).toBe(true);
     expect(soulCatalog.summary).toMatchObject({
       setSkillThresholdIndexedCount: 12,
-      setSkillRuntimeAppliedCount: 10,
+      setSkillRuntimeAppliedCount: 11,
     });
   });
 

@@ -3,7 +3,7 @@
   "contractName": "AzPrDynamicLoadoutEffectMechanismCensus",
   "kind": "azpr-dynamic-loadout-effect-mechanism-census",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "sourceCatalogHash": "1e3b8c4d4cecaf84",
+  "sourceCatalogHash": "1648903a7e038e2c",
   "propertyTagContract": {
     "sourceKind": "il2cpp-battle-property-tag-contract",
     "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag",
@@ -1082,6 +1082,7 @@
         {
           "elementId": 199999024,
           "pathId": -2802459635003440600,
+          "triggerType": 1,
           "eventId": 5,
           "event": "BeforeSkill",
           "frameAnchor": "action-start",
@@ -1415,6 +1416,7 @@
         {
           "elementId": 199999020,
           "pathId": -4719083164342722000,
+          "triggerType": 1,
           "eventId": 1,
           "event": "BeforeDamage",
           "frameAnchor": "hit-before-damage",
@@ -1700,6 +1702,7 @@
         {
           "elementId": 199999022,
           "pathId": -3122175980655525000,
+          "triggerType": 1,
           "eventId": 4,
           "event": null,
           "frameAnchor": null,
@@ -2002,6 +2005,7 @@
         {
           "elementId": 199999018,
           "pathId": 6898765742999895000,
+          "triggerType": 1,
           "eventId": 1,
           "event": "BeforeDamage",
           "frameAnchor": "hit-before-damage",
@@ -2305,6 +2309,7 @@
         {
           "elementId": 199999056,
           "pathId": 1379284923835731500,
+          "triggerType": 1,
           "eventId": 44,
           "event": "AfterHeal",
           "frameAnchor": "heal-after-settlement",
@@ -2578,18 +2583,19 @@
       "objectId": "6:4",
       "displayName": "set-6-4-piece",
       "effectSkillId": 19998008,
-      "mechanismFamily": "set-skill-afterdamage-effect",
+      "mechanismFamily": "set-skill-after-damage-target-property",
       "thresholdActivation": {
         "selectedPieceCountRequired": 4,
         "comparison": "selected-piece-count-greater-than-or-equal",
-        "status": "source-indexed",
-        "appliedToRuntimeEffect": false,
+        "status": "runtime-applied",
+        "appliedToRuntimeEffect": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType"
       },
       "trigger": [
         {
           "elementId": 199999063,
           "pathId": -2660561195248504300,
+          "triggerType": 1,
           "eventId": 2,
           "event": "AfterDamage",
           "frameAnchor": "hit-after-damage",
@@ -2710,15 +2716,13 @@
       "vitalChanges": [],
       "delayedEvents": [],
       "loopPersistence": {
-        "status": "runtime-unapplied",
-        "reason": "set-skill-runtime-operator-not-implemented"
+        "status": "canonical-effect-timeline-applied",
+        "reason": null
       },
-      "evidenceStatus": "source-closure-indexed",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "set-skill-runtime-operator-not-implemented"
-      ],
-      "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998008.asset/MonoBehaviour/skill_control_19998008__3385592889625444843.json"
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998008.asset/MonoBehaviour/skill_control_19998008__3385592889625444843.json|GameAssembly.dll#AliveElementSystem.OnExecuteDamageElement/DamageEventTriggerUtility.OnAfterAttack/TriggerElement.GetTriggerTarget/Parse/CanTrigger/Trigger/get_triggerCount/BuffElement.Execute/ExecuteInjectElements/Combine|dump.cs#AfterDamage/TriggerEvent/Target/Cover/WDM_PHYSICAL/WDM_MAGIC|battle-element-assets.jsonl#path_id=-2660561195248504300;elementId=199999063|battle-element-assets.jsonl#path_id=6349252756564460000;elementId=199999071|battle-element-assets.jsonl#path_id=-5884995951490395000;elementId=199999064|battle-element-assets.jsonl#path_id=7187107487063477000;elementId=199999070|battle-element-assets.jsonl#path_id=-6224086841716568000;elementId=199999065.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5596010208760866000;elementId=199999066"
     },
     {
       "objectKind": "soul-essence",
@@ -10887,8 +10891,8 @@
   "summary": {
     "soulEssenceCount": 62,
     "setSkillCount": 12,
-    "runtimeAppliedCount": 49,
-    "runtimeUnappliedCount": 25,
+    "runtimeAppliedCount": 50,
+    "runtimeUnappliedCount": 24,
     "byMechanismFamily": {
       "equipped-actor-get-element-property-after-acquire": 3,
       "equipped-actor-get-element-property-before-acquire": 1,
@@ -10900,8 +10904,8 @@
       "equipped-actor-skill-tag-property-before-damage": 5,
       "equipped-actor-skill-tag-property-before-skill": 8,
       "equipped-actor-switch-enter-team-property": 1,
+      "set-skill-after-damage-target-property": 1,
       "set-skill-after-heal-source-to-target-property": 1,
-      "set-skill-afterdamage-effect": 1,
       "set-skill-before-damage-stacking-property": 2,
       "set-skill-before-skill-composite-immediate": 1,
       "set-skill-persistent-property": 6,
@@ -10909,10 +10913,10 @@
       "source-indexed-composite-effect": 16
     },
     "byEvidenceStatus": {
-      "runtime-applied": 49,
-      "source-closure-indexed": 2,
+      "runtime-applied": 50,
+      "source-closure-indexed": 1,
       "source-indexed-runtime-unapplied": 23
     }
   },
-  "censusHash": "015aa4b6cfd788a1"
+  "censusHash": "59553fb7be3d86fb"
 }
