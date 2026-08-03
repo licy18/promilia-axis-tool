@@ -240,7 +240,7 @@ describe('verified non-damage event generation', () => {
     const periodicHeal = {
       ...createVitalEvent({
         type: 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL_SUPPRESSED',
-        actionId: 'ultimate-heal',
+        actionId: null,
         actorId: 'actor-b',
         targetId: 'actor-c',
         sourceEventIdentity: 'periodic-heal-at-full-hp',
@@ -249,10 +249,11 @@ describe('verified non-damage event generation', () => {
         change: 0,
         after: 1000,
       }),
+      sourceSequencePath: [Number.MAX_SAFE_INTEGER, 44, 520066, 1],
       payload: {
         ...createVitalEvent({
           type: 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL_SUPPRESSED',
-          actionId: 'ultimate-heal',
+          actionId: null,
           actorId: 'actor-b',
           targetId: 'actor-c',
           sourceEventIdentity: 'periodic-heal-at-full-hp',
@@ -264,6 +265,9 @@ describe('verified non-damage event generation', () => {
         applied: false,
         afterHealDispatchEligible: true,
         actionProvenanceAvailable: false,
+        sourceAttributionStatus: 'native-first-root-source-verified',
+        contributingSources: [{ sourceActorId: 'actor-b' }],
+        maxValue: 1000,
         reason: 'periodic-heal-no-positive-effective-change',
       },
     };
@@ -283,6 +287,8 @@ describe('verified non-damage event generation', () => {
 
     expect(nonDamageEventGeneration.events).toEqual([
       expect.objectContaining({
+        actionId: null,
+        sourceSequencePath: [Number.MAX_SAFE_INTEGER, 44, 520066, 1],
         kind: 'heal-after-settlement',
         eventContext: expect.objectContaining({
           actionProvenanceAvailable: false,
@@ -308,7 +314,7 @@ describe('verified non-damage event generation', () => {
     expect(generation.suppressions).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          actionId: 'ultimate-heal',
+          actionId: null,
           reason: 'soulessence-effect-action-kind-condition-not-matched',
           actualSkillSlotIds: [],
           actualSkillTagIds: [],
@@ -480,6 +486,93 @@ describe('verified non-damage event generation', () => {
           intervalMs: 10,
           reason: 'soulessence-effect-trigger-interval-active',
         }),
+      ])
+    );
+  });
+
+  it('sorts and deduplicates verified actionless settlements while rejecting unresolved sources', () => {
+    const scenario = createScenario();
+    const actionExecutionPlan = {
+      actions: scenario.actions.map(action => ({
+        actionId: action.id,
+        execute: true,
+      })),
+    };
+    const later = createActionlessPeriodicVitalEvent({
+      identity: 'periodic-actionless-later',
+      sourceActorId: 'actor-b',
+      targetActorId: 'actor-c',
+      localSequence: 20,
+    });
+    const earlier = createActionlessPeriodicVitalEvent({
+      identity: 'periodic-actionless-earlier',
+      sourceActorId: 'actor-b',
+      targetActorId: 'actor-c',
+      localSequence: 10,
+    });
+    const unknownSource = createActionlessPeriodicVitalEvent({
+      identity: 'periodic-actionless-unknown-source',
+      sourceActorId: null,
+      targetActorId: 'actor-c',
+      localSequence: 30,
+      contributingSources: [],
+    });
+    const ambiguousSource = createActionlessPeriodicVitalEvent({
+      identity: 'periodic-actionless-ambiguous-source',
+      sourceActorId: 'actor-b',
+      targetActorId: 'actor-c',
+      localSequence: 40,
+      contributingSources: [
+        { sourceActorId: 'actor-b' },
+        { sourceActorId: 'actor-a' },
+      ],
+    });
+    const missingSettlement = createActionlessPeriodicVitalEvent({
+      identity: 'periodic-actionless-missing-settlement',
+      sourceActorId: 'actor-b',
+      targetActorId: 'actor-c',
+      localSequence: 50,
+    });
+    delete missingSettlement.payload.requestedChange;
+    const rejected = createActionlessPeriodicVitalEvent({
+      identity: 'periodic-actionless-rejected',
+      sourceActorId: 'actor-b',
+      targetActorId: 'actor-c',
+      localSequence: 60,
+      appliedToCalculators: false,
+    });
+    const generation = createVerifiedNonDamageEventGeneration({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline: { transitions: [] },
+      actionResolutionById: createActionResolutionById(),
+      verifiedCombatRuntime: {
+        vitalEvents: [
+          later,
+          earlier,
+          { ...earlier, payload: { ...earlier.payload } },
+          unknownSource,
+          ambiguousSource,
+          missingSettlement,
+          rejected,
+        ],
+      },
+    });
+
+    expect(
+      generation.events.map(
+        event => event.eventContext.sourceDescriptorIdentity
+      )
+    ).toEqual(['periodic-actionless-earlier', 'periodic-actionless-later']);
+    expect(generation.events.every(event => event.actionId === null)).toBe(
+      true
+    );
+    expect(generation.suppressions.map(row => row.reason)).toEqual(
+      expect.arrayContaining([
+        'non-damage-event-duplicate',
+        'non-damage-event-actionless-source-attribution-unresolved',
+        'non-damage-event-actionless-calculator-settlement-unresolved',
+        'non-damage-event-settlement-not-applied',
       ])
     );
   });
@@ -683,6 +776,49 @@ function createVitalEvent({
       change,
       after,
       appliedToCalculators: true,
+    },
+  };
+}
+
+function createActionlessPeriodicVitalEvent({
+  identity,
+  sourceActorId,
+  targetActorId,
+  localSequence,
+  contributingSources = [{ sourceActorId }],
+  appliedToCalculators = true,
+}) {
+  const sourceSequencePath = [
+    Number.MAX_SAFE_INTEGER,
+    44,
+    520066,
+    localSequence,
+  ];
+  return {
+    type: 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL_SUPPRESSED',
+    timeMs: 3000,
+    absoluteFrame: 180,
+    actionId: null,
+    actorId: sourceActorId,
+    targetId: targetActorId,
+    sourceSequencePath,
+    payload: {
+      sourceEventIdentity: identity,
+      sourceSequencePath,
+      sourceActorId,
+      targetKind: 'actor',
+      beforeValue: 1000,
+      requestedChange: 100,
+      change: 0,
+      afterValue: 1000,
+      maxValue: 1000,
+      applied: false,
+      appliedToCalculators,
+      afterHealDispatchEligible: true,
+      actionProvenanceAvailable: false,
+      sourceAttributionStatus: 'native-first-root-source-verified',
+      contributingSources,
+      reason: 'periodic-heal-no-positive-effective-change',
     },
   };
 }

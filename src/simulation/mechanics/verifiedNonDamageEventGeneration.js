@@ -154,6 +154,21 @@ function createVitalEventProjection({
   const action = actionById.get(String(vitalEvent.actionId));
   const actionProvenanceAvailable =
     payload.actionProvenanceAvailable !== false;
+  const actionless =
+    actionProvenanceAvailable === false && vitalEvent.actionId === null;
+  const actionlessSource = actionless
+    ? resolveVerifiedActionlessVitalSource({ vitalEvent, payload })
+    : null;
+  if (actionless && actionlessSource?.ready !== true) {
+    return {
+      event: null,
+      suppression: createSuppression(
+        vitalEvent,
+        actionlessSource?.reason ??
+          'non-damage-event-actionless-source-unresolved'
+      ),
+    };
+  }
   if (
     actionProvenanceAvailable &&
     (!action || executionByActionId.get(String(action.id))?.execute !== true)
@@ -218,7 +233,11 @@ function createVitalEventProjection({
     };
   }
   const sourceActorId = String(
-    payload.sourceActorId ?? vitalEvent.actorId ?? action?.actorId ?? ''
+    actionlessSource?.sourceActorId ??
+      payload.sourceActorId ??
+      vitalEvent.actorId ??
+      action?.actorId ??
+      ''
   );
   const triggerSubjectActorId =
     binding.eventId === EVENT_BINDINGS.ON_GOT_SHIELD.eventId
@@ -240,11 +259,13 @@ function createVitalEventProjection({
     payload.sourceEventIdentity ??
     `${vitalEvent.type}|${vitalEvent.actionId ?? 'no-action'}|${targetActorId}|${vitalEvent.timeMs}|${vitalEvent.runtimeSequenceIndex ?? 0}`;
   const transactionIdentity = `non-damage|${sourceEventIdentity}`;
-  const sourceSequencePath = createEventSourceSequencePath(
-    action,
-    binding.phaseSequenceIndex,
-    Number(vitalEvent.runtimeSequenceIndex) || 0
-  );
+  const sourceSequencePath = actionless
+    ? [...actionlessSource.sourceSequencePath]
+    : createEventSourceSequencePath(
+        action,
+        binding.phaseSequenceIndex,
+        Number(vitalEvent.runtimeSequenceIndex) || 0
+      );
   return {
     event: createEvent({
       binding,
@@ -276,6 +297,64 @@ function createVitalEventProjection({
       },
     }),
     suppression: null,
+  };
+}
+
+function resolveVerifiedActionlessVitalSource({ vitalEvent, payload }) {
+  const contributors = Array.isArray(payload.contributingSources)
+    ? payload.contributingSources
+    : [];
+  const sourceActorIds = [
+    payload.sourceActorId,
+    vitalEvent.actorId,
+    ...contributors.map(source => source?.sourceActorId),
+  ]
+    .map(value => String(value ?? ''))
+    .filter(Boolean);
+  const uniqueSourceActorIds = [...new Set(sourceActorIds)];
+  if (
+    payload.sourceAttributionStatus !==
+      'native-first-root-source-verified' ||
+    contributors.length !== 1 ||
+    uniqueSourceActorIds.length !== 1
+  ) {
+    return {
+      ready: false,
+      reason: 'non-damage-event-actionless-source-attribution-unresolved',
+    };
+  }
+  const sourceSequencePath = vitalEvent.sourceSequencePath;
+  if (
+    typeof payload.sourceEventIdentity !== 'string' ||
+    payload.sourceEventIdentity.length === 0 ||
+    !Array.isArray(sourceSequencePath) ||
+    sourceSequencePath.length === 0 ||
+    !sourceSequencePath.every(
+      value => Number.isSafeInteger(value) && value >= 0
+    )
+  ) {
+    return {
+      ready: false,
+      reason: 'non-damage-event-actionless-provenance-unresolved',
+    };
+  }
+  const settlementValues = [
+    payload.before ?? payload.beforeValue,
+    payload.requestedChange,
+    payload.change,
+    payload.after ?? payload.afterValue,
+    payload.maximum ?? payload.maxValue,
+  ];
+  if (!settlementValues.every(value => Number.isFinite(Number(value)))) {
+    return {
+      ready: false,
+      reason: 'non-damage-event-actionless-calculator-settlement-unresolved',
+    };
+  }
+  return {
+    ready: true,
+    sourceActorId: uniqueSourceActorIds[0],
+    sourceSequencePath: [...sourceSequencePath],
   };
 }
 

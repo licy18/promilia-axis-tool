@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import soulEssenceEffectCatalog from '../../data/generated/soulessence-effect-mechanics.json';
 import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import {
   clearInstalledVerifiedCombatMechanicsPackage,
@@ -8,6 +9,8 @@ import { createActionExecutionPlan } from '../../simulation/engine/actionExecuti
 import { createCanonicalCombatTrace } from '../../simulation/headless/canonicalHeadlessCombatCore';
 import { createVerifiedCombatRuntime } from '../../simulation/mechanics/verifiedCombatRuntime';
 import { createVerifiedKiboPassiveGeneration } from '../../simulation/mechanics/verifiedKiboPassiveGeneration';
+import { createVerifiedNonDamageEventGeneration } from '../../simulation/mechanics/verifiedNonDamageEventGeneration';
+import { createVerifiedSoulEssenceEffectGeneration } from '../../simulation/mechanics/verifiedSoulEssenceEffectGeneration';
 import { createActionRuleDiagnostics } from '../../simulation/runtime/actionRuleDiagnostics';
 import { createControlledActorTimeline } from '../../simulation/runtime/controlledActorTimeline';
 import { createEffectRuntimeTimeline } from '../../simulation/runtime/effectRuntimeTimeline';
@@ -31,6 +34,138 @@ afterEach(() => {
 });
 
 describe('verified Kibo periodic-heal runtime', () => {
+  it('routes a production actionless periodic heal through AfterHeal into set 5:4 exactly once', () => {
+    const harness = runPeriodicRuntime({
+      scenarioOptions: {
+        durationMs: 20,
+        actorCurrentHp: 1000,
+      },
+      targetKinds: ['actor'],
+    });
+    const sourceActor = harness.scenario.actors.find(
+      actor => actor.id === SOURCE_ACTOR_ID
+    );
+    sourceActor.verifiedStaticProperties.setSkillActivations = [
+      {
+        setId: 5,
+        pieces: 4,
+        skillId: 19998007,
+        thresholdMet: true,
+        appliedToRuntimeEffect: true,
+        sourceIdentity: 'fixture:c11-r1:set5-four-piece',
+      },
+    ];
+    const periodicHeal = harness.runtime.vitalEvents.find(
+      event => event.type === 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL'
+    );
+    const nonDamageEventGeneration = createVerifiedNonDamageEventGeneration({
+      scenario: harness.scenario,
+      actionExecutionPlan: harness.actionExecutionPlan,
+      controlledActorTimeline: harness.controlledActorTimeline,
+      actionResolutionById: new Map(),
+      verifiedCombatRuntime: harness.runtime,
+    });
+    const definition = soulEssenceEffectCatalog.setSkillDefinitions.find(
+      entry => entry.setId === 5 && entry.pieces === 4
+    );
+    const soulGeneration = createVerifiedSoulEssenceEffectGeneration({
+      scenario: harness.scenario,
+      actionExecutionPlan: harness.actionExecutionPlan,
+      actionResolutionById: new Map(),
+      nonDamageEventGeneration,
+      catalog: {
+        ...soulEssenceEffectCatalog,
+        definitions: [],
+        setSkillDefinitions: [definition],
+      },
+    });
+    const timeline = createEffectRuntimeTimeline({
+      scenario: {
+        ...harness.scenario,
+        time: { ...harness.scenario.time, durationMs: 7000 },
+      },
+      actionExecutionPlan: harness.actionExecutionPlan,
+      generatedCommands: soulGeneration.effectCommands,
+    });
+
+    expect(periodicHeal).toMatchObject({
+      actionId: null,
+      actorId: SOURCE_ACTOR_ID,
+      targetId: SOURCE_ACTOR_ID,
+      sourceSequencePath: expect.any(Array),
+      payload: {
+        sourceEventIdentity: expect.stringContaining('kibo-periodic-heal|'),
+        sourceAttributionStatus: 'native-first-root-source-verified',
+        contributingSources: [
+          expect.objectContaining({ sourceActorId: SOURCE_ACTOR_ID }),
+        ],
+      },
+    });
+    expect(nonDamageEventGeneration.events).toEqual([
+      expect.objectContaining({
+        actionId: null,
+        actorId: SOURCE_ACTOR_ID,
+        targetId: SOURCE_ACTOR_ID,
+        sourceSequencePath: periodicHeal.sourceSequencePath,
+      }),
+    ]);
+    expect(soulGeneration.effectCommands).toEqual([
+      expect.objectContaining({
+        sourceActionId: null,
+        sourceActorId: SOURCE_ACTOR_ID,
+        targetId: SOURCE_ACTOR_ID,
+        sourceSetId: 5,
+        durationMs: 6000,
+      }),
+    ]);
+    expect(
+      timeline.events.filter(
+        event => event.effectId === 'set-skill:5:4:element:199999057'
+      )
+    ).toEqual([
+      expect.objectContaining({ type: 'EFFECT_APPLIED' }),
+      expect.objectContaining({ type: 'EFFECT_EXPIRED' }),
+    ]);
+  });
+
+  it('keeps actionless periodic event identity and source sequence stable when unrelated descriptors are inserted', () => {
+    const baseline = runPeriodicRuntime({ targetKinds: ['actor'] });
+    const withUnrelatedDescriptor = runPeriodicRuntime({
+      targetKinds: ['actor'],
+      directHpEvents: [
+        {
+          timeMs: 1000,
+          action: null,
+          actionId: null,
+          actorId: OTHER_ACTOR_ID,
+          target: { kind: 'actor', id: OTHER_ACTOR_ID },
+          value: 0,
+          applied: true,
+          sourceSequencePath: [Number.MAX_SAFE_INTEGER, 2, 999],
+          effect: { effectIdentity: 'unrelated-out-of-horizon-heal' },
+          sourceIdentity: { identity: 'unrelated-out-of-horizon-heal' },
+        },
+      ],
+    });
+    const baselineEvent = findPeriodicEvent(
+      baseline.runtime,
+      'actor',
+      SOURCE_ACTOR_ID
+    );
+    const insertedEvent = findPeriodicEvent(
+      withUnrelatedDescriptor.runtime,
+      'actor',
+      SOURCE_ACTOR_ID
+    );
+
+    expect(insertedEvent.sourceSequencePath).toEqual(
+      baselineEvent.sourceSequencePath
+    );
+    expect(insertedEvent.payload.sourceEventIdentity).toBe(
+      baselineEvent.payload.sourceEventIdentity
+    );
+  });
+
   it('projects the verified gameplay Kibo root attacker as the single-source Heal104 formula source', () => {
     const scenario = createPeriodicScenario();
     const generation = createVerifiedKiboPassiveGeneration({
@@ -565,6 +700,8 @@ describe('verified Kibo periodic-heal runtime', () => {
           actorId: SOURCE_ACTOR_ID,
           target: { kind: 'actor', id: SOURCE_ACTOR_ID },
           value: 100,
+          applied: true,
+          sourceSequencePath: [Number.MAX_SAFE_INTEGER, 2, 1],
           effect: { effectIdentity: 'test-direct-heal' },
           sourceIdentity: { identity: 'test-direct-heal' },
         },

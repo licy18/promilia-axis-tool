@@ -1,7 +1,7 @@
-# M12-B3-C11 AfterHeal Source-to-Target and Native Block
+# M12-B3-C11-R1 Actionless Periodic AfterHeal Entry
 
 - Status: `verification-complete-awaiting-product-acceptance`
-- Base: C10 production mechanics `785cc9b8c20b1cb995b4fe4f565a6e94101f8531`; C10-R1 product acceptance `ad27e7762fcc8ac96a47d00361cef08fe6dbc959`.
+- Base: reviewed C11 implementation `02935223e914af18cb0bf10abf324edbdd373e17`; C10-R1 product acceptance remains `ad27e7762fcc8ac96a47d00361cef08fe6dbc959`.
 - Scope: `set-skill:5:4` and soul essence `10176`; no C12, M12-C, formal search, UI, package, performance, character, Kibo, or other loadout-effect work.
 
 ## Evidence Contract
@@ -14,6 +14,8 @@ The versioned evidence artifact is `scripts/optimization-qualification/evidence/
 
 Four or five valid set-5 pieces install `set-skill:5:4` once; three pieces and cross-set mixtures do not. An executed direct or periodic AfterHeal from the wearer applies attr1 `dynamicPercent +700` to the actual healed actor for `[apply, apply+6000ms)`. Full-health zero-effective healing still dispatches; rejected settlement, wrong source, or missing owner does not. A real teammate hit gains damage inside the interval and returns to baseline at the exact expiry frame.
 
+C11-R1 closes the production-shaped actionless periodic path. Native Kibo periodic healing keeps `actionId/sourceActionId=null` and is accepted only with one verified root source, a calculator settlement, a stable event identity and a stable `sourceSequencePath`; it is never attached to a nearby action. The before case had one accepted non-damage event but zero effect commands with `soulessence-effect-no-source-non-damage-transaction`; the same event now yields exactly one set-5 command to the healed target. Unknown/multi-source, rejected and incomplete settlements remain fail-closed, while action-linked direct healing remains single-fire.
+
 Soul `10176` observes AfterHeal from its wearer only when the verified source skill tag is NormalAttack. It applies attr5 for 15000ms with star raw values `1460/1940/2430/2910`. Repeated healing while active is blocked without refreshing; the expiry-frame trigger starts a new instance. Periodic healing has no action provenance and cannot borrow a stale NormalAttack tag.
 
 ## Qualification
@@ -24,10 +26,10 @@ Final qualification hashes are source `132db3813d6f0e30`, roster `ee9c2f26717eb9
 
 ## Verification
 
-- C11 focused: `6 files / 139 tests`.
+- C11-R1 focused: `7 files / 162 tests`.
 - Complete optimization qualification: `7 / 56`.
 - Three-character profile/golden/migration: `4 / 38`; replay/profile hashes and gameplay assertions unchanged.
-- Canonical/runtime/cycle: `5 / 87`; Machine Axis: `12 / 157`.
+- Canonical/runtime/cycle: `5 / 87`; Machine Axis: `12 / 157` with the established 30-second process-test budget. The default 5-second run had one 5.19-second timeout after 156 passing assertions; that case passed alone in 1.47 seconds and had no assertion mismatch.
 - Nine deterministic audits, production build, generation assert-clean, and `git diff --check`: passed.
 - Standard Machine Axis hashes: `ed57d06444210db0 / 5c21e09cba3bab55 / 416b4a015702f1b2 / 0b410dc9255d2654`.
 - C11 catalog metadata updates canonical trace hashes, including the B2 cycle report; input/data/evaluation, cycle damage, and authoritative replay semantics remain unchanged.

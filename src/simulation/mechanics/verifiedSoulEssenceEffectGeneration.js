@@ -92,29 +92,52 @@ export function createVerifiedSoulEssenceEffectGeneration({
       });
       continue;
     }
-    for (const [actionIndex, action] of (scenario.actions ?? []).entries()) {
-      const frameAnchor = binding.definition.trigger.frameAnchor;
-      const nonDamageTrigger = isNonDamageTriggerAnchor(frameAnchor);
+    const frameAnchor = binding.definition.trigger.frameAnchor;
+    const nonDamageTrigger = isNonDamageTriggerAnchor(frameAnchor);
+    const occurrenceSources = [
+      ...(scenario.actions ?? []).map((action, actionIndex) => ({
+        action,
+        actionIndex,
+        actionless: false,
+      })),
+      ...(nonDamageTrigger
+        ? [{ action: null, actionIndex: null, actionless: true }]
+        : []),
+    ];
+    for (const { action, actionIndex, actionless } of occurrenceSources) {
       if (
+        !actionless &&
         !nonDamageTrigger &&
         String(action.actorId) !== String(binding.actor.id)
       ) {
         continue;
       }
-      if (executionByActionId.get(action.id)?.execute !== true) continue;
-      const resolution = actionResolutionById?.get?.(action.id) ?? null;
+      if (
+        !actionless &&
+        executionByActionId.get(action.id)?.execute !== true
+      ) {
+        continue;
+      }
+      const resolution = actionless
+        ? null
+        : (actionResolutionById?.get?.(action.id) ?? null);
       const triggerOperator =
         SOULESSENCE_TRIGGER_OPERATOR_REGISTRY[frameAnchor];
-      const rawOccurrences = triggerOperator?.({
-        action,
-        actionIndex,
-        resolution,
-        scenario,
-        tuningGeneration,
-        damageEventGeneration,
-        nonDamageEventGeneration,
-        frameAnchor,
-      });
+      const rawOccurrences = actionless
+        ? resolveActionlessNonDamageTriggerOccurrences({
+            nonDamageEventGeneration,
+            frameAnchor,
+          })
+        : triggerOperator?.({
+            action,
+            actionIndex,
+            resolution,
+            scenario,
+            tuningGeneration,
+            damageEventGeneration,
+            nonDamageEventGeneration,
+            frameAnchor,
+          });
       const occurrences = (rawOccurrences ?? []).filter(
         occurrence =>
           !nonDamageTrigger ||
@@ -122,7 +145,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
       );
       if (occurrences.length === 0) {
         suppressions.push({
-          actionId: action.id,
+          actionId: action?.id ?? null,
           actorId: binding.actor.id,
           ...createBindingDiagnosticIdentity(binding),
           reason: triggerOperator
@@ -160,7 +183,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
           eventContext: occurrences[0]?.eventContext,
         });
         suppressions.push({
-          actionId: action.id,
+          actionId: action?.id ?? null,
           actorId: binding.actor.id,
           ...createBindingDiagnosticIdentity(binding),
           reason: 'soulessence-effect-action-kind-condition-not-matched',
@@ -245,10 +268,9 @@ function resolveActionTriggerOccurrence({
   tuningGeneration,
   frameAnchor,
 }) {
-  const actionSourceSequencePath = getActionSourceSequencePath(
-    action,
-    actionIndex
-  ) ?? [actionIndex];
+  const actionSourceSequencePath = action
+    ? (getActionSourceSequencePath(action, actionIndex) ?? [actionIndex])
+    : null;
   const timeMs = roundRuntimeTime(
     Number(action.startMs) +
       (frameAnchor === 'action-end' ? Number(action.durationMs) : 0)
@@ -313,14 +335,55 @@ function resolveNonDamageTriggerOccurrences({
         event.eventContext?.success === true &&
         event.eventContext?.initialState !== true
     )
-    .map(event => ({
-      hit: null,
-      tuningEvent: null,
-      nonDamageEvent: event,
-      timeMs: Number(event.timeMs),
-      triggerSequencePath: event.sourceSequencePath,
-      eventContext: event.eventContext,
-    }));
+    .map(projectNonDamageTriggerOccurrence);
+}
+
+function resolveActionlessNonDamageTriggerOccurrences({
+  nonDamageEventGeneration,
+  frameAnchor,
+}) {
+  return (nonDamageEventGeneration?.events ?? [])
+    .filter(event => event.actionId === null)
+    .filter(event => event.kind === frameAnchor)
+    .filter(isVerifiedActionlessNonDamageEvent)
+    .map(projectNonDamageTriggerOccurrence);
+}
+
+function isVerifiedActionlessNonDamageEvent(event) {
+  const context = event?.eventContext;
+  return (
+    event?.applied === true &&
+    context?.applied === true &&
+    context?.success === true &&
+    context?.initialState !== true &&
+    context?.actionProvenanceAvailable === false &&
+    context?.sourceActionId === null &&
+    typeof event.eventIdentity === 'string' &&
+    event.eventIdentity.length > 0 &&
+    context.eventIdentity === event.eventIdentity &&
+    Array.isArray(event.sourceSequencePath) &&
+    event.sourceSequencePath.length > 0 &&
+    event.sourceSequencePath.every(Number.isSafeInteger) &&
+    Array.isArray(context.sourceSequencePath) &&
+    compareSourceSequencePaths(
+      event.sourceSequencePath,
+      context.sourceSequencePath
+    ) === 0 &&
+    String(event.actorId ?? '') === String(context.sourceActorId ?? '') &&
+    String(event.targetId ?? '') ===
+      String(context.eventTargetActorId ?? '')
+  );
+}
+
+function projectNonDamageTriggerOccurrence(event) {
+  return {
+    hit: null,
+    tuningEvent: null,
+    nonDamageEvent: event,
+    timeMs: Number(event.timeMs),
+    triggerSequencePath: event.sourceSequencePath,
+    eventContext: event.eventContext,
+  };
 }
 
 function resolveGetElementTriggerOccurrences({
@@ -500,7 +563,7 @@ function createSoulEffectCommand({
   const occurrenceSequencePath = Array.isArray(occurrence?.triggerSequencePath)
     ? occurrence.triggerSequencePath
     : hit == null
-      ? actionSourceSequencePath
+      ? (actionSourceSequencePath ?? [])
       : [...actionSourceSequencePath, Number(hit.hitIndex)];
   const triggerSequencePath = [...occurrenceSequencePath, targetIndex];
   const isSetSkill = binding.ownerKind === 'set-skill';
@@ -509,10 +572,13 @@ function createSoulEffectCommand({
     : `soulessence:${binding.soulEssenceId}:element:${effect.elementId}`;
   const sourceNonDamageEventIdentity =
     occurrence?.nonDamageEvent?.eventIdentity ?? null;
+  const sourceActionId = action?.id ?? null;
+  const commandSourceIdentity =
+    sourceActionId ?? sourceNonDamageEventIdentity ?? 'actionless-unresolved';
   return {
-    id: `${isSetSkill ? `set-skill|${binding.setId}|${binding.pieces}` : `soulessence|${binding.soulEssenceId}`}|${action.id}|${effect.elementId}|${frameAnchor}|target:${target.id}${hit == null ? '' : `|hit:${hit.hitIndex}`}${tuningEvent == null ? '' : `|tuning:${tuningEvent.eventIdentity}`}${sourceNonDamageEventIdentity == null ? '' : `|event:${sourceNonDamageEventIdentity}`}`,
-    sourceActionId: action.id,
-    sourceActionName: action.name,
+    id: `${isSetSkill ? `set-skill|${binding.setId}|${binding.pieces}` : `soulessence|${binding.soulEssenceId}`}|${commandSourceIdentity}|${effect.elementId}|${frameAnchor}|target:${target.id}${hit == null ? '' : `|hit:${hit.hitIndex}`}${tuningEvent == null ? '' : `|tuning:${tuningEvent.eventIdentity}`}${sourceNonDamageEventIdentity == null ? '' : `|event:${sourceNonDamageEventIdentity}`}`,
+    sourceActionId,
+    sourceActionName: action?.name ?? null,
     sourceActorId: actor.id,
     sourceActorName: actor.name,
     ...(isSetSkill
@@ -545,7 +611,7 @@ function createSoulEffectCommand({
       definition.mechanismFamily,
       binding.ownerIdentity,
       `skill:${isSetSkill ? binding.setSkillId : definition.effectSkillId}`,
-      `action-kind:${actionKind}`,
+      actionKind == null ? 'actionless-event' : `action-kind:${actionKind}`,
     ],
     sourceStatus: 'verified-loadout-effect-generated',
     confidence: 'high',
@@ -713,7 +779,7 @@ function resolveSoulTriggerActionContext({ action, resolution, eventContext }) {
       eventContext?.actionKind ??
       actionBinding.actionKind ??
       (actionProvenanceAvailable
-        ? (action.actionKind ?? action.eventType ?? null)
+        ? (action?.actionKind ?? action?.eventType ?? null)
         : null),
     skillSlotIds: uniqueFiniteIntegers([
       ...(eventContext?.skillSlotIds ?? []),
@@ -721,7 +787,7 @@ function resolveSoulTriggerActionContext({ action, resolution, eventContext }) {
         ? [
             actionBinding.skillSlotId,
             actionBinding.skillSlotType,
-            action.skillSlotId,
+            action?.skillSlotId,
             ...extractSkillSlotIds(actionBinding.bindingSourceIdentity),
           ]
         : []),
@@ -736,13 +802,13 @@ function resolveSoulTriggerActionContext({ action, resolution, eventContext }) {
         : []),
     ]),
     switchTrigger: {
-      kind: action.derivedAction?.kind ?? null,
+      kind: action?.derivedAction?.kind ?? null,
       parentActionId:
-        action.derivedAction?.parentActionId ?? action.parentActionId ?? null,
-      triggerPhase: action.switchTriggerBinding?.triggerPhase ?? null,
-      resolutionStatus: action.switchTriggerBinding?.resolutionStatus ?? null,
-      applied: action.switchTriggerBinding?.applied === true,
-      sourceIdentity: action.switchTriggerBinding?.sourceIdentity ?? null,
+        action?.derivedAction?.parentActionId ?? action?.parentActionId ?? null,
+      triggerPhase: action?.switchTriggerBinding?.triggerPhase ?? null,
+      resolutionStatus: action?.switchTriggerBinding?.resolutionStatus ?? null,
+      applied: action?.switchTriggerBinding?.applied === true,
+      sourceIdentity: action?.switchTriggerBinding?.sourceIdentity ?? null,
     },
   };
 }

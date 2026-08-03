@@ -1050,9 +1050,46 @@ function createPeriodicVitalDescriptors({ schedule, durationMs, frameRate }) {
       tickIndex,
       thresholdMs,
       schedule,
+      sourceSequencePath: createPeriodicVitalSourceSequencePath({
+        schedule,
+        tickIndex,
+      }),
     });
   }
   return descriptors;
+}
+
+function createPeriodicVitalSourceSequencePath({ schedule, tickIndex }) {
+  const sourceIdentity = [
+    schedule?.id,
+    schedule?.passiveSkillId,
+    schedule?.rootElementId,
+    schedule?.sourceActorId,
+    schedule?.sourceKiboId,
+    schedule?.sourceSlotId,
+    schedule?.targetKind,
+    schedule?.targetId,
+  ].join('|');
+  return [
+    Number.MAX_SAFE_INTEGER,
+    44,
+    stableSourceSequenceComponent(sourceIdentity),
+    nonNegativeInteger(tickIndex),
+  ];
+}
+
+function stableSourceSequenceComponent(value) {
+  let hash = 2166136261;
+  for (const character of String(value ?? '')) {
+    hash ^= character.codePointAt(0);
+    hash = Math.imul(hash, 16777619) >>> 0;
+  }
+  return hash;
+}
+
+function nonNegativeInteger(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number >= 0 ? number : 0;
 }
 
 function annotatePeriodicVitalOrderConflicts({
@@ -2547,6 +2584,17 @@ function createKiboPassivePeriodicHealEvent({
     schedule.contributingSources?.length === 1
       ? schedule.contributingSources[0]
       : null;
+  const sourceEventIdentity = [
+    'kibo-periodic-heal',
+    schedule.id,
+    `tick:${descriptor.tickIndex}`,
+    `frame:${descriptor.frameIndex}`,
+    `source:${singleSource?.sourceActorId ?? 'unresolved'}`,
+    `target:${schedule.targetKind}:${schedule.targetId}`,
+  ].join('|');
+  const sourceSequencePath = Array.isArray(descriptor.sourceSequencePath)
+    ? [...descriptor.sourceSequencePath]
+    : null;
   return {
     type: applied
       ? 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL'
@@ -2555,6 +2603,7 @@ function createKiboPassivePeriodicHealEvent({
     actionId: null,
     actorId: singleSource?.sourceActorId ?? null,
     targetId: schedule.targetId,
+    sourceSequencePath,
     payload: {
       ...payload,
       applied,
@@ -2563,6 +2612,8 @@ function createKiboPassivePeriodicHealEvent({
         reason === 'periodic-heal-applied' ||
         reason === 'periodic-heal-no-positive-effective-change',
       actionProvenanceAvailable: false,
+      sourceEventIdentity,
+      sourceSequencePath,
       sourceActorId: singleSource?.sourceActorId ?? null,
       sourceKiboId: singleSource?.sourceKiboId ?? null,
       sourceSlotId: singleSource?.sourceSlotId ?? null,
@@ -5365,6 +5416,7 @@ function annotateRuntimeDescriptorOrder(descriptors, frameRate) {
     const tuningSourceSequencePath =
       descriptor.tuningEvent?.eventContext?.sourceSequencePath;
     const directEffectSequencePath = descriptor.directEvent?.sourceSequencePath;
+    const existingSourceSequencePath = descriptor.sourceSequencePath;
     const directEffectDescriptor = isDirectEffectDescriptor(descriptor);
     descriptor.sourceSequencePath = Array.isArray(damageSettlementSequencePath)
       ? [...damageSettlementSequencePath]
@@ -5372,11 +5424,13 @@ function annotateRuntimeDescriptorOrder(descriptors, frameRate) {
         ? [...tuningSourceSequencePath]
         : Array.isArray(directEffectSequencePath)
           ? [...directEffectSequencePath]
-          : directEffectDescriptor
-            ? null
-            : actionSourceSequencePath
-              ? [...actionSourceSequencePath, sourceSequence]
-              : [Number.MAX_SAFE_INTEGER, sourceSequence];
+          : Array.isArray(existingSourceSequencePath)
+            ? [...existingSourceSequencePath]
+            : directEffectDescriptor
+              ? null
+              : actionSourceSequencePath
+                ? [...actionSourceSequencePath, sourceSequence]
+                : [Number.MAX_SAFE_INTEGER, sourceSequence];
     descriptor.sourceSequenceStatus = directEffectDescriptor
       ? Array.isArray(descriptor.sourceSequencePath)
         ? 'verified-direct-effect-source-sequence-ready'

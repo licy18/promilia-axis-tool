@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 19,
-  "phase": "M12-B3-C11",
+  "schemaVersion": 20,
+  "phase": "M12-B3-C11-R1",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "ad27e7762fcc8ac96a47d00361cef08fe6dbc959",
+  "baseCommit": "02935223e914af18cb0bf10abf324edbdd373e17",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
   "reviewedC7R2Commit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
@@ -12,6 +12,7 @@
   "acceptedC9Commit": "bd812d64226a371a55a01981a239e33c318c9e98",
   "reviewedC10Commit": "785cc9b8c20b1cb995b4fe4f565a6e94101f8531",
   "acceptedC10R1Commit": "ad27e7762fcc8ac96a47d00361cef08fe6dbc959",
+  "reviewedC11Commit": "02935223e914af18cb0bf10abf324edbdd373e17",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
     "phase": "M12-B3-C10-R1",
@@ -40,8 +41,31 @@
       "kiboDnaCanonicalValue": []
     }
   },
+  "c11R1ActionlessAfterHealGuard": {
+    "rootCause": "The soul/set trigger generator iterated only scenario actions and matched non-damage transactions by actionId, so a native Kibo periodic heal with actionId null had no occurrence source even though the non-damage projection had accepted it.",
+    "before": {
+      "nonDamageEventCount": 1,
+      "eventActionId": null,
+      "effectCommandCount": 0,
+      "suppressionReason": "soulessence-effect-no-source-non-damage-transaction"
+    },
+    "after": {
+      "nonDamageEventCount": 1,
+      "eventActionId": null,
+      "effectCommandCount": 1,
+      "commandSourceActionId": null,
+      "targetRouting": "native-healed-target",
+      "durationMs": 6000
+    },
+    "contracts": [
+      "actionless periodic AfterHeal is keyed by verified event identity, one native source actor, healed target and stable sourceSequencePath",
+      "action-linked direct AfterHeal remains execution-gated and is emitted exactly once",
+      "10176 remains fail-closed for actionless periodic healing because no NormalAttack provenance exists",
+      "unknown or multi-source attribution, rejected settlement and missing calculator settlement remain suppressed"
+    ]
+  },
   "scope": {
-    "batch": "after-heal-source-to-target-and-native-block",
+    "batch": "after-heal-source-to-target-native-block-and-actionless-periodic-entry",
     "soulEssenceIds": [10176],
     "runtimeAppliedSoulEssenceIds": [10176],
     "evidenceBlockedSoulEssenceIds": [],
@@ -609,8 +633,8 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "C11 adds one source-bound set runtime definition, one source-bound soul definition and the native Block stack mode without changing the verified mechanics package or the standard Machine Axis fixture loadout. Existing canonical fixture identities remain stable; C11 loadouts carry their own trigger, formula, Source/Target and combine identities.",
-    "machineAxisCanonicalHashDrift": 1,
+    "reason": "C11-R1 adds a production entry for verified actionless periodic AfterHeal transactions without changing qualification catalogs, the verified mechanics package, the standard Machine Axis fixture or three-character gameplay semantics.",
+    "machineAxisCanonicalHashDrift": 0,
     "machineAxisTraceMetadataHash": "416b4a015702f1b2",
     "machineAxisEvaluationHashDrift": 0,
     "gameplayAssertionDrift": 0,
@@ -619,11 +643,12 @@
     "c4ConsumeAndAfterDamageRegression": 0,
     "c5AcquireRegression": 0,
     "c6BeforeDamageRegression": 0,
-    "c7NonDamageAndResourceParityRegression": 0
+    "c7NonDamageAndResourceParityRegression": 0,
+    "c11ActionlessPeriodicAfterHealRegression": 0
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 6, "tests": 139, "status": "passed" },
+    "focusedMechanics": { "files": 7, "tests": 162, "status": "passed" },
     "optimizationQualificationDirectory": {
       "files": 7,
       "tests": 56,
@@ -635,7 +660,12 @@
       "status": "passed",
       "gameplayAssertionDrift": 0
     },
-    "machineAxis": { "files": 12, "tests": 157, "status": "passed" },
+    "machineAxis": {
+      "files": 12,
+      "tests": 157,
+      "status": "passed-with-existing-30s-process-test-budget",
+      "defaultBudgetObservation": "156 assertions passed; one process-heavy test timed out at 5.19s and passed alone in 1.47s"
+    },
     "canonicalAndRuntime": {
       "files": 5,
       "tests": 87,

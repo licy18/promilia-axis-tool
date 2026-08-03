@@ -6152,6 +6152,47 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
     },
   });
 
+  const createActionlessPeriodicVitalEvent = ({
+    identity,
+    timeMs,
+    sourceId = sourceActorId,
+    targetId = targetActorId,
+    localSequence = 0,
+    appliedToCalculators = true,
+    contributingSources = [{ sourceActorId: sourceId }],
+    sourceAttributionStatus = 'native-first-root-source-verified',
+  }) => ({
+    type: 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL_SUPPRESSED',
+    timeMs,
+    absoluteFrame: Math.round((timeMs * 60) / 1000),
+    actionId: null,
+    actorId: sourceId,
+    targetId,
+    sourceSequencePath: [
+      Number.MAX_SAFE_INTEGER,
+      44,
+      520066,
+      localSequence,
+    ],
+    payload: {
+      sourceEventIdentity: identity,
+      sourceActorId: sourceId,
+      targetKind: 'actor',
+      beforeValue: 1000,
+      requestedChange: 100,
+      change: 0,
+      afterValue: 1000,
+      maxValue: 1000,
+      applied: false,
+      appliedToCalculators,
+      afterHealDispatchEligible: true,
+      actionProvenanceAvailable: false,
+      sourceAttributionStatus,
+      contributingSources,
+      reason: 'periodic-heal-no-positive-effective-change',
+    },
+  });
+
   it('installs the set 5 runtime effect exactly once at four or five valid pieces', () => {
     const actionPlan = [
       { id: 'c11-set5-threshold-action', actionKind: 'normal-attack', startFrame: 0 },
@@ -6328,13 +6369,18 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
       actorId,
       targetId,
       actionProvenanceAvailable,
+      actionId = action.id,
     }) => ({
       type,
       timeMs,
       absoluteFrame: Math.round((timeMs * 60) / 1000),
-      actionId: action.id,
+      actionId,
       actorId,
       targetId,
+      sourceSequencePath:
+        actionId === null
+          ? [Number.MAX_SAFE_INTEGER, 44, Math.round(timeMs)]
+          : undefined,
       runtimeSequenceIndex: Math.round(timeMs),
       payload: {
         sourceEventIdentity: identity,
@@ -6349,6 +6395,12 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
         appliedToCalculators: true,
         afterHealDispatchEligible: true,
         actionProvenanceAvailable,
+        sourceAttributionStatus:
+          actionId === null
+            ? 'native-first-root-source-verified'
+            : undefined,
+        contributingSources:
+          actionId === null ? [{ sourceActorId: actorId }] : [],
         reason: 'heal-executed-zero-effective-change',
       },
     });
@@ -6374,6 +6426,7 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
             actorId: sourceActorId,
             targetId: thirdActorId,
             actionProvenanceAvailable: false,
+            actionId: null,
           }),
           createVitalEvent({
             type: 'VERIFIED_DIRECT_HEAL',
@@ -6402,10 +6455,22 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
     );
 
     expect(nonDamageEventGeneration.events).toHaveLength(3);
+    expect(nonDamageEventGeneration.events[1]).toMatchObject({
+      actionId: null,
+      eventContext: expect.objectContaining({
+        sourceActionId: null,
+        actionProvenanceAvailable: false,
+      }),
+    });
     expect(commands.map(command => [command.timeMs, command.targetId])).toEqual([
       [1000, targetActorId],
       [3000, thirdActorId],
     ]);
+    expect(commands[1]).toMatchObject({
+      sourceActionId: null,
+      sourceNonDamageEventIdentity:
+        'non-damage|c11-set5-periodic-full-health:event:44',
+    });
     expect(commands).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -6426,6 +6491,9 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
     );
 
     const targetCommand = commands.find(command => command.targetId === targetActorId);
+    const periodicTargetCommand = commands.find(
+      command => command.targetId === thirdActorId
+    );
     const replayAt = (actionId, startFrame) =>
       replayRealActionWithSoulCommands({
         actorCharacterId: 101003,
@@ -6456,6 +6524,83 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
       damage(expired.withoutCommands, 'c11-set5-target-expiry-hit'),
       6
     );
+
+    const replayPeriodicTarget = (actorCharacterId, actionId, startFrame) =>
+      replayRealActionWithSoulCommands({
+        actorCharacterId,
+        soulEssenceId: null,
+        actionId,
+        actionKind: 'normal-attack',
+        startFrame,
+        commands: [periodicTargetCommand],
+      });
+    const periodicActive = replayPeriodicTarget(
+      101010,
+      'c11-r1-periodic-target-active-hit',
+      210
+    );
+    const periodicExpired = replayPeriodicTarget(
+      101010,
+      'c11-r1-periodic-target-expiry-hit',
+      540
+    );
+    const sourceUnaffected = replayPeriodicTarget(
+      101007,
+      'c11-r1-periodic-source-unaffected-hit',
+      210
+    );
+    const teammateUnaffected = replayPeriodicTarget(
+      101003,
+      'c11-r1-periodic-teammate-unaffected-hit',
+      210
+    );
+    expect(
+      damage(
+        periodicActive.withCommands,
+        'c11-r1-periodic-target-active-hit'
+      )
+    ).toBeGreaterThan(
+      damage(
+        periodicActive.withoutCommands,
+        'c11-r1-periodic-target-active-hit'
+      )
+    );
+    expect(
+      damage(
+        periodicExpired.withCommands,
+        'c11-r1-periodic-target-expiry-hit'
+      )
+    ).toBeCloseTo(
+      damage(
+        periodicExpired.withoutCommands,
+        'c11-r1-periodic-target-expiry-hit'
+      ),
+      6
+    );
+    expect(
+      damage(
+        sourceUnaffected.withCommands,
+        'c11-r1-periodic-source-unaffected-hit'
+      )
+    ).toBeCloseTo(
+      damage(
+        sourceUnaffected.withoutCommands,
+        'c11-r1-periodic-source-unaffected-hit'
+      ),
+      6
+    );
+    expect(
+      damage(
+        teammateUnaffected.withCommands,
+        'c11-r1-periodic-teammate-unaffected-hit'
+      )
+    ).toBeCloseTo(
+      damage(
+        teammateUnaffected.withoutCommands,
+        'c11-r1-periodic-teammate-unaffected-hit'
+      ),
+      6
+    );
   });
 
   it('does not let 10176 borrow stale NormalAttack provenance from periodic healing', () => {
@@ -6479,10 +6624,24 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
       ],
       actions: [action],
     };
-    const event = createAfterHealEvent({ action, timeMs: 1000 });
-    event.eventContext.actionProvenanceAvailable = false;
-    event.eventContext.skillSlotIds = [];
-    event.eventContext.skillTagIds = [];
+    const nonDamageEventGeneration = createVerifiedNonDamageEventGeneration({
+      scenario,
+      actionExecutionPlan: {
+        actions: [{ actionId: action.id, execute: true }],
+      },
+      controlledActorTimeline: { transitions: [] },
+      actionResolutionById: new Map([
+        [action.id, createSyntheticVerifiedActionResolution('normal-attack')],
+      ]),
+      verifiedCombatRuntime: {
+        vitalEvents: [
+          createActionlessPeriodicVitalEvent({
+            identity: 'c11-r1-10176-actionless-periodic',
+            timeMs: 1000,
+          }),
+        ],
+      },
+    });
     const generation = createVerifiedSoulEssenceEffectGeneration({
       scenario,
       actionExecutionPlan: {
@@ -6491,7 +6650,7 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
       actionResolutionById: new Map([
         [action.id, createSyntheticVerifiedActionResolution('normal-attack')],
       ]),
-      nonDamageEventGeneration: { events: [event] },
+      nonDamageEventGeneration,
       catalog: {
         ...soulEssenceEffectCatalog,
         definitions: [definition],
@@ -6500,10 +6659,20 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
     });
 
     expect(generation.effectCommands).toEqual([]);
+    expect(nonDamageEventGeneration.events).toEqual([
+      expect.objectContaining({
+        actionId: null,
+        eventContext: expect.objectContaining({
+          actionProvenanceAvailable: false,
+          skillSlotIds: [],
+          skillTagIds: [],
+        }),
+      }),
+    ]);
     expect(generation.suppressions).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          actionId: action.id,
+          actionId: null,
           reason: 'soulessence-effect-action-kind-condition-not-matched',
           actualSkillTagIds: [],
         }),
