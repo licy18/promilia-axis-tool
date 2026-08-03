@@ -1176,18 +1176,15 @@ describe('M12-B3-C dynamic loadout effect census', () => {
         )
     ).toBe(true);
     expect(
-      fourPiece
-        .filter(definition => ![1, 2, 4, 5, 6].includes(definition.setId))
-        .every(
-          definition =>
-            definition.thresholdActivation.status === 'source-indexed' &&
-            definition.thresholdActivation.appliedToRuntimeEffect === false &&
-            definition.runtimeStatus === 'source-indexed-runtime-unapplied' &&
-            definition.runtimeGaps.includes(
-              'set-skill-runtime-operator-not-implemented'
-            )
-        )
-    ).toBe(true);
+      fourPiece.find(definition => definition.setId === 3)
+    ).toMatchObject({
+      thresholdActivation: {
+        status: 'source-indexed',
+        appliedToRuntimeEffect: false,
+      },
+      runtimeStatus: 'source-indexed-runtime-unapplied',
+      runtimeGaps: ['set-skill-source-identity-conflict-evidence-gap'],
+    });
     expect(soulCatalog.summary).toMatchObject({
       setSkillThresholdIndexedCount: 12,
       setSkillRuntimeAppliedCount: 11,
@@ -1250,6 +1247,24 @@ describe('M12-B3-C dynamic loadout effect census', () => {
         }),
       ],
       runtimeStatus: 'runtime-applied',
+    });
+    expect(
+      census.records.find(
+        record => record.objectKind === 'set-skill' && record.objectId === '3:4'
+      )
+    ).toMatchObject({
+      mechanismFamily: 'set-skill-source-identity-conflict',
+      evidenceStatus: 'evidence-insufficient',
+      runtimeStatus: 'source-indexed-runtime-unapplied',
+      runtimeGaps: ['set-skill-source-identity-conflict-evidence-gap'],
+      sourceIdentityConflict: {
+        formalTextSemantics:
+          'normal-attack-hit-self-attack-plus-one-percent-twelve-seconds-max-ten',
+        reachableGraphSemantics:
+          'after-receive-damage-every-five-max-hp-plus-two-and-five-percent',
+        whichSourceIsStale: 'unresolved',
+        safeRuntimeDisposition: 'do-not-apply-either-graph',
+      },
     });
   });
 

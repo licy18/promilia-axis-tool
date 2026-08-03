@@ -1,6 +1,6 @@
 {
-  "phase": "M12-B3-C13",
-  "status": "b3-c13-verification-complete-awaiting-product-acceptance",
+  "phase": "M12-B3-C14",
+  "status": "b3-c14-verification-complete-awaiting-product-acceptance",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -9,12 +9,12 @@
     "equipment": 137,
     "setSkills": 12
   },
-  "sourceSnapshotHash": "52aefbcdd3136e43",
-  "rosterHash": "fd752ae90abcb097",
-  "manifestsHash": "6eedb0da6923c0c1",
-  "ledgerHash": "afad67326a28035d",
-  "bindingMatrixHash": "4eccbccddb161a51",
-  "catalogHash": "64a821822e0362fa",
+  "sourceSnapshotHash": "e6c48099b261da63",
+  "rosterHash": "802a132b8c9080fe",
+  "manifestsHash": "d590b745a2eb0f47",
+  "ledgerHash": "d64df0972b180940",
+  "bindingMatrixHash": "3dc67be8dba47fba",
+  "catalogHash": "4671eb77db38faf7",
   "maturityCounts": {
     "extracted": 191,
     "runtime-integrated": 74
@@ -29,8 +29,8 @@
   "gapCounts": {
     "blockingUniqueGapCount": 381,
     "byCategory": {
-      "evidence-insufficient": 18,
-      "not-implemented": 363
+      "evidence-insufficient": 19,
+      "not-implemented": 362
     },
     "byCode": {
       "actor-static-profile-missing": 1,

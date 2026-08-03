@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 23,
-  "phase": "M12-B3-C13",
+  "schemaVersion": 24,
+  "phase": "M12-B3-C14",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "5537e5a59f9776d7045b0ce8ad9915738715a9a4",
+  "baseCommit": "36217387c9197702088dfe15244569f86c6e43c5",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
   "reviewedC7R2Commit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
@@ -16,11 +16,12 @@
   "acceptedC11R1Commit": "8f01dba447106b03783582d58e80badb8a571b8e",
   "reviewedC12Commit": "a432467d4322ee0dae58e3d47df3b5c2eb55447a",
   "acceptedC12R1Commit": "5537e5a59f9776d7045b0ce8ad9915738715a9a4",
+  "acceptedC13Commit": "36217387c9197702088dfe15244569f86c6e43c5",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
-    "phase": "M12-B3-C12-R1",
-    "productionMechanicsCommit": "a432467d4322ee0dae58e3d47df3b5c2eb55447a",
-    "acceptanceBaseline": "5537e5a59f9776d7045b0ce8ad9915738715a9a4",
+    "phase": "M12-B3-C13",
+    "productionMechanicsCommit": "36217387c9197702088dfe15244569f86c6e43c5",
+    "acceptanceBaseline": "36217387c9197702088dfe15244569f86c6e43c5",
     "status": "product-accepted"
   },
   "r1ProtocolGuard": {
@@ -95,13 +96,14 @@
     ]
   },
   "scope": {
-    "batch": "after-damage-event-target-weakness-absorption-debuff",
+    "batch": "set-three-source-identity-and-legacy-graph-audit",
     "soulEssenceIds": [],
     "runtimeAppliedSoulEssenceIds": [],
     "evidenceBlockedSoulEssenceIds": [],
-    "setSkillIds": ["set-skill:6:4"],
-    "runtimeAppliedSetSkillIds": ["set-skill:6:4"],
-    "explicitlyExcludedSetSkillThresholds": ["set-skill:3:4"],
+    "setSkillIds": ["set-skill:3:4"],
+    "runtimeAppliedSetSkillIds": [],
+    "evidenceBlockedSetSkillIds": ["set-skill:3:4"],
+    "explicitlyExcludedSetSkillThresholds": [],
     "formalSearchExecuted": false,
     "m12cLocked": true,
     "fixedCultivationChanged": false,
@@ -222,6 +224,16 @@
       "skillControlPath": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998008.asset/MonoBehaviour/skill_control_19998008__3385592889625444843.json",
       "skillControlBytes": 1920,
       "skillControlSha256": "c0450ec3810066062c395cac2d68298a8b7118ae0dc3107e53a6cea6fe05d62d"
+    },
+    "setThreeSourceIdentityEvidence": {
+      "path": "scripts/optimization-qualification/evidence/set-three-source-identity-evidence.json",
+      "bytes": 12455,
+      "sha256": "9e8e92d38a1924293aea7b772f7ba2c704913a27db8c5b22df2bb04f76c29418",
+      "battleElementAssetsSha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
+      "battleElementBundleSha256": "96c54123ae7409448b59ec60afdd5d6b40804dd52d6dd32aa350d34c72c3c3fa",
+      "skillControlBundleSha256": "8667f7ab0bce65a600a1fcf50027a755829d873e1a7d84f39077c0cf1d650d8e",
+      "conclusionStatus": "evidence-insufficient",
+      "gapCode": "set-skill-source-identity-conflict-evidence-gap"
     },
     "soulControlClosure": {
       "skillCount": 62,
@@ -577,6 +589,25 @@
     },
     "runtimeBranchesBySetSkillId": false
   },
+  "c14SetThreeSourceIdentityAudit": {
+    "formalEntry": "NewTable accessory_set id=3 binds threshold 4 to skill 19998005; four regional skill localizations independently describe normal-attack hit, self attack +1%, 12 seconds, max 10 stacks",
+    "currentExecutableBinding": "skill_control_19998005 uniquely injects the Iron-Mane Overlord graph 199999022/023/043/044/086: AfterReceiveDamage every five events plus persistent MAXHP +2%/+5%",
+    "reverseReferenceCensus": {
+      "defaultPackageSkillListJsonFiles": 212053,
+      "staticPackageSkillListJsonFiles": 0,
+      "oldGraphControlSkillIds": [19998005],
+      "nearMatchControlSkillIds": [19998003]
+    },
+    "signatureSearch": {
+      "battleElementRows": 14781,
+      "elementRows": 14779,
+      "expectedAttr1A100Duration12000Overlying10Matches": 0,
+      "nearMatch": "199999018/019 is NormalAttack attr1 A100 but 24000ms/max7 and is uniquely bound to skill_control_19998003"
+    },
+    "conclusion": "Current evidence cannot identify whether formal localization or the uniquely reachable graph is stale. Neither graph is applied to set-skill:3:4; the object remains evidence-insufficient.",
+    "runtimeLogicChanged": false,
+    "gapCode": "set-skill-source-identity-conflict-evidence-gap"
+  },
   "definitions": {
     "10048": {
       "name": "璇枢",
@@ -760,9 +791,9 @@
     "runtimeAppliedSetSkillCount": 11,
     "runtimeUnappliedSetSkillCount": 1,
     "newlyAppliedSoulEssenceIds": [],
-    "newlyAppliedSetSkillIds": ["set-skill:6:4"],
+    "newlyAppliedSetSkillIds": [],
     "preservedRuntimeAppliedSoulEssenceCount": 39,
-    "preservedRuntimeAppliedSetSkillCount": 10,
+    "preservedRuntimeAppliedSetSkillCount": 11,
     "remainingBlockedFourPieceSetSkillIds": ["set-skill:3:4"]
   },
   "qualification": {
@@ -775,8 +806,8 @@
     },
     "blockingUniqueGapCount": 381,
     "blockingByCategory": {
-      "not-implemented": 363,
-      "evidence-insufficient": 18
+      "not-implemented": 362,
+      "evidence-insufficient": 19
     },
     "formalAdmissions": {
       "characters": 0,
@@ -787,15 +818,15 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "52aefbcdd3136e43",
-    "rosterHash": "fd752ae90abcb097",
-    "manifestsHash": "6eedb0da6923c0c1",
-    "ledgerHash": "afad67326a28035d",
-    "bindingMatrixHash": "4eccbccddb161a51",
-    "qualificationCatalogHash": "64a821822e0362fa",
-    "dynamicLoadoutEffectCensusHash": "59553fb7be3d86fb",
-    "soulEssenceEffectCatalogHash": "1648903a7e038e2c",
-    "soulEssenceSourceSnapshotHash": "3a5cdd3fce685b76",
+    "sourceSnapshotHash": "e6c48099b261da63",
+    "rosterHash": "802a132b8c9080fe",
+    "manifestsHash": "d590b745a2eb0f47",
+    "ledgerHash": "d64df0972b180940",
+    "bindingMatrixHash": "3dc67be8dba47fba",
+    "qualificationCatalogHash": "4671eb77db38faf7",
+    "dynamicLoadoutEffectCensusHash": "9f5bdfeb31dc7cf7",
+    "soulEssenceEffectCatalogHash": "5185ad5704ca819f",
+    "soulEssenceSourceSnapshotHash": "d5e0287dc75b3c16",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
     "soulEssenceTriggerContractHash": "ee74f6284b3b5118",
     "verifiedMechanicsPackageHash": "20498c0f436fdcc3f0e86ebb6308ea75586d4b2379127d23ec4d971e81bb88e9",
@@ -808,7 +839,7 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "C13 adds source-closed AfterDamage enemy-target weakness absorption for set-skill:6:4; the standard Machine Axis fixture does not equip or execute this set transaction, so its canonical hashes and numeric evaluation remain unchanged.",
+    "reason": "C14 adds a source-identity conflict artifact and keeps set-skill:3:4 runtime-unapplied; no canonical combat behavior changes, so the standard Machine Axis fixture and three-character replays remain unchanged.",
     "machineAxisCanonicalHashDrift": 0,
     "machineAxisTraceMetadataHash": "416b4a015702f1b2",
     "machineAxisEvaluationHashDrift": 0,
@@ -822,14 +853,15 @@
     "c11ActionlessPeriodicAfterHealRegression": 0,
     "c12BeforeSkillCompositeRegression": 0,
     "c12R1DirectSpRoutingRegression": 0,
-    "c13AfterDamageTargetDebuffRegression": 0
+    "c13AfterDamageTargetDebuffRegression": 0,
+    "c14SetThreeRuntimeApplicationCount": 0
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 6, "tests": 178, "status": "passed" },
+    "focusedMechanics": { "files": 4, "tests": 46, "status": "passed" },
     "optimizationQualificationDirectory": {
-      "files": 9,
-      "tests": 63,
+      "files": 10,
+      "tests": 67,
       "status": "passed"
     },
     "characterProfileAndMigration": {
@@ -845,7 +877,7 @@
     },
     "canonicalAndRuntime": {
       "files": 6,
-      "tests": 190,
+      "tests": 192,
       "status": "passed"
     },
     "audits": {

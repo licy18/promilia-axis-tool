@@ -201,6 +201,12 @@ describe('M12-B3 optimization qualification generation', () => {
     expect(
       unappliedSetSkillGaps.map(record => `set-skill:${record.objectId}`).sort()
     ).toEqual(['set-skill:3:4']);
+    expect(unappliedSetSkillGaps[0]).toMatchObject({
+      category: 'evidence-insufficient',
+      details: {
+        reasons: ['set-skill-source-identity-conflict-evidence-gap'],
+      },
+    });
     const setSkillManifests = artifacts.manifests.records.filter(
       record => record.objectKind === 'set-skill'
     );
@@ -246,8 +252,8 @@ describe('M12-B3 optimization qualification generation', () => {
     expect(artifacts.summary.gapCounts).toMatchObject({
       blockingUniqueGapCount: 381,
       byCategory: {
-        'not-implemented': 363,
-        'evidence-insufficient': 18,
+        'not-implemented': 362,
+        'evidence-insufficient': 19,
       },
     });
     expect(artifacts.summary.optimizationReadyCounts).toEqual({

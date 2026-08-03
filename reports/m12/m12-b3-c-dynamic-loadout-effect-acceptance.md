@@ -1,37 +1,33 @@
-# M12-B3-C13 AfterDamage Target Weakness Debuff
+# M12-B3-C14 Set 3 Source Identity Audit
 
 - Status: `verification-complete-awaiting-product-acceptance`.
-- Base: C12-R1 product acceptance `5537e5a59f9776d7045b0ce8ad9915738715a9a4`.
-- Scope: only `set-skill:6:4`; `set-skill:3:4`, C14, M12-C, formal search, UI, package, and performance work remain locked.
+- Base: C13 product acceptance `36217387c9197702088dfe15244569f86c6e43c5`.
+- Scope: only the source identity and legacy-graph audit for `set-skill:3:4`; no runtime effect was added. M12-C, formal search, UI, package, and performance work remain locked.
 
 ## Evidence Contract
 
-The versioned artifact is `scripts/optimization-qualification/evidence/after-damage-target-property-runtime-evidence.json`, `12185B`, SHA-256 `c60a582cda07b5e017cb47751a323f8958a6b1e292dc1a7f5bb34e7904374447`. It binds 9 exact RVA ranges to GameAssembly `222485544B / c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b` and dump `97428254B / 0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a`.
+The versioned artifact is `scripts/optimization-qualification/evidence/set-three-source-identity-evidence.json`, `12455B`, SHA-256 `9e8e92d38a1924293aea7b772f7ba2c704913a27db8c5b22df2bb04f76c29418`. It binds the formal set and skill rows, four regional localizations, exact current control files, battle-element assets, and the two source bundles (`96c54123ae7409448b59ec60afdd5d6b40804dd52d6dd32aa350d34c72c3c3fa` and `8667f7ab0bce65a600a1fcf50027a755829d873e1a7d84f39077c0cf1d650d8e`).
 
-The executable graph is `199999063 -> 199999071 -> 199999064/199999070`. It proves AfterDamage(2), Self observation, OR selection of final verified NormalAttack(1) or WhackAttack(2), native Target(1), Cover refresh, and two PropertyElement leaves for attr202/203. The localized skill says 30% for 8 seconds, the trigger description says 30% for 24 seconds, while the executable wrapper and leaves resolve to `A=2000` through common function 1/base function 5 for 20% over 24000ms. The executable graph, formulas, and native consumers are authoritative.
+All four formal localizations describe a landed normal attack granting self ATK +1% for 12 seconds, up to 10 layers. The sole current `skill_control_19998005` instead injects elements `199999022/023/043/044/086`: Iron-Mane Overlord, AfterReceiveDamage every five events, and permanent MAXHP +2%/+5% with an unload root.
 
-`TriggerElement.Parse`, `CanTrigger`, `Trigger`, and `get_triggerCount` prove `triggerCounter=999999` is a finite TriggerEvent lifetime: one count is consumed per accepted trigger occurrence, not per target or property leaf. The counter and remaining lifetime enter canonical cycle state. The unload remover deletes only the source roots; an already materialized target wrapper keeps its original absolute expiry.
+The complete 14,779-element census contains no `attr1 / A=100 / 12000ms / Overlying / max10` property. The nearest graph, `199999018/019`, is normal-attack `attr1 / A=100` but uses 24000ms/max7 and is uniquely bound to `skill_control_19998003`. A full scan of 212,053 current default-package SkillList JSON files finds the old graph only under `19998005`, the near match only under `19998003`, no static-package SkillList, and no duplicate `19998005` control.
 
-## Runtime Contract
+## Runtime Disposition
 
-Four or five valid same-set pieces install one trigger. A landed normal or charged attack applies one enemy-target debuff after the current packet settles, so the triggering packet is unchanged. Later legal hits inside `[apply, apply+24000ms)` receive the source-backed +20% physical and magical weakness-absorption modifiers; refresh does not stack, and the exact expiry frame restores the baseline.
-
-Miss, `execute=false`, runtime block, wrong or missing final skill tag, wrong source, missing target, unmaterialized damage, and non-damage projection all fail closed. Source actors and enemy targets remain isolated; same-frame ordering follows stable source sequence; repeated initialization, switch, replay, and two-cycle state do not duplicate or lose the effect. Finite trigger counters that decrease across a proposed loop correctly fail the closure gate.
-
-`set-skill:3:4` remains blocked: its accessory text describes normal-attack attack stacking, while the reachable graph identifies Iron-Mane Overlord, a five-received-hit state, and max-HP semantics. C13 does not infer across that identity conflict.
+Current evidence cannot determine whether the formal localization/table or the uniquely reachable old graph is stale. The canonical compiler therefore applies neither graph. `set-skill:3:4` remains `source-indexed-runtime-unapplied` with `set-skill-source-identity-conflict-evidence-gap`; no inferred 1% effect, old MAXHP effect, trigger, modifier, or cycle state enters runtime.
 
 ## Qualification
 
-The denominator remains `11/43/62/137/12`. Runtime integration is `39/62` soul essences and `11/12` set skills. The unique ledger is `381 = 363 not-implemented + 18 evidence-insufficient`; the sole remaining dynamic set gap is `set-skill:3:4`. All five formal admission counts remain zero, `dnaFactors=[]`, and M12-C remains locked.
+The denominator remains `11/43/62/137/12`. Runtime integration remains `39/62` soul essences and `11/12` set skills. The unique ledger remains 381 items but is correctly reclassified as `362 not-implemented + 19 evidence-insufficient`; the sole dynamic set gap is `set-skill:3:4`. All five formal admission counts remain zero, `dnaFactors=[]`, and M12-C remains locked.
 
-Final qualification hashes are source `52aefbcdd3136e43`, roster `fd752ae90abcb097`, manifests `6eedb0da6923c0c1`, ledger `afad67326a28035d`, binding `4eccbccddb161a51`, and catalog `64a821822e0362fa`. Dynamic census/catalog/source hashes are `59553fb7be3d86fb / 1648903a7e038e2c / 3a5cdd3fce685b76`.
+Final qualification hashes are source `e6c48099b261da63`, roster `802a132b8c9080fe`, manifests `d590b745a2eb0f47`, ledger `d64df0972b180940`, binding `3dc67be8dba47fba`, and catalog `4671eb77db38faf7`. Dynamic census/catalog/source hashes are `9f5bdfeb31dc7cf7 / 5185ad5704ca819f / d5e0287dc75b3c16`.
 
 ## Verification
 
-- C13 focused: `6 files / 178 tests`.
-- Complete optimization qualification: `9 / 63`.
+- C14 source/protocol/census subset: `4 files / 46 tests`; full source reverse-reference scan: `1 / 4`.
+- Complete optimization qualification: `10 / 67`.
 - Three-character profile/golden/migration: `4 / 38`; gameplay assertions and replay semantics unchanged.
-- Canonical/runtime/cycle: `6 / 190`; Machine Axis: `12 / 159` with the established 30-second process-test budget.
+- Canonical/runtime/cycle: `6 / 192`; Machine Axis: `12 / 159` with the established 30-second process-test budget.
 - Nine deterministic audits, production build (`1875` modules), generation assert-clean, and `git diff --check`: passed.
 - Standard Machine Axis hashes remain `ed57d06444210db0 / 5c21e09cba3bab55 / 416b4a015702f1b2 / 0b410dc9255d2654`.
 - Existing Sass deprecation, circular chunk, large chunk, package-size, and performance warnings remain non-blocking and were not worked on.

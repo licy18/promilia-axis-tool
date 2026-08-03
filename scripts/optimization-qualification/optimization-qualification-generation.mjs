@@ -38,6 +38,11 @@ import {
   assertAfterDamageTargetPropertyRuntimeEvidenceReference,
   readAfterDamageTargetPropertyRuntimeEvidenceSource,
 } from './after-damage-target-property-evidence.mjs';
+import {
+  assertSetThreeSourceIdentityEvidenceReference,
+  readSetThreeSourceIdentityEvidenceSource,
+  SET_THREE_SOURCE_IDENTITY_EVIDENCE_RELATIVE_PATH,
+} from './set-three-source-identity-evidence.mjs';
 
 export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
   '2026-08-01T00:00:00.000Z';
@@ -121,6 +126,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '165b87b2d5ea01f1a2f7f72a828b6a1eeeca19ef1f429003b2dccca457686212',
   afterDamageTargetPropertyRuntimeEvidence:
     'c60a582cda07b5e017cb47751a323f8958a6b1e292dc1a7f5bb34e7904374447',
+  setThreeSourceIdentityEvidence:
+    '9e8e92d38a1924293aea7b772f7ba2c704913a27db8c5b22df2bb04f76c29418',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
@@ -186,6 +193,7 @@ export async function createOptimizationQualificationArtifacts({
   fourPieceSetStackRuntimeEvidencePath = null,
   beforeSkillCompositeRuntimeEvidencePath = null,
   afterDamageTargetPropertyRuntimeEvidencePath = null,
+  setThreeSourceIdentityEvidencePath = null,
   dynamicLoadoutAcceptanceReportPath = null,
   gameAssemblyPath = 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
   skillLocalizationPath = 'C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_skill.json',
@@ -366,6 +374,73 @@ export async function createOptimizationQualificationArtifacts({
       ),
       projectRoot,
     });
+  const setSkillControlRoot = path.resolve(skillControlRoot);
+  const formalSetThreeControlRoot = path.join(
+    setSkillControlRoot,
+    'skill_control_19998005.asset',
+    'MonoBehaviour'
+  );
+  const nearMatchSetFourControlRoot = path.join(
+    setSkillControlRoot,
+    'skill_control_19998003.asset',
+    'MonoBehaviour'
+  );
+  sources.setThreeSourceIdentityEvidence =
+    await readSetThreeSourceIdentityEvidenceSource({
+      sourcePath:
+        setThreeSourceIdentityEvidencePath ??
+        path.join(
+          projectRoot,
+          ...SET_THREE_SOURCE_IDENTITY_EVIDENCE_RELATIVE_PATH.split('/')
+        ),
+      accessorySetPath: path.join(newTableRoot, 'accessory_set.json'),
+      skillTablePath: path.join(newTableRoot, 'skill.json'),
+      localizationPaths: {
+        chs: skillLocalizationPath,
+        jp: 'C:/PC2/Codex/AzPr/Assets_JP_JA_CB2/ResourcesLang/jp/Table/lang_skill.json',
+        kr: 'C:/PC2/Codex/AzPr/Assets_KR_KO_CB2/ResourcesLang/kr/Table/lang_skill.json',
+        cht: 'C:/PC2/Codex/AzPr/Assets_TW_TC_CB2/ResourcesLang/cht/Table/lang_skill.json',
+      },
+      battleElementAssetsPath,
+      formalControlFiles: {
+        main: path.join(
+          formalSetThreeControlRoot,
+          'skill_control_19998005__-2339022120750825272.json'
+        ),
+        trackInstall: path.join(
+          formalSetThreeControlRoot,
+          'MonoBehaviour_-5874771271388107138__-5874771271388107138.json'
+        ),
+        trackUnload: path.join(
+          formalSetThreeControlRoot,
+          'MonoBehaviour_-4955137497584177538__-4955137497584177538.json'
+        ),
+        behaviorInstall: path.join(
+          formalSetThreeControlRoot,
+          'MonoBehaviour_-7665508558900367746__-7665508558900367746.json'
+        ),
+        behaviorUnload: path.join(
+          formalSetThreeControlRoot,
+          'MonoBehaviour_-7993432668986282370__-7993432668986282370.json'
+        ),
+      },
+      nearMatchControlFiles: {
+        main: path.join(
+          nearMatchSetFourControlRoot,
+          'skill_control_19998003__-3103682062580946589.json'
+        ),
+        behavior: path.join(
+          nearMatchSetFourControlRoot,
+          'MonoBehaviour_-6651836192383337979__-6651836192383337979.json'
+        ),
+      },
+      battleElementBundlePath:
+        'C:/AP/AzurPromilia_TC/AzurPromilia_game/azurpromilia_Data/StreamingAssets/.res/default_package/fwtvymrpqatpf4ytyfvwqg',
+      skillControlBundlePath:
+        'C:/AP/AzurPromilia_TC/AzurPromilia_game/azurpromilia_Data/StreamingAssets/.res/default_package/sxtotgjsgmmqba8fd86yjw',
+      extractedUnityRoot: 'C:/Codex/AzPr Extractor/ExtractedAssets/Unity',
+      projectRoot,
+    });
   const acceptanceReport = JSON.parse(
     await fs.readFile(
       dynamicLoadoutAcceptanceReportPath ??
@@ -405,6 +480,10 @@ export async function createOptimizationQualificationArtifacts({
   assertAfterDamageTargetPropertyRuntimeEvidenceReference(
     acceptanceReport?.sourceClosure?.afterDamageTargetPropertyRuntimeEvidence,
     sources.afterDamageTargetPropertyRuntimeEvidence
+  );
+  assertSetThreeSourceIdentityEvidenceReference(
+    acceptanceReport?.sourceClosure?.setThreeSourceIdentityEvidence,
+    sources.setThreeSourceIdentityEvidence
   );
   sources.il2cppRuntimeContracts.value.soulEffectTriggers =
     attachSoulEffectGetElementRuntimeEvidence(
@@ -521,6 +600,8 @@ export async function createOptimizationQualificationArtifacts({
       sources.beforeSkillCompositeRuntimeEvidence.value,
     afterDamageTargetPropertyRuntimeEvidence:
       sources.afterDamageTargetPropertyRuntimeEvidence.value,
+    setThreeSourceIdentityEvidence:
+      sources.setThreeSourceIdentityEvidence.value,
   });
   sources.battleElementAssets = {
     ...soulEssenceEffects.sourceSnapshot.battleElements,
@@ -631,7 +712,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C13',
+      phase: 'M12-B3-C14',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1597,8 +1678,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C13',
-    status: 'b3-c13-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C14',
+    status: 'b3-c14-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2025,7 +2106,8 @@ function createSourceSnapshot(sources) {
         key === 'persistentLoadoutPropertyRuntimeEvidence' ||
         key === 'fourPieceSetStackRuntimeEvidence' ||
         key === 'beforeSkillCompositeRuntimeEvidence' ||
-        key === 'afterDamageTargetPropertyRuntimeEvidence'
+        key === 'afterDamageTargetPropertyRuntimeEvidence' ||
+        key === 'setThreeSourceIdentityEvidence'
       ) {
         record.value = structuredClone(source.value);
       }
@@ -2042,7 +2124,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C13 AfterDamage Target Weakness Absorption\n\n' +
+    '# M12-B3-C14 Set 3 Source Identity Audit\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -2051,7 +2133,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: C2-C12 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece BeforeDamage, AfterHeal Source-to-Target, Block(5), and BeforeSkill composite contracts. C13 adds source-closed set 6:4: a landed NormalAttack or WhackAttack AfterDamage transaction refreshes one 24-second target wrapper with physical and magic weakness-absorption modifiers, while the current packet remains unchanged and the native finite trigger counter enters canonical cycle state.\n' +
+    '- Dynamic loadout batches: C2-C13 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, and target-debuff contracts. C14 finds a source identity conflict for set 3:4: all formal localizations describe a 12-second, ten-layer normal-attack ATK effect, while the only current executable binding injects the Iron-Mane Overlord received-damage/MAXHP graph and no exact expected graph exists in the current element census. Neither conflicting graph is applied.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'

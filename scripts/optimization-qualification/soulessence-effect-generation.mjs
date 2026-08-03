@@ -55,6 +55,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   fourPieceSetStackRuntimeEvidence = null,
   beforeSkillCompositeRuntimeEvidence = null,
   afterDamageTargetPropertyRuntimeEvidence = null,
+  setThreeSourceIdentityEvidence = null,
 } = {}) {
   if (
     propertyTagContract?.sourceKind !== 'il2cpp-battle-property-tag-contract' ||
@@ -104,6 +105,14 @@ export async function createSoulEssenceEffectMechanicsCatalog({
     throw new Error(
       'soulessence-after-damage-target-property-evidence-missing'
     );
+  }
+  if (
+    setThreeSourceIdentityEvidence?.contractName !==
+      'AzPrSetThreeSourceIdentityEvidence' ||
+    setThreeSourceIdentityEvidence?.conclusion?.status !==
+      'evidence-insufficient'
+  ) {
+    throw new Error('soulessence-set-three-source-identity-evidence-missing');
   }
   const tuningMechanicsHash = hashCanonicalValue(tuningMechanicsCatalog);
   const definitionBySoulId = new Map(
@@ -176,6 +185,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       fourPieceSetStackRuntimeEvidence,
       beforeSkillCompositeRuntimeEvidence,
       afterDamageTargetPropertyRuntimeEvidence,
+      setThreeSourceIdentityEvidence,
     })
   );
   const value = {
@@ -223,6 +233,11 @@ export async function createSoulEssenceEffectMechanicsCatalog({
           afterDamageTargetPropertyRuntimeEvidence
         ),
       },
+      setThreeSourceIdentityEvidence: {
+        sourceIdentity:
+          setThreeSourceIdentityEvidence.conclusion.sourceIdentity,
+        contractHash: hashCanonicalValue(setThreeSourceIdentityEvidence),
+      },
       sourceSnapshotHash: hashCanonicalValue({
         battleElements: battleSource.metadata,
         controlClosure: controlSource.metadata,
@@ -242,6 +257,9 @@ export async function createSoulEssenceEffectMechanicsCatalog({
         afterDamageTargetPropertyRuntimeEvidenceHash: hashCanonicalValue(
           afterDamageTargetPropertyRuntimeEvidence
         ),
+        setThreeSourceIdentityEvidenceHash: hashCanonicalValue(
+          setThreeSourceIdentityEvidence
+        ),
       }),
     },
     policy: {
@@ -257,6 +275,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
         'set-skill-before-damage-stacking-property',
         'set-skill-before-skill-composite-immediate',
         'set-skill-after-damage-target-property',
+        'set-skill-source-identity-conflict',
       ],
     },
     propertyTagContract,
@@ -360,6 +379,7 @@ export function createDynamicLoadoutEffectCensus(catalog) {
       evidenceStatus: definition.evidenceStatus,
       runtimeStatus: definition.runtimeStatus,
       runtimeGaps: definition.runtimeGaps,
+      sourceIdentityConflict: definition.sourceIdentityConflict ?? null,
       sourceIdentity: definition.sourceIdentity,
     })),
   ].sort(
@@ -410,6 +430,7 @@ function compileSetSkillEffectDefinition({
   fourPieceSetStackRuntimeEvidence,
   beforeSkillCompositeRuntimeEvidence,
   afterDamageTargetPropertyRuntimeEvidence,
+  setThreeSourceIdentityEvidence,
 }) {
   const resourcePathIds = uniqueNumbers(control?.resourcePathIds ?? []);
   const missingPathIds = resourcePathIds.filter(
@@ -520,6 +541,10 @@ function compileSetSkillEffectDefinition({
     afterHealProperty ??
     beforeSkillComposite ??
     afterDamageTargetProperty;
+  const sourceIdentityConflict = resolveSetSkillSourceIdentityConflict({
+    setSkill,
+    evidence: setThreeSourceIdentityEvidence,
+  });
   const mechanismFamilies = uniqueStrings([
     ...triggers.map(trigger =>
       trigger.event == null
@@ -542,7 +567,11 @@ function compileSetSkillEffectDefinition({
       ? [...evidenceGaps, ...(persistentRoot?.runtimeGaps ?? [])]
       : compiledDynamicEffect != null
         ? [...evidenceGaps, ...(compiledDynamicEffect.runtimeGaps ?? [])]
-        : [...evidenceGaps, 'set-skill-runtime-operator-not-implemented']
+        : [
+            ...evidenceGaps,
+            sourceIdentityConflict?.gapCode ??
+              'set-skill-runtime-operator-not-implemented',
+          ]
   );
   const runtimeStatus = runtimeGaps.length
     ? 'source-indexed-runtime-unapplied'
@@ -566,9 +595,11 @@ function compileSetSkillEffectDefinition({
         ? compiledDynamicEffect != null
           ? compiledDynamicEffect.mechanismFamily
           : 'set-skill-persistent-property'
-        : mechanismFamilies.length === 1
-          ? mechanismFamilies[0]
-          : 'set-skill-composite-effect',
+        : sourceIdentityConflict != null
+          ? 'set-skill-source-identity-conflict'
+          : mechanismFamilies.length === 1
+            ? mechanismFamilies[0]
+            : 'set-skill-composite-effect',
     mechanismFamilies,
     triggers,
     trigger: compiledDynamicEffect?.trigger ?? null,
@@ -653,7 +684,7 @@ function compileSetSkillEffectDefinition({
       reason:
         runtimeStatus === 'runtime-applied'
           ? null
-          : 'set-skill-runtime-operator-not-implemented',
+          : (runtimeGaps[0] ?? 'set-skill-runtime-operator-not-implemented'),
     },
     sourceClosure: {
       controlSkillId: Number(setSkill.skillId),
@@ -672,17 +703,52 @@ function compileSetSkillEffectDefinition({
     evidenceStatus:
       runtimeStatus === 'runtime-applied'
         ? 'runtime-applied'
-        : evidenceGaps.length === 0
-          ? 'source-closure-indexed'
-          : 'static-evidence-gap',
+        : runtimeGaps.length > 0 &&
+            runtimeGaps.every(reason =>
+              String(reason).endsWith('-evidence-gap')
+            )
+          ? 'evidence-insufficient'
+          : evidenceGaps.length === 0
+            ? 'source-closure-indexed'
+            : 'static-evidence-gap',
     runtimeStatus,
     runtimeGaps,
+    sourceIdentityConflict,
     sourceIdentity: [setSkill.sourceIdentity, control?.sourceIdentity]
       .concat(compiledDynamicEffect?.sourceIdentity ?? [])
+      .concat(sourceIdentityConflict?.sourceIdentity ?? [])
       .filter(Boolean)
       .join('|'),
   };
   return { ...value, mechanicsHash: hashCanonicalValue(value) };
+}
+
+function resolveSetSkillSourceIdentityConflict({ setSkill, evidence }) {
+  const conclusion = evidence?.conclusion;
+  const expectedIdentity = `set-skill:${Number(setSkill.setId)}:${Number(
+    setSkill.pieces
+  )}`;
+  if (
+    conclusion?.status !== 'evidence-insufficient' ||
+    conclusion?.setSkillIdentity !== expectedIdentity ||
+    Number(conclusion?.skillId) !== Number(setSkill.skillId)
+  ) {
+    return null;
+  }
+  return {
+    status: conclusion.status,
+    gapCode: conclusion.gapCode,
+    formalTextSemantics: evidence.sourceConflict?.formalTextSemantics ?? null,
+    reachableGraphSemantics:
+      evidence.sourceConflict?.reachableGraphSemantics ?? null,
+    whichSourceIsStale: evidence.sourceConflict?.whichSourceIsStale ?? null,
+    safeRuntimeDisposition:
+      evidence.sourceConflict?.safeRuntimeDisposition ?? null,
+    missingEvidence: structuredClone(
+      evidence.sourceConflict?.missingEvidence ?? []
+    ),
+    sourceIdentity: conclusion.sourceIdentity,
+  };
 }
 
 function compileFourPieceSetBeforeDamageStack({

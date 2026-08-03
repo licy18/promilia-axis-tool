@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "fd752ae90abcb097",
+  "rosterHash": "802a132b8c9080fe",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "52aefbcdd3136e43",
-        "fd752ae90abcb097"
+        "e6c48099b261da63",
+        "802a132b8c9080fe"
       ]
     },
     {
@@ -4095,7 +4095,7 @@
       "objectKind": "set-skill",
       "objectId": "3:4",
       "code": "set-skill-dynamic-unapplied",
-      "category": "not-implemented",
+      "category": "evidence-insufficient",
       "blocking": true,
       "message": "The accessory set skill is tracked but not applied by the dynamic runtime.",
       "sourceIdentities": [
@@ -4104,10 +4104,10 @@
       "details": {
         "skillId": 19998005,
         "reasons": [
-          "set-skill-runtime-operator-not-implemented"
+          "set-skill-source-identity-conflict-evidence-gap"
         ]
       },
-      "gapHash": "17e4f2e4a44d4451"
+      "gapHash": "3ee2a6574ed4e9f6"
     },
     {
       "gapIdentity": "set-skill:3:4:set-skill-visual-acceptance-not-published",
@@ -6094,8 +6094,8 @@
   "summary": {
     "blockingUniqueGapCount": 381,
     "byCategory": {
-      "evidence-insufficient": 18,
-      "not-implemented": 363
+      "evidence-insufficient": 19,
+      "not-implemented": 362
     },
     "byCode": {
       "actor-static-profile-missing": 1,
@@ -6121,5 +6121,5 @@
       "soul-essence": 108
     }
   },
-  "ledgerHash": "afad67326a28035d"
+  "ledgerHash": "d64df0972b180940"
 }

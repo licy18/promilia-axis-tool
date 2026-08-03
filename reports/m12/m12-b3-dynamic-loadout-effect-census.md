@@ -1,6 +1,6 @@
 # M12-B3-C Dynamic Loadout Effect Census
 
-- Census: `59553fb7be3d86fb`
+- Census: `9f5bdfeb31dc7cf7`
 - Soul essences: 62
 - Set skills: 12
 - Runtime applied: 50
@@ -24,7 +24,7 @@
 - set-skill-before-damage-stacking-property (2): set-skill:2:4, set-skill:4:4
 - set-skill-before-skill-composite-immediate (1): set-skill:1:4
 - set-skill-persistent-property (6): set-skill:1:2, set-skill:2:2, set-skill:3:2, set-skill:4:2, set-skill:5:2, set-skill:6:2
-- set-skill-trigger-event-source-indexed (1): set-skill:3:4
+- set-skill-source-identity-conflict (1): set-skill:3:4
 - source-indexed-composite-effect (16): soul-essence:10008, soul-essence:10011, soul-essence:10063, soul-essence:10071, soul-essence:10076, soul-essence:10078, soul-essence:10084, soul-essence:10095, soul-essence:10121, soul-essence:10122, soul-essence:10132, soul-essence:10146, soul-essence:10152, soul-essence:10196, soul-essence:10197, soul-essence:10198
 
 Set-piece threshold activation is indexed separately from runtime effect application. Meeting a threshold never makes an unapplied set effect executable.
