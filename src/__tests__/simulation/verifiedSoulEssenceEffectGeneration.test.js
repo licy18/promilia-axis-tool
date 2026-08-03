@@ -7050,6 +7050,16 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
       },
       durationMs: 18_000,
       teamCharacterIds: [101007, 101003, 101010],
+      teamKiboIdsByCharacterId: {
+        101007: PROPERTY_TAG_TEST_KIBO_ID,
+        101003: 500003,
+        101010: 500039,
+      },
+      initialKiboEnergyByCharacterId: {
+        101007: 0,
+        101003: 0,
+        101010: 0,
+      },
       initialRuntimeState: {
         controlledActor: {
           actorId: sourceActorId,
@@ -7128,11 +7138,248 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
         }),
       ])
     );
+    const directSpIdentity = generation.directSpEvents[0].eventIdentity;
     expect(
-      result.verifiedCombatRuntime.kiboResourceEvents.filter(
-        event => event.actionId === 'c12-real-normal-skill'
+      result.verifiedCombatRuntime.kiboResourceEvents.filter(event =>
+        String(event.hitKey).startsWith(`${directSpIdentity}|kibo|`)
       )
     ).toEqual([]);
+  });
+
+  it('routes actor-target and Kibo-target direct SP with independent actor, main-pet, and pet shares', () => {
+    const base = createRealSoulScenario({
+      soulEssenceId: null,
+      effectSkillId: 0,
+      equipment: set1Equipment,
+      ownerInitialSp: 0,
+      teamInitialSpByCharacterId: {
+        101007: 0,
+        101003: 0,
+        101010: 0,
+      },
+      durationMs: 18_000,
+      teamCharacterIds: [101007, 101003, 101010],
+      teamKiboIdsByCharacterId: {
+        101007: PROPERTY_TAG_TEST_KIBO_ID,
+        101003: 500003,
+        101010: 500039,
+      },
+      initialKiboEnergyByCharacterId: {
+        101007: 0,
+        101003: 0,
+        101010: 0,
+      },
+      actionPlan: [
+        {
+          id: 'c12-direct-sp-routing',
+          actionKind: 'star-skill',
+          startFrame: 60,
+        },
+      ],
+    });
+    const generatedEvent =
+      base.verifiedSoulEssenceEffectGeneration.directSpEvents[0];
+    const sourceActorId = generatedEvent.actorId;
+    const replay = ({
+      targetKind = 'actor',
+      shareType = 2,
+      mainPetShareType = 0,
+      petShareType = 0,
+      runtimeMode = null,
+      initialKiboEnergy = null,
+      withoutKibos = false,
+      controlledActorId = null,
+    } = {}) => {
+      const eventIdentity = [
+        'fixture:c12:direct-sp-routing',
+        targetKind,
+        shareType,
+        mainPetShareType,
+        petShareType,
+      ].join(':');
+      const directSpEvent = {
+        ...generatedEvent,
+        eventIdentity,
+        sourceIdentity: eventIdentity,
+        target: { kind: targetKind, id: sourceActorId },
+        effect: {
+          ...generatedEvent.effect,
+          directSp: {
+            ...generatedEvent.effect.directSp,
+            shareType,
+            mainPetShareType,
+            petShareType,
+          },
+        },
+      };
+      const scenario = structuredClone(base.effectiveActionTimeline.scenario);
+      if (initialKiboEnergy != null) {
+        for (const entry of scenario.initialRuntimeState.kiboEnergyBySlot) {
+          entry.currentValue = initialKiboEnergy;
+        }
+      }
+      if (withoutKibos) {
+        for (const actor of scenario.actors) {
+          actor.loadout = { ...actor.loadout, kiboId: null };
+        }
+        for (const group of scenario.sourceProject.metadata.timelineTopology
+          .actorGroups) {
+          group.kiboLane = { ...group.kiboLane, kiboId: null };
+        }
+        scenario.initialRuntimeState.kiboEnergyBySlot = [];
+      }
+      if (controlledActorId != null) {
+        const controlledActor = scenario.actors.find(
+          actor => actor.id === controlledActorId
+        );
+        scenario.initialRuntimeState.controlledActor = {
+          actorId: controlledActor.id,
+          characterId: controlledActor.characterId,
+        };
+      }
+      const controlledActorTimeline = createControlledActorTimeline({
+        scenario,
+        actionExecutionPlan: base.actionExecutionPlan,
+      });
+      const runtime = createVerifiedCombatRuntime({
+        scenario,
+        actionExecutionPlan: base.actionExecutionPlan,
+        controlledActorTimeline,
+        effectGeneration: {
+          ...base.verifiedBattleEffectGeneration,
+          directSpEvents: [directSpEvent],
+          directHpEvents: [],
+        },
+        tuningGeneration: base.verifiedTuningMarkGeneration,
+        damageEventGeneration: base.verifiedDamageEventGeneration,
+        effectTimeline: base.effectTimeline,
+        actionVariantRuntime: base.verifiedActionVariantRuntime,
+        kiboPassiveGeneration: base.verifiedKiboPassiveGeneration,
+        ...(runtimeMode == null ? {} : { runtimeMode }),
+      });
+      const actorEvents = runtime.resourceEvents
+        .filter(event =>
+          String(event.hitKey).startsWith(`${eventIdentity}|actor|`)
+        )
+        .map(event => ({
+          actorId: event.actorId,
+          change: event.payload.change,
+          share: event.payload.share,
+        }))
+        .sort((left, right) => left.actorId.localeCompare(right.actorId));
+      const kiboEvents = runtime.kiboResourceEvents
+        .filter(event =>
+          String(event.hitKey).startsWith(`${eventIdentity}|kibo|`)
+        )
+        .map(event => ({
+          actorId: event.actorId,
+          slotId: event.payload.slotId,
+          change: event.payload.change,
+          share: event.payload.share,
+        }))
+        .sort((left, right) => left.actorId.localeCompare(right.actorId));
+      return { actorEvents, kiboEvents };
+    };
+
+    expect(replay()).toMatchObject({
+      actorEvents: [
+        { actorId: 'actor-101003', change: 16, share: 1 },
+        { actorId: 'actor-101007', change: 16, share: 1 },
+        { actorId: 'actor-101010', change: 16, share: 1 },
+      ],
+      kiboEvents: [],
+    });
+    expect(replay({ shareType: 0, mainPetShareType: 1 })).toMatchObject({
+      actorEvents: [{ actorId: sourceActorId, change: 16, share: 1 }],
+      kiboEvents: [
+        {
+          actorId: sourceActorId,
+          slotId: expect.any(String),
+          change: 8,
+          share: 0.5,
+        },
+      ],
+    });
+    expect(replay({ shareType: 0, petShareType: 1 })).toMatchObject({
+      actorEvents: [{ actorId: sourceActorId, change: 16, share: 1 }],
+      kiboEvents: [
+        {
+          actorId: 'actor-101003',
+          slotId: expect.any(String),
+          change: 8,
+          share: 0.5,
+        },
+        {
+          actorId: 'actor-101010',
+          slotId: expect.any(String),
+          change: 8,
+          share: 0.5,
+        },
+      ],
+    });
+    expect(
+      replay({
+        targetKind: 'kibo',
+        shareType: 0,
+        mainPetShareType: 0,
+        petShareType: 0,
+      })
+    ).toMatchObject({
+      actorEvents: [],
+      kiboEvents: [
+        {
+          actorId: sourceActorId,
+          slotId: expect.any(String),
+          change: 16,
+          share: 1,
+        },
+      ],
+    });
+    expect(
+      replay({
+        shareType: 0,
+        mainPetShareType: 1,
+        petShareType: 1,
+        runtimeMode: 'non-damage-event-projection',
+      })
+    ).toEqual(
+      replay({
+        shareType: 0,
+        mainPetShareType: 1,
+        petShareType: 1,
+      })
+    );
+    expect(
+      replay({
+        shareType: 0,
+        mainPetShareType: 2,
+        petShareType: 2,
+        initialKiboEnergy: 100,
+      }).kiboEvents
+    ).toEqual([]);
+    expect(
+      replay({
+        shareType: 0,
+        mainPetShareType: 2,
+        petShareType: 2,
+        withoutKibos: true,
+      }).kiboEvents
+    ).toEqual([]);
+    expect(
+      replay({
+        shareType: 0,
+        mainPetShareType: 1,
+        controlledActorId: 'actor-101003',
+      }).kiboEvents
+    ).toEqual([
+      {
+        actorId: sourceActorId,
+        slotId: expect.any(String),
+        change: 8,
+        share: 0.5,
+      },
+    ]);
+    expect(generatedEvent.sourceSequencePath).toEqual(expect.any(Array));
   });
 
   it('requires an executed controlled NormalSkill while preserving all-miss and same-frame source order', () => {
@@ -7549,6 +7796,8 @@ function createRealSoulScenario({
   combatScenario = null,
   ownerInitialSp = 100,
   teamInitialSpByCharacterId = null,
+  teamKiboIdsByCharacterId = null,
+  initialKiboEnergyByCharacterId = null,
   soulEssenceStar = 1,
   equipment = null,
 } = {}) {
@@ -7584,15 +7833,29 @@ function createRealSoulScenario({
       teamInitialSpByCharacterId?.[String(config.characterId)] ??
       teamInitialSpByCharacterId?.[Number(config.characterId)] ??
       null;
+    const configuredKiboId =
+      teamKiboIdsByCharacterId?.[String(config.characterId)] ??
+      teamKiboIdsByCharacterId?.[Number(config.characterId)] ??
+      null;
+    const resolvedKiboId =
+      Number(configuredKiboId) > 0
+        ? Number(configuredKiboId)
+        : Number(config.characterId) === actorCharacterId && includesKiboAction
+          ? PROPERTY_TAG_TEST_KIBO_ID
+          : config.loadout?.kiboId;
+    const configured = {
+      ...config,
+      loadout: {
+        ...config.loadout,
+        kiboId: resolvedKiboId,
+      },
+    };
     return Number(config.characterId) === actorCharacterId
       ? {
-          ...config,
+          ...configured,
           initialSp: configuredInitialSp ?? ownerInitialSp,
           loadout: {
-            ...config.loadout,
-            kiboId: includesKiboAction
-              ? PROPERTY_TAG_TEST_KIBO_ID
-              : config.loadout?.kiboId,
+            ...configured.loadout,
             soulessenceId: soulEssenceId,
             soulessenceLevel: soulEssenceId == null ? null : 80,
             soulessenceRank: soulEssenceId == null ? null : 1,
@@ -7613,11 +7876,32 @@ function createRealSoulScenario({
           },
         }
       : {
-          ...config,
+          ...configured,
           ...(configuredInitialSp == null
             ? {}
             : { initialSp: configuredInitialSp }),
         };
+  });
+  const configuredKiboEnergyBySlot = teamSlots.flatMap(slot => {
+    const actorConfig = actorConfigs.find(
+      config => Number(config.characterId) === Number(slot.characterId)
+    );
+    const kiboId = Number(actorConfig?.loadout?.kiboId);
+    const configuredInitialEnergy =
+      initialKiboEnergyByCharacterId?.[String(slot.characterId)] ??
+      initialKiboEnergyByCharacterId?.[Number(slot.characterId)] ??
+      null;
+    if (!(kiboId > 0) || configuredInitialEnergy == null) return [];
+    return [
+      {
+        slotId: slot.slotId,
+        actorId: `actor-${slot.characterId}`,
+        characterId: Number(slot.characterId),
+        kiboId,
+        currentValue: Number(configuredInitialEnergy),
+        maxValue: 100,
+      },
+    ];
   });
   let startFrame = 0;
   const actions = requestedActions.map(requested => {
@@ -7681,18 +7965,20 @@ function createRealSoulScenario({
     actions,
     initialRuntimeState: {
       ...(initialRuntimeState ?? {}),
-      ...(includesKiboAction && ownerSlotId
-        ? {
-            kiboEnergyBySlot: [
-              {
-                slotId: ownerSlotId,
-                kiboId: PROPERTY_TAG_TEST_KIBO_ID,
-                currentValue: 100,
-                maxValue: 100,
-              },
-            ],
-          }
-        : {}),
+      ...(configuredKiboEnergyBySlot.length > 0
+        ? { kiboEnergyBySlot: configuredKiboEnergyBySlot }
+        : includesKiboAction && ownerSlotId
+          ? {
+              kiboEnergyBySlot: [
+                {
+                  slotId: ownerSlotId,
+                  kiboId: PROPERTY_TAG_TEST_KIBO_ID,
+                  currentValue: 100,
+                  maxValue: 100,
+                },
+              ],
+            }
+          : {}),
     },
     combatScenario,
     mechanicsProfileSelection:

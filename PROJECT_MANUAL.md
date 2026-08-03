@@ -1775,7 +1775,7 @@ M12-B-R2 已用候选动作的真实资源条件和 canonical 资源轨迹生成
 
 Machine Axis 的 `AzPrMachineAxisCycleDps` v1 与 CLI `cycle` 继续由唯一 canonical core 计算显式半开循环区间。R2 对 sampled 使用 cycle-local 共同随机数证明状态闭环，同时保留每个 seed 的独立伤害样本，并结构化输出样本数、均值、样本方差、分位数及 actor/action/hit 贡献守恒；自然暴击波动不再误判为循环泄漏。奇波触发次数由生成层统一分类：`-1` 与 `9999999` 为 unlimited，小正整数为 finite，未知语义保持 evidence-open；河狸仔 520082 与 520087 稳态刷新可闭环，驮驮龙 15 秒 ICD 和真实一次性触发仍拒绝。权威 expected 示例保持 `22.44996643`、4 hit、`cycleDps=4.48999329`。提交 `76530074f6c2fb1d2b88b4eee1d2fd558d01ce2b` 已通过产品验收，M12-B2 正式关闭且不做 R3；下一阶段为 M12-B3，M12-C 继续锁定。
 
-### M12-B3-C11-R1 已通过产品验收，M12-B3-C12 等待产品复验（2026-08-03）
+### M12-B3-C11-R1 已通过产品验收，M12-B3-C12-R1 等待产品复验（2026-08-03）
 
 M12-B2 已通过产品验收并关闭，M12-B3-A 现从生成数据重算带来源 hash 的固定资格分母；本阶段只建立 optimization qualification，不执行正式配队、装配或输出轴搜索。计划快照包含 10 名带风或雷标签的角色，加上 1 个统一的 `STARBORN 星临者` 优化对象，共 11 个角色优化对象；底层 `199001/199002` 只作为来源身份和运行时外观别名。奇波按离散属性标签选出 22 只风/雷单属性奇波和 21 只含风/雷双属性奇波，共 43 只。装配门禁另包含全部 62 个灵子、137 件公开装备和 12 条套装技能门槛记录。完整 ID/名称清单、筛选与归一化规则和当前源文件 hash 见 `DEVELOPMENT_PLAN.md` 的 M12-B3 章节。
 
@@ -1785,7 +1785,7 @@ M12-C 首个末音优化场景的输入条件仍固定为：全体候选角色 8
 
 角色-装配-奇波组合还需证明静态和动态属性传播、来源/目标、前后台/切人、同帧顺序、状态隔离、保存重放及连续循环。C9 已在 `bd812d64226a371a55a01981a239e33c318c9e98` 通过产品验收；direct PropertyElement 根的装配初始化与 unload 由版本化二进制证据闭合。C10 以 `four-piece-set-stack-runtime-evidence.json` 约束 `Overlying=4` 的单一聚合层数、combineNumber 上限、共享绝对到期、Self 来源隔离与 BeforeDamage 当前包顺序，并由统一 compiler/runtime 接入 `set-skill:2:4` 和 `set-skill:4:4`。11/11 角色优化对象、43/43 奇波、62/62 灵子、137/137 装备、12/12 套装技能和规定绑定场景未全部通过前，阶段不得部分放行，任何 `dynamic-unapplied` 必须结构化拒绝而非 warning，M12-C 保持锁定；UI 美化、包体和纯性能工作不作为资格阻断项。
 
-B3-A-R1 已纠正角色培养来源边界并在 `f902de10c42c2c4dc750be2316fabe3bc026f8cc` 通过产品验收。B3-B-R1 在 `f846161c4a71bbc2de2b5bed3f598f03344fc692` 通过；普通/缘星实例、固定培养与 DNA=`[]` 合同保持不变。C10 生产机制提交为 `785cc9b8c20b1cb995b4fe4f565a6e94101f8531`，C10-R1 已在 `ad27e7762fcc8ac96a47d00361cef08fe6dbc959` 通过产品验收。C11 功能基线 `02935223e914af18cb0bf10abf324edbdd373e17` 闭合 AfterHeal Source->Target、空 OR 与 Block(5)；C11-R1 的原生 Kibo 周期治疗入口已在 `8f01dba447106b03783582d58e80badb8a571b8e` 通过产品验收。C12 通过版本化证据接入 `set-skill:1:4`：仅主控装备者执行 NormalSkill 时，在 12 秒 interval 门内生成 A=16 的角色 SP ShareAll 和 A=400、formula 108 的 AllHero 治疗；blocked、后台、错误 tag 均不触发，interval 进入循环持久态。当前 39/62 灵子、10/12 套装技能为 runtime-applied，382 条阻断为 364 not-implemented + 18 evidence-insufficient，五类准入仍为空，整个 B3 尚未完成且 M12-C 锁定。
+B3-A-R1 已纠正角色培养来源边界并在 `f902de10c42c2c4dc750be2316fabe3bc026f8cc` 通过产品验收。B3-B-R1 在 `f846161c4a71bbc2de2b5bed3f598f03344fc692` 通过；普通/缘星实例、固定培养与 DNA=`[]` 合同保持不变。C10 生产机制提交为 `785cc9b8c20b1cb995b4fe4f565a6e94101f8531`，C10-R1 已在 `ad27e7762fcc8ac96a47d00361cef08fe6dbc959` 通过产品验收。C11 功能基线 `02935223e914af18cb0bf10abf324edbdd373e17` 闭合 AfterHeal Source->Target、空 OR 与 Block(5)；C11-R1 的原生 Kibo 周期治疗入口已在 `8f01dba447106b03783582d58e80badb8a571b8e` 通过产品验收。C12 通过版本化证据接入 `set-skill:1:4`：仅主控装备者执行 NormalSkill 时，在 12 秒 interval 门内生成 A=16 的角色 SP ShareAll 和 A=400、formula 108 的 AllHero 治疗。C12 提交 `a432467d4322ee0dae58e3d47df3b5c2eb55447a` 的 actor-target direct SP 曾把来源 Kibo 错当 direct target；C12-R1 已恢复通用 `shareType/mainPetShareType/petShareType` 分流并锁定 Kibo-target 独立语义。当前 39/62 灵子、10/12 套装技能为 runtime-applied，382 条阻断为 364 not-implemented + 18 evidence-insufficient，五类准入仍为空，整个 B3 尚未完成且 M12-C 锁定。
 
 ### M10-A 小玉闭环缺口修复已通过独立机制验收（2026-07-28）
 

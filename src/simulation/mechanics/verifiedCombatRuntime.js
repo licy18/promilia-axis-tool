@@ -2178,19 +2178,21 @@ function applyDirectSpDescriptor({
       source,
       baseValue,
       kiboResourceEvents,
-      sourceKiboState: [...state.kiboEnergy.values()].find(
-        entry => entry.actorId === sourceState.actor.id
-      ),
+      directTargetKiboState: null,
     });
     return;
   }
 
   if (directEvent.target.kind !== EFFECT_TARGET_KINDS.KIBO) return;
-  const sourceKiboState = [...state.kiboEnergy.values()].find(
+  const directTargetKiboState = [...state.kiboEnergy.values()].find(
     entry => entry.actorId === directEvent.target.id
   );
-  if (!sourceKiboState) return;
-  const source = createKiboSpSource(sourceKiboState, state, descriptor.timeMs);
+  if (!directTargetKiboState) return;
+  const source = createKiboSpSource(
+    directTargetKiboState,
+    state,
+    descriptor.timeMs
+  );
   const baseValue = applyDirectSpEnhancement(
     directEvent.value,
     directSp.enhanceable,
@@ -2203,7 +2205,7 @@ function applyDirectSpDescriptor({
     source,
     baseValue,
     kiboResourceEvents,
-    sourceKiboState,
+    directTargetKiboState,
   });
 }
 
@@ -2214,12 +2216,12 @@ function applyDirectSpToKibos({
   source,
   baseValue,
   kiboResourceEvents,
-  sourceKiboState,
+  directTargetKiboState,
 }) {
   const directSp = directEvent.effect.directSp;
   for (const recipient of state.kiboEnergy.values()) {
     const share =
-      recipient === sourceKiboState
+      recipient === directTargetKiboState
         ? 1
         : recipient.actorId === directEvent.actorId
           ? directSpShareRatio(directSp.mainPetShareType)
@@ -2238,7 +2240,7 @@ function applyDirectSpToKibos({
         kiboState: recipient,
         change,
         reason:
-          recipient === sourceKiboState
+          recipient === directTargetKiboState
             ? 'verified-direct-sp'
             : 'verified-direct-sp-shared',
         hitKey: `${directEvent.eventIdentity}|kibo|${recipient.slotId}`,

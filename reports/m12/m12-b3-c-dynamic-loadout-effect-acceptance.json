@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 21,
-  "phase": "M12-B3-C12",
+  "schemaVersion": 22,
+  "phase": "M12-B3-C12-R1",
   "status": "verification-complete-awaiting-product-acceptance",
   "baseCommit": "8f01dba447106b03783582d58e80badb8a571b8e",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
@@ -14,6 +14,7 @@
   "acceptedC10R1Commit": "ad27e7762fcc8ac96a47d00361cef08fe6dbc959",
   "reviewedC11Commit": "02935223e914af18cb0bf10abf324edbdd373e17",
   "acceptedC11R1Commit": "8f01dba447106b03783582d58e80badb8a571b8e",
+  "reviewedC12Commit": "a432467d4322ee0dae58e3d47df3b5c2eb55447a",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
     "phase": "M12-B3-C11-R1",
@@ -63,6 +64,33 @@
       "action-linked direct AfterHeal remains execution-gated and is emitted exactly once",
       "10176 remains fail-closed for actionless periodic healing because no NormalAttack provenance exists",
       "unknown or multi-source attribution, rejected settlement and missing calculator settlement remain suppressed"
+    ]
+  },
+  "c12R1DirectSpRoutingGuard": {
+    "rootCause": "Actor-target direct SP passed the source actor's bound Kibo as the direct target Kibo, so the generic Kibo route granted that Kibo share=1 before consulting mainPetShareType or petShareType.",
+    "before": {
+      "targetKind": "actor",
+      "shareType": 2,
+      "mainPetShareType": 0,
+      "petShareType": 0,
+      "sourceKiboDirectEventCount": 1,
+      "sourceKiboChange": 16,
+      "sourceKiboShare": 1
+    },
+    "after": {
+      "targetKind": "actor",
+      "shareType": 2,
+      "mainPetShareType": 0,
+      "petShareType": 0,
+      "sourceKiboDirectEventCount": 0,
+      "actorChanges": [16, 16, 16]
+    },
+    "contracts": [
+      "actor-target direct SP always gives the target/source actor its actor value and routes other actors only through shareType",
+      "the source actor's bound Kibo uses mainPetShareType while all other bound Kibos use petShareType",
+      "only a Kibo-target direct SP grants its resolved target Kibo share=1",
+      "full runtime and non-damage-event projection consume the same direct-SP recipient route",
+      "auto-SP events are excluded from direct transaction assertions by stable eventIdentity and hitKey"
     ]
   },
   "scope": {
@@ -292,14 +320,24 @@
   },
   "c9PersistentLoadoutPropertyContract": {
     "nativeEvidence": "InjectToOwnElementBehavior.Start/GetInjectTargets installs frame-zero Self elements; ChangePropertyElement.Parse/Combine binds time=-1 and Cover; explicit UnloadSkill(36) removal closes the lifetime",
-    "runtimeAppliedSoulEssenceIds": [10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061, 10062, 10133, 10156],
+    "runtimeAppliedSoulEssenceIds": [
+      10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061, 10062,
+      10133, 10156
+    ],
     "conditionalOrFiniteOutliers": {
       "10078": "conditional wrapper and finite 1100ms property leaf",
       "10084": "conditional wrapper and finite 1100ms property leaf",
       "10152": "two source conditions and finite 1200ms property leaf",
       "10197": "finite 2300ms property leaf"
     },
-    "twoPieceSetSkills": ["set-skill:1:2", "set-skill:2:2", "set-skill:3:2", "set-skill:4:2", "set-skill:5:2", "set-skill:6:2"],
+    "twoPieceSetSkills": [
+      "set-skill:1:2",
+      "set-skill:2:2",
+      "set-skill:3:2",
+      "set-skill:4:2",
+      "set-skill:5:2",
+      "set-skill:6:2"
+    ],
     "fourPieceDynamicEffectsApplied": false,
     "target": "equipped actor Self only; inheritType None",
     "installation": "one canonical static source per leaf at scenario/loadout initialization",
@@ -691,7 +729,7 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "C12 adds one source-closed set-skill definition and its generic BeforeSkill composite runtime; the standard Machine Axis fixture does not equip that set, so its canonical hashes and numeric evaluation remain unchanged.",
+    "reason": "C12-R1 corrects generic actor-target direct-SP Kibo sharing; the standard Machine Axis fixture does not execute this set transaction, so its canonical hashes and numeric evaluation remain unchanged.",
     "machineAxisCanonicalHashDrift": 0,
     "machineAxisTraceMetadataHash": "416b4a015702f1b2",
     "machineAxisEvaluationHashDrift": 0,
@@ -703,11 +741,12 @@
     "c6BeforeDamageRegression": 0,
     "c7NonDamageAndResourceParityRegression": 0,
     "c11ActionlessPeriodicAfterHealRegression": 0,
-    "c12BeforeSkillCompositeRegression": 0
+    "c12BeforeSkillCompositeRegression": 0,
+    "c12R1DirectSpRoutingRegression": 0
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 7, "tests": 178, "status": "passed" },
+    "focusedMechanics": { "files": 7, "tests": 179, "status": "passed" },
     "optimizationQualificationDirectory": {
       "files": 8,
       "tests": 60,
@@ -726,7 +765,7 @@
     },
     "canonicalAndRuntime": {
       "files": 5,
-      "tests": 169,
+      "tests": 167,
       "status": "passed"
     },
     "audits": {
