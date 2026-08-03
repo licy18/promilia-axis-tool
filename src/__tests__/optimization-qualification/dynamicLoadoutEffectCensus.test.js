@@ -11,8 +11,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       ])
     );
     const persistentSoulIds = [
-      10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061,
-      10062, 10133, 10156,
+      10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061, 10062,
+      10133, 10156,
     ];
 
     for (const soulEssenceId of persistentSoulIds) {
@@ -172,7 +172,72 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       },
       runtimeGaps: [],
     });
-    for (const setId of [1, 3, 6]) {
+    expect(definitions.get('1:4')).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'set-skill-before-skill-composite-immediate',
+      thresholdActivation: {
+        selectedPieceCountRequired: 4,
+        appliedToRuntimeEffect: true,
+      },
+      trigger: {
+        elementId: 199999024,
+        eventId: 5,
+        frameAnchor: 'action-start',
+        intervalMs: 12000,
+        triggerCounter: -1,
+        triggerTarget: {
+          kind: 'equipped-actor-source-events',
+          triggerTargetType: 0,
+        },
+        condition: {
+          logic: 'and',
+          status: 'applied',
+          conditions: [
+            expect.objectContaining({
+              kind: 'skill-tag',
+              skillTagId: 3,
+            }),
+            expect.objectContaining({
+              kind: 'self-stay-type',
+              stayType: 0,
+              stayTypeName: 'Control',
+            }),
+          ],
+        },
+      },
+      immediateEffects: [
+        expect.objectContaining({
+          kind: 'direct-sp',
+          elementId: 199999026,
+          targetKind: 'self-actor',
+          sourceRawValue: 16,
+          shareType: 2,
+          petShareType: 0,
+          mainPetShareType: 0,
+        }),
+        expect.objectContaining({
+          kind: 'direct-heal',
+          elementId: 199999085,
+          targetKind: 'team-actors',
+          damageType: 5,
+          formula: expect.objectContaining({
+            commonFunctionId: 1,
+            baseFunctionId: 108,
+            sourceRawA: 400,
+            baseExpression: '(target.MAXHP[0]*A)/10000',
+          }),
+        }),
+      ],
+      delayedEvents: [
+        expect.objectContaining({
+          triggerElementId: 199999024,
+          delayOrIntervalMs: 12000,
+          status: 'runtime-applied',
+        }),
+      ],
+      runtimeGaps: [],
+    });
+    for (const setId of [3, 6]) {
       expect(definitions.get(`${setId}:4`)).toMatchObject({
         runtimeStatus: 'source-indexed-runtime-unapplied',
         thresholdActivation: { appliedToRuntimeEffect: false },
@@ -184,8 +249,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 48,
-      runtimeUnappliedCount: 26,
+      runtimeAppliedCount: 49,
+      runtimeUnappliedCount: 25,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -1075,7 +1140,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     ).toBe(true);
     expect(
       fourPiece
-        .filter(definition => [2, 4, 5].includes(definition.setId))
+        .filter(definition => [1, 2, 4, 5].includes(definition.setId))
         .every(
           definition =>
             definition.thresholdActivation.status === 'runtime-applied' &&
@@ -1086,7 +1151,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     ).toBe(true);
     expect(
       fourPiece
-        .filter(definition => ![2, 4, 5].includes(definition.setId))
+        .filter(definition => ![1, 2, 4, 5].includes(definition.setId))
         .every(
           definition =>
             definition.thresholdActivation.status === 'source-indexed' &&
@@ -1099,7 +1164,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     ).toBe(true);
     expect(soulCatalog.summary).toMatchObject({
       setSkillThresholdIndexedCount: 12,
-      setSkillRuntimeAppliedCount: 9,
+      setSkillRuntimeAppliedCount: 10,
     });
   });
 
@@ -1158,7 +1223,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
           damageType: 5,
         }),
       ],
-      runtimeStatus: 'source-indexed-runtime-unapplied',
+      runtimeStatus: 'runtime-applied',
     });
   });
 

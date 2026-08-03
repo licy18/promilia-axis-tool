@@ -253,8 +253,7 @@ export function simulateScenario(
     verifiedSoulEssenceEffectGeneration:
       runtimeBundle.soulEssenceEffectGeneration,
     verifiedDamageEventGeneration: runtimeBundle.damageEventGeneration,
-    verifiedNonDamageEventGeneration:
-      runtimeBundle.nonDamageEventGeneration,
+    verifiedNonDamageEventGeneration: runtimeBundle.nonDamageEventGeneration,
     verifiedTuningMarkGeneration: runtimeBundle.tuningGeneration,
     verifiedActionVariantRuntime: runtimeBundle.actionVariantRuntime,
     effectiveActionTimeline,
@@ -439,6 +438,7 @@ function createVerifiedRuntimeBundle({
         actionResolutionById: actionVariantRuntime?.actionResolutionById,
         tuningGeneration,
         damageEventGeneration,
+        controlledActorTimeline,
       })
     : null;
   const baselineEffectTimeline = createEffectRuntimeTimeline({
@@ -458,7 +458,10 @@ function createVerifiedRuntimeBundle({
         scenario,
         actionExecutionPlan,
         controlledActorTimeline,
-        effectGeneration,
+        effectGeneration: mergeVerifiedDirectEffectGeneration(
+          effectGeneration,
+          baselineSoulEssenceEffectGeneration
+        ),
         tuningGeneration,
         damageEventGeneration,
         effectTimeline: baselineEffectTimeline,
@@ -488,6 +491,7 @@ function createVerifiedRuntimeBundle({
         tuningGeneration,
         damageEventGeneration,
         nonDamageEventGeneration,
+        controlledActorTimeline,
       })
     : null;
   const effectTimeline = createEffectRuntimeTimeline({
@@ -506,7 +510,10 @@ function createVerifiedRuntimeBundle({
     scenario,
     actionExecutionPlan,
     controlledActorTimeline,
-    effectGeneration,
+    effectGeneration: mergeVerifiedDirectEffectGeneration(
+      effectGeneration,
+      soulEssenceEffectGeneration
+    ),
     tuningGeneration,
     damageEventGeneration,
     effectTimeline,
@@ -526,6 +533,28 @@ function createVerifiedRuntimeBundle({
     tuningGeneration,
     effectTimeline,
     verifiedCombatRuntime,
+  };
+}
+
+function mergeVerifiedDirectEffectGeneration(effectGeneration, soulGeneration) {
+  if (!effectGeneration || !soulGeneration) return effectGeneration;
+  const directSpEvents = [
+    ...(effectGeneration.directSpEvents ?? []),
+    ...(soulGeneration.directSpEvents ?? []),
+  ];
+  const directHpEvents = [
+    ...(effectGeneration.directHpEvents ?? []),
+    ...(soulGeneration.directHpEvents ?? []),
+  ];
+  return {
+    ...effectGeneration,
+    directSpEvents,
+    directHpEvents,
+    summary: {
+      ...(effectGeneration.summary ?? {}),
+      directSpEventCount: directSpEvents.length,
+      directHpEventCount: directHpEvents.length,
+    },
   };
 }
 

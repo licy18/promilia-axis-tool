@@ -29,6 +29,11 @@ import { createVerifiedDamageEventGeneration } from '../../simulation/mechanics/
 import { createVerifiedNonDamageEventGeneration } from '../../simulation/mechanics/verifiedNonDamageEventGeneration';
 import { createVerifiedSoulEssenceEffectGeneration } from '../../simulation/mechanics/verifiedSoulEssenceEffectGeneration';
 import {
+  qFromFloat,
+  qMul,
+  qToNumber,
+} from '../../simulation/mechanics/verifiedCombatFormulaRuntime';
+import {
   matchesVerifiedBattlePropertyTags,
   resolveVerifiedBattlePropertyTagsForHit,
 } from '../../simulation/mechanics/verifiedBattlePropertyTags';
@@ -5810,7 +5815,11 @@ describe('M12-B3-C10 four-piece BeforeDamage stacking properties', () => {
 
   it('installs 2pc and 4pc once at four or five valid pieces, never at three', () => {
     const actionPlan = [
-      { id: 'c10-threshold-normal', actionKind: 'normal-attack', startFrame: 0 },
+      {
+        id: 'c10-threshold-normal',
+        actionKind: 'normal-attack',
+        startFrame: 0,
+      },
     ];
     const run = count =>
       createSetRun({
@@ -5879,11 +5888,16 @@ describe('M12-B3-C10 four-piece BeforeDamage stacking properties', () => {
       durationMs: 45_000,
       combatScenario: { critical: { policy: 'expected', seed: null } },
     });
-    const commands = result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
-      command => command.sourceSetId === 2 && command.sourceSetPieces === 4
-    );
+    const commands =
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSetId === 2 && command.sourceSetPieces === 4
+      );
     expect(commands.length).toBeGreaterThanOrEqual(6);
-    expect(commands.every(command => command.effectId === 'set-skill:2:4:element:199999021')).toBe(true);
+    expect(
+      commands.every(
+        command => command.effectId === 'set-skill:2:4:element:199999021'
+      )
+    ).toBe(true);
     expect(commands[0]).toMatchObject({
       durationMs: 6000,
       stackMode: 'stack',
@@ -5927,7 +5941,9 @@ describe('M12-B3-C10 four-piece BeforeDamage stacking properties', () => {
       commands: [first],
       combatScenario: { critical: { policy: 'expected', seed: null } },
     });
-    expect(totalHitDamage(replay.withCommands, first.sourceActionId)).toBeGreaterThan(
+    expect(
+      totalHitDamage(replay.withCommands, first.sourceActionId)
+    ).toBeGreaterThan(
       totalHitDamage(replay.withoutCommands, first.sourceActionId)
     );
     const withBranch = replay.withCommands.damageEvents.find(
@@ -5954,9 +5970,10 @@ describe('M12-B3-C10 four-piece BeforeDamage stacking properties', () => {
         { id: 'c10-set4-star', actionKind: 'star-skill', startFrame: 480 },
       ],
     });
-    const commands = result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
-      command => command.sourceSetId === 4 && command.sourceSetPieces === 4
-    );
+    const commands =
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSetId === 4 && command.sourceSetPieces === 4
+      );
     expect(commands.length).toBeGreaterThan(0);
     expect(new Set(commands.map(command => command.sourceActionId))).toEqual(
       new Set(['c10-set4-normal'])
@@ -6027,7 +6044,11 @@ describe('M12-B3-C10 four-piece BeforeDamage stacking properties', () => {
     const landedTemplate = createSetRun({
       equipment: set4Equipment,
       actionPlan: [
-        { id: 'c10-set4-miss-template', actionKind: 'normal-attack', startFrame: 0 },
+        {
+          id: 'c10-set4-miss-template',
+          actionKind: 'normal-attack',
+          startFrame: 0,
+        },
       ],
     });
     const allMissOverrides = Object.fromEntries(
@@ -6058,7 +6079,11 @@ describe('M12-B3-C10 four-piece BeforeDamage stacking properties', () => {
       equipment: set2Equipment,
       ownerInitialSp: 0,
       actionPlan: [
-        { id: 'c10-set2-blocked-ultimate', actionKind: 'ultimate', startFrame: 0 },
+        {
+          id: 'c10-set2-blocked-ultimate',
+          actionKind: 'ultimate',
+          startFrame: 0,
+        },
       ],
     });
     expect(
@@ -6075,7 +6100,11 @@ describe('M12-B3-C10 four-piece BeforeDamage stacking properties', () => {
     const switched = createSetRun({
       equipment: set4Equipment,
       actionPlan: [
-        { id: 'c10-set4-owner-hit', actionKind: 'normal-attack', startFrame: 0 },
+        {
+          id: 'c10-set4-owner-hit',
+          actionKind: 'normal-attack',
+          startFrame: 0,
+        },
         {
           id: 'c10-set4-switch-away',
           actionKind: 'switch',
@@ -6085,9 +6114,10 @@ describe('M12-B3-C10 four-piece BeforeDamage stacking properties', () => {
         },
       ],
     });
-    const command = switched.verifiedSoulEssenceEffectGeneration.effectCommands.find(
-      entry => entry.sourceSetId === 4
-    );
+    const command =
+      switched.verifiedSoulEssenceEffectGeneration.effectCommands.find(
+        entry => entry.sourceSetId === 4
+      );
     expect(command).toMatchObject({
       sourceActorId: 'actor-101007',
       targetId: 'actor-101007',
@@ -6119,7 +6149,11 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
     ring: 1250311,
   };
 
-  const createAfterHealEvent = ({ action, timeMs, targetId = targetActorId }) => ({
+  const createAfterHealEvent = ({
+    action,
+    timeMs,
+    targetId = targetActorId,
+  }) => ({
     schemaVersion: 1,
     kind: 'heal-after-settlement',
     eventId: 44,
@@ -6168,12 +6202,7 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
     actionId: null,
     actorId: sourceId,
     targetId,
-    sourceSequencePath: [
-      Number.MAX_SAFE_INTEGER,
-      44,
-      520066,
-      localSequence,
-    ],
+    sourceSequencePath: [Number.MAX_SAFE_INTEGER, 44, 520066, localSequence],
     payload: {
       sourceEventIdentity: identity,
       sourceActorId: sourceId,
@@ -6195,7 +6224,11 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
 
   it('installs the set 5 runtime effect exactly once at four or five valid pieces', () => {
     const actionPlan = [
-      { id: 'c11-set5-threshold-action', actionKind: 'normal-attack', startFrame: 0 },
+      {
+        id: 'c11-set5-threshold-action',
+        actionKind: 'normal-attack',
+        startFrame: 0,
+      },
     ];
     const run = equipment =>
       createRealSoulScenario({
@@ -6285,7 +6318,9 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
     };
     const generation = createVerifiedSoulEssenceEffectGeneration({
       scenario,
-      actionExecutionPlan: { actions: [{ actionId: action.id, execute: true }] },
+      actionExecutionPlan: {
+        actions: [{ actionId: action.id, execute: true }],
+      },
       actionResolutionById: new Map([
         [action.id, createSyntheticVerifiedActionResolution('normal-attack')],
       ]),
@@ -6332,9 +6367,8 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
       sourceSequenceIndex: 0,
       sourceSequencePath: [0],
     };
-    const actionResolution = createSyntheticVerifiedActionResolution(
-      'normal-attack'
-    );
+    const actionResolution =
+      createSyntheticVerifiedActionResolution('normal-attack');
     const activation = {
       setId: 5,
       pieces: 4,
@@ -6396,9 +6430,7 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
         afterHealDispatchEligible: true,
         actionProvenanceAvailable,
         sourceAttributionStatus:
-          actionId === null
-            ? 'native-first-root-source-verified'
-            : undefined,
+          actionId === null ? 'native-first-root-source-verified' : undefined,
         contributingSources:
           actionId === null ? [{ sourceActorId: actorId }] : [],
         reason: 'heal-executed-zero-effective-change',
@@ -6462,10 +6494,12 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
         actionProvenanceAvailable: false,
       }),
     });
-    expect(commands.map(command => [command.timeMs, command.targetId])).toEqual([
-      [1000, targetActorId],
-      [3000, thirdActorId],
-    ]);
+    expect(commands.map(command => [command.timeMs, command.targetId])).toEqual(
+      [
+        [1000, targetActorId],
+        [3000, thirdActorId],
+      ]
+    );
     expect(commands[1]).toMatchObject({
       sourceActionId: null,
       sourceNonDamageEventIdentity:
@@ -6490,7 +6524,9 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
       ])
     );
 
-    const targetCommand = commands.find(command => command.targetId === targetActorId);
+    const targetCommand = commands.find(
+      command => command.targetId === targetActorId
+    );
     const periodicTargetCommand = commands.find(
       command => command.targetId === thirdActorId
     );
@@ -6555,10 +6591,7 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
       210
     );
     expect(
-      damage(
-        periodicActive.withCommands,
-        'c11-r1-periodic-target-active-hit'
-      )
+      damage(periodicActive.withCommands, 'c11-r1-periodic-target-active-hit')
     ).toBeGreaterThan(
       damage(
         periodicActive.withoutCommands,
@@ -6566,10 +6599,7 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
       )
     );
     expect(
-      damage(
-        periodicExpired.withCommands,
-        'c11-r1-periodic-target-expiry-hit'
-      )
+      damage(periodicExpired.withCommands, 'c11-r1-periodic-target-expiry-hit')
     ).toBeCloseTo(
       damage(
         periodicExpired.withoutCommands,
@@ -6704,7 +6734,10 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
     const generation = createVerifiedSoulEssenceEffectGeneration({
       scenario,
       actionExecutionPlan: {
-        actions: actions.map(action => ({ actionId: action.id, execute: true })),
+        actions: actions.map(action => ({
+          actionId: action.id,
+          execute: true,
+        })),
       },
       actionResolutionById: new Map(
         actions.map(action => [
@@ -6726,7 +6759,10 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
     const timeline = createEffectRuntimeTimeline({
       scenario,
       actionExecutionPlan: {
-        actions: actions.map(action => ({ actionId: action.id, execute: true })),
+        actions: actions.map(action => ({
+          actionId: action.id,
+          execute: true,
+        })),
       },
       generatedCommands: generation.effectCommands,
     });
@@ -6735,7 +6771,9 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
     );
 
     expect(generation.effectCommands).toHaveLength(3);
-    expect(generation.effectCommands.every(command => command.stackMode === 'block')).toBe(true);
+    expect(
+      generation.effectCommands.every(command => command.stackMode === 'block')
+    ).toBe(true);
     expect(events.map(event => [event.type, event.timeMs])).toEqual([
       ['EFFECT_APPLIED', 1000],
       ['EFFECT_BLOCKED', 5000],
@@ -6743,6 +6781,760 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
       ['EFFECT_APPLIED', 16000],
       ['EFFECT_EXPIRED', 31000],
     ]);
+  });
+});
+
+describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
+  const sourceActorId = 'actor-101007';
+  const set1Equipment = {
+    weapon: 1210421,
+    top: 1220221,
+    bottom: 1230221,
+    earring: 1240221,
+    ring: 1250221,
+  };
+
+  it('emits one shared-SP transaction and one heal per hero from an executed controlled NormalSkill', () => {
+    const definition = soulEssenceEffectCatalog.setSkillDefinitions.find(
+      entry => entry.setId === 1 && entry.pieces === 4
+    );
+    const activation = {
+      setId: 1,
+      pieces: 4,
+      skillId: 19998006,
+      thresholdMet: true,
+      appliedToRuntimeEffect: true,
+      sourceIdentity: 'fixture:c12:set1-four-piece',
+    };
+    const action = {
+      id: 'c12-composite-normal-skill',
+      actorId: sourceActorId,
+      actionKind: 'star-skill',
+      startMs: 1000,
+      durationMs: 600,
+      sourceSequenceIndex: 0,
+      sourceSequencePath: [0],
+    };
+    const scenario = {
+      time: { fps: 60, durationMs: 20_000 },
+      initialRuntimeState: {
+        controlledActor: { actorId: sourceActorId, characterId: 101007 },
+      },
+      actors: [
+        {
+          id: sourceActorId,
+          name: 'source',
+          verifiedStaticProperties: { setSkillActivations: [activation] },
+        },
+        { id: 'actor-101003', name: 'target-2' },
+        { id: 'actor-101010', name: 'target-3' },
+      ],
+      actions: [action],
+    };
+    const actionExecutionPlan = {
+      actions: [{ actionId: action.id, execute: true }],
+    };
+    const controlledActorTimeline = createControlledActorTimeline({
+      scenario,
+      actionExecutionPlan,
+    });
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline,
+      actionResolutionById: new Map([
+        [action.id, createSyntheticVerifiedActionResolution('star-skill')],
+      ]),
+      catalog: {
+        ...soulEssenceEffectCatalog,
+        definitions: [],
+        setSkillDefinitions: [definition],
+      },
+    });
+
+    expect(generation.directSpEvents).toEqual([
+      expect.objectContaining({
+        kind: 'direct-sp',
+        actionId: action.id,
+        actorId: sourceActorId,
+        value: 16,
+        target: { kind: 'actor', id: sourceActorId },
+        sourceSequencePath: expect.any(Array),
+      }),
+    ]);
+    expect(generation.directHpEvents).toHaveLength(3);
+    expect(generation.directHpEvents).toEqual(
+      expect.arrayContaining(
+        scenario.actors.map(actor =>
+          expect.objectContaining({
+            kind: 'direct-heal',
+            actionId: action.id,
+            actorId: sourceActorId,
+            target: { kind: 'actor', id: actor.id },
+            value: 400,
+            sourceSequencePath: expect.any(Array),
+          })
+        )
+      )
+    );
+    expect(
+      generation.directHpEvents.every(
+        event =>
+          event.transactionRootIdentity ===
+          generation.directSpEvents[0].transactionRootIdentity
+      )
+    ).toBe(true);
+  });
+
+  it('targets exactly the actors present in one- and two-actor scenarios', () => {
+    const definition = soulEssenceEffectCatalog.setSkillDefinitions.find(
+      entry => entry.setId === 1 && entry.pieces === 4
+    );
+    const activation = {
+      setId: 1,
+      pieces: 4,
+      skillId: 19998006,
+      thresholdMet: true,
+      appliedToRuntimeEffect: true,
+      sourceIdentity: 'fixture:c12:set1-four-piece-team-size',
+    };
+    const run = actorIds => {
+      const action = {
+        id: `c12-team-size-${actorIds.length}`,
+        actorId: sourceActorId,
+        actionKind: 'star-skill',
+        startMs: 1000,
+        durationMs: 600,
+        sourceSequenceIndex: 0,
+        sourceSequencePath: [0],
+      };
+      const scenario = {
+        time: { fps: 60, durationMs: 5000 },
+        initialRuntimeState: {
+          controlledActor: { actorId: sourceActorId, characterId: 101007 },
+        },
+        actors: actorIds.map((actorId, index) => ({
+          id: actorId,
+          characterId: [101007, 101003][index],
+          ...(index === 0
+            ? {
+                verifiedStaticProperties: { setSkillActivations: [activation] },
+              }
+            : {}),
+        })),
+        actions: [action],
+      };
+      const actionExecutionPlan = {
+        actions: [{ actionId: action.id, execute: true }],
+      };
+      return createVerifiedSoulEssenceEffectGeneration({
+        scenario,
+        actionExecutionPlan,
+        controlledActorTimeline: createControlledActorTimeline({
+          scenario,
+          actionExecutionPlan,
+        }),
+        actionResolutionById: new Map([
+          [action.id, createSyntheticVerifiedActionResolution('star-skill')],
+        ]),
+        catalog: {
+          ...soulEssenceEffectCatalog,
+          definitions: [],
+          setSkillDefinitions: [definition],
+        },
+      });
+    };
+
+    expect(
+      run([sourceActorId]).directHpEvents.map(event => event.target.id)
+    ).toEqual([sourceActorId]);
+    expect(
+      run([sourceActorId, 'actor-101003']).directHpEvents.map(
+        event => event.target.id
+      )
+    ).toEqual(['actor-101003', sourceActorId]);
+  });
+
+  it('does not consume the interval on condition failure and admits the exact 12-second boundary', () => {
+    const definition = soulEssenceEffectCatalog.setSkillDefinitions.find(
+      entry => entry.setId === 1 && entry.pieces === 4
+    );
+    const activation = {
+      setId: 1,
+      pieces: 4,
+      skillId: 19998006,
+      thresholdMet: true,
+      appliedToRuntimeEffect: true,
+      sourceIdentity: 'fixture:c12:set1-four-piece-interval',
+    };
+    const actions = [
+      ['c12-interval-first', 'star-skill', 0],
+      ['c12-interval-condition-failed', 'normal-attack', 6000],
+      ['c12-interval-suppressed', 'star-skill', 11999],
+      ['c12-interval-boundary', 'star-skill', 12000],
+    ].map(([id, actionKind, startMs], index) => ({
+      id,
+      actorId: sourceActorId,
+      actionKind,
+      startMs,
+      durationMs: 500,
+      sourceSequenceIndex: index,
+      sourceSequencePath: [index],
+    }));
+    const scenario = {
+      time: { fps: 60, durationMs: 20_000 },
+      initialRuntimeState: {
+        controlledActor: { actorId: sourceActorId, characterId: 101007 },
+      },
+      actors: [
+        {
+          id: sourceActorId,
+          verifiedStaticProperties: { setSkillActivations: [activation] },
+        },
+      ],
+      actions,
+    };
+    const actionExecutionPlan = {
+      actions: actions.map(action => ({ actionId: action.id, execute: true })),
+    };
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline: createControlledActorTimeline({
+        scenario,
+        actionExecutionPlan,
+      }),
+      actionResolutionById: new Map(
+        actions.map(action => [
+          action.id,
+          createSyntheticVerifiedActionResolution(action.actionKind),
+        ])
+      ),
+      catalog: {
+        ...soulEssenceEffectCatalog,
+        definitions: [],
+        setSkillDefinitions: [definition],
+      },
+    });
+
+    expect(generation.directSpEvents.map(event => event.actionId)).toEqual([
+      'c12-interval-first',
+      'c12-interval-boundary',
+    ]);
+    expect(generation.suppressions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actionId: 'c12-interval-condition-failed',
+          reason: 'soulessence-effect-action-kind-condition-not-matched',
+        }),
+        expect.objectContaining({
+          actionId: 'c12-interval-suppressed',
+          reason: 'soulessence-effect-trigger-interval-active',
+          intervalMs: 12000,
+          lastAcceptedAtMs: 0,
+        }),
+      ])
+    );
+  });
+
+  it('applies the real set to actor SP and team HP without changing Kibo energy', () => {
+    const result = createRealSoulScenario({
+      soulEssenceId: null,
+      effectSkillId: 0,
+      equipment: set1Equipment,
+      ownerInitialSp: 0,
+      teamInitialSpByCharacterId: {
+        101007: 0,
+        101003: 0,
+        101010: 0,
+      },
+      durationMs: 18_000,
+      teamCharacterIds: [101007, 101003, 101010],
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: sourceActorId,
+          characterId: 101007,
+        },
+        actorVitalsByActor: [
+          { actorId: sourceActorId, characterId: 101007, currentValue: 1 },
+          { actorId: 'actor-101003', characterId: 101003, currentValue: 1 },
+          { actorId: 'actor-101010', characterId: 101010, currentValue: 1 },
+        ],
+      },
+      actionPlan: [
+        {
+          id: 'c12-real-normal-skill',
+          actionKind: 'star-skill',
+          startFrame: 60,
+        },
+      ],
+    });
+    const generation = result.verifiedSoulEssenceEffectGeneration;
+    const ownerActor = result.effectiveActionTimeline.scenario.actors.find(
+      actor => Number(actor.characterId) === 101007
+    );
+    const heals = result.verifiedCombatRuntime.vitalEvents.filter(
+      event =>
+        event.type === 'VERIFIED_DIRECT_HEAL' &&
+        event.actionId === 'c12-real-normal-skill'
+    );
+    const actorSp = result.verifiedCombatRuntime.resourceEvents.filter(
+      event =>
+        event.actionId === 'c12-real-normal-skill' &&
+        String(event.payload?.reason ?? event.reason).startsWith(
+          'verified-direct-sp'
+        )
+    );
+
+    expect(
+      ownerActor.verifiedStaticProperties.setSkillActivations.find(
+        activation => activation.setId === 1 && activation.pieces === 4
+      )
+    ).toMatchObject({
+      skillId: 19998006,
+      thresholdMet: true,
+      appliedToRuntimeEffect: true,
+    });
+    expect(generation).toBeDefined();
+    expect(generation.directSpEvents).toHaveLength(1);
+    expect(generation.directHpEvents).toHaveLength(3);
+    expect(
+      actorSp
+        .map(event => ({
+          actorId: event.actorId,
+          change: event.payload.change ?? event.change,
+        }))
+        .sort((left, right) => left.actorId.localeCompare(right.actorId))
+    ).toEqual([
+      { actorId: 'actor-101003', change: 16 },
+      { actorId: 'actor-101007', change: 16 },
+      { actorId: 'actor-101010', change: 16 },
+    ]);
+    expect(heals).toHaveLength(3);
+    for (const event of heals) {
+      const expectedBase = qToNumber(
+        qMul(qFromFloat(event.payload.maximum), qFromFloat(400 / 10000))
+      );
+      expect(event.payload.baseRequestedChange).toBeCloseTo(expectedBase, 6);
+    }
+    expect(heals).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          payload: expect.objectContaining({
+            formulaQ16Trace: expect.any(Object),
+            baseFunctionId: 108,
+            sourceRawA: 400,
+          }),
+        }),
+      ])
+    );
+    expect(
+      result.verifiedCombatRuntime.kiboResourceEvents.filter(
+        event => event.actionId === 'c12-real-normal-skill'
+      )
+    ).toEqual([]);
+  });
+
+  it('requires an executed controlled NormalSkill while preserving all-miss and same-frame source order', () => {
+    const definition = soulEssenceEffectCatalog.setSkillDefinitions.find(
+      entry => entry.setId === 1 && entry.pieces === 4
+    );
+    const activation = {
+      setId: 1,
+      pieces: 4,
+      skillId: 19998006,
+      thresholdMet: true,
+      appliedToRuntimeEffect: true,
+      sourceIdentity: 'fixture:c12:controlled-normal-skill',
+    };
+    const otherActorId = 'actor-101003';
+    const run = ({
+      actionKind = 'star-skill',
+      execute = true,
+      initialActorId = sourceActorId,
+      switchFirst = null,
+    } = {}) => {
+      const action = {
+        id: `c12-${actionKind}-${execute}-${initialActorId}-${switchFirst}`,
+        actorId: sourceActorId,
+        actionKind,
+        startMs: 1000,
+        durationMs: 500,
+        sourceSequenceIndex: switchFirst === true ? 1 : 0,
+        sourceSequencePath: [switchFirst === true ? 1 : 0],
+        hitOverrides: {
+          'fixture-all-miss': { landed: 'miss' },
+        },
+      };
+      const switchAction = createSwitchAction({
+        id: `c12-switch-${switchFirst}`,
+        actorId: otherActorId,
+        targetActorId: sourceActorId,
+        targetCharacterId: 101007,
+        startMs: 1000,
+      });
+      const sequencedSwitch = {
+        ...switchAction,
+        sourceSequenceIndex: switchFirst === true ? 0 : 1,
+        sourceSequencePath: [switchFirst === true ? 0 : 1],
+      };
+      const actions =
+        switchFirst == null
+          ? [action]
+          : switchFirst
+            ? [sequencedSwitch, action]
+            : [action, sequencedSwitch];
+      const scenario = {
+        time: { fps: 60, durationMs: 5000 },
+        initialRuntimeState: {
+          controlledActor: {
+            actorId: initialActorId,
+            characterId: initialActorId === sourceActorId ? 101007 : 101003,
+          },
+        },
+        actors: [
+          {
+            id: sourceActorId,
+            characterId: 101007,
+            verifiedStaticProperties: { setSkillActivations: [activation] },
+          },
+          { id: otherActorId, characterId: 101003 },
+        ],
+        actions,
+      };
+      const actionExecutionPlan = {
+        actions: actions.map(entry => ({
+          actionId: entry.id,
+          execute: entry.id === action.id ? execute : true,
+        })),
+      };
+      return createVerifiedSoulEssenceEffectGeneration({
+        scenario,
+        actionExecutionPlan,
+        controlledActorTimeline: createControlledActorTimeline({
+          scenario,
+          actionExecutionPlan,
+        }),
+        actionResolutionById: new Map([
+          [action.id, createSyntheticVerifiedActionResolution(actionKind)],
+        ]),
+        catalog: {
+          ...soulEssenceEffectCatalog,
+          definitions: [],
+          setSkillDefinitions: [definition],
+        },
+      });
+    };
+
+    expect(run().directSpEvents).toHaveLength(1);
+    expect(run({ execute: false }).directSpEvents).toHaveLength(0);
+    expect(run({ actionKind: 'ultimate' }).directSpEvents).toHaveLength(0);
+    expect(run({ initialActorId: otherActorId }).directSpEvents).toHaveLength(
+      0
+    );
+    expect(
+      run({ initialActorId: otherActorId, switchFirst: true }).directSpEvents
+    ).toHaveLength(1);
+    expect(
+      run({ initialActorId: otherActorId, switchFirst: false }).directSpEvents
+    ).toHaveLength(0);
+  });
+
+  it('fires from a real executed all-miss NormalSkill and skips a cooldown-blocked repeat', () => {
+    const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+      entry => entry.ownerId === 101007 && entry.actionKind === 'star-skill'
+    );
+    const allMissOverrides = Object.fromEntries(
+      mapping.selectedHitIdentities.map(identity => [
+        identity,
+        { willHit: false },
+      ])
+    );
+    const result = createRealSoulScenario({
+      soulEssenceId: null,
+      effectSkillId: 0,
+      equipment: set1Equipment,
+      durationMs: 18_000,
+      actionPlan: [
+        {
+          id: 'c12-real-all-miss',
+          actionKind: 'star-skill',
+          startFrame: 60,
+          hitOverrides: allMissOverrides,
+        },
+        {
+          id: 'c12-real-cooldown-blocked',
+          actionKind: 'star-skill',
+          startFrame: 600,
+          hitOverrides: allMissOverrides,
+        },
+      ],
+    });
+    const generation = result.verifiedSoulEssenceEffectGeneration;
+
+    expect(
+      result.actionExecutionPlan.actions.find(
+        entry => entry.actionId === 'c12-real-all-miss'
+      )
+    ).toMatchObject({ execute: true });
+    expect(
+      result.actionExecutionPlan.actions.find(
+        entry => entry.actionId === 'c12-real-cooldown-blocked'
+      )
+    ).toMatchObject({ execute: false });
+    expect(generation.directSpEvents.map(event => event.actionId)).toEqual([
+      'c12-real-all-miss',
+    ]);
+    expect(
+      result.verifiedCombatRuntime.damageEvents.filter(
+        event => event.actionId === 'c12-real-all-miss'
+      )
+    ).toEqual([]);
+  });
+
+  it('clamps shared SP, rejects dead heal targets, and dispatches full-HP AfterHeal once', () => {
+    const result = createRealSoulScenario({
+      soulEssenceId: null,
+      effectSkillId: 0,
+      equipment: set1Equipment,
+      ownerInitialSp: 95,
+      teamInitialSpByCharacterId: {
+        101007: 95,
+        101003: 0,
+        101010: 0,
+      },
+      durationMs: 18_000,
+      teamCharacterIds: [101007, 101003, 101010],
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: sourceActorId,
+          characterId: 101007,
+        },
+        actorVitalsByActor: [
+          { actorId: sourceActorId, characterId: 101007, currentValue: 0 },
+          {
+            actorId: 'actor-101003',
+            characterId: 101003,
+            currentValue: 999999,
+          },
+          { actorId: 'actor-101010', characterId: 101010, currentValue: 1 },
+        ],
+      },
+      actionPlan: [
+        {
+          id: 'c12-clamp-and-vital-boundaries',
+          actionKind: 'star-skill',
+          startFrame: 60,
+        },
+      ],
+    });
+    const actorSp = result.verifiedCombatRuntime.resourceEvents
+      .filter(
+        event =>
+          event.actionId === 'c12-clamp-and-vital-boundaries' &&
+          String(event.payload?.reason ?? event.reason).startsWith(
+            'verified-direct-sp'
+          )
+      )
+      .map(event => ({
+        actorId: event.actorId,
+        change: event.payload.change ?? event.change,
+      }))
+      .sort((left, right) => left.actorId.localeCompare(right.actorId));
+    const heals = result.verifiedCombatRuntime.vitalEvents.filter(
+      event =>
+        event.type === 'VERIFIED_DIRECT_HEAL' &&
+        event.actionId === 'c12-clamp-and-vital-boundaries'
+    );
+    const afterHealEvents =
+      result.verifiedNonDamageEventGeneration.events.filter(
+        event =>
+          event.kind === 'heal-after-settlement' &&
+          event.actionId === 'c12-clamp-and-vital-boundaries'
+      );
+
+    expect(actorSp).toEqual(
+      expect.arrayContaining([
+        { actorId: 'actor-101003', change: 16 },
+        { actorId: 'actor-101010', change: 16 },
+      ])
+    );
+    expect(
+      actorSp.find(event => event.actorId === sourceActorId).change
+    ).toBeCloseTo(4.76091, 5);
+    expect(heals).toHaveLength(3);
+    expect(heals.find(event => event.targetId === sourceActorId)).toMatchObject(
+      {
+        payload: {
+          applied: false,
+          reason: 'direct-heal-dead-target-rejected',
+          change: 0,
+        },
+      }
+    );
+    expect(
+      heals.find(event => event.targetId === 'actor-101003')
+    ).toMatchObject({
+      payload: {
+        applied: true,
+        change: 0,
+        afterHealDispatchEligible: true,
+      },
+    });
+    expect(afterHealEvents.map(event => event.targetId).sort()).toEqual([
+      'actor-101003',
+      'actor-101010',
+    ]);
+    expect(
+      result.verifiedCombatRuntime.kiboResourceEvents.filter(
+        event => event.actionId === 'c12-clamp-and-vital-boundaries'
+      )
+    ).toEqual([]);
+  });
+
+  it('feeds native AfterHeal once without leaking a stale NormalAttack tag into 10176', () => {
+    const definition10176 = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10176
+    );
+    const result = createRealSoulScenario({
+      soulEssenceId: 10176,
+      effectSkillId: definition10176.effectSkillId,
+      equipment: set1Equipment,
+      durationMs: 18_000,
+      actionPlan: [
+        {
+          id: 'c12-after-heal-provenance',
+          actionKind: 'star-skill',
+          startFrame: 60,
+        },
+      ],
+    });
+    const afterHealEvents =
+      result.verifiedNonDamageEventGeneration.events.filter(
+        event =>
+          event.kind === 'heal-after-settlement' &&
+          event.actionId === 'c12-after-heal-provenance'
+      );
+    const commands10176 =
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10176
+      );
+
+    expect(afterHealEvents).toHaveLength(3);
+    expect(
+      new Set(afterHealEvents.map(event => event.eventIdentity)).size
+    ).toBe(3);
+    expect(commands10176).toEqual([]);
+  });
+
+  it('routes each native team heal once into the generic C11 Source-to-Target contract', () => {
+    const base = createRealSoulScenario({
+      soulEssenceId: null,
+      effectSkillId: 0,
+      equipment: set1Equipment,
+      durationMs: 18_000,
+      actionPlan: [
+        {
+          id: 'c12-c11-after-heal-link',
+          actionKind: 'star-skill',
+          startFrame: 60,
+        },
+      ],
+    });
+    const scenario = structuredClone(base.effectiveActionTimeline.scenario);
+    const sourceActor = scenario.actors.find(
+      actor => String(actor.id) === sourceActorId
+    );
+    sourceActor.verifiedStaticProperties.setSkillActivations.push({
+      setId: 5,
+      pieces: 4,
+      skillId: 19998007,
+      thresholdMet: true,
+      runtimeEffectStatus: 'runtime-applied',
+      appliedToRuntimeEffect: true,
+      sourceIdentity: 'fixture:c12:c11-link:set5-four-piece',
+    });
+    const actionExecutionPlan = base.actionExecutionPlan;
+    const controlledActorTimeline = base.controlledActorTimeline;
+    const actionResolutionById = new Map(
+      base.verifiedActionVariantRuntime.actionResolutions.map(resolution => [
+        resolution.actionId,
+        resolution,
+      ])
+    );
+    const baselineSoul = base.verifiedSoulEssenceEffectGeneration;
+    const effectGeneration = {
+      ...base.verifiedBattleEffectGeneration,
+      directSpEvents: [
+        ...(base.verifiedBattleEffectGeneration.directSpEvents ?? []),
+        ...baselineSoul.directSpEvents,
+      ],
+      directHpEvents: [
+        ...(base.verifiedBattleEffectGeneration.directHpEvents ?? []),
+        ...baselineSoul.directHpEvents,
+      ],
+    };
+    const preliminaryRuntime = createVerifiedCombatRuntime({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline,
+      effectGeneration,
+      tuningGeneration: base.verifiedTuningMarkGeneration,
+      damageEventGeneration: base.verifiedDamageEventGeneration,
+      effectTimeline: createEffectRuntimeTimeline({
+        scenario,
+        actionExecutionPlan,
+        controlledActorTimeline,
+        generatedCommands: baselineSoul.effectCommands,
+      }),
+      actionVariantRuntime: base.verifiedActionVariantRuntime,
+      kiboPassiveGeneration: base.verifiedKiboPassiveGeneration,
+      runtimeMode: 'non-damage-event-projection',
+    });
+    const nonDamageEventGeneration = createVerifiedNonDamageEventGeneration({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline,
+      actionResolutionById,
+      verifiedCombatRuntime: preliminaryRuntime,
+    });
+    const finalSoul = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline,
+      actionResolutionById,
+      tuningGeneration: base.verifiedTuningMarkGeneration,
+      damageEventGeneration: base.verifiedDamageEventGeneration,
+      nonDamageEventGeneration,
+    });
+    const set5Commands = finalSoul.effectCommands.filter(
+      command => command.sourceSetId === 5
+    );
+
+    expect(baselineSoul.directHpEvents).toHaveLength(3);
+    expect(
+      preliminaryRuntime.vitalEvents.filter(
+        event =>
+          event.type === 'VERIFIED_DIRECT_HEAL' &&
+          event.actionId === 'c12-c11-after-heal-link'
+      )
+    ).toHaveLength(3);
+    expect(
+      nonDamageEventGeneration.events.filter(
+        event =>
+          event.kind === 'heal-after-settlement' &&
+          event.actionId === 'c12-c11-after-heal-link'
+      )
+    ).toHaveLength(3);
+    expect(set5Commands).toHaveLength(3);
+    expect(set5Commands.map(command => command.targetId).sort()).toEqual([
+      'actor-101003',
+      'actor-101007',
+      'actor-101010',
+    ]);
+    expect(
+      new Set(set5Commands.map(command => command.sourceActionId))
+    ).toEqual(new Set(['c12-c11-after-heal-link']));
   });
 });
 
@@ -6756,6 +7548,7 @@ function createRealSoulScenario({
   initialRuntimeState = null,
   combatScenario = null,
   ownerInitialSp = 100,
+  teamInitialSpByCharacterId = null,
   soulEssenceStar = 1,
   equipment = null,
 } = {}) {
@@ -6786,11 +7579,15 @@ function createRealSoulScenario({
     createDefaultWorkbenchActorConfigs(selection),
     selection,
     teamSlots
-  ).map(config =>
-    Number(config.characterId) === actorCharacterId
+  ).map(config => {
+    const configuredInitialSp =
+      teamInitialSpByCharacterId?.[String(config.characterId)] ??
+      teamInitialSpByCharacterId?.[Number(config.characterId)] ??
+      null;
+    return Number(config.characterId) === actorCharacterId
       ? {
           ...config,
-          initialSp: ownerInitialSp,
+          initialSp: configuredInitialSp ?? ownerInitialSp,
           loadout: {
             ...config.loadout,
             kiboId: includesKiboAction
@@ -6815,8 +7612,13 @@ function createRealSoulScenario({
                   },
           },
         }
-      : config
-  );
+      : {
+          ...config,
+          ...(configuredInitialSp == null
+            ? {}
+            : { initialSp: configuredInitialSp }),
+        };
+  });
   let startFrame = 0;
   const actions = requestedActions.map(requested => {
     const requestedStartFrame = Number.isFinite(Number(requested.startFrame))

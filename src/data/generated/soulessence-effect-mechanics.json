@@ -29,8 +29,8 @@
       "contractHash": "146e6a9a7db86606"
     },
     "triggerContract": {
-      "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType",
-      "contractHash": "a1361b97ef031e8c"
+      "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EHeroPetStayType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType",
+      "contractHash": "ee74f6284b3b5118"
     },
     "tuningMechanics": {
       "sourceIdentity": "combat-overlimit-mechanics-20260718.json",
@@ -44,7 +44,11 @@
       "sourceIdentity": "GameAssembly.dll#ChangePropertyElement.Combine/ChangePropertyConditionArrayObject.CombineLayer/DecreaseLayer/BaseElement.endTime|dump.cs#ECombineType.Overlying/EElementTriggerEventType.BeforeDamage/EElementTriggerFixedConditionType.CheckSkillType/ESkillTagType.NormalAttack",
       "contractHash": "c01d4f713dd9eb43"
     },
-    "sourceSnapshotHash": "4ef729b9b56d4f9e"
+    "beforeSkillCompositeRuntimeEvidence": {
+      "sourceIdentity": "GameAssembly.dll#BeforeSkill/TriggerElement.conditions+interval/SpElement+SPSystem/FormulaUtility.GetOutputHeal+ChangeHP/GetTriggerTarget.AllHero|dump.cs#NormalSkill/Control/ShareAll|NewTable/element_formula#108",
+      "contractHash": "42580d9af5b05dfe"
+    },
+    "sourceSnapshotHash": "eb75b9cb48c5bbf2"
   },
   "policy": {
     "descriptionUsage": "discovery-and-cross-check-only",
@@ -55,7 +59,8 @@
       "equipped-actor-skill-tag-property-after-damage",
       "equipped-actor-persistent-property-root",
       "set-skill-persistent-property",
-      "set-skill-before-damage-stacking-property"
+      "set-skill-before-damage-stacking-property",
+      "set-skill-before-skill-composite-immediate"
     ]
   },
   "propertyTagContract": {
@@ -197,7 +202,7 @@
   },
   "triggerContract": {
     "sourceKind": "il2cpp-soulessence-trigger-contract",
-    "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType",
+    "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EHeroPetStayType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType",
     "logicBindings": [
       {
         "value": 0,
@@ -262,6 +267,14 @@
         "description": "事件元素ID是",
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13"
+      },
+      {
+        "value": 14,
+        "enumName": "CheckSelfStayType",
+        "selectorKind": "self-stay-type",
+        "description": "Self驻场类型",
+        "status": "applied",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSelfStayType=14"
       }
     ],
     "eventBindings": [
@@ -486,6 +499,16 @@
         "provenanceRequirement": "switch-triggered-on-enter",
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.EntrySkill=22"
+      }
+    ],
+    "stayTypeBindings": [
+      {
+        "value": 0,
+        "enumName": "Control",
+        "runtimeKind": "controlled-actor",
+        "description": "主控",
+        "status": "applied",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EHeroPetStayType.Control=0"
       }
     ],
     "targetBindings": [
@@ -910,7 +933,7 @@
       },
       "sourceIdentity": "GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.GetTriggerTarget@0x13BBF50/TriggerElement.CheckCondition@0x13B58F0/AliveElementSystem.OnExecuteNormalElement.Block@0x131A545"
     },
-    "contractHash": "a1361b97ef031e8c"
+    "contractHash": "ee74f6284b3b5118"
   },
   "definitions": [
     {
@@ -939,6 +962,8 @@
           "skillSlotName": null,
           "skillTagId": 2,
           "skillTagName": "WhackAttack",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -1134,6 +1159,8 @@
           "skillSlotName": null,
           "skillTagId": 3,
           "skillTagName": "NormalSkill",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -1467,6 +1494,8 @@
           "skillSlotName": null,
           "skillTagId": 2,
           "skillTagName": "WhackAttack",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -2340,6 +2369,8 @@
           "skillSlotName": null,
           "skillTagId": 3,
           "skillTagName": "NormalSkill",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -2535,6 +2566,8 @@
           "skillSlotName": null,
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -2740,6 +2773,8 @@
           "skillSlotName": null,
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "or",
           "logicValue": 1,
           "logicName": "OR",
@@ -3626,6 +3661,8 @@
           "skillSlotName": null,
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -3942,6 +3979,8 @@
           "skillSlotName": null,
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "or",
           "logicValue": 1,
           "logicName": "OR",
@@ -5112,6 +5151,8 @@
           "skillSlotName": null,
           "skillTagId": 3,
           "skillTagName": "NormalSkill",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -6573,6 +6614,8 @@
           "skillSlotName": null,
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "or",
           "logicValue": 1,
           "logicName": "OR",
@@ -6783,6 +6826,8 @@
           "skillSlotName": null,
           "skillTagId": 3,
           "skillTagName": "NormalSkill",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -7045,6 +7090,8 @@
           "skillSlotName": null,
           "skillTagId": 11,
           "skillTagName": "ExtremityAttack",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -7240,6 +7287,8 @@
           "skillSlotName": null,
           "skillTagId": 2,
           "skillTagName": "WhackAttack",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -7610,6 +7659,8 @@
           "skillSlotName": null,
           "skillTagId": 3,
           "skillTagName": "NormalSkill",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -7865,6 +7916,8 @@
           "skillSlotName": null,
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "or",
           "logicValue": 1,
           "logicName": "OR",
@@ -8072,6 +8125,8 @@
           "skillSlotName": null,
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -8294,6 +8349,8 @@
           "skillSlotName": null,
           "skillTagId": 1,
           "skillTagName": "NormalAttack",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -8489,6 +8546,8 @@
           "skillSlotName": null,
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -8696,6 +8755,8 @@
           "skillSlotName": null,
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "or",
           "logicValue": 1,
           "logicName": "OR",
@@ -9321,6 +9382,8 @@
           "skillSlotName": null,
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -9752,6 +9815,8 @@
           "skillSlotName": null,
           "skillTagId": 22,
           "skillTagName": "EntrySkill",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -9965,6 +10030,8 @@
           "skillSlotName": null,
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -10170,6 +10237,8 @@
           "skillSlotName": null,
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "or",
           "logicValue": 1,
           "logicName": "OR",
@@ -10406,6 +10475,8 @@
           "skillSlotName": null,
           "skillTagId": 22,
           "skillTagName": "EntrySkill",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "or",
           "logicValue": 1,
           "logicName": "OR",
@@ -10887,6 +10958,8 @@
           "skillSlotName": null,
           "skillTagId": 1,
           "skillTagName": "NormalAttack",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -11082,6 +11155,8 @@
           "skillSlotName": null,
           "skillTagId": 1,
           "skillTagName": "NormalAttack",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -11691,6 +11766,8 @@
           "skillSlotName": null,
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "or",
           "logicValue": 1,
           "logicName": "OR",
@@ -11811,6 +11888,8 @@
           "skillSlotName": "UltraSkill",
           "skillTagId": null,
           "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -12006,6 +12085,8 @@
           "skillSlotName": null,
           "skillTagId": 1,
           "skillTagName": "NormalAttack",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -12728,6 +12809,7 @@
       "triggers": [],
       "trigger": null,
       "effect": null,
+      "immediateEffects": [],
       "activationPrerequisites": [
         {
           "elementId": 199999050,
@@ -12967,7 +13049,7 @@
       "runtimeStatus": "runtime-applied",
       "runtimeGaps": [],
       "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998106].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998106.asset/MonoBehaviour/skill_control_19998106__-7273921800481425865.json",
-      "mechanicsHash": "dd079f9014c85d16"
+      "mechanicsHash": "ad1a0249e31ef10f"
     },
     {
       "setId": 1,
@@ -12976,11 +13058,11 @@
       "thresholdActivation": {
         "selectedPieceCountRequired": 4,
         "comparison": "selected-piece-count-greater-than-or-equal",
-        "status": "source-indexed",
-        "appliedToRuntimeEffect": false,
+        "status": "runtime-applied",
+        "appliedToRuntimeEffect": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998006].skillType"
       },
-      "mechanismFamily": "set-skill-composite-effect",
+      "mechanismFamily": "set-skill-before-skill-composite-immediate",
       "mechanismFamilies": [
         "set-skill-beforeskill-effect",
         "set-skill-vital-change"
@@ -13027,8 +13109,121 @@
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024"
         }
       ],
-      "trigger": null,
+      "trigger": {
+        "elementId": 199999024,
+        "pathId": -2802459635003440600,
+        "eventId": 5,
+        "event": "BeforeSkill",
+        "frameAnchor": "action-start",
+        "intervalMs": 12000,
+        "triggerCounter": -1,
+        "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024.triggerInv|GameAssembly.dll#BeforeSkill/TriggerElement.conditions+interval/SpElement+SPSystem/FormulaUtility.GetOutputHeal+ChangeHP/GetTriggerTarget.AllHero|dump.cs#NormalSkill/Control/ShareAll|NewTable/element_formula#108",
+        "condition": {
+          "kind": "condition-group",
+          "conditionType": null,
+          "skillSlotId": null,
+          "skillSlotName": null,
+          "skillTagId": null,
+          "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
+          "logic": "and",
+          "logicValue": 0,
+          "logicName": "AND",
+          "conditions": [
+            {
+              "kind": "skill-tag",
+              "conditionType": 11,
+              "conditionTypeName": "CheckSkillType",
+              "conditionValue": 3,
+              "actionKinds": [
+                "star-skill"
+              ],
+              "provenanceRequirement": null,
+              "tuningProfiles": [],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.NormalSkill=3",
+              "status": "applied",
+              "skillTagId": 3,
+              "skillTagName": "NormalSkill"
+            },
+            {
+              "kind": "self-stay-type",
+              "conditionType": 14,
+              "conditionTypeName": "CheckSelfStayType",
+              "conditionValue": 0,
+              "actionKinds": [],
+              "provenanceRequirement": null,
+              "tuningProfiles": [],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSelfStayType=14|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EHeroPetStayType.Control=0",
+              "status": "applied",
+              "stayType": 0,
+              "stayTypeName": "Control",
+              "runtimeKind": "controlled-actor"
+            }
+          ],
+          "actionKinds": [
+            "star-skill"
+          ],
+          "status": "applied",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
+        },
+        "triggerTargetType": 0,
+        "triggerTarget": {
+          "kind": "equipped-actor-source-events",
+          "triggerTargetType": 0,
+          "triggerTargetTypeName": "Self",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+        },
+        "target": null,
+        "targetKind": "composite-effect-targets",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024"
+      },
       "effect": null,
+      "immediateEffects": [
+        {
+          "kind": "direct-sp",
+          "effectIndex": 0,
+          "elementId": 199999026,
+          "pathId": 5780315057243861000,
+          "targetKind": "self-actor",
+          "targetType": 0,
+          "recoverType": 0,
+          "shareType": 2,
+          "petShareType": 0,
+          "mainPetShareType": 0,
+          "sourceRawValue": 16,
+          "formula": {
+            "commonFunctionId": 1,
+            "baseFunctionId": 5,
+            "commonExpression": "G/10000",
+            "baseExpression": "A",
+            "sourceRawA": 16,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=5780315057243861000;elementId=199999026.formulaParams|functionParams"
+          },
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5780315057243861000;elementId=199999026|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0|GameAssembly.dll#BeforeSkill/TriggerElement.conditions+interval/SpElement+SPSystem/FormulaUtility.GetOutputHeal+ChangeHP/GetTriggerTarget.AllHero|dump.cs#NormalSkill/Control/ShareAll|NewTable/element_formula#108"
+        },
+        {
+          "kind": "direct-heal",
+          "effectIndex": 1,
+          "elementId": 199999085,
+          "pathId": 892380267004970900,
+          "targetKind": "team-actors",
+          "targetType": 15,
+          "damageType": 5,
+          "sourceRawValue": 400,
+          "formula": {
+            "formulaIdentity": "battle-effect-formula:set-skill:19998006:199999085:892380267004970900",
+            "commonFunctionId": 1,
+            "commonExpression": "G/10000",
+            "baseFunctionId": 108,
+            "baseExpression": "(target.MAXHP[0]*A)/10000",
+            "sourceRawA": 400,
+            "commonRatioRaw": 10000,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=892380267004970900;elementId=199999085.formulaParams|functionParams|NewTable/element_formula.rows[id=108]"
+          },
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024.triggerEffectList[1]|battle-element-assets.jsonl#path_id=892380267004970900;elementId=199999085|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15|GameAssembly.dll#BeforeSkill/TriggerElement.conditions+interval/SpElement+SPSystem/FormulaUtility.GetOutputHeal+ChangeHP/GetTriggerTarget.AllHero|dump.cs#NormalSkill/Control/ShareAll|NewTable/element_formula#108"
+        }
+      ],
       "activationPrerequisites": [
         {
           "elementId": 199999024,
@@ -13112,12 +13307,12 @@
           "triggerElementId": 199999024,
           "delayOrIntervalMs": 12000,
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024",
-          "status": "source-indexed-runtime-unapplied"
+          "status": "runtime-applied"
         }
       ],
       "loopPersistence": {
-        "status": "runtime-unapplied",
-        "reason": "set-skill-runtime-operator-not-implemented"
+        "status": "canonical-effect-timeline-applied",
+        "reason": null
       },
       "sourceClosure": {
         "controlSkillId": 19998006,
@@ -13194,13 +13389,11 @@
           }
         ]
       },
-      "evidenceStatus": "source-closure-indexed",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "set-skill-runtime-operator-not-implemented"
-      ],
-      "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998006].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998006.asset/MonoBehaviour/skill_control_19998006__1459779804172427415.json",
-      "mechanicsHash": "0aff00efa7ebf710"
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998006].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998006.asset/MonoBehaviour/skill_control_19998006__1459779804172427415.json|GameAssembly.dll#BeforeSkill/TriggerElement.conditions+interval/SpElement+SPSystem/FormulaUtility.GetOutputHeal+ChangeHP/GetTriggerTarget.AllHero|dump.cs#NormalSkill/Control/ShareAll|NewTable/element_formula#108|battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024|battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5780315057243861000;elementId=199999026|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0|GameAssembly.dll#BeforeSkill/TriggerElement.conditions+interval/SpElement+SPSystem/FormulaUtility.GetOutputHeal+ChangeHP/GetTriggerTarget.AllHero|dump.cs#NormalSkill/Control/ShareAll|NewTable/element_formula#108|battle-element-assets.jsonl#path_id=-2802459635003440600;elementId=199999024.triggerEffectList[1]|battle-element-assets.jsonl#path_id=892380267004970900;elementId=199999085|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15|GameAssembly.dll#BeforeSkill/TriggerElement.conditions+interval/SpElement+SPSystem/FormulaUtility.GetOutputHeal+ChangeHP/GetTriggerTarget.AllHero|dump.cs#NormalSkill/Control/ShareAll|NewTable/element_formula#108|battle-element-assets.jsonl#path_id=6971292572954515000;elementId=199999045.triggerEffectList[0]|battle-element-assets.jsonl#path_id=7930539322231180000;elementId=199999046",
+      "mechanicsHash": "0326870043f16cf3"
     },
     {
       "setId": 2,
@@ -13220,6 +13413,7 @@
       "triggers": [],
       "trigger": null,
       "effect": null,
+      "immediateEffects": [],
       "activationPrerequisites": [
         {
           "elementId": 199999041,
@@ -13459,7 +13653,7 @@
       "runtimeStatus": "runtime-applied",
       "runtimeGaps": [],
       "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998104].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998104.asset/MonoBehaviour/skill_control_19998104__-777981310077937153.json",
-      "mechanicsHash": "876bb31589188e98"
+      "mechanicsHash": "6edd1e96d98ddf19"
     },
     {
       "setId": 2,
@@ -13611,6 +13805,7 @@
         ],
         "sourceIdentity": "battle-element-assets.jsonl#path_id=-2930048594441716700;elementId=199999021"
       },
+      "immediateEffects": [],
       "activationPrerequisites": [
         {
           "elementId": 199999039,
@@ -13749,7 +13944,7 @@
       "runtimeStatus": "runtime-applied",
       "runtimeGaps": [],
       "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998004].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998004.asset/MonoBehaviour/skill_control_19998004__-3432154940691725873.json|GameAssembly.dll#ChangePropertyElement.Combine/ChangePropertyConditionArrayObject.CombineLayer/DecreaseLayer/BaseElement.endTime|dump.cs#ECombineType.Overlying/EElementTriggerEventType.BeforeDamage/EElementTriggerFixedConditionType.CheckSkillType/ESkillTagType.NormalAttack|battle-element-assets.jsonl#path_id=-4719083164342722000;elementId=199999020|battle-element-assets.jsonl#path_id=-2930048594441716700;elementId=199999021|battle-element-assets.jsonl#path_id=3305903183597273600;elementId=199999039.triggerEffectList[0]|battle-element-assets.jsonl#path_id=4344962439394171400;elementId=199999040",
-      "mechanicsHash": "a7b79e77785789c6"
+      "mechanicsHash": "dccb517ab9c90e47"
     },
     {
       "setId": 3,
@@ -13769,6 +13964,7 @@
       "triggers": [],
       "trigger": null,
       "effect": null,
+      "immediateEffects": [],
       "activationPrerequisites": [
         {
           "elementId": 199999047,
@@ -14008,7 +14204,7 @@
       "runtimeStatus": "runtime-applied",
       "runtimeGaps": [],
       "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998105].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998105.asset/MonoBehaviour/skill_control_19998105__6900337914110806724.json",
-      "mechanicsHash": "f4efac96f16d09df"
+      "mechanicsHash": "d77d4954aed674ee"
     },
     {
       "setId": 3,
@@ -14051,6 +14247,7 @@
       ],
       "trigger": null,
       "effect": null,
+      "immediateEffects": [],
       "activationPrerequisites": [
         {
           "elementId": 199999043,
@@ -14233,7 +14430,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998005].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/skill_control_19998005__-2339022120750825272.json",
-      "mechanicsHash": "6b5933a92f5aa6ef"
+      "mechanicsHash": "a43ca2f86301c25a"
     },
     {
       "setId": 4,
@@ -14253,6 +14450,7 @@
       "triggers": [],
       "trigger": null,
       "effect": null,
+      "immediateEffects": [],
       "activationPrerequisites": [
         {
           "elementId": 199999037,
@@ -14492,7 +14690,7 @@
       "runtimeStatus": "runtime-applied",
       "runtimeGaps": [],
       "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998103].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998103.asset/MonoBehaviour/skill_control_19998103__1339765042162713385.json",
-      "mechanicsHash": "6135027d9940e31e"
+      "mechanicsHash": "ace511210a9eab83"
     },
     {
       "setId": 4,
@@ -14554,6 +14752,8 @@
           "skillSlotName": null,
           "skillTagId": 1,
           "skillTagName": "NormalAttack",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
           "logicName": "AND",
@@ -14673,6 +14873,7 @@
         ],
         "sourceIdentity": "battle-element-assets.jsonl#path_id=-4495644276298113500;elementId=199999019"
       },
+      "immediateEffects": [],
       "activationPrerequisites": [
         {
           "elementId": 199999035,
@@ -14823,7 +15024,7 @@
       "runtimeStatus": "runtime-applied",
       "runtimeGaps": [],
       "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998003].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998003.asset/MonoBehaviour/skill_control_19998003__-3103682062580946589.json|GameAssembly.dll#ChangePropertyElement.Combine/ChangePropertyConditionArrayObject.CombineLayer/DecreaseLayer/BaseElement.endTime|dump.cs#ECombineType.Overlying/EElementTriggerEventType.BeforeDamage/EElementTriggerFixedConditionType.CheckSkillType/ESkillTagType.NormalAttack|battle-element-assets.jsonl#path_id=6898765742999895000;elementId=199999018|battle-element-assets.jsonl#path_id=-4495644276298113500;elementId=199999019|battle-element-assets.jsonl#path_id=2016069023922408200;elementId=199999035.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-6915696019662809000;elementId=199999036",
-      "mechanicsHash": "c26262e796898c9d"
+      "mechanicsHash": "0043b9430c16ac4b"
     },
     {
       "setId": 5,
@@ -14843,6 +15044,7 @@
       "triggers": [],
       "trigger": null,
       "effect": null,
+      "immediateEffects": [],
       "activationPrerequisites": [
         {
           "elementId": 199999061,
@@ -15082,7 +15284,7 @@
       "runtimeStatus": "runtime-applied",
       "runtimeGaps": [],
       "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998107].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998107.asset/MonoBehaviour/skill_control_19998107__-1110976143998619078.json",
-      "mechanicsHash": "3a5af921a77214cb"
+      "mechanicsHash": "87e0189733a57c9e"
     },
     {
       "setId": 5,
@@ -15235,6 +15437,7 @@
         ],
         "sourceIdentity": "battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057"
       },
+      "immediateEffects": [],
       "activationPrerequisites": [
         {
           "elementId": 199999058,
@@ -15373,7 +15576,7 @@
       "runtimeStatus": "runtime-applied",
       "runtimeGaps": [],
       "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998007].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998007.asset/MonoBehaviour/skill_control_19998007__-7613573473471366488.json|GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.GetTriggerTarget@0x13BBF50/TriggerElement.CheckCondition@0x13B58F0/AliveElementSystem.OnExecuteNormalElement.Block@0x131A545|battle-element-assets.jsonl#path_id=1379284923835731500;elementId=199999056|battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057|battle-element-assets.jsonl#path_id=-4362329449039080400;elementId=199999058.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5058843380839846000;elementId=199999059",
-      "mechanicsHash": "dd4649aad2eeaf03"
+      "mechanicsHash": "e749462df4c9565c"
     },
     {
       "setId": 6,
@@ -15393,6 +15596,7 @@
       "triggers": [],
       "trigger": null,
       "effect": null,
+      "immediateEffects": [],
       "activationPrerequisites": [
         {
           "elementId": 199999068,
@@ -15632,7 +15836,7 @@
       "runtimeStatus": "runtime-applied",
       "runtimeGaps": [],
       "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998108].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998108.asset/MonoBehaviour/skill_control_19998108__-8361284574940266563.json",
-      "mechanicsHash": "0e44eeaff6d7cb63"
+      "mechanicsHash": "2fb8c91e2fa6f492"
     },
     {
       "setId": 6,
@@ -15686,6 +15890,7 @@
       ],
       "trigger": null,
       "effect": null,
+      "immediateEffects": [],
       "activationPrerequisites": [
         {
           "elementId": 199999065,
@@ -15865,7 +16070,7 @@
         "set-skill-runtime-operator-not-implemented"
       ],
       "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998008.asset/MonoBehaviour/skill_control_19998008__3385592889625444843.json",
-      "mechanicsHash": "19358d0eed136b25"
+      "mechanicsHash": "1645f7a9113fe0f6"
     }
   ],
   "unresolved": [
@@ -16234,7 +16439,7 @@
     "unresolvedCount": 23,
     "setSkillCount": 12,
     "setSkillThresholdIndexedCount": 12,
-    "setSkillRuntimeAppliedCount": 9,
+    "setSkillRuntimeAppliedCount": 10,
     "byMechanismFamily": {
       "equipped-actor-get-element-property-after-acquire": 3,
       "equipped-actor-get-element-property-before-acquire": 1,
@@ -16253,5 +16458,5 @@
       "source-indexed-runtime-unapplied": 23
     }
   },
-  "catalogHash": "0a5b0311ef1281f4"
+  "catalogHash": "1e3b8c4d4cecaf84"
 }

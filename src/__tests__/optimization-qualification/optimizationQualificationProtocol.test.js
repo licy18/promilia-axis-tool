@@ -200,11 +200,7 @@ describe('M12-B3 optimization qualification generation', () => {
     );
     expect(
       unappliedSetSkillGaps.map(record => `set-skill:${record.objectId}`).sort()
-    ).toEqual([
-      'set-skill:1:4',
-      'set-skill:3:4',
-      'set-skill:6:4',
-    ]);
+    ).toEqual(['set-skill:3:4', 'set-skill:6:4']);
     const setSkillManifests = artifacts.manifests.records.filter(
       record => record.objectKind === 'set-skill'
     );
@@ -212,8 +208,9 @@ describe('M12-B3 optimization qualification generation', () => {
       setSkillManifests.filter(
         record => record.maturityState === 'runtime-integrated'
       )
-    ).toHaveLength(9);
+    ).toHaveLength(10);
     const mechanismFamilyBySetSkillId = new Map([
+      ['1:4', 'set-skill-before-skill-composite-immediate'],
       ['2:4', 'set-skill-before-damage-stacking-property'],
       ['4:4', 'set-skill-before-damage-stacking-property'],
       ['5:4', 'set-skill-after-heal-source-to-target-property'],
@@ -246,9 +243,9 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 383,
+      blockingUniqueGapCount: 382,
       byCategory: {
-        'not-implemented': 365,
+        'not-implemented': 364,
         'evidence-insufficient': 18,
       },
     });

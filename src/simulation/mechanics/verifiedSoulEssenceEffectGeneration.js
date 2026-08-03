@@ -9,6 +9,7 @@ import {
   getActionSourceSequencePath,
 } from '../../domain/actionSourceSequence';
 import { evaluateVerifiedBattleEffectFormula } from './verifiedBattleEffectFormulaRuntime';
+import { resolveControlledActorAt } from '../runtime/controlledActorTimeline';
 
 export const VERIFIED_SOULESSENCE_EFFECT_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedSoulEssenceEffectGeneration';
@@ -32,6 +33,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
   tuningGeneration = null,
   damageEventGeneration = null,
   nonDamageEventGeneration = null,
+  controlledActorTimeline = null,
   catalog = soulEssenceEffectCatalog,
 } = {}) {
   const executionByActionId = new Map(
@@ -43,7 +45,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
         definition =>
           definition.runtimeStatus === 'runtime-applied' &&
           definition.trigger != null &&
-          definition.effect != null
+          (definition.effect != null || definition.immediateEffects?.length > 0)
       )
       .map(definition => [Number(definition.soulEssenceId), definition])
   );
@@ -53,23 +55,28 @@ export function createVerifiedSoulEssenceEffectGeneration({
         definition =>
           definition.runtimeStatus === 'runtime-applied' &&
           definition.trigger != null &&
-          definition.effect != null
+          (definition.effect != null || definition.immediateEffects?.length > 0)
       )
       .map(definition => [
         `${Number(definition.setId)}:${Number(definition.pieces)}`,
         definition,
       ])
   );
-  const bindings = (scenario.actors ?? []).flatMap(actor => [
-    createEquippedSoulBinding(actor, definitionBySoulId),
-    ...createEquippedSetSkillBindings(actor, definitionBySetKey),
-  ]).filter(Boolean);
+  const bindings = (scenario.actors ?? [])
+    .flatMap(actor => [
+      createEquippedSoulBinding(actor, definitionBySoulId),
+      ...createEquippedSetSkillBindings(actor, definitionBySetKey),
+    ])
+    .filter(Boolean);
   const effectCommands = [];
+  const directSpEvents = [];
+  const directHpEvents = [];
   const suppressions = [];
   const unresolved = [];
 
   for (const binding of bindings) {
-    if (!binding.starValue) {
+    const hasPropertyEffect = binding.definition.effect != null;
+    if (hasPropertyEffect && !binding.starValue) {
       unresolved.push({
         actorId: binding.actor.id,
         ...createBindingDiagnosticIdentity(binding),
@@ -79,7 +86,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
       });
       continue;
     }
-    if (binding.formulaResult?.applied !== true) {
+    if (hasPropertyEffect && binding.formulaResult?.applied !== true) {
       unresolved.push({
         actorId: binding.actor.id,
         ...createBindingDiagnosticIdentity(binding),
@@ -112,10 +119,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
       ) {
         continue;
       }
-      if (
-        !actionless &&
-        executionByActionId.get(action.id)?.execute !== true
-      ) {
+      if (!actionless && executionByActionId.get(action.id)?.execute !== true) {
         continue;
       }
       const resolution = actionless
@@ -127,6 +131,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
         ? resolveActionlessNonDamageTriggerOccurrences({
             nonDamageEventGeneration,
             frameAnchor,
+            controlledActorTimeline,
           })
         : triggerOperator?.({
             action,
@@ -136,6 +141,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
             tuningGeneration,
             damageEventGeneration,
             nonDamageEventGeneration,
+            controlledActorTimeline,
             frameAnchor,
           });
       const occurrences = (rawOccurrences ?? []).filter(
@@ -211,34 +217,51 @@ export function createVerifiedSoulEssenceEffectGeneration({
         });
         continue;
       }
-      effectCommands.push(
-        ...matchedOccurrences.flatMap(occurrence =>
-          resolveSoulEffectTargets({
-            binding,
-            scenario,
-            occurrence,
-          }).map((target, targetIndex) =>
-            createSoulEffectCommand({
+      if (binding.definition.effect != null) {
+        effectCommands.push(
+          ...matchedOccurrences.flatMap(occurrence =>
+            resolveSoulEffectTargets({
               binding,
-              action,
-              actionIndex,
-              actionKind: occurrence.actionContext.actionKind,
-              actionContext: occurrence.actionContext,
-              conditionMatch: occurrence.conditionMatch,
-              resolution,
+              scenario,
               occurrence,
-              target,
-              targetIndex,
-              catalog,
-            })
+            }).map((target, targetIndex) =>
+              createSoulEffectCommand({
+                binding,
+                action,
+                actionIndex,
+                actionKind: occurrence.actionContext.actionKind,
+                actionContext: occurrence.actionContext,
+                conditionMatch: occurrence.conditionMatch,
+                resolution,
+                occurrence,
+                target,
+                targetIndex,
+                catalog,
+              })
+            )
           )
-        )
-      );
+        );
+      }
+      for (const occurrence of matchedOccurrences) {
+        const immediate = createSoulImmediateEvents({
+          binding,
+          action,
+          actionIndex,
+          resolution,
+          occurrence,
+          scenario,
+          catalog,
+        });
+        directSpEvents.push(...immediate.directSpEvents);
+        directHpEvents.push(...immediate.directHpEvents);
+      }
     }
   }
 
-  const gatedEffectCommands = applySoulTriggerIntervalGates({
+  const gated = applySoulTriggerIntervalGates({
     effectCommands,
+    directSpEvents,
+    directHpEvents,
     suppressions,
   });
 
@@ -250,12 +273,18 @@ export function createVerifiedSoulEssenceEffectGeneration({
       ? 'verified-soulessence-effect-generation-partial'
       : 'verified-soulessence-effect-generation-ready',
     catalogHash: catalog?.catalogHash ?? null,
-    effectCommands: gatedEffectCommands,
+    effectCommands: gated.effectCommands,
+    directSpEvents: gated.directSpEvents,
+    directHpEvents: gated.directHpEvents,
+    triggerIntervalStates: gated.triggerIntervalStates,
+    acceptedTriggerOccurrences: gated.acceptedTriggerOccurrences,
     suppressions,
     unresolved,
     summary: {
       equippedBindingCount: bindings.length,
-      effectCommandCount: gatedEffectCommands.length,
+      effectCommandCount: gated.effectCommands.length,
+      directSpEventCount: gated.directSpEvents.length,
+      directHpEventCount: gated.directHpEvents.length,
       suppressionCount: suppressions.length,
       unresolvedCount: unresolved.length,
     },
@@ -267,6 +296,7 @@ function resolveActionTriggerOccurrence({
   actionIndex,
   tuningGeneration,
   frameAnchor,
+  controlledActorTimeline,
 }) {
   const actionSourceSequencePath = action
     ? (getActionSourceSequencePath(action, actionIndex) ?? [actionIndex])
@@ -300,6 +330,10 @@ function resolveActionTriggerOccurrence({
         elementTypes: [],
         targetElementIds: [],
         landed: null,
+        controlledActorId:
+          resolveControlledActorAt(controlledActorTimeline, timeMs, {
+            sourceSequencePath: actionSourceSequencePath,
+          })?.actorId ?? null,
       },
     },
   ];
@@ -370,8 +404,7 @@ function isVerifiedActionlessNonDamageEvent(event) {
       context.sourceSequencePath
     ) === 0 &&
     String(event.actorId ?? '') === String(context.sourceActorId ?? '') &&
-    String(event.targetId ?? '') ===
-      String(context.eventTargetActorId ?? '')
+    String(event.targetId ?? '') === String(context.eventTargetActorId ?? '')
   );
 }
 
@@ -708,6 +741,138 @@ function createSoulEffectCommand({
   };
 }
 
+function createSoulImmediateEvents({
+  binding,
+  action,
+  actionIndex,
+  resolution,
+  occurrence,
+  scenario,
+  catalog,
+}) {
+  const directSpEvents = [];
+  const directHpEvents = [];
+  const immediateEffects = binding.definition.immediateEffects ?? [];
+  if (!action || immediateEffects.length === 0) {
+    return { directSpEvents, directHpEvents };
+  }
+  const timeMs = roundRuntimeTime(occurrence.timeMs);
+  const triggerSequencePath = Array.isArray(occurrence.triggerSequencePath)
+    ? occurrence.triggerSequencePath
+    : (getActionSourceSequencePath(action, actionIndex) ?? [actionIndex]);
+  const triggerOccurrenceIdentity =
+    occurrence.eventContext?.eventIdentity ??
+    `${binding.ownerIdentity}|${action.id}|${timeMs}`;
+  const transactionRootIdentity = [
+    binding.ownerIdentity,
+    `trigger:${binding.definition.trigger.elementId}`,
+    `event:${triggerOccurrenceIdentity}`,
+  ].join('|');
+  const actors = (scenario.actors ?? [])
+    .filter(actor => actor?.id != null)
+    .slice()
+    .sort((left, right) => String(left.id).localeCompare(String(right.id)));
+
+  for (const immediateEffect of immediateEffects) {
+    const targets =
+      immediateEffect.targetKind === 'team-actors' ? actors : [binding.actor];
+    for (const [targetIndex, targetActor] of targets.entries()) {
+      const target = {
+        kind: EFFECT_TARGET_KINDS.ACTOR,
+        id: String(targetActor.id),
+      };
+      const sourceSequencePath = [
+        ...triggerSequencePath,
+        Number(immediateEffect.effectIndex),
+        targetIndex,
+      ];
+      const effectIdentity = `${binding.ownerIdentity}:element:${immediateEffect.elementId}`;
+      const directEvent = {
+        schemaVersion: 1,
+        sourceKind: 'azpr-verified-soul-immediate-effect',
+        status: 'verified-soul-immediate-effect-ready',
+        eventIdentity: `${immediateEffect.kind}|${transactionRootIdentity}|target:${target.id}`,
+        transactionRootIdentity,
+        triggerOccurrenceIdentity,
+        triggerElementId: binding.definition.trigger.elementId,
+        triggerIntervalMs: binding.definition.trigger.intervalMs ?? null,
+        triggerSourceSequencePath: [...triggerSequencePath],
+        ownerIdentity: binding.ownerIdentity,
+        kind: immediateEffect.kind,
+        timeMs,
+        action,
+        actionId: action.id,
+        actorId: String(binding.actor.id),
+        target,
+        value: Number(immediateEffect.sourceRawValue),
+        formulaResult: {
+          applied: true,
+          status: 'applied',
+          formulaIdentity:
+            immediateEffect.formula?.formulaIdentity ??
+            `${effectIdentity}:formula`,
+          sourceRawA: Number(
+            immediateEffect.formula?.sourceRawA ??
+              immediateEffect.sourceRawValue
+          ),
+          value: Number(immediateEffect.sourceRawValue),
+          sourceIdentity: immediateEffect.formula?.sourceIdentity ?? null,
+        },
+        effect: {
+          elementId: Number(immediateEffect.elementId),
+          pathId: Number(immediateEffect.pathId),
+          sourceIdentity: immediateEffect.sourceIdentity,
+          sourceOrder: {
+            sourceSequencePath,
+            sourceIdentity: immediateEffect.sourceIdentity,
+          },
+          ...(immediateEffect.kind === 'direct-sp'
+            ? {
+                directSp: {
+                  recoverType: Number(immediateEffect.recoverType),
+                  shareType: Number(immediateEffect.shareType),
+                  petShareType: Number(immediateEffect.petShareType),
+                  mainPetShareType: Number(immediateEffect.mainPetShareType),
+                  enhanceable: false,
+                },
+              }
+            : {
+                heal: {
+                  damageType: Number(immediateEffect.damageType),
+                  formula: structuredClone(immediateEffect.formula),
+                },
+              }),
+        },
+        resolution: resolution ?? {
+          packageId: catalog?.kind ?? soulEssenceEffectCatalog.kind,
+        },
+        sourceSequencePath,
+        sourceSequenceStatus: 'verified-direct-effect-source-sequence-ready',
+        sourceSequenceContract: {
+          contractName: 'AzPrSoulImmediateEffectSourceSequence',
+          phase: 'before-skill-trigger-effect-list',
+          effectIndex: Number(immediateEffect.effectIndex),
+          targetSequenceIndex: targetIndex,
+          sourceIdentity: immediateEffect.sourceIdentity,
+        },
+        sourceIdentity: immediateEffect.sourceIdentity,
+        sourceActorId: String(binding.actor.id),
+        sourceSetId: binding.setId ?? null,
+        sourceSetPieces: binding.pieces ?? null,
+        sourceSetSkillId: binding.setSkillId ?? null,
+        appliedToCalculators: true,
+        applied: true,
+      };
+      if (immediateEffect.kind === 'direct-sp') {
+        directSpEvents.push(directEvent);
+      } else if (immediateEffect.kind === 'direct-heal') {
+        directHpEvents.push(directEvent);
+      }
+    }
+  }
+  return { directSpEvents, directHpEvents };
+}
+
 function evaluateSoulEffectFormula({ definition, starValue, star, actor }) {
   if (
     !Number.isInteger(Number(definition.effect.formula?.commonFunctionId)) ||
@@ -754,9 +919,7 @@ function resolveSoulEffectTargets({ binding, scenario, occurrence }) {
     }));
   }
   if (binding.definition.trigger?.target?.kind === 'event-target-actor') {
-    const targetId = String(
-      occurrence?.eventContext?.eventTargetActorId ?? ''
-    );
+    const targetId = String(occurrence?.eventContext?.eventTargetActorId ?? '');
     const actor = (scenario.actors ?? []).find(
       candidate => String(candidate.id) === targetId
     );
@@ -775,6 +938,8 @@ function resolveSoulTriggerActionContext({ action, resolution, eventContext }) {
     ? (resolution?.controlBinding ?? {})
     : {};
   return {
+    sourceActorId: action?.actorId ?? eventContext?.sourceActorId ?? null,
+    controlledActorId: eventContext?.controlledActorId ?? null,
     actionKind:
       eventContext?.actionKind ??
       actionBinding.actionKind ??
@@ -869,6 +1034,13 @@ function matchesSoulTriggerCondition(condition, actionContext, eventContext) {
         Number(entry.conditionValue)
       );
     }
+    if (entry.kind === 'self-stay-type') {
+      return (
+        Number(entry.stayType) === 0 &&
+        String(actionContext.sourceActorId) ===
+          String(actionContext.controlledActorId)
+      );
+    }
     return (
       (entry.actionKinds ?? []).includes(actionContext.actionKind) &&
       matchesSoulTriggerProvenance(entry, actionContext)
@@ -957,15 +1129,45 @@ function matchesNonDamageTriggerObserver(binding, eventContext) {
   return false;
 }
 
-function applySoulTriggerIntervalGates({ effectCommands, suppressions }) {
+function applySoulTriggerIntervalGates({
+  effectCommands,
+  directSpEvents,
+  directHpEvents,
+  suppressions,
+}) {
   const intervalGroups = new Map();
-  for (const [commandIndex, command] of effectCommands.entries()) {
-    const intervalMs = Number(command.sourceIdentity?.triggerIntervalMs);
+  const artifacts = [
+    ...effectCommands.map((value, index) => ({
+      kind: 'effect-command',
+      index,
+      value,
+    })),
+    ...directSpEvents.map((value, index) => ({
+      kind: 'direct-sp',
+      index,
+      value,
+    })),
+    ...directHpEvents.map((value, index) => ({
+      kind: 'direct-heal',
+      index,
+      value,
+    })),
+  ];
+  for (const artifact of artifacts) {
+    const command = artifact.value;
+    const intervalMs = Number(
+      command.triggerIntervalMs ?? command.sourceIdentity?.triggerIntervalMs
+    );
     if (!(intervalMs > 0)) continue;
+    const ownerIdentity =
+      command.ownerIdentity ??
+      (command.sourceSetId != null
+        ? `set-skill:${command.sourceSetId}:${command.sourceSetPieces}`
+        : `soulessence:${command.sourceSoulEssenceId}`);
     const bindingKey = [
-      command.sourceActorId,
-      command.sourceSoulEssenceId,
-      command.sourceIdentity?.triggerElementId,
+      command.sourceActorId ?? command.actorId,
+      ownerIdentity,
+      command.triggerElementId ?? command.sourceIdentity?.triggerElementId,
     ].join('|');
     if (!intervalGroups.has(bindingKey)) {
       intervalGroups.set(bindingKey, {
@@ -975,6 +1177,7 @@ function applySoulTriggerIntervalGates({ effectCommands, suppressions }) {
     }
     const group = intervalGroups.get(bindingKey);
     const occurrenceIdentity =
+      command.triggerOccurrenceIdentity ??
       command.sourceNonDamageEventIdentity ??
       command.sourceIdentity?.triggerEventContext?.eventIdentity ??
       command.id;
@@ -983,18 +1186,25 @@ function applySoulTriggerIntervalGates({ effectCommands, suppressions }) {
         occurrenceIdentity,
         timeMs: Number(command.timeMs),
         sourceSequencePath:
+          command.triggerSourceSequencePath ??
           command.sourceIdentity?.triggerEventContext?.sourceSequencePath ??
           command.sourceIdentity?.triggerSequencePath ??
           [],
-        commandIndexes: [],
+        artifacts: [],
         command,
       });
     }
-    group.occurrences.get(occurrenceIdentity).commandIndexes.push(commandIndex);
+    group.occurrences.get(occurrenceIdentity).artifacts.push(artifact);
   }
 
-  const suppressedCommandIndexes = new Set();
-  for (const group of intervalGroups.values()) {
+  const suppressed = {
+    'effect-command': new Set(),
+    'direct-sp': new Set(),
+    'direct-heal': new Set(),
+  };
+  const acceptedTriggerOccurrences = [];
+  const triggerIntervalStates = [];
+  for (const [bindingKey, group] of intervalGroups) {
     let lastAcceptedAtMs = null;
     const occurrences = [...group.occurrences.values()].sort(
       (left, right) =>
@@ -1010,13 +1220,17 @@ function applySoulTriggerIntervalGates({ effectCommands, suppressions }) {
         lastAcceptedAtMs != null &&
         occurrence.timeMs - lastAcceptedAtMs < group.intervalMs
       ) {
-        for (const commandIndex of occurrence.commandIndexes) {
-          suppressedCommandIndexes.add(commandIndex);
+        for (const artifact of occurrence.artifacts) {
+          suppressed[artifact.kind].add(artifact.index);
         }
         suppressions.push({
-          actionId: occurrence.command.sourceActionId,
-          actorId: occurrence.command.sourceActorId,
+          actionId:
+            occurrence.command.sourceActionId ?? occurrence.command.actionId,
+          actorId:
+            occurrence.command.sourceActorId ?? occurrence.command.actorId,
           soulEssenceId: occurrence.command.sourceSoulEssenceId,
+          setId: occurrence.command.sourceSetId ?? null,
+          setPieces: occurrence.command.sourceSetPieces ?? null,
           effectSkillId:
             occurrence.command.sourceIdentity?.effectSkillId ?? null,
           eventIdentity: occurrence.occurrenceIdentity,
@@ -1028,11 +1242,38 @@ function applySoulTriggerIntervalGates({ effectCommands, suppressions }) {
         continue;
       }
       lastAcceptedAtMs = occurrence.timeMs;
+      acceptedTriggerOccurrences.push({
+        bindingKey,
+        eventIdentity: occurrence.occurrenceIdentity,
+        timeMs: occurrence.timeMs,
+        intervalMs: group.intervalMs,
+        sourceSequencePath: occurrence.sourceSequencePath,
+        actionId:
+          occurrence.command.sourceActionId ?? occurrence.command.actionId,
+        actorId: occurrence.command.sourceActorId ?? occurrence.command.actorId,
+      });
     }
+    triggerIntervalStates.push({
+      bindingKey,
+      intervalMs: group.intervalMs,
+      lastAcceptedAtMs,
+      readyAtMs:
+        lastAcceptedAtMs == null ? null : lastAcceptedAtMs + group.intervalMs,
+    });
   }
-  return effectCommands.filter(
-    (_command, commandIndex) => !suppressedCommandIndexes.has(commandIndex)
-  );
+  return {
+    effectCommands: effectCommands.filter(
+      (_command, index) => !suppressed['effect-command'].has(index)
+    ),
+    directSpEvents: directSpEvents.filter(
+      (_event, index) => !suppressed['direct-sp'].has(index)
+    ),
+    directHpEvents: directHpEvents.filter(
+      (_event, index) => !suppressed['direct-heal'].has(index)
+    ),
+    acceptedTriggerOccurrences,
+    triggerIntervalStates,
+  };
 }
 
 function extractSkillSlotIds(sourceIdentity) {

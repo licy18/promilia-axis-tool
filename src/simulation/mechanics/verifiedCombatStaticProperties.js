@@ -61,7 +61,10 @@ export function compileVerifiedStaticActorProperties({
   const unresolved = [];
   const unapplied = [];
   const heroTemplate = new Map(
-    profile.templateAttributes.map(entry => [Number(entry.id), Number(entry.value)])
+    profile.templateAttributes.map(entry => [
+      Number(entry.id),
+      Number(entry.value),
+    ])
   );
   const growthAttributes = new Map(
     growth.attributes.map(entry => [Number(entry.id), Number(entry.value)])
@@ -94,7 +97,9 @@ export function compileVerifiedStaticActorProperties({
     if (attributeId === 6) {
       levelAttributes.push({
         id: attributeId,
-        value: Number(mechanicsPackage.spUnitContract?.actor?.maxSpGrowthMultiplier)
+        value: Number(
+          mechanicsPackage.spUnitContract?.actor?.maxSpGrowthMultiplier
+        )
           ? value *
             Number(mechanicsPackage.spUnitContract.actor.maxSpGrowthMultiplier)
           : value,
@@ -238,7 +243,8 @@ export function compileVerifiedStaticKiboProperties({
     return createUnavailableKiboResult(
       kiboId,
       'verified-static-kibo-profile-unresolved',
-      indexes.kiboIdentity.get(kiboId)?.classification ?? 'identity-not-classified'
+      indexes.kiboIdentity.get(kiboId)?.classification ??
+        'identity-not-classified'
     );
   }
   if (!actorProperties?.complete) {
@@ -255,7 +261,8 @@ export function compileVerifiedStaticKiboProperties({
     indexes.kiboMaximumLevel,
     DEFAULT_KIBO_LEVEL
   );
-  const hobbyId = positiveIntegerOrNull(config.hobbyId) ?? DEFAULT_KIBO_HOBBY_ID;
+  const hobbyId =
+    positiveIntegerOrNull(config.hobbyId) ?? DEFAULT_KIBO_HOBBY_ID;
   const intimacyLevel = clampInteger(
     config.intimacyLevel,
     1,
@@ -266,10 +273,13 @@ export function compileVerifiedStaticKiboProperties({
   const hobby = indexes.kiboHobbies.get(hobbyId);
   const intimacy = indexes.kiboIntimacy.get(intimacyLevel);
   const unresolved = [];
-  if (!growth) unresolved.push(createKiboIssue('kibo-level-growth-missing', level));
+  if (!growth)
+    unresolved.push(createKiboIssue('kibo-level-growth-missing', level));
   if (!hobby) unresolved.push(createKiboIssue('kibo-hobby-missing', hobbyId));
   if (!intimacy) {
-    unresolved.push(createKiboIssue('kibo-intimacy-level-missing', intimacyLevel));
+    unresolved.push(
+      createKiboIssue('kibo-intimacy-level-missing', intimacyLevel)
+    );
   }
   if (unresolved.length) {
     return {
@@ -285,7 +295,10 @@ export function compileVerifiedStaticKiboProperties({
   }
 
   const species = new Map(
-    profile.speciesAttributes.map(entry => [Number(entry.id), Number(entry.value)])
+    profile.speciesAttributes.map(entry => [
+      Number(entry.id),
+      Number(entry.value),
+    ])
   );
   const growthAttributes = new Map(
     growth.attributes.map(entry => [Number(entry.id), Number(entry.value)])
@@ -304,8 +317,9 @@ export function compileVerifiedStaticKiboProperties({
       );
       const hobbyFactor = Number(hobbyAttributes.get(attributeId) ?? 100) / 100;
       const comprehensionFactor =
-        Number(comprehensionByAttribute[attributeId] ?? DEFAULT_KIBO_COMPREHENSION) /
-        100;
+        Number(
+          comprehensionByAttribute[attributeId] ?? DEFAULT_KIBO_COMPREHENSION
+        ) / 100;
       ownAttributes.set(
         attributeId,
         integrate(levelBase * hobbyFactor * comprehensionFactor)
@@ -317,7 +331,7 @@ export function compileVerifiedStaticKiboProperties({
         attributeId,
         Number(mechanicsPackage.spUnitContract?.kibo?.maxSpGrowthMultiplier)
           ? speciesValue *
-            Number(mechanicsPackage.spUnitContract.kibo.maxSpGrowthMultiplier)
+              Number(mechanicsPackage.spUnitContract.kibo.maxSpGrowthMultiplier)
           : speciesValue
       );
       continue;
@@ -337,7 +351,10 @@ export function compileVerifiedStaticKiboProperties({
   });
   const finalValues = new Map(ownAttributes);
   for (const [attributeId, value] of inherited.values) {
-    finalValues.set(attributeId, Number(finalValues.get(attributeId) ?? 0) + value);
+    finalValues.set(
+      attributeId,
+      Number(finalValues.get(attributeId) ?? 0) + value
+    );
   }
   for (const group of catalog.attributeGroups ?? []) {
     const attributeId = Number(group.baseAttrId);
@@ -885,9 +902,8 @@ function applyEquipmentSources({
       thresholdMet &&
       effectDefinition?.runtimeStatus === 'runtime-applied' &&
       effectDefinition?.persistentRoot != null;
-    const persistentApplied =
-      persistentDeclared && persistentValidation.valid;
-    const dynamicRuntimeApplied =
+    const persistentApplied = persistentDeclared && persistentValidation.valid;
+    const dynamicPropertyRuntimeApplied =
       thresholdMet &&
       effectDefinition?.runtimeStatus === 'runtime-applied' &&
       effectDefinition?.trigger?.frameAnchor != null &&
@@ -895,6 +911,24 @@ function applyEquipmentSources({
       effectDefinition?.trigger?.target?.kind != null &&
       effectDefinition?.effect?.formula != null &&
       Number(effectDefinition?.effect?.durationMs) > 0;
+    const immediateEffectRuntimeApplied =
+      thresholdMet &&
+      effectDefinition?.runtimeStatus === 'runtime-applied' &&
+      effectDefinition?.trigger?.frameAnchor != null &&
+      effectDefinition?.trigger?.condition?.status === 'applied' &&
+      Array.isArray(effectDefinition?.immediateEffects) &&
+      effectDefinition.immediateEffects.length > 0 &&
+      effectDefinition.immediateEffects.every(
+        effect =>
+          ['direct-sp', 'direct-heal'].includes(effect?.kind) &&
+          Number.isInteger(Number(effect?.effectIndex)) &&
+          Number.isInteger(Number(effect?.elementId)) &&
+          Number.isFinite(Number(effect?.sourceRawValue)) &&
+          effect?.targetKind != null &&
+          effect?.sourceIdentity != null
+      );
+    const dynamicRuntimeApplied =
+      dynamicPropertyRuntimeApplied || immediateEffectRuntimeApplied;
     if (persistentDeclared && !persistentValidation.valid) {
       unresolved.push({
         kind: 'accessory-set-persistent-property',
@@ -954,9 +988,7 @@ function applyEquipmentSources({
           sourceSequenceStatus:
             'verified-persistent-loadout-property-source-sequence-ready',
           formulaResult,
-          lifecycle: structuredClone(
-            effectDefinition.persistentRoot.lifecycle
-          ),
+          lifecycle: structuredClone(effectDefinition.persistentRoot.lifecycle),
           unload: structuredClone(effectDefinition.persistentRoot.unload),
         });
       }
@@ -971,13 +1003,13 @@ function applyEquipmentSources({
       thresholdStatus: thresholdMet
         ? 'set-skill-piece-threshold-met'
         : 'set-skill-piece-threshold-not-met',
-      runtimeEffectStatus:
-        effectDefinition?.runtimeStatus ?? setProfile.status,
+      runtimeEffectStatus: effectDefinition?.runtimeStatus ?? setProfile.status,
       sourceIdentity: setProfile.sourceIdentity,
       appliedToCalculators: persistentApplied,
       appliedToRuntimeEffect: dynamicRuntimeApplied,
-      runtimeEffectDefinitionIdentity:
-        dynamicRuntimeApplied ? effectDefinition.sourceIdentity : null,
+      runtimeEffectDefinitionIdentity: dynamicRuntimeApplied
+        ? effectDefinition.sourceIdentity
+        : null,
     };
   });
   for (const activation of setSkillActivations) {
@@ -1283,11 +1315,11 @@ function aggregateStaticAttributes({ catalog, sources }) {
     };
   }
   const attributes = createAttributeOutput({
-      values,
-      definitions: new Map(
-        catalog.attributeDefinitions.map(entry => [Number(entry.id), entry])
-      ),
-    });
+    values,
+    definitions: new Map(
+      catalog.attributeDefinitions.map(entry => [Number(entry.id), entry])
+    ),
+  });
   for (const group of catalog.attributeGroups ?? []) {
     const entry = attributes.find(
       attribute => attribute.id === Number(group.baseAttrId)
@@ -1327,9 +1359,7 @@ function calculateKiboInheritance({
     groupedSourceIds.add(percentId);
     groupedSourceIds.add(extraId);
     const actorBase = Number(actorAttributes.get(baseId)?.externalBase ?? 0);
-    const actorPercent = Number(
-      actorAttributes.get(percentId)?.rawValue ?? 0
-    );
+    const actorPercent = Number(actorAttributes.get(percentId)?.rawValue ?? 0);
     const actorExtra = Number(actorAttributes.get(extraId)?.rawValue ?? 0);
     const baseAdjustment = Number(
       inheritanceBySource.get(baseId)?.adjustment ?? 0
@@ -1475,12 +1505,7 @@ function createResourceProfile({ attributes, sourceIdentity }) {
   };
 }
 
-function createAppliedSource({
-  kind,
-  sourceId,
-  sourceIdentity,
-  attributes,
-}) {
+function createAppliedSource({ kind, sourceId, sourceIdentity, attributes }) {
   return {
     kind,
     sourceId,
@@ -1537,9 +1562,7 @@ function getCatalogIndexes(catalog) {
 }
 
 function indexBy(values, key) {
-  return new Map(
-    (values ?? []).map(value => [Number(value[key]), value])
-  );
+  return new Map((values ?? []).map(value => [Number(value[key]), value]));
 }
 
 function maximumOf(values, key, fallback) {
@@ -1598,9 +1621,7 @@ function createUnavailableKiboResult(kiboId, reason, classification = null) {
     core: {},
     stats: {},
     sources: [],
-    unresolved: [
-      { kind: 'kibo-static-properties', reason, classification },
-    ],
+    unresolved: [{ kind: 'kibo-static-properties', reason, classification }],
     unapplied: [],
     complete: false,
     ready: false,

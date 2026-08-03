@@ -28,6 +28,11 @@ import {
   FOUR_PIECE_SET_STACK_EVIDENCE_RELATIVE_PATH,
   readFourPieceSetStackRuntimeEvidenceSource,
 } from './four-piece-set-stack-evidence.mjs';
+import {
+  assertBeforeSkillCompositeRuntimeEvidenceReference,
+  BEFORE_SKILL_COMPOSITE_EVIDENCE_RELATIVE_PATH,
+  readBeforeSkillCompositeRuntimeEvidenceSource,
+} from './before-skill-composite-evidence.mjs';
 
 export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
   '2026-08-01T00:00:00.000Z';
@@ -107,6 +112,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     'c8b9205b959a241f284dcacb4a27cbe63fc62cd028766777f50cca8941ecea57',
   fourPieceSetStackRuntimeEvidence:
     'ae357c59a494f724c9ce36fde79df3fd505f1434c01c4b87697d5770f9cc98dc',
+  beforeSkillCompositeRuntimeEvidence:
+    '165b87b2d5ea01f1a2f7f72a828b6a1eeeca19ef1f429003b2dccca457686212',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
@@ -170,6 +177,7 @@ export async function createOptimizationQualificationArtifacts({
   landedHitRecoveryRuntimeEvidencePath = null,
   persistentLoadoutPropertyRuntimeEvidencePath = null,
   fourPieceSetStackRuntimeEvidencePath = null,
+  beforeSkillCompositeRuntimeEvidencePath = null,
   dynamicLoadoutAcceptanceReportPath = null,
   gameAssemblyPath = 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
 } = {}) {
@@ -316,6 +324,19 @@ export async function createOptimizationQualificationArtifacts({
       il2CppDumpPath: il2cppRuntimeContractsPath,
       projectRoot,
     });
+  sources.beforeSkillCompositeRuntimeEvidence =
+    await readBeforeSkillCompositeRuntimeEvidenceSource({
+      sourcePath:
+        beforeSkillCompositeRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          ...BEFORE_SKILL_COMPOSITE_EVIDENCE_RELATIVE_PATH.split('/')
+        ),
+      gameAssemblyPath,
+      il2CppDumpPath: il2cppRuntimeContractsPath,
+      elementFormulaPath: path.join(newTableRoot, 'element_formula.json'),
+      projectRoot,
+    });
   const acceptanceReport = JSON.parse(
     await fs.readFile(
       dynamicLoadoutAcceptanceReportPath ??
@@ -341,13 +362,16 @@ export async function createOptimizationQualificationArtifacts({
     sources.soulEffectNonDamageRuntimeEvidence
   );
   assertPersistentLoadoutPropertyRuntimeEvidenceReference(
-    acceptanceReport?.sourceClosure
-      ?.persistentLoadoutPropertyRuntimeEvidence,
+    acceptanceReport?.sourceClosure?.persistentLoadoutPropertyRuntimeEvidence,
     sources.persistentLoadoutPropertyRuntimeEvidence
   );
   assertFourPieceSetStackRuntimeEvidenceReference(
     acceptanceReport?.sourceClosure?.fourPieceSetStackRuntimeEvidence,
     sources.fourPieceSetStackRuntimeEvidence
+  );
+  assertBeforeSkillCompositeRuntimeEvidenceReference(
+    acceptanceReport?.sourceClosure?.beforeSkillCompositeRuntimeEvidence,
+    sources.beforeSkillCompositeRuntimeEvidence
   );
   sources.il2cppRuntimeContracts.value.soulEffectTriggers =
     attachSoulEffectGetElementRuntimeEvidence(
@@ -460,6 +484,8 @@ export async function createOptimizationQualificationArtifacts({
       sources.persistentLoadoutPropertyRuntimeEvidence.value,
     fourPieceSetStackRuntimeEvidence:
       sources.fourPieceSetStackRuntimeEvidence.value,
+    beforeSkillCompositeRuntimeEvidence:
+      sources.beforeSkillCompositeRuntimeEvidence.value,
   });
   sources.battleElementAssets = {
     ...soulEssenceEffects.sourceSnapshot.battleElements,
@@ -570,7 +596,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C11',
+      phase: 'M12-B3-C12',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1536,8 +1562,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C11',
-    status: 'b3-c11-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C12',
+    status: 'b3-c12-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1962,7 +1988,8 @@ function createSourceSnapshot(sources) {
         key === 'soulEffectNonDamageRuntimeEvidence' ||
         key === 'landedHitRecoveryRuntimeEvidence' ||
         key === 'persistentLoadoutPropertyRuntimeEvidence' ||
-        key === 'fourPieceSetStackRuntimeEvidence'
+        key === 'fourPieceSetStackRuntimeEvidence' ||
+        key === 'beforeSkillCompositeRuntimeEvidence'
       ) {
         record.value = structuredClone(source.value);
       }
@@ -1979,7 +2006,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C11 AfterHeal Source-to-Target and Native Block\n\n' +
+    '# M12-B3-C12 BeforeSkill Composite Team Recovery\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1988,7 +2015,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: C2-C10 retain their accepted trigger, transaction, ordering, healing, persistent-root and four-piece BeforeDamage contracts. C11 adds the source-closed AfterHeal Source observer to actual healed Target route for set 5:4, plus native Block(5) for soul 10176. Empty OR is proven true by the native condition consumer; full-health executed healing still dispatches, rejected settlements stay suppressed, active Block duplicates neither stack nor refresh, and a new instance can apply at the right-open expiry boundary.\n' +
+    '- Dynamic loadout batches: C2-C11 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece BeforeDamage, AfterHeal Source-to-Target and Block(5) contracts. C12 adds the source-closed set 1:4 BeforeSkill composite transaction: an executed controlled NormalSkill emits one ShareAll actor-SP effect followed by one AllHero max-HP-ratio heal per player actor, shares nothing to Kibo, and keeps the 12-second interval as canonical cycle state.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'
@@ -2048,6 +2075,10 @@ async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
     namespace: 'Lens.Gameplay.Modules.BigWorld',
     declaration: 'public enum ESkillTagType',
   });
+  const heroPetStayTypeBlock = extractIl2CppTypeBlock(text, {
+    namespace: 'Gameplay.Modules.BigWorld.Core.Enum',
+    declaration: 'public enum EHeroPetStayType',
+  });
   const battlePropertyTagBlock = extractIl2CppTypeBlock(text, {
     namespace: 'Lens.Gameplay.Modules.BigWorld',
     declaration: 'public enum EBattlePropertyTag',
@@ -2089,6 +2120,7 @@ async function readIl2CppRuntimeContractsSource(sourcePath, projectRoot) {
     sourcePath: normalizeSourcePath(sourcePath, projectRoot),
     skillSlotBlock,
     skillTagBlock,
+    heroPetStayTypeBlock,
     triggerConditionLogicBlock,
     triggerFixedConditionBlock,
     triggerEventTypeBlock,
@@ -2186,6 +2218,7 @@ function createSoulEffectTriggerContract({
   sourcePath,
   skillSlotBlock,
   skillTagBlock,
+  heroPetStayTypeBlock,
   triggerConditionLogicBlock,
   triggerFixedConditionBlock,
   triggerEventTypeBlock,
@@ -2245,6 +2278,12 @@ function createSoulEffectTriggerContract({
       enumName: 'CheckElementId',
       selectorKind: 'event-element-id',
       description: '事件元素ID是',
+    },
+    {
+      value: 14,
+      enumName: 'CheckSelfStayType',
+      selectorKind: 'self-stay-type',
+      description: 'Self驻场类型',
     },
   ].map(binding => {
     assertIl2CppEnumMember({
@@ -2313,6 +2352,28 @@ function createSoulEffectTriggerContract({
       };
     }
   );
+  const stayTypeBindings = [
+    {
+      value: 0,
+      enumName: 'Control',
+      runtimeKind: 'controlled-actor',
+      description: '主控',
+    },
+  ].map(binding => {
+    assertIl2CppEnumMember({
+      block: heroPetStayTypeBlock,
+      enumName: 'EHeroPetStayType',
+      memberName: binding.enumName,
+      value: binding.value,
+      description: binding.description,
+      annotationKind: 'InspectorName',
+    });
+    return {
+      ...binding,
+      status: 'applied',
+      sourceIdentity: `${sourcePath}#EHeroPetStayType.${binding.enumName}=${binding.value}`,
+    };
+  });
   const eventBindings = [
     [1, 'BeforeDamage', 'hit-before-damage', '造成伤害前'],
     [2, 'AfterDamage', 'hit-after-damage', '造成伤害后'],
@@ -2411,6 +2472,7 @@ function createSoulEffectTriggerContract({
       'EElementTriggerTargetType',
       'ESkillSlotType',
       'ESkillTagType',
+      'EHeroPetStayType',
       'ETriggerEffectTargetType',
     ]
       .map(identity => `${sourcePath}#${identity}`)
@@ -2421,6 +2483,7 @@ function createSoulEffectTriggerContract({
     triggerTargetBindings,
     skillSlotBindings,
     skillTagBindings,
+    stayTypeBindings,
     targetBindings,
     buffElementWrapper: createBuffElementWrapperContract({
       sourcePath,
@@ -2822,7 +2885,8 @@ export async function readSoulEffectNonDamageRuntimeEvidenceSource({
         `public const EElementTriggerTargetType ${record.enumName} = ${record.value};`
     ),
     ...(value.dumpBindings?.combineTypeEnum ?? []).map(
-      record => `public const ECombineType ${record.enumName} = ${record.value};`
+      record =>
+        `public const ECombineType ${record.enumName} = ${record.value};`
     ),
     ...(value.dumpBindings?.triggerDataFields ?? []).map(
       record => `public EntityHandle ${record.field}; // ${record.offset}`
@@ -2857,7 +2921,8 @@ export function validateSoulEffectNonDamageRuntimeEvidence(
 ) {
   const expectedMethods = [
     {
-      identity: 'Lens.Gameplay.Modules.BigWorld.TriggerElement.GetTriggerTarget',
+      identity:
+        'Lens.Gameplay.Modules.BigWorld.TriggerElement.GetTriggerTarget',
       rva: '0x13BBF50',
       declaration:
         'private List<EntityHandle> GetTriggerTarget(ElementTriggerDataBase triggerData, int targetType, int factionType, bool onlyCheck) { }',
@@ -2872,7 +2937,8 @@ export function validateSoulEffectNonDamageRuntimeEvidence(
       identity:
         'Lens.Gameplay.Modules.BigWorld.AliveElementSystem.OnExecuteNormalElement',
       rva: '0x13195C0',
-      declaration: 'public virtual void OnExecuteNormalElement(IElement element) { }',
+      declaration:
+        'public virtual void OnExecuteNormalElement(IElement element) { }',
     },
   ];
   const expectedRouting = [
@@ -3028,8 +3094,7 @@ export function assertSoulEffectNonDamageRuntimeEvidenceReference(
     reference?.il2CppDumpPath !== source.value.reviewedIl2CppDump?.path ||
     Number(reference?.il2CppDumpBytes) !==
       Number(source.value.reviewedIl2CppDump?.bytes) ||
-    reference?.il2CppDumpSha256 !==
-      source.value.reviewedIl2CppDump?.sha256 ||
+    reference?.il2CppDumpSha256 !== source.value.reviewedIl2CppDump?.sha256 ||
     Number(reference?.rangeCount) !== rangeCount
   ) {
     throw new Error(
@@ -3171,7 +3236,8 @@ function attachSoulEffectNonDamageRuntimeEvidence(triggerContract, evidence) {
   );
   const sourceObserver = triggerContract.triggerTargetBindings?.find(
     binding =>
-      Number(binding.value) === Number(evidence.sourceObserver?.triggerTargetType)
+      Number(binding.value) ===
+      Number(evidence.sourceObserver?.triggerTargetType)
   );
   if (
     switchEvent?.frameAnchor !== evidence.switchEnter?.frameAnchor ||

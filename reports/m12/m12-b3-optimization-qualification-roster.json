@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "phase": "M12-B3-C11",
+  "phase": "M12-B3-C12",
   "sourceSnapshot": {
     "files": {
       "characters": {
@@ -1431,6 +1431,337 @@
           }
         }
       },
+      "beforeSkillCompositeRuntimeEvidence": {
+        "path": "scripts/optimization-qualification/evidence/before-skill-composite-runtime-evidence.json",
+        "sha256": "165b87b2d5ea01f1a2f7f72a828b6a1eeeca19ef1f429003b2dccca457686212",
+        "bytes": 10538,
+        "value": {
+          "schemaVersion": 1,
+          "contractName": "AzPrBeforeSkillCompositeImmediateRuntimeEvidence",
+          "reviewedBinary": {
+            "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+            "bytes": 222485544,
+            "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+          },
+          "reviewedIl2CppDump": {
+            "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+            "bytes": 97428254,
+            "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+          },
+          "reviewedElementFormula": {
+            "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+            "bytes": 15113,
+            "sha256": "ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e"
+          },
+          "dumpBindings": {
+            "methods": [
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.CheckTriggerCondition",
+                "rva": "0x13B6A50",
+                "declaration": "private bool CheckTriggerCondition(TTriggerElementParams.TriggerElementCondition condition, ElementTriggerDataBase triggerData) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.TriggerEventElementHandler",
+                "rva": "0x13BFB50",
+                "declaration": "private void TriggerEventElementHandler(ElementTriggerDataBase triggerData) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
+                "rva": "0x13BD9C0",
+                "declaration": "public override void Parse(TElementParams param, int skillId, CustomBattleVerifyInfo verifyInfo) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.GetTriggerTarget",
+                "rva": "0x13BBF50",
+                "declaration": "private List<EntityHandle> GetTriggerTarget(ElementTriggerDataBase triggerData, int targetType, int factionType, bool onlyCheck) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.GetAllHero",
+                "rva": "0x13B8E30",
+                "declaration": "private void GetAllHero(ref List<EntityHandle> targets, bool onlyCheck) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.SpElement.Execute",
+                "rva": "0x13A5480",
+                "declaration": "public override void Execute() { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.SpElement.Parse",
+                "rva": "0x13A6090",
+                "declaration": "public override void Parse(TElementParams param, int skillId, CustomBattleVerifyInfo verifyInfo) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.SPSystem.OnTransmit",
+                "rva": "0x14837F0",
+                "declaration": "public void OnTransmit(ETransmitType type, ITransmitArgs args) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.SPSystem.RecoverSP",
+                "rva": "0x1483F40",
+                "declaration": "private void RecoverSP(TSpElementParams.ERecoverTagType recoverTagType, float baseDelta, float delta) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.FormulaUtility.GetOutputHeal",
+                "rva": "0x1882B60",
+                "declaration": "private static FormulaUtility.OutputDamageData GetOutputHeal(IElement elementConfig, EntityHandle attackerHandle, EntityHandle executorHandle, EntityHandle sourceHandle) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.FormulaUtility.ChangeHP",
+                "rva": "0x187C950",
+                "declaration": "private static bool ChangeHP(EntityHandle attacker, EntityHandle executor, AliveData executorData, MyFloat value, ref int lockResult, out bool changeHpIndex) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElement_SkillHandle",
+                "rva": "0x18B6400",
+                "declaration": "public static void InvokeTriggerElement_SkillHandle(EntityHandle source, EntityHandle self, EntityHandle target, EElementTriggerEventType type, int skillSlot, int skillID, TElementParams element) { }"
+              }
+            ],
+            "fields": [
+              {
+                "identity": "TTriggerElementParams.triggerInv",
+                "declaration": "public int triggerInv; // 0x104"
+              },
+              {
+                "identity": "TTriggerElementParams.triggerCounter",
+                "declaration": "public int triggerCounter; // 0x108"
+              },
+              {
+                "identity": "TSpElementParams.shareType",
+                "declaration": "public TSpElementParams.ESPShareType shareType; // 0xC0"
+              },
+              {
+                "identity": "TSpElementParams.petShareType",
+                "declaration": "public TSpElementParams.ESPShareType petShareType; // 0xD8"
+              },
+              {
+                "identity": "TSpElementParams.mainPetShareType",
+                "declaration": "public TSpElementParams.ESPShareType mainPetShareType; // 0xDC"
+              }
+            ],
+            "enums": [
+              {
+                "identity": "EElementTriggerEventType.BeforeSkill",
+                "declaration": "public const EElementTriggerEventType BeforeSkill = 5;",
+                "description": "[InspectorName(\"释放技能前\")]"
+              },
+              {
+                "identity": "EElementTriggerFixedConditionType.CheckSkillType",
+                "declaration": "public const EElementTriggerFixedConditionType CheckSkillType = 11;",
+                "description": "[Description(\"事件技能Tag\")]"
+              },
+              {
+                "identity": "EElementTriggerFixedConditionType.CheckSelfStayType",
+                "declaration": "public const EElementTriggerFixedConditionType CheckSelfStayType = 14;",
+                "description": "[Description(\"Self驻场类型\")]"
+              },
+              {
+                "identity": "ESkillTagType.NormalSkill",
+                "declaration": "public const ESkillTagType NormalSkill = 3;",
+                "description": "[Description(\"角色小技能\")]"
+              },
+              {
+                "identity": "EHeroPetStayType.Control",
+                "declaration": "public const EHeroPetStayType Control = 0;",
+                "description": "[InspectorName(\"主控\")]"
+              },
+              {
+                "identity": "EElementTriggerTargetType.Self",
+                "declaration": "public const EElementTriggerTargetType Self = 0;",
+                "description": "[Description(\"自身\")]"
+              },
+              {
+                "identity": "ETriggerEffectTargetType.AllHero",
+                "declaration": "public const ETriggerEffectTargetType AllHero = 15;",
+                "description": "[Description(\"玩家所有角色（不包括联机玩家）\")]"
+              },
+              {
+                "identity": "TSpElementParams.ESPShareType.ShareAll",
+                "declaration": "public const TSpElementParams.ESPShareType ShareAll = 2;",
+                "description": null
+              }
+            ]
+          },
+          "binaryRanges": [
+            {
+              "identity": "before-skill-dispatch",
+              "range": "0x13eb8a8-0x13eb8d6",
+              "bytes": 46,
+              "sha256": "53dce8773de6891fcd5a16c6c3e56f9705c34b3f56d02a6f5d4fee4ce5349bbd"
+            },
+            {
+              "identity": "condition-skill-tag",
+              "range": "0x13b72a8-0x13b7376",
+              "bytes": 206,
+              "sha256": "16ca879faaba69c126030c0e7a3777487063402bcf8e8e157d3a65da43e8bc17"
+            },
+            {
+              "identity": "condition-self-stay",
+              "range": "0x13b7488-0x13b7570",
+              "bytes": 232,
+              "sha256": "35172a6b6ec99dc2717a5f6c1dc9211ef05da744e80f1cf5cfa04c770255934a"
+            },
+            {
+              "identity": "interval-gate-before-condition",
+              "range": "0x13bfc35-0x13bfcd3",
+              "bytes": 158,
+              "sha256": "488d1c79d0bfa25411e557ac8c98a58228522b698d4dc6fe42cdcbafdab88833"
+            },
+            {
+              "identity": "successful-trigger-interval-commit",
+              "range": "0x13bfd56-0x13bfda9",
+              "bytes": 83,
+              "sha256": "804292b6a2286c85b50cda5c61bb9b78de155650f290afdb68884c0e4fb7dccd"
+            },
+            {
+              "identity": "trigger-interval-ms-parse",
+              "range": "0x13bdbae-0x13bdbee",
+              "bytes": 64,
+              "sha256": "26a2066e4a24b0b8b1a5bf2c45c2bcd015c7331fc7fa8e3b7a1d621a5637ec01"
+            },
+            {
+              "identity": "all-hero-target-routing",
+              "range": "0x13bc21e-0x13bc232",
+              "bytes": 20,
+              "sha256": "b6b2042aba09f9fac28ba5a04af90e4f526bf59edb67c6a7e528680211557446"
+            },
+            {
+              "identity": "sp-params-parse",
+              "range": "0x13a6180-0x13a61ed",
+              "bytes": 109,
+              "sha256": "44f818d5af842541e3a65a660f88fa1e9d8a7956133017cd462650e626448b4a"
+            },
+            {
+              "identity": "sp-share-all-transmit",
+              "range": "0x13a5987-0x13a5b4d",
+              "bytes": 454,
+              "sha256": "89f6aadc9f885e61f934f5c61870c1e7c602220e08ae46311f88e36e25b6986f"
+            },
+            {
+              "identity": "sp-system-main-settlement",
+              "range": "0x1483968-0x1483a69",
+              "bytes": 257,
+              "sha256": "57f40489f7946782c3ad5eee1d79fa95f6b8763b9d961e59f125b137f217350b"
+            },
+            {
+              "identity": "sp-system-team-share",
+              "range": "0x1483c0f-0x1483d1e",
+              "bytes": 271,
+              "sha256": "4068007372ea38e76fd90468190f560b6375f103b757dc4480f54d16a4a2096c"
+            },
+            {
+              "identity": "sp-system-cap",
+              "range": "0x1483fbb-0x1484232",
+              "bytes": 631,
+              "sha256": "1be3b39c05d745bf3b6ead134761a372f29c115e8675be0efe1f433bdaf640bb"
+            },
+            {
+              "identity": "heal-source-target-modifiers",
+              "range": "0x1882fa8-0x188300d",
+              "bytes": 101,
+              "sha256": "ca3742b16019a92ce15d75195fe81ba59d8d14609dd0815cfe66bee932cca056"
+            },
+            {
+              "identity": "heal-settlement-change-hp",
+              "range": "0x18835b8-0x18835f1",
+              "bytes": 57,
+              "sha256": "1d7e71694b6c2c68007fc18e628bd68fccc5c800573c9d0657ab983f8e5bd3cb"
+            }
+          ],
+          "reviewedDefinition": {
+            "setId": 1,
+            "pieces": 4,
+            "skillId": 19998006,
+            "triggerElementId": 199999024,
+            "triggerPathId": -2802459635003440600,
+            "eventId": 5,
+            "triggerTargetType": 0,
+            "conditionLogicValue": 0,
+            "conditions": [
+              {
+                "conditionType": 11,
+                "conditionValue": 3,
+                "conditionExtra": 0
+              },
+              {
+                "conditionType": 14,
+                "conditionValue": 0,
+                "conditionExtra": 0
+              }
+            ],
+            "intervalMs": 12000,
+            "triggerCounter": -1,
+            "effects": [
+              {
+                "effectIndex": 0,
+                "targetType": 0,
+                "elementId": 199999026,
+                "pathId": 5780315057243861000,
+                "kind": "direct-sp",
+                "recoverType": 0,
+                "shareType": 2,
+                "petShareType": 0,
+                "mainPetShareType": 0,
+                "sourceRawValue": 16,
+                "commonFunctionId": 1,
+                "baseFunctionId": 5
+              },
+              {
+                "effectIndex": 1,
+                "targetType": 15,
+                "elementId": 199999085,
+                "pathId": 892380267004970900,
+                "kind": "direct-heal",
+                "damageType": 5,
+                "commonFunctionId": 1,
+                "baseFunctionId": 108,
+                "sourceRawA": 400,
+                "baseExpression": "(target.MAXHP[0]*A)/10000"
+              }
+            ],
+            "unloadTriggerElementId": 199999045,
+            "removerElementId": 199999046,
+            "removedElementIds": [
+              199999045,
+              199999024
+            ]
+          },
+          "semantics": {
+            "triggerPhase": "before-skill-dispatch-for-executed-action-before-action-settlement",
+            "conditionLogic": "all-conditions-must-match",
+            "conditionFailureConsumesInterval": false,
+            "intervalUnit": "milliseconds-parsed-to-seconds-by-native-runtime",
+            "intervalBoundary": "right-open-suppression-exact-boundary-admitted",
+            "intervalPersistence": "absolute-last-accepted-trigger-time-per-installed-trigger",
+            "skillSelector": "event-final-control-binding-skill-tag",
+            "staySelector": "native-self-entity-control-stay-type",
+            "spScale": "raw-points",
+            "heroShare": "share-all-full-value-to-player-heroes",
+            "petShare": "independent-fields-no-share-when-zero",
+            "healFormula": "target-max-hp-times-a-divided-by-10000-then-source-healup-target-healdown",
+            "allHeroTarget": "player-heroes-excluding-network-players-and-pets",
+            "effectOrdering": "trigger-effect-list-order-under-one-trigger-transaction"
+          },
+          "conclusion": {
+            "status": "applied",
+            "sourceIdentity": "GameAssembly.dll#BeforeSkill/TriggerElement.conditions+interval/SpElement+SPSystem/FormulaUtility.GetOutputHeal+ChangeHP/GetTriggerTarget.AllHero|dump.cs#NormalSkill/Control/ShareAll|NewTable/element_formula#108"
+          },
+          "verifiedBinary": {
+            "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+            "bytes": 222485544,
+            "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+          },
+          "verifiedIl2CppDump": {
+            "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+            "bytes": 97428254,
+            "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+          },
+          "verifiedElementFormula": {
+            "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+            "bytes": 15113,
+            "sha256": "ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e"
+          }
+        }
+      },
       "battleElementAssets": {
         "path": "C:/PC2/Codex/AzPr/work/combat-formulas/battle-element-assets.jsonl",
         "sha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
@@ -1447,7 +1778,7 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "132db3813d6f0e30"
+    "sourceSnapshotHash": "2b7d7760b80761b1"
   },
   "filterContract": {
     "characterElements": [
@@ -3039,6 +3370,8 @@
             "skillSlotName": null,
             "skillTagId": 2,
             "skillTagName": "WhackAttack",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -3248,6 +3581,8 @@
             "skillSlotName": null,
             "skillTagId": 3,
             "skillTagName": "NormalSkill",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -3623,6 +3958,8 @@
             "skillSlotName": null,
             "skillTagId": 2,
             "skillTagName": "WhackAttack",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -4552,6 +4889,8 @@
             "skillSlotName": null,
             "skillTagId": 3,
             "skillTagName": "NormalSkill",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -4761,6 +5100,8 @@
             "skillSlotName": null,
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -4980,6 +5321,8 @@
             "skillSlotName": null,
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "or",
             "logicValue": 1,
             "logicName": "OR",
@@ -5922,6 +6265,8 @@
             "skillSlotName": null,
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -6252,6 +6597,8 @@
             "skillSlotName": null,
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "or",
             "logicValue": 1,
             "logicName": "OR",
@@ -7492,6 +7839,8 @@
             "skillSlotName": null,
             "skillTagId": 3,
             "skillTagName": "NormalSkill",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -9065,6 +9414,8 @@
             "skillSlotName": null,
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "or",
             "logicValue": 1,
             "logicName": "OR",
@@ -9289,6 +9640,8 @@
             "skillSlotName": null,
             "skillTagId": 3,
             "skillTagName": "NormalSkill",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -9579,6 +9932,8 @@
             "skillSlotName": null,
             "skillTagId": 11,
             "skillTagName": "ExtremityAttack",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -9788,6 +10143,8 @@
             "skillSlotName": null,
             "skillTagId": 2,
             "skillTagName": "WhackAttack",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -10186,6 +10543,8 @@
             "skillSlotName": null,
             "skillTagId": 3,
             "skillTagName": "NormalSkill",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -10483,6 +10842,8 @@
             "skillSlotName": null,
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "or",
             "logicValue": 1,
             "logicName": "OR",
@@ -10704,6 +11065,8 @@
             "skillSlotName": null,
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -10940,6 +11303,8 @@
             "skillSlotName": null,
             "skillTagId": 1,
             "skillTagName": "NormalAttack",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -11149,6 +11514,8 @@
             "skillSlotName": null,
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -11370,6 +11737,8 @@
             "skillSlotName": null,
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "or",
             "logicValue": 1,
             "logicName": "OR",
@@ -12037,6 +12406,8 @@
             "skillSlotName": null,
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -12496,6 +12867,8 @@
             "skillSlotName": null,
             "skillTagId": 22,
             "skillTagName": "EntrySkill",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -12723,6 +13096,8 @@
             "skillSlotName": null,
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -12942,6 +13317,8 @@
             "skillSlotName": null,
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "or",
             "logicValue": 1,
             "logicName": "OR",
@@ -13192,6 +13569,8 @@
             "skillSlotName": null,
             "skillTagId": 22,
             "skillTagName": "EntrySkill",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "or",
             "logicValue": 1,
             "logicName": "OR",
@@ -13701,6 +14080,8 @@
             "skillSlotName": null,
             "skillTagId": 1,
             "skillTagName": "NormalAttack",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -13910,6 +14291,8 @@
             "skillSlotName": null,
             "skillTagId": 1,
             "skillTagName": "NormalAttack",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -14561,6 +14944,8 @@
             "skillSlotName": null,
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "or",
             "logicValue": 1,
             "logicName": "OR",
@@ -14695,6 +15080,8 @@
             "skillSlotName": "UltraSkill",
             "skillTagId": null,
             "skillTagName": null,
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -14904,6 +15291,8 @@
             "skillSlotName": null,
             "skillTagId": 1,
             "skillTagName": "NormalAttack",
+            "stayType": null,
+            "stayTypeName": null,
             "logic": "and",
             "logicValue": 0,
             "logicName": "AND",
@@ -18406,5 +18795,5 @@
       ]
     }
   },
-  "rosterHash": "ee9c2f26717eb9a9"
+  "rosterHash": "c9e288a29b05d17b"
 }

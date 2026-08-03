@@ -287,18 +287,7 @@ describe('verified static combat properties', () => {
         sourceId: '10033:19003602:star-1',
         attributes: [{ id: 1005, value: 1460 }],
         sourceSequencePath: [
-          0,
-          101007,
-          1,
-          10033,
-          0,
-          1900360,
-          0,
-          0,
-          0,
-          0,
-          0,
-          19003602,
+          0, 101007, 1, 10033, 0, 1900360, 0, 0, 0, 0, 0, 19003602,
         ],
         sourceSequenceStatus:
           'verified-persistent-loadout-property-source-sequence-ready',
@@ -371,8 +360,7 @@ describe('verified static combat properties', () => {
     const validate = root =>
       validatePersistentLoadoutPropertyRoot(root, {
         requiresStarValues: true,
-        expectedPropertyElementIds:
-          definition.sourceClosure.propertyElementIds,
+        expectedPropertyElementIds: definition.sourceClosure.propertyElementIds,
       });
     const mutations = [
       root => {
@@ -429,6 +417,13 @@ describe('verified static combat properties', () => {
       bottom: 1230221,
       earring: 1240221,
     });
+    const fivePieces = compileWithEquipment({
+      weapon: 1210421,
+      top: 1220221,
+      bottom: 1230221,
+      earring: 1240221,
+      ring: 1250221,
+    });
     const setSources = result =>
       result.sources.filter(
         source => source.kind === 'accessory-set-persistent-property'
@@ -453,11 +448,31 @@ describe('verified static combat properties', () => {
       appliedToCalculators: true,
     });
     expect(
-      fourPieces.unapplied.some(
-        source =>
-          source.kind === 'accessory-set-skill' && source.pieces === 4
+      fourPieces.setSkillActivations.find(
+        activation => activation.setId === 1 && activation.pieces === 4
       )
-    ).toBe(true);
+    ).toMatchObject({
+      skillId: 19998006,
+      thresholdMet: true,
+      runtimeEffectStatus: 'runtime-applied',
+      appliedToRuntimeEffect: true,
+    });
+    expect(
+      fourPieces.unapplied.some(
+        source => source.kind === 'accessory-set-skill' && source.pieces === 4
+      )
+    ).toBe(false);
+    expect(
+      fivePieces.setSkillActivations.filter(
+        activation => activation.setId === 1 && activation.pieces === 4
+      )
+    ).toEqual([
+      expect.objectContaining({
+        selectedPieceCount: 5,
+        thresholdMet: true,
+        appliedToRuntimeEffect: true,
+      }),
+    ]);
   });
 
   it('propagates one three-actor loadout change through actor, kibo, and hit results', () => {
@@ -486,9 +501,9 @@ describe('verified static combat properties', () => {
       )
     ).toBe(true);
     expect(equippedActor.stats.attack).toBeGreaterThan(bareActor.stats.attack);
-    expect(equippedActor.verifiedStaticKiboProperties.stats.attack).toBeGreaterThan(
-      bareActor.verifiedStaticKiboProperties.stats.attack
-    );
+    expect(
+      equippedActor.verifiedStaticKiboProperties.stats.attack
+    ).toBeGreaterThan(bareActor.verifiedStaticKiboProperties.stats.attack);
     expect(actionDamage(equipped.result, 'loadout-actor-hit')).toBeGreaterThan(
       actionDamage(bare.result, 'loadout-actor-hit')
     );
@@ -710,22 +725,22 @@ function simulateActorLoadoutScenario({
   };
   const teamSlots = createDefaultWorkbenchTeamSlots(selection);
   const kiboIds = [500002, 500003];
-  const actorConfigs = createDefaultWorkbenchActorConfigs(
-    selection
-  ).map((config, index) => ({
-    ...config,
-    loadout: {
-      ...config.loadout,
-      kiboId:
-        Number(config.characterId) === Number(characterId)
-          ? 500001
-          : kiboIds.shift(),
-      ...(Number(config.characterId) === Number(characterId)
-        ? loadoutPatch
-        : {}),
-      kiboConfig: neutralKiboConfig,
-    },
-  }));
+  const actorConfigs = createDefaultWorkbenchActorConfigs(selection).map(
+    (config, index) => ({
+      ...config,
+      loadout: {
+        ...config.loadout,
+        kiboId:
+          Number(config.characterId) === Number(characterId)
+            ? 500001
+            : kiboIds.shift(),
+        ...(Number(config.characterId) === Number(characterId)
+          ? loadoutPatch
+          : {}),
+        kiboConfig: neutralKiboConfig,
+      },
+    })
+  );
   const mapping = mechanicsPackage.actionMappings.find(
     entry =>
       Number(entry.ownerId) === Number(characterId) &&
@@ -810,7 +825,9 @@ function createPersistentSoulLoadout(
 }
 
 function settleDirectHeal({ scenario, result }) {
-  const action = scenario.actions.find(entry => entry.id === 'loadout-actor-hit');
+  const action = scenario.actions.find(
+    entry => entry.id === 'loadout-actor-hit'
+  );
   const directHpEvents = [
     ...(result.verifiedBattleEffectGeneration?.directHpEvents ?? []),
     {
@@ -822,8 +839,9 @@ function settleDirectHeal({ scenario, result }) {
       target: { kind: 'actor', id: action.actorId },
       value: 100,
       effect: { effectIdentity: 'fixture:persistent-direct-heal-effect' },
-      resolution:
-        result.verifiedActionVariantRuntime.actionResolutionById.get(action.id),
+      resolution: result.verifiedActionVariantRuntime.actionResolutionById.get(
+        action.id
+      ),
       sourceIdentity: 'fixture:persistent-direct-heal-settlement',
       sourceSequencePath: [
         ...(action.sourceSequencePath ?? [action.sourceSequenceIndex ?? 0]),
@@ -831,8 +849,7 @@ function settleDirectHeal({ scenario, result }) {
         30,
         0,
       ],
-      sourceSequenceStatus:
-        'verified-direct-effect-source-sequence-ready',
+      sourceSequenceStatus: 'verified-direct-effect-source-sequence-ready',
       applied: true,
     },
   ];
@@ -867,7 +884,8 @@ function actionDamage(result, actionId) {
 function actionToughnessDamage(result, actionId) {
   return result.verifiedCombatRuntime.damageEvents
     .filter(
-      event => event.type === 'VERIFIED_COMBAT_HIT' && event.actionId === actionId
+      event =>
+        event.type === 'VERIFIED_COMBAT_HIT' && event.actionId === actionId
     )
     .reduce(
       (total, event) => total + Number(event.payload.toughnessDamage ?? 0),

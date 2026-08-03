@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 20,
-  "phase": "M12-B3-C11-R1",
+  "schemaVersion": 21,
+  "phase": "M12-B3-C12",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "02935223e914af18cb0bf10abf324edbdd373e17",
+  "baseCommit": "8f01dba447106b03783582d58e80badb8a571b8e",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
   "reviewedC7R2Commit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
@@ -13,11 +13,12 @@
   "reviewedC10Commit": "785cc9b8c20b1cb995b4fe4f565a6e94101f8531",
   "acceptedC10R1Commit": "ad27e7762fcc8ac96a47d00361cef08fe6dbc959",
   "reviewedC11Commit": "02935223e914af18cb0bf10abf324edbdd373e17",
+  "acceptedC11R1Commit": "8f01dba447106b03783582d58e80badb8a571b8e",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
-    "phase": "M12-B3-C10-R1",
-    "productionMechanicsCommit": "785cc9b8c20b1cb995b4fe4f565a6e94101f8531",
-    "acceptanceBaseline": "ad27e7762fcc8ac96a47d00361cef08fe6dbc959",
+    "phase": "M12-B3-C11-R1",
+    "productionMechanicsCommit": "02935223e914af18cb0bf10abf324edbdd373e17",
+    "acceptanceBaseline": "8f01dba447106b03783582d58e80badb8a571b8e",
     "status": "product-accepted"
   },
   "r1ProtocolGuard": {
@@ -65,13 +66,13 @@
     ]
   },
   "scope": {
-    "batch": "after-heal-source-to-target-native-block-and-actionless-periodic-entry",
-    "soulEssenceIds": [10176],
-    "runtimeAppliedSoulEssenceIds": [10176],
+    "batch": "before-skill-controlled-normal-skill-composite-team-recovery",
+    "soulEssenceIds": [],
+    "runtimeAppliedSoulEssenceIds": [],
     "evidenceBlockedSoulEssenceIds": [],
-    "setSkillIds": ["set-skill:5:4"],
-    "runtimeAppliedSetSkillIds": ["set-skill:5:4"],
-    "explicitlyExcludedSetSkillThresholds": ["set-skill:1:4", "set-skill:3:4", "set-skill:6:4"],
+    "setSkillIds": ["set-skill:1:4"],
+    "runtimeAppliedSetSkillIds": ["set-skill:1:4"],
+    "explicitlyExcludedSetSkillThresholds": ["set-skill:3:4", "set-skill:6:4"],
     "formalSearchExecuted": false,
     "m12cLocked": true,
     "fixedCultivationChanged": false,
@@ -159,6 +160,20 @@
       "il2CppDumpBytes": 97428254,
       "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
     },
+    "beforeSkillCompositeRuntimeEvidence": {
+      "path": "scripts/optimization-qualification/evidence/before-skill-composite-runtime-evidence.json",
+      "bytes": 10538,
+      "sha256": "165b87b2d5ea01f1a2f7f72a828b6a1eeeca19ef1f429003b2dccca457686212",
+      "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+      "binaryBytes": 222485544,
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "il2CppDumpPath": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+      "il2CppDumpBytes": 97428254,
+      "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+      "elementFormulaPath": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+      "elementFormulaBytes": 15113,
+      "elementFormulaSha256": "ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e"
+    },
     "soulControlClosure": {
       "skillCount": 62,
       "fileCount": 506,
@@ -168,6 +183,7 @@
   },
   "compiledContract": {
     "events": [
+      { "eventId": 5, "name": "BeforeSkill", "frameAnchor": "action-start" },
       {
         "eventId": 10,
         "name": "AfterGetElement",
@@ -402,6 +418,48 @@
     },
     "runtimeBranchesBySetSkillOrSoulEssenceId": false
   },
+  "c12BeforeSkillCompositeTeamRecoveryContract": {
+    "nativeEvidence": {
+      "beforeSkillDispatch": "TriggerElement before-skill dispatch occurs for an executable skill action before its hit settlements",
+      "conditions": "CheckSkillType(11)=NormalSkill(3) AND CheckSelfStayType(14)=Control(0), evaluated against final control binding and the source-sequence-aware controlled actor",
+      "interval": "TriggerElement.CanTrigger uses milliseconds; a failed condition does not commit the interval, [0,12000) is suppressed and the exact 12000ms boundary is admitted",
+      "sp": "SpElement 199999026 carries A=16, recoverType=0 and shareType=ShareAll(2); petShareType/mainPetShareType remain 0",
+      "heal": "DamageElement 199999085 uses damageType=5 and element_formula 108: (target.MAXHP[0]*A)/10000 with A=400",
+      "targets": "Self(0) routes the SP root to the equipped actor before native ShareAll distribution; AllHero(15) enumerates only scenario heroes"
+    },
+    "evidenceArtifact": {
+      "path": "scripts/optimization-qualification/evidence/before-skill-composite-runtime-evidence.json",
+      "bytes": 10538,
+      "sha256": "165b87b2d5ea01f1a2f7f72a828b6a1eeeca19ef1f429003b2dccca457686212",
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "dumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+      "formulaSha256": "ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e",
+      "rvaRangeCount": 14
+    },
+    "set-skill:1:4": {
+      "skillId": 19998006,
+      "triggerElementId": 199999024,
+      "threshold": "at least four valid same-set equipment slots; one runtime installation at four or five pieces",
+      "trigger": "BeforeSkill(5), Self(0), NormalSkill(3) AND Control(0), 12000ms interval",
+      "spEffect": "199999026 Self root, A=16, ShareAll actor SP, no Kibo energy",
+      "healEffect": "199999085 AllHero, target MAXHP * 400/10000 through Q16.16, one native AfterHeal per accepted target",
+      "triggerCounter": -1,
+      "unloadElementId": 199999045,
+      "removerElementId": 199999046
+    },
+    "eventSemantics": {
+      "executedAllMissDispatches": true,
+      "blockedOrUnexecutedDispatches": false,
+      "backgroundEquippedActorDispatches": false,
+      "conditionFailureConsumesInterval": false,
+      "fullHpExecutedHealDispatchesAfterHeal": true,
+      "deadTargetDispatchesAfterHeal": false,
+      "criticalRandomSamplesConsumed": 0,
+      "damageOrToughnessTransactionsGenerated": 0,
+      "intervalStateIncludedInCycleBoundary": true,
+      "runtimeBranchesBySetSkillId": false
+    }
+  },
   "definitions": {
     "10048": {
       "name": "璇枢",
@@ -582,13 +640,13 @@
   "batchResults": {
     "runtimeAppliedSoulEssenceCount": 39,
     "runtimeUnappliedSoulEssenceCount": 23,
-    "runtimeAppliedSetSkillCount": 9,
-    "runtimeUnappliedSetSkillCount": 3,
-    "newlyAppliedSoulEssenceIds": [10176],
-    "newlyAppliedSetSkillIds": ["set-skill:5:4"],
-    "preservedRuntimeAppliedSoulEssenceCount": 38,
-    "preservedRuntimeAppliedSetSkillCount": 8,
-    "remainingBlockedFourPieceSetSkillIds": ["set-skill:1:4", "set-skill:3:4", "set-skill:6:4"]
+    "runtimeAppliedSetSkillCount": 10,
+    "runtimeUnappliedSetSkillCount": 2,
+    "newlyAppliedSoulEssenceIds": [],
+    "newlyAppliedSetSkillIds": ["set-skill:1:4"],
+    "preservedRuntimeAppliedSoulEssenceCount": 39,
+    "preservedRuntimeAppliedSetSkillCount": 9,
+    "remainingBlockedFourPieceSetSkillIds": ["set-skill:3:4", "set-skill:6:4"]
   },
   "qualification": {
     "denominators": {
@@ -598,9 +656,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 383,
+    "blockingUniqueGapCount": 382,
     "blockingByCategory": {
-      "not-implemented": 365,
+      "not-implemented": 364,
       "evidence-insufficient": 18
     },
     "formalAdmissions": {
@@ -612,17 +670,17 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "132db3813d6f0e30",
-    "rosterHash": "ee9c2f26717eb9a9",
-    "manifestsHash": "b09e331ee024d724",
-    "ledgerHash": "d2ee3867d75ddf13",
-    "bindingMatrixHash": "aa6b08a6d79712e3",
-    "qualificationCatalogHash": "fc2623a2ba726407",
-    "dynamicLoadoutEffectCensusHash": "6d37f034f4f64ea0",
-    "soulEssenceEffectCatalogHash": "0a5b0311ef1281f4",
-    "soulEssenceSourceSnapshotHash": "4ef729b9b56d4f9e",
+    "sourceSnapshotHash": "2b7d7760b80761b1",
+    "rosterHash": "c9e288a29b05d17b",
+    "manifestsHash": "ee74913560aec624",
+    "ledgerHash": "5f9784e737be583f",
+    "bindingMatrixHash": "66607a402069b8bc",
+    "qualificationCatalogHash": "6623bb969daea122",
+    "dynamicLoadoutEffectCensusHash": "015aa4b6cfd788a1",
+    "soulEssenceEffectCatalogHash": "1e3b8c4d4cecaf84",
+    "soulEssenceSourceSnapshotHash": "eb75b9cb48c5bbf2",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
-    "soulEssenceTriggerContractHash": "a1361b97ef031e8c",
+    "soulEssenceTriggerContractHash": "ee74f6284b3b5118",
     "verifiedMechanicsPackageHash": "20498c0f436fdcc3f0e86ebb6308ea75586d4b2379127d23ec4d971e81bb88e9",
     "verifiedMechanicsFileSha256": "b84aaca9cd3fe1384df62cbdde5db531a0339e1c6a988f3fb6c9088d7953a971",
     "machineAxisCanonicalHashes": {
@@ -633,25 +691,26 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "C11-R1 adds a production entry for verified actionless periodic AfterHeal transactions without changing qualification catalogs, the verified mechanics package, the standard Machine Axis fixture or three-character gameplay semantics.",
+    "reason": "C12 adds one source-closed set-skill definition and its generic BeforeSkill composite runtime; the standard Machine Axis fixture does not equip that set, so its canonical hashes and numeric evaluation remain unchanged.",
     "machineAxisCanonicalHashDrift": 0,
     "machineAxisTraceMetadataHash": "416b4a015702f1b2",
     "machineAxisEvaluationHashDrift": 0,
     "gameplayAssertionDrift": 0,
     "threeCharacterReplayHashDrift": 0,
-    "threeCharacterCanonicalTraceMetadataHashDrift": 4,
+    "threeCharacterCanonicalTraceMetadataHashDrift": 0,
     "c4ConsumeAndAfterDamageRegression": 0,
     "c5AcquireRegression": 0,
     "c6BeforeDamageRegression": 0,
     "c7NonDamageAndResourceParityRegression": 0,
-    "c11ActionlessPeriodicAfterHealRegression": 0
+    "c11ActionlessPeriodicAfterHealRegression": 0,
+    "c12BeforeSkillCompositeRegression": 0
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 7, "tests": 162, "status": "passed" },
+    "focusedMechanics": { "files": 7, "tests": 178, "status": "passed" },
     "optimizationQualificationDirectory": {
-      "files": 7,
-      "tests": 56,
+      "files": 8,
+      "tests": 60,
       "status": "passed"
     },
     "characterProfileAndMigration": {
@@ -662,13 +721,12 @@
     },
     "machineAxis": {
       "files": 12,
-      "tests": 157,
-      "status": "passed-with-existing-30s-process-test-budget",
-      "defaultBudgetObservation": "156 assertions passed; one process-heavy test timed out at 5.19s and passed alone in 1.47s"
+      "tests": 158,
+      "status": "passed-with-established-30s-process-test-budget"
     },
     "canonicalAndRuntime": {
       "files": 5,
-      "tests": 87,
+      "tests": 169,
       "status": "passed"
     },
     "audits": {

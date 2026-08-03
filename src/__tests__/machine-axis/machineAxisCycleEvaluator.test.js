@@ -461,6 +461,52 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
+  it('keeps BeforeSkill trigger intervals in the cycle boundary state', () => {
+    const createBoundary = remainingFrames => ({
+      activeActorId: 'actor-1',
+      actors: [{ actorId: 'actor-1', sp: 100, max: 100 }],
+      kibos: [],
+      tuningMarks: [],
+      specialResources: [],
+      actorVitals: [],
+      kiboVitals: [],
+      cooldowns: [],
+      effects: [],
+      soulTriggerIntervals: [
+        {
+          bindingKey: 'actor-1|set-skill:1:4|199999024',
+          intervalMs: 12000,
+          remainingFrames,
+          sourceIdentityHash: 'c12-source',
+        },
+      ],
+      kiboPassiveRuntime: [],
+      targetStates: [],
+      shields: [],
+      pendingEvents: [],
+    });
+
+    expect(
+      compareCycleBoundaryStates(createBoundary(360), createBoundary(360))
+    ).toMatchObject({
+      closed: true,
+      stateDiffs: expect.arrayContaining([
+        expect.objectContaining({
+          dimension: 'soulTriggerIntervals',
+          equal: true,
+        }),
+      ]),
+    });
+    expect(
+      compareCycleBoundaryStates(createBoundary(360), createBoundary(0)).issues
+    ).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-state-not-closed',
+        path: 'state.soulTriggerIntervals',
+      })
+    );
+  });
+
   it('keeps cooldown charge identity in the closure proof', () => {
     const start = {
       activeActorId: 'actor-1',
@@ -995,8 +1041,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       report.samples.every(
         sample =>
           sample.replayProof.damageStabilityMode ===
-            'cycle-local-common-random-numbers' &&
-          sample.replayProof.stable
+            'cycle-local-common-random-numbers' && sample.replayProof.stable
       )
     ).toBe(true);
   }, 120_000);

@@ -1,5 +1,9 @@
 import { ACTION_TYPES } from '../../domain/projectSchema';
-import { compareActionSourceSequence } from '../../domain/actionSourceSequence';
+import {
+  compareActionSourceSequence,
+  compareSourceSequencePaths,
+  getActionSourceSequencePath,
+} from '../../domain/actionSourceSequence';
 
 export const CONTROLLED_ACTOR_TIMELINE_SCHEMA_VERSION = 1;
 export const CONTROLLED_ACTOR_TIMELINE_CONTRACT_NAME =
@@ -36,6 +40,7 @@ export function createControlledActorTimeline({
       actionId: action.id,
       timeMs: clampNumber(action.startMs, 0, durationMs),
       frameIndex: timeToFrame(action.startMs, frameRate),
+      sourceSequencePath: getActionSourceSequencePath(action),
       sourceActor: createActorIdentity(action.actor),
       beforeActor: createActorIdentity(beforeActor),
       targetActor: createActorIdentity(targetActor),
@@ -88,7 +93,7 @@ export function createControlledActorTimeline({
 export function resolveControlledActorAt(
   timeline,
   timeMs,
-  { strictlyBefore = false } = {}
+  { strictlyBefore = false, sourceSequencePath = null } = {}
 ) {
   const targetTimeMs = nonNegativeNumber(timeMs);
   let actor = timeline?.initialActor ?? null;
@@ -96,9 +101,16 @@ export function resolveControlledActorAt(
     const transitionTimeMs = nonNegativeNumber(transition.timeMs);
     if (
       transitionTimeMs > targetTimeMs ||
-      (strictlyBefore && transitionTimeMs === targetTimeMs)
+      (strictlyBefore && transitionTimeMs === targetTimeMs) ||
+      (transitionTimeMs === targetTimeMs &&
+        sourceSequencePath != null &&
+        compareSourceSequencePaths(
+          transition.sourceSequencePath,
+          sourceSequencePath
+        ) > 0)
     ) {
-      break;
+      if (transitionTimeMs > targetTimeMs) break;
+      continue;
     }
     if (transition.applied && transition.afterActor) {
       actor = transition.afterActor;

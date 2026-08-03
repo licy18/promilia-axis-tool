@@ -53,6 +53,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   tuningMechanicsCatalog = null,
   persistentLoadoutPropertyRuntimeEvidence = null,
   fourPieceSetStackRuntimeEvidence = null,
+  beforeSkillCompositeRuntimeEvidence = null,
 } = {}) {
   if (
     propertyTagContract?.sourceKind !== 'il2cpp-battle-property-tag-contract' ||
@@ -86,6 +87,13 @@ export async function createSoulEssenceEffectMechanicsCatalog({
     fourPieceSetStackRuntimeEvidence?.conclusion?.status !== 'applied'
   ) {
     throw new Error('soulessence-four-piece-set-stack-evidence-missing');
+  }
+  if (
+    beforeSkillCompositeRuntimeEvidence?.contractName !==
+      'AzPrBeforeSkillCompositeImmediateRuntimeEvidence' ||
+    beforeSkillCompositeRuntimeEvidence?.conclusion?.status !== 'applied'
+  ) {
+    throw new Error('soulessence-before-skill-composite-evidence-missing');
   }
   const tuningMechanicsHash = hashCanonicalValue(tuningMechanicsCatalog);
   const definitionBySoulId = new Map(
@@ -156,6 +164,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       tuningMechanicsCatalog,
       persistentLoadoutPropertyRuntimeEvidence,
       fourPieceSetStackRuntimeEvidence,
+      beforeSkillCompositeRuntimeEvidence,
     })
   );
   const value = {
@@ -191,6 +200,11 @@ export async function createSoulEssenceEffectMechanicsCatalog({
           fourPieceSetStackRuntimeEvidence.conclusion.sourceIdentity,
         contractHash: hashCanonicalValue(fourPieceSetStackRuntimeEvidence),
       },
+      beforeSkillCompositeRuntimeEvidence: {
+        sourceIdentity:
+          beforeSkillCompositeRuntimeEvidence.conclusion.sourceIdentity,
+        contractHash: hashCanonicalValue(beforeSkillCompositeRuntimeEvidence),
+      },
       sourceSnapshotHash: hashCanonicalValue({
         battleElements: battleSource.metadata,
         controlClosure: controlSource.metadata,
@@ -203,6 +217,9 @@ export async function createSoulEssenceEffectMechanicsCatalog({
         ),
         fourPieceSetStackRuntimeEvidenceHash: hashCanonicalValue(
           fourPieceSetStackRuntimeEvidence
+        ),
+        beforeSkillCompositeRuntimeEvidenceHash: hashCanonicalValue(
+          beforeSkillCompositeRuntimeEvidence
         ),
       }),
     },
@@ -217,6 +234,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
         'equipped-actor-persistent-property-root',
         'set-skill-persistent-property',
         'set-skill-before-damage-stacking-property',
+        'set-skill-before-skill-composite-immediate',
       ],
     },
     propertyTagContract,
@@ -368,6 +386,7 @@ function compileSetSkillEffectDefinition({
   tuningMechanicsCatalog,
   persistentLoadoutPropertyRuntimeEvidence,
   fourPieceSetStackRuntimeEvidence,
+  beforeSkillCompositeRuntimeEvidence,
 }) {
   const resourcePathIds = uniqueNumbers(control?.resourcePathIds ?? []);
   const missingPathIds = resourcePathIds.filter(
@@ -443,7 +462,22 @@ function compileSetSkillEffectDefinition({
     triggerContract,
     tuningMechanicsCatalog,
   });
-  const compiledDynamicEffect = beforeDamageStack ?? afterHealProperty;
+  const beforeSkillComposite = compileFourPieceSetBeforeSkillComposite({
+    setSkill,
+    control,
+    closure,
+    activeTriggerRows,
+    triggerRows,
+    propertyRows,
+    damageRows,
+    resourceRows,
+    battleElementsByPathId,
+    triggerContract,
+    tuningMechanicsCatalog,
+    beforeSkillCompositeRuntimeEvidence,
+  });
+  const compiledDynamicEffect =
+    beforeDamageStack ?? afterHealProperty ?? beforeSkillComposite;
   const mechanismFamilies = uniqueStrings([
     ...triggers.map(trigger =>
       trigger.event == null
@@ -497,6 +531,7 @@ function compileSetSkillEffectDefinition({
     triggers,
     trigger: compiledDynamicEffect?.trigger ?? null,
     effect: compiledDynamicEffect?.effect ?? null,
+    immediateEffects: compiledDynamicEffect?.immediateEffects ?? [],
     activationPrerequisites: closure.rows
       .filter(
         row =>
@@ -564,7 +599,7 @@ function compileSetSkillEffectDefinition({
         triggerElementId: trigger.elementId,
         delayOrIntervalMs: trigger.intervalMs,
         sourceIdentity: trigger.sourceIdentity,
-        status: 'source-indexed-runtime-unapplied',
+        status: runtimeStatus,
       })),
     loopPersistence: {
       status:
@@ -688,7 +723,8 @@ function compileFourPieceSetBeforeDamageStack({
   const unloadPaths = lifecycle?.removalPaths ?? [];
   const matchingUnload = unloadPaths.find(
     row =>
-      Number(row.triggerElementId) === Number(reviewed.unloadTriggerElementId) &&
+      Number(row.triggerElementId) ===
+        Number(reviewed.unloadTriggerElementId) &&
       Number(row.removerElementId) === Number(reviewed.removerElementId) &&
       sameNumbers(row.removedElementIds, reviewed.removedElementIds)
   );
@@ -740,7 +776,8 @@ function compileFourPieceSetBeforeDamageStack({
   }
   if (
     triggerEffects.length !== 1 ||
-    Number(triggerEffects[0]?.targetType) !== Number(reviewed.effectTargetType) ||
+    Number(triggerEffects[0]?.targetType) !==
+      Number(reviewed.effectTargetType) ||
     effectTargetBinding?.targetKind !== 'self-actor' ||
     !effectPath
   ) {
@@ -749,7 +786,8 @@ function compileFourPieceSetBeforeDamageStack({
   if (
     propertyRows.length !== 1 ||
     reachablePropertyRows.length !== 1 ||
-    Number(propertyTree.elementConfigId) !== Number(reviewed.propertyElementId) ||
+    Number(propertyTree.elementConfigId) !==
+      Number(reviewed.propertyElementId) ||
     Number(propertyTree.attributeID) !== Number(reviewed.attributeId) ||
     Number(propertyTree.calculateType) !== Number(reviewed.calculateType) ||
     Number(propertyTree.time) !== Number(reviewed.durationMs) ||
@@ -893,6 +931,274 @@ function compileFourPieceSetBeforeDamageStack({
   };
 }
 
+function compileFourPieceSetBeforeSkillComposite({
+  setSkill,
+  control,
+  closure,
+  activeTriggerRows,
+  triggerRows,
+  propertyRows,
+  damageRows,
+  resourceRows,
+  battleElementsByPathId,
+  triggerContract,
+  tuningMechanicsCatalog,
+  beforeSkillCompositeRuntimeEvidence,
+}) {
+  if (Number(setSkill.pieces) !== 4) return null;
+  const reviewed = beforeSkillCompositeRuntimeEvidence?.reviewedDefinition;
+  if (
+    Number(reviewed?.setId) !== Number(setSkill.setId) ||
+    Number(reviewed?.pieces) !== Number(setSkill.pieces) ||
+    Number(reviewed?.skillId) !== Number(setSkill.skillId)
+  ) {
+    return null;
+  }
+
+  const runtimeGaps = [];
+  const trigger = activeTriggerRows.length === 1 ? activeTriggerRows[0] : null;
+  const triggerTree = trigger?.typetree ?? {};
+  const triggerEffects = Array.isArray(triggerTree.triggerEffectList)
+    ? triggerTree.triggerEffectList
+    : [];
+  const eventBinding = triggerContract?.eventBindings?.find(
+    binding => Number(binding.value) === Number(triggerTree.triggerParam1)
+  );
+  const triggerTargetBinding = triggerContract?.triggerTargetBindings?.find(
+    binding => Number(binding.value) === Number(triggerTree.triggerTargetType)
+  );
+  const condition = compileTriggerCondition({
+    trigger,
+    conditions: triggerTree.triggerConditionList ?? [],
+    conditionLogicValue: Number(triggerTree.triggerConditionType),
+    triggerContract,
+    tuningMechanicsCatalog,
+    frameAnchor: eventBinding?.frameAnchor ?? null,
+  });
+  const effectRows = triggerEffects.map(
+    effect =>
+      battleElementsByPathId.get(Number(effect?.targetElement?.m_PathID)) ??
+      null
+  );
+  const removalPaths = projectUnloadRemovalPaths({
+    unloadTriggers: triggerRows.filter(
+      row => Number(row.typetree?.triggerParam1) === 36
+    ),
+    closure,
+    battleElementsByPathId,
+  });
+  const matchingUnload = removalPaths.find(
+    row =>
+      Number(row.triggerElementId) ===
+        Number(reviewed.unloadTriggerElementId) &&
+      Number(row.removerElementId) === Number(reviewed.removerElementId) &&
+      sameNumbers(row.removedElementIds, reviewed.removedElementIds)
+  );
+
+  if (!control)
+    runtimeGaps.push('set-before-skill-composite-control-source-missing');
+  if (activeTriggerRows.length !== 1) {
+    runtimeGaps.push('set-before-skill-composite-active-trigger-not-unique');
+  }
+  if (
+    Number(triggerTree.elementConfigId) !== Number(reviewed.triggerElementId) ||
+    Number(trigger?.path_id) !== Number(reviewed.triggerPathId) ||
+    Number(triggerTree.triggerParam1) !== Number(reviewed.eventId) ||
+    eventBinding?.frameAnchor !== 'action-start'
+  ) {
+    runtimeGaps.push('set-before-skill-composite-trigger-source-drift');
+  }
+  if (
+    Number(triggerTree.triggerTargetType) !==
+      Number(reviewed.triggerTargetType) ||
+    triggerTargetBinding?.sourceKind !== 'equipped-actor-source-events'
+  ) {
+    runtimeGaps.push('set-before-skill-composite-trigger-subject-source-drift');
+  }
+  if (
+    Number(triggerTree.triggerConditionType) !==
+      Number(reviewed.conditionLogicValue) ||
+    !sameConditions(triggerTree.triggerConditionList, reviewed.conditions) ||
+    condition?.logic !== 'and' ||
+    condition?.status !== 'applied'
+  ) {
+    runtimeGaps.push('set-before-skill-composite-condition-source-drift');
+  }
+  if (
+    Number(triggerTree.triggerInv) !== Number(reviewed.intervalMs) ||
+    Number(triggerTree.triggerCounter) !== Number(reviewed.triggerCounter) ||
+    beforeSkillCompositeRuntimeEvidence?.semantics
+      ?.conditionFailureConsumesInterval !== false ||
+    beforeSkillCompositeRuntimeEvidence?.semantics?.intervalBoundary !==
+      'right-open-suppression-exact-boundary-admitted'
+  ) {
+    runtimeGaps.push('set-before-skill-composite-interval-source-drift');
+  }
+  if (
+    triggerEffects.length !== reviewed.effects.length ||
+    effectRows.some(
+      (row, index) =>
+        Number(row?.typetree?.elementConfigId) !==
+        Number(reviewed.effects[index]?.elementId)
+    )
+  ) {
+    runtimeGaps.push('set-before-skill-composite-effect-order-source-drift');
+  }
+  if (
+    propertyRows.length > 0 ||
+    damageRows.length !== 1 ||
+    resourceRows.length !== 1
+  ) {
+    runtimeGaps.push('set-before-skill-composite-effect-family-source-drift');
+  }
+  if (!matchingUnload) {
+    runtimeGaps.push('set-before-skill-composite-unload-source-drift');
+  }
+
+  const immediateEffects = reviewed.effects.map((reviewedEffect, index) => {
+    const effectRow = effectRows[index];
+    const tree = effectRow?.typetree ?? {};
+    const sourceEffect = triggerEffects[index];
+    const targetBinding = triggerContract?.targetBindings?.find(
+      binding => Number(binding.value) === Number(sourceEffect?.targetType)
+    );
+    const commonFunctionId = numberOrNull(
+      tree.formulaParams?.function_1 ?? tree.baseIntParams?.[0]
+    );
+    const baseFunctionId = numberOrNull(
+      tree.formulaParams?.function_2 ?? tree.baseIntParams?.[1]
+    );
+    const sourceRawA = numberOrNull(
+      tree.formulaParams?.formulaParamValues?.[0] ?? tree.functionParams?.[0]
+    );
+    if (
+      Number(sourceEffect?.targetType) !== Number(reviewedEffect.targetType) ||
+      Number(sourceEffect?.targetElement?.m_PathID) !==
+        Number(reviewedEffect.pathId) ||
+      targetBinding?.targetKind == null ||
+      commonFunctionId !== Number(reviewedEffect.commonFunctionId) ||
+      baseFunctionId !== Number(reviewedEffect.baseFunctionId)
+    ) {
+      runtimeGaps.push(
+        `set-before-skill-composite-effect-${index}-source-drift`
+      );
+    }
+    const sourceIdentity = [
+      `${createElementIdentity(trigger)}.triggerEffectList[${index}]`,
+      effectRow ? createElementIdentity(effectRow) : null,
+      targetBinding?.sourceIdentity,
+      beforeSkillCompositeRuntimeEvidence?.conclusion?.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|');
+    if (reviewedEffect.kind === 'direct-sp') {
+      if (
+        Number(tree.recoverType) !== Number(reviewedEffect.recoverType) ||
+        Number(tree.shareType) !== Number(reviewedEffect.shareType) ||
+        Number(tree.petShareType) !== Number(reviewedEffect.petShareType) ||
+        Number(tree.mainPetShareType) !==
+          Number(reviewedEffect.mainPetShareType) ||
+        sourceRawA !== Number(reviewedEffect.sourceRawValue)
+      ) {
+        runtimeGaps.push('set-before-skill-composite-sp-source-drift');
+      }
+      return {
+        kind: 'direct-sp',
+        effectIndex: index,
+        elementId: Number(tree.elementConfigId),
+        pathId: Number(effectRow?.path_id),
+        targetKind: targetBinding?.targetKind ?? 'unresolved',
+        targetType: Number(sourceEffect?.targetType),
+        recoverType: Number(tree.recoverType),
+        shareType: Number(tree.shareType),
+        petShareType: Number(tree.petShareType),
+        mainPetShareType: Number(tree.mainPetShareType),
+        sourceRawValue: sourceRawA,
+        formula: {
+          commonFunctionId,
+          baseFunctionId,
+          commonExpression: 'G/10000',
+          baseExpression: 'A',
+          sourceRawA,
+          sourceIdentity: `${createElementIdentity(effectRow)}.formulaParams|functionParams`,
+        },
+        sourceIdentity,
+      };
+    }
+    if (
+      Number(tree.damageType) !== Number(reviewedEffect.damageType) ||
+      sourceRawA !== Number(reviewedEffect.sourceRawA) ||
+      reviewedEffect.baseExpression !== '(target.MAXHP[0]*A)/10000'
+    ) {
+      runtimeGaps.push('set-before-skill-composite-heal-source-drift');
+    }
+    return {
+      kind: 'direct-heal',
+      effectIndex: index,
+      elementId: Number(tree.elementConfigId),
+      pathId: Number(effectRow?.path_id),
+      targetKind: targetBinding?.targetKind ?? 'unresolved',
+      targetType: Number(sourceEffect?.targetType),
+      damageType: Number(tree.damageType),
+      sourceRawValue: sourceRawA,
+      formula: {
+        formulaIdentity: `battle-effect-formula:set-skill:${Number(setSkill.skillId)}:${Number(tree.elementConfigId)}:${Number(effectRow?.path_id)}`,
+        commonFunctionId,
+        commonExpression: 'G/10000',
+        baseFunctionId,
+        baseExpression: reviewedEffect.baseExpression,
+        sourceRawA,
+        commonRatioRaw: numberOrNull(
+          tree.formulaParams?.formulaParamValues?.[6] ??
+            tree.functionParams?.[6]
+        ),
+        sourceIdentity: `${createElementIdentity(effectRow)}.formulaParams|functionParams|NewTable/element_formula.rows[id=${baseFunctionId}]`,
+      },
+      sourceIdentity,
+    };
+  });
+
+  return {
+    mechanismFamily: 'set-skill-before-skill-composite-immediate',
+    runtimeGaps: uniqueStrings(runtimeGaps),
+    sourceIdentity: [
+      beforeSkillCompositeRuntimeEvidence?.conclusion?.sourceIdentity,
+      trigger ? createElementIdentity(trigger) : null,
+      ...immediateEffects.map(effect => effect.sourceIdentity),
+      matchingUnload?.sourceIdentity,
+    ].filter(Boolean),
+    trigger:
+      trigger == null
+        ? null
+        : {
+            elementId: Number(triggerTree.elementConfigId),
+            pathId: Number(trigger.path_id),
+            eventId: Number(triggerTree.triggerParam1),
+            event: eventBinding?.name ?? null,
+            frameAnchor: eventBinding?.frameAnchor ?? null,
+            intervalMs: numberOrNull(triggerTree.triggerInv),
+            triggerCounter: numberOrNull(triggerTree.triggerCounter),
+            intervalSourceIdentity: `${createElementIdentity(trigger)}.triggerInv|${beforeSkillCompositeRuntimeEvidence?.conclusion?.sourceIdentity}`,
+            condition,
+            triggerTargetType: numberOrNull(triggerTree.triggerTargetType),
+            triggerTarget: triggerTargetBinding
+              ? {
+                  kind: triggerTargetBinding.sourceKind,
+                  triggerTargetType: Number(triggerTargetBinding.value),
+                  triggerTargetTypeName: triggerTargetBinding.enumName,
+                  sourceIdentity: `${createElementIdentity(trigger)}.triggerTargetType|${triggerTargetBinding.sourceIdentity}`,
+                }
+              : null,
+            target: null,
+            targetKind: 'composite-effect-targets',
+            sourceIdentity: createElementIdentity(trigger),
+          },
+    effect: null,
+    immediateEffects,
+    unload: matchingUnload ?? null,
+  };
+}
+
 function compileFourPieceSetAfterHealProperty({
   setSkill,
   control,
@@ -986,7 +1292,8 @@ function compileFourPieceSetAfterHealProperty({
   if (
     Number(triggerTree.triggerParam1) !== 44 ||
     eventBinding.frameAnchor !== 'heal-after-settlement' ||
-    triggerContract?.nonDamageRuntime?.afterHeal?.dispatchAfterSettlement !== true
+    triggerContract?.nonDamageRuntime?.afterHeal?.dispatchAfterSettlement !==
+      true
   ) {
     runtimeGaps.push('set-after-heal-event-source-drift');
   }
@@ -1149,11 +1456,13 @@ function compileFourPieceSetAfterHealProperty({
 function sameConditions(left, right) {
   return (
     JSON.stringify(projectConditions(left ?? [])) ===
-    JSON.stringify((right ?? []).map(row => ({
-      conditionType: numberOrNull(row.conditionType),
-      conditionValue: numberOrNull(row.conditionValue),
-      conditionExtra: numberOrNull(row.conditionExtra),
-    })))
+    JSON.stringify(
+      (right ?? []).map(row => ({
+        conditionType: numberOrNull(row.conditionType),
+        conditionValue: numberOrNull(row.conditionValue),
+        conditionExtra: numberOrNull(row.conditionExtra),
+      }))
+    )
   );
 }
 
@@ -1267,7 +1576,9 @@ function compileTriggerCondition({
         ? triggerContract.skillSlotBindings
         : typeBinding?.selectorKind === 'skill-tag'
           ? triggerContract.skillTagBindings
-          : [];
+          : typeBinding?.selectorKind === 'self-stay-type'
+            ? triggerContract.stayTypeBindings
+            : [];
     const valueBinding = valueBindings.find(
       binding => Number(binding.value) === conditionValue
     );
@@ -1311,6 +1622,14 @@ function compileTriggerCondition({
         ...base,
         skillTagId: conditionValue,
         skillTagName: valueBinding?.enumName ?? null,
+      };
+    }
+    if (typeBinding?.selectorKind === 'self-stay-type') {
+      return {
+        ...base,
+        stayType: conditionValue,
+        stayTypeName: valueBinding?.enumName ?? null,
+        runtimeKind: valueBinding?.runtimeKind ?? null,
       };
     }
     return base;
@@ -1368,6 +1687,8 @@ function compileTriggerCondition({
     skillSlotName: single?.skillSlotName ?? null,
     skillTagId: single?.skillTagId ?? null,
     skillTagName: single?.skillTagName ?? null,
+    stayType: single?.stayType ?? null,
+    stayTypeName: single?.stayTypeName ?? null,
     logic: logicBinding.runtimeLogic,
     logicValue: Number(logicBinding.value),
     logicName: logicBinding.enumName,
@@ -1963,9 +2284,7 @@ function compilePersistentSoulEffectDefinition({
   });
   const runtimeGaps = uniqueStrings([
     ...(control ? [] : ['effect-control-source-missing']),
-    ...(missingPathIds.length
-      ? ['effect-resource-reference-missing']
-      : []),
+    ...(missingPathIds.length ? ['effect-resource-reference-missing'] : []),
     ...persistentRoot.runtimeGaps,
   ]);
   const runtimeStatus = runtimeGaps.length
@@ -2166,7 +2485,9 @@ function compilePersistentPropertyRoot({
   for (const effect of effects) {
     if (effect.durationMs !== -1) {
       runtimeGaps.push('effect-persistent-root-lifetime-not-permanent');
-      runtimeGaps.push('effect-persistent-root-conditional-wrapper-unsupported');
+      runtimeGaps.push(
+        'effect-persistent-root-conditional-wrapper-unsupported'
+      );
     }
     if (
       effect.combineType !== 3 ||
@@ -2215,8 +2536,7 @@ function compilePersistentPropertyRoot({
           : 'unresolved',
       directInjectTargetType:
         installation?.injection?.directInjectTargetType ?? null,
-      removeElementOnEnd:
-        installation?.injection?.removeElementOnEnd ?? null,
+      removeElementOnEnd: installation?.injection?.removeElementOnEnd ?? null,
       rootElementId: numberOrNull(rootRow?.typetree?.elementConfigId),
       rootPathId: numberOrNull(rootRow?.path_id),
       sourceSequencePath: structuredClone(
@@ -2342,11 +2662,7 @@ function compilePersistentPropertyEffect({
       commonExpression: commonFunctionId === 1 ? 'G/10000' : null,
       baseFunctionId,
       baseExpression:
-        baseFunctionId === 3
-          ? 'A/10000'
-          : baseFunctionId === 5
-            ? 'A'
-            : null,
+        baseFunctionId === 3 ? 'A/10000' : baseFunctionId === 5 ? 'A' : null,
       commonRatioRaw: Number(formulaParams[6]),
       formulaParams,
       sourceParameterEncoding: 'battle-element-raw-a',
@@ -2574,7 +2890,8 @@ function compareTimelineInjections(left, right) {
   const rightPath = right.sourceSequencePath ?? [];
   const length = Math.max(leftPath.length, rightPath.length);
   for (let index = 0; index < length; index += 1) {
-    const delta = Number(leftPath[index] ?? -1) - Number(rightPath[index] ?? -1);
+    const delta =
+      Number(leftPath[index] ?? -1) - Number(rightPath[index] ?? -1);
     if (delta !== 0) return delta;
   }
   return Number(left.elementPathId) - Number(right.elementPathId);

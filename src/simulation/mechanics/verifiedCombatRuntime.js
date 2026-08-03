@@ -2670,6 +2670,19 @@ function applyDirectHealDescriptor({ descriptor, state }) {
     timeMs: descriptor.timeMs,
   });
   const before = vital.currentHp;
+  if (!(Number(before) > 0)) {
+    return createDirectVitalEvent({
+      type: 'VERIFIED_DIRECT_HEAL',
+      descriptor,
+      before,
+      after: before,
+      maximum: vital.maximumHp,
+      vital,
+      applied: false,
+      reason: 'direct-heal-dead-target-rejected',
+      requestedChange: 0,
+    });
+  }
   const formula = resolveDirectHealFormula({ descriptor, state });
   vital.currentHp = clampNumber(
     vital.currentHp + formula.requestedChange,
@@ -2691,6 +2704,7 @@ function applyDirectHealDescriptor({ descriptor, state }) {
 function resolveDirectHealFormula({ descriptor, state }) {
   const directEvent = descriptor.directEvent;
   const sourceTarget = resolveDirectHealSourceTarget(directEvent);
+  const targetVital = resolveFriendlyVitalState(state, directEvent.target);
   const sourceAttributeId = state.attributeIdByKey.get('SHOOT_HEALUP') ?? 23;
   const targetAttributeId = state.attributeIdByKey.get('SUFFER_HEALUP') ?? 24;
   const resolutionOptions = {
@@ -2710,13 +2724,31 @@ function resolveDirectHealFormula({ descriptor, state }) {
     target: directEvent.target,
     attributeId: targetAttributeId,
   });
-  const baseRequestedChange = Number(directEvent.value);
-  const formulaReady = sourceHealUp.ready && targetHealUp.ready;
+  const formulaContract = directEvent.effect?.heal?.formula ?? null;
+  const baseFunctionId = Number(formulaContract?.baseFunctionId);
+  const commonFunctionId = Number(formulaContract?.commonFunctionId);
+  const sourceRawA = Number(
+    formulaContract?.sourceRawA ?? directEvent.formulaResult?.sourceRawA
+  );
+  const targetMaximumHp = Number(targetVital?.maximumHp);
+  const usesMaximumHpRatioFormula = baseFunctionId === 108;
+  const baseFormulaReady = usesMaximumHpRatioFormula
+    ? commonFunctionId === 1 &&
+      Number.isFinite(sourceRawA) &&
+      Number.isFinite(targetMaximumHp)
+    : Number.isFinite(Number(directEvent.value));
+  const baseRaw = usesMaximumHpRatioFormula
+    ? baseFormulaReady
+      ? qMul(qFromFloat(targetMaximumHp), qFromFloat(sourceRawA / 10000))
+      : qFromInt(0)
+    : qFromFloat(Number(directEvent.value));
+  const baseRequestedChange = qToNumber(baseRaw);
+  const formulaReady =
+    baseFormulaReady && sourceHealUp.ready && targetHealUp.ready;
   const sourceShootHealUpRaw = formulaReady ? Number(sourceHealUp.value) : 0;
   const targetSufferHealUpRaw = formulaReady ? Number(targetHealUp.value) : 0;
   const healUpFactor =
     1 + (sourceShootHealUpRaw + targetSufferHealUpRaw) / 10000;
-  const baseRaw = qFromFloat(baseRequestedChange);
   const factorRaw = qFromFloat(healUpFactor);
   const resultRaw = qMul(baseRaw, factorRaw);
   const requestedChange = Number(runtimeIntegerize(resultRaw));
@@ -2725,7 +2757,22 @@ function resolveDirectHealFormula({ descriptor, state }) {
     payload: {
       formulaStatus: formulaReady
         ? 'verified-direct-heal-modifier-applied'
-        : 'verified-direct-heal-modifier-attribute-unresolved',
+        : baseFormulaReady
+          ? 'verified-direct-heal-modifier-attribute-unresolved'
+          : 'verified-direct-heal-base-formula-unresolved',
+      formulaIdentity:
+        formulaContract?.formulaIdentity ??
+        directEvent.formulaResult?.formulaIdentity ??
+        null,
+      commonFunctionId: Number.isInteger(commonFunctionId)
+        ? commonFunctionId
+        : null,
+      baseFunctionId: Number.isInteger(baseFunctionId) ? baseFunctionId : null,
+      sourceRawA: Number.isFinite(sourceRawA) ? sourceRawA : null,
+      targetMaximumHp: Number.isFinite(targetMaximumHp)
+        ? roundValue(targetMaximumHp)
+        : null,
+      baseExpression: formulaContract?.baseExpression ?? null,
       baseRequestedChange: roundValue(baseRequestedChange),
       sourceShootHealUpRaw: roundValue(sourceShootHealUpRaw),
       targetSufferHealUpRaw: roundValue(targetSufferHealUpRaw),
@@ -2736,6 +2783,12 @@ function resolveDirectHealFormula({ descriptor, state }) {
         targetHealUp,
       },
       formulaQ16Trace: {
+        targetMaximumRaw: Number.isFinite(targetMaximumHp)
+          ? qFromFloat(targetMaximumHp).toString()
+          : null,
+        sourceRatioRaw: Number.isFinite(sourceRawA)
+          ? qFromFloat(sourceRawA / 10000).toString()
+          : null,
         baseRaw: baseRaw.toString(),
         factorRaw: factorRaw.toString(),
         resultRaw: resultRaw.toString(),

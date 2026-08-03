@@ -234,7 +234,7 @@ export function validateMachineAxisCycleEnvelope(value = {}) {
         cycleIssue(
           'machine-axis-cycle-seeds-invalid',
           'options.seeds',
-        'Cycle seeds must be a non-empty array of integers or non-empty strings'
+          'Cycle seeds must be a non-empty array of integers or non-empty strings'
         )
       );
     }
@@ -525,6 +525,15 @@ export function compareCycleBoundaryStates(startSnapshot, endSnapshot) {
     ['shields', normalizeShieldState],
     ['pendingEvents', normalizePendingState],
   ];
+  if (
+    (startSnapshot.soulTriggerIntervals?.length ?? 0) > 0 ||
+    (endSnapshot.soulTriggerIntervals?.length ?? 0) > 0
+  ) {
+    stateDimensions.splice(2, 0, [
+      'soulTriggerIntervals',
+      normalizeSoulTriggerIntervalState,
+    ]);
+  }
   const stateDiffs = [];
   for (const [dimension, normalize] of stateDimensions) {
     const startValue = normalize(startSnapshot);
@@ -677,8 +686,7 @@ function evaluateCycleSample({
   if (commonRandomPlan && !commonRandomPlan.valid) {
     return rejectedSample(seed, commonRandomPlan.issues);
   }
-  const replayContract =
-    commonRandomPlan?.contract ?? loopPlan.contract;
+  const replayContract = commonRandomPlan?.contract ?? loopPlan.contract;
 
   let replayPrepared;
   try {
@@ -1371,9 +1379,10 @@ function createCycleSampleStatistics({ samples, durationSeconds, aggregate }) {
     samples.map(sample => Number(sample.firstCycle?.hpDamage) || 0)
   );
   const cycleDps = describeCycleSampleValues(
-    samples.map(sample =>
-      (Number(sample.firstCycle?.hpDamage) || 0) /
-      Math.max(VALUE_TOLERANCE, durationSeconds)
+    samples.map(
+      sample =>
+        (Number(sample.firstCycle?.hpDamage) || 0) /
+        Math.max(VALUE_TOLERANCE, durationSeconds)
     )
   );
   const contributionConservation = Object.fromEntries(
@@ -1421,10 +1430,7 @@ function describeCycleSampleValues(values) {
   const meanValue = mean(sorted);
   const variance =
     sorted.length > 1
-      ? sorted.reduce(
-          (sum, value) => sum + (value - meanValue) ** 2,
-          0
-        ) /
+      ? sorted.reduce((sum, value) => sum + (value - meanValue) ** 2, 0) /
         (sorted.length - 1)
       : 0;
   return {
@@ -1615,8 +1621,7 @@ function compareTuningMarkLifecycleStates(startRows = [], endRows = []) {
         startRow.decayRemainingFrames;
     const heldReadyClosed =
       bothEmpty ||
-      endRow.heldReadyRemainingFrames <=
-        startRow.heldReadyRemainingFrames;
+      endRow.heldReadyRemainingFrames <= startRow.heldReadyRemainingFrames;
     const diff = {
       markIdentity,
       profileKey: endRow.profileKey ?? startRow.profileKey,
@@ -1624,9 +1629,7 @@ function compareTuningMarkLifecycleStates(startRows = [], endRows = []) {
       startStacks: startRow.stacks,
       endStacks: endRow.stacks,
       stackDelta,
-      startDecayRemainingFrames: bothEmpty
-        ? 0
-        : startRow.decayRemainingFrames,
+      startDecayRemainingFrames: bothEmpty ? 0 : startRow.decayRemainingFrames,
       endDecayRemainingFrames: bothEmpty ? 0 : endRow.decayRemainingFrames,
       startHeldReadyRemainingFrames: bothEmpty
         ? 0
@@ -1686,10 +1689,7 @@ function normalizeTuningMarkLifecycleRow(row = {}) {
     profileKey: row.profileKey ?? null,
     markId: row.markId ?? null,
     stacks: Math.max(0, Number(row.stacks) || 0),
-    decayRemainingFrames: Math.max(
-      0,
-      Number(row.decayRemainingFrames) || 0
-    ),
+    decayRemainingFrames: Math.max(0, Number(row.decayRemainingFrames) || 0),
     heldReadyRemainingFrames: Math.max(
       0,
       Number(row.heldReadyRemainingFrames) || 0
@@ -1710,10 +1710,51 @@ function emptyTuningMarkLifecycle() {
 function projectCanonicalBoundaryState({ snapshot, boundaryRun, frame }) {
   const verifiedRuntime = boundaryRun?.simulation?.verifiedCombatRuntime;
   if (!verifiedRuntime?.ready) return snapshot;
-  const boundaryTimeMs =
-    Number(frame) * (1000 / (Number(snapshot.fps) || 60));
+  const boundaryTimeMs = Number(frame) * (1000 / (Number(snapshot.fps) || 60));
   const prefixTimeMs = Number(boundaryRun.trace?.scenario?.durationMs) || 0;
   const prefixGapMs = Math.max(0, boundaryTimeMs - prefixTimeMs);
+  const soulTriggerOccurrences =
+    boundaryRun.simulation?.verifiedSoulEssenceEffectGeneration
+      ?.acceptedTriggerOccurrences;
+  if (Array.isArray(soulTriggerOccurrences)) {
+    const latestByBinding = new Map();
+    for (const occurrence of soulTriggerOccurrences) {
+      if (
+        !occurrence?.bindingKey ||
+        Number(occurrence.timeMs) > boundaryTimeMs
+      ) {
+        continue;
+      }
+      const current = latestByBinding.get(occurrence.bindingKey);
+      if (
+        !current ||
+        Number(occurrence.timeMs) > Number(current.timeMs) ||
+        (Number(occurrence.timeMs) === Number(current.timeMs) &&
+          compareCanonicalRows(occurrence, current) > 0)
+      ) {
+        latestByBinding.set(occurrence.bindingKey, occurrence);
+      }
+    }
+    snapshot.soulTriggerIntervals = [...latestByBinding.values()]
+      .map(occurrence => ({
+        bindingKey: occurrence.bindingKey,
+        intervalMs: Number(occurrence.intervalMs) || 0,
+        remainingFrames: Math.max(
+          0,
+          msToFrame(
+            Number(occurrence.timeMs) +
+              Number(occurrence.intervalMs) -
+              boundaryTimeMs
+          )
+        ),
+        sourceIdentityHash: hashCanonicalValue({
+          bindingKey: occurrence.bindingKey,
+          actorId: occurrence.actorId ?? null,
+        }),
+      }))
+      .filter(row => row.remainingFrames > 0)
+      .sort(compareCanonicalRows);
+  }
   const tuningState = verifiedRuntime.tuningMarkRuntime?.finalState;
   if (Array.isArray(tuningState)) {
     snapshot.tuningMarks = tuningState
@@ -1731,10 +1772,7 @@ function projectCanonicalBoundaryState({ snapshot, boundaryRun, frame }) {
         heldReadyRemainingFrames: Math.max(
           0,
           msToFrame(
-            Math.max(
-              0,
-              (Number(row.heldReadyRemainingMs) || 0) - prefixGapMs
-            )
+            Math.max(0, (Number(row.heldReadyRemainingMs) || 0) - prefixGapMs)
           )
         ),
       }))
@@ -1765,9 +1803,7 @@ function projectCanonicalBoundaryState({ snapshot, boundaryRun, frame }) {
               ? 0
               : Math.max(0, msToFrame(cooldownReadyAtMs - boundaryTimeMs)),
           triggerCount: Math.max(0, Number(row.triggerCount) || 0),
-          configuredTriggerCounter: integerOrNull(
-            row.configuredTriggerCounter
-          ),
+          configuredTriggerCounter: integerOrNull(row.configuredTriggerCounter),
           triggerLifetime: row.triggerLifetime ?? null,
           triggerLifetimeBasis: row.triggerLifetimeBasis ?? null,
           maxTriggerCount: integerOrNull(row.maxTriggerCount),
@@ -1811,8 +1847,7 @@ function projectCanonicalBoundaryState({ snapshot, boundaryRun, frame }) {
             ),
           }))
           .filter(
-            state =>
-              state.stateElementId != null && state.remainingFrames !== 0
+            state => state.stateElementId != null && state.remainingFrames !== 0
           )
           .sort(compareCanonicalRows),
       }))
@@ -1944,6 +1979,18 @@ function normalizeEffectState(snapshot) {
     .sort(compareCanonicalRows);
 }
 
+function normalizeSoulTriggerIntervalState(snapshot) {
+  return (snapshot.soulTriggerIntervals ?? [])
+    .map(row => ({
+      bindingKey: row.bindingKey ?? null,
+      intervalMs: Math.max(0, Number(row.intervalMs) || 0),
+      remainingFrames: Math.max(0, Number(row.remainingFrames) || 0),
+      sourceIdentityHash: row.sourceIdentityHash ?? null,
+    }))
+    .filter(row => row.bindingKey && row.remainingFrames > 0)
+    .sort(compareCanonicalRows);
+}
+
 function normalizeKiboPassiveRuntimeState(snapshot) {
   return (snapshot.kiboPassiveRuntime ?? [])
     .map(row => ({
@@ -1983,10 +2030,7 @@ function normalizeTargetState(snapshot) {
       maxValue: Number(row.maxValue) || 0,
       layers: (row.layers ?? [])
         .map(layer => ({
-          remainingFrames: Math.max(
-            0,
-            Number(layer.remainingFrames) || 0
-          ),
+          remainingFrames: Math.max(0, Number(layer.remainingFrames) || 0),
           sourceIdentityHash: layer.sourceIdentityHash ?? null,
         }))
         .filter(layer => layer.remainingFrames > 0)
