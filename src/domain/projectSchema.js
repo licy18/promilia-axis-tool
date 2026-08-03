@@ -61,6 +61,7 @@ export const EFFECT_STACK_MODES = Object.freeze({
   REFRESH: 'refresh',
   STACK: 'stack',
   REPLACE: 'replace',
+  BLOCK: 'block',
 });
 
 export const ENEMY_ELEMENT_DEFENSE_DEFINITIONS = Object.freeze([

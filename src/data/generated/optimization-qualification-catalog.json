@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "567d220743475d95",
-  "manifestsHash": "a9d70ae361b5ec38",
-  "gapLedgerHash": "61ad6177831d5a97",
-  "bindingMatrixHash": "3b67fc5bfffd6bd8",
-  "sourceSnapshotHash": "1d5b5b30e0eab9c2",
+  "rosterHash": "ee9c2f26717eb9a9",
+  "manifestsHash": "b09e331ee024d724",
+  "gapLedgerHash": "d2ee3867d75ddf13",
+  "bindingMatrixHash": "aa6b08a6d79712e3",
+  "sourceSnapshotHash": "132db3813d6f0e30",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -27,7 +27,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "218c03395131baf6"
+      "manifestHash": "8597fb66425a456a"
     },
     {
       "objectKind": "character",
@@ -52,7 +52,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "145476c357ed38bf"
+      "manifestHash": "dcbb321ea0edbd55"
     },
     {
       "objectKind": "character",
@@ -2292,13 +2292,12 @@
       "objectKind": "set-skill",
       "objectId": "5:4",
       "displayName": "套装 5 4件",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "set-skill-dynamic-unapplied",
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "8fe715d0c57c95cd"
+      "manifestHash": "783dcafe3c918268"
     },
     {
       "objectKind": "set-skill",
@@ -2472,7 +2471,7 @@
       "blockerCodes": [
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "f2e3e977ad4431c1"
+      "manifestHash": "9830cb98c09d13ba"
     },
     {
       "objectKind": "soul-essence",
@@ -2962,7 +2961,7 @@
         "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "34c77a880aff2292"
+      "manifestHash": "ffc4ce42caaece39"
     },
     {
       "objectKind": "soul-essence",
@@ -2992,14 +2991,12 @@
       "objectKind": "soul-essence",
       "objectId": "10176",
       "displayName": "温柔的照护",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "1dd55bc0e45d1a00"
+      "manifestHash": "240cdff0b071fc09"
     },
     {
       "objectKind": "soul-essence",
@@ -3066,7 +3063,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-01T00:00:00.000Z",
-    "rosterHash": "567d220743475d95",
+    "rosterHash": "ee9c2f26717eb9a9",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24974,7 +24971,7 @@
       "setSkillThresholdQualifiedCount": 0,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "3b67fc5bfffd6bd8"
+    "bindingMatrixHash": "aa6b08a6d79712e3"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -39781,7 +39778,7 @@
             ],
             "status": "runtime-applied",
             "mechanismFamily": "equipped-actor-switch-enter-team-property",
-            "catalogDefinitionHash": "660788095327de2a",
+            "catalogDefinitionHash": "c3ba188fd1b2e80d",
             "sourceIdentity": "NewTable/soulessence.rows[id=10048].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10048]"
@@ -42595,7 +42592,7 @@
             ],
             "status": "source-indexed-runtime-unapplied",
             "mechanismFamily": "equipped-actor-shield-acquire-team-property",
-            "catalogDefinitionHash": "e8a933981ea00467",
+            "catalogDefinitionHash": "2788d405e86d10d2",
             "sourceIdentity": "NewTable/soulessence.rows[id=10169].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10169]"
@@ -42794,9 +42791,9 @@
                 "sourceIdentity": "NewTable/skill_level.rows[id=2657,skillId=1900150,level=4]"
               }
             ],
-            "status": "source-indexed-runtime-unapplied",
+            "status": "runtime-applied",
             "mechanismFamily": "equipped-actor-heal-event-target-property",
-            "catalogDefinitionHash": "a663f38192e39d7e",
+            "catalogDefinitionHash": "41c16469bbed4892",
             "sourceIdentity": "NewTable/soulessence.rows[id=10176].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10176]"
@@ -43072,8 +43069,8 @@
       ],
       "effectStatus": {
         "status": "partially-runtime-applied",
-        "runtimeAppliedCount": 38,
-        "unresolvedCount": 24
+        "runtimeAppliedCount": 39,
+        "unresolvedCount": 23
       }
     },
     "equipment": {
@@ -44402,8 +44399,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 195,
-      "runtime-integrated": 70
+      "extracted": 193,
+      "runtime-integrated": 72
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -44413,7 +44410,7 @@
       "set-skill": 0
     },
     "optimizationReadyTotal": 0,
-    "gameplayBlockingGapCount": 386,
+    "gameplayBlockingGapCount": 383,
     "bindingQualifiedEdgeCount": 0,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44498,5 +44495,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "845c4456697f9cfb"
+  "catalogHash": "fc2623a2ba726407"
 }

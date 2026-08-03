@@ -429,6 +429,21 @@ function compileSetSkillEffectDefinition({
     tuningMechanicsCatalog,
     fourPieceSetStackRuntimeEvidence,
   });
+  const afterHealProperty = compileFourPieceSetAfterHealProperty({
+    setSkill,
+    control,
+    closure,
+    activeTriggerRows,
+    triggerRows,
+    propertyRows,
+    damageRows,
+    resourceRows,
+    battleElementsByPathId,
+    propertyTagContract,
+    triggerContract,
+    tuningMechanicsCatalog,
+  });
+  const compiledDynamicEffect = beforeDamageStack ?? afterHealProperty;
   const mechanismFamilies = uniqueStrings([
     ...triggers.map(trigger =>
       trigger.event == null
@@ -449,8 +464,8 @@ function compileSetSkillEffectDefinition({
   const runtimeGaps = uniqueStrings(
     persistentCandidate
       ? [...evidenceGaps, ...(persistentRoot?.runtimeGaps ?? [])]
-      : beforeDamageStack != null
-        ? [...evidenceGaps, ...(beforeDamageStack.runtimeGaps ?? [])]
+      : compiledDynamicEffect != null
+        ? [...evidenceGaps, ...(compiledDynamicEffect.runtimeGaps ?? [])]
         : [...evidenceGaps, 'set-skill-runtime-operator-not-implemented']
   );
   const runtimeStatus = runtimeGaps.length
@@ -472,16 +487,16 @@ function compileSetSkillEffectDefinition({
     },
     mechanismFamily:
       runtimeStatus === 'runtime-applied'
-        ? beforeDamageStack != null
-          ? 'set-skill-before-damage-stacking-property'
+        ? compiledDynamicEffect != null
+          ? compiledDynamicEffect.mechanismFamily
           : 'set-skill-persistent-property'
         : mechanismFamilies.length === 1
           ? mechanismFamilies[0]
           : 'set-skill-composite-effect',
     mechanismFamilies,
     triggers,
-    trigger: beforeDamageStack?.trigger ?? null,
-    effect: beforeDamageStack?.effect ?? null,
+    trigger: compiledDynamicEffect?.trigger ?? null,
+    effect: compiledDynamicEffect?.effect ?? null,
     activationPrerequisites: closure.rows
       .filter(
         row =>
@@ -554,7 +569,7 @@ function compileSetSkillEffectDefinition({
     loopPersistence: {
       status:
         runtimeStatus === 'runtime-applied'
-          ? beforeDamageStack != null
+          ? compiledDynamicEffect != null
             ? 'canonical-effect-timeline-applied'
             : 'canonical-static-loadout-applied'
           : 'runtime-unapplied',
@@ -586,7 +601,7 @@ function compileSetSkillEffectDefinition({
     runtimeStatus,
     runtimeGaps,
     sourceIdentity: [setSkill.sourceIdentity, control?.sourceIdentity]
-      .concat(beforeDamageStack?.sourceIdentity ?? [])
+      .concat(compiledDynamicEffect?.sourceIdentity ?? [])
       .filter(Boolean)
       .join('|'),
   };
@@ -785,6 +800,7 @@ function compileFourPieceSetBeforeDamageStack({
     matchingUnload?.sourceIdentity,
   ].filter(Boolean);
   return {
+    mechanismFamily: 'set-skill-before-damage-stacking-property',
     runtimeGaps: uniqueStrings(runtimeGaps),
     sourceIdentity,
     trigger:
@@ -863,6 +879,259 @@ function compileFourPieceSetBeforeDamageStack({
             stackMode: 'stack',
             stackDelta: 1,
             maxStacks: Math.max(1, Number(propertyTree.combineNumber) || 1),
+            combineType: Number(propertyTree.combineType),
+            combineNumber: Number(propertyTree.combineNumber),
+            valuesByStar: [
+              {
+                star: 1,
+                valueRaw: sourceRawA,
+                sourceIdentity: `${createElementIdentity(property)}.formulaParams.formulaParamValues[0]`,
+              },
+            ],
+            sourceIdentity: createElementIdentity(property),
+          },
+  };
+}
+
+function compileFourPieceSetAfterHealProperty({
+  setSkill,
+  control,
+  closure,
+  activeTriggerRows,
+  triggerRows,
+  propertyRows,
+  damageRows,
+  resourceRows,
+  battleElementsByPathId,
+  propertyTagContract,
+  triggerContract,
+  tuningMechanicsCatalog,
+}) {
+  if (Number(setSkill.pieces) !== 4) return null;
+  const trigger = activeTriggerRows.length === 1 ? activeTriggerRows[0] : null;
+  const triggerTree = trigger?.typetree ?? {};
+  const eventBinding = triggerContract?.eventBindings?.find(
+    binding => Number(binding.value) === Number(triggerTree.triggerParam1)
+  );
+  if (eventBinding?.frameAnchor !== 'heal-after-settlement') return null;
+
+  const runtimeGaps = [];
+  const triggerEffects = Array.isArray(triggerTree.triggerEffectList)
+    ? triggerTree.triggerEffectList
+    : [];
+  const targetPathId = Number(triggerEffects[0]?.targetElement?.m_PathID);
+  const reachablePropertyRows = trigger
+    ? collectReachableRows(
+        Number(trigger.path_id),
+        closure.edges,
+        battleElementsByPathId
+      ).filter(row => propertyRows.some(item => item.path_id === row.path_id))
+    : [];
+  const property =
+    reachablePropertyRows.length === 1 ? reachablePropertyRows[0] : null;
+  const propertyTree = property?.typetree ?? {};
+  const effectPath = property
+    ? findElementPath(targetPathId, Number(property.path_id), closure.edges)
+    : null;
+  const triggerTargetBinding = triggerContract?.triggerTargetBindings?.find(
+    binding => Number(binding.value) === Number(triggerTree.triggerTargetType)
+  );
+  const effectTargetBinding = triggerContract?.targetBindings?.find(
+    binding => Number(binding.value) === Number(triggerEffects[0]?.targetType)
+  );
+  const condition = compileTriggerCondition({
+    trigger,
+    conditions: triggerTree.triggerConditionList ?? [],
+    conditionLogicValue: Number(triggerTree.triggerConditionType),
+    triggerContract,
+    tuningMechanicsCatalog,
+    frameAnchor: eventBinding.frameAnchor,
+  });
+  const lifecycle = compilePropertyLifecycle({
+    property,
+    wrapperRows: [],
+    unloadTriggers: triggerRows.filter(
+      row => Number(row.typetree?.triggerParam1) === 36
+    ),
+    closure,
+    battleElementsByPathId,
+    wrapperContract: triggerContract?.buffElementWrapper,
+  });
+  const commonFunctionId = Number(
+    propertyTree.formulaParams?.function_1 ?? propertyTree.baseIntParams?.[0]
+  );
+  const baseFunctionId = Number(
+    propertyTree.formulaParams?.function_2 ?? propertyTree.baseIntParams?.[1]
+  );
+  const sourceRawA = Number(
+    propertyTree.formulaParams?.formulaParamValues?.[0] ??
+      propertyTree.functionParams?.[0]
+  );
+  const commonRatioRaw = Number(
+    propertyTree.formulaParams?.formulaParamValues?.[6] ??
+      propertyTree.functionParams?.[6]
+  );
+  const propertyTags = uniqueNumbers(propertyTree.defaultPropertyTags ?? []);
+  const supportedPropertyTags = new Set(
+    (propertyTagContract?.bindings ?? [])
+      .filter(binding => binding.status === 'applied')
+      .map(binding => Number(binding.propertyTag))
+  );
+  const removalPaths = lifecycle?.removalPaths ?? [];
+  const sourceObserver = triggerContract?.nonDamageRuntime?.sourceObserver;
+
+  if (!control) runtimeGaps.push('set-after-heal-control-source-missing');
+  if (activeTriggerRows.length !== 1)
+    runtimeGaps.push('set-after-heal-active-trigger-not-unique');
+  if (
+    Number(triggerTree.triggerParam1) !== 44 ||
+    eventBinding.frameAnchor !== 'heal-after-settlement' ||
+    triggerContract?.nonDamageRuntime?.afterHeal?.dispatchAfterSettlement !== true
+  ) {
+    runtimeGaps.push('set-after-heal-event-source-drift');
+  }
+  if (
+    Number(triggerTree.triggerTargetType) !== 2 ||
+    triggerTargetBinding?.sourceKind !== 'event-source-actor-events' ||
+    Number(sourceObserver?.triggerTargetType) !== 2 ||
+    sourceObserver?.runtimeSourceKind !== 'event-source-actor-events'
+  ) {
+    runtimeGaps.push('set-after-heal-source-observer-evidence-gap');
+  }
+  if (
+    Number(triggerTree.triggerConditionType) !== 1 ||
+    (triggerTree.triggerConditionList ?? []).length !== 0 ||
+    condition?.kind !== 'always' ||
+    condition?.logic !== 'or' ||
+    condition?.status !== 'applied' ||
+    triggerContract?.nonDamageRuntime?.emptyConditionSemantics
+      ?.emptyOrResult !== true
+  ) {
+    runtimeGaps.push('set-after-heal-empty-or-evidence-gap');
+  }
+  if (
+    triggerEffects.length !== 1 ||
+    Number(triggerEffects[0]?.targetType) !== 1 ||
+    effectTargetBinding?.targetKind !== 'event-target-actor' ||
+    !effectPath
+  ) {
+    runtimeGaps.push('set-after-heal-target-routing-source-drift');
+  }
+  if (
+    propertyRows.length !== 1 ||
+    reachablePropertyRows.length !== 1 ||
+    Number(propertyTree.calculateType) !== 2 ||
+    !(Number(lifecycle?.durationMs) > 0) ||
+    Number(propertyTree.combineType) !== 3 ||
+    Number(propertyTree.combineNumber) !== -1 ||
+    Number(propertyTree.inheritType) !== 0
+  ) {
+    runtimeGaps.push('set-after-heal-property-source-drift');
+  }
+  if (
+    commonFunctionId !== 1 ||
+    baseFunctionId !== 3 ||
+    commonRatioRaw !== 10_000 ||
+    !Number.isFinite(sourceRawA)
+  ) {
+    runtimeGaps.push('set-after-heal-formula-source-drift');
+  }
+  if (
+    propertyTags.length > 1 ||
+    (propertyTags.length === 1 && !supportedPropertyTags.has(propertyTags[0]))
+  ) {
+    runtimeGaps.push('set-after-heal-property-tag-source-gap');
+  }
+  if (damageRows.length > 0 || resourceRows.length > 0) {
+    runtimeGaps.push('set-after-heal-side-branch-unapplied');
+  }
+  if (removalPaths.length === 0) {
+    runtimeGaps.push('set-after-heal-unload-source-drift');
+  }
+
+  const formulaFamily = resolveFormulaFamily({
+    commonFunctionId,
+    baseFunctionId,
+  });
+  const sourceIdentity = [
+    triggerContract?.nonDamageRuntime?.sourceIdentity,
+    trigger ? createElementIdentity(trigger) : null,
+    property ? createElementIdentity(property) : null,
+    ...removalPaths.map(row => row.sourceIdentity),
+  ].filter(Boolean);
+  return {
+    mechanismFamily: 'set-skill-after-heal-source-to-target-property',
+    runtimeGaps: uniqueStrings(runtimeGaps),
+    sourceIdentity,
+    trigger:
+      trigger == null
+        ? null
+        : {
+            elementId: Number(triggerTree.elementConfigId),
+            pathId: Number(trigger.path_id),
+            eventId: Number(triggerTree.triggerParam1),
+            event: eventBinding.name,
+            frameAnchor: eventBinding.frameAnchor,
+            intervalMs: numberOrNull(triggerTree.triggerInv),
+            intervalSourceIdentity: `${createElementIdentity(trigger)}.triggerInv`,
+            condition,
+            triggerTargetType: numberOrNull(triggerTree.triggerTargetType),
+            triggerTarget: {
+              kind: triggerTargetBinding?.sourceKind ?? 'unresolved',
+              triggerTargetType: Number(triggerTargetBinding?.value),
+              triggerTargetTypeName: triggerTargetBinding?.enumName ?? null,
+              sourceIdentity: `${createElementIdentity(trigger)}.triggerTargetType|${triggerTargetBinding?.sourceIdentity ?? 'unresolved'}`,
+            },
+            target: {
+              kind: effectTargetBinding?.targetKind ?? 'unresolved',
+              effectTargetType: Number(effectTargetBinding?.value),
+              effectTargetTypeName: effectTargetBinding?.enumName ?? null,
+              effectListIndex: 0,
+              targetElementPathId: targetPathId,
+              sourceIdentity: `${createElementIdentity(trigger)}.triggerEffectList[0].targetType|${effectTargetBinding?.sourceIdentity ?? 'unresolved'}`,
+            },
+            targetKind: effectTargetBinding?.targetKind ?? 'unresolved',
+            sourceIdentity: createElementIdentity(trigger),
+          },
+    effect:
+      property == null
+        ? null
+        : {
+            elementId: Number(propertyTree.elementConfigId),
+            pathId: Number(property.path_id),
+            name: propertyTree.elementName ?? property.name ?? null,
+            attributeId: Number(propertyTree.attributeID),
+            bucket:
+              PROPERTY_BUCKET_BY_CALCULATE_TYPE[
+                Number(propertyTree.calculateType)
+              ] ?? null,
+            calculateType: Number(propertyTree.calculateType),
+            propertyTags,
+            propertyTagMatchMode:
+              propertyTags.length === 0 ? 'unscoped' : 'single-exact',
+            propertyTagSourceIdentity: `${createElementIdentity(property)}.defaultPropertyTags`,
+            formula: {
+              formulaIdentity: `battle-effect-formula:set-skill:${Number(setSkill.skillId)}:${Number(propertyTree.elementConfigId)}:${property.path_id}`,
+              commonFunctionId,
+              commonExpression: 'G/10000',
+              baseFunctionId,
+              baseExpression: 'A/10000',
+              commonRatioRaw,
+              sourceParameterEncoding: 'battle-element-raw-a',
+              family: formulaFamily,
+              sourceIdentity: `${createElementIdentity(property)}.formulaParams|functionParams`,
+            },
+            sourceRawA,
+            durationMs: Number(lifecycle?.durationMs),
+            leafDurationMs: Number(propertyTree.time),
+            lifecycle: {
+              ...lifecycle,
+              expiryInterval: 'right-open',
+              unload: removalPaths,
+            },
+            stackMode: 'refresh',
+            stackDelta: 1,
+            maxStacks: 1,
             combineType: Number(propertyTree.combineType),
             combineNumber: Number(propertyTree.combineNumber),
             valuesByStar: [
@@ -1458,8 +1727,15 @@ function compileSoulEffectDefinition({
   ) {
     runtimeGaps.push('effect-wrapper-lifecycle-not-unique');
   }
-  if (![3, 4].includes(Number(propertyTree.combineType))) {
+  if (![3, 4, 5].includes(Number(propertyTree.combineType))) {
     runtimeGaps.push('effect-property-stack-operator-unsupported');
+  }
+  if (
+    Number(propertyTree.combineType) === 5 &&
+    triggerContract.nonDamageRuntime?.combineSemantics?.block?.runtimeMode !==
+      'block-while-active-same-config'
+  ) {
+    runtimeGaps.push('effect-property-block-native-evidence-gap');
   }
   if (!PROPERTY_BUCKET_BY_CALCULATE_TYPE[Number(propertyTree.calculateType)]) {
     runtimeGaps.push('effect-property-bucket-unsupported');
@@ -1595,7 +1871,11 @@ function compileSoulEffectDefinition({
             leafDurationMs: Number(propertyTree.time),
             lifecycle,
             stackMode:
-              Number(propertyTree.combineType) === 4 ? 'stack' : 'refresh',
+              Number(propertyTree.combineType) === 4
+                ? 'stack'
+                : Number(propertyTree.combineType) === 5
+                  ? 'block'
+                  : 'refresh',
             stackDelta: 1,
             maxStacks:
               Number(propertyTree.combineType) === 4

@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 18,
-  "phase": "M12-B3-C10-R1",
+  "schemaVersion": 19,
+  "phase": "M12-B3-C11",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "785cc9b8c20b1cb995b4fe4f565a6e94101f8531",
+  "baseCommit": "ad27e7762fcc8ac96a47d00361cef08fe6dbc959",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
   "reviewedC7R2Commit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
@@ -11,10 +11,12 @@
   "acceptedC8R1Commit": "26a8125b2ca262777ff11b12f37e7d32b68eac91",
   "acceptedC9Commit": "bd812d64226a371a55a01981a239e33c318c9e98",
   "reviewedC10Commit": "785cc9b8c20b1cb995b4fe4f565a6e94101f8531",
+  "acceptedC10R1Commit": "ad27e7762fcc8ac96a47d00361cef08fe6dbc959",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
-    "phase": "M12-B3-C9",
-    "acceptanceBaseline": "bd812d64226a371a55a01981a239e33c318c9e98",
+    "phase": "M12-B3-C10-R1",
+    "productionMechanicsCommit": "785cc9b8c20b1cb995b4fe4f565a6e94101f8531",
+    "acceptanceBaseline": "ad27e7762fcc8ac96a47d00361cef08fe6dbc959",
     "status": "product-accepted"
   },
   "r1ProtocolGuard": {
@@ -39,12 +41,13 @@
     }
   },
   "scope": {
-    "batch": "four-piece-before-damage-stacking-properties",
-    "soulEssenceIds": [],
-    "runtimeAppliedSoulEssenceIds": [],
+    "batch": "after-heal-source-to-target-and-native-block",
+    "soulEssenceIds": [10176],
+    "runtimeAppliedSoulEssenceIds": [10176],
     "evidenceBlockedSoulEssenceIds": [],
-    "setSkillIds": ["set-skill:2:4", "set-skill:4:4"],
-    "explicitlyExcludedSetSkillThresholds": ["set-skill:1:4", "set-skill:3:4", "set-skill:5:4", "set-skill:6:4"],
+    "setSkillIds": ["set-skill:5:4"],
+    "runtimeAppliedSetSkillIds": ["set-skill:5:4"],
+    "explicitlyExcludedSetSkillThresholds": ["set-skill:1:4", "set-skill:3:4", "set-skill:6:4"],
     "formalSearchExecuted": false,
     "m12cLocked": true,
     "fixedCultivationChanged": false,
@@ -67,11 +70,15 @@
     },
     "nonDamageRuntimeEvidence": {
       "path": "scripts/optimization-qualification/evidence/soulessence-non-damage-runtime-evidence.json",
-      "bytes": 5872,
-      "sha256": "1465c750e146825b4f4716e38051dcf06b1b897cefae0e55fb7cd6348b080552",
+      "bytes": 10853,
+      "sha256": "70035b60930cc755abbff484494c370abbdb306f0af05895f7479f59c050f1e6",
       "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
       "binaryBytes": 222485544,
       "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "il2CppDumpPath": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+      "il2CppDumpBytes": 97428254,
+      "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+      "rangeCount": 12,
       "switchConsumer": "HeroSwitchSystem.TriggerSwitchEnter@0x1596740",
       "shieldConsumer": "ShieldElement.Execute@0x13A2040",
       "healConsumer": "DamageUtility.OnAfterHeal@0x1872130",
@@ -320,6 +327,57 @@
     "unload": "the reviewed UnloadSkill trigger removes the source graph; an already materialized timed layer keeps its source-bound absolute expiry",
     "runtimeBranchesBySetOrSkillId": false
   },
+  "c11AfterHealSourceTargetAndBlockContract": {
+    "nativeEvidence": {
+      "triggerTargetRouting": "TriggerElement.GetTriggerTarget@0x13BBF50 routes Self to ElementTriggerDataBase.self+0x28, Target to target+0x20 and Source to source+0x18",
+      "afterHealDispatch": "DamageUtility.OnAfterHeal@0x1872130 receives the heal source and actual healed target after settlement; no effective-delta gate suppresses a full-health executed heal",
+      "emptyOr": "TriggerElement.CheckCondition@0x13B58F0 returns true for an empty OR condition list",
+      "block": "AliveElementSystem.OnExecuteNormalElement@0x13195C0 frees an incoming same-config Block(5) element while an active instance exists; it neither stacks nor refreshes and can apply after removal or right-open expiry"
+    },
+    "evidenceArtifact": {
+      "path": "scripts/optimization-qualification/evidence/soulessence-non-damage-runtime-evidence.json",
+      "bytes": 10853,
+      "sha256": "70035b60930cc755abbff484494c370abbdb306f0af05895f7479f59c050f1e6",
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "dumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+      "rvaRangeCount": 12
+    },
+    "set-skill:5:4": {
+      "skillId": 19998007,
+      "threshold": "at least four valid same-set equipment slots; one runtime installation at four or five pieces",
+      "trigger": "AfterHeal(44), Source(2) observer, native empty OR",
+      "effectTarget": "Target(1), the actual healed actor",
+      "attributeId": 1,
+      "bucket": "dynamicPercent",
+      "sourceRawA": 700,
+      "evaluatedValue": 0.0699920654296875,
+      "durationMs": 6000,
+      "stackMode": "refresh",
+      "rightOpenExpiry": true
+    },
+    "soul-essence:10176": {
+      "name": "温柔的照护",
+      "trigger": "AfterHeal(44), Self observer, CheckSkillType(11)=NormalAttack(1)",
+      "effectTarget": "Target(1), the actual healed actor",
+      "attributeId": 5,
+      "bucket": "dynamicPercent",
+      "valuesByStarRaw": [1460, 1940, 2430, 2910],
+      "durationMs": 15000,
+      "combineType": 5,
+      "stackMode": "block",
+      "activeDuplicateRefreshes": false,
+      "reapplyAtExpiry": true
+    },
+    "eventSemantics": {
+      "executedZeroEffectiveHealDispatches": true,
+      "failedOrRejectedDescriptorDispatches": false,
+      "periodicHealActionProvenance": "empty for skill predicates; set 5:4 may observe the Source event while 10176 cannot borrow a stale NormalAttack tag",
+      "sourceAndTargetRemainDistinct": true,
+      "switchDoesNotRetargetTimedEffect": true,
+      "descriptorOrderIsNotSemantic": true
+    },
+    "runtimeBranchesBySetSkillOrSoulEssenceId": false
+  },
   "definitions": {
     "10048": {
       "name": "璇枢",
@@ -370,7 +428,7 @@
     },
     "10176": {
       "name": "温柔的照护",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "runtime-applied",
       "event": "AfterHeal(44)",
       "condition": "CheckSkillType(11)=NormalAttack(1)",
       "target": "event-target-actor",
@@ -378,14 +436,20 @@
       "durationMs": 15000,
       "combineType": 5,
       "combineNumber": -1,
-      "valuesByStarRaw": [1460, 1940, 2430, 2910],
-      "blockingReason": "effect-property-stack-operator-unsupported"
+      "stackMode": "block",
+      "activeDuplicateRefreshes": false,
+      "valuesByStarRaw": [1460, 1940, 2430, 2910]
     }
   },
   "runtimeMatrix": {
     "10048": "A real switch into the equipped actor creates one event and three deterministically ordered AllHero commands; switch-out, initial foreground and same-actor no-op do not trigger",
     "10175": "An executed ultimate heal creates one effect on the actual healed actor, including healer != target and full-HP zero-effective-heal cases; blocked descriptors do not trigger",
     "periodicHeal": "Kibo and tuning periodic heals share the canonical AfterHeal transaction but cannot satisfy action-tag conditions without real action provenance",
+    "set5SourceToTarget": "A direct or periodic heal from the set wearer produces one +7% attack command on the actual healed actor; a heal from another actor is invisible to the Source observer",
+    "set5Threshold": "three matching pieces and cross-set mixtures do not install the four-piece runtime binding; four and five matching pieces install it exactly once",
+    "set5NumericConsequence": "the healed teammate's verified hit reads the +7% attack modifier inside [apply, apply+6000ms) and returns to baseline at the exact expiry frame",
+    "10176Block": "an executed NormalAttack heal applies once for 15000ms; a same-config trigger while active is blocked without refresh, and the expiry-frame trigger creates a new instance",
+    "10176PeriodicProvenance": "periodic healing has no final NormalAttack tag and cannot borrow the originating action tag",
     "directShield": "Successful acquisition is projected once; rejected and zero-value descriptors do not dispatch; refresh/replacement qualification remains blocked",
     "rightOpenExpiry": true,
     "switchAndReplayStable": true,
@@ -492,15 +556,15 @@
     "gameplayLogicChanged": false
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 38,
-    "runtimeUnappliedSoulEssenceCount": 24,
-    "runtimeAppliedSetSkillCount": 8,
-    "runtimeUnappliedSetSkillCount": 4,
-    "newlyAppliedSoulEssenceIds": [],
-    "newlyAppliedSetSkillIds": ["set-skill:2:4", "set-skill:4:4"],
+    "runtimeAppliedSoulEssenceCount": 39,
+    "runtimeUnappliedSoulEssenceCount": 23,
+    "runtimeAppliedSetSkillCount": 9,
+    "runtimeUnappliedSetSkillCount": 3,
+    "newlyAppliedSoulEssenceIds": [10176],
+    "newlyAppliedSetSkillIds": ["set-skill:5:4"],
     "preservedRuntimeAppliedSoulEssenceCount": 38,
-    "preservedRuntimeAppliedSetSkillCount": 6,
-    "remainingBlockedFourPieceSetSkillIds": ["set-skill:1:4", "set-skill:3:4", "set-skill:5:4", "set-skill:6:4"]
+    "preservedRuntimeAppliedSetSkillCount": 8,
+    "remainingBlockedFourPieceSetSkillIds": ["set-skill:1:4", "set-skill:3:4", "set-skill:6:4"]
   },
   "qualification": {
     "denominators": {
@@ -510,9 +574,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 386,
+    "blockingUniqueGapCount": 383,
     "blockingByCategory": {
-      "not-implemented": 368,
+      "not-implemented": 365,
       "evidence-insufficient": 18
     },
     "formalAdmissions": {
@@ -524,31 +588,34 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "1d5b5b30e0eab9c2",
-    "rosterHash": "567d220743475d95",
-    "manifestsHash": "a9d70ae361b5ec38",
-    "ledgerHash": "61ad6177831d5a97",
-    "bindingMatrixHash": "3b67fc5bfffd6bd8",
-    "qualificationCatalogHash": "845c4456697f9cfb",
-    "dynamicLoadoutEffectCensusHash": "364a2e6c3cbd4f80",
-    "soulEssenceEffectCatalogHash": "9dc8eb099801619d",
-    "soulEssenceSourceSnapshotHash": "b63efd861e6c17b4",
+    "sourceSnapshotHash": "132db3813d6f0e30",
+    "rosterHash": "ee9c2f26717eb9a9",
+    "manifestsHash": "b09e331ee024d724",
+    "ledgerHash": "d2ee3867d75ddf13",
+    "bindingMatrixHash": "aa6b08a6d79712e3",
+    "qualificationCatalogHash": "fc2623a2ba726407",
+    "dynamicLoadoutEffectCensusHash": "6d37f034f4f64ea0",
+    "soulEssenceEffectCatalogHash": "0a5b0311ef1281f4",
+    "soulEssenceSourceSnapshotHash": "4ef729b9b56d4f9e",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
-    "soulEssenceTriggerContractHash": "d68083acc3d5496d",
+    "soulEssenceTriggerContractHash": "a1361b97ef031e8c",
     "verifiedMechanicsPackageHash": "20498c0f436fdcc3f0e86ebb6308ea75586d4b2379127d23ec4d971e81bb88e9",
     "verifiedMechanicsFileSha256": "b84aaca9cd3fe1384df62cbdde5db531a0339e1c6a988f3fb6c9088d7953a971",
     "machineAxisCanonicalHashes": {
       "input": "ed57d06444210db0",
       "data": "5c21e09cba3bab55",
-      "trace": "40a0e5018a43c3ae",
+      "trace": "416b4a015702f1b2",
       "evaluation": "0b410dc9255d2654"
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "C10 adds source-bound four-piece runtime definitions to the loadout catalog without changing the verified mechanics package or the standard Machine Axis fixture loadout. Existing canonical fixture identities remain stable; C10 set loadouts carry their own trigger, formula and source-sequence identities.",
-    "machineAxisCanonicalHashDrift": 0,
+    "reason": "C11 adds one source-bound set runtime definition, one source-bound soul definition and the native Block stack mode without changing the verified mechanics package or the standard Machine Axis fixture loadout. Existing canonical fixture identities remain stable; C11 loadouts carry their own trigger, formula, Source/Target and combine identities.",
+    "machineAxisCanonicalHashDrift": 1,
+    "machineAxisTraceMetadataHash": "416b4a015702f1b2",
     "machineAxisEvaluationHashDrift": 0,
     "gameplayAssertionDrift": 0,
+    "threeCharacterReplayHashDrift": 0,
+    "threeCharacterCanonicalTraceMetadataHashDrift": 4,
     "c4ConsumeAndAfterDamageRegression": 0,
     "c5AcquireRegression": 0,
     "c6BeforeDamageRegression": 0,
@@ -556,29 +623,29 @@
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 5, "tests": 121, "status": "passed" },
+    "focusedMechanics": { "files": 6, "tests": 139, "status": "passed" },
     "optimizationQualificationDirectory": {
-      "files": 6,
-      "tests": 53,
+      "files": 7,
+      "tests": 56,
       "status": "passed"
     },
     "characterProfileAndMigration": {
       "files": 4,
-      "tests": 34,
+      "tests": 38,
       "status": "passed",
       "gameplayAssertionDrift": 0
     },
     "machineAxis": { "files": 12, "tests": 157, "status": "passed" },
     "canonicalAndRuntime": {
       "files": 5,
-      "tests": 88,
+      "tests": 87,
       "status": "passed"
     },
     "audits": {
       "count": 9,
       "status": "clean",
-      "appliedLoadoutPropertySourceCount": 45,
-      "triggeredLoadoutPropertySourceCount": 26,
+      "appliedLoadoutPropertySourceCount": 46,
+      "triggeredLoadoutPropertySourceCount": 27,
       "persistentLoadoutPropertySourceCount": 19,
       "appliedLoadoutPropertySourceDriftCount": 0,
       "tuningConditionSourceCount": 14,

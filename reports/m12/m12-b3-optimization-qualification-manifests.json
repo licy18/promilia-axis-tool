@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "567d220743475d95",
+  "rosterHash": "ee9c2f26717eb9a9",
   "records": [
     {
       "objectKind": "character",
@@ -32,10 +32,10 @@
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "8a4519b84a16d95d"
+          "e3370850d1e1d6ea"
         ]
       },
-      "manifestHash": "218c03395131baf6"
+      "manifestHash": "8597fb66425a456a"
     },
     {
       "objectKind": "character",
@@ -99,10 +99,10 @@
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "d36e3c54eec0a701"
+          "ba4890b77bc9e6ea"
         ]
       },
-      "manifestHash": "145476c357ed38bf"
+      "manifestHash": "dcbb321ea0edbd55"
     },
     {
       "objectKind": "character",
@@ -8968,18 +8968,9 @@
       "sourceIdentities": [
         "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998007].skillType"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "set-skill-dynamic-unapplied",
-          "category": "not-implemented",
-          "message": "The accessory set skill is tracked but not applied by the dynamic runtime.",
-          "skillId": 19998007,
-          "reasons": [
-            "set-skill-runtime-operator-not-implemented"
-          ]
-        },
         {
           "code": "set-skill-visual-acceptance-not-published",
           "category": "not-implemented",
@@ -9000,11 +8991,11 @@
           "thresholdActivation": {
             "selectedPieceCountRequired": 4,
             "comparison": "selected-piece-count-greater-than-or-equal",
-            "status": "source-indexed",
-            "appliedToRuntimeEffect": false,
+            "status": "runtime-applied",
+            "appliedToRuntimeEffect": true,
             "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998007].skillType"
           },
-          "mechanismFamily": "set-skill-afterheal-effect",
+          "mechanismFamily": "set-skill-after-heal-source-to-target-property",
           "mechanismFamilies": [
             "set-skill-afterheal-effect"
           ],
@@ -9032,8 +9023,118 @@
               "sourceIdentity": "battle-element-assets.jsonl#path_id=1379284923835731500;elementId=199999056"
             }
           ],
-          "trigger": null,
-          "effect": null,
+          "trigger": {
+            "elementId": 199999056,
+            "pathId": 1379284923835731500,
+            "eventId": 44,
+            "event": "AfterHeal",
+            "frameAnchor": "heal-after-settlement",
+            "intervalMs": 0,
+            "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=1379284923835731500;elementId=199999056.triggerInv",
+            "condition": {
+              "kind": "always",
+              "logic": "or",
+              "logicValue": 1,
+              "logicName": "OR",
+              "conditions": [],
+              "actionKinds": [],
+              "status": "applied",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1379284923835731500;elementId=199999056.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1|GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.GetTriggerTarget@0x13BBF50/TriggerElement.CheckCondition@0x13B58F0/AliveElementSystem.OnExecuteNormalElement.Block@0x131A545"
+            },
+            "triggerTargetType": 2,
+            "triggerTarget": {
+              "kind": "event-source-actor-events",
+              "triggerTargetType": 2,
+              "triggerTargetTypeName": "Source",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1379284923835731500;elementId=199999056.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Source=2"
+            },
+            "target": {
+              "kind": "event-target-actor",
+              "effectTargetType": 1,
+              "effectTargetTypeName": "Target",
+              "effectListIndex": 0,
+              "targetElementPathId": -1927426470474616000,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1379284923835731500;elementId=199999056.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Target=1"
+            },
+            "targetKind": "event-target-actor",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1379284923835731500;elementId=199999056"
+          },
+          "effect": {
+            "elementId": 199999057,
+            "pathId": -1927426470474616000,
+            "name": "装备- 被治疗者 加攻击7%，持续6s",
+            "attributeId": 1,
+            "bucket": "dynamicPercent",
+            "calculateType": 2,
+            "propertyTags": [],
+            "propertyTagMatchMode": "unscoped",
+            "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057.defaultPropertyTags",
+            "formula": {
+              "formulaIdentity": "battle-effect-formula:set-skill:19998007:199999057:-1927426470474616000",
+              "commonFunctionId": 1,
+              "commonExpression": "G/10000",
+              "baseFunctionId": 3,
+              "baseExpression": "A/10000",
+              "commonRatioRaw": 10000,
+              "sourceParameterEncoding": "battle-element-raw-a",
+              "family": "basis-point-property-a-with-common-ratio",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057.formulaParams|functionParams"
+            },
+            "sourceRawA": 700,
+            "durationMs": 6000,
+            "leafDurationMs": 6000,
+            "lifecycle": {
+              "sourceKind": "property-leaf-duration",
+              "durationMs": 6000,
+              "leafDurationMs": 6000,
+              "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057.time",
+              "wrapper": null,
+              "removalPaths": [
+                {
+                  "triggerElementId": 199999058,
+                  "triggerPathId": -4362329449039080400,
+                  "triggerEventId": 36,
+                  "effectIndex": 0,
+                  "removerElementId": 199999059,
+                  "removerPathId": 5058843380839846000,
+                  "removedElementIds": [
+                    199999058,
+                    199999056
+                  ],
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-4362329449039080400;elementId=199999058.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5058843380839846000;elementId=199999059"
+                }
+              ],
+              "expiryInterval": "right-open",
+              "unload": [
+                {
+                  "triggerElementId": 199999058,
+                  "triggerPathId": -4362329449039080400,
+                  "triggerEventId": 36,
+                  "effectIndex": 0,
+                  "removerElementId": 199999059,
+                  "removerPathId": 5058843380839846000,
+                  "removedElementIds": [
+                    199999058,
+                    199999056
+                  ],
+                  "sourceIdentity": "battle-element-assets.jsonl#path_id=-4362329449039080400;elementId=199999058.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5058843380839846000;elementId=199999059"
+                }
+              ]
+            },
+            "stackMode": "refresh",
+            "stackDelta": 1,
+            "maxStacks": 1,
+            "combineType": 3,
+            "combineNumber": -1,
+            "valuesByStar": [
+              {
+                "star": 1,
+                "valueRaw": 700,
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057.formulaParams.formulaParamValues[0]"
+              }
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057"
+          },
           "activationPrerequisites": [
             {
               "elementId": 199999058,
@@ -9091,8 +9192,8 @@
           "vitalChanges": [],
           "delayedEvents": [],
           "loopPersistence": {
-            "status": "runtime-unapplied",
-            "reason": "set-skill-runtime-operator-not-implemented"
+            "status": "canonical-effect-timeline-applied",
+            "reason": null
           },
           "sourceClosure": {
             "controlSkillId": 19998007,
@@ -9168,16 +9269,14 @@
               }
             ]
           },
-          "evidenceStatus": "source-closure-indexed",
-          "runtimeStatus": "source-indexed-runtime-unapplied",
-          "runtimeGaps": [
-            "set-skill-runtime-operator-not-implemented"
-          ],
-          "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998007].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998007.asset/MonoBehaviour/skill_control_19998007__-7613573473471366488.json",
-          "mechanicsHash": "4a47bc3ba4018694"
+          "evidenceStatus": "runtime-applied",
+          "runtimeStatus": "runtime-applied",
+          "runtimeGaps": [],
+          "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998007].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998007.asset/MonoBehaviour/skill_control_19998007__-7613573473471366488.json|GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.GetTriggerTarget@0x13BBF50/TriggerElement.CheckCondition@0x13B58F0/AliveElementSystem.OnExecuteNormalElement.Block@0x131A545|battle-element-assets.jsonl#path_id=1379284923835731500;elementId=199999056|battle-element-assets.jsonl#path_id=-1927426470474616000;elementId=199999057|battle-element-assets.jsonl#path_id=-4362329449039080400;elementId=199999058.triggerEffectList[0]|battle-element-assets.jsonl#path_id=5058843380839846000;elementId=199999059",
+          "mechanicsHash": "dd4649aad2eeaf03"
         }
       },
-      "manifestHash": "8fe715d0c57c95cd"
+      "manifestHash": "783dcafe3c918268"
     },
     {
       "objectKind": "set-skill",
@@ -12537,7 +12636,7 @@
               "conditions": [],
               "actionKinds": [],
               "status": "applied",
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.Parse@0x13BD9C0/TriggerElement.CanTrigger@0x13B5770"
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.GetTriggerTarget@0x13BBF50/TriggerElement.CheckCondition@0x13B58F0/AliveElementSystem.OnExecuteNormalElement.Block@0x131A545"
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201.triggerTargetType",
@@ -12683,7 +12782,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10048].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900920.asset/MonoBehaviour/skill_control_1900920__-4473087367283292344.json|battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201|battle-element-assets.jsonl#path_id=-5655228325641076000;elementId=19009202"
         }
       },
-      "manifestHash": "f2e3e977ad4431c1"
+      "manifestHash": "9830cb98c09d13ba"
     },
     {
       "objectKind": "soul-essence",
@@ -22514,7 +22613,7 @@
               "conditions": [],
               "actionKinds": [],
               "status": "applied",
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.Parse@0x13BD9C0/TriggerElement.CanTrigger@0x13B5770"
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.GetTriggerTarget@0x13BBF50/TriggerElement.CheckCondition@0x13B58F0/AliveElementSystem.OnExecuteNormalElement.Block@0x131A545"
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500.triggerTargetType",
@@ -22662,7 +22761,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10169].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900750.asset/MonoBehaviour/skill_control_1900750__4791716372985824884.json|battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500|battle-element-assets.jsonl#path_id=-7968102161953321000;elementId=19007503"
         }
       },
-      "manifestHash": "34c77a880aff2292"
+      "manifestHash": "ffc4ce42caaece39"
     },
     {
       "objectKind": "soul-essence",
@@ -23073,23 +23172,9 @@
         "generated/soulessences.json#items[id=10176]",
         "NewTable/soulessence.rows[id=10176]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "soulessence-effect-skill-dynamic-unapplied",
-          "category": "not-implemented",
-          "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
-          "skillId": 1900150,
-          "reasons": [
-            "effect-property-stack-operator-unsupported"
-          ]
-        },
-        {
-          "code": "strict-soulessence-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied."
-        },
         {
           "code": "soulessence-visual-acceptance-not-published",
           "category": "not-implemented",
@@ -23106,7 +23191,7 @@
         "maximumRank": 6,
         "staticProfileApplied": true,
         "effectSkillId": 1900150,
-        "effectStatus": "source-indexed-runtime-unapplied",
+        "effectStatus": "runtime-applied",
         "sourceIdentity": "NewTable/soulessence.rows[id=10176]",
         "sourceEffectStatus": "effect-skill-dynamic-unapplied",
         "effectMechanics": {
@@ -23117,7 +23202,7 @@
             "skillLogicType": 6,
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900150]"
           },
-          "runtimeStatus": "source-indexed-runtime-unapplied",
+          "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-heal-event-target-property",
           "activationPrerequisites": [],
           "trigger": {
@@ -23225,7 +23310,7 @@
                 }
               ]
             },
-            "stackMode": "refresh",
+            "stackMode": "block",
             "stackDelta": 1,
             "maxStacks": 1,
             "combineType": 5,
@@ -23301,13 +23386,11 @@
             "damageElementIds": [],
             "activationPrerequisiteElementIds": []
           },
-          "runtimeGaps": [
-            "effect-property-stack-operator-unsupported"
-          ],
+          "runtimeGaps": [],
           "sourceIdentity": "NewTable/soulessence.rows[id=10176].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900150.asset/MonoBehaviour/skill_control_1900150__-6680374433071234951.json|battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501|battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502"
         }
       },
-      "manifestHash": "1dd55bc0e45d1a00"
+      "manifestHash": "240cdff0b071fc09"
     },
     {
       "objectKind": "soul-essence",
@@ -24063,8 +24146,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 195,
-      "runtime-integrated": 70
+      "extracted": 193,
+      "runtime-integrated": 72
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -24075,5 +24158,5 @@
     },
     "optimizationReadyTotal": 0
   },
-  "manifestsHash": "a9d70ae361b5ec38"
+  "manifestsHash": "b09e331ee024d724"
 }

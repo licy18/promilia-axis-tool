@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "applied-source-binding-audit",
-  "generatedAt": "2026-08-02T20:34:10.161Z",
+  "generatedAt": "2026-08-02T23:48:28.828Z",
   "decision": {
     "status": "passed",
     "passed": true,
@@ -14,7 +14,7 @@
     "compatibleUnboundCount": 0,
     "unexplainedCompatibleUnboundCount": 0,
     "missingTrackCount": 0,
-    "loadoutPropertyTagSourceCount": 45,
+    "loadoutPropertyTagSourceCount": 46,
     "loadoutPropertyTagDriftCount": 0,
     "loadoutTuningConditionCount": 14,
     "loadoutTuningConditionDriftCount": 0,
@@ -62,11 +62,11 @@
       "expectedSha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
       "actualSha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
       "propertyTagContractHash": "146e6a9a7db86606",
-      "triggerContractHash": "d68083acc3d5496d"
+      "triggerContractHash": "a1361b97ef031e8c"
     },
     "summary": {
-      "sourceCount": 45,
-      "triggeredSourceCount": 26,
+      "sourceCount": 46,
+      "triggeredSourceCount": 27,
       "persistentSourceCount": 19,
       "driftCount": 0,
       "propertyTagDriftCount": 0,
@@ -628,7 +628,7 @@
           "generatedLogicValue": 0,
           "sourceConditions": [],
           "generatedConditions": [],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.Parse@0x13BD9C0/TriggerElement.CanTrigger@0x13B5770",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.GetTriggerTarget@0x13BBF50/TriggerElement.CheckCondition@0x13B58F0/AliveElementSystem.OnExecuteNormalElement.Block@0x131A545",
           "tuningConditions": []
         },
         "triggerEvent": {
@@ -3308,6 +3308,86 @@
           ]
         },
         "sourceIdentity": "battle-element-assets.jsonl#path_id=8237672842561680000;elementId=19001402",
+        "status": "applied-source-property-tags-ready",
+        "issueCodes": []
+      },
+      {
+        "soulEssenceId": 10176,
+        "effectElementId": 19001502,
+        "sourcePropertyTags": [],
+        "generatedPropertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502.defaultPropertyTags",
+        "triggerCondition": {
+          "sourceLogicValue": 0,
+          "generatedLogicValue": 0,
+          "sourceConditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 1
+            }
+          ],
+          "generatedConditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 1
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
+        },
+        "triggerEvent": {
+          "sourceEventId": 44,
+          "generatedEventId": 44,
+          "enumName": "AfterHeal",
+          "frameAnchor": "heal-after-settlement",
+          "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.AfterHeal=44"
+        },
+        "triggerSourceTarget": {
+          "sourceTriggerTargetType": 0,
+          "generatedTriggerTargetType": 0,
+          "sourceKind": "equipped-actor-source-events",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+        },
+        "triggerEffectTarget": {
+          "sourceTargetType": 1,
+          "generatedTargetType": 1,
+          "sourceTargetPathId": -398033826930552400,
+          "generatedTargetPathId": -398033826930552400,
+          "targetKind": "event-target-actor",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Target=1"
+        },
+        "formula": {
+          "sourceCommonFunctionId": 1,
+          "generatedCommonFunctionId": 1,
+          "sourceBaseFunctionId": 3,
+          "generatedBaseFunctionId": 3,
+          "formulaIdentity": "battle-effect-formula:soulessence:1900150:19001502:-398033826930552400",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502.formulaParams|functionParams"
+        },
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 15000,
+          "leafDurationMs": 15000,
+          "wrapper": null,
+          "wrapperInjectedPathIds": [],
+          "removalPaths": [
+            {
+              "triggerElementId": 19001503,
+              "triggerPathId": 5037932307766098000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19001504,
+              "removerPathId": 7457526910130286000,
+              "removedElementIds": [
+                19001501,
+                19001503
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=5037932307766098000;elementId=19001503.triggerEffectList[0]|battle-element-assets.jsonl#path_id=7457526910130286000;elementId=19001504"
+            }
+          ]
+        },
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502",
         "status": "applied-source-property-tags-ready",
         "issueCodes": []
       },

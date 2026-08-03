@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "567d220743475d95",
+  "rosterHash": "ee9c2f26717eb9a9",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "1d5b5b30e0eab9c2",
-        "567d220743475d95"
+        "132db3813d6f0e30",
+        "ee9c2f26717eb9a9"
       ]
     },
     {
@@ -4185,25 +4185,6 @@
       "gapHash": "c339d4fcb0c7bfdd"
     },
     {
-      "gapIdentity": "set-skill:5:4:set-skill-dynamic-unapplied",
-      "objectKind": "set-skill",
-      "objectId": "5:4",
-      "code": "set-skill-dynamic-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "The accessory set skill is tracked but not applied by the dynamic runtime.",
-      "sourceIdentities": [
-        "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998007].skillType"
-      ],
-      "details": {
-        "skillId": 19998007,
-        "reasons": [
-          "set-skill-runtime-operator-not-implemented"
-        ]
-      },
-      "gapHash": "bfdfb54399cbdc6b"
-    },
-    {
       "gapIdentity": "set-skill:5:4:set-skill-visual-acceptance-not-published",
       "objectKind": "set-skill",
       "objectId": "5:4",
@@ -5904,41 +5885,6 @@
       "gapHash": "bd6ee4a0f48d07d6"
     },
     {
-      "gapIdentity": "soul-essence:10176:soulessence-effect-skill-dynamic-unapplied",
-      "objectKind": "soul-essence",
-      "objectId": "10176",
-      "code": "soulessence-effect-skill-dynamic-unapplied",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
-      "sourceIdentities": [
-        "generated/soulessences.json#items[id=10176]",
-        "NewTable/soulessence.rows[id=10176]"
-      ],
-      "details": {
-        "skillId": 1900150,
-        "reasons": [
-          "effect-property-stack-operator-unsupported"
-        ]
-      },
-      "gapHash": "2ed36069af2b3869"
-    },
-    {
-      "gapIdentity": "soul-essence:10176:strict-soulessence-cultivation-runtime-partial",
-      "objectKind": "soul-essence",
-      "objectId": "10176",
-      "code": "strict-soulessence-cultivation-runtime-partial",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied.",
-      "sourceIdentities": [
-        "generated/soulessences.json#items[id=10176]",
-        "NewTable/soulessence.rows[id=10176]"
-      ],
-      "details": {},
-      "gapHash": "49f3c51bbdd6f520"
-    },
-    {
       "gapIdentity": "soul-essence:10176:soulessence-visual-acceptance-not-published",
       "objectKind": "soul-essence",
       "objectId": "10176",
@@ -6184,10 +6130,10 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 386,
+    "blockingUniqueGapCount": 383,
     "byCategory": {
       "evidence-insufficient": 18,
-      "not-implemented": 368
+      "not-implemented": 365
     },
     "byCode": {
       "actor-static-profile-missing": 1,
@@ -6198,20 +6144,20 @@
       "kibo-passive-static-evidence-gap": 4,
       "kibo-visual-acceptance-not-published": 43,
       "level-breakthrough-skill-unlock-source-mismatch": 1,
-      "set-skill-dynamic-unapplied": 4,
+      "set-skill-dynamic-unapplied": 3,
       "set-skill-visual-acceptance-not-published": 12,
-      "soulessence-effect-skill-dynamic-unapplied": 24,
+      "soulessence-effect-skill-dynamic-unapplied": 23,
       "soulessence-visual-acceptance-not-published": 62,
       "strict-character-cultivation-runtime-partial": 11,
-      "strict-soulessence-cultivation-runtime-partial": 24
+      "strict-soulessence-cultivation-runtime-partial": 23
     },
     "byObjectKind": {
       "character": 33,
       "equipment": 137,
       "kibo": 90,
-      "set-skill": 16,
-      "soul-essence": 110
+      "set-skill": 15,
+      "soul-essence": 108
     }
   },
-  "ledgerHash": "61ad6177831d5a97"
+  "ledgerHash": "d2ee3867d75ddf13"
 }

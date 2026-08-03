@@ -99,6 +99,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '4054d0d97a146faeb56f1fcb518126c1ca41edb698c3ed722fe5247e4ffff56a',
   soulEffectBeforeDamageRuntimeEvidence:
     'a1a30e0c70dbfaf49990bddb48bf97c1b9cca31f2a77a303fba9382c239a3f7f',
+  soulEffectNonDamageRuntimeEvidence:
+    '70035b60930cc755abbff484494c370abbdb306f0af05895f7479f59c050f1e6',
   landedHitRecoveryRuntimeEvidence:
     '634c979cda572f8fff1509bbf888240aebe8fad7728f357ce06390fee364a248',
   persistentLoadoutPropertyRuntimeEvidence:
@@ -264,8 +266,9 @@ export async function createOptimizationQualificationArtifacts({
       projectRoot
     );
   sources.soulEffectNonDamageRuntimeEvidence =
-    await readSoulEffectNonDamageRuntimeEvidenceSource(
-      soulEffectNonDamageRuntimeEvidencePath ??
+    await readSoulEffectNonDamageRuntimeEvidenceSource({
+      sourcePath:
+        soulEffectNonDamageRuntimeEvidencePath ??
         path.join(
           projectRoot,
           'scripts',
@@ -273,9 +276,10 @@ export async function createOptimizationQualificationArtifacts({
           'evidence',
           'soulessence-non-damage-runtime-evidence.json'
         ),
+      il2CppDumpPath: il2cppRuntimeContractsPath,
       gameAssemblyPath,
-      projectRoot
-    );
+      projectRoot,
+    });
   sources.landedHitRecoveryRuntimeEvidence =
     await readLandedHitRecoveryRuntimeEvidenceSource({
       sourcePath:
@@ -331,6 +335,10 @@ export async function createOptimizationQualificationArtifacts({
   assertGetElementTypeRuntimeEvidenceReference(
     acceptanceReport?.sourceClosure?.getElementTypeRuntimeEvidence,
     sources.soulEffectGetElementTypeRuntimeEvidence
+  );
+  assertSoulEffectNonDamageRuntimeEvidenceReference(
+    acceptanceReport?.sourceClosure?.nonDamageRuntimeEvidence,
+    sources.soulEffectNonDamageRuntimeEvidence
   );
   assertPersistentLoadoutPropertyRuntimeEvidenceReference(
     acceptanceReport?.sourceClosure
@@ -562,7 +570,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C10',
+      phase: 'M12-B3-C11',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1528,8 +1536,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C10',
-    status: 'b3-c10-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C11',
+    status: 'b3-c11-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -1971,7 +1979,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C10 Four-Piece BeforeDamage Stack Effects\n\n' +
+    '# M12-B3-C11 AfterHeal Source-to-Target and Native Block\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -1980,7 +1988,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: C2-C9 retain their accepted trigger, transaction, ordering, healing and persistent-root contracts. C10 compiles only the two source-closed four-piece BeforeDamage graphs through one runtime operator. Set 2:4 stacks attr7 on every landed packet up to five layers for a shared refreshed 6s lifetime; set 4:4 additionally requires the final NormalAttack skill tag and stacks attr1 up to seven layers for a shared refreshed 24s lifetime. The current packet observes the BeforeDamage layer, while miss, blocked actions, wrong tags and unqualified equipment remain fail-closed.\n' +
+    '- Dynamic loadout batches: C2-C10 retain their accepted trigger, transaction, ordering, healing, persistent-root and four-piece BeforeDamage contracts. C11 adds the source-closed AfterHeal Source observer to actual healed Target route for set 5:4, plus native Block(5) for soul 10176. Empty OR is proven true by the native condition consumer; full-health executed healing still dispatches, rejected settlements stay suppressed, active Block duplicates neither stack nor refresh, and a new instance can apply at the right-open expiry boundary.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'
@@ -2340,6 +2348,12 @@ function createSoulEffectTriggerContract({
       enumName: 'Self',
       sourceKind: 'equipped-actor-source-events',
       description: '自身',
+    },
+    {
+      value: 2,
+      enumName: 'Source',
+      sourceKind: 'event-source-actor-events',
+      description: '元素来源',
     },
   ].map(binding => {
     assertIl2CppEnumMember({
@@ -2776,54 +2790,198 @@ async function readSoulEffectBeforeDamageRuntimeEvidenceSource(
   };
 }
 
-async function readSoulEffectNonDamageRuntimeEvidenceSource(
+export async function readSoulEffectNonDamageRuntimeEvidenceSource({
   sourcePath,
   gameAssemblyPath,
-  projectRoot
-) {
+  il2CppDumpPath,
+  projectRoot,
+}) {
   const bytes = await fs.readFile(sourcePath);
   const value = JSON.parse(bytes.toString('utf8'));
+  const binaryIdentity = await readBinaryIdentity(gameAssemblyPath);
+  const dumpIdentity = await readBinaryIdentity(il2CppDumpPath);
+  const binary = await fs.readFile(gameAssemblyPath);
+  const dumpText = await fs.readFile(il2CppDumpPath, 'utf8');
+  const rangeHashes = Object.fromEntries(
+    Object.values(value.consumer ?? {})
+      .filter(record => record?.range)
+      .map(record => [
+        record.range,
+        createHash('sha256')
+          .update(readPortableExecutableRvaRange(binary, record.range))
+          .digest('hex'),
+      ])
+  );
+  const dumpFragments = [
+    ...(value.dumpBindings?.methods ?? []).flatMap(record => [
+      `// RVA: ${record.rva}`,
+      record.declaration,
+    ]),
+    ...(value.dumpBindings?.triggerTargetEnum ?? []).map(
+      record =>
+        `public const EElementTriggerTargetType ${record.enumName} = ${record.value};`
+    ),
+    ...(value.dumpBindings?.combineTypeEnum ?? []).map(
+      record => `public const ECombineType ${record.enumName} = ${record.value};`
+    ),
+    ...(value.dumpBindings?.triggerDataFields ?? []).map(
+      record => `public EntityHandle ${record.field}; // ${record.offset}`
+    ),
+  ];
+  const observations = {
+    binaryIdentity,
+    dumpIdentity,
+    rangeHashes,
+    rangeCount: Object.keys(rangeHashes).length,
+    dumpFragmentsPresent: dumpFragments.every(fragment =>
+      dumpText.includes(fragment)
+    ),
+  };
+  validateSoulEffectNonDamageRuntimeEvidence(value, observations);
+  return {
+    path: normalizeSourcePath(sourcePath, projectRoot),
+    bytes: bytes.byteLength,
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+    value: {
+      ...value,
+      verifiedBinary: binaryIdentity,
+      verifiedIl2CppDump: dumpIdentity,
+    },
+    observations,
+  };
+}
+
+export function validateSoulEffectNonDamageRuntimeEvidence(
+  value,
+  observations
+) {
+  const expectedMethods = [
+    {
+      identity: 'Lens.Gameplay.Modules.BigWorld.TriggerElement.GetTriggerTarget',
+      rva: '0x13BBF50',
+      declaration:
+        'private List<EntityHandle> GetTriggerTarget(ElementTriggerDataBase triggerData, int targetType, int factionType, bool onlyCheck) { }',
+    },
+    {
+      identity: 'Lens.Gameplay.Modules.BigWorld.TriggerElement.CheckCondition',
+      rva: '0x13B58F0',
+      declaration:
+        'private bool CheckCondition(TTriggerElementParams.TriggerConditionType conditionType, ElementTriggerDataBase triggerData) { }',
+    },
+    {
+      identity:
+        'Lens.Gameplay.Modules.BigWorld.AliveElementSystem.OnExecuteNormalElement',
+      rva: '0x13195C0',
+      declaration: 'public virtual void OnExecuteNormalElement(IElement element) { }',
+    },
+  ];
+  const expectedRouting = [
+    {
+      value: 0,
+      enumName: 'Self',
+      field: 'self',
+      fieldOffset: '0x28',
+      caseRva: '0x13BC109',
+    },
+    {
+      value: 1,
+      enumName: 'Target',
+      field: 'target',
+      fieldOffset: '0x20',
+      caseRva: '0x13BC11B',
+    },
+    {
+      value: 2,
+      enumName: 'Source',
+      field: 'source',
+      fieldOffset: '0x18',
+      caseRva: '0x13BC12D',
+    },
+  ];
   if (
     value?.contractName !== 'AzPrSoulEssenceNonDamageRuntimeEvidence' ||
-    Number(value?.schemaVersion) !== 1 ||
+    Number(value?.schemaVersion) !== 2 ||
     value?.conclusion?.status !== 'applied'
   ) {
     throw new Error(
       'optimization-qualification-non-damage-evidence-contract-invalid'
     );
   }
-  const binaryIdentity = await readBinaryIdentity(gameAssemblyPath);
   if (
-    Number(value.reviewedBinary?.bytes) !== binaryIdentity.bytes ||
-    value.reviewedBinary?.sha256 !== binaryIdentity.sha256
+    Number(value.reviewedBinary?.bytes) !==
+      Number(observations?.binaryIdentity?.bytes) ||
+    value.reviewedBinary?.sha256 !== observations?.binaryIdentity?.sha256
   ) {
     throw new Error(
       'optimization-qualification-non-damage-evidence-binary-mismatch'
     );
   }
-  const binary = await fs.readFile(gameAssemblyPath);
-  const ranges = [
-    value.consumer?.switchEnter,
-    value.consumer?.onGotShield,
-    value.consumer?.afterHeal,
-    value.consumer?.healSettlementOrder,
-    value.consumer?.triggerIntervalParse,
-    value.consumer?.triggerIntervalGate,
-    value.consumer?.triggerEventHandlerIntervalGate,
-  ];
-  for (const evidenceRange of ranges) {
-    const rangeBytes = readPortableExecutableRvaRange(
-      binary,
-      evidenceRange?.range
+  if (
+    Number(value.reviewedIl2CppDump?.bytes) !==
+      Number(observations?.dumpIdentity?.bytes) ||
+    value.reviewedIl2CppDump?.sha256 !== observations?.dumpIdentity?.sha256 ||
+    observations?.dumpFragmentsPresent !== true ||
+    JSON.stringify(value.dumpBindings?.methods) !==
+      JSON.stringify(expectedMethods)
+  ) {
+    throw new Error(
+      'optimization-qualification-non-damage-evidence-dump-binding-drift'
     );
+  }
+  for (const evidenceRange of Object.values(value.consumer ?? {}).filter(
+    record => record?.range
+  )) {
     if (
-      createHash('sha256').update(rangeBytes).digest('hex') !==
-      evidenceRange?.sha256
+      observations?.rangeHashes?.[evidenceRange.range] !== evidenceRange.sha256
     ) {
       throw new Error(
-        `optimization-qualification-non-damage-evidence-range-drift:${evidenceRange?.range ?? 'missing'}`
+        `optimization-qualification-non-damage-evidence-range-drift:${evidenceRange.range}`
       );
     }
+  }
+  if (
+    JSON.stringify(value.triggerTargetRouting?.bindings) !==
+      JSON.stringify(expectedRouting) ||
+    value.triggerTargetRouting?.consumer !==
+      'Lens.Gameplay.Modules.BigWorld.TriggerElement.GetTriggerTarget' ||
+    value.triggerTargetRouting?.rva !== '0x13BBF50' ||
+    Number(value.sourceObserver?.triggerTargetType) !== 2 ||
+    value.sourceObserver?.enumName !== 'Source' ||
+    value.sourceObserver?.runtimeSourceKind !== 'event-source-actor-events'
+  ) {
+    throw new Error(
+      'optimization-qualification-non-damage-evidence-trigger-target-routing-drift'
+    );
+  }
+  if (
+    value.emptyConditionSemantics?.emptyOrResult !== true ||
+    value.emptyConditionSemantics?.emptyAndResult !== true ||
+    ![34, 40, 44].every(eventId =>
+      value.emptyConditionSemantics?.supportedEventIds?.includes(eventId)
+    ) ||
+    ![34, 40, 44].every(eventId =>
+      value.emptyConditionEvents?.includes(eventId)
+    )
+  ) {
+    throw new Error(
+      'optimization-qualification-non-damage-evidence-empty-condition-drift'
+    );
+  }
+  const block = value.combineSemantics?.block;
+  if (
+    Number(block?.combineType) !== 5 ||
+    block?.enumName !== 'Block' ||
+    block?.runtimeMode !== 'block-while-active-same-config' ||
+    block?.identityComparison !== 'IElement.config-reference-equality' ||
+    block?.activeDuplicateRefreshes !== false ||
+    block?.activeDuplicateStacks !== false ||
+    block?.activeDuplicateIsFreed !== true ||
+    block?.reapplyAfterRemovalOrExpiry !== true ||
+    block?.expiryInterval !== 'right-open'
+  ) {
+    throw new Error(
+      'optimization-qualification-non-damage-evidence-block-semantics-drift'
+    );
   }
   if (
     Number(value.switchEnter?.eventId) !== 34 ||
@@ -2850,12 +3008,34 @@ async function readSoulEffectNonDamageRuntimeEvidenceSource(
       'optimization-qualification-non-damage-evidence-semantics-incomplete'
     );
   }
-  return {
-    path: normalizeSourcePath(sourcePath, projectRoot),
-    bytes: bytes.byteLength,
-    sha256: createHash('sha256').update(bytes).digest('hex'),
-    value: { ...value, verifiedBinary: binaryIdentity },
-  };
+}
+
+export function assertSoulEffectNonDamageRuntimeEvidenceReference(
+  reference,
+  source
+) {
+  const rangeCount = Object.values(source.value.consumer ?? {}).filter(
+    record => record?.range
+  ).length;
+  if (
+    reference?.path !== source.path ||
+    Number(reference?.bytes) !== Number(source.bytes) ||
+    reference?.sha256 !== source.sha256 ||
+    reference?.binaryPath !== source.value.reviewedBinary?.path ||
+    Number(reference?.binaryBytes) !==
+      Number(source.value.reviewedBinary?.bytes) ||
+    reference?.binarySha256 !== source.value.reviewedBinary?.sha256 ||
+    reference?.il2CppDumpPath !== source.value.reviewedIl2CppDump?.path ||
+    Number(reference?.il2CppDumpBytes) !==
+      Number(source.value.reviewedIl2CppDump?.bytes) ||
+    reference?.il2CppDumpSha256 !==
+      source.value.reviewedIl2CppDump?.sha256 ||
+    Number(reference?.rangeCount) !== rangeCount
+  ) {
+    throw new Error(
+      'optimization-qualification-non-damage-evidence-report-reference-drift'
+    );
+  }
 }
 
 function attachSoulEffectGetElementRuntimeEvidence(
@@ -2989,12 +3169,18 @@ function attachSoulEffectNonDamageRuntimeEvidence(triggerContract, evidence) {
     binding =>
       Number(binding.value) === Number(evidence.effectTarget?.effectTargetType)
   );
+  const sourceObserver = triggerContract.triggerTargetBindings?.find(
+    binding =>
+      Number(binding.value) === Number(evidence.sourceObserver?.triggerTargetType)
+  );
   if (
     switchEvent?.frameAnchor !== evidence.switchEnter?.frameAnchor ||
     shieldEvent?.frameAnchor !== evidence.onGotShield?.frameAnchor ||
     healEvent?.frameAnchor !== evidence.afterHeal?.frameAnchor ||
     effectTarget?.enumName !== evidence.effectTarget?.enumName ||
-    effectTarget?.targetKind !== evidence.effectTarget?.runtimeTargetKind
+    effectTarget?.targetKind !== evidence.effectTarget?.runtimeTargetKind ||
+    sourceObserver?.enumName !== evidence.sourceObserver?.enumName ||
+    sourceObserver?.sourceKind !== evidence.sourceObserver?.runtimeSourceKind
   ) {
     throw new Error(
       'optimization-qualification-non-damage-source-binding-drift'
@@ -3009,10 +3195,17 @@ function attachSoulEffectNonDamageRuntimeEvidence(triggerContract, evidence) {
       onGotShield: structuredClone(evidence.onGotShield),
       afterHeal: structuredClone(evidence.afterHeal),
       sourceVisibility: structuredClone(evidence.sourceVisibility),
+      sourceObserver: structuredClone(evidence.sourceObserver),
+      triggerTargetRouting: structuredClone(evidence.triggerTargetRouting),
       effectTarget: structuredClone(evidence.effectTarget),
+      emptyConditionSemantics: structuredClone(
+        evidence.emptyConditionSemantics
+      ),
       emptyConditionEvents: [...(evidence.emptyConditionEvents ?? [])],
+      combineSemantics: structuredClone(evidence.combineSemantics),
       consumer: structuredClone(evidence.consumer),
       reviewedBinary: structuredClone(evidence.reviewedBinary),
+      reviewedIl2CppDump: structuredClone(evidence.reviewedIl2CppDump),
       sourceIdentity: evidence.conclusion.sourceIdentity,
     },
   };

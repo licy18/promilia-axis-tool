@@ -187,14 +187,14 @@ describe('M12-B3 optimization qualification generation', () => {
       artifacts.gaps.records.filter(
         record => record.code === 'soulessence-effect-skill-dynamic-unapplied'
       )
-    ).toHaveLength(24);
+    ).toHaveLength(23);
     expect(
       artifacts.manifests.records.filter(
         record =>
           record.objectKind === 'soul-essence' &&
           record.maturityState === 'runtime-integrated'
       )
-    ).toHaveLength(38);
+    ).toHaveLength(39);
     const unappliedSetSkillGaps = artifacts.gaps.records.filter(
       record => record.code === 'set-skill-dynamic-unapplied'
     );
@@ -203,7 +203,6 @@ describe('M12-B3 optimization qualification generation', () => {
     ).toEqual([
       'set-skill:1:4',
       'set-skill:3:4',
-      'set-skill:5:4',
       'set-skill:6:4',
     ]);
     const setSkillManifests = artifacts.manifests.records.filter(
@@ -213,8 +212,13 @@ describe('M12-B3 optimization qualification generation', () => {
       setSkillManifests.filter(
         record => record.maturityState === 'runtime-integrated'
       )
-    ).toHaveLength(8);
-    for (const objectId of ['2:4', '4:4']) {
+    ).toHaveLength(9);
+    const mechanismFamilyBySetSkillId = new Map([
+      ['2:4', 'set-skill-before-damage-stacking-property'],
+      ['4:4', 'set-skill-before-damage-stacking-property'],
+      ['5:4', 'set-skill-after-heal-source-to-target-property'],
+    ]);
+    for (const [objectId, mechanismFamily] of mechanismFamilyBySetSkillId) {
       const manifest = setSkillManifests.find(
         record => record.objectId === objectId
       );
@@ -225,7 +229,7 @@ describe('M12-B3 optimization qualification generation', () => {
         optimizationReady: false,
         evidence: {
           effectMechanics: {
-            mechanismFamily: 'set-skill-before-damage-stacking-property',
+            mechanismFamily,
             runtimeStatus: 'runtime-applied',
             thresholdActivation: {
               status: 'runtime-applied',
@@ -242,9 +246,9 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 386,
+      blockingUniqueGapCount: 383,
       byCategory: {
-        'not-implemented': 368,
+        'not-implemented': 365,
         'evidence-insufficient': 18,
       },
     });

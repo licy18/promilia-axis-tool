@@ -20,6 +20,7 @@ export const EFFECT_RUNTIME_EVENT_TYPES = Object.freeze({
   TRANSFERRED: 'EFFECT_TRANSFERRED',
   APPLIED: 'EFFECT_APPLIED',
   REFRESHED: 'EFFECT_REFRESHED',
+  BLOCKED: 'EFFECT_BLOCKED',
   REMOVED: 'EFFECT_REMOVED',
   EXPIRED: 'EFFECT_EXPIRED',
 });
@@ -263,6 +264,8 @@ export function createEffectRuntimeTimeline({
         eventTypeCounts.get(EFFECT_RUNTIME_EVENT_TYPES.APPLIED) ?? 0,
       refreshedEventCount:
         eventTypeCounts.get(EFFECT_RUNTIME_EVENT_TYPES.REFRESHED) ?? 0,
+      blockedRefreshEventCount:
+        eventTypeCounts.get(EFFECT_RUNTIME_EVENT_TYPES.BLOCKED) ?? 0,
       removedEventCount:
         eventTypeCounts.get(EFFECT_RUNTIME_EVENT_TYPES.REMOVED) ?? 0,
       expiredEventCount:
@@ -719,6 +722,20 @@ function applyRuntimeEffectCommand({
           command.operation === EFFECT_OPERATIONS.REFRESH
             ? 'effect-runtime-refresh-missing-applied'
             : 'effect-runtime-applied',
+      })
+    );
+    return;
+  }
+
+  if (command.stackMode === EFFECT_STACK_MODES.BLOCK) {
+    emitEvent(
+      createEffectRuntimeEvent({
+        type: EFFECT_RUNTIME_EVENT_TYPES.BLOCKED,
+        command,
+        before: existing,
+        after: existing,
+        scenario,
+        status: 'effect-runtime-blocked-active-instance',
       })
     );
     return;

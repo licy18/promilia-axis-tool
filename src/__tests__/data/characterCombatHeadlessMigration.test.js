@@ -16,7 +16,7 @@ const GOLDENS = [
       '6fa24e7026a9372b1eb57c094b5b3c726bf012953b92cc965359f8072b350cb3',
     inputHash: 'd06f95049d890d66',
     dataHash: '2152b959f23227e3',
-    traceHash: '23c301eb7b6d9e8f',
+    traceHash: 'c3e418d50d47750b',
   },
   {
     identity: 'ruby-main',
@@ -29,7 +29,7 @@ const GOLDENS = [
       'f9144e8d2724b63653363556774ce8d5f64e33439edd39a684e18f12f3f0e2bd',
     inputHash: '6c9ff10a10bf1a99',
     dataHash: '92b789c56ea4d314',
-    traceHash: '3aae9355bcf3230f',
+    traceHash: '75bed45b430d9eb3',
   },
   {
     identity: 'han-main',
@@ -42,7 +42,7 @@ const GOLDENS = [
       '69d7c6c48099766121656ba8e52a26b9e1244e1ed33f80fef4b7d0f965fe4c36',
     inputHash: 'bdb1c3d123b791a2',
     dataHash: '2b9a3af2d4170de9',
-    traceHash: '3f2eb9c062a3201b',
+    traceHash: '9e343388f845a8d5',
   },
   {
     identity: 'han-controlled-buff-switch',
@@ -55,7 +55,7 @@ const GOLDENS = [
       '5b6de79f7b816c6749f8bc7cbc5d394db8a43ae030ae7febf4647f59c0c5dc14',
     inputHash: '4cabc725c2ed7eda',
     dataHash: 'b1105b9a085035ff',
-    traceHash: 'a9e1ac0fe202f573',
+    traceHash: '15bf99101c3fc25f',
   },
 ];
 

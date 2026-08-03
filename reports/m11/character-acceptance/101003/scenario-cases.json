@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/ultimate-controlled-buff-switch-golden.json",
-        "reportHash": "4635c42a554ad5da",
+        "reportHash": "3a5be9828f753208",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -18,7 +18,7 @@
         "canonicalHashes": {
           "input": "4cabc725c2ed7eda",
           "data": "b1105b9a085035ff",
-          "trace": "a9e1ac0fe202f573",
+          "trace": "15bf99101c3fc25f",
           "evaluation": null
         }
       },
@@ -808,7 +808,7 @@
           "assertionHash": "a105b0c3214ea211"
         }
       ],
-      "scenarioCaseHash": "f16f7fceb6eb670d"
+      "scenarioCaseHash": "8f0c9bbb75b9295a"
     },
     {
       "schemaVersion": 1,
@@ -816,7 +816,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/golden-trace.json",
-        "reportHash": "da33bd5263e64431",
+        "reportHash": "08ebeff01a0df1c6",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -826,7 +826,7 @@
         "canonicalHashes": {
           "input": "bdb1c3d123b791a2",
           "data": "2b9a3af2d4170de9",
-          "trace": "3f2eb9c062a3201b",
+          "trace": "9e343388f845a8d5",
           "evaluation": null
         }
       },
@@ -3347,7 +3347,7 @@
           "assertionHash": "9b24a5aeab528c8e"
         }
       ],
-      "scenarioCaseHash": "a7478c721a65d1dd"
+      "scenarioCaseHash": "37cb8dc7c93b3336"
     },
     {
       "schemaVersion": 1,
@@ -3366,7 +3366,7 @@
           "algorithm": "fnv1a64-utf8-v1",
           "input": "846aaf6dd688dda5",
           "data": "caa7cd9968e236b6",
-          "trace": "9a16c7be20520ac3",
+          "trace": "6445f14b401c1a2d",
           "evaluation": "920e7363ae12290d"
         }
       },
@@ -5789,7 +5789,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "8087c17c2be7b5e4"
+      "scenarioCaseHash": "36173e635533b088"
     }
   ],
   "summary": {
@@ -5802,5 +5802,5 @@
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "e9acddb54fbbd0cc"
+  "scenarioSetHash": "bcf637fb34b1ed7f"
 }

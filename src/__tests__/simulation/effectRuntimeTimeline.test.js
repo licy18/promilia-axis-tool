@@ -777,6 +777,48 @@ describe('effect runtime timeline', () => {
     ).toHaveLength(1);
   });
 
+  it('blocks a same-config active duplicate without refreshing and reapplies at expiry', () => {
+    const scenario = {
+      time: { durationMs: 3000, fps: 60 },
+      actors: [{ id: 'actor-source' }],
+      actions: [],
+    };
+    const command = (id, timeMs) => ({
+      ...createVerifiedGeneratedEffectCommand({
+        id,
+        effectId: 'native-block-effect',
+        semanticTargetKind: 'self-actor',
+        targetId: 'actor-source',
+        timeMs,
+        durationMs: 1000,
+        inheritType: null,
+        inheritOnControlledActorSwitch: false,
+      }),
+      stackMode: EFFECT_STACK_MODES.BLOCK,
+    });
+    const timeline = createEffectRuntimeTimeline({
+      scenario,
+      generatedCommands: [
+        command('block-first', 0),
+        command('block-active-duplicate', 500),
+        command('block-expiry-boundary', 1000),
+      ],
+    });
+
+    expect(
+      timeline.events.map(event => [event.type, event.timeMs, event.status])
+    ).toEqual([
+      ['EFFECT_APPLIED', 0, 'effect-runtime-applied'],
+      ['EFFECT_BLOCKED', 500, 'effect-runtime-blocked-active-instance'],
+      ['EFFECT_EXPIRED', 1000, 'effect-runtime-expired'],
+      ['EFFECT_APPLIED', 1000, 'effect-runtime-applied'],
+      ['EFFECT_EXPIRED', 2000, 'effect-runtime-expired'],
+    ]);
+    expect(timeline.events[1].before.expiresAtMs).toBe(1000);
+    expect(timeline.events[1].after.expiresAtMs).toBe(1000);
+    expect(timeline.summary.blockedRefreshEventCount).toBe(1);
+  });
+
   it('rejects effect commands that bypass the calculator isolation boundary', () => {
     const project = createEffectOnlyProject();
     project.actions[0].effectCommands[0].appliedToCalculators = true;

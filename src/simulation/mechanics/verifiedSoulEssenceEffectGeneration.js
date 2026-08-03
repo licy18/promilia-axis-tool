@@ -118,8 +118,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
       const occurrences = (rawOccurrences ?? []).filter(
         occurrence =>
           !nonDamageTrigger ||
-          String(occurrence.eventContext?.triggerSubjectActorId) ===
-            String(binding.actor.id)
+          matchesNonDamageTriggerObserver(binding, occurrence.eventContext)
       );
       if (occurrences.length === 0) {
         suppressions.push({
@@ -876,6 +875,22 @@ function isNonDamageTriggerAnchor(frameAnchor) {
   ].includes(frameAnchor);
 }
 
+function matchesNonDamageTriggerObserver(binding, eventContext) {
+  const sourceKind = binding.definition.trigger?.triggerTarget?.kind;
+  if (
+    sourceKind === 'equipped-actor-source-events' ||
+    sourceKind === 'native-event-subject-matches-equipped-actor'
+  ) {
+    return (
+      String(eventContext?.triggerSubjectActorId) === String(binding.actor.id)
+    );
+  }
+  if (sourceKind === 'event-source-actor-events') {
+    return String(eventContext?.sourceActorId) === String(binding.actor.id);
+  }
+  return false;
+}
+
 function applySoulTriggerIntervalGates({ effectCommands, suppressions }) {
   const intervalGroups = new Map();
   for (const [commandIndex, command] of effectCommands.entries()) {
@@ -977,6 +992,7 @@ function uniqueFiniteIntegers(values) {
 function normalizeStackMode(value) {
   if (value === EFFECT_STACK_MODES.STACK) return EFFECT_STACK_MODES.STACK;
   if (value === EFFECT_STACK_MODES.REPLACE) return EFFECT_STACK_MODES.REPLACE;
+  if (value === EFFECT_STACK_MODES.BLOCK) return EFFECT_STACK_MODES.BLOCK;
   return EFFECT_STACK_MODES.REFRESH;
 }
 
