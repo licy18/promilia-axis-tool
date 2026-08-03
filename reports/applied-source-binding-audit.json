@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "applied-source-binding-audit",
-  "generatedAt": "2026-08-03T02:58:30.409Z",
+  "generatedAt": "2026-08-03T09:02:25.235Z",
   "decision": {
     "status": "passed",
     "passed": true,
@@ -14,7 +14,7 @@
     "compatibleUnboundCount": 0,
     "unexplainedCompatibleUnboundCount": 0,
     "missingTrackCount": 0,
-    "loadoutPropertyTagSourceCount": 46,
+    "loadoutPropertyTagSourceCount": 49,
     "loadoutPropertyTagDriftCount": 0,
     "loadoutTuningConditionCount": 14,
     "loadoutTuningConditionDriftCount": 0,
@@ -65,9 +65,10 @@
       "triggerContractHash": "ee74f6284b3b5118"
     },
     "summary": {
-      "sourceCount": 46,
+      "sourceCount": 49,
       "triggeredSourceCount": 27,
-      "persistentSourceCount": 19,
+      "persistentSourceCount": 22,
+      "periodicPersistentSourceCount": 3,
       "driftCount": 0,
       "propertyTagDriftCount": 0,
       "tuningConditionCount": 14,
@@ -3421,6 +3422,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -3491,6 +3494,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -3561,6 +3566,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -3631,6 +3638,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -3701,6 +3710,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -3771,6 +3782,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -3841,6 +3854,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -3911,6 +3926,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -3981,6 +3998,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -4051,6 +4070,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -4094,6 +4115,104 @@
       {
         "kind": "persistent-loadout-property-source-binding",
         "ownerKind": "soulessence",
+        "ownerId": 10084,
+        "skillId": 1900600,
+        "effectElementId": 19006001,
+        "installationRootElementId": 19006000,
+        "unloadTriggerElementId": 19006002,
+        "sourcePropertyTags": [],
+        "generatedPropertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "attribute": {
+          "sourceAttributeId": 8,
+          "generatedAttributeId": 8,
+          "sourceCalculateType": 1,
+          "generatedCalculateType": 1
+        },
+        "formula": {
+          "sourceCommonFunctionId": 1,
+          "generatedCommonFunctionId": 1,
+          "sourceBaseFunctionId": 5,
+          "generatedBaseFunctionId": 5
+        },
+        "lifecycle": {
+          "durationMode": "persistent-root-periodic-finite-property-leaf",
+          "leafDurationMs": 1100,
+          "combineMode": "cover-by-source-identity",
+          "inheritType": 0,
+          "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
+        },
+        "nativeLifecycleMode": "persistent-root-periodic-finite-property-leaf",
+        "periodicActivation": {
+          "triggerType": 0,
+          "timeTriggerType": 1,
+          "intervalMs": 1000,
+          "timeExecuteFirstFrame": true,
+          "triggerCounter": -1,
+          "conditionLogic": "and",
+          "conditions": [
+            {
+              "kind": "self-element-layer-formula",
+              "conditionType": 10000,
+              "conditionValue": 1007,
+              "markElementId": 750,
+              "strictThreshold": 2
+            }
+          ],
+          "conditionFailureConsumesPeriod": true,
+          "firstTick": "first-positive-runtime-update",
+          "subsequentTickBoundary": "strict-elapsed-greater-than-ordinal-times-interval",
+          "sameFramePhase": "after-action-and-tuning-transactions",
+          "target": {
+            "kind": "self-actor",
+            "targetType": 0,
+            "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+          },
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4746040833970375000;elementId=19006000|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+        },
+        "installation": {
+          "frame": 0,
+          "targetKind": "self-actor",
+          "directInjectTargetType": 0,
+          "removeElementOnEnd": false,
+          "rootElementId": 19006000,
+          "rootPathId": -4746040833970375000,
+          "sourceSequencePath": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/New Timeline__5235606625454068247.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/MonoBehaviour_7004761849945723415__7004761849945723415.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-4746040833970375000;elementId=19006000|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+        },
+        "unload": {
+          "eventId": 36,
+          "triggerElementId": 19006002,
+          "triggerPathId": -5962945396310436000,
+          "removalPaths": [
+            {
+              "pathIds": [
+                -5962945396310436000,
+                -4096738821820803000,
+                -4746040833970375000
+              ],
+              "elementIds": [
+                19006002,
+                19006003,
+                19006000
+              ]
+            }
+          ],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/New Timeline__5235606625454068247.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/MonoBehaviour_7004761849945723415__7004761849945723415.json|elementDataList[1]|battle-element-assets.jsonl#path_id=-5962945396310436000;elementId=19006002|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
+        },
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=5335513805115515000;elementId=19006001",
+        "status": "applied-source-periodic-persistent-property-ready",
+        "issueCodes": []
+      },
+      {
+        "kind": "persistent-loadout-property-source-binding",
+        "ownerKind": "soulessence",
         "ownerId": 10133,
         "skillId": 1900440,
         "effectElementId": 19004401,
@@ -4121,6 +4240,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -4191,6 +4312,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -4234,6 +4357,108 @@
       {
         "kind": "persistent-loadout-property-source-binding",
         "ownerKind": "soulessence",
+        "ownerId": 10152,
+        "skillId": 1900490,
+        "effectElementId": 19004902,
+        "installationRootElementId": 19004901,
+        "unloadTriggerElementId": 19004903,
+        "sourcePropertyTags": [],
+        "generatedPropertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "attribute": {
+          "sourceAttributeId": 222,
+          "generatedAttributeId": 222,
+          "sourceCalculateType": 1,
+          "generatedCalculateType": 1
+        },
+        "formula": {
+          "sourceCommonFunctionId": 1,
+          "generatedCommonFunctionId": 1,
+          "sourceBaseFunctionId": 5,
+          "generatedBaseFunctionId": 5
+        },
+        "lifecycle": {
+          "durationMode": "persistent-root-periodic-finite-property-leaf",
+          "leafDurationMs": 1200,
+          "combineMode": "cover-by-source-identity",
+          "inheritType": 0,
+          "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
+        },
+        "nativeLifecycleMode": "persistent-root-periodic-finite-property-leaf",
+        "periodicActivation": {
+          "triggerType": 0,
+          "timeTriggerType": 1,
+          "intervalMs": 1000,
+          "timeExecuteFirstFrame": true,
+          "triggerCounter": -1,
+          "conditionLogic": "and",
+          "conditions": [
+            {
+              "kind": "self-has-element-id",
+              "conditionType": 1,
+              "conditionValue": 650,
+              "markElementId": 650
+            },
+            {
+              "kind": "self-element-layer-formula",
+              "conditionType": 10000,
+              "conditionValue": 1007,
+              "markElementId": 650,
+              "strictThreshold": 1
+            }
+          ],
+          "conditionFailureConsumesPeriod": true,
+          "firstTick": "first-positive-runtime-update",
+          "subsequentTickBoundary": "strict-elapsed-greater-than-ordinal-times-interval",
+          "sameFramePhase": "after-action-and-tuning-transactions",
+          "target": {
+            "kind": "self-actor",
+            "targetType": 0,
+            "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+          },
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=293455178027922940;elementId=19004901|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+        },
+        "installation": {
+          "frame": 0,
+          "targetKind": "self-actor",
+          "directInjectTargetType": 0,
+          "removeElementOnEnd": false,
+          "rootElementId": 19004901,
+          "rootPathId": 293455178027922940,
+          "sourceSequencePath": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_6618222656261442340__6618222656261442340.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_-7617206040492061916__-7617206040492061916.json|elementDataList[0]|battle-element-assets.jsonl#path_id=293455178027922940;elementId=19004901|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+        },
+        "unload": {
+          "eventId": 36,
+          "triggerElementId": 19004903,
+          "triggerPathId": 8886631474257295000,
+          "removalPaths": [
+            {
+              "pathIds": [
+                8886631474257295000,
+                293455178027922940
+              ],
+              "elementIds": [
+                19004903,
+                19004901
+              ]
+            }
+          ],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_2171627772115929892__2171627772115929892.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_5244654183765953316__5244654183765953316.json|elementDataList[0]|battle-element-assets.jsonl#path_id=8886631474257295000;elementId=19004903|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
+        },
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=3794026193344005600;elementId=19004902",
+        "status": "applied-source-periodic-persistent-property-ready",
+        "issueCodes": []
+      },
+      {
+        "kind": "persistent-loadout-property-source-binding",
+        "ownerKind": "soulessence",
         "ownerId": 10156,
         "skillId": 1900260,
         "effectElementId": 19002602,
@@ -4261,6 +4486,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -4303,6 +4530,96 @@
       },
       {
         "kind": "persistent-loadout-property-source-binding",
+        "ownerKind": "soulessence",
+        "ownerId": 10197,
+        "skillId": 1900770,
+        "effectElementId": 19007702,
+        "installationRootElementId": 19007701,
+        "unloadTriggerElementId": 19007703,
+        "sourcePropertyTags": [],
+        "generatedPropertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "attribute": {
+          "sourceAttributeId": 21,
+          "generatedAttributeId": 21,
+          "sourceCalculateType": 1,
+          "generatedCalculateType": 1
+        },
+        "formula": {
+          "sourceCommonFunctionId": 1,
+          "generatedCommonFunctionId": 1,
+          "sourceBaseFunctionId": 5,
+          "generatedBaseFunctionId": 5
+        },
+        "lifecycle": {
+          "durationMode": "persistent-root-periodic-finite-property-leaf",
+          "leafDurationMs": 2300,
+          "combineMode": "cover-by-source-identity",
+          "inheritType": 0,
+          "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
+        },
+        "nativeLifecycleMode": "persistent-root-periodic-finite-property-leaf",
+        "periodicActivation": {
+          "triggerType": 0,
+          "timeTriggerType": 1,
+          "intervalMs": 2000,
+          "timeExecuteFirstFrame": true,
+          "triggerCounter": -1,
+          "conditionLogic": "and",
+          "conditions": [],
+          "conditionFailureConsumesPeriod": true,
+          "firstTick": "first-positive-runtime-update",
+          "subsequentTickBoundary": "strict-elapsed-greater-than-ordinal-times-interval",
+          "sameFramePhase": "after-action-and-tuning-transactions",
+          "target": {
+            "kind": "self-kibo",
+            "targetType": 13,
+            "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+          },
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-2823429950423167000;elementId=19007701|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+        },
+        "installation": {
+          "frame": 0,
+          "targetKind": "self-actor",
+          "directInjectTargetType": 0,
+          "removeElementOnEnd": false,
+          "rootElementId": 19007701,
+          "rootPathId": -2823429950423167000,
+          "sourceSequencePath": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_-8260296123005999956__-8260296123005999956.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_1342996484479378604__1342996484479378604.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-2823429950423167000;elementId=19007701|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+        },
+        "unload": {
+          "eventId": 36,
+          "triggerElementId": 19007703,
+          "triggerPathId": -6231249903244081000,
+          "removalPaths": [
+            {
+              "pathIds": [
+                -6231249903244081000,
+                -4668706173733528000,
+                -2823429950423167000
+              ],
+              "elementIds": [
+                19007703,
+                19007704,
+                19007701
+              ]
+            }
+          ],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_2881065271915832492__2881065271915832492.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_-8113656816848083796__-8113656816848083796.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-6231249903244081000;elementId=19007703|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
+        },
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-7745989274928222000;elementId=19007702",
+        "status": "applied-source-periodic-persistent-property-ready",
+        "issueCodes": []
+      },
+      {
+        "kind": "persistent-loadout-property-source-binding",
         "ownerKind": "set-skill",
         "ownerId": "1:2",
         "skillId": 19998106,
@@ -4331,6 +4648,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -4401,6 +4720,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -4471,6 +4792,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -4541,6 +4864,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -4611,6 +4936,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",
@@ -4681,6 +5008,8 @@
           "inheritType": 0,
           "sourceIdentity": "GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill"
         },
+        "nativeLifecycleMode": "until-loadout-uninstall",
+        "periodicActivation": null,
         "installation": {
           "frame": 0,
           "targetKind": "self-actor",

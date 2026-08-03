@@ -630,7 +630,9 @@ function applySoulessenceSource({
     const persistentDeclared =
       cultivationEffect?.runtimeStatus === 'runtime-applied' &&
       effectDefinition?.runtimeStatus === 'runtime-applied' &&
-      effectDefinition?.persistentRoot != null;
+      effectDefinition?.persistentRoot != null &&
+      effectDefinition.persistentRoot.activationMode !==
+        'periodic-conditional-finite-leaf';
     const persistentApplied =
       persistentDeclared &&
       Number(cultivationEffect?.skillId) ===
@@ -901,7 +903,9 @@ function applyEquipmentSources({
     const persistentDeclared =
       thresholdMet &&
       effectDefinition?.runtimeStatus === 'runtime-applied' &&
-      effectDefinition?.persistentRoot != null;
+      effectDefinition?.persistentRoot != null &&
+      effectDefinition.persistentRoot.activationMode !==
+        'periodic-conditional-finite-leaf';
     const persistentApplied = persistentDeclared && persistentValidation.valid;
     const dynamicPropertyEffects =
       effectDefinition?.effect?.propertyEffects?.length > 0

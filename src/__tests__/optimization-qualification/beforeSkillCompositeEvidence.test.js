@@ -171,14 +171,14 @@ describe('BeforeSkill composite SP and team-heal native evidence', () => {
     );
 
     expect(report).toMatchObject({
-      phase: 'M12-B3-C14',
+      phase: 'M12-B3-C15',
       status: 'verification-complete-awaiting-product-acceptance',
-      baseCommit: '36217387c9197702088dfe15244569f86c6e43c5',
+      baseCommit: 'a5434a1e0b01c2d70db1832064e34f63fb44e279',
       reviewedC12Commit: 'a432467d4322ee0dae58e3d47df3b5c2eb55447a',
       acceptedC12R1Commit: '5537e5a59f9776d7045b0ce8ad9915738715a9a4',
       acceptedC13Commit: '36217387c9197702088dfe15244569f86c6e43c5',
       batchResults: {
-        runtimeAppliedSoulEssenceCount: 39,
+        runtimeAppliedSoulEssenceCount: 42,
         runtimeAppliedSetSkillCount: 11,
         remainingBlockedFourPieceSetSkillIds: ['set-skill:3:4'],
       },

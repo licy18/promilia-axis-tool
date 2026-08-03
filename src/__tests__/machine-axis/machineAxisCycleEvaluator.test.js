@@ -507,6 +507,55 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
+  it('keeps periodic persistent-root cadence phase in the cycle boundary state', () => {
+    const createBoundary = remainingFrames => ({
+      activeActorId: 'actor-1',
+      actors: [{ actorId: 'actor-1', sp: 100, max: 100 }],
+      kibos: [],
+      tuningMarks: [],
+      specialResources: [],
+      actorVitals: [],
+      kiboVitals: [],
+      cooldowns: [],
+      effects: [],
+      soulPeriodicRoots: [
+        {
+          bindingKey: 'actor-1|soulessence:10084|root:19006000',
+          actorId: 'actor-1',
+          ownerIdentity: 'soulessence:10084',
+          rootElementId: 19006000,
+          intervalFrames: 60,
+          remainingFrames,
+          sourceIdentityHash: 'c15-periodic-root-source',
+        },
+      ],
+      kiboPassiveRuntime: [],
+      targetStates: [],
+      shields: [],
+      pendingEvents: [],
+    });
+
+    expect(
+      compareCycleBoundaryStates(createBoundary(41), createBoundary(41))
+    ).toMatchObject({
+      closed: true,
+      stateDiffs: expect.arrayContaining([
+        expect.objectContaining({
+          dimension: 'soulPeriodicRoots',
+          equal: true,
+        }),
+      ]),
+    });
+    expect(
+      compareCycleBoundaryStates(createBoundary(41), createBoundary(17)).issues
+    ).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-state-not-closed',
+        path: 'state.soulPeriodicRoots',
+      })
+    );
+  });
+
   it('rejects a loop that consumes a finite loadout trigger lifetime', () => {
     const createBoundary = ({ acceptedCount, remainingTriggerCount }) => ({
       activeActorId: 'actor-1',

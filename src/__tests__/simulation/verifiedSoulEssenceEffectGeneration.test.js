@@ -340,8 +340,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 39,
-      unresolvedCount: 23,
+      runtimeAppliedCount: 42,
+      unresolvedCount: 20,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -8353,6 +8353,313 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
     expect(
       new Set(set5Commands.map(command => command.sourceActionId))
     ).toEqual(new Set(['c12-c11-after-heal-link']));
+  });
+
+  it('evaluates periodic persistent roots on native cadence and keeps the multi-tag outlier blocked', () => {
+    const run = ({
+      soulEssenceId,
+      effectSkillId,
+      soulEssenceStar = 1,
+      tuningMarks = [],
+      kibo = false,
+    }) =>
+      createRealSoulScenario({
+        soulEssenceId,
+        effectSkillId,
+        soulEssenceStar,
+        durationMs: frameToMs(150),
+        actionPlan: [],
+        initialRuntimeState: { tuningMarks },
+        teamKiboIdsByCharacterId: kibo
+          ? { [OWNER_ID]: PROPERTY_TAG_TEST_KIBO_ID }
+          : null,
+      });
+
+    const windStar1 = run({
+      soulEssenceId: 10084,
+      effectSkillId: 1900600,
+      tuningMarks: [createInheritedTuningMark(750, 3, 20_000)],
+    });
+    const windStar4 = run({
+      soulEssenceId: 10084,
+      effectSkillId: 1900600,
+      soulEssenceStar: 4,
+      tuningMarks: [createInheritedTuningMark(750, 3, 20_000)],
+    });
+    const breakEfficiency = run({
+      soulEssenceId: 10152,
+      effectSkillId: 1900490,
+      tuningMarks: [createInheritedTuningMark(650, 2, 20_000)],
+    });
+    const kiboDamage = run({
+      soulEssenceId: 10197,
+      effectSkillId: 1900770,
+      kibo: true,
+    });
+    expect(
+      windStar1.verifiedSoulEssenceEffectGeneration.effectCommands.map(
+        command => command.absoluteFrame
+      )
+    ).toEqual([1, 61, 121]);
+    expect(
+      windStar1.verifiedSoulEssenceEffectGeneration.effectCommands.map(
+        command => command.modifiers[0].sourceRawA
+      )
+    ).toEqual([2580, 2580, 2580]);
+    expect(
+      windStar4.verifiedSoulEssenceEffectGeneration.effectCommands.map(
+        command => command.modifiers[0].sourceRawA
+      )
+    ).toEqual([5170, 5170, 5170]);
+    expect(
+      breakEfficiency.verifiedSoulEssenceEffectGeneration.effectCommands.map(
+        command => [command.absoluteFrame, command.modifiers[0].sourceRawA]
+      )
+    ).toEqual([
+      [1, 3720],
+      [61, 3720],
+      [121, 3720],
+    ]);
+    expect(
+      kiboDamage.verifiedSoulEssenceEffectGeneration.effectCommands.map(
+        command => [
+          command.absoluteFrame,
+          command.targetKind,
+          command.targetKiboId,
+          command.modifiers[0].sourceRawA,
+        ]
+      )
+    ).toEqual([
+      [1, 'kibo', PROPERTY_TAG_TEST_KIBO_ID, 1880],
+      [121, 'kibo', PROPERTY_TAG_TEST_KIBO_ID, 1880],
+    ]);
+    expect(
+      soulEssenceEffectCatalog.definitions.find(
+        definition => definition.soulEssenceId === 10078
+      )
+    ).toMatchObject({
+      runtimeStatus: 'source-indexed-runtime-unapplied',
+      runtimeGaps: [
+        'effect-periodic-root-multi-property-tag-semantics-evidence-gap',
+      ],
+    });
+  });
+
+  it('consumes failed periodic checks, refreshes one Cover leaf, and expires right-open', () => {
+    const projection = createRealSoulScenario({
+      soulEssenceId: 10084,
+      effectSkillId: 1900600,
+      durationMs: frameToMs(156),
+      actionPlan: [],
+      initialRuntimeState: {
+        tuningMarks: [createInheritedTuningMark(750, 2, 20_000)],
+      },
+    });
+    const actionResolutionById = new Map(
+      projection.verifiedActionVariantRuntime.actionResolutions.map(
+        resolution => [resolution.actionId, resolution]
+      )
+    );
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario: projection.effectiveActionTimeline.scenario,
+      actionExecutionPlan: projection.actionExecutionPlan,
+      controlledActorTimeline: projection.controlledActorTimeline,
+      actionResolutionById,
+      tuningGeneration: {
+        ...projection.verifiedTuningMarkGeneration,
+        initialState: [{ markId: 750, currentValue: 2 }],
+        events: [
+          { markId: 750, timeMs: 500, after: 3 },
+          { markId: 750, timeMs: 1500, after: 2 },
+        ],
+      },
+      damageEventGeneration: projection.verifiedDamageEventGeneration,
+    });
+    expect(
+      generation.effectCommands.map(command => command.absoluteFrame)
+    ).toEqual([61]);
+    expect(
+      generation.suppressions
+        .filter(
+          entry =>
+            entry.reason ===
+            'soulessence-periodic-root-condition-not-matched'
+        )
+        .map(entry => entry.absoluteFrame)
+    ).toEqual([1, 121]);
+
+    const timeline = createEffectRuntimeTimeline({
+      scenario: projection.effectiveActionTimeline.scenario,
+      actionExecutionPlan: projection.actionExecutionPlan,
+      controlledActorTimeline: projection.controlledActorTimeline,
+      generatedCommands: generation.effectCommands,
+    });
+    const command = generation.effectCommands[0];
+    expect(
+      resolveActiveEffectsAt(timeline, command.timeMs + 1099.999, {
+        targetKind: 'actor',
+        targetId: `actor-${OWNER_ID}`,
+      })
+    ).toHaveLength(1);
+    const expiryTimeMs = timeline.events.find(
+      event => event.type === 'EFFECT_EXPIRED'
+    ).timeMs;
+    expect(expiryTimeMs).toBeCloseTo(command.timeMs + 1100, 2);
+    expect(
+      resolveActiveEffectsAt(timeline, expiryTimeMs, {
+        targetKind: 'actor',
+        targetId: `actor-${OWNER_ID}`,
+      })
+    ).toHaveLength(0);
+
+    const refreshed = createRealSoulScenario({
+      soulEssenceId: 10084,
+      effectSkillId: 1900600,
+      durationMs: frameToMs(150),
+      actionPlan: [],
+      initialRuntimeState: {
+        tuningMarks: [createInheritedTuningMark(750, 3, 20_000)],
+      },
+    });
+    const activePeriodicLeaves = resolveActiveEffectsAt(
+      refreshed.effectTimeline,
+      frameToMs(130),
+      { targetKind: 'actor', targetId: `actor-${OWNER_ID}` }
+    ).filter(
+      effect => effect.effectId === 'soulessence:10084:element:19006001'
+    );
+    expect(activePeriodicLeaves).toEqual([
+      expect.objectContaining({
+        effectId: 'soulessence:10084:element:19006001',
+        stacks: 1,
+        refreshCount: 2,
+      }),
+    ]);
+    expect(activePeriodicLeaves[0].appliedAtMs).toBeCloseTo(frameToMs(1), 2);
+    expect(activePeriodicLeaves[0].updatedAtMs).toBeCloseTo(
+      frameToMs(121),
+      2
+    );
+  });
+
+  it('applies periodic leaves to critical damage, toughness, and only the equipped Kibo', () => {
+    const compare = ({
+      soulEssenceId,
+      effectSkillId,
+      actionKind,
+      tuningMarks = [],
+      kibo = false,
+      combatScenario = null,
+    }) => {
+      const actionId = `c15-${soulEssenceId}-${actionKind}`;
+      const options = {
+        durationMs: frameToMs(240),
+        actionPlan: [{ id: actionId, actionKind, startFrame: 30 }],
+        initialRuntimeState: { tuningMarks },
+        combatScenario,
+        teamKiboIdsByCharacterId: kibo
+          ? { [OWNER_ID]: PROPERTY_TAG_TEST_KIBO_ID }
+          : null,
+      };
+      const withSoul = createRealSoulScenario({
+        ...options,
+        soulEssenceId,
+        effectSkillId,
+      });
+      const withoutPeriodicLeaf = createVerifiedCombatRuntime({
+        scenario: withSoul.effectiveActionTimeline.scenario,
+        actionExecutionPlan: withSoul.actionExecutionPlan,
+        controlledActorTimeline: withSoul.controlledActorTimeline,
+        effectGeneration: withSoul.verifiedBattleEffectGeneration,
+        tuningGeneration: withSoul.verifiedTuningMarkGeneration,
+        damageEventGeneration: withSoul.verifiedDamageEventGeneration,
+        effectTimeline: createEffectRuntimeTimeline({
+          scenario: withSoul.effectiveActionTimeline.scenario,
+          actionExecutionPlan: withSoul.actionExecutionPlan,
+          controlledActorTimeline: withSoul.controlledActorTimeline,
+          generatedCommands: [],
+        }),
+        actionVariantRuntime: withSoul.verifiedActionVariantRuntime,
+        kiboPassiveGeneration: withSoul.verifiedKiboPassiveGeneration,
+      });
+      return { actionId, withSoul, withoutPeriodicLeaf };
+    };
+
+    const criticalDamage = compare({
+      soulEssenceId: 10084,
+      effectSkillId: 1900600,
+      actionKind: 'normal-attack',
+      tuningMarks: [createInheritedTuningMark(750, 3, 20_000)],
+      combatScenario: { critical: { policy: 'critical' } },
+    });
+    expect(
+      totalHitDamage(
+        criticalDamage.withSoul.verifiedCombatRuntime,
+        criticalDamage.actionId
+      )
+    ).toBeGreaterThan(
+      totalHitDamage(
+        criticalDamage.withoutPeriodicLeaf,
+        criticalDamage.actionId
+      )
+    );
+
+    const breakEfficiency = compare({
+      soulEssenceId: 10152,
+      effectSkillId: 1900490,
+      actionKind: 'charged-attack',
+      tuningMarks: [createInheritedTuningMark(650, 2, 20_000)],
+    });
+    const toughnessHits = result =>
+      result.verifiedCombatRuntime.damageEvents
+        .filter(
+          event =>
+            event.type === 'VERIFIED_COMBAT_HIT' &&
+            event.actionId === breakEfficiency.actionId
+        )
+        .map(event => Number(event.payload.toughnessDamage ?? 0));
+    expect(toughnessHits(breakEfficiency.withSoul)[0]).toBeGreaterThan(
+      toughnessHits({
+        verifiedCombatRuntime: breakEfficiency.withoutPeriodicLeaf,
+      })[0]
+    );
+
+    const kiboDamage = compare({
+      soulEssenceId: 10197,
+      effectSkillId: 1900770,
+      actionKind: 'kibo-signature',
+      kibo: true,
+    });
+    expect(
+      totalHitDamage(
+        kiboDamage.withSoul.verifiedCombatRuntime,
+        kiboDamage.actionId
+      )
+    ).toBeGreaterThan(
+      totalHitDamage(
+        kiboDamage.withoutPeriodicLeaf,
+        kiboDamage.actionId
+      )
+    );
+
+    const actorDamage = compare({
+      soulEssenceId: 10197,
+      effectSkillId: 1900770,
+      actionKind: 'normal-attack',
+      kibo: true,
+    });
+    expect(
+      totalHitDamage(
+        actorDamage.withSoul.verifiedCombatRuntime,
+        actorDamage.actionId
+      )
+    ).toBeCloseTo(
+      totalHitDamage(
+        actorDamage.withoutPeriodicLeaf,
+        actorDamage.actionId
+      ),
+      6
+    );
   });
 });
 

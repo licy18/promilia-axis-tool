@@ -615,6 +615,11 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
       sourceCount: allRecords.length,
       triggeredSourceCount: records.length,
       persistentSourceCount: persistentRecords.length,
+      periodicPersistentSourceCount: persistentRecords.filter(
+        record =>
+          record.nativeLifecycleMode ===
+          'persistent-root-periodic-finite-property-leaf'
+      ).length,
       driftCount: propertyDriftCount + tuningConsumePriority.summary.driftCount,
       propertyTagDriftCount: propertyDriftCount,
       tuningConditionCount: records.reduce(
@@ -650,9 +655,57 @@ function createPersistentLoadoutPropertyAuditRecords({
   const installationSourceRow = sourceRowsByElementId.get(
     Number(root.installation?.rootElementId)
   );
+  const installationTree = installationSourceRow?.typetree ?? {};
   const unloadSourceRow = sourceRowsByElementId.get(
     Number(root.unload?.triggerElementId)
   );
+  const periodicActivation = root.periodicActivation ?? null;
+  const isPeriodicRoot =
+    root.lifecycle?.durationMode ===
+    'persistent-root-periodic-finite-property-leaf';
+  const sourcePeriodicConditions = (
+    installationTree.triggerConditionList ?? []
+  ).map(condition => ({
+    conditionType: Number(condition?.conditionParam1),
+    conditionValue: Number(condition?.conditionParam2),
+  }));
+  const generatedPeriodicConditions = (
+    periodicActivation?.conditions ?? []
+  ).map(condition => ({
+    conditionType: Number(condition?.conditionType),
+    conditionValue: Number(condition?.conditionValue),
+  }));
+  const sourcePeriodicConditionLogic =
+    Number(installationTree.triggerConditionType) === 0 ? 'and' : null;
+  const sourcePeriodicTargetType = Number(
+    installationTree.triggerEffectList?.[0]?.targetType
+  );
+  const periodicNativeLifecycleReady =
+    root.activationMode === 'periodic-conditional-finite-leaf' &&
+    periodicActivation != null &&
+    Number(periodicActivation.triggerType) ===
+      Number(installationTree.triggerType) &&
+    Number(periodicActivation.timeTriggerType) ===
+      Number(installationTree.triggerParam1) &&
+    Number(periodicActivation.intervalMs) ===
+      Number(installationTree.triggerParam2) &&
+    periodicActivation.timeExecuteFirstFrame ===
+      (Number(installationTree.timeExeFirstFrame) === 1) &&
+    Number(periodicActivation.triggerCounter) ===
+      Number(installationTree.triggerCounter) &&
+    periodicActivation.conditionLogic === sourcePeriodicConditionLogic &&
+    JSON.stringify(generatedPeriodicConditions) ===
+      JSON.stringify(sourcePeriodicConditions) &&
+    periodicActivation.conditionFailureConsumesPeriod === true &&
+    periodicActivation.firstTick === 'first-positive-runtime-update' &&
+    periodicActivation.subsequentTickBoundary ===
+      'strict-elapsed-greater-than-ordinal-times-interval' &&
+    Number(periodicActivation.target?.targetType) ===
+      sourcePeriodicTargetType &&
+    Number(installationTree.duration) === -1 &&
+    String(periodicActivation.sourceIdentity ?? '').includes(
+      `elementId=${Number(root.installation?.rootElementId)}`
+    );
   const expectedEffectElementIds = [
     ...new Set((definition.sourceClosure?.propertyElementIds ?? []).map(Number)),
   ].sort((left, right) => left - right);
@@ -723,12 +776,20 @@ function createPersistentLoadoutPropertyAuditRecords({
       root.installation.sourceSequencePath.length > 0
         ? []
         : ['persistent-property-installation-contract-drift']),
-      ...(root.lifecycle?.durationMode === 'until-loadout-uninstall' &&
-      Number(root.lifecycle?.leafDurationMs) === -1 &&
-      root.lifecycle?.combineMode === 'cover-by-source-identity' &&
-      Number(root.lifecycle?.inheritType) === 0
-        ? []
-        : ['persistent-property-native-lifecycle-contract-drift']),
+      ...(isPeriodicRoot
+        ? periodicNativeLifecycleReady &&
+          Number(root.lifecycle?.leafDurationMs) === Number(effect?.durationMs) &&
+          Number(root.lifecycle?.leafDurationMs) > 0 &&
+          root.lifecycle?.combineMode === 'cover-by-source-identity' &&
+          Number(root.lifecycle?.inheritType) === 0
+          ? []
+          : ['persistent-property-periodic-lifecycle-contract-drift']
+        : root.lifecycle?.durationMode === 'until-loadout-uninstall' &&
+            Number(root.lifecycle?.leafDurationMs) === -1 &&
+            root.lifecycle?.combineMode === 'cover-by-source-identity' &&
+            Number(root.lifecycle?.inheritType) === 0
+          ? []
+          : ['persistent-property-native-lifecycle-contract-drift']),
       ...(Number(root.unload?.eventId) === 36 && removalPaths.length > 0
         ? []
         : ['persistent-property-unload-contract-drift']),
@@ -769,12 +830,16 @@ function createPersistentLoadoutPropertyAuditRecords({
         generatedBaseFunctionId: Number(effect?.formula?.baseFunctionId),
       },
       lifecycle: structuredClone(root.lifecycle),
+      nativeLifecycleMode: root.lifecycle?.durationMode ?? null,
+      periodicActivation: structuredClone(periodicActivation),
       installation: structuredClone(root.installation),
       unload: structuredClone(root.unload),
       sourceIdentity: effect?.sourceIdentity ?? null,
       status:
         issueCodes.length === 0
-          ? 'applied-source-persistent-property-ready'
+          ? isPeriodicRoot
+            ? 'applied-source-periodic-persistent-property-ready'
+            : 'applied-source-persistent-property-ready'
           : 'applied-source-persistent-property-drift',
       issueCodes,
     };

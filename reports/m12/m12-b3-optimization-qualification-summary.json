@@ -1,6 +1,6 @@
 {
-  "phase": "M12-B3-C14",
-  "status": "b3-c14-verification-complete-awaiting-product-acceptance",
+  "phase": "M12-B3-C15",
+  "status": "b3-c15-verification-complete-awaiting-product-acceptance",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -9,15 +9,15 @@
     "equipment": 137,
     "setSkills": 12
   },
-  "sourceSnapshotHash": "e6c48099b261da63",
-  "rosterHash": "802a132b8c9080fe",
-  "manifestsHash": "d590b745a2eb0f47",
-  "ledgerHash": "d64df0972b180940",
-  "bindingMatrixHash": "3dc67be8dba47fba",
-  "catalogHash": "4671eb77db38faf7",
+  "sourceSnapshotHash": "661271d99b9e9b9e",
+  "rosterHash": "93b5f932243f030b",
+  "manifestsHash": "0700d78f431be1b9",
+  "ledgerHash": "81dc3cbf160a4132",
+  "bindingMatrixHash": "e2680052cfb8ea87",
+  "catalogHash": "fd4eb4442b914a17",
   "maturityCounts": {
-    "extracted": 191,
-    "runtime-integrated": 74
+    "extracted": 188,
+    "runtime-integrated": 77
   },
   "optimizationReadyCounts": {
     "character": 0,
@@ -27,10 +27,10 @@
     "set-skill": 0
   },
   "gapCounts": {
-    "blockingUniqueGapCount": 381,
+    "blockingUniqueGapCount": 375,
     "byCategory": {
-      "evidence-insufficient": 19,
-      "not-implemented": 362
+      "evidence-insufficient": 21,
+      "not-implemented": 354
     },
     "byCode": {
       "actor-static-profile-missing": 1,
@@ -43,17 +43,17 @@
       "level-breakthrough-skill-unlock-source-mismatch": 1,
       "set-skill-dynamic-unapplied": 1,
       "set-skill-visual-acceptance-not-published": 12,
-      "soulessence-effect-skill-dynamic-unapplied": 23,
+      "soulessence-effect-skill-dynamic-unapplied": 20,
       "soulessence-visual-acceptance-not-published": 62,
       "strict-character-cultivation-runtime-partial": 11,
-      "strict-soulessence-cultivation-runtime-partial": 23
+      "strict-soulessence-cultivation-runtime-partial": 20
     },
     "byObjectKind": {
       "character": 33,
       "equipment": 137,
       "kibo": 90,
       "set-skill": 13,
-      "soul-essence": 108
+      "soul-essence": 102
     }
   },
   "m12cLocked": true

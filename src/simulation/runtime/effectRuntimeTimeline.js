@@ -372,6 +372,17 @@ function isEffectEventVisibleToSettlement(
   const triggerEvent = state?.sourceIdentity?.triggerEvent ?? null;
   const triggerSequencePath =
     state?.sourceIdentity?.triggerSequencePath ?? null;
+  if (
+    state?.sourceIdentity?.sameFrameVisibility === 'strict-source-sequence' &&
+    Array.isArray(triggerSequencePath)
+  ) {
+    return (
+      compareSourceSequencePaths(
+        triggerSequencePath,
+        settlingSourceSequencePath
+      ) < 0
+    );
+  }
   const beforeSettlementTriggers = ['BeforeDamage', 'BeforeGetElement'];
   const afterSettlementTriggers = ['AfterDamage', 'AfterGetElement'];
   if (

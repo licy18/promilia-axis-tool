@@ -52,6 +52,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   triggerContract = null,
   tuningMechanicsCatalog = null,
   persistentLoadoutPropertyRuntimeEvidence = null,
+  periodicPersistentPropertyRuntimeEvidence = null,
   fourPieceSetStackRuntimeEvidence = null,
   beforeSkillCompositeRuntimeEvidence = null,
   afterDamageTargetPropertyRuntimeEvidence = null,
@@ -82,6 +83,15 @@ export async function createSoulEssenceEffectMechanicsCatalog({
     persistentLoadoutPropertyRuntimeEvidence?.conclusion?.status !== 'applied'
   ) {
     throw new Error('soulessence-persistent-loadout-property-evidence-missing');
+  }
+  if (
+    periodicPersistentPropertyRuntimeEvidence?.contractName !==
+      'AzPrPeriodicPersistentPropertyRuntimeEvidence' ||
+    periodicPersistentPropertyRuntimeEvidence?.conclusion?.status !== 'applied'
+  ) {
+    throw new Error(
+      'soulessence-periodic-persistent-property-evidence-missing'
+    );
   }
   if (
     fourPieceSetStackRuntimeEvidence?.contractName !==
@@ -159,6 +169,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       triggerContract,
       tuningMechanicsCatalog,
       persistentLoadoutPropertyRuntimeEvidence,
+      periodicPersistentPropertyRuntimeEvidence,
       control: controlSource.bySkillId.get(
         Number(definitionBySoulId.get(item.soulEssenceId)?.reishiSkill)
       ),
@@ -2285,6 +2296,7 @@ function compileSoulEffectDefinition({
   triggerContract,
   tuningMechanicsCatalog,
   persistentLoadoutPropertyRuntimeEvidence,
+  periodicPersistentPropertyRuntimeEvidence,
 }) {
   const effectSkillId = Number(sourceDefinition?.reishiSkill);
   const resourcePathIds = uniqueNumbers(control?.resourcePathIds ?? []);
@@ -2325,6 +2337,7 @@ function compileSoulEffectDefinition({
       battleElementsByPathId,
       propertyTagContract,
       persistentLoadoutPropertyRuntimeEvidence,
+      periodicPersistentPropertyRuntimeEvidence,
     });
   }
   const trigger = activeTriggers.length === 1 ? activeTriggers[0] : null;
@@ -2707,6 +2720,7 @@ function compilePersistentSoulEffectDefinition({
   battleElementsByPathId,
   propertyTagContract,
   persistentLoadoutPropertyRuntimeEvidence,
+  periodicPersistentPropertyRuntimeEvidence,
 }) {
   const persistentRoot = compilePersistentPropertyRoot({
     ownerKind: 'soul-essence',
@@ -2720,6 +2734,7 @@ function compilePersistentSoulEffectDefinition({
     battleElementsByPathId,
     propertyTagContract,
     persistentLoadoutPropertyRuntimeEvidence,
+    periodicPersistentPropertyRuntimeEvidence,
     resolveValues: property =>
       compileStarValues({
         rows: valueRows,
@@ -2747,7 +2762,10 @@ function compilePersistentSoulEffectDefinition({
     runtimeStatus,
     mechanismFamily:
       runtimeStatus === 'runtime-applied'
-        ? 'equipped-actor-persistent-property-root'
+        ? persistentRoot.activationMode ===
+          'periodic-conditional-finite-leaf'
+          ? 'equipped-loadout-periodic-conditional-property-root'
+          : 'equipped-actor-persistent-property-root'
         : 'source-indexed-composite-effect',
     activationPrerequisites: persistentRoot.activationPrerequisites,
     trigger: null,
@@ -2802,6 +2820,7 @@ function compilePersistentPropertyRoot({
   battleElementsByPathId,
   propertyTagContract,
   persistentLoadoutPropertyRuntimeEvidence,
+  periodicPersistentPropertyRuntimeEvidence,
   resolveValues,
 }) {
   const supportedPropertyTags = new Set(
@@ -2839,6 +2858,14 @@ function compilePersistentPropertyRoot({
   const installation =
     installationCandidates.length === 1 ? installationCandidates[0] : null;
   const rootRow = installation?.root ?? null;
+  const rootElementId = numberOrNull(rootRow?.typetree?.elementConfigId);
+  const periodicEvidenceContract =
+    periodicPersistentPropertyRuntimeEvidence?.rootContracts?.find(
+      row => Number(row.rootElementId) === rootElementId
+    ) ?? null;
+  const periodicRoot = periodicEvidenceContract != null;
+  const periodicRuntimeApplied =
+    periodicEvidenceContract?.disposition === 'runtime-applied';
   const reachableRows = rootRow
     ? collectReachableRows(
         rootRow.path_id,
@@ -2909,7 +2936,22 @@ function compilePersistentPropertyRoot({
   if (installationCandidates.length !== 1) {
     runtimeGaps.push('effect-persistent-root-installation-not-unique');
   }
-  if (conditionalRows.length > 0) {
+  if (periodicRoot) {
+    if (
+      periodicPersistentPropertyRuntimeEvidence?.conclusion?.status !==
+      'applied'
+    ) {
+      runtimeGaps.push('effect-periodic-root-native-evidence-gap');
+    }
+    if (!periodicRuntimeApplied) {
+      runtimeGaps.push(
+        periodicEvidenceContract?.disposition ===
+          'evidence-insufficient-multi-property-tag-match'
+          ? 'effect-periodic-root-multi-property-tag-semantics-evidence-gap'
+          : 'effect-periodic-root-source-evidence-insufficient'
+      );
+    }
+  } else if (conditionalRows.length > 0) {
     runtimeGaps.push('effect-persistent-root-conditional-wrapper-unsupported');
   }
   if (damageRows.length > 0) {
@@ -2919,6 +2961,7 @@ function compilePersistentPropertyRoot({
     runtimeGaps.push('effect-persistent-root-property-leaf-missing');
   }
   if (
+    !periodicRoot &&
     rootRow &&
     Object.hasOwn(rootRow.typetree ?? {}, 'time') &&
     Number(rootRow.typetree?.time) !== -1
@@ -2927,15 +2970,19 @@ function compilePersistentPropertyRoot({
     runtimeGaps.push('effect-persistent-root-conditional-wrapper-unsupported');
   }
   for (const effect of effects) {
-    if (effect.durationMs !== -1) {
+    if (!periodicRoot && effect.durationMs !== -1) {
       runtimeGaps.push('effect-persistent-root-lifetime-not-permanent');
       runtimeGaps.push(
         'effect-persistent-root-conditional-wrapper-unsupported'
       );
     }
+    if (periodicRoot && !(effect.durationMs > 0)) {
+      runtimeGaps.push('effect-periodic-root-leaf-duration-invalid');
+    }
     if (
       effect.combineType !== 3 ||
-      effect.combineNumber !== -1 ||
+      (!periodicRoot && effect.combineNumber !== -1) ||
+      (periodicRoot && ![0, -1].includes(effect.combineNumber)) ||
       effect.executeTargetType !== 0 ||
       effect.inheritType !== 0
     ) {
@@ -2956,7 +3003,11 @@ function compilePersistentPropertyRoot({
       (effect.propertyTags.length === 1 &&
         !supportedPropertyTags.has(effect.propertyTags[0]))
     ) {
-      runtimeGaps.push('effect-persistent-root-property-tag-unsupported');
+      runtimeGaps.push(
+        periodicRoot && effect.propertyTags.length > 1
+          ? 'effect-periodic-root-multi-property-tag-semantics-evidence-gap'
+          : 'effect-persistent-root-property-tag-unsupported'
+      );
     }
     if (ownerKind === 'soul-essence' && effect.valuesByStar.length !== 4) {
       runtimeGaps.push('effect-persistent-root-star-values-incomplete');
@@ -2968,6 +3019,10 @@ function compilePersistentPropertyRoot({
   const evidenceSourceIdentity =
     persistentLoadoutPropertyRuntimeEvidence?.conclusion?.sourceIdentity ??
     'persistent-loadout-property-native-evidence-unresolved';
+  const periodicEvidenceSourceIdentity = periodicRoot
+    ? (periodicPersistentPropertyRuntimeEvidence?.conclusion
+        ?.sourceIdentity ?? 'periodic-persistent-property-evidence-unresolved')
+    : null;
   return {
     status: runtimeGaps.length
       ? 'source-indexed-runtime-unapplied'
@@ -2981,7 +3036,7 @@ function compilePersistentPropertyRoot({
       directInjectTargetType:
         installation?.injection?.directInjectTargetType ?? null,
       removeElementOnEnd: installation?.injection?.removeElementOnEnd ?? null,
-      rootElementId: numberOrNull(rootRow?.typetree?.elementConfigId),
+      rootElementId,
       rootPathId: numberOrNull(rootRow?.path_id),
       sourceSequencePath: structuredClone(
         installation?.injection?.sourceSequencePath ?? []
@@ -2990,12 +3045,15 @@ function compilePersistentPropertyRoot({
         installation?.injection?.sourceIdentity,
         rootRow ? createElementIdentity(rootRow) : null,
         evidenceSourceIdentity,
+        periodicEvidenceSourceIdentity,
       ]
         .filter(Boolean)
         .join('|'),
     },
     lifecycle: {
-      durationMode: 'until-loadout-uninstall',
+      durationMode: periodicRoot
+        ? 'persistent-root-periodic-finite-property-leaf'
+        : 'until-loadout-uninstall',
       leafDurationMs:
         effects.length > 0 &&
         effects.every(effect => effect.durationMs === effects[0].durationMs)
@@ -3005,6 +3063,55 @@ function compilePersistentPropertyRoot({
       inheritType: 0,
       sourceIdentity: evidenceSourceIdentity,
     },
+    activationMode: periodicRoot
+      ? 'periodic-conditional-finite-leaf'
+      : 'scenario-start-permanent',
+    periodicActivation: periodicRoot
+      ? {
+          triggerType: numberOrNull(rootRow?.typetree?.triggerType),
+          timeTriggerType: numberOrNull(rootRow?.typetree?.triggerParam1),
+          intervalMs: numberOrNull(rootRow?.typetree?.triggerParam2),
+          timeExecuteFirstFrame:
+            Number(rootRow?.typetree?.timeExeFirstFrame) === 1,
+          triggerCounter: numberOrNull(rootRow?.typetree?.triggerCounter),
+          conditionLogic:
+            Number(rootRow?.typetree?.triggerConditionType) === 0
+              ? 'and'
+              : 'unresolved',
+          conditions: structuredClone(periodicEvidenceContract?.conditions ?? []),
+          conditionFailureConsumesPeriod: true,
+          firstTick: 'first-positive-runtime-update',
+          subsequentTickBoundary:
+            'strict-elapsed-greater-than-ordinal-times-interval',
+          sameFramePhase: 'after-action-and-tuning-transactions',
+          target:
+            Number(periodicEvidenceContract?.targetType) === 13
+              ? {
+                  kind: 'self-kibo',
+                  targetType: 13,
+                  sourceIdentity: periodicEvidenceSourceIdentity,
+                }
+              : Number(periodicEvidenceContract?.targetType) === 0
+                ? {
+                    kind: 'self-actor',
+                    targetType: 0,
+                    sourceIdentity: periodicEvidenceSourceIdentity,
+                  }
+                : {
+                    kind: 'unresolved',
+                    targetType: numberOrNull(
+                      periodicEvidenceContract?.targetType
+                    ),
+                    sourceIdentity: periodicEvidenceSourceIdentity,
+                  },
+          sourceIdentity: [
+            rootRow ? createElementIdentity(rootRow) : null,
+            periodicEvidenceSourceIdentity,
+          ]
+            .filter(Boolean)
+            .join('|'),
+        }
+      : null,
     unload: {
       eventId: 36,
       triggerElementId: numberOrNull(
@@ -3056,6 +3163,7 @@ function compilePersistentPropertyRoot({
         ? createElementIdentity(unloadCandidate.trigger)
         : null,
       evidenceSourceIdentity,
+      periodicEvidenceSourceIdentity,
     ]
       .filter(Boolean)
       .join('|'),

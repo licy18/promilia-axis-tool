@@ -1,0 +1,372 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrPeriodicPersistentPropertyRuntimeEvidence",
+  "reviewedBinary": {
+    "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+    "bytes": 222485544,
+    "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+  },
+  "reviewedIl2CppDump": {
+    "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+    "bytes": 97428254,
+    "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+  },
+  "reviewedBattleElements": {
+    "path": "C:/PC2/Codex/AzPr/work/combat-formulas/battle-element-assets.jsonl",
+    "bytes": 43759616,
+    "sha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346"
+  },
+  "reviewedElementFormula": {
+    "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+    "bytes": 15113,
+    "sha256": "ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e"
+  },
+  "dumpBindings": {
+    "methods": [
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.OnUpdate",
+        "rva": "0x13BD190",
+        "declaration": "protected override void OnUpdate(float deltaTime) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.CheckCondition",
+        "rva": "0x13B58F0",
+        "declaration": "private bool CheckCondition(TTriggerElementParams.TriggerConditionType conditionType, ElementTriggerDataBase triggerData) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.CheckNormalCondition",
+        "rva": "0x13B5E60",
+        "declaration": "private bool CheckNormalCondition(TTriggerElementParams.TriggerElementCondition condition, ElementTriggerDataBase triggerData) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.GetTriggerTarget",
+        "rva": "0x13BBF50",
+        "declaration": "private List<EntityHandle> GetTriggerTarget(ElementTriggerDataBase triggerData, int targetType, int factionType, bool onlyCheck) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.GetSelfPet",
+        "rva": "0x13BB640",
+        "declaration": "private EntityHandle GetSelfPet() { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.TriggerEffect",
+        "rva": "0x13BE0C0",
+        "declaration": "private void TriggerEffect(TTriggerElementParams.TriggerElementEffect effect, EntityHandle handle, int effectIndex, ElementTriggerDataBase triggerData) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.ChangePropertyElement.Parse",
+        "rva": "0x137D670",
+        "declaration": "public override void Parse(TElementParams param, int skillId, CustomBattleVerifyInfo verifyInfo) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.ChangePropertyElement.Combine",
+        "rva": "0x137A120",
+        "declaration": "public override void Combine(IElement element) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.FormulaUtility.Calculate",
+        "rva": "0x187C840",
+        "declaration": "public static MyFloat Calculate(TElement_formula formulaData, IElement element, List<int> functionParams, AliveData self, AliveData target, AliveData source) { }"
+      }
+    ],
+    "fields": [
+      {
+        "identity": "TriggerElement.m_count",
+        "declaration": "private int m_count; // 0x248"
+      },
+      {
+        "identity": "TriggerElement.m_currentTriggerFrequency",
+        "declaration": "private int m_currentTriggerFrequency; // 0x264"
+      },
+      {
+        "identity": "TriggerElement.m_timeExeFirstFrame",
+        "declaration": "private bool m_timeExeFirstFrame; // 0x268"
+      },
+      {
+        "identity": "TriggerElement.m_triggerParam1",
+        "declaration": "private int m_triggerParam1; // 0x27C"
+      },
+      {
+        "identity": "TriggerElement.m_triggerParam2",
+        "declaration": "private int m_triggerParam2; // 0x280"
+      },
+      {
+        "identity": "TriggerElement.m_interval",
+        "declaration": "private MyFloat m_interval; // 0x288"
+      },
+      {
+        "identity": "TTriggerElementParams.triggerConditionList",
+        "declaration": "public List<TTriggerElementParams.TriggerElementCondition> triggerConditionList; // 0x118"
+      },
+      {
+        "identity": "TTriggerElementParams.triggerEffectList",
+        "declaration": "public List<TTriggerElementParams.TriggerElementEffect> triggerEffectList; // 0x130"
+      },
+      {
+        "identity": "TTriggerElementParams.duration",
+        "declaration": "public int duration; // 0x144"
+      }
+    ],
+    "enums": [
+      {
+        "identity": "EElementTriggerType.TimeEvent",
+        "declaration": "public const EElementTriggerType TimeEvent = 0;",
+        "description": "[Description(\"时间触发\")]"
+      },
+      {
+        "identity": "EElementTimeTriggerType.LoopEvent",
+        "declaration": "public const EElementTimeTriggerType LoopEvent = 1;",
+        "description": "[Description(\"循环倒计时触发\")]"
+      },
+      {
+        "identity": "EElementTriggerConditionType.AND",
+        "declaration": "public const EElementTriggerConditionType AND = 0;",
+        "description": null
+      },
+      {
+        "identity": "EElementNormalFixedConditionType.HasElementId",
+        "declaration": "public const EElementNormalFixedConditionType HasElementId = 1;",
+        "description": "[Description(\"目标主体拥有元素ID\")]"
+      },
+      {
+        "identity": "ETriggerEffectTargetType.Self",
+        "declaration": "public const ETriggerEffectTargetType Self = 0;",
+        "description": "[Description(\"自身\")]"
+      },
+      {
+        "identity": "ETriggerEffectTargetType.SelfPet",
+        "declaration": "public const ETriggerEffectTargetType SelfPet = 13;",
+        "description": "[Description(\"自带宠物\")]"
+      },
+      {
+        "identity": "ECombineType.Cover",
+        "declaration": "public const ECombineType Cover = 3;",
+        "description": "[Description(\"覆盖\")]"
+      }
+    ]
+  },
+  "binaryRanges": [
+    {
+      "identity": "normal-has-element-id",
+      "range": "0x13b6199-0x13b633a",
+      "bytes": 417,
+      "sha256": "97a526442d59fa271d8697815e98541be2c7707f3640f9944631572163bb770d"
+    },
+    {
+      "identity": "formula-condition-dispatch",
+      "range": "0x13b5c03-0x13b5d38",
+      "bytes": 309,
+      "sha256": "493a6f9776561a152a1574bca22737181f059b63fe6c6efa5e1fed9ffd58e261"
+    },
+    {
+      "identity": "time-loop-trigger",
+      "range": "0x13bd342-0x13bd44e",
+      "bytes": 268,
+      "sha256": "97a8043162ac0e62490f97db4f71c23be6f89243ac6aead17cd8ff60d7056d62"
+    },
+    {
+      "identity": "effect-target-dispatch-through-self-pet",
+      "range": "0x13bc0ec-0x13bc20f",
+      "bytes": 291,
+      "sha256": "f25c9db991989c1653918dd7f018afdccfd037b5399f1ebfb5328115452f9c08"
+    },
+    {
+      "identity": "self-pet-resolution",
+      "range": "0x13bb640-0x13bb81a",
+      "bytes": 474,
+      "sha256": "aab9af9314211588668381c399b11aa4ed7473654b8a66774ae43fbe1933f771"
+    },
+    {
+      "identity": "trigger-effect-target-call",
+      "range": "0x13be3fc-0x13be428",
+      "bytes": 44,
+      "sha256": "3ed3a002eb89229c8142d9fcbffbeff4868271fee328d761e4fdf9dacbad9f31"
+    },
+    {
+      "identity": "property-duration-parse",
+      "range": "0x137d7f8-0x137d83a",
+      "bytes": 66,
+      "sha256": "a02b465cf138291d1e808f264839493a16f2b6004d4edbfa392811543162e56a"
+    },
+    {
+      "identity": "property-cover-combine",
+      "range": "0x137a1b6-0x137a226",
+      "bytes": 112,
+      "sha256": "8f803e4e100de3dfcb98c4e3072d41e21e0f97c9bf8810a103ff82ae07e52863"
+    }
+  ],
+  "formulaContract": {
+    "formulaId": 1007,
+    "expression": "IF(self.ELEMENT_LAYERS[J]>K,G,0)",
+    "elementIdParameterIndex": 9,
+    "thresholdParameterIndex": 10,
+    "trueValueParameterIndex": 6,
+    "comparison": "strictly-greater-than"
+  },
+  "rootContracts": [
+    {
+      "rootElementId": 19004600,
+      "triggerType": 0,
+      "timeTriggerType": 1,
+      "intervalMs": 1000,
+      "timeExecuteFirstFrame": true,
+      "triggerCounter": -1,
+      "rootDurationMs": -1,
+      "conditionLogic": "and",
+      "conditions": [
+        {
+          "kind": "self-element-layer-formula",
+          "conditionType": 10000,
+          "conditionValue": 1007,
+          "markElementId": 250,
+          "strictThreshold": 1
+        }
+      ],
+      "targetType": 0,
+      "leafElementId": 19004601,
+      "leafDurationMs": 1100,
+      "deleteChildElementOnUnload": true,
+      "propertyTags": [302, 303],
+      "leaf": {
+        "attributeId": 21,
+        "calculateType": 1,
+        "combineType": 3,
+        "combineNumber": 0,
+        "executeTargetType": 0,
+        "inheritType": 0,
+        "commonFunctionId": 1,
+        "baseFunctionId": 5,
+        "commonRatioRaw": 10000
+      },
+      "disposition": "evidence-insufficient-multi-property-tag-match"
+    },
+    {
+      "rootElementId": 19006000,
+      "triggerType": 0,
+      "timeTriggerType": 1,
+      "intervalMs": 1000,
+      "timeExecuteFirstFrame": true,
+      "triggerCounter": -1,
+      "rootDurationMs": -1,
+      "conditionLogic": "and",
+      "conditions": [
+        {
+          "kind": "self-element-layer-formula",
+          "conditionType": 10000,
+          "conditionValue": 1007,
+          "markElementId": 750,
+          "strictThreshold": 2
+        }
+      ],
+      "targetType": 0,
+      "leafElementId": 19006001,
+      "leafDurationMs": 1100,
+      "deleteChildElementOnUnload": true,
+      "propertyTags": [],
+      "leaf": {
+        "attributeId": 8,
+        "calculateType": 1,
+        "combineType": 3,
+        "combineNumber": 0,
+        "executeTargetType": 0,
+        "inheritType": 0,
+        "commonFunctionId": 1,
+        "baseFunctionId": 5,
+        "commonRatioRaw": 10000
+      },
+      "disposition": "runtime-applied"
+    },
+    {
+      "rootElementId": 19004901,
+      "triggerType": 0,
+      "timeTriggerType": 1,
+      "intervalMs": 1000,
+      "timeExecuteFirstFrame": true,
+      "triggerCounter": -1,
+      "rootDurationMs": -1,
+      "conditionLogic": "and",
+      "conditions": [
+        {
+          "kind": "self-has-element-id",
+          "conditionType": 1,
+          "conditionValue": 650,
+          "markElementId": 650
+        },
+        {
+          "kind": "self-element-layer-formula",
+          "conditionType": 10000,
+          "conditionValue": 1007,
+          "markElementId": 650,
+          "strictThreshold": 1
+        }
+      ],
+      "targetType": 0,
+      "leafElementId": 19004902,
+      "leafDurationMs": 1200,
+      "deleteChildElementOnUnload": false,
+      "propertyTags": [],
+      "leaf": {
+        "attributeId": 222,
+        "calculateType": 1,
+        "combineType": 3,
+        "combineNumber": -1,
+        "executeTargetType": 0,
+        "inheritType": 0,
+        "commonFunctionId": 1,
+        "baseFunctionId": 5,
+        "commonRatioRaw": 10000
+      },
+      "disposition": "runtime-applied"
+    },
+    {
+      "rootElementId": 19007701,
+      "triggerType": 0,
+      "timeTriggerType": 1,
+      "intervalMs": 2000,
+      "timeExecuteFirstFrame": true,
+      "triggerCounter": -1,
+      "rootDurationMs": -1,
+      "conditionLogic": "and",
+      "conditions": [],
+      "targetType": 13,
+      "leafElementId": 19007702,
+      "leafDurationMs": 2300,
+      "deleteChildElementOnUnload": false,
+      "propertyTags": [],
+      "leaf": {
+        "attributeId": 21,
+        "calculateType": 1,
+        "combineType": 3,
+        "combineNumber": -1,
+        "executeTargetType": 0,
+        "inheritType": 0,
+        "commonFunctionId": 1,
+        "baseFunctionId": 5,
+        "commonRatioRaw": 10000
+      },
+      "disposition": "runtime-applied"
+    }
+  ],
+  "semantics": {
+    "installation": "frame-zero-self-root-installed-once-from-loadout-control",
+    "timeLoop": "first-positive-update-when-timeExeFirstFrame-then-strict-elapsed-greater-than-ordinal-times-interval",
+    "conditionCadence": "period-counter-advances-before-condition-check-so-failed-condition-consumes-that-period",
+    "formulaCondition": "condition-type-at-least-5000-loads-element-formula-by-condition-value-and-compares-calculated-result-to-zero",
+    "normalHasElementId": "condition-type-1-checks-the-trigger-subject-current-element-collection-for-the-config-id",
+    "conditionLogic": "and",
+    "effectTargetSelf": "trigger-effect-target-type-0-resolves-native-self",
+    "effectTargetSelfPet": "trigger-effect-target-type-13-dispatches-to-GetSelfPet",
+    "leafLifetime": "finite-property-leaf-duration-is-independent-from-persistent-root-lifetime",
+    "cover": "same-source-property-leaf-refreshes-without-stacking",
+    "rightOpenLifetime": "active-from-apply-inclusive-until-expiry-exclusive",
+    "unload": "root-removal-stops-future-periodic-triggers-and-deleteChildElement-controls-immediate-child-removal",
+    "sameFrameCanonicalOrder": "periodic-on-update-settlement-follows-already-materialized-action-and-tuning-transactions-at-the-same-frame",
+    "multiPropertyTagMatch": "evidence-open"
+  },
+  "conclusion": {
+    "status": "applied",
+    "runtimeAppliedRootElementIds": [19004901, 19006000, 19007701],
+    "evidenceInsufficientRootElementIds": [19004600],
+    "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+  }
+}

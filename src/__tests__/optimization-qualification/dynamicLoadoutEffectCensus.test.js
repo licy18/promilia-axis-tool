@@ -48,12 +48,47 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     );
     expect(definitions.get(10133).persistentRoot.effects).toHaveLength(2);
 
-    for (const soulEssenceId of [10078, 10084, 10152, 10197]) {
+    expect(definitions.get(10078)).toMatchObject({
+      runtimeStatus: 'source-indexed-runtime-unapplied',
+      persistentRoot: {
+        activationMode: 'periodic-conditional-finite-leaf',
+        effects: [
+          expect.objectContaining({
+            elementId: 19004601,
+            propertyTags: [302, 303],
+            propertyTagMatchMode: 'evidence-open-multi-tag',
+          }),
+        ],
+      },
+      runtimeGaps: [
+        'effect-periodic-root-multi-property-tag-semantics-evidence-gap',
+      ],
+    });
+    for (const [soulEssenceId, rootElementId, leafElementId] of [
+      [10084, 19006000, 19006001],
+      [10152, 19004901, 19004902],
+      [10197, 19007701, 19007702],
+    ]) {
       expect(definitions.get(soulEssenceId)).toMatchObject({
-        runtimeStatus: 'source-indexed-runtime-unapplied',
-        runtimeGaps: expect.arrayContaining([
-          'effect-persistent-root-conditional-wrapper-unsupported',
-        ]),
+        runtimeStatus: 'runtime-applied',
+        mechanismFamily: 'equipped-loadout-periodic-conditional-property-root',
+        persistentRoot: {
+          status: 'runtime-applied',
+          activationMode: 'periodic-conditional-finite-leaf',
+          installation: { rootElementId },
+          lifecycle: {
+            durationMode: 'persistent-root-periodic-finite-property-leaf',
+            combineMode: 'cover-by-source-identity',
+          },
+          periodicActivation: {
+            triggerType: 0,
+            timeTriggerType: 1,
+            timeExecuteFirstFrame: true,
+            conditionFailureConsumesPeriod: true,
+          },
+          effects: [expect.objectContaining({ elementId: leafElementId })],
+        },
+        runtimeGaps: [],
       });
     }
   });
@@ -275,8 +310,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 50,
-      runtimeUnappliedCount: 24,
+      runtimeAppliedCount: 53,
+      runtimeUnappliedCount: 21,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,

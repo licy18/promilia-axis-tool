@@ -44,8 +44,12 @@ export function createVerifiedSoulEssenceEffectGeneration({
       .filter(
         definition =>
           definition.runtimeStatus === 'runtime-applied' &&
-          definition.trigger != null &&
-          (definition.effect != null || definition.immediateEffects?.length > 0)
+          ((definition.trigger != null &&
+            (definition.effect != null ||
+              definition.immediateEffects?.length > 0)) ||
+            (definition.persistentRoot?.activationMode ===
+              'periodic-conditional-finite-leaf' &&
+              definition.persistentRoot?.effects?.length > 0))
       )
       .map(definition => [Number(definition.soulEssenceId), definition])
   );
@@ -63,9 +67,9 @@ export function createVerifiedSoulEssenceEffectGeneration({
       ])
   );
   const bindings = (scenario.actors ?? [])
-    .flatMap(actor => [
-      createEquippedSoulBinding(actor, definitionBySoulId),
-      ...createEquippedSetSkillBindings(actor, definitionBySetKey),
+    .flatMap((actor, actorIndex) => [
+      createEquippedSoulBinding(actor, actorIndex, definitionBySoulId),
+      ...createEquippedSetSkillBindings(actor, actorIndex, definitionBySetKey),
     ])
     .filter(Boolean);
   const effectCommands = [];
@@ -73,9 +77,12 @@ export function createVerifiedSoulEssenceEffectGeneration({
   const directHpEvents = [];
   const suppressions = [];
   const unresolved = [];
+  const periodicRootStates = [];
 
   for (const binding of bindings) {
-    const hasPropertyEffect = binding.definition.effect != null;
+    const periodicBinding = isPeriodicPersistentPropertyBinding(binding);
+    const hasPropertyEffect =
+      binding.definition.effect != null || periodicBinding;
     const propertyFormulaResults = binding.propertyFormulaResults ?? [];
     if (
       hasPropertyEffect &&
@@ -105,6 +112,19 @@ export function createVerifiedSoulEssenceEffectGeneration({
         ],
         sourceIdentity: binding.definition.sourceIdentity,
       });
+      continue;
+    }
+    if (periodicBinding) {
+      const periodic = createPeriodicPersistentPropertyArtifacts({
+        binding,
+        scenario,
+        tuningGeneration,
+        catalog,
+      });
+      effectCommands.push(...periodic.effectCommands);
+      suppressions.push(...periodic.suppressions);
+      unresolved.push(...periodic.unresolved);
+      periodicRootStates.push(periodic.state);
       continue;
     }
     const frameAnchor = binding.definition.trigger.frameAnchor;
@@ -286,6 +306,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
     directHpEvents: gated.directHpEvents,
     triggerIntervalStates: gated.triggerIntervalStates,
     triggerCounterStates: gated.triggerCounterStates,
+    periodicRootStates,
     acceptedTriggerOccurrences: gated.acceptedTriggerOccurrences,
     suppressions,
     unresolved,
@@ -295,6 +316,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
       directSpEventCount: gated.directSpEvents.length,
       directHpEventCount: gated.directHpEvents.length,
       triggerCounterStateCount: gated.triggerCounterStates.length,
+      periodicRootStateCount: periodicRootStates.length,
       suppressionCount: suppressions.length,
       unresolvedCount: unresolved.length,
     },
@@ -473,7 +495,7 @@ function resolveDamageTriggerOccurrences({
     }));
 }
 
-function createEquippedSoulBinding(actor, definitionBySoulId) {
+function createEquippedSoulBinding(actor, actorIndex, definitionBySoulId) {
   const soulEssenceId = Number(actor?.loadout?.soulessenceId);
   if (!Number.isInteger(soulEssenceId) || soulEssenceId <= 0) return null;
   const definition = definitionBySoulId.get(soulEssenceId);
@@ -487,35 +509,50 @@ function createEquippedSoulBinding(actor, definitionBySoulId) {
     return null;
   }
   const star = Number(effectSkill.star);
-  const starValue = definition.effect?.valuesByStar?.find(
-    row => Number(row.star) === star
-  );
-  const formulaResult = starValue
-    ? evaluateSoulEffectFormula({
-        definition,
-        starValue,
-        star,
-        actor,
-      })
-    : null;
+  const propertyEffects =
+    definition.persistentRoot?.activationMode ===
+    'periodic-conditional-finite-leaf'
+      ? (definition.persistentRoot.effects ?? [])
+      : [definition.effect].filter(Boolean);
+  const propertyFormulaResults = propertyEffects.map(effect => {
+    const starValue = effect.valuesByStar?.find(
+      row => Number(row.star) === star
+    );
+    return {
+      effect,
+      starValue: starValue ?? null,
+      formulaResult: starValue
+        ? evaluateSoulEffectFormula({
+            definition,
+            effect,
+            starValue,
+            star,
+            actor,
+          })
+        : null,
+    };
+  });
+  const primary = propertyFormulaResults[0] ?? {};
   return {
     actor,
+    actorIndex,
     ownerKind: 'soul-essence',
     ownerIdentity: `soulessence:${soulEssenceId}`,
     soulEssenceId,
     definition,
     star: Number.isInteger(star) ? star : null,
-    starValue: starValue ?? null,
-    formulaResult,
-    propertyFormulaResults:
-      starValue == null
-        ? []
-        : [{ effect: definition.effect, starValue, formulaResult }],
+    starValue: primary.starValue ?? null,
+    formulaResult: primary.formulaResult ?? null,
+    propertyFormulaResults,
     cultivationSourceIdentity: effectSkill?.sourceIdentity ?? null,
   };
 }
 
-function createEquippedSetSkillBindings(actor, definitionBySetKey) {
+function createEquippedSetSkillBindings(
+  actor,
+  actorIndex,
+  definitionBySetKey
+) {
   return (actor?.verifiedStaticProperties?.setSkillActivations ?? [])
     .filter(
       activation =>
@@ -555,6 +592,7 @@ function createEquippedSetSkillBindings(actor, definitionBySetKey) {
       const primary = propertyFormulaResults[0] ?? {};
       return {
         actor,
+        actorIndex,
         ownerKind: 'set-skill',
         ownerIdentity: `set-skill:${activation.setId}:${activation.pieces}`,
         setId: Number(activation.setId),
@@ -569,6 +607,375 @@ function createEquippedSetSkillBindings(actor, definitionBySetKey) {
       };
     })
     .filter(Boolean);
+}
+
+function isPeriodicPersistentPropertyBinding(binding) {
+  return (
+    binding?.ownerKind === 'soul-essence' &&
+    binding.definition?.persistentRoot?.activationMode ===
+      'periodic-conditional-finite-leaf'
+  );
+}
+
+function createPeriodicPersistentPropertyArtifacts({
+  binding,
+  scenario,
+  tuningGeneration,
+  catalog,
+}) {
+  const root = binding.definition.persistentRoot;
+  const activation = root.periodicActivation;
+  const frameRate = positiveNumber(scenario?.time?.fps, 60);
+  const durationMs = Math.max(0, Number(scenario?.time?.durationMs) || 0);
+  const intervalMs = Number(activation?.intervalMs);
+  const rootElementId = Number(root.installation?.rootElementId);
+  const effectCommands = [];
+  const suppressions = [];
+  const unresolved = [];
+  const tickFrames = [];
+
+  if (
+    Number(activation?.triggerType) !== 0 ||
+    Number(activation?.timeTriggerType) !== 1 ||
+    activation?.timeExecuteFirstFrame !== true ||
+    !(intervalMs > 0) ||
+    activation?.conditionLogic !== 'and' ||
+    !['self-actor', 'self-kibo'].includes(activation?.target?.kind)
+  ) {
+    unresolved.push({
+      actorId: binding.actor.id,
+      ...createBindingDiagnosticIdentity(binding),
+      status: 'soulessence-effect-runtime-unresolved',
+      reasons: ['soulessence-periodic-root-contract-invalid'],
+      sourceIdentity: root.sourceIdentity,
+    });
+    return {
+      effectCommands,
+      suppressions,
+      unresolved,
+      state: createPeriodicRootState({
+        binding,
+        activation,
+        rootElementId,
+        tickFrames,
+        frameRate,
+      }),
+    };
+  }
+
+  const target = resolvePeriodicPersistentPropertyTarget(binding, activation);
+  const horizonFrame = Math.floor((durationMs * frameRate) / 1000);
+  for (let tickOrdinal = 0; ; tickOrdinal += 1) {
+    const thresholdMs = tickOrdinal * intervalMs;
+    const absoluteFrame =
+      Math.floor((thresholdMs * frameRate) / 1000) + 1;
+    if (absoluteFrame > horizonFrame) break;
+    const timeMs = roundRuntimeTime((absoluteFrame * 1000) / frameRate);
+    tickFrames.push(absoluteFrame);
+    const sourceSequencePath = createPeriodicPersistentPropertySourceSequencePath({
+      binding,
+      root,
+      tickOrdinal,
+    });
+    const condition = evaluatePeriodicPersistentPropertyConditions({
+      conditions: activation.conditions,
+      tuningGeneration,
+      timeMs,
+    });
+    if (!condition.matched) {
+      suppressions.push({
+        actionId: null,
+        actorId: binding.actor.id,
+        ...createBindingDiagnosticIdentity(binding),
+        reason: 'soulessence-periodic-root-condition-not-matched',
+        timeMs,
+        absoluteFrame,
+        tickOrdinal,
+        conditionResults: condition.results,
+        sourceSequencePath,
+      });
+      continue;
+    }
+    if (!target) {
+      suppressions.push({
+        actionId: null,
+        actorId: binding.actor.id,
+        ...createBindingDiagnosticIdentity(binding),
+        reason: 'soulessence-periodic-root-target-unavailable',
+        timeMs,
+        absoluteFrame,
+        tickOrdinal,
+        sourceSequencePath,
+      });
+      continue;
+    }
+    for (const [effectIndex, entry] of (
+      binding.propertyFormulaResults ?? []
+    ).entries()) {
+      effectCommands.push(
+        createPeriodicPersistentPropertyEffectCommand({
+          binding,
+          root,
+          activation,
+          entry,
+          target,
+          timeMs,
+          absoluteFrame,
+          tickOrdinal,
+          effectIndex,
+          sourceSequencePath: [...sourceSequencePath, effectIndex],
+          condition,
+          catalog,
+        })
+      );
+    }
+  }
+
+  return {
+    effectCommands,
+    suppressions,
+    unresolved,
+    state: createPeriodicRootState({
+      binding,
+      activation,
+      rootElementId,
+      tickFrames,
+      frameRate,
+    }),
+  };
+}
+
+function createPeriodicRootState({
+  binding,
+  activation,
+  rootElementId,
+  tickFrames,
+  frameRate,
+}) {
+  return {
+    bindingKey: `${binding.actor.id}|${binding.ownerIdentity}|root:${rootElementId}`,
+    actorId: String(binding.actor.id),
+    ownerIdentity: binding.ownerIdentity,
+    rootElementId,
+    intervalMs: Number(activation?.intervalMs),
+    intervalFrames: Math.round(
+      (Number(activation?.intervalMs) * frameRate) / 1000
+    ),
+    timeExecuteFirstFrame: activation?.timeExecuteFirstFrame === true,
+    tickFrames,
+    lastTickFrame: tickFrames.at(-1) ?? null,
+    nextTickFrame:
+      tickFrames.length === 0
+        ? 1
+        : tickFrames.at(-1) +
+          Math.round((Number(activation?.intervalMs) * frameRate) / 1000),
+    sourceIdentity: activation?.sourceIdentity ?? null,
+  };
+}
+
+function resolvePeriodicPersistentPropertyTarget(binding, activation) {
+  if (activation.target.kind === 'self-actor') {
+    return {
+      kind: EFFECT_TARGET_KINDS.ACTOR,
+      id: binding.actor.id,
+      name: binding.actor.name ?? null,
+      kiboId: null,
+    };
+  }
+  const kiboId = Number(binding.actor?.loadout?.kiboId);
+  if (activation.target.kind !== 'self-kibo' || !(kiboId > 0)) return null;
+  return {
+    kind: EFFECT_TARGET_KINDS.KIBO,
+    id: binding.actor.id,
+    name: `Kibo ${kiboId}`,
+    kiboId,
+  };
+}
+
+function createPeriodicPersistentPropertySourceSequencePath({
+  binding,
+  root,
+  tickOrdinal,
+}) {
+  return [
+    Number.MAX_SAFE_INTEGER - 64,
+    Number(binding.actorIndex),
+    1,
+    Number(root.installation.rootElementId),
+    Number(tickOrdinal),
+  ];
+}
+
+function evaluatePeriodicPersistentPropertyConditions({
+  conditions,
+  tuningGeneration,
+  timeMs,
+}) {
+  const results = (conditions ?? []).map(condition => {
+    const markCount = resolveTuningMarkCountAt({
+      tuningGeneration,
+      markId: Number(condition.markElementId),
+      timeMs,
+    });
+    if (condition.kind === 'self-has-element-id') {
+      return { condition, markCount, matched: markCount > 0 };
+    }
+    if (condition.kind === 'self-element-layer-formula') {
+      return {
+        condition,
+        markCount,
+        matched: markCount > Number(condition.strictThreshold),
+      };
+    }
+    return { condition, markCount, matched: false };
+  });
+  return {
+    matched: results.every(result => result.matched),
+    results,
+  };
+}
+
+function resolveTuningMarkCountAt({ tuningGeneration, markId, timeMs }) {
+  let count = Number(
+    (tuningGeneration?.initialState ?? []).find(
+      row => Number(row.markId) === Number(markId)
+    )?.currentValue
+  ) || 0;
+  for (const event of tuningGeneration?.events ?? []) {
+    if (
+      Number(event.markId) === Number(markId) &&
+      Number(event.timeMs) <= Number(timeMs)
+    ) {
+      count = Number(event.after) || 0;
+    }
+  }
+  return count;
+}
+
+function createPeriodicPersistentPropertyEffectCommand({
+  binding,
+  root,
+  activation,
+  entry,
+  target,
+  timeMs,
+  absoluteFrame,
+  tickOrdinal,
+  effectIndex,
+  sourceSequencePath,
+  condition,
+  catalog,
+}) {
+  const effect = entry.effect;
+  const formulaResult = entry.formulaResult;
+  const effectIdentity = `soulessence:${binding.soulEssenceId}:element:${effect.elementId}`;
+  const occurrenceIdentity = `${binding.ownerIdentity}|root:${root.installation.rootElementId}|tick:${tickOrdinal}`;
+  return {
+    id: `${occurrenceIdentity}|effect:${effect.elementId}|target:${target.kind}:${target.id}`,
+    sourceActionId: null,
+    sourceActionName: null,
+    sourceActorId: binding.actor.id,
+    sourceActorName: binding.actor.name ?? null,
+    sourceSoulEssenceId: binding.soulEssenceId,
+    sourceKiboId: null,
+    targetKiboId: target.kiboId,
+    effectId: effectIdentity,
+    effectName: `${binding.definition.name}-${effect.name ?? effect.elementId}`,
+    operation: EFFECT_OPERATIONS.APPLY,
+    targetKind: target.kind,
+    targetId: String(target.id),
+    targetName: target.name,
+    semanticTargetKind: activation.target.kind,
+    timeMs,
+    absoluteFrame,
+    durationMs: effect.durationMs,
+    stackMode: EFFECT_STACK_MODES.REFRESH,
+    stackDelta: 1,
+    maxStacks: 1,
+    tags: [
+      'soulessence-effect',
+      'periodic-persistent-property-root',
+      binding.ownerIdentity,
+      `skill:${binding.definition.effectSkillId}`,
+    ],
+    sourceStatus: 'verified-loadout-effect-generated',
+    confidence: 'high',
+    trackingStatus: 'applied',
+    generatedVerified: true,
+    appliedToCalculators: true,
+    formulaSourceActorId: binding.actor.id,
+    effectAdderActorId: binding.actor.id,
+    triggerSourceSequencePath: sourceSequencePath,
+    modifiers: [
+      {
+        kind: 'battle-property',
+        attributeId: effect.attributeId,
+        bucket: effect.bucket,
+        valueRaw: formulaResult.value,
+        value: formulaResult.value,
+        sourceRawA: formulaResult.sourceRawA,
+        evaluatedValue: formulaResult.evaluatedValue,
+        formulaIdentity: formulaResult.formulaIdentity,
+        formulaResult,
+        sourceElementId: effect.elementId,
+        sourceElementPathId: effect.pathId,
+        propertyTags: [...(effect.propertyTags ?? [])],
+        propertyTagMatchMode: effect.propertyTagMatchMode ?? 'unscoped',
+        propertyTagSourceIdentity: effect.propertyTagSourceIdentity ?? null,
+        sourceIdentity: effect.sourceIdentity,
+      },
+    ],
+    sourceIdentity: {
+      packageId: catalog?.kind ?? soulEssenceEffectCatalog.kind,
+      catalogKind: catalog?.kind ?? soulEssenceEffectCatalog.kind,
+      catalogHash: catalog?.catalogHash ?? soulEssenceEffectCatalog.catalogHash,
+      effectIdentity,
+      soulEssenceId: binding.soulEssenceId,
+      effectSkillId: binding.definition.effectSkillId,
+      actionBindingIdentity: root.installation.sourceIdentity,
+      triggerElementId: root.installation.rootElementId,
+      triggerPathId: root.installation.rootPathId,
+      triggerEvent: 'PeriodicPropertyTick',
+      frameAnchor: 'periodic-root-update',
+      triggerSequencePath: sourceSequencePath,
+      sameFrameVisibility: 'strict-source-sequence',
+      triggerOccurrenceIdentity: occurrenceIdentity,
+      tickOrdinal,
+      absoluteFrame,
+      triggerCondition: activation.conditions,
+      conditionResults: condition.results,
+      effectElementId: effect.elementId,
+      effectPathId: effect.pathId,
+      propertyFormulaResults: [
+        {
+          effectElementId: effect.elementId,
+          effectPathId: effect.pathId,
+          attributeId: effect.attributeId,
+          starValueSourceIdentity: entry.starValue.sourceIdentity,
+          formulaIdentity: formulaResult.formulaIdentity,
+          formulaSourceIdentity: effect.formula.sourceIdentity ?? null,
+          sourceRawA: formulaResult.sourceRawA,
+          evaluatedValue: formulaResult.evaluatedValue,
+          sourceIdentity: effect.sourceIdentity,
+        },
+      ],
+      lifecycle: root.lifecycle,
+      periodicActivation: activation,
+      star: binding.star,
+      starValueSourceIdentity: entry.starValue.sourceIdentity,
+      formulaIdentity: formulaResult.formulaIdentity,
+      sourceRawA: formulaResult.sourceRawA,
+      evaluatedValue: formulaResult.evaluatedValue,
+      targetIdentity: {
+        targetKind: activation.target.kind,
+        targetId: String(target.id),
+        targetKiboId: target.kiboId,
+        sourceIdentity: activation.target.sourceIdentity,
+      },
+      cultivationSourceIdentity: binding.cultivationSourceIdentity,
+      provenance: [binding.definition.sourceIdentity],
+    },
+  };
 }
 
 function createBindingDiagnosticIdentity(binding) {

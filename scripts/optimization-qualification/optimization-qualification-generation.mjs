@@ -24,6 +24,11 @@ import {
   readPersistentLoadoutPropertyRuntimeEvidenceSource,
 } from './persistent-loadout-property-evidence.mjs';
 import {
+  assertPeriodicPersistentPropertyRuntimeEvidenceReference,
+  PERIODIC_PERSISTENT_PROPERTY_EVIDENCE_RELATIVE_PATH,
+  readPeriodicPersistentPropertyRuntimeEvidenceSource,
+} from './periodic-persistent-property-evidence.mjs';
+import {
   assertFourPieceSetStackRuntimeEvidenceReference,
   FOUR_PIECE_SET_STACK_EVIDENCE_RELATIVE_PATH,
   readFourPieceSetStackRuntimeEvidenceSource,
@@ -120,6 +125,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '634c979cda572f8fff1509bbf888240aebe8fad7728f357ce06390fee364a248',
   persistentLoadoutPropertyRuntimeEvidence:
     'c8b9205b959a241f284dcacb4a27cbe63fc62cd028766777f50cca8941ecea57',
+  periodicPersistentPropertyRuntimeEvidence:
+    'da295df64cfde1d6770e19b542b9fd1cca35c559606ccf31f65b2b0273b68461',
   fourPieceSetStackRuntimeEvidence:
     'ae357c59a494f724c9ce36fde79df3fd505f1434c01c4b87697d5770f9cc98dc',
   beforeSkillCompositeRuntimeEvidence:
@@ -190,6 +197,7 @@ export async function createOptimizationQualificationArtifacts({
   soulEffectNonDamageRuntimeEvidencePath = null,
   landedHitRecoveryRuntimeEvidencePath = null,
   persistentLoadoutPropertyRuntimeEvidencePath = null,
+  periodicPersistentPropertyRuntimeEvidencePath = null,
   fourPieceSetStackRuntimeEvidencePath = null,
   beforeSkillCompositeRuntimeEvidencePath = null,
   afterDamageTargetPropertyRuntimeEvidencePath = null,
@@ -327,6 +335,20 @@ export async function createOptimizationQualificationArtifacts({
         ),
       gameAssemblyPath,
       il2CppDumpPath: il2cppRuntimeContractsPath,
+      projectRoot,
+    });
+  sources.periodicPersistentPropertyRuntimeEvidence =
+    await readPeriodicPersistentPropertyRuntimeEvidenceSource({
+      sourcePath:
+        periodicPersistentPropertyRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          ...PERIODIC_PERSISTENT_PROPERTY_EVIDENCE_RELATIVE_PATH.split('/')
+        ),
+      gameAssemblyPath,
+      il2CppDumpPath: il2cppRuntimeContractsPath,
+      battleElementAssetsPath,
+      elementFormulaPath: path.join(newTableRoot, 'element_formula.json'),
       projectRoot,
     });
   sources.fourPieceSetStackRuntimeEvidence =
@@ -469,6 +491,11 @@ export async function createOptimizationQualificationArtifacts({
     acceptanceReport?.sourceClosure?.persistentLoadoutPropertyRuntimeEvidence,
     sources.persistentLoadoutPropertyRuntimeEvidence
   );
+  assertPeriodicPersistentPropertyRuntimeEvidenceReference(
+    acceptanceReport?.sourceClosure
+      ?.periodicPersistentPropertyRuntimeEvidence,
+    sources.periodicPersistentPropertyRuntimeEvidence
+  );
   assertFourPieceSetStackRuntimeEvidenceReference(
     acceptanceReport?.sourceClosure?.fourPieceSetStackRuntimeEvidence,
     sources.fourPieceSetStackRuntimeEvidence
@@ -594,6 +621,8 @@ export async function createOptimizationQualificationArtifacts({
     tuningMechanicsCatalog: mechanics.tuningMechanicsCatalog,
     persistentLoadoutPropertyRuntimeEvidence:
       sources.persistentLoadoutPropertyRuntimeEvidence.value,
+    periodicPersistentPropertyRuntimeEvidence:
+      sources.periodicPersistentPropertyRuntimeEvidence.value,
     fourPieceSetStackRuntimeEvidence:
       sources.fourPieceSetStackRuntimeEvidence.value,
     beforeSkillCompositeRuntimeEvidence:
@@ -712,7 +741,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C14',
+      phase: 'M12-B3-C15',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1678,8 +1707,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C14',
-    status: 'b3-c14-verification-complete-awaiting-product-acceptance',
+    phase: 'M12-B3-C15',
+    status: 'b3-c15-verification-complete-awaiting-product-acceptance',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2104,6 +2133,7 @@ function createSourceSnapshot(sources) {
         key === 'soulEffectNonDamageRuntimeEvidence' ||
         key === 'landedHitRecoveryRuntimeEvidence' ||
         key === 'persistentLoadoutPropertyRuntimeEvidence' ||
+        key === 'periodicPersistentPropertyRuntimeEvidence' ||
         key === 'fourPieceSetStackRuntimeEvidence' ||
         key === 'beforeSkillCompositeRuntimeEvidence' ||
         key === 'afterDamageTargetPropertyRuntimeEvidence' ||
@@ -2124,7 +2154,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C14 Set 3 Source Identity Audit\n\n' +
+    '# M12-B3-C15 Periodic Persistent Property Roots\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -2133,7 +2163,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: C2-C13 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, and target-debuff contracts. C14 finds a source identity conflict for set 3:4: all formal localizations describe a 12-second, ten-layer normal-attack ATK effect, while the only current executable binding injects the Iron-Mane Overlord received-damage/MAXHP graph and no exact expected graph exists in the current element census. Neither conflicting graph is applied.\n' +
+    '- Dynamic loadout batches: C2-C14 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, target-debuff, and set-three source-conflict contracts. C15 adds a source-driven periodic persistent-root family with native time-loop cadence, condition re-evaluation, finite Cover leaves, right-open expiry, unload provenance, and cycle phase state. Soul essences 10084, 10152, and 10197 are runtime-applied; 10078 remains evidence-insufficient because native multi-PropertyTag matching for tags 302/303 is not closed.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'

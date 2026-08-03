@@ -544,6 +544,15 @@ export function compareCycleBoundaryStates(startSnapshot, endSnapshot) {
       normalizeSoulTriggerCounterState,
     ]);
   }
+  if (
+    (startSnapshot.soulPeriodicRoots?.length ?? 0) > 0 ||
+    (endSnapshot.soulPeriodicRoots?.length ?? 0) > 0
+  ) {
+    soulTriggerDimensions.push([
+      'soulPeriodicRoots',
+      normalizeSoulPeriodicRootState,
+    ]);
+  }
   stateDimensions.splice(2, 0, ...soulTriggerDimensions);
   const stateDiffs = [];
   for (const [dimension, normalize] of stateDimensions) {
@@ -1791,6 +1800,34 @@ function projectCanonicalBoundaryState({ snapshot, boundaryRun, frame }) {
       .filter(row => row.bindingKey && row.triggerCounterLimit != null)
       .sort(compareCanonicalRows);
   }
+  const soulPeriodicRootStates =
+    boundaryRun.simulation?.verifiedSoulEssenceEffectGeneration
+      ?.periodicRootStates;
+  if (Array.isArray(soulPeriodicRootStates)) {
+    snapshot.soulPeriodicRoots = soulPeriodicRootStates
+      .map(row => {
+        const intervalFrames = Math.max(1, Number(row.intervalFrames) || 0);
+        const nextTickFrame = resolveNextPeriodicRootTickFrame({
+          boundaryFrame: Number(frame),
+          intervalFrames,
+          timeExecuteFirstFrame: row.timeExecuteFirstFrame === true,
+        });
+        return {
+          bindingKey: row.bindingKey ?? null,
+          actorId: row.actorId ?? null,
+          ownerIdentity: row.ownerIdentity ?? null,
+          rootElementId: integerOrNull(row.rootElementId),
+          intervalFrames,
+          remainingFrames: Math.max(0, nextTickFrame - Number(frame)),
+          sourceIdentityHash: hashCanonicalValue({
+            bindingKey: row.bindingKey ?? null,
+            sourceIdentity: row.sourceIdentity ?? null,
+          }),
+        };
+      })
+      .filter(row => row.bindingKey && row.remainingFrames > 0)
+      .sort(compareCanonicalRows);
+  }
   const tuningState = verifiedRuntime.tuningMarkRuntime?.finalState;
   if (Array.isArray(tuningState)) {
     snapshot.tuningMarks = tuningState
@@ -2044,6 +2081,34 @@ function normalizeSoulTriggerCounterState(snapshot) {
     }))
     .filter(row => row.bindingKey && row.triggerCounterLimit != null)
     .sort(compareCanonicalRows);
+}
+
+function normalizeSoulPeriodicRootState(snapshot) {
+  return (snapshot.soulPeriodicRoots ?? [])
+    .map(row => ({
+      bindingKey: row.bindingKey ?? null,
+      actorId: row.actorId ?? null,
+      ownerIdentity: row.ownerIdentity ?? null,
+      rootElementId: integerOrNull(row.rootElementId),
+      intervalFrames: Math.max(1, Number(row.intervalFrames) || 0),
+      remainingFrames: Math.max(0, Number(row.remainingFrames) || 0),
+      sourceIdentityHash: row.sourceIdentityHash ?? null,
+    }))
+    .filter(row => row.bindingKey && row.remainingFrames > 0)
+    .sort(compareCanonicalRows);
+}
+
+function resolveNextPeriodicRootTickFrame({
+  boundaryFrame,
+  intervalFrames,
+  timeExecuteFirstFrame,
+}) {
+  const firstTickFrame = timeExecuteFirstFrame ? 1 : intervalFrames;
+  if (boundaryFrame < firstTickFrame) return firstTickFrame;
+  const completedIntervals = Math.floor(
+    (boundaryFrame - firstTickFrame) / intervalFrames
+  );
+  return firstTickFrame + (completedIntervals + 1) * intervalFrames;
 }
 
 function normalizeKiboPassiveRuntimeState(snapshot) {

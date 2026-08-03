@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 24,
-  "phase": "M12-B3-C14",
+  "schemaVersion": 25,
+  "phase": "M12-B3-C15",
   "status": "verification-complete-awaiting-product-acceptance",
-  "baseCommit": "36217387c9197702088dfe15244569f86c6e43c5",
+  "baseCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
   "reviewedC7R2Commit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
@@ -17,11 +17,12 @@
   "reviewedC12Commit": "a432467d4322ee0dae58e3d47df3b5c2eb55447a",
   "acceptedC12R1Commit": "5537e5a59f9776d7045b0ce8ad9915738715a9a4",
   "acceptedC13Commit": "36217387c9197702088dfe15244569f86c6e43c5",
+  "acceptedC14Commit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "implementationCommit": "git-self",
   "acceptedPredecessor": {
-    "phase": "M12-B3-C13",
-    "productionMechanicsCommit": "36217387c9197702088dfe15244569f86c6e43c5",
-    "acceptanceBaseline": "36217387c9197702088dfe15244569f86c6e43c5",
+    "phase": "M12-B3-C14",
+    "productionMechanicsCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
+    "acceptanceBaseline": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
     "status": "product-accepted"
   },
   "r1ProtocolGuard": {
@@ -96,13 +97,13 @@
     ]
   },
   "scope": {
-    "batch": "set-three-source-identity-and-legacy-graph-audit",
-    "soulEssenceIds": [],
-    "runtimeAppliedSoulEssenceIds": [],
-    "evidenceBlockedSoulEssenceIds": [],
-    "setSkillIds": ["set-skill:3:4"],
+    "batch": "periodic-persistent-property-root-with-finite-leaf",
+    "soulEssenceIds": [10078, 10084, 10152, 10197],
+    "runtimeAppliedSoulEssenceIds": [10084, 10152, 10197],
+    "evidenceBlockedSoulEssenceIds": [10078],
+    "setSkillIds": [],
     "runtimeAppliedSetSkillIds": [],
-    "evidenceBlockedSetSkillIds": ["set-skill:3:4"],
+    "evidenceBlockedSetSkillIds": [],
     "explicitlyExcludedSetSkillThresholds": [],
     "formalSearchExecuted": false,
     "m12cLocked": true,
@@ -179,6 +180,23 @@
       "il2CppDumpPath": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
       "il2CppDumpBytes": 97428254,
       "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+    },
+    "periodicPersistentPropertyRuntimeEvidence": {
+      "path": "scripts/optimization-qualification/evidence/periodic-persistent-property-runtime-evidence.json",
+      "bytes": 13603,
+      "sha256": "da295df64cfde1d6770e19b542b9fd1cca35c559606ccf31f65b2b0273b68461",
+      "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+      "binaryBytes": 222485544,
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "il2CppDumpPath": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+      "il2CppDumpBytes": 97428254,
+      "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+      "battleElementsPath": "C:/PC2/Codex/AzPr/work/combat-formulas/battle-element-assets.jsonl",
+      "battleElementsBytes": 43759616,
+      "battleElementsSha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
+      "elementFormulaPath": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+      "elementFormulaBytes": 15113,
+      "elementFormulaSha256": "ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e"
     },
     "fourPieceSetStackRuntimeEvidence": {
       "path": "scripts/optimization-qualification/evidence/four-piece-set-stack-runtime-evidence.json",
@@ -389,6 +407,26 @@
       "toughness": "set-skill:6:2 adds attr222=2000 and increases a real charged-hit toughness settlement",
       "twoPassReplay": "the same persistent source is installed once and produces equal first/second pass hit results"
     }
+  },
+  "c15PeriodicPersistentPropertyContract": {
+    "nativeEvidence": "SkillPlayer UpdateElements calls TriggerElement.OnUpdate, which evaluates periodic roots at frame 1 and then on strict greater-than interval boundaries; TriggerEffect injects a finite ChangePropertyElement leaf whose Cover lifecycle remains independent from the persistent root",
+    "rootInstallation": "one source-driven root per equipped actor/loadout/control/map/root identity; changing loadout removes the root and prevents later refreshes",
+    "periodicCadence": {
+      "1000ms": [1, 61, 121],
+      "2000ms": [1, 121, 241],
+      "failedConditionConsumesCurrentPeriod": true
+    },
+    "runtimeAppliedSoulEssenceIds": [10084, 10152, 10197],
+    "evidenceBlockedSoulEssenceIds": [10078],
+    "contracts": {
+      "10084": "root 19006000 periodically refreshes finite leaf 19006001 on Self; attr8 affects verified critical damage only while the 1100ms right-open leaf is active",
+      "10152": "root 19004901 requires both source conditions, then refreshes 1200ms attr222 leaf 19004902 on Self; first-hit toughness changes only while active",
+      "10197": "root 19007701 has no explicit condition and targets GetSelfPet; finite 2300ms attr21 leaf 19007702 changes only the equipped actor's Kibo damage",
+      "10078": "root 19004600 and 1100ms attr21 leaf 19004601 are indexed, but defaultPropertyTags [302,303] remain fail-closed because native multi-tag match semantics are not source-closed"
+    },
+    "formulaIdentity": "all star values are resolved from skillsub_ele_value and evaluated through the shared verified formula registry; 19004902 uses baseFunctionId 5",
+    "sourceSequence": "actor/loadout/control/map/root/tick/leaf provenance; descriptor enumeration order is non-semantic",
+    "cycleClosure": "relative periodic cadence phase is projected as soulPeriodicRoots and must match across loop boundaries"
   },
   "c10FourPieceBeforeDamageStackContract": {
     "nativeEvidence": "AliveElementSystem dispatches BeforeDamage before current packet settlement; ChangePropertyElement.Combine delegates Overlying(4) to one capped aggregate layer and refreshes one shared absolute end time",
@@ -786,11 +824,11 @@
     "gameplayLogicChanged": false
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 39,
-    "runtimeUnappliedSoulEssenceCount": 23,
+    "runtimeAppliedSoulEssenceCount": 42,
+    "runtimeUnappliedSoulEssenceCount": 20,
     "runtimeAppliedSetSkillCount": 11,
     "runtimeUnappliedSetSkillCount": 1,
-    "newlyAppliedSoulEssenceIds": [],
+    "newlyAppliedSoulEssenceIds": [10084, 10152, 10197],
     "newlyAppliedSetSkillIds": [],
     "preservedRuntimeAppliedSoulEssenceCount": 39,
     "preservedRuntimeAppliedSetSkillCount": 11,
@@ -804,10 +842,10 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 381,
+    "blockingUniqueGapCount": 375,
     "blockingByCategory": {
-      "not-implemented": 362,
-      "evidence-insufficient": 19
+      "not-implemented": 354,
+      "evidence-insufficient": 21
     },
     "formalAdmissions": {
       "characters": 0,
@@ -818,14 +856,14 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "e6c48099b261da63",
-    "rosterHash": "802a132b8c9080fe",
-    "manifestsHash": "d590b745a2eb0f47",
-    "ledgerHash": "d64df0972b180940",
-    "bindingMatrixHash": "3dc67be8dba47fba",
-    "qualificationCatalogHash": "4671eb77db38faf7",
-    "dynamicLoadoutEffectCensusHash": "9f5bdfeb31dc7cf7",
-    "soulEssenceEffectCatalogHash": "5185ad5704ca819f",
+    "sourceSnapshotHash": "661271d99b9e9b9e",
+    "rosterHash": "93b5f932243f030b",
+    "manifestsHash": "0700d78f431be1b9",
+    "ledgerHash": "81dc3cbf160a4132",
+    "bindingMatrixHash": "e2680052cfb8ea87",
+    "qualificationCatalogHash": "fd4eb4442b914a17",
+    "dynamicLoadoutEffectCensusHash": "637c622f607c7593",
+    "soulEssenceEffectCatalogHash": "9c5eba7a4694f5b6",
     "soulEssenceSourceSnapshotHash": "d5e0287dc75b3c16",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
     "soulEssenceTriggerContractHash": "ee74f6284b3b5118",
@@ -839,7 +877,7 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "C14 adds a source-identity conflict artifact and keeps set-skill:3:4 runtime-unapplied; no canonical combat behavior changes, so the standard Machine Axis fixture and three-character replays remain unchanged.",
+    "reason": "C15 adds a source-driven periodic-root runtime family for equipped 10084/10152/10197 and leaves 10078 fail-closed. Scenarios without these loadouts retain existing numeric semantics; catalog/profile metadata is regenerated from the new qualification state.",
     "machineAxisCanonicalHashDrift": 0,
     "machineAxisTraceMetadataHash": "416b4a015702f1b2",
     "machineAxisEvaluationHashDrift": 0,
@@ -854,14 +892,16 @@
     "c12BeforeSkillCompositeRegression": 0,
     "c12R1DirectSpRoutingRegression": 0,
     "c13AfterDamageTargetDebuffRegression": 0,
-    "c14SetThreeRuntimeApplicationCount": 0
+    "c14SetThreeRuntimeApplicationCount": 0,
+    "c15NewRuntimeAppliedSoulEssenceCount": 3,
+    "c15EvidenceBlockedSoulEssenceCount": 1
   },
   "verification": {
     "status": "passed",
-    "focusedMechanics": { "files": 4, "tests": 46, "status": "passed" },
+    "focusedMechanics": { "files": 5, "tests": 179, "status": "passed" },
     "optimizationQualificationDirectory": {
-      "files": 10,
-      "tests": 67,
+      "files": 11,
+      "tests": 71,
       "status": "passed"
     },
     "characterProfileAndMigration": {
@@ -872,27 +912,28 @@
     },
     "machineAxis": {
       "files": 12,
-      "tests": 159,
+      "tests": 160,
       "status": "passed-with-established-30s-process-test-budget"
     },
     "canonicalAndRuntime": {
       "files": 6,
-      "tests": 192,
+      "tests": 187,
       "status": "passed"
     },
     "audits": {
       "count": 9,
       "status": "clean",
-      "appliedLoadoutPropertySourceCount": 46,
+      "appliedLoadoutPropertySourceCount": 49,
       "triggeredLoadoutPropertySourceCount": 27,
-      "persistentLoadoutPropertySourceCount": 19,
+      "persistentLoadoutPropertySourceCount": 22,
+      "periodicPersistentLoadoutPropertySourceCount": 3,
       "appliedLoadoutPropertySourceDriftCount": 0,
       "tuningConditionSourceCount": 14,
       "tuningConditionSourceDriftCount": 0,
       "tuningConsumePriorityGroupCount": 12,
       "tuningConsumePrioritySourceDriftCount": 0
     },
-    "productionBuild": "passed",
+    "productionBuild": "passed-1875-modules",
     "gitDiffCheck": "passed"
   },
   "knownNonBlockingRisks": [
