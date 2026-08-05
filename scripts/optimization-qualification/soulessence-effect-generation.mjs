@@ -56,6 +56,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   fourPieceSetStackRuntimeEvidence = null,
   beforeSkillCompositeRuntimeEvidence = null,
   afterDamageTargetPropertyRuntimeEvidence = null,
+  afterDamageEmptyConditionRuntimeEvidence = null,
   setThreeSourceIdentityEvidence = null,
 } = {}) {
   if (
@@ -170,6 +171,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       tuningMechanicsCatalog,
       persistentLoadoutPropertyRuntimeEvidence,
       periodicPersistentPropertyRuntimeEvidence,
+      afterDamageEmptyConditionRuntimeEvidence,
       control: controlSource.bySkillId.get(
         Number(definitionBySoulId.get(item.soulEssenceId)?.reishiSkill)
       ),
@@ -2297,6 +2299,7 @@ function compileSoulEffectDefinition({
   tuningMechanicsCatalog,
   persistentLoadoutPropertyRuntimeEvidence,
   periodicPersistentPropertyRuntimeEvidence,
+  afterDamageEmptyConditionRuntimeEvidence = null,
 }) {
   const effectSkillId = Number(sourceDefinition?.reishiSkill);
   const resourcePathIds = uniqueNumbers(control?.resourcePathIds ?? []);
@@ -2396,6 +2399,16 @@ function compileSoulEffectDefinition({
   const triggerEvent = triggerContract.eventBindings.find(
     binding => Number(binding.value) === Number(triggerTree.triggerParam1)
   );
+  const emptyConditionEvidence =
+    Number(triggerEvent?.value) === 2 &&
+    afterDamageEmptyConditionRuntimeEvidence?.conclusion?.status === 'applied'
+      ? {
+          status: afterDamageEmptyConditionRuntimeEvidence.conclusion.status,
+          eventId: 2,
+          sourceIdentity:
+            afterDamageEmptyConditionRuntimeEvidence.conclusion.sourceIdentity,
+        }
+      : null;
   const compiledCondition = compileTriggerCondition({
     trigger,
     conditions,
@@ -2403,6 +2416,7 @@ function compileSoulEffectDefinition({
     triggerContract,
     tuningMechanicsCatalog,
     frameAnchor: triggerEvent?.frameAnchor ?? null,
+    emptyConditionEvidence,
   });
   const triggerTargetBinding = triggerContract.triggerTargetBindings.find(
     binding => Number(binding.value) === Number(triggerTree.triggerTargetType)

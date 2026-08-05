@@ -86,8 +86,28 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - C7-R3 stores the recovery fields, local/remote callsites, executor/source `isMainControl` gates, `EPlayerNetworkState` semantics, SPSystem dispatch and 11 exact binary ranges in a versioned artifact. The generator revalidates its binary/dump/range hashes and the acceptance report reference. `isMainControl` is local network authority, not the active actor timeline, so production runtime remains unchanged.
 - R3 verification passed: focused evidence/runtime `5 / 119`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, nine deterministic audits, and production build. The accepted R2 canonical/runtime `6 / 72` remains applicable with zero production runtime diff.
 - C14 verification and product acceptance are complete. C15 passes focused source/census/runtime/cycle `5 / 179`, complete optimization qualification `11 / 71`, three-character profile/golden/migration `4 / 38`, canonical/runtime/cycle `6 / 187`, Machine Axis `12 / 160`, nine deterministic audits, and the 1875-module production build. Standard Machine Axis hashes remain unchanged.
-- Status: `B3-C15 product-accepted-stage-paused`.
-- Next step: none until the user explicitly resumes the task. Do not start C16, M12-C, formal search, or a new mechanism batch.
+- Status: `B3-E1 implemented`（2026-08-05 用户恢复执行，E1 已收口提交）。
+- Next step: E2（激活前置条件 10018）；M12-C 与正式搜索保持锁定。
+
+## B3 恢复执行计划（2026-08-05，用户已明确恢复）
+
+排序原则：先易后难。每批以「源证据 + 生成器/运行时 + 测试 + 聚焦验证 + 提交」收口，逐批把 `source-indexed-runtime-unapplied` 与 `dynamic-unapplied` 转绿；五类 formal admission 与 M12-C 保持锁定直至全分母通过。
+
+### 批次拆解（易 -> 难）
+
+- **E1（已完成，2026-08-05）**：AfterDamage 空条件语义 —— `10101 归来 (1900200)` 已转绿。新增证据 `soulessence-after-damage-empty-condition-runtime-evidence.json`（`TriggerElement.CheckCondition@0x13B58F0` 空列表分支 + `OnAfterAttack`/`InvokeTriggerElement_DamageHandle` 派发路径，range `0x13B58F0-0x13B5950` 字节哈希固定）；生成器在 `compileSoulEffectDefinition` 对 AfterDamage 事件传入 `emptyConditionEvidence`（事件绑定字段为 `value`，非 `eventId`）；重生成机制/census/gaps。结果：runtime-applied 53→54（10101 条件 `always`、runtimeGaps 空），阻断 375→373（not-implemented 354→352）。验收报告推进至 `M12-B3-E1 / b3-e1-implemented`。
+- **E1 验证**：优化资格套件 12 文件/74 测试、灵魂效果运行时 105/105（新增 10101 真实回放用例：首段不生效、后续段按 190 基数叠层、unscoped 标签）、Machine Axis 12/160、`audit:optimization-qualification` 幂等通过、`git diff --check` 通过。
+- **E1 产出**：证据 JSON + `soulessence-after-damage-empty-condition-evidence.mjs` 校验模块 + 单测；生成器接线（sources/FROZEN hash/sourceSnapshot 嵌入/验收报告 sourceClosure 断言）；`dynamicLoadoutEffectCensus.test.js`、`optimizationQualificationProtocol.test.js`、`verifiedSoulEssenceEffectGeneration.test.js`、`beforeSkillCompositeEvidence.test.js` 同步。
+- **E2**：激活前置条件 —— `10018 飞行试验 (1900400)` 唯一缺口 `effect-activation-condition-operator-unsupported`（activationPrerequisites conditionType=10000/value=1007 语义未映射）。需先确认 10000 对应的原生条件枚举与 1007 含义，再实现编译与运行时门控。
+- **E3**：技能 Tag 补全 + damage 分支 —— `10032 唤灵 (1900340)`（skill-tag 8 未映射 + damage-branch）；顺带检查 `10063 屋嘟娃娃 (1900880)` 空条件批次（若与 E1 同类可并入）。
+- **E4**：composite 家族 —— `source-indexed-composite-effect` 12 个非证据项（10008/10011/10063/10071/10076/10095/10121/10122/10132/10146/10196/10198，另有 10078 属证据项归 E6），需支持多叶组合效果的编译与运行时。
+- **E5**：结构差异项 —— `10107 药草大丰收 (1900350)`、`10170 攀高的幼崽 (1900740)`、`10216 耕种之时 (1900780)`（多属性叶/公式族/栈运算符差异）。
+- **E6**：证据硬项 —— `10169 软软棉花肉 (1900750)` shield refresh/replacement、`10078 星晚的追忆 (1900460)` 多 PropertyTag、`set-skill:3:4` source identity、4 个 kibo passive evidence（500082/500185/500231/500360）、`112001` 解锁来源 mismatch、hero_rank final-panel 证据（11 角色 + STARBORN）、STARBORN 静态 profile。
+- **E7**：视觉/产品验收 —— 137 装备、62 灵魂、43 奇波、11 角色、12 套装逐对象走四态链与 Workbench 签收；全绿后才解锁 M12-C（不在此阶段执行正式搜索）。
+
+### 硬边界（沿用）
+
+- 不执行正式队伍/装配/轴搜索；不启动 M12-C；不动主 checkout 的脏 reports；不扩张搜索维度。
 
 ## Remaining Blockers
 

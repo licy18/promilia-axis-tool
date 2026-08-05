@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
-  "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "93b5f932243f030b",
-  "manifestsHash": "0700d78f431be1b9",
-  "gapLedgerHash": "81dc3cbf160a4132",
-  "bindingMatrixHash": "e2680052cfb8ea87",
-  "sourceSnapshotHash": "661271d99b9e9b9e",
+  "generatedAt": "2026-08-05T00:00:00.000Z",
+  "rosterHash": "26c5b9f3de5c2dd5",
+  "manifestsHash": "671cda971b8e28d9",
+  "gapLedgerHash": "9aea582e97522363",
+  "bindingMatrixHash": "dc4a2c1dd1f0bebe",
+  "sourceSnapshotHash": "2112f6062e7d0982",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -2705,14 +2705,12 @@
       "objectKind": "soul-essence",
       "objectId": "10101",
       "displayName": "归来",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "f4794e7f86f6f7f0"
+      "manifestHash": "3929b8e50d347858"
     },
     {
       "objectKind": "soul-essence",
@@ -3054,8 +3052,8 @@
     "schemaVersion": 1,
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
-    "generatedAt": "2026-08-01T00:00:00.000Z",
-    "rosterHash": "93b5f932243f030b",
+    "generatedAt": "2026-08-05T00:00:00.000Z",
+    "rosterHash": "26c5b9f3de5c2dd5",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24963,7 +24961,7 @@
       "setSkillThresholdQualifiedCount": 0,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "e2680052cfb8ea87"
+    "bindingMatrixHash": "dc4a2c1dd1f0bebe"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -41175,9 +41173,9 @@
                 "sourceIdentity": "NewTable/skill_level.rows[id=2677,skillId=1900200,level=4]"
               }
             ],
-            "status": "source-indexed-runtime-unapplied",
+            "status": "runtime-applied",
             "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
-            "catalogDefinitionHash": "9533d023be6c2ec3",
+            "catalogDefinitionHash": "cf273728c02afefe",
             "sourceIdentity": "NewTable/soulessence.rows[id=10101].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10101]"
@@ -43061,8 +43059,8 @@
       ],
       "effectStatus": {
         "status": "partially-runtime-applied",
-        "runtimeAppliedCount": 42,
-        "unresolvedCount": 20
+        "runtimeAppliedCount": 43,
+        "unresolvedCount": 19
       }
     },
     "equipment": {
@@ -44391,8 +44389,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 188,
-      "runtime-integrated": 77
+      "extracted": 187,
+      "runtime-integrated": 78
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -44402,7 +44400,7 @@
       "set-skill": 0
     },
     "optimizationReadyTotal": 0,
-    "gameplayBlockingGapCount": 375,
+    "gameplayBlockingGapCount": 373,
     "bindingQualifiedEdgeCount": 0,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44487,5 +44485,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "fd4eb4442b914a17"
+  "catalogHash": "d1a7ab1aa6682ec9"
 }

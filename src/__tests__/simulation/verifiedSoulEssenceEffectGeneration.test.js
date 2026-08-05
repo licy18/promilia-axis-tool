@@ -71,6 +71,17 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     attributeId: 53,
   },
   {
+    soulEssenceId: 10101,
+    contextual: true,
+    event: 'AfterDamage',
+    frameAnchor: 'hit-after-damage',
+    actionKind: null,
+    durationMs: 4000,
+    stackMode: 'stack',
+    maxStacks: 30,
+    attributeId: 222,
+  },
+  {
     soulEssenceId: 10037,
     event: 'BeforeSkill',
     frameAnchor: 'action-start',
@@ -340,8 +351,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 42,
-      unresolvedCount: 20,
+      runtimeAppliedCount: 43,
+      unresolvedCount: 19,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -4686,6 +4697,37 @@ describe('verified soul essence effect generation', () => {
         command =>
           command.modifiers[0].propertyTags.join('|') === '301' &&
           command.modifiers[0].propertyTagMatchMode === 'single-exact'
+      )
+    ).toBe(true);
+  });
+
+  it('replays real 10101 empty-condition after-damage stacks through canonical settlement', () => {
+    const result = createRealSoulScenario({
+      soulEssenceId: 10101,
+      effectSkillId: 1900200,
+    });
+    const hits = result.verifiedCombatRuntime.damageEvents.filter(
+      event => event.type === 'VERIFIED_COMBAT_HIT'
+    );
+    const damageUpTrace = event =>
+      event.payload.dynamicPropertyTrace?.source?.find(
+        trace => trace.attributeId === 222
+      );
+
+    expect(hits.length).toBeGreaterThan(2);
+    expect(damageUpTrace(hits[0])).toBeUndefined();
+    expect(damageUpTrace(hits[1])).toMatchObject({
+      dynamicExtraRaw: 190,
+    });
+    const commands = result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10101
+    );
+    expect(commands.length).toBeGreaterThan(1);
+    expect(
+      commands.every(
+        command =>
+          (command.modifiers[0].propertyTags ?? []).join('|') === '' &&
+          command.modifiers[0].propertyTagMatchMode === 'unscoped'
       )
     ).toBe(true);
   });

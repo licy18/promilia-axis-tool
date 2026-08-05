@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "contractName": "AzPrSoulEssenceEffectMechanicsCatalog",
   "kind": "azpr-soulessence-effect-mechanics-catalog",
-  "generatedAt": "2026-08-01T00:00:00.000Z",
+  "generatedAt": "2026-08-05T00:00:00.000Z",
   "sourceSnapshot": {
     "battleElements": {
       "path": "C:/PC2/Codex/AzPr/work/combat-formulas/battle-element-assets.jsonl",
@@ -7540,7 +7540,7 @@
         "skillLogicType": 6,
         "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900200]"
       },
-      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
       "activationPrerequisites": [],
       "trigger": {
@@ -7552,13 +7552,14 @@
         "intervalMs": 100,
         "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
         "condition": {
-          "kind": "condition-group",
+          "kind": "always",
           "logic": "and",
           "logicValue": 0,
+          "logicName": "AND",
           "conditions": [],
           "actionKinds": [],
-          "status": "static-evidence-gap",
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001.triggerConditionType|triggerConditionList"
+          "status": "applied",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#AliveElementSystem.OnExecuteDamageElement@0x1318800/DamageEventTriggerUtility.OnAfterAttack@0x1871F20/SkillUtility.InvokeTriggerElement_DamageHandle@0x18B5F10/TriggerElement.CheckCondition@0x13B58F0"
         },
         "triggerTargetType": 0,
         "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001.triggerTargetType",
@@ -7700,9 +7701,7 @@
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
-      "runtimeGaps": [
-        "effect-skill-tag-condition-operator-unsupported"
-      ],
+      "runtimeGaps": [],
       "sourceIdentity": "NewTable/soulessence.rows[id=10101].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900200.asset/MonoBehaviour/skill_control_1900200__-1028192825404748457.json|battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001|battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002"
     },
     {
@@ -16708,15 +16707,6 @@
       "sourceIdentity": "NewTable/soulessence.rows[id=10095].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900320.asset/MonoBehaviour/skill_control_1900320__-2637092768690775001.json"
     },
     {
-      "soulEssenceId": 10101,
-      "effectSkillId": 1900200,
-      "status": "source-indexed-runtime-unapplied",
-      "reasons": [
-        "effect-skill-tag-condition-operator-unsupported"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10101].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900200.asset/MonoBehaviour/skill_control_1900200__-1028192825404748457.json|battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001|battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002"
-    },
-    {
       "soulEssenceId": 10107,
       "effectSkillId": 1900350,
       "status": "source-indexed-runtime-unapplied",
@@ -16893,8 +16883,8 @@
     "controlClosureCount": 62,
     "resourceReferenceCount": 282,
     "missingResourceReferenceCount": 0,
-    "runtimeAppliedCount": 42,
-    "unresolvedCount": 20,
+    "runtimeAppliedCount": 43,
+    "unresolvedCount": 19,
     "setSkillCount": 12,
     "setSkillThresholdIndexedCount": 12,
     "setSkillRuntimeAppliedCount": 11,
@@ -16913,9 +16903,9 @@
       "source-indexed-composite-effect": 13
     },
     "byRuntimeStatus": {
-      "runtime-applied": 42,
-      "source-indexed-runtime-unapplied": 20
+      "runtime-applied": 43,
+      "source-indexed-runtime-unapplied": 19
     }
   },
-  "catalogHash": "9c5eba7a4694f5b6"
+  "catalogHash": "7b2e46610bdc9d2b"
 }

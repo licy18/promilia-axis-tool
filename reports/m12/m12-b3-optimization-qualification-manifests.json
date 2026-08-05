@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
-  "generatedAt": "2026-08-01T00:00:00.000Z",
-  "rosterHash": "93b5f932243f030b",
+  "generatedAt": "2026-08-05T00:00:00.000Z",
+  "rosterHash": "26c5b9f3de5c2dd5",
   "records": [
     {
       "objectKind": "character",
@@ -18180,23 +18180,9 @@
         "generated/soulessences.json#items[id=10101]",
         "NewTable/soulessence.rows[id=10101]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "soulessence-effect-skill-dynamic-unapplied",
-          "category": "not-implemented",
-          "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
-          "skillId": 1900200,
-          "reasons": [
-            "effect-skill-tag-condition-operator-unsupported"
-          ]
-        },
-        {
-          "code": "strict-soulessence-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied."
-        },
         {
           "code": "soulessence-visual-acceptance-not-published",
           "category": "not-implemented",
@@ -18213,7 +18199,7 @@
         "maximumRank": 6,
         "staticProfileApplied": true,
         "effectSkillId": 1900200,
-        "effectStatus": "source-indexed-runtime-unapplied",
+        "effectStatus": "runtime-applied",
         "sourceIdentity": "NewTable/soulessence.rows[id=10101]",
         "sourceEffectStatus": "effect-skill-dynamic-unapplied",
         "effectMechanics": {
@@ -18224,7 +18210,7 @@
             "skillLogicType": 6,
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900200]"
           },
-          "runtimeStatus": "source-indexed-runtime-unapplied",
+          "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
           "activationPrerequisites": [],
           "trigger": {
@@ -18236,13 +18222,14 @@
             "intervalMs": 100,
             "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
             "condition": {
-              "kind": "condition-group",
+              "kind": "always",
               "logic": "and",
               "logicValue": 0,
+              "logicName": "AND",
               "conditions": [],
               "actionKinds": [],
-              "status": "static-evidence-gap",
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001.triggerConditionType|triggerConditionList"
+              "status": "applied",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#AliveElementSystem.OnExecuteDamageElement@0x1318800/DamageEventTriggerUtility.OnAfterAttack@0x1871F20/SkillUtility.InvokeTriggerElement_DamageHandle@0x18B5F10/TriggerElement.CheckCondition@0x13B58F0"
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001.triggerTargetType",
@@ -18384,13 +18371,11 @@
             "damageElementIds": [],
             "activationPrerequisiteElementIds": []
           },
-          "runtimeGaps": [
-            "effect-skill-tag-condition-operator-unsupported"
-          ],
+          "runtimeGaps": [],
           "sourceIdentity": "NewTable/soulessence.rows[id=10101].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900200.asset/MonoBehaviour/skill_control_1900200__-1028192825404748457.json|battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001|battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002"
         }
       },
-      "manifestHash": "f4794e7f86f6f7f0"
+      "manifestHash": "3929b8e50d347858"
     },
     {
       "objectKind": "soul-essence",
@@ -24743,8 +24728,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 188,
-      "runtime-integrated": 77
+      "extracted": 187,
+      "runtime-integrated": 78
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -24755,5 +24740,5 @@
     },
     "optimizationReadyTotal": 0
   },
-  "manifestsHash": "0700d78f431be1b9"
+  "manifestsHash": "671cda971b8e28d9"
 }

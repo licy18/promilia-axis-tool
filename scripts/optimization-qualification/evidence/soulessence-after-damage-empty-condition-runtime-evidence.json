@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrSoulEssenceAfterDamageEmptyConditionRuntimeEvidence",
+  "reviewedBinary": {
+    "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+    "bytes": 222485544,
+    "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+  },
+  "reviewedIl2CppDump": {
+    "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+    "bytes": 97428254,
+    "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+  },
+  "dumpBindings": {
+    "methods": [
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.CheckCondition",
+        "rva": "0x13B58F0",
+        "declaration": "private bool CheckCondition(TTriggerElementParams.TriggerConditionType conditionType, ElementTriggerDataBase triggerData) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.DamageEventTriggerUtility.OnAfterAttack",
+        "rva": "0x1871F20",
+        "declaration": "public static void OnAfterAttack(TDamageElementParams config, EntityHandle p_source, EntityHandle p_attacker, EntityHandle p_executor, BaseElement.SkillInfo skillInfo) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
+        "rva": "0x13BD9C0",
+        "declaration": "public override void Parse(TElementParams param, int skillId, CustomBattleVerifyInfo verifyInfo) { }"
+      }
+    ],
+    "enums": [
+      {
+        "identity": "EElementTriggerEventType.AfterDamage",
+        "value": 2
+      },
+      {
+        "identity": "EElementTriggerConditionType.AND",
+        "value": 0
+      },
+      {
+        "identity": "EElementTriggerConditionType.OR",
+        "value": 1
+      }
+    ]
+  },
+  "consumer": {
+    "dispatch": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.DamageEventTriggerUtility.OnAfterAttack",
+      "rva": "0x1871F20",
+      "triggerInvoker": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElement_DamageHandle",
+      "triggerInvokerRva": "0x18B5F10",
+      "reason": "OnExecuteDamageElement settles the damage packet, then calls OnAfterAttack which dispatches event 2 through InvokeTriggerElement_DamageHandle. The dispatch uses the trigger's own condition list and does not inject conditions for an empty triggerConditionList."
+    },
+    "conditionCheck": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.TriggerElement.CheckCondition",
+      "rva": "0x13B58F0",
+      "range": "0x13B58F0-0x13B5950",
+      "sha256": "f736370cf769dd058d30646193b3ae87527baa4c04deb59d3a661d15b271d65e",
+      "reason": "The native condition-list loop reaches the empty-list branch; AND=0 and OR=1 both return true for zero conditions. The same CheckCondition consumer serves the event 2 after-damage dispatch."
+    }
+  },
+  "emptyConditionSemantics": {
+    "consumer": "Lens.Gameplay.Modules.BigWorld.TriggerElement.CheckCondition",
+    "rva": "0x13B58F0",
+    "range": "0x13B58F0-0x13B5950",
+    "sha256": "f736370cf769dd058d30646193b3ae87527baa4c04deb59d3a661d15b271d65e",
+    "emptyOrResult": true,
+    "emptyAndResult": true,
+    "supportedEventIds": [2],
+    "reason": "AfterDamage (event 2) dispatches with the trigger's own condition list through InvokeTriggerElement_DamageHandle; an empty list reaches CheckCondition's empty-list branch and both AND=0 and OR=1 return true, so no synthetic condition is required."
+  },
+  "conclusion": {
+    "status": "applied",
+    "eventContract": "after-damage-empty-condition-dispatch",
+    "sourceIdentity": "GameAssembly.dll#AliveElementSystem.OnExecuteDamageElement@0x1318800/DamageEventTriggerUtility.OnAfterAttack@0x1871F20/SkillUtility.InvokeTriggerElement_DamageHandle@0x18B5F10/TriggerElement.CheckCondition@0x13B58F0"
+  }
+}

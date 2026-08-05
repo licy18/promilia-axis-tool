@@ -1,12 +1,12 @@
-# M12-B3-C15 Periodic Persistent Property Roots
+# M12-B3-E1 After-Damage Empty Condition
 
-- Status: `b3-c15-product-accepted-stage-paused`
-- Source snapshot: `661271d99b9e9b9e`
-- Roster: `93b5f932243f030b`
-- Catalog: `fd4eb4442b914a17`
+- Status: `b3-e1-implemented`
+- Source snapshot: `2112f6062e7d0982`
+- Roster: `26c5b9f3de5c2dd5`
+- Catalog: `d1a7ab1aa6682ec9`
 - Denominators: characters 11, Kibo 43, soul essence 62, equipment 137, set skills 12
 - Optimization ready: characters 0, Kibo 0, soul essence 0, equipment 0, set skills 0
-- Blocking gaps: not implemented 354, evidence insufficient 21
+- Blocking gaps: not implemented 352, evidence insufficient 21
 - Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.
 - Dynamic loadout batches: C2-C14 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, target-debuff, and set-three source-conflict contracts. C15 adds a source-driven periodic persistent-root family with native time-loop cadence, condition re-evaluation, finite Cover leaves, right-open expiry, unload provenance, and cycle phase state. Soul essences 10084, 10152, and 10197 are runtime-applied; 10078 remains evidence-insufficient because native multi-PropertyTag matching for tags 302/303 is not closed.
 - STARBORN alias mechanism hash: `413c5f8d9053d23e` (source aliases 199001/199002 are one optimization object)

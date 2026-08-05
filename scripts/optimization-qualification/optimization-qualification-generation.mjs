@@ -44,13 +44,18 @@ import {
   readAfterDamageTargetPropertyRuntimeEvidenceSource,
 } from './after-damage-target-property-evidence.mjs';
 import {
+  AFTER_DAMAGE_EMPTY_CONDITION_EVIDENCE_RELATIVE_PATH,
+  assertAfterDamageEmptyConditionRuntimeEvidenceReference,
+  readAfterDamageEmptyConditionRuntimeEvidenceSource,
+} from './soulessence-after-damage-empty-condition-evidence.mjs';
+import {
   assertSetThreeSourceIdentityEvidenceReference,
   readSetThreeSourceIdentityEvidenceSource,
   SET_THREE_SOURCE_IDENTITY_EVIDENCE_RELATIVE_PATH,
 } from './set-three-source-identity-evidence.mjs';
 
 export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
-  '2026-08-01T00:00:00.000Z';
+  '2026-08-05T00:00:00.000Z';
 
 export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   characters:
@@ -133,6 +138,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '165b87b2d5ea01f1a2f7f72a828b6a1eeeca19ef1f429003b2dccca457686212',
   afterDamageTargetPropertyRuntimeEvidence:
     'c60a582cda07b5e017cb47751a323f8958a6b1e292dc1a7f5bb34e7904374447',
+  soulessenceAfterDamageEmptyConditionRuntimeEvidence:
+    '6d5ce341ac84ce65013669a691f9e6e6c599b834ffb26e99b0065ad504d88626',
   setThreeSourceIdentityEvidence:
     '9e8e92d38a1924293aea7b772f7ba2c704913a27db8c5b22df2bb04f76c29418',
 });
@@ -201,6 +208,7 @@ export async function createOptimizationQualificationArtifacts({
   fourPieceSetStackRuntimeEvidencePath = null,
   beforeSkillCompositeRuntimeEvidencePath = null,
   afterDamageTargetPropertyRuntimeEvidencePath = null,
+  soulessenceAfterDamageEmptyConditionRuntimeEvidencePath = null,
   setThreeSourceIdentityEvidencePath = null,
   dynamicLoadoutAcceptanceReportPath = null,
   gameAssemblyPath = 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
@@ -396,6 +404,18 @@ export async function createOptimizationQualificationArtifacts({
       ),
       projectRoot,
     });
+  sources.soulessenceAfterDamageEmptyConditionRuntimeEvidence =
+    await readAfterDamageEmptyConditionRuntimeEvidenceSource({
+      sourcePath:
+        soulessenceAfterDamageEmptyConditionRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          ...AFTER_DAMAGE_EMPTY_CONDITION_EVIDENCE_RELATIVE_PATH.split('/')
+        ),
+      gameAssemblyPath,
+      il2CppDumpPath: il2cppRuntimeContractsPath,
+      projectRoot,
+    });
   const setSkillControlRoot = path.resolve(skillControlRoot);
   const formalSetThreeControlRoot = path.join(
     setSkillControlRoot,
@@ -507,6 +527,10 @@ export async function createOptimizationQualificationArtifacts({
   assertAfterDamageTargetPropertyRuntimeEvidenceReference(
     acceptanceReport?.sourceClosure?.afterDamageTargetPropertyRuntimeEvidence,
     sources.afterDamageTargetPropertyRuntimeEvidence
+  );
+  assertAfterDamageEmptyConditionRuntimeEvidenceReference(
+    acceptanceReport?.sourceClosure?.afterDamageEmptyConditionRuntimeEvidence,
+    sources.soulessenceAfterDamageEmptyConditionRuntimeEvidence
   );
   assertSetThreeSourceIdentityEvidenceReference(
     acceptanceReport?.sourceClosure?.setThreeSourceIdentityEvidence,
@@ -629,6 +653,8 @@ export async function createOptimizationQualificationArtifacts({
       sources.beforeSkillCompositeRuntimeEvidence.value,
     afterDamageTargetPropertyRuntimeEvidence:
       sources.afterDamageTargetPropertyRuntimeEvidence.value,
+    afterDamageEmptyConditionRuntimeEvidence:
+      sources.soulessenceAfterDamageEmptyConditionRuntimeEvidence.value,
     setThreeSourceIdentityEvidence:
       sources.setThreeSourceIdentityEvidence.value,
   });
@@ -741,7 +767,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-C15',
+      phase: 'M12-B3-E1',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1707,8 +1733,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-C15',
-    status: 'b3-c15-product-accepted-stage-paused',
+    phase: 'M12-B3-E1',
+    status: 'b3-e1-implemented',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2137,6 +2163,7 @@ function createSourceSnapshot(sources) {
         key === 'fourPieceSetStackRuntimeEvidence' ||
         key === 'beforeSkillCompositeRuntimeEvidence' ||
         key === 'afterDamageTargetPropertyRuntimeEvidence' ||
+        key === 'soulessenceAfterDamageEmptyConditionRuntimeEvidence' ||
         key === 'setThreeSourceIdentityEvidence'
       ) {
         record.value = structuredClone(source.value);
@@ -2154,7 +2181,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-C15 Periodic Persistent Property Roots\n\n' +
+    '# M12-B3-E1 After-Damage Empty Condition\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
