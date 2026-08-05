@@ -63,8 +63,8 @@ describe('kibo headless census', () => {
       },
       publicActionClosure: {
         evidenceClosed: 132,
-        scenarioAssumed: 53,
-        unresolved: 181,
+        scenarioAssumed: 137,
+        unresolved: 97,
       },
     });
     expect(outputs.mechanicsCatalog.summary.triggerLifetime).toEqual({
