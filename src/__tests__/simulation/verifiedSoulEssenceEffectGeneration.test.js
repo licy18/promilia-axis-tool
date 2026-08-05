@@ -93,6 +93,39 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     attributeId: 58,
   },
   {
+    soulEssenceId: 10008,
+    contextual: true,
+    event: 'AfterDamage',
+    frameAnchor: 'hit-after-damage',
+    actionKind: 'charged-attack',
+    durationMs: 12000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 222,
+  },
+  {
+    soulEssenceId: 10071,
+    contextual: true,
+    event: 'BeforeDamage',
+    frameAnchor: 'hit-before-damage',
+    actionKind: 'charged-attack',
+    durationMs: 50,
+    stackMode: 'stack',
+    maxStacks: 1,
+    attributeId: 59,
+  },
+  {
+    soulEssenceId: 10146,
+    contextual: true,
+    event: 'BeforeDamage',
+    frameAnchor: 'hit-before-damage',
+    actionKind: 'charged-attack',
+    durationMs: 20000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 1,
+  },
+  {
     soulEssenceId: 10037,
     event: 'BeforeSkill',
     frameAnchor: 'action-start',
@@ -362,8 +395,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 44,
-      unresolvedCount: 18,
+      runtimeAppliedCount: 47,
+      unresolvedCount: 15,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -4798,6 +4831,96 @@ describe('verified soul essence effect generation', () => {
       attributeId: 58,
       propertyTagMatchMode: 'unscoped',
     });
+  });
+
+  it('replays real 10146 multi-trigger charged buff through canonical settlement', () => {
+    const result = createRealSoulScenario({
+      soulEssenceId: 10146,
+      effectSkillId: 1900420,
+      actionPlan: [
+        { id: 'e3a-10146-charged', actionKind: 'charged-attack', startFrame: 60 },
+      ],
+    });
+    const commands = result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10146
+    );
+    expect(commands.length).toBeGreaterThan(0);
+    expect(commands[0].modifiers[0]).toMatchObject({
+      attributeId: 1,
+      propertyTagMatchMode: 'unscoped',
+    });
+  });
+
+  it('replays real 10071 charged buff gated by mark 250 layers above one', () => {
+    const suppressed = createRealSoulScenario({
+      soulEssenceId: 10071,
+      effectSkillId: 1900650,
+      actionPlan: [
+        { id: 'e3a-10071-charged-no-mark', actionKind: 'charged-attack', startFrame: 60 },
+      ],
+    });
+    expect(
+      suppressed.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10071
+      )
+    ).toEqual([]);
+
+    const suppressedWrongMark = createRealSoulScenario({
+      soulEssenceId: 10071,
+      effectSkillId: 1900650,
+      initialRuntimeState: {
+        tuningMarks: [createInheritedTuningMark(250, 2, 20_000)],
+      },
+      actionPlan: [
+        { id: 'e3a-10071-charged-wrong-mark', actionKind: 'charged-attack', startFrame: 60 },
+      ],
+    });
+    expect(
+      suppressedWrongMark.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10071
+      )
+    ).toEqual([]);
+
+    const active = createRealSoulScenario({
+      soulEssenceId: 10071,
+      effectSkillId: 1900650,
+      initialRuntimeState: {
+        tuningMarks: [createInheritedTuningMark(950, 2, 20_000)],
+      },
+      actionPlan: [
+        { id: 'e3a-10071-charged-with-mark', actionKind: 'charged-attack', startFrame: 60 },
+      ],
+    });
+    const commands = active.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10071
+    );
+    expect(commands.length).toBeGreaterThan(0);
+    expect(commands[0].modifiers[0]).toMatchObject({
+      attributeId: 59,
+      propertyTagMatchMode: 'unscoped',
+    });
+  });
+
+  it('keeps 10008 target-overdrive conditions fail-closed without matching elements', () => {
+    const result = createRealSoulScenario({
+      soulEssenceId: 10008,
+      effectSkillId: 1900120,
+      actionPlan: [
+        { id: 'e3a-10008-charged', actionKind: 'charged-attack', startFrame: 60 },
+      ],
+    });
+    expect(
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10008
+      )
+    ).toEqual([]);
+    expect(
+      result.verifiedSoulEssenceEffectGeneration.suppressions.some(
+        suppression =>
+          suppression.reason ===
+          'soulessence-effect-action-kind-condition-not-matched'
+      )
+    ).toBe(true);
   });
 
   it.each([

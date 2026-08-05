@@ -484,7 +484,11 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
         ? []
         : ['loadout-effect-formula-function-drift']),
       ...((definition.trigger?.condition?.conditions ?? []).every(condition =>
-        String(condition.sourceIdentity ?? '').includes('dump.cs#')
+        String(condition.sourceIdentity ?? '').includes('dump.cs#') ||
+        (Number(condition.conditionType) === 10000 &&
+          String(condition.sourceIdentity ?? '').includes(
+            'element_formula.json#'
+          ))
       )
         ? []
         : ['loadout-trigger-condition-enum-source-identity-missing']),

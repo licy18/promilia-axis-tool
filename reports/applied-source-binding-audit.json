@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "applied-source-binding-audit",
-  "generatedAt": "2026-08-05T05:24:54.850Z",
+  "generatedAt": "2026-08-05T06:02:37.864Z",
   "decision": {
     "status": "passed",
     "passed": true,
@@ -14,9 +14,9 @@
     "compatibleUnboundCount": 0,
     "unexplainedCompatibleUnboundCount": 0,
     "missingTrackCount": 0,
-    "loadoutPropertyTagSourceCount": 51,
+    "loadoutPropertyTagSourceCount": 54,
     "loadoutPropertyTagDriftCount": 0,
-    "loadoutTuningConditionCount": 14,
+    "loadoutTuningConditionCount": 15,
     "loadoutTuningConditionDriftCount": 0,
     "tuningConsumePriorityGroupCount": 12,
     "tuningConsumePriorityDriftCount": 0
@@ -65,13 +65,13 @@
       "triggerContractHash": "ee74f6284b3b5118"
     },
     "summary": {
-      "sourceCount": 51,
-      "triggeredSourceCount": 29,
+      "sourceCount": 54,
+      "triggeredSourceCount": 32,
       "persistentSourceCount": 22,
       "periodicPersistentSourceCount": 3,
       "driftCount": 0,
       "propertyTagDriftCount": 0,
-      "tuningConditionCount": 14,
+      "tuningConditionCount": 15,
       "tuningConditionDriftCount": 0,
       "tuningConsumePriorityGroupCount": 12,
       "tuningConsumePriorityDriftCount": 0
@@ -234,6 +234,140 @@
           ]
         },
         "sourceIdentity": "battle-element-assets.jsonl#path_id=-131968735896823040;elementId=19006104",
+        "status": "applied-source-property-tags-ready",
+        "issueCodes": []
+      },
+      {
+        "soulEssenceId": 10008,
+        "effectElementId": 19001108,
+        "sourcePropertyTags": [],
+        "generatedPropertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=7565174917272651000;elementId=19001108.defaultPropertyTags",
+        "triggerCondition": {
+          "sourceLogicValue": 0,
+          "generatedLogicValue": 0,
+          "sourceConditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 2
+            },
+            {
+              "conditionType": 12,
+              "conditionValue": 899
+            }
+          ],
+          "generatedConditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 2
+            },
+            {
+              "conditionType": 12,
+              "conditionValue": 899
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-7480298753715348000;elementId=19001201.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": [
+            {
+              "conditionType": 12,
+              "conditionTypeName": "CheckTargetElementId",
+              "conditionValue": 899,
+              "triggerEventId": 2,
+              "kind": "target-element-id",
+              "expectedProfiles": [
+                {
+                  "profileKey": "water",
+                  "markId": 850,
+                  "overlimitPacketElementId": 899,
+                  "damageElementId": 897,
+                  "elementTypes": [
+                    22,
+                    36,
+                    43,
+                    307
+                  ],
+                  "elementTypeSourceKind": "damage-template",
+                  "markSourcePresent": true,
+                  "packetSourcePresent": true,
+                  "damageSourcePresent": true
+                }
+              ],
+              "generatedProfiles": [
+                {
+                  "profileKey": "water",
+                  "markId": 850,
+                  "overlimitPacketElementId": 899,
+                  "damageElementId": 897,
+                  "elementTypes": [
+                    22,
+                    36,
+                    43,
+                    307
+                  ],
+                  "elementTypeSourceKind": "damage-template"
+                }
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-7480298753715348000;elementId=19001201.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckTargetElementId=12|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=water]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=850]|battle-element-assets.jsonl#path_id=-3161718249097424629|battle-element-assets.jsonl#path_id=-3161718249097424629|battle-element-assets.jsonl#path_id=3909034050250717657.types",
+              "status": "applied-source-tuning-condition-ready",
+              "issueCodes": []
+            }
+          ]
+        },
+        "triggerEvent": {
+          "sourceEventId": 2,
+          "generatedEventId": 2,
+          "enumName": "AfterDamage",
+          "frameAnchor": "hit-after-damage",
+          "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.AfterDamage=2"
+        },
+        "triggerSourceTarget": {
+          "sourceTriggerTargetType": 0,
+          "generatedTriggerTargetType": 0,
+          "sourceKind": "equipped-actor-source-events",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-7480298753715348000;elementId=19001201.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+        },
+        "triggerEffectTarget": {
+          "sourceTargetType": 0,
+          "generatedTargetType": 0,
+          "sourceTargetPathId": 7565174917272651000,
+          "generatedTargetPathId": 7565174917272651000,
+          "targetKind": "self-actor",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-7480298753715348000;elementId=19001201.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        },
+        "formula": {
+          "sourceCommonFunctionId": 1,
+          "generatedCommonFunctionId": 1,
+          "sourceBaseFunctionId": 5,
+          "generatedBaseFunctionId": 5,
+          "formulaIdentity": "battle-effect-formula:soulessence:1900120:19001108:7565174917272651000",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=7565174917272651000;elementId=19001108.formulaParams|functionParams"
+        },
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 12000,
+          "leafDurationMs": 12000,
+          "wrapper": null,
+          "wrapperInjectedPathIds": [],
+          "removalPaths": [
+            {
+              "triggerElementId": 19001203,
+              "triggerPathId": 2282567122939052000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19001204,
+              "removerPathId": -179862200198884480,
+              "removedElementIds": [
+                19001201,
+                19001203,
+                19001205,
+                19001108
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=2282567122939052000;elementId=19001203.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-179862200198884480;elementId=19001204"
+            }
+          ]
+        },
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=7565174917272651000;elementId=19001108",
         "status": "applied-source-property-tags-ready",
         "issueCodes": []
       },
@@ -1274,6 +1408,95 @@
           ]
         },
         "sourceIdentity": "battle-element-assets.jsonl#path_id=-2685633708192990000;elementId=19009002",
+        "status": "applied-source-property-tags-ready",
+        "issueCodes": []
+      },
+      {
+        "soulEssenceId": 10071,
+        "effectElementId": 19006502,
+        "sourcePropertyTags": [],
+        "generatedPropertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-7924391024652865000;elementId=19006502.defaultPropertyTags",
+        "triggerCondition": {
+          "sourceLogicValue": 0,
+          "generatedLogicValue": 0,
+          "sourceConditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 2
+            },
+            {
+              "conditionType": 10000,
+              "conditionValue": 1007
+            }
+          ],
+          "generatedConditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 2
+            },
+            {
+              "conditionType": 10000,
+              "conditionValue": 1007
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-7589891308127638000;elementId=19006501.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
+        },
+        "triggerEvent": {
+          "sourceEventId": 1,
+          "generatedEventId": 1,
+          "enumName": "BeforeDamage",
+          "frameAnchor": "hit-before-damage",
+          "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.BeforeDamage=1"
+        },
+        "triggerSourceTarget": {
+          "sourceTriggerTargetType": 0,
+          "generatedTriggerTargetType": 0,
+          "sourceKind": "equipped-actor-source-events",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-7589891308127638000;elementId=19006501.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+        },
+        "triggerEffectTarget": {
+          "sourceTargetType": 0,
+          "generatedTargetType": 0,
+          "sourceTargetPathId": -7924391024652865000,
+          "generatedTargetPathId": -7924391024652865000,
+          "targetKind": "self-actor",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-7589891308127638000;elementId=19006501.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        },
+        "formula": {
+          "sourceCommonFunctionId": 1,
+          "generatedCommonFunctionId": 1,
+          "sourceBaseFunctionId": 5,
+          "generatedBaseFunctionId": 5,
+          "formulaIdentity": "battle-effect-formula:soulessence:1900650:19006502:-7924391024652865000",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-7924391024652865000;elementId=19006502.formulaParams|functionParams"
+        },
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 50,
+          "leafDurationMs": 50,
+          "wrapper": null,
+          "wrapperInjectedPathIds": [],
+          "removalPaths": [
+            {
+              "triggerElementId": 19006503,
+              "triggerPathId": 73751544066915410,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19006504,
+              "removerPathId": -7411425429276465000,
+              "removedElementIds": [
+                19006501,
+                19006503,
+                19006505
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=73751544066915410;elementId=19006503.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-7411425429276465000;elementId=19006504"
+            }
+          ]
+        },
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-7924391024652865000;elementId=19006502",
         "status": "applied-source-property-tags-ready",
         "issueCodes": []
       },
@@ -2738,6 +2961,86 @@
           ]
         },
         "sourceIdentity": "battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102",
+        "status": "applied-source-property-tags-ready",
+        "issueCodes": []
+      },
+      {
+        "soulEssenceId": 10146,
+        "effectElementId": 19004203,
+        "sourcePropertyTags": [],
+        "generatedPropertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=17992665022024710;elementId=19004203.defaultPropertyTags",
+        "triggerCondition": {
+          "sourceLogicValue": 0,
+          "generatedLogicValue": 0,
+          "sourceConditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 2
+            }
+          ],
+          "generatedConditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 2
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4639353932355848000;elementId=19004202.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
+        },
+        "triggerEvent": {
+          "sourceEventId": 1,
+          "generatedEventId": 1,
+          "enumName": "BeforeDamage",
+          "frameAnchor": "hit-before-damage",
+          "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.BeforeDamage=1"
+        },
+        "triggerSourceTarget": {
+          "sourceTriggerTargetType": 0,
+          "generatedTriggerTargetType": 0,
+          "sourceKind": "equipped-actor-source-events",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4639353932355848000;elementId=19004202.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+        },
+        "triggerEffectTarget": {
+          "sourceTargetType": 15,
+          "generatedTargetType": 15,
+          "sourceTargetPathId": 17992665022024710,
+          "generatedTargetPathId": 17992665022024710,
+          "targetKind": "team-actors",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4639353932355848000;elementId=19004202.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+        },
+        "formula": {
+          "sourceCommonFunctionId": 1,
+          "generatedCommonFunctionId": 1,
+          "sourceBaseFunctionId": 3,
+          "generatedBaseFunctionId": 3,
+          "formulaIdentity": "battle-effect-formula:soulessence:1900420:19004203:17992665022024710",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=17992665022024710;elementId=19004203.formulaParams|functionParams"
+        },
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 20000,
+          "leafDurationMs": 20000,
+          "wrapper": null,
+          "wrapperInjectedPathIds": [],
+          "removalPaths": [
+            {
+              "triggerElementId": 19004205,
+              "triggerPathId": 5459761055082515000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19004206,
+              "removerPathId": -2398066028154467000,
+              "removedElementIds": [
+                19004205,
+                19004201
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=5459761055082515000;elementId=19004205.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-2398066028154467000;elementId=19004206"
+            }
+          ]
+        },
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=17992665022024710;elementId=19004203",
         "status": "applied-source-property-tags-ready",
         "issueCodes": []
       },

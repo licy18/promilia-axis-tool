@@ -2010,6 +2010,9 @@ function compileTriggerCondition({
   tuningMechanicsCatalog,
   frameAnchor,
   emptyConditionEvidence = null,
+  elementFormulaRows = [],
+  activationConditionRuntimeEvidence = null,
+  elementFunctionParams = [],
 }) {
   if (!trigger) {
     return {
@@ -2029,6 +2032,42 @@ function compileTriggerCondition({
   const compiledConditions = (conditions ?? []).map((condition, index) => {
     const conditionType = Number(condition?.conditionParam1);
     const conditionValue = Number(condition?.conditionParam2);
+    if (conditionType === 10000) {
+      const formulaId = conditionValue;
+      const formula = (elementFormulaRows ?? []).find(
+        row => Number(row.id) === formulaId
+      );
+      const match = String(formula?.functionOutput ?? '').match(
+        /^IF\(self\.ELEMENT_LAYERS\[([A-Z])\]>([A-Z]),([A-Z]),0\)$/u
+      );
+      const resolveVariable = letter => {
+        const raw = elementFunctionParams[letter.charCodeAt(0) - 65];
+        return Number.isFinite(Number(raw)) ? Number(raw) : null;
+      };
+      const markId = match ? resolveVariable(match[1]) : null;
+      const minLayers = match ? resolveVariable(match[2]) : null;
+      const valueRaw = match ? resolveVariable(match[3]) : null;
+      const applied =
+        activationConditionRuntimeEvidence?.conclusion?.status === 'applied' &&
+        match &&
+        markId != null &&
+        minLayers != null;
+      return {
+        kind: 'element-formula-layer-gt',
+        conditionType,
+        conditionValue,
+        formulaId,
+        markId,
+        minLayers,
+        valueRaw,
+        formula: formula?.functionOutput ?? null,
+        actionKinds: [],
+        provenanceRequirement: null,
+        tuningProfiles: [],
+        sourceIdentity: `${createElementIdentity(trigger)}.triggerConditionList[${index}]|NewTable/element_formula.json#rows[id=${formulaId}]|${activationConditionRuntimeEvidence?.conclusion?.sourceIdentity ?? 'activation-condition-evidence-missing'}`,
+        status: applied ? 'applied' : 'static-evidence-gap',
+      };
+    }
     const typeBinding = triggerContract.conditionTypeBindings.find(
       binding => Number(binding.value) === conditionType
     );
@@ -2354,6 +2393,141 @@ function compileActivationConditions({
   });
 }
 
+function buildSoulTriggerEntry({
+  triggerRow,
+  property,
+  closure,
+  battleElementsByPathId,
+  propertyRows,
+  triggerContract,
+  tuningMechanicsCatalog,
+  elementFormulaRows,
+  activationConditionRuntimeEvidence,
+  afterDamageEmptyConditionRuntimeEvidence,
+}) {
+  const tree = triggerRow?.typetree ?? {};
+  const eventBinding = triggerContract.eventBindings.find(
+    binding => Number(binding.value) === Number(tree.triggerParam1)
+  );
+  const frameAnchor = eventBinding?.frameAnchor ?? null;
+  const supported = SUPPORTED_FRAME_ANCHORS.has(frameAnchor);
+  const conditions = Array.isArray(tree.triggerConditionList)
+    ? tree.triggerConditionList
+    : [];
+  const emptyConditionEvidence =
+    Number(eventBinding?.value) === 2 &&
+    afterDamageEmptyConditionRuntimeEvidence?.conclusion?.status === 'applied'
+      ? {
+          status: afterDamageEmptyConditionRuntimeEvidence.conclusion.status,
+          eventId: 2,
+          sourceIdentity:
+            afterDamageEmptyConditionRuntimeEvidence.conclusion.sourceIdentity,
+        }
+      : null;
+  const compiledCondition = compileTriggerCondition({
+    trigger: triggerRow,
+    conditions,
+    conditionLogicValue: Number(tree.triggerConditionType),
+    triggerContract,
+    tuningMechanicsCatalog,
+    frameAnchor,
+    emptyConditionEvidence,
+    elementFormulaRows,
+    activationConditionRuntimeEvidence,
+    elementFunctionParams: Array.isArray(tree.functionParams)
+      ? tree.functionParams
+      : [],
+  });
+  const triggerTargetBinding = triggerContract.triggerTargetBindings.find(
+    binding => Number(binding.value) === Number(tree.triggerTargetType)
+  );
+  const triggerEffectRows = Array.isArray(tree.triggerEffectList)
+    ? tree.triggerEffectList
+        .map((effectRow, effectListIndex) => ({
+          effectRow,
+          effectListIndex,
+          targetPathId: Number(effectRow?.targetElement?.m_PathID),
+        }))
+        .filter(
+          ({ targetPathId }) =>
+            property != null &&
+            findElementPath(
+              targetPathId,
+              Number(property.path_id),
+              closure.edges
+            ) != null
+        )
+    : [];
+  const targetBinding =
+    triggerEffectRows.length === 1
+      ? (triggerContract.targetBindings.find(
+          binding =>
+            Number(binding.value) ===
+            Number(triggerEffectRows[0]?.effectRow?.targetType)
+        ) ?? null)
+      : null;
+  const reachablePropertyRows = triggerRow
+    ? collectReachableRows(
+        Number(triggerRow.path_id),
+        closure.edges,
+        battleElementsByPathId
+      ).filter(row =>
+        propertyRows.some(item => item.path_id === row.path_id)
+      )
+    : [];
+  const sharedLeaf =
+    property != null &&
+    reachablePropertyRows.length === 1 &&
+    Number(reachablePropertyRows[0].path_id) === Number(property.path_id);
+  const valid =
+    supported &&
+    compiledCondition?.status === 'applied' &&
+    triggerTargetBinding != null &&
+    targetBinding != null &&
+    sharedLeaf;
+  return {
+    valid,
+    value: {
+      elementId: Number(tree.elementConfigId),
+      pathId: Number(triggerRow.path_id),
+      eventId: Number(tree.triggerParam1),
+      event: eventBinding?.name ?? null,
+      frameAnchor,
+      intervalMs: numberOrNull(tree.triggerInv),
+      intervalSourceIdentity: `${createElementIdentity(triggerRow)}.triggerInv|${triggerContract.nonDamageRuntime?.consumer?.triggerIntervalParse?.identity ?? 'trigger-interval-contract-unresolved'}`,
+      condition: compiledCondition,
+      triggerTargetType: numberOrNull(tree.triggerTargetType),
+      triggerTargetTypeSourceIdentity: `${createElementIdentity(triggerRow)}.triggerTargetType`,
+      triggerTarget:
+        triggerTargetBinding == null
+          ? null
+          : {
+              kind: triggerTargetBinding.sourceKind,
+              triggerTargetType: Number(triggerTargetBinding.value),
+              triggerTargetTypeName: triggerTargetBinding.enumName,
+              sourceIdentity: `${createElementIdentity(triggerRow)}.triggerTargetType|${triggerTargetBinding.sourceIdentity}`,
+            },
+      target:
+        targetBinding == null
+          ? null
+          : {
+              kind: targetBinding.targetKind,
+              effectTargetType: Number(targetBinding.value),
+              effectTargetTypeName: targetBinding.enumName,
+              effectListIndex: triggerEffectRows[0]?.effectListIndex ?? null,
+              targetElementPathId: triggerEffectRows[0]
+                ? Number(triggerEffectRows[0]?.effectRow?.targetElement?.m_PathID)
+                : null,
+              sourceIdentity: triggerEffectRows[0]
+                ? `${createElementIdentity(triggerRow)}.triggerEffectList[${triggerEffectRows[0].effectListIndex}].targetType|${targetBinding.sourceIdentity}`
+                : null,
+            },
+      targetKind: targetBinding?.targetKind ?? 'unresolved',
+      sourceIdentity: createElementIdentity(triggerRow),
+    },
+  };
+}
+
 function compileSoulEffectDefinition({
   soul,
   sourceDefinition,
@@ -2412,7 +2586,7 @@ function compileSoulEffectDefinition({
       periodicPersistentPropertyRuntimeEvidence,
     });
   }
-  const trigger = activeTriggers.length === 1 ? activeTriggers[0] : null;
+  const trigger = activeTriggers[0] ?? null;
   const activationPrerequisiteRows = trigger
     ? closure.rows.filter(row => {
         if (Number(row.path_id) === Number(trigger.path_id)) return false;
@@ -2547,11 +2721,28 @@ function compileSoulEffectDefinition({
     rows: valueRowsBySkillId.get(effectSkillId) ?? [],
     elementId: Number(propertyTree.elementConfigId),
   });
+  const triggerEntries = activeTriggers.map(triggerRow =>
+    buildSoulTriggerEntry({
+      triggerRow,
+      property,
+      closure,
+      battleElementsByPathId,
+      propertyRows,
+      triggerContract,
+      tuningMechanicsCatalog,
+      elementFormulaRows,
+      activationConditionRuntimeEvidence,
+      afterDamageEmptyConditionRuntimeEvidence,
+    })
+  );
   const runtimeGaps = [];
   if (!control) runtimeGaps.push('effect-control-source-missing');
   if (missingPathIds.length)
     runtimeGaps.push('effect-resource-reference-missing');
-  if (activeTriggers.length !== 1) {
+  if (
+    triggerEntries.length === 0 ||
+    triggerEntries.some(entry => !entry.valid)
+  ) {
     runtimeGaps.push('effect-active-trigger-not-unique');
   }
   if (!triggerEvent || !SUPPORTED_FRAME_ANCHORS.has(triggerEvent.frameAnchor)) {
@@ -2580,7 +2771,9 @@ function compileSoulEffectDefinition({
   ) {
     runtimeGaps.push('effect-activation-condition-operator-unsupported');
   }
-  if (compiledCondition?.status !== 'applied') {
+  const primaryTriggerCondition =
+    triggerEntries[0]?.value?.condition ?? compiledCondition;
+  if (primaryTriggerCondition?.status !== 'applied') {
     runtimeGaps.push('effect-skill-tag-condition-operator-unsupported');
   }
   if (reachablePropertyRows.length !== 1) {
@@ -2661,45 +2854,11 @@ function compileSoulEffectDefinition({
       sourceIdentity: createElementIdentity(row),
     })),
     activationConditions,
-    trigger:
-      trigger == null
-        ? null
-        : {
-            elementId: Number(triggerTree.elementConfigId),
-            pathId: trigger.path_id,
-            eventId: Number(triggerTree.triggerParam1),
-            event: triggerEvent?.name ?? null,
-            frameAnchor: triggerEvent?.frameAnchor ?? null,
-            intervalMs: numberOrNull(triggerTree.triggerInv),
-            intervalSourceIdentity: `${createElementIdentity(trigger)}.triggerInv|${triggerContract.nonDamageRuntime?.consumer?.triggerIntervalParse?.identity ?? 'trigger-interval-contract-unresolved'}`,
-            condition: compiledCondition,
-            triggerTargetType: numberOrNull(triggerTree.triggerTargetType),
-            triggerTargetTypeSourceIdentity: `${createElementIdentity(trigger)}.triggerTargetType`,
-            triggerTarget:
-              triggerTargetBinding == null
-                ? null
-                : {
-                    kind: triggerTargetBinding.sourceKind,
-                    triggerTargetType: Number(triggerTargetBinding.value),
-                    triggerTargetTypeName: triggerTargetBinding.enumName,
-                    sourceIdentity: `${createElementIdentity(trigger)}.triggerTargetType|${triggerTargetBinding.sourceIdentity}`,
-                  },
-            target:
-              targetBinding == null
-                ? null
-                : {
-                    kind: targetBinding.targetKind,
-                    effectTargetType: Number(targetBinding.value),
-                    effectTargetTypeName: targetBinding.enumName,
-                    effectListIndex: triggerEffectRows[0].effectListIndex,
-                    targetElementPathId: Number(
-                      triggerEffectRows[0]?.effectRow?.targetElement?.m_PathID
-                    ),
-                    sourceIdentity: `${createElementIdentity(trigger)}.triggerEffectList[${triggerEffectRows[0].effectListIndex}].targetType|${targetBinding.sourceIdentity}`,
-                  },
-            targetKind: targetBinding?.targetKind ?? 'unresolved',
-            sourceIdentity: createElementIdentity(trigger),
-          },
+    trigger: triggerEntries[0]?.value ?? null,
+    triggers:
+      activeTriggers.length > 1
+        ? triggerEntries.map(entry => entry.value)
+        : [],
     effect:
       property == null
         ? null
