@@ -1,7 +1,7 @@
 {
   "schemaVersion": 25,
-    "phase": "M12-B3-E6",
-    "status": "b3-e6-implemented",
+    "phase": "M12-B3-E7",
+    "status": "b3-e7-implemented",
   "baseCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
@@ -20,7 +20,7 @@
   "acceptedC14Commit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "acceptedC15Commit": "aafb6aa6c645b7b7490fdba0f71b8941da311f6e",
   "implementationCommit": "git-self",
-  "nextStage": "b3-e6-implemented-awaiting-product-acceptance",
+  "nextStage": "b3-e7-implemented-awaiting-product-acceptance",
   "acceptedPredecessor": {
     "phase": "M12-B3-C14",
     "productionMechanicsCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
@@ -147,15 +147,15 @@
     },
     "nonDamageRuntimeEvidence": {
       "path": "scripts/optimization-qualification/evidence/soulessence-non-damage-runtime-evidence.json",
-      "bytes": 10853,
-      "sha256": "70035b60930cc755abbff484494c370abbdb306f0af05895f7479f59c050f1e6",
+      "bytes": 11917,
+      "sha256": "b70e084ba7f5edfc65f70dbb3b8aab6f8ac30888a252627f4412e2d1b9a768a1",
       "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
       "binaryBytes": 222485544,
       "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
       "il2CppDumpPath": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
       "il2CppDumpBytes": 97428254,
       "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
-      "rangeCount": 12,
+      "rangeCount": 13,
       "switchConsumer": "HeroSwitchSystem.TriggerSwitchEnter@0x1596740",
       "shieldConsumer": "ShieldElement.Execute@0x13A2040",
       "healConsumer": "DamageUtility.OnAfterHeal@0x1872130",
@@ -1012,15 +1012,15 @@
     "gameplayLogicChanged": false
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 57,
-    "runtimeUnappliedSoulEssenceCount": 5,
+    "runtimeAppliedSoulEssenceCount": 58,
+    "runtimeUnappliedSoulEssenceCount": 4,
     "runtimeAppliedSetSkillCount": 11,
     "runtimeUnappliedSetSkillCount": 1,
     "newlyAppliedSoulEssenceIds": [
-      10032
+      10169
     ],
     "newlyAppliedSetSkillIds": [],
-    "preservedRuntimeAppliedSoulEssenceCount": 56,
+    "preservedRuntimeAppliedSoulEssenceCount": 57,
     "preservedRuntimeAppliedSetSkillCount": 11,
     "remainingBlockedFourPieceSetSkillIds": [
       "set-skill:3:4"
@@ -1034,10 +1034,10 @@
       "equipment": 137,
       "setSkills": 12
     },
-  "blockingUniqueGapCount": 345,
+  "blockingUniqueGapCount": 343,
   "blockingByCategory": {
     "not-implemented": 324,
-    "evidence-insufficient": 21
+    "evidence-insufficient": 19
   },
     "formalAdmissions": {
       "characters": 0,
@@ -1048,17 +1048,17 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "6fad7809e7d280e6",
-    "rosterHash": "f231d1cb8d6463b4",
-    "manifestsHash": "7e5abd1ed1c8bb55",
-    "ledgerHash": "d6539bb4059b0935",
-    "bindingMatrixHash": "0d96b3d1020b9c6f",
-    "qualificationCatalogHash": "73bcb318f6abcc80",
-    "dynamicLoadoutEffectCensusHash": "5ad90c31db4c1203",
-    "soulEssenceEffectCatalogHash": "d7c188ce3c2347e5",
-    "soulEssenceSourceSnapshotHash": "11d83acf0e3b1e61",
+    "sourceSnapshotHash": "211b26b7365700a7",
+    "rosterHash": "8bd390b4db8b5942",
+    "manifestsHash": "7f1a6bbd6fae3722",
+    "ledgerHash": "3d420ff1c7f92d40",
+    "bindingMatrixHash": "1eb94f9330b1486e",
+    "qualificationCatalogHash": "5814f1bca01e1d81",
+    "dynamicLoadoutEffectCensusHash": "f464cb668a515e0a",
+    "soulEssenceEffectCatalogHash": "1e6b26d4e15ef77e",
+    "soulEssenceSourceSnapshotHash": "f5c9cbf8b6c53a18",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
-    "soulEssenceTriggerContractHash": "2888814887f39dc1",
+    "soulEssenceTriggerContractHash": "7b50576425fff76e",
     "verifiedMechanicsPackageHash": "20498c0f436fdcc3f0e86ebb6308ea75586d4b2379127d23ec4d971e81bb88e9",
     "verifiedMechanicsFileSha256": "b84aaca9cd3fe1384df62cbdde5db531a0339e1c6a988f3fb6c9088d7953a971",
     "machineAxisCanonicalHashes": {

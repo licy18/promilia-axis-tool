@@ -43,6 +43,12 @@
       { "field": "source", "offset": "0x18" },
       { "field": "target", "offset": "0x20" },
       { "field": "self", "offset": "0x28" }
+    ],
+    "propertyFields": [
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.AliveProperty.shieldHitValueList",
+        "declaration": "private List<ShieldData> <shieldHitValueList>k__BackingField; // 0x88"
+      }
     ]
   },
   "consumer": {
@@ -66,6 +72,12 @@
       "triggerInvokerRva": "0x18B5D50",
       "range": "0x13A21D8-0x13A22CF",
       "sha256": "35e822ad22f0c882ca6282195efa9a248b06b4617715cf8521d2eab2375aab4a"
+    },
+    "onGotShieldEmptyListGate": {
+      "identity": "Lens.Gameplay.Modules.BigWorld.ShieldElement.Execute.empty-shield-list-gate",
+      "rva": "0x13A21D8",
+      "range": "0x13A21D8-0x13A21E2",
+      "sha256": "f0ae0341736cefc7254ec8308cb36fac36ebf8faa9e2f0afe0ac8c50754d9371"
     },
     "afterHeal": {
       "identity": "Lens.Gameplay.Modules.BigWorld.DamageUtility.OnAfterHeal",
@@ -162,8 +174,17 @@
     "zeroValueDispatch": false,
     "inheritedStateDispatch": false,
     "failedOrRejectedDispatch": false,
-    "refreshReplacementSemantics": "evidence-insufficient",
-    "reason": "ShieldElement.Execute dispatches event 40 only on its successful new-shield path before SetShield. The reviewed branch does not close replacement or combine semantics for an already active shield instance."
+    "refreshReplacementSemantics": "applied",
+    "emptyShieldListGate": {
+      "consumer": "Lens.Gameplay.Modules.BigWorld.ShieldElement.Execute",
+      "rva": "0x13A21D8",
+      "field": "AliveProperty.shieldHitValueList",
+      "fieldOffset": "0x88",
+      "listSizeOffset": "0x18",
+      "range": "0x13A21D8-0x13A21E2",
+      "sha256": "f0ae0341736cefc7254ec8308cb36fac36ebf8faa9e2f0afe0ac8c50754d9371"
+    },
+    "reason": "ShieldElement.Execute dispatches event 40 only when AliveProperty.shieldHitValueList (List<ShieldData> at +0x88, native List._size at +0x18) is empty; an already active shield instance skips the dispatch and only SetShield runs, so replacement or refresh of an existing shield does not re-dispatch event 40."
   },
   "afterHeal": {
     "eventId": 44,
@@ -232,6 +253,6 @@
   "conclusion": {
     "status": "applied",
     "eventContract": "canonical-non-damage-event-transaction",
-    "sourceIdentity": "GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.GetTriggerTarget@0x13BBF50/TriggerElement.CheckCondition@0x13B58F0/AliveElementSystem.OnExecuteNormalElement.Block@0x131A545"
+    "sourceIdentity": "GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.GetTriggerTarget@0x13BBF50/TriggerElement.CheckCondition@0x13B58F0/AliveElementSystem.OnExecuteNormalElement.Block@0x131A545/ShieldElement.Execute.empty-shield-list-gate@0x13A21D8/AliveProperty.shieldHitValueList@0x88"
   }
 }

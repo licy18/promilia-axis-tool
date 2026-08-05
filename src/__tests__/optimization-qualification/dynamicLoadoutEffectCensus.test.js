@@ -310,8 +310,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 68,
-      runtimeUnappliedCount: 6,
+      runtimeAppliedCount: 69,
+      runtimeUnappliedCount: 5,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -510,7 +510,12 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     ).toMatchObject({
       eventId: 40,
       frameAnchor: 'shield-after-acquire',
-      refreshReplacementSemantics: 'evidence-insufficient',
+      refreshReplacementSemantics: 'applied',
+      emptyShieldListGate: expect.objectContaining({
+        field: 'AliveProperty.shieldHitValueList',
+        fieldOffset: '0x88',
+        listSizeOffset: '0x18',
+      }),
     });
     expect(soulCatalog.triggerContract.nonDamageRuntime).toMatchObject({
       emptyConditionEvents: expect.arrayContaining([44]),
@@ -543,7 +548,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       runtimeGaps: [],
     });
     expect(definitions.get(10169)).toMatchObject({
-      runtimeStatus: 'source-indexed-runtime-unapplied',
+      runtimeStatus: 'runtime-applied',
       mechanismFamily: 'equipped-actor-shield-acquire-team-property',
       trigger: {
         eventId: 40,
@@ -555,7 +560,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
         }),
         target: expect.objectContaining({ kind: 'team-actors' }),
       },
-      runtimeGaps: ['effect-shield-refresh-replacement-semantics-evidence-gap'],
+      runtimeGaps: [],
     });
     expect(definitions.get(10175)).toMatchObject({
       runtimeStatus: 'runtime-applied',
@@ -1381,6 +1386,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       [10076, []],
       [10198, []],
       [10032, []],
+      [10169, []],
     ]);
     const appliedDefinitions = soulCatalog.definitions.filter(
       definition =>

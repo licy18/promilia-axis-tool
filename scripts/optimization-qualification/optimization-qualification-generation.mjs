@@ -130,7 +130,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   soulEffectBeforeDamageRuntimeEvidence:
     '9a134964698a7bb6dacc25e917759b69b0ec4fb63df4863501d02c9df904d14e',
   soulEffectNonDamageRuntimeEvidence:
-    '70035b60930cc755abbff484494c370abbdb306f0af05895f7479f59c050f1e6',
+    'b70e084ba7f5edfc65f70dbb3b8aab6f8ac30888a252627f4412e2d1b9a768a1',
   landedHitRecoveryRuntimeEvidence:
     '634c979cda572f8fff1509bbf888240aebe8fad7728f357ce06390fee364a248',
   persistentLoadoutPropertyRuntimeEvidence:
@@ -807,7 +807,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-E6',
+      phase: 'M12-B3-E7',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1773,8 +1773,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-E6',
-    status: 'b3-e6-implemented',
+    phase: 'M12-B3-E7',
+    status: 'b3-e7-implemented',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2223,7 +2223,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-E6 Composite Multi-Trigger\n\n' +
+    '# M12-B3-E7 Composite Multi-Trigger\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -3141,6 +3141,9 @@ export async function readSoulEffectNonDamageRuntimeEvidenceSource({
     ...(value.dumpBindings?.triggerDataFields ?? []).map(
       record => `public EntityHandle ${record.field}; // ${record.offset}`
     ),
+    ...(value.dumpBindings?.propertyFields ?? []).map(
+      record => record.declaration
+    ),
   ];
   const observations = {
     binaryIdentity,
@@ -3244,6 +3247,22 @@ export function validateSoulEffectNonDamageRuntimeEvidence(
       'optimization-qualification-non-damage-evidence-dump-binding-drift'
     );
   }
+  const expectedPropertyFields = [
+    {
+      identity:
+        'Lens.Gameplay.Modules.BigWorld.AliveProperty.shieldHitValueList',
+      declaration:
+        'private List<ShieldData> <shieldHitValueList>k__BackingField; // 0x88',
+    },
+  ];
+  if (
+    JSON.stringify(value.dumpBindings?.propertyFields) !==
+    JSON.stringify(expectedPropertyFields)
+  ) {
+    throw new Error(
+      'optimization-qualification-non-damage-evidence-property-field-drift'
+    );
+  }
   for (const evidenceRange of Object.values(value.consumer ?? {}).filter(
     record => record?.range
   )) {
@@ -3312,7 +3331,13 @@ export function validateSoulEffectNonDamageRuntimeEvidence(
     value.onGotShield?.inheritedStateDispatch !== false ||
     value.onGotShield?.failedOrRejectedDispatch !== false ||
     value.onGotShield?.refreshReplacementSemantics !==
-      'evidence-insufficient' ||
+      'applied' ||
+    value.onGotShield?.emptyShieldListGate?.consumer !==
+      'Lens.Gameplay.Modules.BigWorld.ShieldElement.Execute' ||
+    value.onGotShield?.emptyShieldListGate?.field !==
+      'AliveProperty.shieldHitValueList' ||
+    value.onGotShield?.emptyShieldListGate?.fieldOffset !== '0x88' ||
+    value.onGotShield?.emptyShieldListGate?.listSizeOffset !== '0x18' ||
     Number(value.afterHeal?.eventId) !== 44 ||
     value.afterHeal?.frameAnchor !== 'heal-after-settlement' ||
     value.afterHeal?.zeroEffectiveChangeDispatch !== true ||

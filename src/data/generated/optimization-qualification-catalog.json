@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "f231d1cb8d6463b4",
-  "manifestsHash": "7e5abd1ed1c8bb55",
-  "gapLedgerHash": "d6539bb4059b0935",
-  "bindingMatrixHash": "0d96b3d1020b9c6f",
-  "sourceSnapshotHash": "6fad7809e7d280e6",
+  "rosterHash": "8bd390b4db8b5942",
+  "manifestsHash": "7f1a6bbd6fae3722",
+  "gapLedgerHash": "3d420ff1c7f92d40",
+  "bindingMatrixHash": "1eb94f9330b1486e",
+  "sourceSnapshotHash": "211b26b7365700a7",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -2296,7 +2296,7 @@
       "blockerCodes": [
         "set-skill-visual-acceptance-not-published"
       ],
-      "manifestHash": "6c46d33800742507"
+      "manifestHash": "8fe528bd842b0677"
     },
     {
       "objectKind": "set-skill",
@@ -2463,7 +2463,7 @@
       "blockerCodes": [
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "c7a609dcc92272a0"
+      "manifestHash": "402936e38ff21ad5"
     },
     {
       "objectKind": "soul-essence",
@@ -2799,7 +2799,7 @@
       "blockerCodes": [
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "84cc7fb075c65422"
+      "manifestHash": "48a96dadb02e2927"
     },
     {
       "objectKind": "soul-essence",
@@ -2926,14 +2926,12 @@
       "objectKind": "soul-essence",
       "objectId": "10169",
       "displayName": "软软棉花肉",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "8a50dd0c9816df41"
+      "manifestHash": "6e101c041521b8bf"
     },
     {
       "objectKind": "soul-essence",
@@ -3025,7 +3023,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "f231d1cb8d6463b4",
+    "rosterHash": "8bd390b4db8b5942",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24933,7 +24931,7 @@
       "setSkillThresholdQualifiedCount": 0,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "0d96b3d1020b9c6f"
+    "bindingMatrixHash": "1eb94f9330b1486e"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -39740,7 +39738,7 @@
             ],
             "status": "runtime-applied",
             "mechanismFamily": "equipped-actor-switch-enter-team-property",
-            "catalogDefinitionHash": "99e96672b5d47d1b",
+            "catalogDefinitionHash": "c807fc0bb13490a6",
             "sourceIdentity": "NewTable/soulessence.rows[id=10048].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10048]"
@@ -41750,7 +41748,7 @@
             ],
             "status": "runtime-applied",
             "mechanismFamily": "equipped-actor-composite-property-effects",
-            "catalogDefinitionHash": "38bf58737855c211",
+            "catalogDefinitionHash": "f9964e754bf032d0",
             "sourceIdentity": "NewTable/soulessence.rows[id=10132].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10132]"
@@ -42552,9 +42550,9 @@
                 "sourceIdentity": "NewTable/skill_level.rows[id=2897,skillId=1900750,level=4]"
               }
             ],
-            "status": "source-indexed-runtime-unapplied",
+            "status": "runtime-applied",
             "mechanismFamily": "equipped-actor-shield-acquire-team-property",
-            "catalogDefinitionHash": "0b9911ee3b7c0b0e",
+            "catalogDefinitionHash": "f375d92c699d35eb",
             "sourceIdentity": "NewTable/soulessence.rows[id=10169].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10169]"
@@ -43031,8 +43029,8 @@
       ],
       "effectStatus": {
         "status": "partially-runtime-applied",
-        "runtimeAppliedCount": 57,
-        "unresolvedCount": 5
+        "runtimeAppliedCount": 58,
+        "unresolvedCount": 4
       }
     },
     "equipment": {
@@ -44361,8 +44359,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 173,
-      "runtime-integrated": 92
+      "extracted": 172,
+      "runtime-integrated": 93
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -44372,7 +44370,7 @@
       "set-skill": 0
     },
     "optimizationReadyTotal": 0,
-    "gameplayBlockingGapCount": 345,
+    "gameplayBlockingGapCount": 343,
     "bindingQualifiedEdgeCount": 0,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44457,5 +44455,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "73bcb318f6abcc80"
+  "catalogHash": "5814f1bca01e1d81"
 }

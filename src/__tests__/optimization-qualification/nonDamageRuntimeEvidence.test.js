@@ -115,6 +115,12 @@ describe('non-damage Source/Target and Block native evidence', () => {
         value.combineSemantics.block.activeDuplicateRefreshes = true;
       },
       value => {
+        value.onGotShield.emptyShieldListGate.fieldOffset = '0x90';
+      },
+      value => {
+        value.onGotShield.refreshReplacementSemantics = 'evidence-insufficient';
+      },
+      value => {
         value.reviewedIl2CppDump.sha256 = '0'.repeat(64);
       },
     ];

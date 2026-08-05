@@ -219,6 +219,18 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     attributeId: 1,
   },
   {
+    soulEssenceId: 10169,
+    contextual: true,
+    event: 'OnGotShield',
+    frameAnchor: 'shield-after-acquire',
+    actionKind: null,
+    actionKinds: [],
+    durationMs: 20000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 229,
+  },
+  {
     soulEssenceId: 10037,
     event: 'BeforeSkill',
     frameAnchor: 'action-start',
@@ -488,8 +500,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 57,
-      unresolvedCount: 5,
+      runtimeAppliedCount: 58,
+      unresolvedCount: 4,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -1251,6 +1263,99 @@ describe('verified soul essence effect generation', () => {
           event.formulaResult.starValue.star === 2
       )
     ).toBe(true);
+  });
+
+  it('replays real 10169 shield-acquire team tuning buff once per native event', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10169
+    );
+    expect(definition).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'equipped-actor-shield-acquire-team-property',
+      trigger: {
+        event: 'OnGotShield',
+        frameAnchor: 'shield-after-acquire',
+        condition: {
+          kind: 'always',
+          status: 'applied',
+        },
+        triggerTarget: expect.objectContaining({
+          kind: 'equipped-actor-source-events',
+        }),
+        target: expect.objectContaining({ kind: 'team-actors' }),
+      },
+      effect: expect.objectContaining({
+        elementId: 19007503,
+        attributeId: 229,
+        durationMs: 20000,
+        stackMode: 'refresh',
+        maxStacks: 1,
+      }),
+      runtimeGaps: [],
+    });
+    expect(
+      soulEssenceEffectCatalog.triggerContract.nonDamageRuntime.onGotShield
+        .refreshReplacementSemantics
+    ).toBe('applied');
+
+    const actorId = 'actor-soul-10169';
+    const scenario = {
+      time: { fps: 60, durationMs: 30_000 },
+      actors: [createSoulMatrixActor({ actorId, definition })],
+      actions: [],
+    };
+    const actionExecutionPlan = { actions: [] };
+    const nonDamageEventGeneration = {
+      events: [
+        {
+          kind: 'shield-after-acquire',
+          actionId: null,
+          actorId,
+          applied: true,
+          timeMs: 500,
+          eventIdentity: 'shield-after-acquire|soul-10169|500',
+          sourceSequencePath: [0],
+          eventContext: {
+            eventIdentity: 'shield-after-acquire|soul-10169|500',
+            applied: true,
+            success: true,
+            initialState: false,
+            actionProvenanceAvailable: false,
+            sourceActionId: null,
+            sourceSequencePath: [0],
+            triggerSubjectActorId: actorId,
+            sourceActorId: actorId,
+            eventTargetActorId: actorId,
+          },
+          targetId: actorId,
+        },
+      ],
+    };
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      nonDamageEventGeneration,
+    });
+    const commands = generation.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10169
+    );
+    expect(commands).toHaveLength(1);
+    expect(commands[0]).toMatchObject({
+      targetKind: 'actor',
+      targetId: actorId,
+      effectId: 'soulessence:10169:element:19007503',
+      durationMs: 20000,
+      timeMs: 500,
+      modifiers: [
+        expect.objectContaining({
+          attributeId: 229,
+          sourceElementId: 19007503,
+          sourceRawA: 375000,
+        }),
+      ],
+    });
+    expect(generation.suppressions).toEqual([]);
+    expect(generation.unresolved).toEqual([]);
   });
 
   it.each([
