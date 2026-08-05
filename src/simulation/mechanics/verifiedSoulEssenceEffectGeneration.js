@@ -205,7 +205,13 @@ export function createVerifiedSoulEssenceEffectGeneration({
         : binding.definition.trigger
           ? [binding.definition.trigger]
           : []
-    ).filter(Boolean);
+    )
+      .filter(Boolean)
+      .sort(
+        (left, right) =>
+          Number(right.role === 'arm') - Number(left.role === 'arm')
+      );
+    const relayArmedTimes = new Map();
     for (const triggerDefinition of triggerDefinitions) {
       const frameAnchor = triggerDefinition.frameAnchor;
       const nonDamageTrigger = isNonDamageTriggerAnchor(frameAnchor);
@@ -293,7 +299,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
           };
         })
         .filter(occurrence => occurrence.conditionMatch.matched);
-      const activationMatchedOccurrences = matchedOccurrences.filter(
+      let activationMatchedOccurrences = matchedOccurrences.filter(
         occurrence =>
           matchesActivationConditions(
             binding.definition.activationConditions,
@@ -351,6 +357,44 @@ export function createVerifiedSoulEssenceEffectGeneration({
           }),
         });
         continue;
+      }
+      if (triggerDefinition.role === 'arm') {
+        if (
+          triggerDefinition.relayElementId != null &&
+          matchedOccurrences.length > 0
+        ) {
+          const relayId = Number(triggerDefinition.relayElementId);
+          for (const occurrence of matchedOccurrences) {
+            const occurrenceTimeMs = Number(occurrence.timeMs);
+            const existingTimeMs = relayArmedTimes.get(relayId);
+            relayArmedTimes.set(
+              relayId,
+              existingTimeMs == null
+                ? occurrenceTimeMs
+                : Math.min(existingTimeMs, occurrenceTimeMs)
+            );
+          }
+        }
+        continue;
+      }
+      if (triggerDefinition.requiresRelayArmed === true) {
+        const relayId = Number(triggerDefinition.elementId);
+        const armedTimeMs = relayArmedTimes.get(relayId);
+        const eligibleOccurrences = activationMatchedOccurrences.filter(
+          occurrence =>
+            armedTimeMs != null && Number(occurrence.timeMs) >= armedTimeMs
+        );
+        if (eligibleOccurrences.length === 0) {
+          suppressions.push({
+            actionId: action?.id ?? null,
+            actorId: binding.actor.id,
+            ...createBindingDiagnosticIdentity(binding),
+            reason: 'soulessence-effect-relay-not-armed',
+            triggerElementId: relayId,
+          });
+          continue;
+        }
+        activationMatchedOccurrences = eligibleOccurrences;
       }
       const leafEffects =
         binding.propertyLeafEffects ??

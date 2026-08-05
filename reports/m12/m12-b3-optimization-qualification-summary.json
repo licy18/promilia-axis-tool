@@ -1,6 +1,6 @@
 {
-  "phase": "M12-B3-E9",
-  "status": "b3-e9-implemented",
+  "phase": "M12-B3-E10",
+  "status": "b3-e10-implemented",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -10,14 +10,14 @@
     "setSkills": 12
   },
   "sourceSnapshotHash": "d7f77da35e3a80b0",
-  "rosterHash": "1f9c06743f46f558",
-  "manifestsHash": "2c5cd101e79ae7a0",
-  "ledgerHash": "9380b3a997a1b251",
-  "bindingMatrixHash": "2b1d1dcc746ba7fb",
-  "catalogHash": "414ca805c524a316",
+  "rosterHash": "362c5c52e0bfb00b",
+  "manifestsHash": "50d13f85a54475b3",
+  "ledgerHash": "51d0339daafb26c8",
+  "bindingMatrixHash": "2af6ebbc4f9dc816",
+  "catalogHash": "17f3eb5d760cb1a7",
   "maturityCounts": {
-    "extracted": 170,
-    "runtime-integrated": 95
+    "extracted": 169,
+    "runtime-integrated": 96
   },
   "optimizationReadyCounts": {
     "character": 0,
@@ -27,10 +27,10 @@
     "set-skill": 0
   },
   "gapCounts": {
-    "blockingUniqueGapCount": 339,
+    "blockingUniqueGapCount": 337,
     "byCategory": {
       "evidence-insufficient": 17,
-      "not-implemented": 322
+      "not-implemented": 320
     },
     "byCode": {
       "actor-static-profile-missing": 1,
@@ -43,17 +43,17 @@
       "level-breakthrough-skill-unlock-source-mismatch": 1,
       "set-skill-dynamic-unapplied": 1,
       "set-skill-visual-acceptance-not-published": 12,
-      "soulessence-effect-skill-dynamic-unapplied": 2,
+      "soulessence-effect-skill-dynamic-unapplied": 1,
       "soulessence-visual-acceptance-not-published": 62,
       "strict-character-cultivation-runtime-partial": 11,
-      "strict-soulessence-cultivation-runtime-partial": 2
+      "strict-soulessence-cultivation-runtime-partial": 1
     },
     "byObjectKind": {
       "character": 33,
       "equipment": 137,
       "kibo": 90,
       "set-skill": 13,
-      "soul-essence": 66
+      "soul-essence": 64
     }
   },
   "m12cLocked": true

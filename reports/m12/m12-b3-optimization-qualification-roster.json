@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "phase": "M12-B3-E9",
+  "phase": "M12-B3-E10",
   "sourceSnapshot": {
     "files": {
       "characters": {
@@ -5535,6 +5535,9 @@
           "leafPathIds": [
             7615727136823255000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19004801,
           "pathId": -4992960068897353000,
           "eventId": 6,
@@ -5762,6 +5765,9 @@
           "leafPathIds": [
             -131968735896823040
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19006100,
           "pathId": 4614392219156132000,
           "eventId": 5,
@@ -5989,6 +5995,9 @@
           "leafPathIds": [
             7565174917272651000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19001201,
           "pathId": -7480298753715348000,
           "eventId": 2,
@@ -6092,6 +6101,9 @@
             "leafPathIds": [
               7565174917272651000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19001201,
             "pathId": -7480298753715348000,
             "eventId": 2,
@@ -6194,6 +6206,9 @@
             "leafPathIds": [
               7565174917272651000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19001205,
             "pathId": 7018481759493248000,
             "eventId": 2,
@@ -6436,7 +6451,7 @@
       "maximumRank": 6,
       "staticProfileApplied": true,
       "effectSkillId": 1900530,
-      "effectStatus": "source-indexed-runtime-unapplied",
+      "effectStatus": "runtime-applied",
       "sourceIdentity": "NewTable/soulessence.rows[id=10011]",
       "sourceEffectStatus": "effect-skill-dynamic-unapplied",
       "effectMechanics": {
@@ -6447,14 +6462,17 @@
           "skillLogicType": 6,
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900530]"
         },
-        "runtimeStatus": "source-indexed-runtime-unapplied",
-        "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+        "runtimeStatus": "runtime-applied",
+        "mechanismFamily": "equipped-actor-critical-damage-relay-property",
         "activationPrerequisites": [],
         "activationConditions": [],
         "trigger": {
           "leafPathIds": [
-            -1219091418453908700
+            706811026081145600
           ],
+          "role": "arm",
+          "relayElementId": 19005302,
+          "requiresRelayArmed": false,
           "elementId": 19005301,
           "pathId": -569579431889589300,
           "eventId": 5,
@@ -6529,8 +6547,11 @@
         "triggers": [
           {
             "leafPathIds": [
-              -1219091418453908700
+              706811026081145600
             ],
+            "role": "arm",
+            "relayElementId": 19005302,
+            "requiresRelayArmed": false,
             "elementId": 19005301,
             "pathId": -569579431889589300,
             "eventId": 5,
@@ -6606,6 +6627,9 @@
             "leafPathIds": [
               -1219091418453908700
             ],
+            "role": "application",
+            "relayElementId": 19005302,
+            "requiresRelayArmed": true,
             "elementId": 19005302,
             "pathId": 706811026081145600,
             "eventId": 25,
@@ -6758,7 +6782,6 @@
           ],
           "wrapperElementIds": [],
           "effectPathElementIds": [
-            19005302,
             19005303
           ],
           "removalPaths": [
@@ -6779,10 +6802,8 @@
           "damageElementIds": [],
           "activationPrerequisiteElementIds": []
         },
-        "runtimeGaps": [
-          "effect-wrapper-lifecycle-not-unique"
-        ],
-        "sourceIdentity": "NewTable/soulessence.rows[id=10011].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900530.asset/MonoBehaviour/skill_control_1900530__7646815027927349175.json|battle-element-assets.jsonl#path_id=-569579431889589300;elementId=19005301|battle-element-assets.jsonl#path_id=-1219091418453908700;elementId=19005303"
+        "runtimeGaps": [],
+        "sourceIdentity": "NewTable/soulessence.rows[id=10011].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900530.asset/MonoBehaviour/skill_control_1900530__7646815027927349175.json|battle-element-assets.jsonl#path_id=706811026081145600;elementId=19005302|battle-element-assets.jsonl#path_id=-1219091418453908700;elementId=19005303"
       }
     },
     {
@@ -6839,6 +6860,9 @@
           "leafPathIds": [
             -8968084659041655000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19004002,
           "pathId": 6735504116185173000,
           "eventId": 1,
@@ -7070,6 +7094,9 @@
           "leafPathIds": [
             -6568649023911365000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19003401,
           "pathId": -4873163209865115000,
           "eventId": 6,
@@ -7851,6 +7878,9 @@
           "leafPathIds": [
             6108188296881701000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19004500,
           "pathId": -5806624494324189000,
           "eventId": 5,
@@ -8078,6 +8108,9 @@
           "leafPathIds": [
             -4023729244501754000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19003301,
           "pathId": -2023989584562330600,
           "eventId": 9,
@@ -8315,6 +8348,9 @@
           "leafPathIds": [
             1889171037961678300
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19005500,
           "pathId": -4330459562266431000,
           "eventId": 1,
@@ -8837,6 +8873,9 @@
           "leafPathIds": [
             -5655228325641076000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19009201,
           "pathId": -6515773177271123000,
           "eventId": 34,
@@ -9295,6 +9334,9 @@
           "leafPathIds": [
             4769837230415874000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19009101,
           "pathId": -7255963679965377000,
           "eventId": 10,
@@ -9643,6 +9685,9 @@
           "leafPathIds": [
             -2274249246834308600
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19009301,
           "pathId": 6322365379307683000,
           "eventId": 6,
@@ -10909,6 +10954,9 @@
           "leafPathIds": [
             -2685633708192990000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19009001,
           "pathId": 3763334915368993000,
           "eventId": 6,
@@ -11650,6 +11698,9 @@
           "leafPathIds": [
             654594980681767700
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19008801,
           "pathId": 8121214350672122000,
           "eventId": 32,
@@ -11701,6 +11752,9 @@
             "leafPathIds": [
               654594980681767700
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19008801,
             "pathId": 8121214350672122000,
             "eventId": 32,
@@ -11859,6 +11913,9 @@
           "leafPathIds": [
             -7924391024652865000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19006501,
           "pathId": -7589891308127638000,
           "eventId": 1,
@@ -11950,6 +12007,9 @@
             "leafPathIds": [
               -7924391024652865000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19006501,
             "pathId": -7589891308127638000,
             "eventId": 1,
@@ -12040,6 +12100,9 @@
             "leafPathIds": [
               -7924391024652865000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19006505,
             "pathId": 4358135260256566000,
             "eventId": 1,
@@ -12287,6 +12350,9 @@
           "leafPathIds": [
             7028756448168345000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19001907,
           "pathId": 1378104299211557000,
           "eventId": 2,
@@ -12378,6 +12444,9 @@
             "leafPathIds": [
               7028756448168345000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19001907,
             "pathId": 1378104299211557000,
             "eventId": 2,
@@ -12469,6 +12538,9 @@
               6159851672715162000,
               7028756448168345000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19001901,
             "pathId": 4354886660003561000,
             "eventId": 2,
@@ -13688,6 +13760,9 @@
           "leafPathIds": [
             475903754845527040
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19002301,
           "pathId": -4157799704864835600,
           "eventId": 6,
@@ -13930,6 +14005,9 @@
           "leafPathIds": [
             8461738275188953000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19006601,
           "pathId": 1967620083657371400,
           "eventId": 6,
@@ -14157,9 +14235,11 @@
         "activationConditions": [],
         "trigger": {
           "leafPathIds": [
-            -3451754637210168300,
-            7036297722921961000
+            1260336059307292200
           ],
+          "role": "arm",
+          "relayElementId": 19003202,
+          "requiresRelayArmed": false,
           "elementId": 19003201,
           "pathId": -8698995960148588000,
           "eventId": 9,
@@ -14228,9 +14308,11 @@
         "triggers": [
           {
             "leafPathIds": [
-              -3451754637210168300,
-              7036297722921961000
+              1260336059307292200
             ],
+            "role": "arm",
+            "relayElementId": 19003202,
+            "requiresRelayArmed": false,
             "elementId": 19003201,
             "pathId": -8698995960148588000,
             "eventId": 9,
@@ -14301,6 +14383,9 @@
               -3451754637210168300,
               7036297722921961000
             ],
+            "role": "application",
+            "relayElementId": 19003202,
+            "requiresRelayArmed": true,
             "elementId": 19003202,
             "pathId": 1260336059307292200,
             "eventId": 10,
@@ -14698,6 +14783,9 @@
           "leafPathIds": [
             -6749174475042234000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19004700,
           "pathId": 4922202484723645000,
           "eventId": 5,
@@ -14925,6 +15013,9 @@
           "leafPathIds": [
             -5650259386971768000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19006701,
           "pathId": 4493671040636124000,
           "eventId": 2,
@@ -15154,6 +15245,9 @@
           "leafPathIds": [
             447782200906035000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19002001,
           "pathId": -5029048619406844000,
           "eventId": 2,
@@ -15357,6 +15451,9 @@
             -4920865215663824000,
             616368813777100300
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19003501,
           "pathId": 1736025164143914200,
           "eventId": 6,
@@ -15442,6 +15539,9 @@
               -4920865215663824000,
               616368813777100300
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19003501,
             "pathId": 1736025164143914200,
             "eventId": 6,
@@ -15682,6 +15782,9 @@
           "leafPathIds": [
             -3951307457830891000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19005807,
           "pathId": -6053806038821734000,
           "eventId": 5,
@@ -15758,6 +15861,9 @@
             "leafPathIds": [
               -3951307457830891000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19005807,
             "pathId": -6053806038821734000,
             "eventId": 5,
@@ -15833,6 +15939,9 @@
             "leafPathIds": [
               617870747599547100
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19005803,
             "pathId": -4302027442297452000,
             "eventId": 5,
@@ -15908,6 +16017,9 @@
             "leafPathIds": [
               -8623271278801233000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19005805,
             "pathId": -815251239453341200,
             "eventId": 5,
@@ -15983,6 +16095,9 @@
             "leafPathIds": [
               929843409631741000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19005801,
             "pathId": 966636484284346600,
             "eventId": 5,
@@ -16595,6 +16710,9 @@
           "leafPathIds": [
             4466764196042693000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19005707,
           "pathId": 4664023450211686000,
           "eventId": 6,
@@ -16703,6 +16821,9 @@
             "leafPathIds": [
               4466764196042693000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19005707,
             "pathId": 4664023450211686000,
             "eventId": 6,
@@ -16810,6 +16931,9 @@
             "leafPathIds": [
               -2799837647923611000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19005700,
             "pathId": 6110915074095077000,
             "eventId": 1,
@@ -16922,6 +17046,9 @@
             "leafPathIds": [
               4466764196042693000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19005706,
             "pathId": 6589208604639745000,
             "eventId": 6,
@@ -17336,6 +17463,9 @@
           "leafPathIds": [
             8480096044321114000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19005900,
           "pathId": -7832567119319180000,
           "eventId": 1,
@@ -17575,6 +17705,9 @@
           "leafPathIds": [
             -4751821042418617000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19004101,
           "pathId": -2700117266412374500,
           "eventId": 5,
@@ -17829,6 +17962,9 @@
           "leafPathIds": [
             -3194128450977334000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19005401,
           "pathId": -8058605269236214000,
           "eventId": 5,
@@ -18056,6 +18192,9 @@
           "leafPathIds": [
             7184896566896581000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19002801,
           "pathId": -908628671126506600,
           "eventId": 1,
@@ -18295,6 +18434,9 @@
           "leafPathIds": [
             8731924757452644000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19002701,
           "pathId": 1890390088406099200,
           "eventId": 2,
@@ -18560,6 +18702,9 @@
             -1521385363814632700,
             6337378764466493000
           ],
+          "role": "application",
+          "relayElementId": 19004302,
+          "requiresRelayArmed": true,
           "elementId": 19004302,
           "pathId": -7245115188157259000,
           "eventId": 1,
@@ -18620,6 +18765,9 @@
               -1521385363814632700,
               6337378764466493000
             ],
+            "role": "application",
+            "relayElementId": 19004302,
+            "requiresRelayArmed": true,
             "elementId": 19004302,
             "pathId": -7245115188157259000,
             "eventId": 1,
@@ -18676,9 +18824,11 @@
           },
           {
             "leafPathIds": [
-              -1521385363814632700,
-              6337378764466493000
+              -7245115188157259000
             ],
+            "role": "arm",
+            "relayElementId": 19004302,
+            "requiresRelayArmed": false,
             "elementId": 19004301,
             "pathId": 3767032036209538000,
             "eventId": 44,
@@ -19395,6 +19545,9 @@
           "leafPathIds": [
             -5684518322628377000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19002101,
           "pathId": 7447841024087717000,
           "eventId": 2,
@@ -19796,6 +19949,9 @@
           "leafPathIds": [
             17992665022024710
           ],
+          "role": "application",
+          "relayElementId": 19004202,
+          "requiresRelayArmed": true,
           "elementId": 19004202,
           "pathId": -4639353932355848000,
           "eventId": 1,
@@ -19872,6 +20028,9 @@
             "leafPathIds": [
               17992665022024710
             ],
+            "role": "application",
+            "relayElementId": 19004202,
+            "requiresRelayArmed": true,
             "elementId": 19004202,
             "pathId": -4639353932355848000,
             "eventId": 1,
@@ -19945,8 +20104,11 @@
           },
           {
             "leafPathIds": [
-              17992665022024710
+              -4639353932355848000
             ],
+            "role": "arm",
+            "relayElementId": 19004202,
+            "requiresRelayArmed": false,
             "elementId": 19004201,
             "pathId": 9151991891478690000,
             "eventId": 2,
@@ -20214,6 +20376,9 @@
           "leafPathIds": [
             -6475704673365761000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19001101,
           "pathId": -246520716839985300,
           "eventId": 5,
@@ -20459,6 +20624,9 @@
           "leafPathIds": [
             6856932050092692000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19002201,
           "pathId": 2849866293729341000,
           "eventId": 10,
@@ -20696,6 +20864,9 @@
           "leafPathIds": [
             6687059805823089000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19005600,
           "pathId": 4249731622778222600,
           "eventId": 1,
@@ -20964,6 +21135,9 @@
           "leafPathIds": [
             3837107787407859700
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19001301,
           "pathId": 756477731831644700,
           "eventId": 5,
@@ -21519,6 +21693,9 @@
           "leafPathIds": [
             2209371490931731500
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19002401,
           "pathId": -6345955383762432000,
           "eventId": 6,
@@ -21746,6 +21923,9 @@
           "leafPathIds": [
             6931937794752071000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19002501,
           "pathId": 7681111361882010000,
           "eventId": 6,
@@ -22229,6 +22409,9 @@
           "leafPathIds": [
             -7968102161953321000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19007500,
           "pathId": -7210722185016667000,
           "eventId": 40,
@@ -22432,6 +22615,9 @@
             -1316209878453022700,
             4411393089753127400
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19007400,
           "pathId": 1288282584316539400,
           "eventId": 10,
@@ -22527,6 +22713,9 @@
               -1316209878453022700,
               4411393089753127400
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007400,
             "pathId": 1288282584316539400,
             "eventId": 10,
@@ -22939,6 +23128,9 @@
           "leafPathIds": [
             8237672842561680000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19001401,
           "pathId": -5225606672832072000,
           "eventId": 44,
@@ -23166,6 +23358,9 @@
           "leafPathIds": [
             -398033826930552400
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19001501,
           "pathId": -100069638428322610,
           "eventId": 44,
@@ -23393,6 +23588,9 @@
           "leafPathIds": [
             8699597337981486000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19007914,
           "pathId": -6906323084063795000,
           "eventId": 9,
@@ -23493,6 +23691,9 @@
             "leafPathIds": [
               8699597337981486000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007914,
             "pathId": -6906323084063795000,
             "eventId": 9,
@@ -23592,6 +23793,9 @@
             "leafPathIds": [
               -8064628129931879000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007916,
             "pathId": -5617070855499878000,
             "eventId": 9,
@@ -23691,6 +23895,9 @@
             "leafPathIds": [
               5178487711844678000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007912,
             "pathId": -4512194375934567400,
             "eventId": 9,
@@ -23790,6 +23997,9 @@
             "leafPathIds": [
               1170390787759001600
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007900,
             "pathId": -4480017141699600000,
             "eventId": 9,
@@ -23889,6 +24099,9 @@
             "leafPathIds": [
               2556688659965768000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007910,
             "pathId": -1389840892469013800,
             "eventId": 9,
@@ -23988,6 +24201,9 @@
             "leafPathIds": [
               -5829978218984574000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007918,
             "pathId": 152420113643601020,
             "eventId": 9,
@@ -24087,6 +24303,9 @@
             "leafPathIds": [
               -3681341915283005400
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007906,
             "pathId": 456708501478121300,
             "eventId": 9,
@@ -24186,6 +24405,9 @@
             "leafPathIds": [
               -4746318165591798000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007908,
             "pathId": 1788098511552996600,
             "eventId": 9,
@@ -24285,6 +24507,9 @@
             "leafPathIds": [
               -3236886696819669000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007904,
             "pathId": 9148244080893451000,
             "eventId": 9,
@@ -25662,6 +25887,9 @@
           "leafPathIds": [
             -5972416317449343000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19007601,
           "pathId": -8856206549049605000,
           "eventId": 6,
@@ -25759,6 +25987,9 @@
             "leafPathIds": [
               -5972416317449343000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007601,
             "pathId": -8856206549049605000,
             "eventId": 6,
@@ -25855,6 +26086,9 @@
             "leafPathIds": [
               -5972416317449343000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007606,
             "pathId": 8057366732446265000,
             "eventId": 6,
@@ -26089,6 +26323,9 @@
           "leafPathIds": [
             2616925179382354000
           ],
+          "role": "application",
+          "relayElementId": null,
+          "requiresRelayArmed": false,
           "elementId": 19007801,
           "pathId": -9208882666704061000,
           "eventId": 5,
@@ -26161,6 +26398,9 @@
             "leafPathIds": [
               2616925179382354000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007801,
             "pathId": -9208882666704061000,
             "eventId": 5,
@@ -29057,5 +29297,5 @@
       ]
     }
   },
-  "rosterHash": "1f9c06743f46f558"
+  "rosterHash": "362c5c52e0bfb00b"
 }

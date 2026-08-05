@@ -231,6 +231,18 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     attributeId: 229,
   },
   {
+    soulEssenceId: 10011,
+    contextual: true,
+    event: 'BeforeSkill',
+    frameAnchor: 'action-start',
+    actionKind: 'normal-attack',
+    actionKinds: ['normal-attack'],
+    durationMs: 24000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 52,
+  },
+  {
     soulEssenceId: 10037,
     event: 'BeforeSkill',
     frameAnchor: 'action-start',
@@ -500,8 +512,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 60,
-      unresolvedCount: 2,
+      runtimeAppliedCount: 61,
+      unresolvedCount: 1,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -1485,6 +1497,104 @@ describe('verified soul essence effect generation', () => {
         .filter(event => event.effect.elementId === 19008802)
         .every(event => event.value === 700)
     ).toBe(true);
+  });
+
+  it('replays real 10011 normal-attack armed critical relay property buff', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10011
+    );
+    expect(definition).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'equipped-actor-critical-damage-relay-property',
+      triggers: expect.arrayContaining([
+        expect.objectContaining({
+          event: 'BeforeSkill',
+          role: 'arm',
+          relayElementId: 19005302,
+          requiresRelayArmed: false,
+        }),
+        expect.objectContaining({
+          event: 'BeforeCriticalDamage',
+          role: 'application',
+          requiresRelayArmed: true,
+        }),
+      ]),
+      effect: expect.objectContaining({
+        elementId: 19005303,
+        attributeId: 52,
+        durationMs: 24000,
+        stackMode: 'refresh',
+        maxStacks: 1,
+      }),
+      runtimeGaps: [],
+    });
+
+    const armed = createRealSoulScenario({
+      actorCharacterId: 101007,
+      soulEssenceId: 10011,
+      effectSkillId: 1900530,
+      durationMs: 12_000,
+      combatScenario: { critical: { policy: 'critical' } },
+      actionPlan: [
+        {
+          id: 'soul-10011-normal-crit',
+          actionKind: 'normal-attack',
+          startFrame: 60,
+        },
+      ],
+    });
+    const armedGeneration =
+      armed.verifiedSoulEssenceEffectGeneration;
+    const armedCommands = armedGeneration.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10011
+    );
+    expect(armedCommands.length).toBeGreaterThan(0);
+    expect(
+      armedCommands.every(
+        command =>
+          command.effectId === 'soulessence:10011:element:19005303' &&
+          command.targetKind === 'actor' &&
+          command.targetId === 'actor-101007' &&
+          command.modifiers[0].attributeId === 52 &&
+          command.modifiers[0].sourceElementId === 19005303 &&
+          command.modifiers[0].sourceRawA === 1220
+      )
+    ).toBe(true);
+    expect(
+      armedGeneration.suppressions.some(
+        suppression =>
+          suppression.reason === 'soulessence-effect-relay-not-armed'
+      )
+    ).toBe(false);
+
+    const unarmed = createRealSoulScenario({
+      actorCharacterId: 101007,
+      soulEssenceId: 10011,
+      effectSkillId: 1900530,
+      durationMs: 12_000,
+      combatScenario: { critical: { policy: 'critical' } },
+      actionPlan: [
+        {
+          id: 'soul-10011-charged-crit-without-arm',
+          actionKind: 'charged-attack',
+          startFrame: 60,
+        },
+      ],
+    });
+    const unarmedGeneration =
+      unarmed.verifiedSoulEssenceEffectGeneration;
+    expect(
+      unarmedGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10011
+      )
+    ).toEqual([]);
+    expect(
+      unarmedGeneration.suppressions
+        .filter(suppression => suppression.soulEssenceId === 10011)
+        .map(suppression => suppression.reason)
+    ).toEqual(
+      expect.arrayContaining(['soulessence-effect-relay-not-armed'])
+    );
   });
 
   it.each([
@@ -5711,21 +5821,154 @@ describe('verified soul essence effect generation', () => {
   });
 
   it('replays real 10146 multi-trigger charged buff through canonical settlement', () => {
-    const result = createRealSoulScenario({
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10146
+    );
+    expect(definition).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      triggers: expect.arrayContaining([
+        expect.objectContaining({
+          event: 'AfterDamage',
+          role: 'arm',
+          relayElementId: 19004202,
+          requiresRelayArmed: false,
+        }),
+        expect.objectContaining({
+          event: 'BeforeDamage',
+          role: 'application',
+          requiresRelayArmed: true,
+        }),
+      ]),
+      runtimeGaps: [],
+    });
+
+    const unarmed = createRealSoulScenario({
       soulEssenceId: 10146,
       effectSkillId: 1900420,
       actionPlan: [
-        { id: 'e3a-10146-charged', actionKind: 'charged-attack', startFrame: 60 },
+        {
+          id: 'e10-10146-charged-unarmed',
+          actionKind: 'charged-attack',
+          startFrame: 60,
+        },
       ],
     });
-    const commands = result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+    expect(
+      unarmed.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10146
+      )
+    ).toEqual([]);
+    expect(
+      unarmed.verifiedSoulEssenceEffectGeneration.suppressions
+        .filter(suppression => suppression.soulEssenceId === 10146)
+        .map(suppression => suppression.reason)
+    ).toEqual(
+      expect.arrayContaining(['soulessence-effect-relay-not-armed'])
+    );
+
+    const actorId = 'actor-101007';
+    const armAction = {
+      ...createRealSoulActionDraft({
+        id: 'e10-10146-arm',
+        actionKind: 'charged-attack',
+        startFrame: 0,
+        actorCharacterId: 101007,
+      }),
+      actorId,
+    };
+    const chargedAction = {
+      ...createRealSoulActionDraft({
+        id: 'e10-10146-charged',
+        actionKind: 'charged-attack',
+        startFrame: 600,
+        actorCharacterId: 101007,
+      }),
+      actorId,
+    };
+    const resolution = resolveVerifiedCombatActionMechanics(chargedAction);
+    const scenario = {
+      time: { fps: 60, durationMs: 12_000 },
+      actors: [
+        createSoulMatrixActor({ actorId, definition }),
+        { id: 'actor-101003', characterId: 101003, name: 'third-actor' },
+        { id: 'actor-101010', characterId: 101010, name: 'third-actor' },
+      ],
+      actions: [armAction, chargedAction],
+    };
+    const actionExecutionPlan = {
+      actions: [
+        { actionId: armAction.id, execute: true },
+        { actionId: chargedAction.id, execute: true },
+      ],
+    };
+    const actionResolutionById = new Map([
+      [armAction.id, resolution],
+      [chargedAction.id, resolution],
+    ]);
+    const damageEventGeneration = {
+      events: [
+        {
+          kind: 'hit-after-damage',
+          actionId: armAction.id,
+          actorId,
+          applied: true,
+          timeMs: 100,
+          hit: { hitIndex: 1 },
+          sourceSequencePath: [0],
+          eventContext: {
+            eventIdentity: 'synthetic:10146:after:599',
+            applied: true,
+            success: true,
+            landed: true,
+            targetElementIds: [599],
+            sourceSequencePath: [0],
+            actionProvenanceAvailable: true,
+          },
+        },
+        {
+          kind: 'hit-before-damage',
+          actionId: chargedAction.id,
+          actorId,
+          applied: true,
+          timeMs: 200,
+          hit: { hitIndex: 1 },
+          sourceSequencePath: [1],
+          eventContext: {
+            eventIdentity: 'synthetic:10146:before:charged',
+            applied: true,
+            success: true,
+            landed: true,
+            sourceSequencePath: [1],
+            actionProvenanceAvailable: true,
+          },
+        },
+      ],
+    };
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      actionResolutionById,
+      damageEventGeneration,
+    });
+    const commands = generation.effectCommands.filter(
       command => command.sourceSoulEssenceId === 10146
     );
     expect(commands.length).toBeGreaterThan(0);
-    expect(commands[0].modifiers[0]).toMatchObject({
-      attributeId: 1,
-      propertyTagMatchMode: 'unscoped',
-    });
+    expect(
+      commands.every(
+        command =>
+          command.sourceActionId === chargedAction.id &&
+          command.modifiers[0].attributeId === 1 &&
+          command.modifiers[0].propertyTagMatchMode === 'unscoped'
+      )
+    ).toBe(true);
+    expect(
+      generation.suppressions.some(
+        suppression =>
+          suppression.soulEssenceId === 10146 &&
+          suppression.reason === 'soulessence-effect-relay-not-armed'
+      )
+    ).toBe(false);
   });
 
   it('replays real 10071 charged buff gated by mark 250 layers above one', () => {
@@ -5848,15 +6091,7 @@ describe('verified soul essence effect generation', () => {
     }
   });
 
-  it('replays real 10132 unconditional before-damage leaves through canonical settlement', () => {
-    const result = createRealSoulScenario({
-      soulEssenceId: 10132,
-      effectSkillId: 1900430,
-      actionPlan: [
-        { id: 'e3c-10132-charged', actionKind: 'charged-attack', startFrame: 60 },
-      ],
-    });
-    const generation = result.verifiedSoulEssenceEffectGeneration;
+  it('replays real 10132 heal-armed before-damage relay leaves through canonical settlement', () => {
     const definition = soulEssenceEffectCatalog.definitions.find(
       entry => entry.soulEssenceId === 10132
     );
@@ -5867,13 +6102,150 @@ describe('verified soul essence effect generation', () => {
         trigger => trigger.condition.kind === 'always'
       )
     ).toBe(true);
+    const sourceActorId = 'actor-101007';
+    const healAction = {
+      ...createRealSoulActionDraft({
+        id: 'e10-10132-heal',
+        actionKind: 'ultimate',
+        startFrame: 0,
+        actorCharacterId: 101007,
+      }),
+      actorId: sourceActorId,
+      sourceSequenceIndex: 0,
+      sourceSequencePath: [0],
+    };
+    const chargedAction = {
+      ...createRealSoulActionDraft({
+        id: 'e10-10132-charged',
+        actionKind: 'charged-attack',
+        startFrame: 600,
+        actorCharacterId: 101007,
+      }),
+      actorId: sourceActorId,
+    };
+    const healResolution = {
+      ...resolveVerifiedCombatActionMechanics(healAction),
+      hits: [],
+    };
+    const scenario = {
+      time: { fps: 60, durationMs: 12_000 },
+      actors: [
+        createSoulMatrixActor({ actorId: sourceActorId, definition }),
+        { id: 'actor-101003', characterId: 101003, name: 'heal-target' },
+        { id: 'actor-101010', characterId: 101010, name: 'third-actor' },
+      ],
+      actions: [healAction, chargedAction],
+    };
+    const actionExecutionPlan = {
+      actions: [
+        { actionId: healAction.id, execute: true },
+        { actionId: chargedAction.id, execute: true },
+      ],
+    };
+    const actionResolutionById = new Map([
+      [healAction.id, healResolution],
+      [chargedAction.id, resolveVerifiedCombatActionMechanics(chargedAction)],
+    ]);
+    const healTimeMs = frameToMs(300);
+    const nonDamageEventGeneration = createVerifiedNonDamageEventGeneration({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline: { transitions: [] },
+      actionResolutionById,
+      verifiedCombatRuntime: {
+        vitalEvents: [
+          {
+            type: 'VERIFIED_DIRECT_HEAL',
+            timeMs: healTimeMs,
+            absoluteFrame: 300,
+            actionId: healAction.id,
+            actorId: sourceActorId,
+            targetId: 'actor-101003',
+            runtimeSequenceIndex: 0,
+            payload: {
+              sourceEventIdentity: 'e10-native-heal',
+              sourceActorId,
+              targetKind: 'actor',
+              beforeValue: 1000,
+              requestedChange: 100,
+              change: 100,
+              afterValue: 1100,
+              maxValue: 1000,
+              applied: true,
+              appliedToCalculators: true,
+              afterHealDispatchEligible: true,
+              actionProvenanceAvailable: false,
+              sourceAttributionStatus: 'source-attributed',
+              contributingSources: [],
+              reason: 'verified-direct-heal',
+            },
+          },
+        ],
+      },
+    });
+    const damageEventGeneration = createVerifiedDamageEventGeneration({
+      scenario,
+      actionExecutionPlan,
+      actionResolutionById,
+    });
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      actionResolutionById,
+      damageEventGeneration,
+      nonDamageEventGeneration,
+    });
+    const commands = generation.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10132
+    );
+    expect(commands.length).toBeGreaterThan(0);
+    expect(
+      commands.every(command => command.sourceActionId === chargedAction.id)
+    ).toBe(true);
     expect(
       generation.suppressions.some(
         suppression =>
-          suppression.reason === 'soulessence-effect-trigger-condition-missing'
+          suppression.soulEssenceId === 10132 &&
+          suppression.reason === 'soulessence-effect-relay-not-armed'
       )
     ).toBe(false);
-    expect(generation.unresolved).toEqual([]);
+
+    const unarmedScenario = {
+      ...scenario,
+      actions: [chargedAction],
+    };
+    const unarmedPlan = {
+      actions: [{ actionId: chargedAction.id, execute: true }],
+    };
+    const unarmed = createVerifiedSoulEssenceEffectGeneration({
+      scenario: unarmedScenario,
+      actionExecutionPlan: unarmedPlan,
+      actionResolutionById: new Map([
+        [chargedAction.id, resolveVerifiedCombatActionMechanics(chargedAction)],
+      ]),
+      damageEventGeneration: createVerifiedDamageEventGeneration({
+        scenario: unarmedScenario,
+        actionExecutionPlan: unarmedPlan,
+        actionResolutionById: new Map([
+          [
+            chargedAction.id,
+            resolveVerifiedCombatActionMechanics(chargedAction),
+          ],
+        ]),
+      }),
+    });
+    expect(
+      unarmed.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10132
+      )
+    ).toEqual([]);
+    expect(
+      unarmed.suppressions
+        .filter(suppression => suppression.soulEssenceId === 10132)
+        .map(suppression => suppression.reason)
+    ).toEqual(
+      expect.arrayContaining(['soulessence-effect-relay-not-armed'])
+    );
   });
 
   it.each([

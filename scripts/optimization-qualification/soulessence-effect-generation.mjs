@@ -2424,6 +2424,8 @@ function buildSoulTriggerEntry({
   knownElementTypes = null,
   effectRowCandidates = null,
   requiresLeaf = true,
+  role = 'application',
+  relayElementId = null,
 }) {
   const tree = triggerRow?.typetree ?? {};
   const eventBinding = triggerContract.eventBindings.find(
@@ -2527,12 +2529,17 @@ function buildSoulTriggerEntry({
     rowTargetBindings.length > 0 &&
     rowTargetBindings.every(binding => binding != null) &&
     (!requiresLeaf || reachableEffectRows.length > 0);
-  const valid = baseValid && sharedLeaf;
+  const valid =
+    role === 'arm' ? baseValid : baseValid && sharedLeaf;
   return {
     valid,
     baseValid,
     value: {
       leafPathIds: reachableEffectRows.map(row => Number(row.path_id)),
+      role,
+      relayElementId: relayElementId == null ? null : Number(relayElementId),
+      requiresRelayArmed:
+        role === 'application' && relayElementId != null,
       elementId: Number(tree.elementConfigId),
       pathId: Number(triggerRow.path_id),
       eventId: Number(tree.triggerParam1),
@@ -3127,7 +3134,27 @@ function compileSoulEffectDefinition({
       damageRows,
     });
   }
-  const trigger = primaryTriggerRow;
+  const armTriggerRows = activeTriggers.filter(row =>
+    (row.typetree?.triggerEffectList ?? []).some(effectRow =>
+      activeTriggers.some(
+        candidate =>
+          Number(candidate.path_id) ===
+          Number(effectRow?.targetElement?.m_PathID)
+      )
+    )
+  );
+  const relayTriggerRows = activeTriggers.filter(row =>
+    armTriggerRows.some(armRow =>
+      (armRow.typetree?.triggerEffectList ?? []).some(
+        effectRow =>
+          Number(effectRow?.targetElement?.m_PathID) === Number(row.path_id)
+      )
+    )
+  );
+  const applicationTriggerRows = activeTriggers.filter(
+    row => !armTriggerRows.includes(row)
+  );
+  const trigger = applicationTriggerRows[0] ?? primaryTriggerRow;
   const reachablePropertyRows = trigger
     ? collectReachableRows(
         trigger.path_id,
@@ -3248,10 +3275,20 @@ function compileSoulEffectDefinition({
     rows: valueRowsBySkillId.get(effectSkillId) ?? [],
     elementId: Number(propertyTree.elementConfigId),
   });
-  const triggerEntries = activeTriggers.map(triggerRow =>
-    buildSoulTriggerEntry({
+  const triggerEntries = activeTriggers.map(triggerRow => {
+    const isArm = armTriggerRows.includes(triggerRow);
+    const relayRow = isArm
+      ? relayTriggerRows.find(relay =>
+          (triggerRow.typetree?.triggerEffectList ?? []).some(
+            effectRow =>
+              Number(effectRow?.targetElement?.m_PathID) ===
+              Number(relay.path_id)
+          )
+        )
+      : null;
+    return buildSoulTriggerEntry({
       triggerRow,
-      property,
+      property: isArm ? null : property,
       closure,
       battleElementsByPathId,
       propertyRows,
@@ -3263,8 +3300,16 @@ function compileSoulEffectDefinition({
       beforeDamageEmptyConditionRuntimeEvidence,
       knownElementIds,
       knownElementTypes,
-    })
-  );
+      effectRowCandidates: isArm ? relayTriggerRows : null,
+      requiresLeaf: !isArm,
+      role: isArm ? 'arm' : 'application',
+      relayElementId: isArm
+        ? relayRow?.typetree?.elementConfigId
+        : relayTriggerRows.includes(triggerRow)
+          ? triggerRow.typetree?.elementConfigId
+          : null,
+    });
+  });
   const leafRowsByPathId = new Map();
   for (const entry of triggerEntries) {
     for (const pathId of entry.value.leafPathIds ?? []) {
@@ -3301,6 +3346,7 @@ function compileSoulEffectDefinition({
       compiledLeaves.map(leaf => Number(leaf.effect.pathId))
     );
     const triggersValid = triggerEntries.every(entry => {
+      if (entry.value.role === 'arm') return entry.baseValid;
       const pathIds = entry.value.leafPathIds ?? [];
       return (
         entry.baseValid &&
@@ -4219,6 +4265,12 @@ function createMechanismFamily(triggerEvent) {
   }
   if (triggerEvent?.frameAnchor === 'hit-after-damage') {
     return 'equipped-actor-skill-tag-property-after-damage';
+  }
+  if (triggerEvent?.frameAnchor === 'hit-before-critical-damage') {
+    return 'equipped-actor-critical-damage-relay-property';
+  }
+  if (triggerEvent?.frameAnchor === 'kill-event') {
+    return 'equipped-actor-kill-event-property';
   }
   if (triggerEvent?.frameAnchor === 'element-before-acquire') {
     return 'equipped-actor-get-element-property-before-acquire';

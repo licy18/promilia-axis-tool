@@ -861,7 +861,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-E9',
+      phase: 'M12-B3-E10',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1827,8 +1827,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-E9',
-    status: 'b3-e9-implemented',
+    phase: 'M12-B3-E10',
+    status: 'b3-e10-implemented',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2279,7 +2279,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-E9 Composite Multi-Trigger\n\n' +
+    '# M12-B3-E10 Composite Multi-Trigger\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +

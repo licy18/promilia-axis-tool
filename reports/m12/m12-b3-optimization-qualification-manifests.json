@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "1f9c06743f46f558",
+  "rosterHash": "362c5c52e0bfb00b",
   "records": [
     {
       "objectKind": "character",
@@ -10357,6 +10357,9 @@
             "leafPathIds": [
               7615727136823255000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19004801,
             "pathId": -4992960068897353000,
             "eventId": 6,
@@ -10555,7 +10558,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10001].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900480.asset/MonoBehaviour/skill_control_1900480__-3360510152850789063.json|battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801|battle-element-assets.jsonl#path_id=7615727136823255000;elementId=19004802"
         }
       },
-      "manifestHash": "fc416a7164f28068"
+      "manifestHash": "7d60a2234d3edc7a"
     },
     {
       "objectKind": "soul-essence",
@@ -10603,6 +10606,9 @@
             "leafPathIds": [
               -131968735896823040
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19006100,
             "pathId": 4614392219156132000,
             "eventId": 5,
@@ -10801,7 +10807,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10002].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900610.asset/MonoBehaviour/skill_control_1900610__-5226631149718649563.json|battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100|battle-element-assets.jsonl#path_id=-131968735896823040;elementId=19006104"
         }
       },
-      "manifestHash": "87213f3cd62619d7"
+      "manifestHash": "151bc214e238ee59"
     },
     {
       "objectKind": "soul-essence",
@@ -10849,6 +10855,9 @@
             "leafPathIds": [
               7565174917272651000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19001201,
             "pathId": -7480298753715348000,
             "eventId": 2,
@@ -10952,6 +10961,9 @@
               "leafPathIds": [
                 7565174917272651000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19001201,
               "pathId": -7480298753715348000,
               "eventId": 2,
@@ -11054,6 +11066,9 @@
               "leafPathIds": [
                 7565174917272651000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19001205,
               "pathId": 7018481759493248000,
               "eventId": 2,
@@ -11286,7 +11301,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10008].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900120.asset/MonoBehaviour/skill_control_1900120__672231505877738425.json|battle-element-assets.jsonl#path_id=-7480298753715348000;elementId=19001201|battle-element-assets.jsonl#path_id=7565174917272651000;elementId=19001108"
         }
       },
-      "manifestHash": "42bb9aaf0b306172"
+      "manifestHash": "6a43163dc98ec7e4"
     },
     {
       "objectKind": "soul-essence",
@@ -11296,23 +11311,9 @@
         "generated/soulessences.json#items[id=10011]",
         "NewTable/soulessence.rows[id=10011]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "soulessence-effect-skill-dynamic-unapplied",
-          "category": "not-implemented",
-          "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
-          "skillId": 1900530,
-          "reasons": [
-            "effect-wrapper-lifecycle-not-unique"
-          ]
-        },
-        {
-          "code": "strict-soulessence-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied."
-        },
         {
           "code": "soulessence-visual-acceptance-not-published",
           "category": "not-implemented",
@@ -11329,7 +11330,7 @@
         "maximumRank": 6,
         "staticProfileApplied": true,
         "effectSkillId": 1900530,
-        "effectStatus": "source-indexed-runtime-unapplied",
+        "effectStatus": "runtime-applied",
         "sourceIdentity": "NewTable/soulessence.rows[id=10011]",
         "sourceEffectStatus": "effect-skill-dynamic-unapplied",
         "effectMechanics": {
@@ -11340,14 +11341,17 @@
             "skillLogicType": 6,
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900530]"
           },
-          "runtimeStatus": "source-indexed-runtime-unapplied",
-          "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+          "runtimeStatus": "runtime-applied",
+          "mechanismFamily": "equipped-actor-critical-damage-relay-property",
           "activationPrerequisites": [],
           "activationConditions": [],
           "trigger": {
             "leafPathIds": [
-              -1219091418453908700
+              706811026081145600
             ],
+            "role": "arm",
+            "relayElementId": 19005302,
+            "requiresRelayArmed": false,
             "elementId": 19005301,
             "pathId": -569579431889589300,
             "eventId": 5,
@@ -11422,8 +11426,11 @@
           "triggers": [
             {
               "leafPathIds": [
-                -1219091418453908700
+                706811026081145600
               ],
+              "role": "arm",
+              "relayElementId": 19005302,
+              "requiresRelayArmed": false,
               "elementId": 19005301,
               "pathId": -569579431889589300,
               "eventId": 5,
@@ -11499,6 +11506,9 @@
               "leafPathIds": [
                 -1219091418453908700
               ],
+              "role": "application",
+              "relayElementId": 19005302,
+              "requiresRelayArmed": true,
               "elementId": 19005302,
               "pathId": 706811026081145600,
               "eventId": 25,
@@ -11651,7 +11661,6 @@
             ],
             "wrapperElementIds": [],
             "effectPathElementIds": [
-              19005302,
               19005303
             ],
             "removalPaths": [
@@ -11672,13 +11681,11 @@
             "damageElementIds": [],
             "activationPrerequisiteElementIds": []
           },
-          "runtimeGaps": [
-            "effect-wrapper-lifecycle-not-unique"
-          ],
-          "sourceIdentity": "NewTable/soulessence.rows[id=10011].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900530.asset/MonoBehaviour/skill_control_1900530__7646815027927349175.json|battle-element-assets.jsonl#path_id=-569579431889589300;elementId=19005301|battle-element-assets.jsonl#path_id=-1219091418453908700;elementId=19005303"
+          "runtimeGaps": [],
+          "sourceIdentity": "NewTable/soulessence.rows[id=10011].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900530.asset/MonoBehaviour/skill_control_1900530__7646815027927349175.json|battle-element-assets.jsonl#path_id=706811026081145600;elementId=19005302|battle-element-assets.jsonl#path_id=-1219091418453908700;elementId=19005303"
         }
       },
-      "manifestHash": "d560390062196257"
+      "manifestHash": "8ad75583f29cbaa4"
     },
     {
       "objectKind": "soul-essence",
@@ -11751,6 +11758,9 @@
             "leafPathIds": [
               -8968084659041655000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19004002,
             "pathId": 6735504116185173000,
             "eventId": 1,
@@ -11953,7 +11963,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10018].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900400.asset/MonoBehaviour/skill_control_1900400__-2587960116876469994.json|battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002|battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003"
         }
       },
-      "manifestHash": "81c32626ae2dbd5e"
+      "manifestHash": "8145314df2708ef8"
     },
     {
       "objectKind": "soul-essence",
@@ -12001,6 +12011,9 @@
             "leafPathIds": [
               -6568649023911365000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19003401,
             "pathId": -4873163209865115000,
             "eventId": 6,
@@ -12241,7 +12254,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10032].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900340.asset/MonoBehaviour/skill_control_1900340__-7674146641941054446.json|battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401|battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403"
         }
       },
-      "manifestHash": "67d3d2b9d1d3e371"
+      "manifestHash": "8e79024c3b3113e7"
     },
     {
       "objectKind": "soul-essence",
@@ -12839,6 +12852,9 @@
             "leafPathIds": [
               6108188296881701000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19004500,
             "pathId": -5806624494324189000,
             "eventId": 5,
@@ -13037,7 +13053,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10037].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900450.asset/MonoBehaviour/skill_control_1900450__2734482160659846208.json|battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500|battle-element-assets.jsonl#path_id=6108188296881701000;elementId=19004501"
         }
       },
-      "manifestHash": "46594b77eae5c078"
+      "manifestHash": "35c728317ee2be7e"
     },
     {
       "objectKind": "soul-essence",
@@ -13085,6 +13101,9 @@
             "leafPathIds": [
               -4023729244501754000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19003301,
             "pathId": -2023989584562330600,
             "eventId": 9,
@@ -13293,7 +13312,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10043].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900330.asset/MonoBehaviour/skill_control_1900330__-3361609167118804129.json|battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301|battle-element-assets.jsonl#path_id=-4023729244501754000;elementId=19003302"
         }
       },
-      "manifestHash": "f25eb988a9a6c1f8"
+      "manifestHash": "b0a8e064e7cfd3ae"
     },
     {
       "objectKind": "soul-essence",
@@ -13341,6 +13360,9 @@
             "leafPathIds": [
               1889171037961678300
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19005500,
             "pathId": -4330459562266431000,
             "eventId": 1,
@@ -13578,7 +13600,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10044].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900550.asset/MonoBehaviour/skill_control_1900550__-7653067718708357441.json|battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500|battle-element-assets.jsonl#path_id=1889171037961678300;elementId=19005503"
         }
       },
-      "manifestHash": "06a155cf7be0b2b2"
+      "manifestHash": "2660164882618060"
     },
     {
       "objectKind": "soul-essence",
@@ -13901,6 +13923,9 @@
             "leafPathIds": [
               -5655228325641076000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19009201,
             "pathId": -6515773177271123000,
             "eventId": 34,
@@ -14074,7 +14099,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10048].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900920.asset/MonoBehaviour/skill_control_1900920__-4473087367283292344.json|battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201|battle-element-assets.jsonl#path_id=-5655228325641076000;elementId=19009202"
         }
       },
-      "manifestHash": "402936e38ff21ad5"
+      "manifestHash": "3ad816061d888b4b"
     },
     {
       "objectKind": "soul-essence",
@@ -14397,6 +14422,9 @@
             "leafPathIds": [
               4769837230415874000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19009101,
             "pathId": -7255963679965377000,
             "eventId": 10,
@@ -14716,7 +14744,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10052].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900910.asset/MonoBehaviour/skill_control_1900910__2559169442837246188.json|battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101|battle-element-assets.jsonl#path_id=4769837230415874000;elementId=19009102"
         }
       },
-      "manifestHash": "f84b43518df4a0ef"
+      "manifestHash": "a1e5c826e5d94d21"
     },
     {
       "objectKind": "soul-essence",
@@ -14764,6 +14792,9 @@
             "leafPathIds": [
               -2274249246834308600
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19009301,
             "pathId": 6322365379307683000,
             "eventId": 6,
@@ -14977,7 +15008,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10055].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900930.asset/MonoBehaviour/skill_control_1900930__3135420117074848428.json|battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301|battle-element-assets.jsonl#path_id=-2274249246834308600;elementId=19009302"
         }
       },
-      "manifestHash": "fa723f1cdd1f1a12"
+      "manifestHash": "607e92e6c7f0ea14"
     },
     {
       "objectKind": "soul-essence",
@@ -16125,6 +16156,9 @@
             "leafPathIds": [
               -2685633708192990000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19009001,
             "pathId": 3763334915368993000,
             "eventId": 6,
@@ -16325,7 +16359,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10060].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900900.asset/MonoBehaviour/skill_control_1900900__44735022036249210.json|battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001|battle-element-assets.jsonl#path_id=-2685633708192990000;elementId=19009002"
         }
       },
-      "manifestHash": "6bbdbadc128cfb6c"
+      "manifestHash": "d4b993e49bf92fe6"
     },
     {
       "objectKind": "soul-essence",
@@ -16923,6 +16957,9 @@
             "leafPathIds": [
               654594980681767700
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19008801,
             "pathId": 8121214350672122000,
             "eventId": 32,
@@ -16974,6 +17011,9 @@
               "leafPathIds": [
                 654594980681767700
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19008801,
               "pathId": 8121214350672122000,
               "eventId": 32,
@@ -17103,7 +17143,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10063].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900880.asset/MonoBehaviour/skill_control_1900880__3748949261925534020.json|battle-element-assets.jsonl#path_id=654594980681767700;elementId=19008802"
         }
       },
-      "manifestHash": "8295b44ec2cc1c17"
+      "manifestHash": "39e371bbbdd49ab3"
     },
     {
       "objectKind": "soul-essence",
@@ -17151,6 +17191,9 @@
             "leafPathIds": [
               -7924391024652865000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19006501,
             "pathId": -7589891308127638000,
             "eventId": 1,
@@ -17242,6 +17285,9 @@
               "leafPathIds": [
                 -7924391024652865000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19006501,
               "pathId": -7589891308127638000,
               "eventId": 1,
@@ -17332,6 +17378,9 @@
               "leafPathIds": [
                 -7924391024652865000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19006505,
               "pathId": 4358135260256566000,
               "eventId": 1,
@@ -17550,7 +17599,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10071].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900650.asset/MonoBehaviour/skill_control_1900650__855217176283647622.json|battle-element-assets.jsonl#path_id=-7589891308127638000;elementId=19006501|battle-element-assets.jsonl#path_id=-7924391024652865000;elementId=19006502"
         }
       },
-      "manifestHash": "231a33480c1fcbfd"
+      "manifestHash": "b0bc92c4a678c6f7"
     },
     {
       "objectKind": "soul-essence",
@@ -17598,6 +17647,9 @@
             "leafPathIds": [
               7028756448168345000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19001907,
             "pathId": 1378104299211557000,
             "eventId": 2,
@@ -17689,6 +17741,9 @@
               "leafPathIds": [
                 7028756448168345000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19001907,
               "pathId": 1378104299211557000,
               "eventId": 2,
@@ -17780,6 +17835,9 @@
                 6159851672715162000,
                 7028756448168345000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19001901,
               "pathId": 4354886660003561000,
               "eventId": 2,
@@ -18335,7 +18393,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10076].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900190.asset/MonoBehaviour/skill_control_1900190__947113783478568836.json|battle-element-assets.jsonl#path_id=7028756448168345000;elementId=19001908|battle-element-assets.jsonl#path_id=6159851672715162000;elementId=19001902"
         }
       },
-      "manifestHash": "a846ac3d92d72be8"
+      "manifestHash": "6f9c8a6c4a34b766"
     },
     {
       "objectKind": "soul-essence",
@@ -19056,6 +19114,9 @@
             "leafPathIds": [
               475903754845527040
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19002301,
             "pathId": -4157799704864835600,
             "eventId": 6,
@@ -19269,7 +19330,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10093].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900230.asset/MonoBehaviour/skill_control_1900230__7491246200405412096.json|battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301|battle-element-assets.jsonl#path_id=475903754845527040;elementId=19002302"
         }
       },
-      "manifestHash": "1c6022aec9b96809"
+      "manifestHash": "9eabcfde062b0e43"
     },
     {
       "objectKind": "soul-essence",
@@ -19317,6 +19378,9 @@
             "leafPathIds": [
               8461738275188953000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19006601,
             "pathId": 1967620083657371400,
             "eventId": 6,
@@ -19517,7 +19581,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10094].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900660.asset/MonoBehaviour/skill_control_1900660__7785137375177341249.json|battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601|battle-element-assets.jsonl#path_id=8461738275188953000;elementId=19006602"
         }
       },
-      "manifestHash": "6806021769ba32f3"
+      "manifestHash": "dea9ccfb8fdff8a9"
     },
     {
       "objectKind": "soul-essence",
@@ -19578,9 +19642,11 @@
           "activationConditions": [],
           "trigger": {
             "leafPathIds": [
-              -3451754637210168300,
-              7036297722921961000
+              1260336059307292200
             ],
+            "role": "arm",
+            "relayElementId": 19003202,
+            "requiresRelayArmed": false,
             "elementId": 19003201,
             "pathId": -8698995960148588000,
             "eventId": 9,
@@ -19649,9 +19715,11 @@
           "triggers": [
             {
               "leafPathIds": [
-                -3451754637210168300,
-                7036297722921961000
+                1260336059307292200
               ],
+              "role": "arm",
+              "relayElementId": 19003202,
+              "requiresRelayArmed": false,
               "elementId": 19003201,
               "pathId": -8698995960148588000,
               "eventId": 9,
@@ -19722,6 +19790,9 @@
                 -3451754637210168300,
                 7036297722921961000
               ],
+              "role": "application",
+              "relayElementId": 19003202,
+              "requiresRelayArmed": true,
               "elementId": 19003202,
               "pathId": 1260336059307292200,
               "eventId": 10,
@@ -20090,7 +20161,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10095].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900320.asset/MonoBehaviour/skill_control_1900320__-2637092768690775001.json|battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203|battle-element-assets.jsonl#path_id=7036297722921961000;elementId=19003206"
         }
       },
-      "manifestHash": "40f01b6413f87ff4"
+      "manifestHash": "21859d10cabfef99"
     },
     {
       "objectKind": "soul-essence",
@@ -20138,6 +20209,9 @@
             "leafPathIds": [
               -6749174475042234000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19004700,
             "pathId": 4922202484723645000,
             "eventId": 5,
@@ -20336,7 +20410,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10097].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900470.asset/MonoBehaviour/skill_control_1900470__7648283824826147029.json|battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700|battle-element-assets.jsonl#path_id=-6749174475042234000;elementId=19004701"
         }
       },
-      "manifestHash": "c12b0c5064d418cf"
+      "manifestHash": "b0b143b06f388831"
     },
     {
       "objectKind": "soul-essence",
@@ -20384,6 +20458,9 @@
             "leafPathIds": [
               -5650259386971768000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19006701,
             "pathId": 4493671040636124000,
             "eventId": 2,
@@ -20584,7 +20661,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10098].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900670.asset/MonoBehaviour/skill_control_1900670__-3252376364471466317.json|battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701|battle-element-assets.jsonl#path_id=-5650259386971768000;elementId=19006702"
         }
       },
-      "manifestHash": "94079c6a38a38bb9"
+      "manifestHash": "f0fd9c45447063e7"
     },
     {
       "objectKind": "soul-essence",
@@ -20632,6 +20709,9 @@
             "leafPathIds": [
               447782200906035000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19002001,
             "pathId": -5029048619406844000,
             "eventId": 2,
@@ -20805,7 +20885,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10101].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900200.asset/MonoBehaviour/skill_control_1900200__-1028192825404748457.json|battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001|battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002"
         }
       },
-      "manifestHash": "cff8ac21b12d5482"
+      "manifestHash": "9b61e918fac5ec2c"
     },
     {
       "objectKind": "soul-essence",
@@ -20854,6 +20934,9 @@
               -4920865215663824000,
               616368813777100300
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19003501,
             "pathId": 1736025164143914200,
             "eventId": 6,
@@ -20939,6 +21022,9 @@
                 -4920865215663824000,
                 616368813777100300
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19003501,
               "pathId": 1736025164143914200,
               "eventId": 6,
@@ -21150,7 +21236,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10107].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900350.asset/MonoBehaviour/skill_control_1900350__715439430624416201.json|battle-element-assets.jsonl#path_id=616368813777100300;elementId=19003502|battle-element-assets.jsonl#path_id=-4920865215663824000;elementId=19003503"
         }
       },
-      "manifestHash": "936ff39894085111"
+      "manifestHash": "eb98a4da06bc21f5"
     },
     {
       "objectKind": "soul-essence",
@@ -21198,6 +21284,9 @@
             "leafPathIds": [
               -3951307457830891000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19005807,
             "pathId": -6053806038821734000,
             "eventId": 5,
@@ -21274,6 +21363,9 @@
               "leafPathIds": [
                 -3951307457830891000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19005807,
               "pathId": -6053806038821734000,
               "eventId": 5,
@@ -21349,6 +21441,9 @@
               "leafPathIds": [
                 617870747599547100
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19005803,
               "pathId": -4302027442297452000,
               "eventId": 5,
@@ -21424,6 +21519,9 @@
               "leafPathIds": [
                 -8623271278801233000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19005805,
               "pathId": -815251239453341200,
               "eventId": 5,
@@ -21499,6 +21597,9 @@
               "leafPathIds": [
                 929843409631741000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19005801,
               "pathId": 966636484284346600,
               "eventId": 5,
@@ -22082,7 +22183,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10121].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900580.asset/MonoBehaviour/skill_control_1900580__5994700394878693879.json|battle-element-assets.jsonl#path_id=-3951307457830891000;elementId=19005808|battle-element-assets.jsonl#path_id=617870747599547100;elementId=19005804|battle-element-assets.jsonl#path_id=-8623271278801233000;elementId=19005806|battle-element-assets.jsonl#path_id=929843409631741000;elementId=19005802"
         }
       },
-      "manifestHash": "54f082db12638c36"
+      "manifestHash": "abe34bce2ebb0ed8"
     },
     {
       "objectKind": "soul-essence",
@@ -22130,6 +22231,9 @@
             "leafPathIds": [
               4466764196042693000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19005707,
             "pathId": 4664023450211686000,
             "eventId": 6,
@@ -22238,6 +22342,9 @@
               "leafPathIds": [
                 4466764196042693000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19005707,
               "pathId": 4664023450211686000,
               "eventId": 6,
@@ -22345,6 +22452,9 @@
               "leafPathIds": [
                 -2799837647923611000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19005700,
               "pathId": 6110915074095077000,
               "eventId": 1,
@@ -22457,6 +22567,9 @@
               "leafPathIds": [
                 4466764196042693000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19005706,
               "pathId": 6589208604639745000,
               "eventId": 6,
@@ -22842,7 +22955,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10122].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900570.asset/MonoBehaviour/skill_control_1900570__334890856914764825.json|battle-element-assets.jsonl#path_id=4466764196042693000;elementId=19005704|battle-element-assets.jsonl#path_id=-2799837647923611000;elementId=19005703"
         }
       },
-      "manifestHash": "cfa8d936f1bc87d1"
+      "manifestHash": "14cf59f3e1a49801"
     },
     {
       "objectKind": "soul-essence",
@@ -22890,6 +23003,9 @@
             "leafPathIds": [
               8480096044321114000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19005900,
             "pathId": -7832567119319180000,
             "eventId": 1,
@@ -23100,7 +23216,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10123].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900590.asset/MonoBehaviour/skill_control_1900590__210735096432786726.json|battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900|battle-element-assets.jsonl#path_id=8480096044321114000;elementId=19005901"
         }
       },
-      "manifestHash": "48c66fa75e84830e"
+      "manifestHash": "0a17c0be9c8ab5e0"
     },
     {
       "objectKind": "soul-essence",
@@ -23148,6 +23264,9 @@
             "leafPathIds": [
               -4751821042418617000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19004101,
             "pathId": -2700117266412374500,
             "eventId": 5,
@@ -23373,7 +23492,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10124].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900410.asset/MonoBehaviour/skill_control_1900410__4820183586340899112.json|battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101|battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102"
         }
       },
-      "manifestHash": "6bae26b3620ffba2"
+      "manifestHash": "1a11298bafddde8c"
     },
     {
       "objectKind": "soul-essence",
@@ -23421,6 +23540,9 @@
             "leafPathIds": [
               -3194128450977334000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19005401,
             "pathId": -8058605269236214000,
             "eventId": 5,
@@ -23619,7 +23741,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10125].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900540.asset/MonoBehaviour/skill_control_1900540__-5207417492774847545.json|battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401|battle-element-assets.jsonl#path_id=-3194128450977334000;elementId=19005402"
         }
       },
-      "manifestHash": "effcdf5c610a75c9"
+      "manifestHash": "0b6c06636c605a97"
     },
     {
       "objectKind": "soul-essence",
@@ -23667,6 +23789,9 @@
             "leafPathIds": [
               7184896566896581000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19002801,
             "pathId": -908628671126506600,
             "eventId": 1,
@@ -23877,7 +24002,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10130].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900280.asset/MonoBehaviour/skill_control_1900280__4588656220270570984.json|battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801|battle-element-assets.jsonl#path_id=7184896566896581000;elementId=19002802"
         }
       },
-      "manifestHash": "8868ff0f44f3bddd"
+      "manifestHash": "0d6854d79758b35f"
     },
     {
       "objectKind": "soul-essence",
@@ -23925,6 +24050,9 @@
             "leafPathIds": [
               8731924757452644000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19002701,
             "pathId": 1890390088406099200,
             "eventId": 2,
@@ -24160,7 +24288,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10131].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900270.asset/MonoBehaviour/skill_control_1900270__1514447479398424667.json|battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701|battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702"
         }
       },
-      "manifestHash": "ad475bc745a60df6"
+      "manifestHash": "78bd3fd7e96cc184"
     },
     {
       "objectKind": "soul-essence",
@@ -24209,6 +24337,9 @@
               -1521385363814632700,
               6337378764466493000
             ],
+            "role": "application",
+            "relayElementId": 19004302,
+            "requiresRelayArmed": true,
             "elementId": 19004302,
             "pathId": -7245115188157259000,
             "eventId": 1,
@@ -24269,6 +24400,9 @@
                 -1521385363814632700,
                 6337378764466493000
               ],
+              "role": "application",
+              "relayElementId": 19004302,
+              "requiresRelayArmed": true,
               "elementId": 19004302,
               "pathId": -7245115188157259000,
               "eventId": 1,
@@ -24325,9 +24459,11 @@
             },
             {
               "leafPathIds": [
-                -1521385363814632700,
-                6337378764466493000
+                -7245115188157259000
               ],
+              "role": "arm",
+              "relayElementId": 19004302,
+              "requiresRelayArmed": false,
               "elementId": 19004301,
               "pathId": 3767032036209538000,
               "eventId": 44,
@@ -24671,7 +24807,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10132].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900430.asset/MonoBehaviour/skill_control_1900430__-3725567591603608227.json|battle-element-assets.jsonl#path_id=-1521385363814632700;elementId=19004306|battle-element-assets.jsonl#path_id=6337378764466493000;elementId=19004303"
         }
       },
-      "manifestHash": "48a96dadb02e2927"
+      "manifestHash": "719d3ab3f54022aa"
     },
     {
       "objectKind": "soul-essence",
@@ -25082,6 +25218,9 @@
             "leafPathIds": [
               -5684518322628377000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19002101,
             "pathId": 7447841024087717000,
             "eventId": 2,
@@ -25454,7 +25593,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10136].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900210.asset/MonoBehaviour/skill_control_1900210__4149299819814011094.json|battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101|battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102"
         }
       },
-      "manifestHash": "1a63a40974f10105"
+      "manifestHash": "c1a4ec44bbee0b77"
     },
     {
       "objectKind": "soul-essence",
@@ -25502,6 +25641,9 @@
             "leafPathIds": [
               17992665022024710
             ],
+            "role": "application",
+            "relayElementId": 19004202,
+            "requiresRelayArmed": true,
             "elementId": 19004202,
             "pathId": -4639353932355848000,
             "eventId": 1,
@@ -25578,6 +25720,9 @@
               "leafPathIds": [
                 17992665022024710
               ],
+              "role": "application",
+              "relayElementId": 19004202,
+              "requiresRelayArmed": true,
               "elementId": 19004202,
               "pathId": -4639353932355848000,
               "eventId": 1,
@@ -25651,8 +25796,11 @@
             },
             {
               "leafPathIds": [
-                17992665022024710
+                -4639353932355848000
               ],
+              "role": "arm",
+              "relayElementId": 19004202,
+              "requiresRelayArmed": false,
               "elementId": 19004201,
               "pathId": 9151991891478690000,
               "eventId": 2,
@@ -25891,7 +26039,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10146].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900420.asset/MonoBehaviour/skill_control_1900420__-4853276219982639132.json|battle-element-assets.jsonl#path_id=-4639353932355848000;elementId=19004202|battle-element-assets.jsonl#path_id=17992665022024710;elementId=19004203"
         }
       },
-      "manifestHash": "a49a2aa8e052fe41"
+      "manifestHash": "3fa0f58fb3cbb6f2"
     },
     {
       "objectKind": "soul-essence",
@@ -25939,6 +26087,9 @@
             "leafPathIds": [
               -6475704673365761000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19001101,
             "pathId": -246520716839985300,
             "eventId": 5,
@@ -26155,7 +26306,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10147].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900110.asset/MonoBehaviour/skill_control_1900110__4798028882442525532.json|battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101|battle-element-assets.jsonl#path_id=2200502015063215000;elementId=19001001|battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002"
         }
       },
-      "manifestHash": "ec23c237df6f65fd"
+      "manifestHash": "89d819b5d3819e17"
     },
     {
       "objectKind": "soul-essence",
@@ -26203,6 +26354,9 @@
             "leafPathIds": [
               6856932050092692000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19002201,
             "pathId": 2849866293729341000,
             "eventId": 10,
@@ -26411,7 +26565,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10149].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900220.asset/MonoBehaviour/skill_control_1900220__-6482979135949661655.json|battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201|battle-element-assets.jsonl#path_id=6856932050092692000;elementId=19002202"
         }
       },
-      "manifestHash": "e0376e22a7b8e1f7"
+      "manifestHash": "55c598020c5cf0d1"
     },
     {
       "objectKind": "soul-essence",
@@ -26459,6 +26613,9 @@
             "leafPathIds": [
               6687059805823089000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19005600,
             "pathId": 4249731622778222600,
             "eventId": 1,
@@ -26698,7 +26855,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10150].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900560.asset/MonoBehaviour/skill_control_1900560__1002074190257504026.json|battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600|battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601"
         }
       },
-      "manifestHash": "f42f3a5185aba283"
+      "manifestHash": "c58a09160907f0c5"
     },
     {
       "objectKind": "soul-essence",
@@ -26746,6 +26903,9 @@
             "leafPathIds": [
               3837107787407859700
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19001301,
             "pathId": 756477731831644700,
             "eventId": 5,
@@ -26944,7 +27104,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10151].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900130.asset/MonoBehaviour/skill_control_1900130__6614751741932084313.json|battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301|battle-element-assets.jsonl#path_id=3837107787407859700;elementId=19001302"
         }
       },
-      "manifestHash": "e0762a7f4435e898"
+      "manifestHash": "a53a24a16c62654a"
     },
     {
       "objectKind": "soul-essence",
@@ -27339,6 +27499,9 @@
             "leafPathIds": [
               2209371490931731500
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19002401,
             "pathId": -6345955383762432000,
             "eventId": 6,
@@ -27537,7 +27700,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10154].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900240.asset/MonoBehaviour/skill_control_1900240__-7012870850065822120.json|battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401|battle-element-assets.jsonl#path_id=2209371490931731500;elementId=19002402"
         }
       },
-      "manifestHash": "2508aa3f96b6809a"
+      "manifestHash": "07f285d47760e5e0"
     },
     {
       "objectKind": "soul-essence",
@@ -27585,6 +27748,9 @@
             "leafPathIds": [
               6931937794752071000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19002501,
             "pathId": 7681111361882010000,
             "eventId": 6,
@@ -27783,7 +27949,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10155].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900250.asset/MonoBehaviour/skill_control_1900250__-4475867281655653105.json|battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501|battle-element-assets.jsonl#path_id=6931937794752071000;elementId=19002502"
         }
       },
-      "manifestHash": "7cddd3ae1d1a73f8"
+      "manifestHash": "120df3ab220d519a"
     },
     {
       "objectKind": "soul-essence",
@@ -28106,6 +28272,9 @@
             "leafPathIds": [
               -7968102161953321000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007500,
             "pathId": -7210722185016667000,
             "eventId": 40,
@@ -28279,7 +28448,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10169].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900750.asset/MonoBehaviour/skill_control_1900750__4791716372985824884.json|battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500|battle-element-assets.jsonl#path_id=-7968102161953321000;elementId=19007503"
         }
       },
-      "manifestHash": "6e101c041521b8bf"
+      "manifestHash": "f71b4e6e98310359"
     },
     {
       "objectKind": "soul-essence",
@@ -28328,6 +28497,9 @@
               -1316209878453022700,
               4411393089753127400
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007400,
             "pathId": 1288282584316539400,
             "eventId": 10,
@@ -28423,6 +28595,9 @@
                 -1316209878453022700,
                 4411393089753127400
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19007400,
               "pathId": 1288282584316539400,
               "eventId": 10,
@@ -28806,7 +28981,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10170].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900740.asset/MonoBehaviour/skill_control_1900740__3612376006236613009.json|battle-element-assets.jsonl#path_id=-1316209878453022700;elementId=19007403|battle-element-assets.jsonl#path_id=4411393089753127400;elementId=19007404"
         }
       },
-      "manifestHash": "d16726fa556abe3c"
+      "manifestHash": "746fbe810509b3ec"
     },
     {
       "objectKind": "soul-essence",
@@ -28854,6 +29029,9 @@
             "leafPathIds": [
               8237672842561680000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19001401,
             "pathId": -5225606672832072000,
             "eventId": 44,
@@ -29052,7 +29230,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10175].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900140.asset/MonoBehaviour/skill_control_1900140__2623401305453258783.json|battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401|battle-element-assets.jsonl#path_id=8237672842561680000;elementId=19001402"
         }
       },
-      "manifestHash": "a3db8e4c2fad5e85"
+      "manifestHash": "50e324264c0a6bd7"
     },
     {
       "objectKind": "soul-essence",
@@ -29100,6 +29278,9 @@
             "leafPathIds": [
               -398033826930552400
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19001501,
             "pathId": -100069638428322610,
             "eventId": 44,
@@ -29298,7 +29479,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10176].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900150.asset/MonoBehaviour/skill_control_1900150__-6680374433071234951.json|battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501|battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502"
         }
       },
-      "manifestHash": "55b7189aaf30907d"
+      "manifestHash": "514e79c666817903"
     },
     {
       "objectKind": "soul-essence",
@@ -29346,6 +29527,9 @@
             "leafPathIds": [
               8699597337981486000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007914,
             "pathId": -6906323084063795000,
             "eventId": 9,
@@ -29446,6 +29630,9 @@
               "leafPathIds": [
                 8699597337981486000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19007914,
               "pathId": -6906323084063795000,
               "eventId": 9,
@@ -29545,6 +29732,9 @@
               "leafPathIds": [
                 -8064628129931879000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19007916,
               "pathId": -5617070855499878000,
               "eventId": 9,
@@ -29644,6 +29834,9 @@
               "leafPathIds": [
                 5178487711844678000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19007912,
               "pathId": -4512194375934567400,
               "eventId": 9,
@@ -29743,6 +29936,9 @@
               "leafPathIds": [
                 1170390787759001600
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19007900,
               "pathId": -4480017141699600000,
               "eventId": 9,
@@ -29842,6 +30038,9 @@
               "leafPathIds": [
                 2556688659965768000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19007910,
               "pathId": -1389840892469013800,
               "eventId": 9,
@@ -29941,6 +30140,9 @@
               "leafPathIds": [
                 -5829978218984574000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19007918,
               "pathId": 152420113643601020,
               "eventId": 9,
@@ -30040,6 +30242,9 @@
               "leafPathIds": [
                 -3681341915283005400
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19007906,
               "pathId": 456708501478121300,
               "eventId": 9,
@@ -30139,6 +30344,9 @@
               "leafPathIds": [
                 -4746318165591798000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19007908,
               "pathId": 1788098511552996600,
               "eventId": 9,
@@ -30238,6 +30446,9 @@
               "leafPathIds": [
                 -3236886696819669000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19007904,
               "pathId": 9148244080893451000,
               "eventId": 9,
@@ -31290,7 +31501,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10196].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900790.asset/MonoBehaviour/skill_control_1900790__-7033315392035953286.json|battle-element-assets.jsonl#path_id=8699597337981486000;elementId=19007915|battle-element-assets.jsonl#path_id=-8064628129931879000;elementId=19007917|battle-element-assets.jsonl#path_id=5178487711844678000;elementId=19007913|battle-element-assets.jsonl#path_id=1170390787759001600;elementId=19007901|battle-element-assets.jsonl#path_id=2556688659965768000;elementId=19007911|battle-element-assets.jsonl#path_id=-5829978218984574000;elementId=19007919|battle-element-assets.jsonl#path_id=-3681341915283005400;elementId=19007907|battle-element-assets.jsonl#path_id=-4746318165591798000;elementId=19007909|battle-element-assets.jsonl#path_id=-3236886696819669000;elementId=19007905"
         }
       },
-      "manifestHash": "be26c95587832e35"
+      "manifestHash": "bd31398618f8f4e9"
     },
     {
       "objectKind": "soul-essence",
@@ -31653,6 +31864,9 @@
             "leafPathIds": [
               -5972416317449343000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007601,
             "pathId": -8856206549049605000,
             "eventId": 6,
@@ -31750,6 +31964,9 @@
               "leafPathIds": [
                 -5972416317449343000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19007601,
               "pathId": -8856206549049605000,
               "eventId": 6,
@@ -31846,6 +32063,9 @@
               "leafPathIds": [
                 -5972416317449343000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19007606,
               "pathId": 8057366732446265000,
               "eventId": 6,
@@ -32051,7 +32271,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10198].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900760.asset/MonoBehaviour/skill_control_1900760__-7896113229959849353.json|battle-element-assets.jsonl#path_id=-8856206549049605000;elementId=19007601|battle-element-assets.jsonl#path_id=-5972416317449343000;elementId=19007602"
         }
       },
-      "manifestHash": "db4507c3a3fe1ee8"
+      "manifestHash": "05713edcfd4ccbb2"
     },
     {
       "objectKind": "soul-essence",
@@ -32099,6 +32319,9 @@
             "leafPathIds": [
               2616925179382354000
             ],
+            "role": "application",
+            "relayElementId": null,
+            "requiresRelayArmed": false,
             "elementId": 19007801,
             "pathId": -9208882666704061000,
             "eventId": 5,
@@ -32171,6 +32394,9 @@
               "leafPathIds": [
                 2616925179382354000
               ],
+              "role": "application",
+              "relayElementId": null,
+              "requiresRelayArmed": false,
               "elementId": 19007801,
               "pathId": -9208882666704061000,
               "eventId": 5,
@@ -32324,14 +32550,14 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10216].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900780.asset/MonoBehaviour/skill_control_1900780__6516213473126657462.json|battle-element-assets.jsonl#path_id=2616925179382354000;elementId=19007802"
         }
       },
-      "manifestHash": "2bb51e5b60f89fc6"
+      "manifestHash": "f72264ba3fa01da2"
     }
   ],
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 170,
-      "runtime-integrated": 95
+      "extracted": 169,
+      "runtime-integrated": 96
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -32342,5 +32568,5 @@
     },
     "optimizationReadyTotal": 0
   },
-  "manifestsHash": "2c5cd101e79ae7a0"
+  "manifestsHash": "50d13f85a54475b3"
 }
