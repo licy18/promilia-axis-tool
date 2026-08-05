@@ -22,6 +22,13 @@
    **3% / 4% / 5% / 6%**——只对应 19003203 全队攻击力，不含调谐强度。
 5. 灵魂文案（`generated/soulessences.json` id=10095）：仅描述
    “提升全队3%攻击力，持续16秒”，未提及调谐强度。
+6. 客户端版本核对（2026-08-06 复核）：本机客户端资源包
+   `StreamingAssets/.res/default_package/fwtvymrpqatpf4ytyfvwqg` 与
+   `GameAssembly.dll` 时间戳为 **2026-06-10**，而
+   `C:\PC2\Codex\AzPr\Assets\ResourcesAssets\Config\NewTable\skillsub_ele_value.json`
+   快照为 **2026-04-26**——客户端可能晚于现有提取快照。
+   若客户端有内容更新，重新提取 NewTable 可能补出 19003206 数值行
+   （会改变 FROZEN 源哈希，需按“不静默重定基线”规则由用户决策后执行）。
 
 ## 判定
 
@@ -34,5 +41,7 @@
 ## 收口条件（二选一，需外部输入）
 
 - 新源数据：`skillsub_ele_value`（或等效表）补上 19003206 的 level 1-4 数值；
+- 客户端重提取：先确认本机客户端 6/10 资源是否含新表，再决定是否重提取
+  （涉及 FROZEN 源哈希重基线，需用户批准）；
 - 产品/源确认：19003206 为死分支（如游戏实际不执行该效果），则按单叶 19003203
   编译并记录决策来源。
