@@ -3,7 +3,7 @@
   "contractName": "AzPrDynamicLoadoutEffectMechanismCensus",
   "kind": "azpr-dynamic-loadout-effect-mechanism-census",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "sourceCatalogHash": "67782f1be6ac4845",
+  "sourceCatalogHash": "187df5b36ba5063a",
   "propertyTagContract": {
     "sourceKind": "il2cpp-battle-property-tag-contract",
     "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag",
@@ -7852,7 +7852,7 @@
       "objectId": "10095",
       "displayName": "甜点时光",
       "effectSkillId": 1900320,
-      "mechanismFamily": "source-indexed-composite-effect",
+      "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
       "trigger": {
         "leafPathIds": [
           1260336059307292200
@@ -7981,15 +7981,12 @@
       "vitalChanges": [],
       "delayedEvents": [],
       "loopPersistence": {
-        "status": "runtime-unapplied"
+        "status": "canonical-effect-timeline-applied"
       },
-      "evidenceStatus": "source-indexed-runtime-unapplied",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "effect-property-leaf-not-unique",
-        "effect-star-values-incomplete"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10095].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900320.asset/MonoBehaviour/skill_control_1900320__-2637092768690775001.json|battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203|battle-element-assets.jsonl#path_id=7036297722921961000;elementId=19003206"
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10095].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900320.asset/MonoBehaviour/skill_control_1900320__-2637092768690775001.json|battle-element-assets.jsonl#path_id=1260336059307292200;elementId=19003202|battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203"
     },
     {
       "objectKind": "soul-essence",
@@ -13112,12 +13109,12 @@
   "summary": {
     "soulEssenceCount": 62,
     "setSkillCount": 12,
-    "runtimeAppliedCount": 72,
-    "runtimeUnappliedCount": 2,
+    "runtimeAppliedCount": 73,
+    "runtimeUnappliedCount": 1,
     "byMechanismFamily": {
       "equipped-actor-composite-property-effects": 6,
       "equipped-actor-critical-damage-relay-property": 1,
-      "equipped-actor-get-element-property-after-acquire": 2,
+      "equipped-actor-get-element-property-after-acquire": 3,
       "equipped-actor-get-element-property-before-acquire": 1,
       "equipped-actor-heal-event-target-property": 2,
       "equipped-actor-immediate-resource-heal-effect": 3,
@@ -13134,14 +13131,12 @@
       "set-skill-before-damage-stacking-property": 2,
       "set-skill-before-skill-composite-immediate": 1,
       "set-skill-persistent-property": 6,
-      "set-skill-source-identity-conflict": 1,
-      "source-indexed-composite-effect": 1
+      "set-skill-source-identity-conflict": 1
     },
     "byEvidenceStatus": {
       "evidence-insufficient": 1,
-      "runtime-applied": 72,
-      "source-indexed-runtime-unapplied": 1
+      "runtime-applied": 73
     }
   },
-  "censusHash": "0b26bb7394799805"
+  "censusHash": "8d16d5c96248a336"
 }

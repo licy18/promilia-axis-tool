@@ -9392,8 +9392,8 @@
         "skillLogicType": 6,
         "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900320]"
       },
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "mechanismFamily": "source-indexed-composite-effect",
+      "runtimeStatus": "runtime-applied",
+      "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
       "activationPrerequisites": [],
       "activationConditions": [],
       "trigger": {
@@ -9543,8 +9543,7 @@
         },
         {
           "leafPathIds": [
-            -3451754637210168300,
-            7036297722921961000
+            -3451754637210168300
           ],
           "role": "application",
           "relayElementId": 19003202,
@@ -9625,14 +9624,6 @@
               "effectListIndex": 0,
               "targetElementPathId": -3451754637210168300,
               "sourceIdentity": "battle-element-assets.jsonl#path_id=1260336059307292200;elementId=19003202.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
-            },
-            {
-              "kind": "team-actors",
-              "effectTargetType": 15,
-              "effectTargetTypeName": "AllHero",
-              "effectListIndex": 1,
-              "targetElementPathId": 7036297722921961000,
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=1260336059307292200;elementId=19003202.triggerEffectList[1].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
             }
           ],
           "targetKind": "team-actors",
@@ -9713,135 +9704,6 @@
         ],
         "sourceIdentity": "battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203"
       },
-      "effectLeaves": [
-        {
-          "elementId": 19003203,
-          "pathId": -3451754637210168300,
-          "name": "莉莉-甜点时光",
-          "attributeId": 1,
-          "bucket": "dynamicPercent",
-          "calculateType": 2,
-          "propertyTags": [],
-          "propertyTagMatchMode": "unscoped",
-          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203.defaultPropertyTags",
-          "formula": {
-            "formulaIdentity": "battle-effect-formula:soulessence:1900320:19003203:-3451754637210168300",
-            "commonFunctionId": 1,
-            "commonExpression": "G/10000",
-            "baseFunctionId": 3,
-            "baseExpression": "A/10000",
-            "commonRatioRaw": 10000,
-            "sourceParameterEncoding": "battle-element-raw-a",
-            "family": "basis-point-property-a-with-common-ratio",
-            "sourceIdentity": "battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203.formulaParams|functionParams"
-          },
-          "durationMs": 16000,
-          "leafDurationMs": 16000,
-          "lifecycle": {
-            "sourceKind": "property-leaf-duration",
-            "durationMs": 16000,
-            "leafDurationMs": 16000,
-            "durationSourceIdentity": "battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203.time",
-            "wrapper": null,
-            "removalPaths": [
-              {
-                "triggerElementId": 19003204,
-                "triggerPathId": 7265055193760068000,
-                "triggerEventId": 36,
-                "effectIndex": 0,
-                "removerElementId": 19003205,
-                "removerPathId": -7953459907989853000,
-                "removedElementIds": [
-                  19003201,
-                  19003204
-                ],
-                "sourceIdentity": "battle-element-assets.jsonl#path_id=7265055193760068000;elementId=19003204.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-7953459907989853000;elementId=19003205"
-              }
-            ]
-          },
-          "stackMode": "refresh",
-          "stackDelta": 1,
-          "maxStacks": 1,
-          "combineType": 3,
-          "combineNumber": 1,
-          "valuesByStar": [
-            {
-              "star": 1,
-              "valueRaw": 300,
-              "sourceIdentity": "NewTable/skillsub_ele_value.rows[id=200149,skillId=1900320,level=1,elementId=19003203]"
-            },
-            {
-              "star": 2,
-              "valueRaw": 400,
-              "sourceIdentity": "NewTable/skillsub_ele_value.rows[id=200150,skillId=1900320,level=2,elementId=19003203]"
-            },
-            {
-              "star": 3,
-              "valueRaw": 500,
-              "sourceIdentity": "NewTable/skillsub_ele_value.rows[id=200151,skillId=1900320,level=3,elementId=19003203]"
-            },
-            {
-              "star": 4,
-              "valueRaw": 600,
-              "sourceIdentity": "NewTable/skillsub_ele_value.rows[id=200152,skillId=1900320,level=4,elementId=19003203]"
-            }
-          ],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203"
-        },
-        {
-          "elementId": 19003206,
-          "pathId": 7036297722921961000,
-          "name": "莉莉-甜点时光",
-          "attributeId": 2,
-          "bucket": "dynamicPercent",
-          "calculateType": 2,
-          "propertyTags": [],
-          "propertyTagMatchMode": "unscoped",
-          "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=7036297722921961000;elementId=19003206.defaultPropertyTags",
-          "formula": {
-            "formulaIdentity": "battle-effect-formula:soulessence:1900320:19003206:7036297722921961000",
-            "commonFunctionId": 1,
-            "commonExpression": "G/10000",
-            "baseFunctionId": 3,
-            "baseExpression": "A/10000",
-            "commonRatioRaw": 10000,
-            "sourceParameterEncoding": "battle-element-raw-a",
-            "family": "basis-point-property-a-with-common-ratio",
-            "sourceIdentity": "battle-element-assets.jsonl#path_id=7036297722921961000;elementId=19003206.formulaParams|functionParams"
-          },
-          "durationMs": 16000,
-          "leafDurationMs": 16000,
-          "lifecycle": {
-            "sourceKind": "property-leaf-duration",
-            "durationMs": 16000,
-            "leafDurationMs": 16000,
-            "durationSourceIdentity": "battle-element-assets.jsonl#path_id=7036297722921961000;elementId=19003206.time",
-            "wrapper": null,
-            "removalPaths": [
-              {
-                "triggerElementId": 19003204,
-                "triggerPathId": 7265055193760068000,
-                "triggerEventId": 36,
-                "effectIndex": 0,
-                "removerElementId": 19003205,
-                "removerPathId": -7953459907989853000,
-                "removedElementIds": [
-                  19003201,
-                  19003204
-                ],
-                "sourceIdentity": "battle-element-assets.jsonl#path_id=7265055193760068000;elementId=19003204.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-7953459907989853000;elementId=19003205"
-              }
-            ]
-          },
-          "stackMode": "refresh",
-          "stackDelta": 1,
-          "maxStacks": 1,
-          "combineType": 3,
-          "combineNumber": 1,
-          "valuesByStar": [],
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=7036297722921961000;elementId=19003206"
-        }
-      ],
       "immediateEffects": [],
       "sourceClosure": {
         "controlSkillId": 1900320,
@@ -9871,28 +9733,13 @@
           19003204
         ],
         "propertyElementIds": [
-          19003203,
-          19003206
+          19003203
         ],
         "wrapperElementIds": [],
         "effectPathElementIds": [
-          19003203,
-          19003206
+          19003203
         ],
         "removalPaths": [
-          {
-            "triggerElementId": 19003204,
-            "triggerPathId": 7265055193760068000,
-            "triggerEventId": 36,
-            "effectIndex": 0,
-            "removerElementId": 19003205,
-            "removerPathId": -7953459907989853000,
-            "removedElementIds": [
-              19003201,
-              19003204
-            ],
-            "sourceIdentity": "battle-element-assets.jsonl#path_id=7265055193760068000;elementId=19003204.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-7953459907989853000;elementId=19003205"
-          },
           {
             "triggerElementId": 19003204,
             "triggerPathId": 7265055193760068000,
@@ -9910,11 +9757,16 @@
         "damageElementIds": [],
         "activationPrerequisiteElementIds": []
       },
-      "runtimeGaps": [
-        "effect-property-leaf-not-unique",
-        "effect-star-values-incomplete"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10095].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900320.asset/MonoBehaviour/skill_control_1900320__-2637092768690775001.json|battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203|battle-element-assets.jsonl#path_id=7036297722921961000;elementId=19003206"
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10095].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900320.asset/MonoBehaviour/skill_control_1900320__-2637092768690775001.json|battle-element-assets.jsonl#path_id=1260336059307292200;elementId=19003202|battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203",
+      "excludedDeadBranches": [
+        {
+          "elementId": 19003206,
+          "pathId": 7036297722921961000,
+          "decision": "product-confirmed-dead-branch",
+          "decisionSource": "user-confirmation-2026-08-06: soulessence-10095-description-and-skill-level-text-only-mention-team-attack; no skillsub_ele_value rows for elementId 19003206; no other NewTable reference"
+        }
+      ]
     },
     {
       "soulEssenceId": 10097,
@@ -24940,32 +24792,21 @@
       "mechanicsHash": "a73e157c21bab9f2"
     }
   ],
-  "unresolved": [
-    {
-      "soulEssenceId": 10095,
-      "effectSkillId": 1900320,
-      "status": "source-indexed-runtime-unapplied",
-      "reasons": [
-        "effect-property-leaf-not-unique",
-        "effect-star-values-incomplete"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10095].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900320.asset/MonoBehaviour/skill_control_1900320__-2637092768690775001.json|battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203|battle-element-assets.jsonl#path_id=7036297722921961000;elementId=19003206"
-    }
-  ],
+  "unresolved": [],
   "summary": {
     "soulEssenceCount": 62,
     "controlClosureCount": 62,
     "resourceReferenceCount": 282,
     "missingResourceReferenceCount": 0,
-    "runtimeAppliedCount": 61,
-    "unresolvedCount": 1,
+    "runtimeAppliedCount": 62,
+    "unresolvedCount": 0,
     "setSkillCount": 12,
     "setSkillThresholdIndexedCount": 12,
     "setSkillRuntimeAppliedCount": 11,
     "byMechanismFamily": {
       "equipped-actor-composite-property-effects": 6,
       "equipped-actor-critical-damage-relay-property": 1,
-      "equipped-actor-get-element-property-after-acquire": 2,
+      "equipped-actor-get-element-property-after-acquire": 3,
       "equipped-actor-get-element-property-before-acquire": 1,
       "equipped-actor-heal-event-target-property": 2,
       "equipped-actor-immediate-resource-heal-effect": 3,
@@ -24976,13 +24817,11 @@
       "equipped-actor-skill-tag-property-before-damage": 7,
       "equipped-actor-skill-tag-property-before-skill": 7,
       "equipped-actor-switch-enter-team-property": 1,
-      "equipped-loadout-periodic-conditional-property-root": 4,
-      "source-indexed-composite-effect": 1
+      "equipped-loadout-periodic-conditional-property-root": 4
     },
     "byRuntimeStatus": {
-      "runtime-applied": 61,
-      "source-indexed-runtime-unapplied": 1
+      "runtime-applied": 62
     }
   },
-  "catalogHash": "67782f1be6ac4845"
+  "catalogHash": "187df5b36ba5063a"
 }

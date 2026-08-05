@@ -293,6 +293,17 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     attributeId: 21,
   },
   {
+    soulEssenceId: 10095,
+    contextual: true,
+    event: 'BeforeGetElement',
+    frameAnchor: 'element-before-acquire',
+    actionKind: null,
+    durationMs: 16000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 1,
+  },
+  {
     soulEssenceId: 10097,
     event: 'BeforeSkill',
     frameAnchor: 'action-start',
@@ -512,8 +523,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 61,
-      unresolvedCount: 1,
+      runtimeAppliedCount: 62,
+      unresolvedCount: 0,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -5969,6 +5980,176 @@ describe('verified soul essence effect generation', () => {
           suppression.reason === 'soulessence-effect-relay-not-armed'
       )
     ).toBe(false);
+  });
+
+  it('replays real 10095 block-armed wind-mark team attack buff with dead branch excluded', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10095
+    );
+    expect(definition).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      effect: expect.objectContaining({
+        elementId: 19003203,
+        attributeId: 1,
+        durationMs: 16000,
+        stackMode: 'refresh',
+        maxStacks: 1,
+      }),
+      excludedDeadBranches: [
+        expect.objectContaining({
+          elementId: 19003206,
+          decision: 'product-confirmed-dead-branch',
+        }),
+      ],
+      runtimeGaps: [],
+    });
+    expect(definition.effectLeaves ?? []).toHaveLength(0);
+    expect(
+      definition.triggers.find(trigger => trigger.role === 'application')
+    ).toMatchObject({
+      event: 'AfterGetElement',
+      requiresRelayArmed: true,
+    });
+
+    const actorId = 'actor-101007';
+    const armAction = {
+      ...createRealSoulActionDraft({
+        id: 'e11-10095-block-arm',
+        actionKind: 'charged-attack',
+        startFrame: 0,
+        actorCharacterId: 101007,
+      }),
+      actorId,
+    };
+    const windAction = {
+      ...createRealSoulActionDraft({
+        id: 'e11-10095-wind-mark',
+        actionKind: 'charged-attack',
+        startFrame: 600,
+        actorCharacterId: 101007,
+      }),
+      actorId,
+    };
+    const resolution = resolveVerifiedCombatActionMechanics(windAction);
+    const scenario = {
+      time: { fps: 60, durationMs: 12_000 },
+      actors: [
+        createSoulMatrixActor({ actorId, definition }),
+        { id: 'actor-101003', characterId: 101003, name: 'third-actor' },
+        { id: 'actor-101010', characterId: 101010, name: 'third-actor' },
+      ],
+      actions: [armAction, windAction],
+    };
+    const actionExecutionPlan = {
+      actions: [
+        { actionId: armAction.id, execute: true },
+        { actionId: windAction.id, execute: true },
+      ],
+    };
+    const actionResolutionById = new Map([
+      [armAction.id, resolution],
+      [windAction.id, resolution],
+    ]);
+    const tuningGeneration = {
+      getElementEvents: [
+        {
+          kind: 'element-before-acquire',
+          actionId: armAction.id,
+          actorId,
+          applied: true,
+          timeMs: 100,
+          sourceSequencePath: [0],
+          eventContext: {
+            elementId: 199001234,
+            applied: true,
+            success: true,
+            initialState: false,
+            sourceSequencePath: [0],
+          },
+        },
+        {
+          kind: 'element-after-acquire',
+          actionId: windAction.id,
+          actorId,
+          applied: true,
+          timeMs: 200,
+          sourceSequencePath: [1],
+          eventContext: {
+            elementId: 750,
+            applied: true,
+            success: true,
+            initialState: false,
+            sourceSequencePath: [1],
+          },
+        },
+      ],
+    };
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      actionResolutionById,
+      tuningGeneration,
+    });
+    const commands = generation.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10095
+    );
+    expect(commands.length).toBeGreaterThan(0);
+    expect(
+      commands.every(
+        command =>
+          command.sourceActionId === windAction.id &&
+          command.effectId === 'soulessence:10095:element:19003203' &&
+          command.modifiers[0].attributeId === 1 &&
+          command.modifiers[0].sourceElementId === 19003203 &&
+          command.modifiers[0].sourceRawA === 300
+      )
+    ).toBe(true);
+    expect(
+      generation.suppressions.some(
+        suppression =>
+          suppression.soulEssenceId === 10095 &&
+          suppression.reason === 'soulessence-effect-relay-not-armed'
+      )
+    ).toBe(false);
+
+    const unarmed = createVerifiedSoulEssenceEffectGeneration({
+      scenario: { ...scenario, actions: [windAction] },
+      actionExecutionPlan: {
+        actions: [{ actionId: windAction.id, execute: true }],
+      },
+      actionResolutionById: new Map([[windAction.id, resolution]]),
+      tuningGeneration: {
+        getElementEvents: [
+          {
+            kind: 'element-after-acquire',
+            actionId: windAction.id,
+            actorId,
+            applied: true,
+            timeMs: 200,
+            sourceSequencePath: [0],
+            eventContext: {
+              elementId: 750,
+              applied: true,
+              success: true,
+              initialState: false,
+              sourceSequencePath: [0],
+            },
+          },
+        ],
+      },
+    });
+    expect(
+      unarmed.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10095
+      )
+    ).toEqual([]);
+    expect(
+      unarmed.suppressions
+        .filter(suppression => suppression.soulEssenceId === 10095)
+        .map(suppression => suppression.reason)
+    ).toEqual(
+      expect.arrayContaining(['soulessence-effect-relay-not-armed'])
+    );
   });
 
   it('replays real 10071 charged buff gated by mark 250 layers above one', () => {

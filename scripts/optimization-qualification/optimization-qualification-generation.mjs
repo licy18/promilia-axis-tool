@@ -861,7 +861,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-E10',
+      phase: 'M12-B3-E11',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1827,8 +1827,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-E10',
-    status: 'b3-e10-implemented',
+    phase: 'M12-B3-E11',
+    status: 'b3-e11-implemented',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2279,7 +2279,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-E10 Composite Multi-Trigger\n\n' +
+    '# M12-B3-E11 Composite Multi-Trigger\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -2288,7 +2288,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: C2-C14 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, target-debuff, and set-three source-conflict contracts. C15 adds a source-driven periodic persistent-root family with native time-loop cadence, condition re-evaluation, finite Cover leaves, right-open expiry, unload provenance, and cycle phase state. Soul essences 10084, 10152, and 10197 are runtime-applied; 10078 remains evidence-insufficient because native multi-PropertyTag matching for tags 302/303 is not closed.\n' +
+    '- Dynamic loadout batches: C2-C14 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, target-debuff, and set-three source-conflict contracts. C15 adds a source-driven periodic persistent-root family with native time-loop cadence, condition re-evaluation, finite Cover leaves, right-open expiry, unload provenance, and cycle phase state. Soul essences 10084, 10152, and 10197 are runtime-applied; 10078 remains evidence-insufficient because native multi-PropertyTag matching for tags 302/303 is not closed. E11 registers the product-confirmed dead tuning-intensity branch (element 19003206) of soul 10095 as excluded, closes 10095 as runtime-applied with the single team-attack leaf 19003203, and leaves no runtime-unresolved souls (62/62).\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'

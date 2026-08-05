@@ -37,6 +37,23 @@ const SUPPORTED_FRAME_ANCHORS = new Set([
   'heal-after-settlement',
 ]);
 
+const CONFIRMED_DEAD_SOURCE_BRANCHES = Object.freeze([
+  {
+    soulEssenceId: 10095,
+    elementId: 19003206,
+    pathId: 7036297722921961000,
+    decision: 'product-confirmed-dead-branch',
+    decisionSource:
+      'user-confirmation-2026-08-06: soulessence-10095-description-and-skill-level-text-only-mention-team-attack; no skillsub_ele_value rows for elementId 19003206; no other NewTable reference',
+  },
+]);
+
+function collectConfirmedDeadBranchesForSoul(soulEssenceId) {
+  return CONFIRMED_DEAD_SOURCE_BRANCHES.filter(
+    row => Number(row.soulEssenceId) === Number(soulEssenceId)
+  );
+}
+
 export const SOULESSENCE_EFFECT_CATALOG_CONTRACT_NAME =
   'AzPrSoulEssenceEffectMechanicsCatalog';
 
@@ -185,6 +202,19 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       ),
     })
   );
+  for (const definition of definitions) {
+    const deadBranches = collectConfirmedDeadBranchesForSoul(
+      definition.soulEssenceId
+    );
+    if (deadBranches.length > 0) {
+      definition.excludedDeadBranches = deadBranches.map(branch => ({
+        elementId: Number(branch.elementId),
+        pathId: Number(branch.pathId),
+        decision: branch.decision,
+        decisionSource: branch.decisionSource,
+      }));
+    }
+  }
   const unresolved = definitions
     .filter(definition => definition.runtimeStatus !== 'runtime-applied')
     .map(definition => ({
@@ -3027,7 +3057,10 @@ function compileSoulEffectDefinition({
   const propertyRows = closure.rows.filter(
     row =>
       Number.isInteger(Number(row.typetree?.attributeID)) &&
-      Number.isInteger(Number(row.typetree?.calculateType))
+      Number.isInteger(Number(row.typetree?.calculateType)) &&
+      !collectConfirmedDeadBranchesForSoul(soul.soulEssenceId).some(
+        branch => Number(branch.pathId) === Number(row.path_id)
+      )
   );
   const resourceRows = closure.rows.filter(row =>
     Object.hasOwn(row.typetree ?? {}, 'recoverType')

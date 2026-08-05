@@ -3,10 +3,10 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "362c5c52e0bfb00b",
-  "manifestsHash": "50d13f85a54475b3",
-  "gapLedgerHash": "51d0339daafb26c8",
-  "bindingMatrixHash": "2af6ebbc4f9dc816",
+  "rosterHash": "eba0163d055aa7d6",
+  "manifestsHash": "2bdc820be0fafb5a",
+  "gapLedgerHash": "bfb768bf34500baf",
+  "bindingMatrixHash": "ac386a86f7a56a77",
   "sourceSnapshotHash": "d7f77da35e3a80b0",
   "denominators": {
     "characterOptimizationObjects": 11,
@@ -2654,14 +2654,12 @@
       "objectKind": "soul-essence",
       "objectId": "10095",
       "displayName": "甜点时光",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "21859d10cabfef99"
+      "manifestHash": "ce17c4f10e86ee93"
     },
     {
       "objectKind": "soul-essence",
@@ -3017,7 +3015,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "362c5c52e0bfb00b",
+    "rosterHash": "eba0163d055aa7d6",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24925,7 +24923,7 @@
       "setSkillThresholdQualifiedCount": 0,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "2af6ebbc4f9dc816"
+    "bindingMatrixHash": "ac386a86f7a56a77"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -40936,9 +40934,9 @@
                 "sourceIdentity": "NewTable/skill_level.rows[id=2725,skillId=1900320,level=4]"
               }
             ],
-            "status": "source-indexed-runtime-unapplied",
-            "mechanismFamily": "source-indexed-composite-effect",
-            "catalogDefinitionHash": "7da44578b7b76660",
+            "status": "runtime-applied",
+            "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
+            "catalogDefinitionHash": "806085dfe0fd5adb",
             "sourceIdentity": "NewTable/soulessence.rows[id=10095].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10095]"
@@ -43022,9 +43020,9 @@
         }
       ],
       "effectStatus": {
-        "status": "partially-runtime-applied",
-        "runtimeAppliedCount": 61,
-        "unresolvedCount": 1
+        "status": "runtime-applied",
+        "runtimeAppliedCount": 62,
+        "unresolvedCount": 0
       }
     },
     "equipment": {
@@ -44353,8 +44351,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 169,
-      "runtime-integrated": 96
+      "extracted": 168,
+      "runtime-integrated": 97
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -44364,7 +44362,7 @@
       "set-skill": 0
     },
     "optimizationReadyTotal": 0,
-    "gameplayBlockingGapCount": 337,
+    "gameplayBlockingGapCount": 335,
     "bindingQualifiedEdgeCount": 0,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44449,5 +44447,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "17f3eb5d760cb1a7"
+  "catalogHash": "aa5241ca13e17564"
 }
