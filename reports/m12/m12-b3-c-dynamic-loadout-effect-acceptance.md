@@ -34,7 +34,7 @@ Final generated hashes are source `661271d99b9e9b9e`, roster `93b5f932243f030b`,
 - Canonical/runtime/cycle: `6 / 187`; Machine Axis: `12 / 160` with the established 30-second process-test budget.
 - Nine deterministic audits are clean. Applied-source covers 49 property sources: 27 triggered, 22 persistent, including 3 periodic persistent roots, with zero drift.
 - Production build passed with 1875 modules; generation assert-clean and `git diff --check` passed.
-- Standard Machine Axis hashes remain `ed57d06444210db0 / 5c21e09cba3bab55 / 416b4a015702f1b2 / 0b410dc9255d2654`.
+- Standard Machine Axis hashes remain `368b3279f56166c7 / 2c77540ff1b38280 / 03ea90d03d234e76 / 0b410dc9255d2654`.
 - Existing Sass deprecation, circular chunk, large chunk, package-size, and performance warnings remain non-blocking and are outside C15.
 
 C15 passed product acceptance at the recorded baseline. Work remains paused until an explicit user instruction; C16, M12-C, formal search, and any new mechanism batch have not started.
