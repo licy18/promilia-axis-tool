@@ -2504,6 +2504,12 @@ function buildSoulTriggerEntry({
             Number(triggerEffectRows[0]?.effectRow?.targetType)
         ) ?? null)
       : null;
+  const rowTargetBindings = triggerEffectRows.map(row =>
+    triggerContract.targetBindings.find(
+      binding =>
+        Number(binding.value) === Number(row.effectRow?.targetType)
+    ) ?? null
+  );
   const sharedLeaf =
     property != null &&
     reachableEffectRows.length === 1 &&
@@ -2512,7 +2518,8 @@ function buildSoulTriggerEntry({
     supported &&
     compiledCondition?.status === 'applied' &&
     triggerTargetBinding != null &&
-    targetBinding != null &&
+    rowTargetBindings.length > 0 &&
+    rowTargetBindings.every(binding => binding != null) &&
     (!requiresLeaf || reachableEffectRows.length > 0);
   const valid = baseValid && sharedLeaf;
   return {
@@ -2554,6 +2561,21 @@ function buildSoulTriggerEntry({
                 ? `${createElementIdentity(triggerRow)}.triggerEffectList[${triggerEffectRows[0].effectListIndex}].targetType|${targetBinding.sourceIdentity}`
                 : null,
             },
+      targets: triggerEffectRows.map((row, rowIndex) => {
+        const rowTargetBinding = rowTargetBindings[rowIndex];
+        return rowTargetBinding == null
+          ? null
+          : {
+              kind: rowTargetBinding.targetKind,
+              effectTargetType: Number(rowTargetBinding.value),
+              effectTargetTypeName: rowTargetBinding.enumName,
+              effectListIndex: row.effectListIndex,
+              targetElementPathId: Number(
+                row.effectRow?.targetElement?.m_PathID
+              ),
+              sourceIdentity: `${createElementIdentity(triggerRow)}.triggerEffectList[${row.effectListIndex}].targetType|${rowTargetBinding.sourceIdentity}`,
+            };
+      }),
       targetKind: targetBinding?.targetKind ?? 'unresolved',
       sourceIdentity: createElementIdentity(triggerRow),
     },
@@ -3155,6 +3177,12 @@ function compileSoulEffectDefinition({
             Number(triggerEffectRows[0]?.effectRow?.targetType)
         ) ?? null)
       : null;
+  const rowTargetBindings = triggerEffectRows.map(row =>
+    triggerContract.targetBindings.find(
+      binding =>
+        Number(binding.value) === Number(row.effectRow?.targetType)
+    ) ?? null
+  );
   const formulaFamily = resolveFormulaFamily({
     commonFunctionId,
     baseFunctionId,
@@ -3400,7 +3428,10 @@ function compileSoulEffectDefinition({
   }
   if (starValues.length !== 4)
     runtimeGaps.push('effect-star-values-incomplete');
-  if (triggerEffectRows.length !== 1 || !targetBinding) {
+  if (
+    triggerEffectRows.length === 0 ||
+    rowTargetBindings.some(binding => binding == null)
+  ) {
     runtimeGaps.push('effect-trigger-target-unsupported');
   }
   const runtimeStatus = runtimeGaps.length

@@ -286,6 +286,21 @@ export function createVerifiedSoulEssenceEffectGeneration({
         (binding.definition.effect ? [binding.definition.effect] : []);
       if (leafEffects.length > 0) {
         for (let leafIndex = 0; leafIndex < leafEffects.length; leafIndex += 1) {
+          const occurrenceLeafPathId = Number(
+            leafEffects[leafIndex]?.pathId
+          );
+          const leafOccurrences = activationMatchedOccurrences.filter(
+            occurrence => {
+              const triggerLeafPathIds = (
+                occurrence?.triggerDefinition?.leafPathIds ?? []
+              ).map(Number);
+              return (
+                triggerLeafPathIds.length === 0 ||
+                triggerLeafPathIds.includes(occurrenceLeafPathId)
+              );
+            }
+          );
+          if (leafOccurrences.length === 0) continue;
           const isMultiLeafSoul =
             Array.isArray(binding.propertyLeafEffects) &&
             binding.propertyLeafEffects.length > 1;
@@ -302,7 +317,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
               }
             : binding;
           effectCommands.push(
-            ...activationMatchedOccurrences.flatMap(occurrence =>
+            ...leafOccurrences.flatMap(occurrence =>
               resolveSoulEffectTargets({
                 binding: leafBinding,
                 scenario,
@@ -1136,6 +1151,7 @@ function createSoulEffectCommand({
     targetKind: target.kind,
     targetId: String(target.id),
     targetName: target.name ?? null,
+    targetKiboId: target.kiboId ?? null,
     semanticTargetKind: triggerTarget?.kind ?? 'self-actor',
     triggerType: definition.trigger.triggerType ?? null,
     triggerCounter: definition.trigger.triggerCounter ?? null,
@@ -1469,17 +1485,31 @@ function evaluateSoulEffectFormula({
 function resolveSoulEffectTargets({ binding, scenario, occurrence }) {
   const triggerTarget =
     occurrence?.triggerDefinition?.target ?? binding.definition.trigger?.target;
-  if (triggerTarget?.kind === 'team-actors') {
-    return (scenario.actors ?? []).map(actor => ({
-      kind: EFFECT_TARGET_KINDS.ACTOR,
-      id: actor.id,
-      name: actor.name ?? null,
-    }));
-  }
-  if (triggerTarget?.kind === 'event-target-actor') {
-    const targetId = String(occurrence?.eventContext?.eventTargetActorId ?? '');
+  const triggerSourceTarget =
+    occurrence?.triggerDefinition?.triggerTarget ??
+    binding.definition.trigger?.triggerTarget;
+  const triggerTargets =
+    occurrence?.triggerDefinition?.targets ??
+    binding.definition.trigger?.targets ??
+    (triggerTarget ? [triggerTarget] : []);
+  const resolvePetActor = () => {
+    const kiboId = Number(binding.actor?.loadout?.kiboId);
+    if (!(kiboId > 0)) return [];
+    return [
+      {
+        kind: EFFECT_TARGET_KINDS.KIBO,
+        id: binding.actor.id,
+        name: `Kibo ${kiboId}`,
+        kiboId,
+      },
+    ];
+  };
+  const resolveControllingHero = () => {
+    const controlledActorId = String(
+      occurrence?.eventContext?.controlledActorId ?? ''
+    );
     const actor = (scenario.actors ?? []).find(
-      candidate => String(candidate.id) === targetId
+      candidate => String(candidate.id) === controlledActorId
     );
     return actor
       ? [
@@ -1490,23 +1520,28 @@ function resolveSoulEffectTargets({ binding, scenario, occurrence }) {
           },
         ]
       : [];
-  }
-  if (triggerTarget?.kind === 'event-target-entity') {
-    const targetKind = occurrence?.eventContext?.eventTargetKind;
-    const targetId = String(occurrence?.eventContext?.eventTargetId ?? '');
-    if (
-      targetKind === EFFECT_TARGET_KINDS.ENEMY &&
-      String(scenario.enemy?.id) === targetId
-    ) {
-      return [
-        {
-          kind: EFFECT_TARGET_KINDS.ENEMY,
-          id: scenario.enemy.id,
-          name: scenario.enemy.name ?? null,
-        },
-      ];
+  };
+  const resolveTarget = target => {
+    if (target?.kind === 'team-actors') {
+      return (scenario.actors ?? []).map(actor => ({
+        kind: EFFECT_TARGET_KINDS.ACTOR,
+        id: actor.id,
+        name: actor.name ?? null,
+      }));
     }
-    if (targetKind === EFFECT_TARGET_KINDS.ACTOR) {
+    if (target?.kind === 'pet-actor') {
+      return resolvePetActor();
+    }
+    if (target?.kind === 'controlling-hero') {
+      return resolveControllingHero();
+    }
+    if (triggerSourceTarget?.kind === 'self-pet-actor') {
+      return resolvePetActor();
+    }
+    if (target?.kind === 'event-target-actor') {
+      const targetId = String(
+        occurrence?.eventContext?.eventTargetActorId ?? ''
+      );
       const actor = (scenario.actors ?? []).find(
         candidate => String(candidate.id) === targetId
       );
@@ -1520,7 +1555,53 @@ function resolveSoulEffectTargets({ binding, scenario, occurrence }) {
           ]
         : [];
     }
-    return [];
+    if (target?.kind === 'event-target-entity') {
+      const targetKind = occurrence?.eventContext?.eventTargetKind;
+      const targetId = String(occurrence?.eventContext?.eventTargetId ?? '');
+      if (
+        targetKind === EFFECT_TARGET_KINDS.ENEMY &&
+        String(scenario.enemy?.id) === targetId
+      ) {
+        return [
+          {
+            kind: EFFECT_TARGET_KINDS.ENEMY,
+            id: scenario.enemy.id,
+            name: scenario.enemy.name ?? null,
+          },
+        ];
+      }
+      if (targetKind === EFFECT_TARGET_KINDS.ACTOR) {
+        const actor = (scenario.actors ?? []).find(
+          candidate => String(candidate.id) === targetId
+        );
+        return actor
+          ? [
+              {
+                kind: EFFECT_TARGET_KINDS.ACTOR,
+                id: actor.id,
+                name: actor.name ?? null,
+              },
+            ]
+          : [];
+      }
+      return [];
+    }
+    return [
+      {
+        kind: EFFECT_TARGET_KINDS.ACTOR,
+        id: binding.actor.id,
+        name: binding.actor.name ?? null,
+      },
+    ];
+  };
+  const resolved = uniqueTargets(triggerTargets.flatMap(resolveTarget));
+  if (resolved.length > 0) return resolved;
+  if (triggerTarget?.kind === 'team-actors') {
+    return (scenario.actors ?? []).map(actor => ({
+      kind: EFFECT_TARGET_KINDS.ACTOR,
+      id: actor.id,
+      name: actor.name ?? null,
+    }));
   }
   return [
     {
@@ -1529,6 +1610,16 @@ function resolveSoulEffectTargets({ binding, scenario, occurrence }) {
       name: binding.actor.name ?? null,
     },
   ];
+}
+
+function uniqueTargets(targets) {
+  const seen = new Set();
+  return targets.filter(target => {
+    const key = `${target.kind}|${target.id}|${target.kiboId ?? ''}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 function resolveSoulTriggerActionContext({ action, resolution, eventContext }) {

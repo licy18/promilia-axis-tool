@@ -184,6 +184,30 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     attributeId: 4,
   },
   {
+    soulEssenceId: 10076,
+    contextual: true,
+    event: 'AfterDamage',
+    frameAnchor: 'hit-after-damage',
+    actionKind: null,
+    actionKinds: ['normal-attack'],
+    durationMs: 3000,
+    stackMode: 'stack',
+    maxStacks: 2,
+    attributeId: 222,
+  },
+  {
+    soulEssenceId: 10198,
+    contextual: true,
+    event: 'AfterSkill',
+    frameAnchor: 'action-end',
+    actionKind: 'star-skill',
+    actionKinds: ['star-skill'],
+    durationMs: 8000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 52,
+  },
+  {
     soulEssenceId: 10037,
     event: 'BeforeSkill',
     frameAnchor: 'action-start',
@@ -453,8 +477,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 54,
-      unresolvedCount: 8,
+      runtimeAppliedCount: 56,
+      unresolvedCount: 6,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -892,6 +916,139 @@ describe('verified soul essence effect generation', () => {
         }),
       ])
     );
+  });
+
+  it('replays real 10076 normal-attack break-efficiency stacks on the equipped actor', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10076
+    );
+    expect(definition).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'equipped-actor-composite-property-effects',
+      effectLeaves: [
+        expect.objectContaining({
+          elementId: 19001908,
+          attributeId: 222,
+          durationMs: 3000,
+          stackMode: 'stack',
+          maxStacks: 2,
+        }),
+        expect.objectContaining({
+          elementId: 19001902,
+          attributeId: 222,
+          durationMs: 6000,
+          stackMode: 'refresh',
+          maxStacks: 1,
+        }),
+      ],
+      runtimeGaps: [],
+    });
+
+    const result = createRealSoulScenario({
+      actorCharacterId: 101007,
+      soulEssenceId: 10076,
+      effectSkillId: 1900190,
+      durationMs: 12_000,
+      actionPlan: [
+        {
+          id: 'soul-10076-normal-attack',
+          actionKind: 'normal-attack',
+          startFrame: 60,
+        },
+      ],
+    });
+    const generation = result.verifiedSoulEssenceEffectGeneration;
+    const commands = generation.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10076
+    );
+    expect(commands.length).toBeGreaterThan(0);
+    expect(
+      commands.every(
+        command =>
+          command.targetKind === 'actor' &&
+          command.targetId === 'actor-101007' &&
+          command.effectId === 'soulessence:10076:element:19001908' &&
+          command.modifiers[0].attributeId === 222 &&
+          command.modifiers[0].sourceElementId === 19001908
+      )
+    ).toBe(true);
+    expect(
+      commands.some(
+        command => command.effectId === 'soulessence:10076:element:19001902'
+      )
+    ).toBe(false);
+  });
+
+  it('replays real 10198 AfterSkill owner and pet fire-damage buff on both targets', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10198
+    );
+    expect(definition).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'equipped-actor-skill-tag-property-after-skill',
+      triggers: expect.arrayContaining([
+        expect.objectContaining({
+          event: 'AfterSkill',
+          targets: [
+            expect.objectContaining({ kind: 'self-actor' }),
+            expect.objectContaining({ kind: 'pet-actor' }),
+          ],
+        }),
+      ]),
+      effect: expect.objectContaining({
+        elementId: 19007602,
+        attributeId: 52,
+        durationMs: 8000,
+      }),
+      runtimeGaps: [],
+    });
+
+    const result = createRealSoulScenario({
+      actorCharacterId: 101007,
+      soulEssenceId: 10198,
+      effectSkillId: 1900760,
+      durationMs: 12_000,
+      teamKiboIdsByCharacterId: {
+        101007: PROPERTY_TAG_TEST_KIBO_ID,
+      },
+      actionPlan: [
+        {
+          id: 'soul-10198-star-skill',
+          actionKind: 'star-skill',
+          startFrame: 60,
+        },
+      ],
+    });
+    const generation = result.verifiedSoulEssenceEffectGeneration;
+    const commands = generation.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10198
+    );
+    expect(commands).toHaveLength(2);
+    const actorCommand = commands.find(command => command.targetKind === 'actor');
+    const kiboCommand = commands.find(command => command.targetKind === 'kibo');
+    expect(actorCommand).toMatchObject({
+      targetId: 'actor-101007',
+      effectId: 'soulessence:10198:element:19007602',
+      durationMs: 8000,
+      modifiers: [
+        expect.objectContaining({
+          attributeId: 52,
+          sourceElementId: 19007602,
+        }),
+      ],
+    });
+    expect(kiboCommand).toMatchObject({
+      targetId: 'actor-101007',
+      targetKiboId: PROPERTY_TAG_TEST_KIBO_ID,
+      effectId: 'soulessence:10198:element:19007602',
+      durationMs: 8000,
+      modifiers: [
+        expect.objectContaining({
+          attributeId: 52,
+          sourceElementId: 19007602,
+        }),
+      ],
+    });
   });
 
   it.each([

@@ -807,7 +807,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-E4',
+      phase: 'M12-B3-E5',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1773,8 +1773,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-E4',
-    status: 'b3-e4-implemented',
+    phase: 'M12-B3-E5',
+    status: 'b3-e5-implemented',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2223,7 +2223,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-E4 Composite Multi-Trigger\n\n' +
+    '# M12-B3-E5 Composite Multi-Trigger\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -2518,6 +2518,12 @@ function createSoulEffectTriggerContract({
   });
   const skillSlotBindings = [
     {
+      value: 1,
+      enumName: 'Attack',
+      actionKinds: ['normal-attack'],
+      description: '普通攻击',
+    },
+    {
       value: 4,
       enumName: 'UltraSkill',
       actionKinds: ['ultimate'],
@@ -2641,6 +2647,12 @@ function createSoulEffectTriggerContract({
       sourceKind: 'pet-actor',
       description: '宠物',
     },
+    {
+      value: 9,
+      enumName: 'SelfPet',
+      sourceKind: 'self-pet-actor',
+      description: '自带宠物',
+    },
   ].map(binding => {
     assertIl2CppEnumMember({
       block: triggerSourceTargetBlock,
@@ -2673,6 +2685,12 @@ function createSoulEffectTriggerContract({
       enumName: 'ControllingHero',
       targetKind: 'controlling-hero',
       description: '当前英雄',
+    },
+    {
+      value: 9,
+      enumName: 'Pet',
+      targetKind: 'pet-actor',
+      description: '宠物',
     },
     {
       value: 15,
