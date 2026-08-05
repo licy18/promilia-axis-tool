@@ -807,7 +807,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-E3',
+      phase: 'M12-B3-E4',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1773,8 +1773,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-E3',
-    status: 'b3-e3-implemented',
+    phase: 'M12-B3-E4',
+    status: 'b3-e4-implemented',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2223,7 +2223,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-E3 Composite Multi-Trigger\n\n' +
+    '# M12-B3-E4 Composite Multi-Trigger\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -2542,11 +2542,13 @@ function createSoulEffectTriggerContract({
     ['WhackAttack', 2, 'charged-attack', '角色重击'],
     ['NormalSkill', 3, 'star-skill', '角色小技能'],
     ['UltraSkill', 4, 'ultimate', '角色大招'],
+    ['PetCommandSkill', 5, [], '角色指挥技能'],
     ['Dodge', 6, 'dodge-attack', '角色闪避'],
     ['Jump', 7, 'plunging-attack', '角色跳跃'],
     ['AerialAttack', 9, 'plunging-attack', '角色下落攻击'],
     ['ExtremityAttack', 11, 'limit-counter', '角色极限反击'],
     ['PerfectDodge', 12, 'perfect-parry', '角色完美闪避'],
+    ['PetUltraSkill', 14, [], '宠物大招'],
     ['HeroJointStrikeSkill', 17, 'star-combo', '角色合击技能'],
     ['EntrySkill', 22, 'star-carry', '角色入场技', 'switch-triggered-on-enter'],
   ];
@@ -2562,7 +2564,7 @@ function createSoulEffectTriggerContract({
       return {
         value,
         enumName,
-        actionKinds: [actionKind],
+        actionKinds: Array.isArray(actionKind) ? actionKind : [actionKind],
         provenanceRequirement: provenanceRequirement ?? null,
         status: 'applied',
         sourceIdentity: `${sourcePath}#ESkillTagType.${enumName}=${value}`,
@@ -2633,6 +2635,12 @@ function createSoulEffectTriggerContract({
       sourceKind: 'event-source-actor-events',
       description: '元素来源',
     },
+    {
+      value: 12,
+      enumName: 'Pet',
+      sourceKind: 'pet-actor',
+      description: '宠物',
+    },
   ].map(binding => {
     assertIl2CppEnumMember({
       block: triggerSourceTargetBlock,
@@ -2659,6 +2667,12 @@ function createSoulEffectTriggerContract({
       enumName: 'Target',
       targetKind: 'event-target-actor',
       description: '目标',
+    },
+    {
+      value: 3,
+      enumName: 'ControllingHero',
+      targetKind: 'controlling-hero',
+      description: '当前英雄',
     },
     {
       value: 15,

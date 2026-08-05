@@ -1296,8 +1296,12 @@ function createSoulImmediateEvents({
     .sort((left, right) => String(left.id).localeCompare(String(right.id)));
 
   for (const immediateEffect of immediateEffects) {
-    const targets =
-      immediateEffect.targetKind === 'team-actors' ? actors : [binding.actor];
+    const targets = resolveSoulImmediateEffectTargets({
+      immediateEffect,
+      actors,
+      binding,
+      occurrence,
+    });
     for (const [targetIndex, targetActor] of targets.entries()) {
       const target = {
         kind: EFFECT_TARGET_KINDS.ACTOR,
@@ -1395,6 +1399,27 @@ function createSoulImmediateEvents({
     }
   }
   return { directSpEvents, directHpEvents };
+}
+
+function resolveSoulImmediateEffectTargets({
+  immediateEffect,
+  actors,
+  binding,
+  occurrence,
+}) {
+  if (immediateEffect.targetKind === 'team-actors') {
+    return actors;
+  }
+  if (immediateEffect.targetKind === 'controlling-hero') {
+    const controlledActorId = String(
+      occurrence?.eventContext?.controlledActorId ?? ''
+    );
+    const controlledActor = actors.find(
+      actor => String(actor.id) === controlledActorId
+    );
+    return controlledActor ? [controlledActor] : [];
+  }
+  return [binding.actor];
 }
 
 function evaluateSoulEffectFormula({

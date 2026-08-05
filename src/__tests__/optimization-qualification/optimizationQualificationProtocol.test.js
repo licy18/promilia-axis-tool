@@ -187,14 +187,14 @@ describe('M12-B3 optimization qualification generation', () => {
       artifacts.gaps.records.filter(
         record => record.code === 'soulessence-effect-skill-dynamic-unapplied'
       )
-    ).toHaveLength(10);
+    ).toHaveLength(8);
     expect(
       artifacts.manifests.records.filter(
         record =>
           record.objectKind === 'soul-essence' &&
           record.maturityState === 'runtime-integrated'
       )
-    ).toHaveLength(52);
+    ).toHaveLength(54);
     const unappliedSetSkillGaps = artifacts.gaps.records.filter(
       record => record.code === 'set-skill-dynamic-unapplied'
     );
@@ -250,9 +250,9 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 355,
+      blockingUniqueGapCount: 351,
       byCategory: {
-        'not-implemented': 334,
+        'not-implemented': 330,
         'evidence-insufficient': 21,
       },
     });

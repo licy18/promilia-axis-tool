@@ -3,7 +3,7 @@
   "contractName": "AzPrDynamicLoadoutEffectMechanismCensus",
   "kind": "azpr-dynamic-loadout-effect-mechanism-census",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "sourceCatalogHash": "d3c205ad7465bb31",
+  "sourceCatalogHash": "15c3a2bc9c95bb8c",
   "propertyTagContract": {
     "sourceKind": "il2cpp-battle-property-tag-contract",
     "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag",
@@ -316,6 +316,14 @@
         "description": "元素来源",
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Source=2"
+      },
+      {
+        "value": 12,
+        "enumName": "Pet",
+        "sourceKind": "pet-actor",
+        "description": "宠物",
+        "status": "applied",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Pet=12"
       }
     ],
     "skillSlotBindings": [
@@ -372,6 +380,14 @@
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.UltraSkill=4"
       },
       {
+        "value": 5,
+        "enumName": "PetCommandSkill",
+        "actionKinds": [],
+        "provenanceRequirement": null,
+        "status": "applied",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.PetCommandSkill=5"
+      },
+      {
         "value": 6,
         "enumName": "Dodge",
         "actionKinds": [
@@ -422,6 +438,14 @@
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.PerfectDodge=12"
       },
       {
+        "value": 14,
+        "enumName": "PetUltraSkill",
+        "actionKinds": [],
+        "provenanceRequirement": null,
+        "status": "applied",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.PetUltraSkill=14"
+      },
+      {
         "value": 17,
         "enumName": "HeroJointStrikeSkill",
         "actionKinds": [
@@ -468,6 +492,14 @@
         "description": "目标",
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Target=1"
+      },
+      {
+        "value": 3,
+        "enumName": "ControllingHero",
+        "targetKind": "controlling-hero",
+        "description": "当前英雄",
+        "status": "applied",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.ControllingHero=3"
       },
       {
         "value": 15,
@@ -877,7 +909,7 @@
       },
       "sourceIdentity": "GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.GetTriggerTarget@0x13BBF50/TriggerElement.CheckCondition@0x13B58F0/AliveElementSystem.OnExecuteNormalElement.Block@0x131A545"
     },
-    "contractHash": "bb86377d338f616e"
+    "contractHash": "167e4ab02454e564"
   },
   "policy": {
     "thresholdActivationIsNotRuntimeApplication": true,
@@ -3601,7 +3633,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "runtimeGaps": [
         "effect-active-trigger-not-unique",
-        "effect-damage-branch-unapplied",
+        "effect-immediate-effect-unapplied",
         "effect-skill-tag-condition-operator-unsupported"
       ],
       "sourceIdentity": "NewTable/soulessence.rows[id=10032].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900340.asset/MonoBehaviour/skill_control_1900340__-7674146641941054446.json|battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401|battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403"
@@ -6362,7 +6394,9 @@
       "effectSkillId": 1900880,
       "mechanismFamily": "source-indexed-composite-effect",
       "trigger": {
-        "leafPathIds": [],
+        "leafPathIds": [
+          654594980681767700
+        ],
         "elementId": 19008801,
         "pathId": 8121214350672122000,
         "eventId": 32,
@@ -6387,15 +6421,29 @@
           "triggerTargetTypeName": "Self",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
         },
-        "target": null,
-        "targetKind": "unresolved",
+        "target": {
+          "kind": "self-actor",
+          "effectTargetType": 0,
+          "effectTargetTypeName": "Self",
+          "effectListIndex": 0,
+          "targetElementPathId": 654594980681767700,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        },
+        "targetKind": "self-actor",
         "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801"
       },
       "activationPrerequisites": [],
       "sourceTarget": {
         "source": "equipped-actor",
-        "target": "unresolved",
-        "targetEvidence": null
+        "target": "self-actor",
+        "targetEvidence": {
+          "kind": "self-actor",
+          "effectTargetType": 0,
+          "effectTargetTypeName": "Self",
+          "effectListIndex": 0,
+          "targetElementPathId": 654594980681767700,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        }
       },
       "formula": null,
       "effectPropertyTags": [],
@@ -6412,19 +6460,9 @@
       "evidenceStatus": "source-indexed-runtime-unapplied",
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "runtimeGaps": [
-        "effect-active-trigger-not-unique",
-        "effect-damage-branch-unapplied",
-        "effect-formula-family-operator-unsupported",
-        "effect-property-bucket-unsupported",
-        "effect-property-duration-unresolved",
-        "effect-property-leaf-not-unique",
-        "effect-property-stack-operator-unsupported",
-        "effect-skill-tag-condition-operator-unsupported",
-        "effect-star-values-incomplete",
-        "effect-trigger-event-operator-unsupported",
-        "effect-trigger-target-unsupported"
+        "effect-active-trigger-not-unique"
       ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10063].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900880.asset/MonoBehaviour/skill_control_1900880__3748949261925534020.json|battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801"
+      "sourceIdentity": "NewTable/soulessence.rows[id=10063].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900880.asset/MonoBehaviour/skill_control_1900880__3748949261925534020.json|battle-element-assets.jsonl#path_id=654594980681767700;elementId=19008802"
     },
     {
       "objectKind": "soul-essence",
@@ -7964,9 +8002,12 @@
       "objectId": "10107",
       "displayName": "药草大丰收",
       "effectSkillId": 1900350,
-      "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+      "mechanismFamily": "equipped-actor-immediate-resource-heal-effect",
       "trigger": {
-        "leafPathIds": [],
+        "leafPathIds": [
+          -4920865215663824000,
+          616368813777100300
+        ],
         "elementId": 19003501,
         "pathId": 1736025164143914200,
         "eventId": 6,
@@ -8017,15 +8058,29 @@
           "triggerTargetTypeName": "Self",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
         },
-        "target": null,
-        "targetKind": "unresolved",
+        "target": {
+          "kind": "team-actors",
+          "effectTargetType": 15,
+          "effectTargetTypeName": "AllHero",
+          "effectListIndex": 0,
+          "targetElementPathId": 616368813777100300,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+        },
+        "targetKind": "team-actors",
         "sourceIdentity": "battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501"
       },
       "activationPrerequisites": [],
       "sourceTarget": {
         "source": "equipped-actor",
-        "target": "unresolved",
-        "targetEvidence": null
+        "target": "team-actors",
+        "targetEvidence": {
+          "kind": "team-actors",
+          "effectTargetType": 15,
+          "effectTargetTypeName": "AllHero",
+          "effectListIndex": 0,
+          "targetElementPathId": 616368813777100300,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+        }
       },
       "formula": null,
       "effectPropertyTags": [],
@@ -8037,22 +8092,12 @@
       "vitalChanges": [],
       "delayedEvents": [],
       "loopPersistence": {
-        "status": "runtime-unapplied"
+        "status": "canonical-effect-timeline-applied"
       },
-      "evidenceStatus": "source-indexed-runtime-unapplied",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "effect-active-trigger-not-unique",
-        "effect-damage-branch-unapplied",
-        "effect-formula-family-operator-unsupported",
-        "effect-property-bucket-unsupported",
-        "effect-property-duration-unresolved",
-        "effect-property-leaf-not-unique",
-        "effect-property-stack-operator-unsupported",
-        "effect-star-values-incomplete",
-        "effect-trigger-target-unsupported"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10107].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900350.asset/MonoBehaviour/skill_control_1900350__715439430624416201.json|battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501"
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10107].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900350.asset/MonoBehaviour/skill_control_1900350__715439430624416201.json|battle-element-assets.jsonl#path_id=616368813777100300;elementId=19003502|battle-element-assets.jsonl#path_id=-4920865215663824000;elementId=19003503"
     },
     {
       "objectKind": "soul-essence",
@@ -12068,8 +12113,16 @@
         "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=-8856206549049605000;elementId=19007601.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
         "condition": {
           "kind": "condition-group",
+          "conditionType": null,
+          "skillSlotId": null,
+          "skillSlotName": null,
+          "skillTagId": null,
+          "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "or",
           "logicValue": 1,
+          "logicName": "OR",
           "conditions": [
             {
               "kind": "skill-tag",
@@ -12094,15 +12147,17 @@
               "actionKinds": [],
               "provenanceRequirement": null,
               "tuningProfiles": [],
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=-8856206549049605000;elementId=19007601.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|condition-value-unresolved",
-              "status": "static-evidence-gap",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-8856206549049605000;elementId=19007601.triggerConditionList[1]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.PetCommandSkill=5",
+              "status": "applied",
               "skillTagId": 5,
-              "skillTagName": null
+              "skillTagName": "PetCommandSkill"
             }
           ],
-          "actionKinds": [],
-          "status": "static-evidence-gap",
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=-8856206549049605000;elementId=19007601.triggerConditionType|triggerConditionList"
+          "actionKinds": [
+            "star-skill"
+          ],
+          "status": "applied",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-8856206549049605000;elementId=19007601.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.OR=1"
         },
         "triggerTargetType": 0,
         "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-8856206549049605000;elementId=19007601.triggerTargetType",
@@ -12185,7 +12240,6 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "runtimeGaps": [
         "effect-active-trigger-not-unique",
-        "effect-skill-tag-condition-operator-unsupported",
         "effect-trigger-target-unsupported"
       ],
       "sourceIdentity": "NewTable/soulessence.rows[id=10198].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900760.asset/MonoBehaviour/skill_control_1900760__-7896113229959849353.json|battle-element-assets.jsonl#path_id=-8856206549049605000;elementId=19007601|battle-element-assets.jsonl#path_id=-5972416317449343000;elementId=19007602"
@@ -12195,9 +12249,11 @@
       "objectId": "10216",
       "displayName": "耕种之时",
       "effectSkillId": 1900780,
-      "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+      "mechanismFamily": "equipped-actor-immediate-resource-heal-effect",
       "trigger": {
-        "leafPathIds": [],
+        "leafPathIds": [
+          2616925179382354000
+        ],
         "elementId": 19007801,
         "pathId": -9208882666704061000,
         "eventId": 5,
@@ -12206,9 +12262,17 @@
         "intervalMs": 0,
         "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
         "condition": {
-          "kind": "condition-group",
+          "kind": "skill-tag",
+          "conditionType": 11,
+          "skillSlotId": null,
+          "skillSlotName": null,
+          "skillTagId": 14,
+          "skillTagName": "PetUltraSkill",
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
+          "logicName": "AND",
           "conditions": [
             {
               "kind": "skill-tag",
@@ -12218,28 +12282,47 @@
               "actionKinds": [],
               "provenanceRequirement": null,
               "tuningProfiles": [],
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|condition-value-unresolved",
-              "status": "static-evidence-gap",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckSkillType=11|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.PetUltraSkill=14",
+              "status": "applied",
               "skillTagId": 14,
-              "skillTagName": null
+              "skillTagName": "PetUltraSkill"
             }
           ],
           "actionKinds": [],
-          "status": "static-evidence-gap",
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerConditionType|triggerConditionList"
+          "status": "applied",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
         },
         "triggerTargetType": 12,
         "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerTargetType",
-        "triggerTarget": null,
-        "target": null,
-        "targetKind": "unresolved",
+        "triggerTarget": {
+          "kind": "pet-actor",
+          "triggerTargetType": 12,
+          "triggerTargetTypeName": "Pet",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Pet=12"
+        },
+        "target": {
+          "kind": "controlling-hero",
+          "effectTargetType": 3,
+          "effectTargetTypeName": "ControllingHero",
+          "effectListIndex": 0,
+          "targetElementPathId": 2616925179382354000,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.ControllingHero=3"
+        },
+        "targetKind": "controlling-hero",
         "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801"
       },
       "activationPrerequisites": [],
       "sourceTarget": {
         "source": "equipped-actor",
-        "target": "unresolved",
-        "targetEvidence": null
+        "target": "controlling-hero",
+        "targetEvidence": {
+          "kind": "controlling-hero",
+          "effectTargetType": 3,
+          "effectTargetTypeName": "ControllingHero",
+          "effectListIndex": 0,
+          "targetElementPathId": 2616925179382354000,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.ControllingHero=3"
+        }
       },
       "formula": null,
       "effectPropertyTags": [],
@@ -12251,41 +12334,31 @@
       "vitalChanges": [],
       "delayedEvents": [],
       "loopPersistence": {
-        "status": "runtime-unapplied"
+        "status": "canonical-effect-timeline-applied"
       },
-      "evidenceStatus": "source-indexed-runtime-unapplied",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "effect-active-trigger-not-unique",
-        "effect-formula-family-operator-unsupported",
-        "effect-property-bucket-unsupported",
-        "effect-property-duration-unresolved",
-        "effect-property-leaf-not-unique",
-        "effect-property-stack-operator-unsupported",
-        "effect-skill-tag-condition-operator-unsupported",
-        "effect-star-values-incomplete",
-        "effect-trigger-source-target-unsupported",
-        "effect-trigger-target-unsupported"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10216].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900780.asset/MonoBehaviour/skill_control_1900780__6516213473126657462.json|battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801"
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10216].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900780.asset/MonoBehaviour/skill_control_1900780__6516213473126657462.json|battle-element-assets.jsonl#path_id=2616925179382354000;elementId=19007802"
     }
   ],
   "summary": {
     "soulEssenceCount": 62,
     "setSkillCount": 12,
-    "runtimeAppliedCount": 63,
-    "runtimeUnappliedCount": 11,
+    "runtimeAppliedCount": 65,
+    "runtimeUnappliedCount": 9,
     "byMechanismFamily": {
       "equipped-actor-composite-property-effects": 5,
       "equipped-actor-get-element-property-after-acquire": 2,
       "equipped-actor-get-element-property-before-acquire": 1,
       "equipped-actor-heal-event-target-property": 2,
+      "equipped-actor-immediate-resource-heal-effect": 2,
       "equipped-actor-persistent-property-root": 12,
       "equipped-actor-shield-acquire-team-property": 1,
       "equipped-actor-skill-tag-property-after-damage": 5,
-      "equipped-actor-skill-tag-property-after-skill": 10,
+      "equipped-actor-skill-tag-property-after-skill": 9,
       "equipped-actor-skill-tag-property-before-damage": 7,
-      "equipped-actor-skill-tag-property-before-skill": 9,
+      "equipped-actor-skill-tag-property-before-skill": 8,
       "equipped-actor-switch-enter-team-property": 1,
       "equipped-loadout-periodic-conditional-property-root": 3,
       "set-skill-after-damage-target-property": 1,
@@ -12298,9 +12371,9 @@
     },
     "byEvidenceStatus": {
       "evidence-insufficient": 1,
-      "runtime-applied": 63,
-      "source-indexed-runtime-unapplied": 10
+      "runtime-applied": 65,
+      "source-indexed-runtime-unapplied": 8
     }
   },
-  "censusHash": "2694cdefb7aec15d"
+  "censusHash": "d5d010e8ecb5fba2"
 }

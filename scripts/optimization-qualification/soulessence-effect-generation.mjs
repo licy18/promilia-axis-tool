@@ -2416,6 +2416,8 @@ function buildSoulTriggerEntry({
   beforeDamageEmptyConditionRuntimeEvidence = null,
   knownElementIds = null,
   knownElementTypes = null,
+  effectRowCandidates = null,
+  requiresLeaf = true,
 }) {
   const tree = triggerRow?.typetree ?? {};
   const eventBinding = triggerContract.eventBindings.find(
@@ -2467,13 +2469,14 @@ function buildSoulTriggerEntry({
   const triggerTargetBinding = triggerContract.triggerTargetBindings.find(
     binding => Number(binding.value) === Number(tree.triggerTargetType)
   );
-  const reachablePropertyRows = triggerRow
+  const candidates = effectRowCandidates ?? propertyRows;
+  const reachableEffectRows = triggerRow
     ? collectReachableRows(
         Number(triggerRow.path_id),
         closure.edges,
         battleElementsByPathId
       ).filter(row =>
-        propertyRows.some(item => item.path_id === row.path_id)
+        candidates.some(item => item.path_id === row.path_id)
       )
     : [];
   const triggerEffectRows = Array.isArray(tree.triggerEffectList)
@@ -2482,11 +2485,11 @@ function buildSoulTriggerEntry({
           effectRow,
           effectListIndex,
           targetPathId: Number(effectRow?.targetElement?.m_PathID),
-          matchesLeaf: reachablePropertyRows.some(
-            leafRow =>
+          matchesLeaf: reachableEffectRows.some(
+            effectRowCandidate =>
               findElementPath(
                 Number(effectRow?.targetElement?.m_PathID),
-                Number(leafRow.path_id),
+                Number(effectRowCandidate.path_id),
                 closure.edges
               ) != null
           ),
@@ -2503,20 +2506,20 @@ function buildSoulTriggerEntry({
       : null;
   const sharedLeaf =
     property != null &&
-    reachablePropertyRows.length === 1 &&
-    Number(reachablePropertyRows[0].path_id) === Number(property.path_id);
+    reachableEffectRows.length === 1 &&
+    Number(reachableEffectRows[0].path_id) === Number(property.path_id);
   const baseValid =
     supported &&
     compiledCondition?.status === 'applied' &&
     triggerTargetBinding != null &&
     targetBinding != null &&
-    reachablePropertyRows.length > 0;
+    (!requiresLeaf || reachableEffectRows.length > 0);
   const valid = baseValid && sharedLeaf;
   return {
     valid,
     baseValid,
     value: {
-      leafPathIds: reachablePropertyRows.map(row => Number(row.path_id)),
+      leafPathIds: reachableEffectRows.map(row => Number(row.path_id)),
       elementId: Number(tree.elementConfigId),
       pathId: Number(triggerRow.path_id),
       eventId: Number(tree.triggerParam1),
@@ -2682,6 +2685,225 @@ function compileSoulEffectLeaf({
   };
 }
 
+function compileSoulImmediateEffectDefinition({
+  soul,
+  effectSkillId,
+  logicBySkillId,
+  activeTriggers,
+  unloadTriggers,
+  immediateEffectRows,
+  closure,
+  battleElementsByPathId,
+  triggerContract,
+  tuningMechanicsCatalog,
+  elementFormulaRows,
+  activationConditionRuntimeEvidence,
+  afterDamageEmptyConditionRuntimeEvidence,
+  beforeDamageEmptyConditionRuntimeEvidence,
+  knownElementIds,
+  knownElementTypes,
+  activationPrerequisiteRows,
+  control,
+  missingPathIds,
+  damageRows,
+}) {
+  const triggerEntries = activeTriggers.map(triggerRow =>
+    buildSoulTriggerEntry({
+      triggerRow,
+      property: null,
+      closure,
+      battleElementsByPathId,
+      propertyRows: immediateEffectRows,
+      triggerContract,
+      tuningMechanicsCatalog,
+      elementFormulaRows,
+      activationConditionRuntimeEvidence,
+      afterDamageEmptyConditionRuntimeEvidence,
+      beforeDamageEmptyConditionRuntimeEvidence,
+      knownElementIds,
+      knownElementTypes,
+      effectRowCandidates: immediateEffectRows,
+      requiresLeaf: false,
+    })
+  );
+  const rowTargetByPathId = new Map();
+  for (const triggerRow of activeTriggers) {
+    const tree = triggerRow.typetree ?? {};
+    for (const [effectListIndex, effectRow] of (
+      tree.triggerEffectList ?? []
+    ).entries()) {
+      const targetPathId = Number(effectRow?.targetElement?.m_PathID);
+      const reached = immediateEffectRows.find(
+        row =>
+          findElementPath(
+            targetPathId,
+            Number(row.path_id),
+            closure.edges
+          ) != null
+      );
+      if (!reached) continue;
+      const binding = triggerContract.targetBindings.find(
+        candidate => Number(candidate.value) === Number(effectRow?.targetType)
+      );
+      rowTargetByPathId.set(Number(reached.path_id), {
+        targetKind: binding?.targetKind ?? 'unresolved',
+        targetType: Number(effectRow?.targetType),
+        effectListIndex,
+        targetElementPathId: targetPathId,
+        sourceIdentity: `${createElementIdentity(triggerRow)}.triggerEffectList[${effectListIndex}].targetType|${binding?.sourceIdentity ?? 'target-binding-unresolved'}`,
+      });
+    }
+  }
+  const immediateEffects = [];
+  const effectIssues = [];
+  const seenPathIds = new Set();
+  for (const row of immediateEffectRows) {
+    const pathId = Number(row.path_id);
+    if (seenPathIds.has(pathId)) continue;
+    seenPathIds.add(pathId);
+    const tree = row.typetree ?? {};
+    const target = rowTargetByPathId.get(pathId);
+    const commonFunctionId = Number(
+      tree.formulaParams?.function_1 ?? tree.baseIntParams?.[0]
+    );
+    const baseFunctionId = Number(
+      tree.formulaParams?.function_2 ?? tree.baseIntParams?.[1]
+    );
+    const commonRatioRaw = Number(
+      tree.formulaParams?.formulaParamValues?.[6] ?? tree.functionParams?.[6]
+    );
+    const sourceRawA = Number(
+      tree.formulaParams?.formulaParamValues?.[0] ?? tree.functionParams?.[0]
+    );
+    if (!target || target.targetKind === 'unresolved') {
+      effectIssues.push(`soul-immediate-effect-target-unresolved:${pathId}`);
+      continue;
+    }
+    const isSp = Object.hasOwn(tree, 'recoverType');
+    const baseExpression = isSp
+      ? 'A'
+      : '(target.MAXHP[0]*A)/10000';
+    immediateEffects.push({
+      kind: isSp ? 'direct-sp' : 'direct-heal',
+      effectIndex: target.effectListIndex,
+      elementId: Number(tree.elementConfigId),
+      pathId,
+      targetKind: target.targetKind,
+      targetType: target.targetType,
+      ...(isSp
+        ? {
+            recoverType: Number(tree.recoverType),
+            shareType: Number(tree.shareType),
+            petShareType: Number(tree.petShareType),
+            mainPetShareType: Number(tree.mainPetShareType),
+          }
+        : {
+            damageType: Number(tree.damageType),
+          }),
+      sourceRawValue: sourceRawA,
+      formula: {
+        formulaIdentity: `battle-effect-formula:soulessence:${effectSkillId}:${Number(tree.elementConfigId)}:${pathId}`,
+        commonFunctionId,
+        commonExpression: commonFunctionId === 1 ? 'G/10000' : null,
+        baseFunctionId,
+        baseExpression,
+        sourceRawA,
+        commonRatioRaw,
+        sourceIdentity: `${createElementIdentity(row)}.formulaParams|functionParams`,
+      },
+      sourceIdentity: `${target.sourceIdentity}|${createElementIdentity(row)}`,
+    });
+  }
+  const triggersValid =
+    triggerEntries.length > 0 && triggerEntries.every(entry => entry.baseValid);
+  const effectsValid =
+    immediateEffects.length === immediateEffectRows.length &&
+    effectIssues.length === 0;
+  const gaps = [];
+  if (!control) gaps.push('effect-control-source-missing');
+  if (missingPathIds.length) gaps.push('effect-resource-reference-missing');
+  if (!triggersValid) gaps.push('effect-active-trigger-not-unique');
+  if (damageRows.length) gaps.push('effect-damage-branch-unapplied');
+  if (!effectsValid) gaps.push('effect-immediate-effect-unresolved');
+  const runtimeStatus = gaps.length
+    ? 'source-indexed-runtime-unapplied'
+    : 'runtime-applied';
+  return {
+    soulEssenceId: soul.soulEssenceId,
+    name: soul.name,
+    effectSkillId,
+    effectSkillLogic: logicBySkillId.get(effectSkillId)
+      ? {
+          skillLogicType: Number(
+            logicBySkillId.get(effectSkillId).skillLogicType
+          ),
+          sourceIdentity: `NewTable/skillsub_logic.rows[skillId=${effectSkillId}]`,
+        }
+      : null,
+    runtimeStatus,
+    mechanismFamily:
+      runtimeStatus === 'runtime-applied'
+        ? 'equipped-actor-immediate-resource-heal-effect'
+        : 'source-indexed-composite-effect',
+    activationPrerequisites: activationPrerequisiteRows.map(row => ({
+      elementId: Number(row.typetree?.elementConfigId),
+      pathId: Number(row.path_id),
+      triggerType: Number(row.typetree?.triggerType),
+      conditions: (row.typetree?.triggerConditionList ?? []).map(condition => ({
+        conditionType: Number(condition?.conditionParam1),
+        conditionValue: Number(condition?.conditionParam2),
+        conditionExtra: Number.isFinite(Number(condition?.conditionParam3))
+          ? Number(condition.conditionParam3)
+          : null,
+      })),
+      sourceIdentity: createElementIdentity(row),
+    })),
+    activationConditions: compileActivationConditions({
+      activationPrerequisiteRows,
+      elementFormulaRows,
+      activationConditionRuntimeEvidence,
+    }),
+    trigger: triggerEntries[0]?.value ?? null,
+    triggers: triggerEntries.map(entry => entry.value),
+    effect: null,
+    effectLeaves: [],
+    immediateEffects,
+    sourceClosure: {
+      controlSkillId: effectSkillId,
+      controlSourceIdentity: control?.sourceIdentity ?? null,
+      resourcePathIds: uniqueNumbers(control?.resourcePathIds ?? []),
+      missingPathIds,
+      reachablePathIds: closure.rows.map(row => row.path_id),
+      activeTriggerElementIds: activeTriggers.map(row =>
+        Number(row.typetree?.elementConfigId)
+      ),
+      unloadTriggerElementIds: unloadTriggers.map(row =>
+        Number(row.typetree?.elementConfigId)
+      ),
+      propertyElementIds: [],
+      wrapperElementIds: [],
+      effectPathElementIds: immediateEffectRows.map(row =>
+        Number(row.typetree?.elementConfigId)
+      ),
+      removalPaths: [],
+      damageElementIds: damageRows.map(row =>
+        Number(row.typetree?.elementConfigId)
+      ),
+      activationPrerequisiteElementIds: activationPrerequisiteRows.map(row =>
+        Number(row.typetree?.elementConfigId)
+      ),
+    },
+    runtimeGaps: uniqueStrings(gaps),
+    sourceIdentity: [
+      `NewTable/soulessence.rows[id=${soul.soulEssenceId}].reishiSkill`,
+      control?.sourceIdentity,
+      ...immediateEffectRows.map(createElementIdentity),
+    ]
+      .filter(Boolean)
+      .join('|'),
+  };
+}
+
 function compileSoulEffectDefinition({
   soul,
   sourceDefinition,
@@ -2722,7 +2944,62 @@ function compileSoulEffectDefinition({
       Number.isInteger(Number(row.typetree?.attributeID)) &&
       Number.isInteger(Number(row.typetree?.calculateType))
   );
-  const damageRows = closure.rows.filter(row => isDamageElement(row.typetree));
+  const resourceRows = closure.rows.filter(row =>
+    Object.hasOwn(row.typetree ?? {}, 'recoverType')
+  );
+  const healRows = closure.rows.filter(row => {
+    const tree = row.typetree ?? {};
+    const base = Number(
+      tree.formulaParams?.function_2 ?? tree.baseIntParams?.[1]
+    );
+    return (
+      Number.isInteger(Number(tree.damageType)) &&
+      [104, 108].includes(base)
+    );
+  });
+  const damageRows = closure.rows.filter(
+    row => isDamageElement(row.typetree) && !healRows.includes(row)
+  );
+  const immediateEffectRows = [...resourceRows, ...healRows];
+  const unhandledImmediateEffectRows = immediateEffectRows.filter(
+    row => !propertyRows.includes(row)
+  );
+  const knownElementIds = new Set(
+    [...battleElementsByPathId.values()]
+      .map(row => Number(row.typetree?.elementConfigId))
+      .filter(value => Number.isInteger(value) && value > 0)
+  );
+  const knownElementTypes = new Set(
+    [...battleElementsByPathId.values()].flatMap(row =>
+      Array.isArray(row.typetree?.types)
+        ? row.typetree.types.map(Number)
+      : []
+    )
+  );
+  const primaryTriggerRow = activeTriggers[0] ?? null;
+  const activationPrerequisiteRows = primaryTriggerRow
+    ? closure.rows.filter(row => {
+        if (Number(row.path_id) === Number(primaryTriggerRow.path_id)) {
+          return false;
+        }
+        const tree = row.typetree ?? {};
+        if (
+          Number(tree.triggerType) !== 0 ||
+          !Array.isArray(tree.triggerConditionList) ||
+          tree.triggerConditionList.length === 0
+        ) {
+          return false;
+        }
+        return collectReachableRows(
+          row.path_id,
+          closure.edges,
+          battleElementsByPathId
+        ).some(
+          reachable =>
+            Number(reachable.path_id) === Number(primaryTriggerRow.path_id)
+        );
+      })
+    : [];
   if (activeTriggers.length === 0 && propertyRows.length > 0) {
     return compilePersistentSoulEffectDefinition({
       soul,
@@ -2739,29 +3016,39 @@ function compileSoulEffectDefinition({
       propertyTagContract,
       persistentLoadoutPropertyRuntimeEvidence,
       periodicPersistentPropertyRuntimeEvidence,
+      unhandledImmediateEffectRows,
     });
   }
-  const trigger = activeTriggers[0] ?? null;
-  const activationPrerequisiteRows = trigger
-    ? closure.rows.filter(row => {
-        if (Number(row.path_id) === Number(trigger.path_id)) return false;
-        const tree = row.typetree ?? {};
-        if (
-          Number(tree.triggerType) !== 0 ||
-          !Array.isArray(tree.triggerConditionList) ||
-          tree.triggerConditionList.length === 0
-        ) {
-          return false;
-        }
-        return collectReachableRows(
-          row.path_id,
-          closure.edges,
-          battleElementsByPathId
-        ).some(
-          reachable => Number(reachable.path_id) === Number(trigger.path_id)
-        );
-      })
-    : [];
+  if (
+    immediateEffectRows.length > 0 &&
+    activeTriggers.length > 0 &&
+    propertyRows.length === 0 &&
+    damageRows.length === 0
+  ) {
+    return compileSoulImmediateEffectDefinition({
+      soul,
+      effectSkillId,
+      logicBySkillId,
+      activeTriggers,
+      unloadTriggers,
+      immediateEffectRows,
+      closure,
+      battleElementsByPathId,
+      triggerContract,
+      tuningMechanicsCatalog,
+      elementFormulaRows,
+      activationConditionRuntimeEvidence,
+      afterDamageEmptyConditionRuntimeEvidence,
+      beforeDamageEmptyConditionRuntimeEvidence,
+      knownElementIds,
+      knownElementTypes,
+      activationPrerequisiteRows,
+      control,
+      missingPathIds,
+      damageRows,
+    });
+  }
+  const trigger = primaryTriggerRow;
   const reachablePropertyRows = trigger
     ? collectReachableRows(
         trigger.path_id,
@@ -2876,18 +3163,6 @@ function compileSoulEffectDefinition({
     rows: valueRowsBySkillId.get(effectSkillId) ?? [],
     elementId: Number(propertyTree.elementConfigId),
   });
-  const knownElementIds = new Set(
-    [...battleElementsByPathId.values()]
-      .map(row => Number(row.typetree?.elementConfigId))
-      .filter(value => Number.isInteger(value) && value > 0)
-  );
-  const knownElementTypes = new Set(
-    [...battleElementsByPathId.values()].flatMap(row =>
-      Array.isArray(row.typetree?.types)
-        ? row.typetree.types.map(Number)
-        : []
-    )
-  );
   const triggerEntries = activeTriggers.map(triggerRow =>
     buildSoulTriggerEntry({
       triggerRow,
@@ -2953,6 +3228,8 @@ function compileSoulEffectDefinition({
     if (missingPathIds.length) gaps.push('effect-resource-reference-missing');
     if (!triggersValid) gaps.push('effect-active-trigger-not-unique');
     if (damageRows.length) gaps.push('effect-damage-branch-unapplied');
+    if (unhandledImmediateEffectRows.length)
+      gaps.push('effect-immediate-effect-unapplied');
     if (!leafValid) gaps.push('effect-property-leaf-not-unique');
     for (const leaf of compiledLeaves) gaps.push(...leaf.gaps);
     const effectLeaves = compiledLeaves.map(leaf => leaf.effect);
@@ -3082,6 +3359,8 @@ function compileSoulEffectDefinition({
     runtimeGaps.push('effect-property-leaf-not-unique');
   }
   if (damageRows.length) runtimeGaps.push('effect-damage-branch-unapplied');
+  if (unhandledImmediateEffectRows.length)
+    runtimeGaps.push('effect-immediate-effect-unapplied');
   if (!(Number(lifecycle?.durationMs) > 0)) {
     runtimeGaps.push('effect-property-duration-unresolved');
   }
@@ -3274,6 +3553,7 @@ function compilePersistentSoulEffectDefinition({
   propertyTagContract,
   persistentLoadoutPropertyRuntimeEvidence,
   periodicPersistentPropertyRuntimeEvidence,
+  unhandledImmediateEffectRows = [],
 }) {
   const persistentRoot = compilePersistentPropertyRoot({
     ownerKind: 'soul-essence',
@@ -3297,6 +3577,9 @@ function compilePersistentSoulEffectDefinition({
   const runtimeGaps = uniqueStrings([
     ...(control ? [] : ['effect-control-source-missing']),
     ...(missingPathIds.length ? ['effect-resource-reference-missing'] : []),
+    ...(unhandledImmediateEffectRows.length
+      ? ['effect-immediate-effect-unapplied']
+      : []),
     ...persistentRoot.runtimeGaps,
   ]);
   const runtimeStatus = runtimeGaps.length

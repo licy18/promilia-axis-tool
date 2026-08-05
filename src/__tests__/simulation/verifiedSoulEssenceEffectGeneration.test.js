@@ -48,6 +48,8 @@ const SOUL_SKILL_ID = 1900480;
 const OWNER_ID = 101007;
 const PROPERTY_TAG_TEST_KIBO_ID = 500216;
 const PROPERTY_TAG_TEST_KIBO_SKILL_ID = 50021601;
+const PET_ULTRA_KIBO_ID = 500042;
+const PET_ULTRA_KIBO_SKILL_ID = 50004202;
 
 const APPLIED_SOUL_EFFECT_MATRIX = [
   {
@@ -451,8 +453,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 52,
-      unresolvedCount: 10,
+      runtimeAppliedCount: 54,
+      unresolvedCount: 8,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -466,7 +468,7 @@ describe('verified soul essence effect generation', () => {
     ).toMatchObject({
       runtimeStatus: 'source-indexed-runtime-unapplied',
       runtimeGaps: expect.arrayContaining([
-        'effect-damage-branch-unapplied',
+        'effect-immediate-effect-unapplied',
         'effect-skill-tag-condition-operator-unsupported',
       ]),
     });
@@ -639,7 +641,8 @@ describe('verified soul essence effect generation', () => {
     const appliedDefinitions = soulEssenceEffectCatalog.definitions.filter(
       definition =>
         definition.runtimeStatus === 'runtime-applied' &&
-        definition.trigger != null
+        definition.trigger != null &&
+        definition.effect != null
     );
 
     expect(
@@ -672,6 +675,223 @@ describe('verified soul essence effect generation', () => {
         },
       });
     }
+  });
+
+  it('applies the real 10107 AfterSkill NormalSkill team SP and max-HP heal', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10107
+    );
+    expect(definition).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'equipped-actor-immediate-resource-heal-effect',
+      trigger: {
+        event: 'AfterSkill',
+        frameAnchor: 'action-end',
+        condition: {
+          kind: 'skill-tag',
+          skillTagId: 3,
+          skillTagName: 'NormalSkill',
+        },
+        triggerTarget: expect.objectContaining({
+          kind: 'equipped-actor-source-events',
+        }),
+        target: expect.objectContaining({ kind: 'team-actors' }),
+      },
+      immediateEffects: [
+        expect.objectContaining({
+          kind: 'direct-sp',
+          targetKind: 'team-actors',
+          targetType: 15,
+          sourceRawValue: 18,
+          recoverType: 0,
+          shareType: 0,
+        }),
+        expect.objectContaining({
+          kind: 'direct-heal',
+          targetKind: 'team-actors',
+          targetType: 15,
+          damageType: 5,
+          sourceRawValue: 500,
+          formula: expect.objectContaining({
+            baseFunctionId: 104,
+            baseExpression: '(target.MAXHP[0]*A)/10000',
+          }),
+        }),
+      ],
+      runtimeGaps: [],
+    });
+
+    const result = createRealSoulScenario({
+      actorCharacterId: 101007,
+      soulEssenceId: 10107,
+      effectSkillId: 1900350,
+      durationMs: 12_000,
+      ownerInitialSp: 0,
+      teamCharacterIds: [101007, 101003, 101010],
+      actionPlan: [
+        {
+          id: 'soul-10107-normal-skill',
+          actionKind: 'star-skill',
+          startFrame: 60,
+        },
+      ],
+    });
+    const generation = result.verifiedSoulEssenceEffectGeneration;
+    expect(generation.directSpEvents).toHaveLength(3);
+    expect(generation.directHpEvents).toHaveLength(3);
+    for (const event of generation.directSpEvents) {
+      expect(event).toMatchObject({
+        kind: 'direct-sp',
+        value: 18,
+        effect: {
+          elementId: 19003502,
+          directSp: {
+            recoverType: 0,
+            shareType: 0,
+            petShareType: 0,
+            mainPetShareType: 0,
+          },
+        },
+      });
+    }
+    for (const event of generation.directHpEvents) {
+      expect(event).toMatchObject({
+        kind: 'direct-heal',
+        effect: {
+          elementId: 19003503,
+          heal: {
+            damageType: 5,
+            formula: expect.objectContaining({
+              baseFunctionId: 104,
+              sourceRawA: 500,
+            }),
+          },
+        },
+      });
+    }
+    expect(generation.effectCommands).toEqual([]);
+  });
+
+  it('applies the real 10216 BeforeSkill PetUltraSkill direct-SP to the controlling hero', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10216
+    );
+    expect(definition).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'equipped-actor-immediate-resource-heal-effect',
+      trigger: {
+        event: 'BeforeSkill',
+        frameAnchor: 'action-start',
+        condition: {
+          kind: 'skill-tag',
+          skillTagId: 14,
+          skillTagName: 'PetUltraSkill',
+        },
+        triggerTarget: expect.objectContaining({ kind: 'pet-actor' }),
+        target: expect.objectContaining({ kind: 'controlling-hero' }),
+      },
+      immediateEffects: [
+        expect.objectContaining({
+          kind: 'direct-sp',
+          targetKind: 'controlling-hero',
+          targetType: 3,
+          sourceRawValue: 100000,
+          recoverType: 0,
+          shareType: 0,
+        }),
+      ],
+      runtimeGaps: [],
+    });
+
+    const teamSlots = createDefaultWorkbenchTeamSlots();
+    const actorConfigs = createDefaultWorkbenchActorConfigs(
+      DEFAULT_WORKBENCH_SELECTION
+    ).map(config =>
+      Number(config.characterId) === OWNER_ID
+        ? {
+            ...config,
+            initialSp: 0,
+            loadout: {
+              ...config.loadout,
+              kiboId: PET_ULTRA_KIBO_ID,
+              soulessenceId: 10216,
+              soulessenceLevel: 80,
+              soulessenceRank: 1,
+              soulessenceStar: 1,
+              soulessenceCultivation: {
+                effectSkill: {
+                  skillId: 1900780,
+                  star: 1,
+                  skillLevel: 1,
+                  runtimeStatus: 'runtime-applied',
+                  sourceIdentity: 'fixture:strict-soulessence-star-1',
+                },
+              },
+            },
+          }
+        : config
+    );
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      durationMs: 12_000,
+      teamSlots,
+      actorConfigs,
+      actions: [
+        createWorkbenchActionDraft({
+          id: 'soul-10216-pet-ultra',
+          type: 'kiboEvent',
+          actorCharacterId: OWNER_ID,
+          skillId: PET_ULTRA_KIBO_SKILL_ID,
+          kiboId: PET_ULTRA_KIBO_ID,
+          actionVariantIndex: 0,
+          startMs: 0,
+          durationMs: 2000,
+          eventType: 'signature',
+        }),
+      ],
+      initialRuntimeState: {
+        kiboEnergyBySlot: [
+          {
+            slotId: 'team-slot-3',
+            kiboId: PET_ULTRA_KIBO_ID,
+            currentValue: 100,
+            maxValue: 100,
+          },
+        ],
+        controlledActor: {
+          actorId: 'actor-101007',
+          characterId: 101007,
+        },
+      },
+      mechanicsProfileSelection:
+        createVerifiedWorkbenchMechanicsProfileSelection(),
+    });
+    const result = simulateScenario(
+      compileProject(project, getWorkbenchGameData())
+    );
+    const generation = result.verifiedSoulEssenceEffectGeneration;
+    expect(generation.directSpEvents).toHaveLength(1);
+    expect(generation.directSpEvents[0]).toMatchObject({
+      kind: 'direct-sp',
+      value: 100000,
+      target: { kind: 'actor', id: 'actor-101007' },
+      effect: {
+        elementId: 19007802,
+        directSp: {
+          recoverType: 0,
+          shareType: 0,
+          petShareType: 0,
+          mainPetShareType: 0,
+        },
+      },
+    });
+    expect(generation.directHpEvents).toEqual([]);
+    expect(generation.suppressions).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          reason: 'soulessence-effect-action-kind-condition-not-matched',
+        }),
+      ])
+    );
   });
 
   it.each([
