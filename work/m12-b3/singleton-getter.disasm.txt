@@ -1,0 +1,83 @@
+# C:\AP\AzurPromilia_TC\AzurPromilia_game\GameAssembly.dll
+# RVA=0x16E5E30 size=0x140 fileOffset=0x16E4630 section=il2cpp
+00000001816E5E30  sub      rsp, 0x28
+00000001816E5E34  cmp      byte ptr [rip + 0xb15fe31], 0
+00000001816E5E3B  jne      0x1816e5e5c
+00000001816E5E3D  lea      rcx, [rip + 0xabd1c64]
+00000001816E5E44  call     0x180c7b870
+00000001816E5E49  lea      rcx, [rip + 0xad7e1d8]
+00000001816E5E50  call     0x180c7b870
+00000001816E5E55  mov      byte ptr [rip + 0xb15fe10], 1
+00000001816E5E5C  mov      rcx, qword ptr [rip + 0xabd1c45]
+00000001816E5E63  test     byte ptr [rcx + 0x53], 0x20
+00000001816E5E67  je       0x1816e5e74
+00000001816E5E69  mov      rax, qword ptr [rcx + 0x60]
+00000001816E5E6D  add      rsp, 0x28
+00000001816E5E71  jmp      rax
+00000001816E5E74  mov      rax, qword ptr [rip + 0xad7e1ad]
+00000001816E5E7B  mov      rcx, qword ptr [rax + 0xb8]
+00000001816E5E82  mov      rax, qword ptr [rcx]
+00000001816E5E85  test     rax, rax
+00000001816E5E88  je       0x1816e5e93
+00000001816E5E8A  mov      rax, qword ptr [rax + 0x50]
+00000001816E5E8E  add      rsp, 0x28
+00000001816E5E92  ret      
+00000001816E5E93  call     0x180c7bb00
+00000001816E5E98  int3     
+00000001816E5E99  int3     
+00000001816E5E9A  int3     
+00000001816E5E9B  int3     
+00000001816E5E9C  int3     
+00000001816E5E9D  int3     
+00000001816E5E9E  int3     
+00000001816E5E9F  int3     
+00000001816E5EA0  sub      rsp, 0x28
+00000001816E5EA4  cmp      byte ptr [rip + 0xb15fdbf], 0
+00000001816E5EAB  jne      0x1816e5ecc
+00000001816E5EAD  lea      rcx, [rip + 0xabd1fac]
+00000001816E5EB4  call     0x180c7b870
+00000001816E5EB9  lea      rcx, [rip + 0xad7e168]
+00000001816E5EC0  call     0x180c7b870
+00000001816E5EC5  mov      byte ptr [rip + 0xb15fd9e], 1
+00000001816E5ECC  mov      rcx, qword ptr [rip + 0xabd1f8d]
+00000001816E5ED3  test     byte ptr [rcx + 0x53], 0x20
+00000001816E5ED7  je       0x1816e5ee4
+00000001816E5ED9  mov      rax, qword ptr [rcx + 0x60]
+00000001816E5EDD  add      rsp, 0x28
+00000001816E5EE1  jmp      rax
+00000001816E5EE4  mov      rax, qword ptr [rip + 0xad7e13d]
+00000001816E5EEB  mov      rcx, qword ptr [rax + 0xb8]
+00000001816E5EF2  mov      rax, qword ptr [rcx]
+00000001816E5EF5  test     rax, rax
+00000001816E5EF8  je       0x1816e5f03
+00000001816E5EFA  mov      rax, qword ptr [rax + 0x60]
+00000001816E5EFE  add      rsp, 0x28
+00000001816E5F02  ret      
+00000001816E5F03  call     0x180c7bb00
+00000001816E5F08  int3     
+00000001816E5F09  int3     
+00000001816E5F0A  int3     
+00000001816E5F0B  int3     
+00000001816E5F0C  int3     
+00000001816E5F0D  int3     
+00000001816E5F0E  int3     
+00000001816E5F0F  int3     
+00000001816E5F10  sub      rsp, 0x28
+00000001816E5F14  cmp      byte ptr [rip + 0xb15fd4b], 0
+00000001816E5F1B  jne      0x1816e5f3c
+00000001816E5F1D  lea      rcx, [rip + 0xabd22ec]
+00000001816E5F24  call     0x180c7b870
+00000001816E5F29  lea      rcx, [rip + 0xad7e0f8]
+00000001816E5F30  call     0x180c7b870
+00000001816E5F35  mov      byte ptr [rip + 0xb15fd2a], 1
+00000001816E5F3C  mov      rcx, qword ptr [rip + 0xabd22cd]
+00000001816E5F43  test     byte ptr [rcx + 0x53], 0x20
+00000001816E5F47  je       0x1816e5f54
+00000001816E5F49  mov      rax, qword ptr [rcx + 0x60]
+00000001816E5F4D  add      rsp, 0x28
+00000001816E5F51  jmp      rax
+00000001816E5F54  mov      rax, qword ptr [rip + 0xad7e0cd]
+00000001816E5F5B  mov      rcx, qword ptr [rax + 0xb8]
+00000001816E5F62  mov      rax, qword ptr [rcx]
+00000001816E5F65  test     rax, rax
+00000001816E5F68  je       0x1816e5f76

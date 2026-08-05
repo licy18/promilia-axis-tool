@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "26c5b9f3de5c2dd5",
+  "rosterHash": "027d033dfdd0ddcf",
   "records": [
     {
       "objectKind": "character",
@@ -10352,6 +10352,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19004801,
             "pathId": -4992960068897353000,
@@ -10539,7 +10540,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10001].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900480.asset/MonoBehaviour/skill_control_1900480__-3360510152850789063.json|battle-element-assets.jsonl#path_id=-4992960068897353000;elementId=19004801|battle-element-assets.jsonl#path_id=7615727136823255000;elementId=19004802"
         }
       },
-      "manifestHash": "d5b0858dbe93be70"
+      "manifestHash": "ce75740383cebaa0"
     },
     {
       "objectKind": "soul-essence",
@@ -10582,6 +10583,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19006100,
             "pathId": 4614392219156132000,
@@ -10769,7 +10771,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10002].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900610.asset/MonoBehaviour/skill_control_1900610__-5226631149718649563.json|battle-element-assets.jsonl#path_id=4614392219156132000;elementId=19006100|battle-element-assets.jsonl#path_id=-131968735896823040;elementId=19006104"
         }
       },
-      "manifestHash": "fc9b4800e2929fdb"
+      "manifestHash": "88cead62f7218e8f"
     },
     {
       "objectKind": "soul-essence",
@@ -10836,6 +10838,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "source-indexed-composite-effect",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": null,
           "effect": null,
           "sourceClosure": {
@@ -10888,7 +10891,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10008].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900120.asset/MonoBehaviour/skill_control_1900120__672231505877738425.json"
         }
       },
-      "manifestHash": "9a7fc27ef9e35e38"
+      "manifestHash": "11d35a81993fea24"
     },
     {
       "objectKind": "soul-essence",
@@ -10955,6 +10958,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "source-indexed-composite-effect",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": null,
           "effect": null,
           "sourceClosure": {
@@ -11007,7 +11011,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10011].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900530.asset/MonoBehaviour/skill_control_1900530__7646815027927349175.json"
         }
       },
-      "manifestHash": "baa5557ffc1f99f4"
+      "manifestHash": "f21273454e9a252c"
     },
     {
       "objectKind": "soul-essence",
@@ -11017,23 +11021,9 @@
         "generated/soulessences.json#items[id=10018]",
         "NewTable/soulessence.rows[id=10018]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "soulessence-effect-skill-dynamic-unapplied",
-          "category": "not-implemented",
-          "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
-          "skillId": 1900400,
-          "reasons": [
-            "effect-activation-condition-operator-unsupported"
-          ]
-        },
-        {
-          "code": "strict-soulessence-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied."
-        },
         {
           "code": "soulessence-visual-acceptance-not-published",
           "category": "not-implemented",
@@ -11050,7 +11040,7 @@
         "maximumRank": 6,
         "staticProfileApplied": true,
         "effectSkillId": 1900400,
-        "effectStatus": "source-indexed-runtime-unapplied",
+        "effectStatus": "runtime-applied",
         "sourceIdentity": "NewTable/soulessence.rows[id=10018]",
         "sourceEffectStatus": "effect-skill-dynamic-unapplied",
         "effectMechanics": {
@@ -11061,7 +11051,7 @@
             "skillLogicType": 6,
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900400]"
           },
-          "runtimeStatus": "source-indexed-runtime-unapplied",
+          "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
           "activationPrerequisites": [
             {
@@ -11076,6 +11066,18 @@
                 }
               ],
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-8153693107315429000;elementId=19004001"
+            }
+          ],
+          "activationConditions": [
+            {
+              "kind": "element-formula-layer-gt",
+              "formulaId": 1007,
+              "markId": 250,
+              "minLayers": 1,
+              "valueRaw": 10000,
+              "formula": "IF(self.ELEMENT_LAYERS[J]>K,G,0)",
+              "status": "applied",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-8153693107315429000;elementId=19004001.triggerConditionList[0]|NewTable/element_formula.json#rows[id=1007]|GameAssembly.dll#ConditionalSelectionElement.CheckCondition@0x137E810/BattleConfigManager.get_elementFormulaConfig@0x16E5E30/ElementFormulaData.GetId@0x1B3FB70/FormulaUtility.Calculate@0x187C840|NewTable/element_formula.json#rows[id=1007]"
             }
           ],
           "trigger": {
@@ -11265,13 +11267,11 @@
               19004001
             ]
           },
-          "runtimeGaps": [
-            "effect-activation-condition-operator-unsupported"
-          ],
+          "runtimeGaps": [],
           "sourceIdentity": "NewTable/soulessence.rows[id=10018].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900400.asset/MonoBehaviour/skill_control_1900400__-2587960116876469994.json|battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002|battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003"
         }
       },
-      "manifestHash": "9d5996c2624ded0e"
+      "manifestHash": "ca295d45b2d70de7"
     },
     {
       "objectKind": "soul-essence",
@@ -11329,6 +11329,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19003401,
             "pathId": -4873163209865115000,
@@ -11511,7 +11512,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10032].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900340.asset/MonoBehaviour/skill_control_1900340__-7674146641941054446.json|battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401|battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403"
         }
       },
-      "manifestHash": "20a314a9c63bcbaf"
+      "manifestHash": "1ecae8089b8bdea3"
     },
     {
       "objectKind": "soul-essence",
@@ -12104,6 +12105,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19004500,
             "pathId": -5806624494324189000,
@@ -12291,7 +12293,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10037].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900450.asset/MonoBehaviour/skill_control_1900450__2734482160659846208.json|battle-element-assets.jsonl#path_id=-5806624494324189000;elementId=19004500|battle-element-assets.jsonl#path_id=6108188296881701000;elementId=19004501"
         }
       },
-      "manifestHash": "18643bd614179749"
+      "manifestHash": "2397fe4808f988f9"
     },
     {
       "objectKind": "soul-essence",
@@ -12334,6 +12336,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-get-element-property-before-acquire",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19003301,
             "pathId": -2023989584562330600,
@@ -12531,7 +12534,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10043].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900330.asset/MonoBehaviour/skill_control_1900330__-3361609167118804129.json|battle-element-assets.jsonl#path_id=-2023989584562330600;elementId=19003301|battle-element-assets.jsonl#path_id=-4023729244501754000;elementId=19003302"
         }
       },
-      "manifestHash": "4aebc26350a2b37f"
+      "manifestHash": "4a9302c715a451c7"
     },
     {
       "objectKind": "soul-essence",
@@ -12574,6 +12577,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19005500,
             "pathId": -4330459562266431000,
@@ -12800,7 +12804,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10044].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900550.asset/MonoBehaviour/skill_control_1900550__-7653067718708357441.json|battle-element-assets.jsonl#path_id=-4330459562266431000;elementId=19005500|battle-element-assets.jsonl#path_id=1889171037961678300;elementId=19005503"
         }
       },
-      "manifestHash": "745f01c4ecf00eea"
+      "manifestHash": "661f1079e46ff876"
     },
     {
       "objectKind": "soul-essence",
@@ -13118,6 +13122,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-switch-enter-team-property",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19009201,
             "pathId": -6515773177271123000,
@@ -13280,7 +13285,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10048].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900920.asset/MonoBehaviour/skill_control_1900920__-4473087367283292344.json|battle-element-assets.jsonl#path_id=-6515773177271123000;elementId=19009201|battle-element-assets.jsonl#path_id=-5655228325641076000;elementId=19009202"
         }
       },
-      "manifestHash": "9830cb98c09d13ba"
+      "manifestHash": "d5b905f891a54a16"
     },
     {
       "objectKind": "soul-essence",
@@ -13598,6 +13603,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19009101,
             "pathId": -7255963679965377000,
@@ -13906,7 +13912,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10052].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900910.asset/MonoBehaviour/skill_control_1900910__2559169442837246188.json|battle-element-assets.jsonl#path_id=-7255963679965377000;elementId=19009101|battle-element-assets.jsonl#path_id=4769837230415874000;elementId=19009102"
         }
       },
-      "manifestHash": "4d8b247b74f7d8ab"
+      "manifestHash": "d5b1d2ee544cf1bb"
     },
     {
       "objectKind": "soul-essence",
@@ -13949,6 +13955,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19009301,
             "pathId": 6322365379307683000,
@@ -14151,7 +14158,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10055].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900930.asset/MonoBehaviour/skill_control_1900930__3135420117074848428.json|battle-element-assets.jsonl#path_id=6322365379307683000;elementId=19009301|battle-element-assets.jsonl#path_id=-2274249246834308600;elementId=19009302"
         }
       },
-      "manifestHash": "3aaf517bcb42b854"
+      "manifestHash": "7481b85f3fe0347c"
     },
     {
       "objectKind": "soul-essence",
@@ -15294,6 +15301,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19009001,
             "pathId": 3763334915368993000,
@@ -15483,7 +15491,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10060].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900900.asset/MonoBehaviour/skill_control_1900900__44735022036249210.json|battle-element-assets.jsonl#path_id=3763334915368993000;elementId=19009001|battle-element-assets.jsonl#path_id=-2685633708192990000;elementId=19009002"
         }
       },
-      "manifestHash": "7966e252b91095d2"
+      "manifestHash": "691d17cd1f2d037a"
     },
     {
       "objectKind": "soul-essence",
@@ -16099,6 +16107,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "source-indexed-composite-effect",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19008801,
             "pathId": 8121214350672122000,
@@ -16175,7 +16184,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10063].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900880.asset/MonoBehaviour/skill_control_1900880__3748949261925534020.json|battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801"
         }
       },
-      "manifestHash": "194416c9dde61e1b"
+      "manifestHash": "89bd4fd0f85a7463"
     },
     {
       "objectKind": "soul-essence",
@@ -16242,6 +16251,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "source-indexed-composite-effect",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": null,
           "effect": null,
           "sourceClosure": {
@@ -16294,7 +16304,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10071].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900650.asset/MonoBehaviour/skill_control_1900650__855217176283647622.json"
         }
       },
-      "manifestHash": "24de358d8383bc25"
+      "manifestHash": "c46e323444033315"
     },
     {
       "objectKind": "soul-essence",
@@ -16361,6 +16371,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "source-indexed-composite-effect",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": null,
           "effect": null,
           "sourceClosure": {
@@ -16418,7 +16429,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10076].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900190.asset/MonoBehaviour/skill_control_1900190__947113783478568836.json"
         }
       },
-      "manifestHash": "9add8433c9e9957d"
+      "manifestHash": "fce0294c0472e3e5"
     },
     {
       "objectKind": "soul-essence",
@@ -17152,6 +17163,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19002301,
             "pathId": -4157799704864835600,
@@ -17354,7 +17366,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10093].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900230.asset/MonoBehaviour/skill_control_1900230__7491246200405412096.json|battle-element-assets.jsonl#path_id=-4157799704864835600;elementId=19002301|battle-element-assets.jsonl#path_id=475903754845527040;elementId=19002302"
         }
       },
-      "manifestHash": "a9c5a37f8f7bee53"
+      "manifestHash": "e5dd563b98cc0d33"
     },
     {
       "objectKind": "soul-essence",
@@ -17397,6 +17409,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19006601,
             "pathId": 1967620083657371400,
@@ -17586,7 +17599,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10094].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900660.asset/MonoBehaviour/skill_control_1900660__7785137375177341249.json|battle-element-assets.jsonl#path_id=1967620083657371400;elementId=19006601|battle-element-assets.jsonl#path_id=8461738275188953000;elementId=19006602"
         }
       },
-      "manifestHash": "f44d806d2d64fe71"
+      "manifestHash": "b1341fa0b15b6af5"
     },
     {
       "objectKind": "soul-essence",
@@ -17653,6 +17666,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "source-indexed-composite-effect",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": null,
           "effect": null,
           "sourceClosure": {
@@ -17708,7 +17722,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10095].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900320.asset/MonoBehaviour/skill_control_1900320__-2637092768690775001.json"
         }
       },
-      "manifestHash": "b21765306d38807a"
+      "manifestHash": "831af19e064c8cf6"
     },
     {
       "objectKind": "soul-essence",
@@ -17751,6 +17765,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19004700,
             "pathId": 4922202484723645000,
@@ -17938,7 +17953,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10097].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900470.asset/MonoBehaviour/skill_control_1900470__7648283824826147029.json|battle-element-assets.jsonl#path_id=4922202484723645000;elementId=19004700|battle-element-assets.jsonl#path_id=-6749174475042234000;elementId=19004701"
         }
       },
-      "manifestHash": "a25fd8edbd5ac656"
+      "manifestHash": "8d3b3b7987a6abb2"
     },
     {
       "objectKind": "soul-essence",
@@ -17981,6 +17996,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19006701,
             "pathId": 4493671040636124000,
@@ -18170,7 +18186,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10098].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900670.asset/MonoBehaviour/skill_control_1900670__-3252376364471466317.json|battle-element-assets.jsonl#path_id=4493671040636124000;elementId=19006701|battle-element-assets.jsonl#path_id=-5650259386971768000;elementId=19006702"
         }
       },
-      "manifestHash": "99fb0e1021019dc3"
+      "manifestHash": "7b387a80c41a1eef"
     },
     {
       "objectKind": "soul-essence",
@@ -18213,6 +18229,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19002001,
             "pathId": -5029048619406844000,
@@ -18375,7 +18392,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10101].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900200.asset/MonoBehaviour/skill_control_1900200__-1028192825404748457.json|battle-element-assets.jsonl#path_id=-5029048619406844000;elementId=19002001|battle-element-assets.jsonl#path_id=447782200906035000;elementId=19002002"
         }
       },
-      "manifestHash": "3929b8e50d347858"
+      "manifestHash": "f744b4bd00610ba4"
     },
     {
       "objectKind": "soul-essence",
@@ -18439,6 +18456,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19003501,
             "pathId": 1736025164143914200,
@@ -18541,7 +18559,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10107].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900350.asset/MonoBehaviour/skill_control_1900350__715439430624416201.json|battle-element-assets.jsonl#path_id=1736025164143914200;elementId=19003501"
         }
       },
-      "manifestHash": "7e5df042be4774ca"
+      "manifestHash": "5d56abcb53c57e82"
     },
     {
       "objectKind": "soul-essence",
@@ -18608,6 +18626,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "source-indexed-composite-effect",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": null,
           "effect": null,
           "sourceClosure": {
@@ -18675,7 +18694,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10121].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900580.asset/MonoBehaviour/skill_control_1900580__5994700394878693879.json"
         }
       },
-      "manifestHash": "cd2eeb9b80af92a2"
+      "manifestHash": "1e247d858cb64c0e"
     },
     {
       "objectKind": "soul-essence",
@@ -18742,6 +18761,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "source-indexed-composite-effect",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": null,
           "effect": null,
           "sourceClosure": {
@@ -18800,7 +18820,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10122].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900570.asset/MonoBehaviour/skill_control_1900570__334890856914764825.json"
         }
       },
-      "manifestHash": "8ecfb4aed63d41a1"
+      "manifestHash": "2e2dafcc7a820fb1"
     },
     {
       "objectKind": "soul-essence",
@@ -18843,6 +18863,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19005900,
             "pathId": -7832567119319180000,
@@ -19042,7 +19063,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10123].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900590.asset/MonoBehaviour/skill_control_1900590__210735096432786726.json|battle-element-assets.jsonl#path_id=-7832567119319180000;elementId=19005900|battle-element-assets.jsonl#path_id=8480096044321114000;elementId=19005901"
         }
       },
-      "manifestHash": "b5d185f947484c98"
+      "manifestHash": "f1d0909d0a428268"
     },
     {
       "objectKind": "soul-essence",
@@ -19085,6 +19106,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19004101,
             "pathId": -2700117266412374500,
@@ -19299,7 +19321,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10124].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900410.asset/MonoBehaviour/skill_control_1900410__4820183586340899112.json|battle-element-assets.jsonl#path_id=-2700117266412374500;elementId=19004101|battle-element-assets.jsonl#path_id=-4751821042418617000;elementId=19004102"
         }
       },
-      "manifestHash": "c159f5eb4b60ca4f"
+      "manifestHash": "fb1fb61e42555aeb"
     },
     {
       "objectKind": "soul-essence",
@@ -19342,6 +19364,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19005401,
             "pathId": -8058605269236214000,
@@ -19529,7 +19552,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10125].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900540.asset/MonoBehaviour/skill_control_1900540__-5207417492774847545.json|battle-element-assets.jsonl#path_id=-8058605269236214000;elementId=19005401|battle-element-assets.jsonl#path_id=-3194128450977334000;elementId=19005402"
         }
       },
-      "manifestHash": "eaebab0d69096359"
+      "manifestHash": "b5afe7d9666c65fd"
     },
     {
       "objectKind": "soul-essence",
@@ -19572,6 +19595,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19002801,
             "pathId": -908628671126506600,
@@ -19771,7 +19795,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10130].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900280.asset/MonoBehaviour/skill_control_1900280__4588656220270570984.json|battle-element-assets.jsonl#path_id=-908628671126506600;elementId=19002801|battle-element-assets.jsonl#path_id=7184896566896581000;elementId=19002802"
         }
       },
-      "manifestHash": "73e32ae6ff21c908"
+      "manifestHash": "ef5b35312b8e234c"
     },
     {
       "objectKind": "soul-essence",
@@ -19814,6 +19838,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19002701,
             "pathId": 1890390088406099200,
@@ -20038,7 +20063,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10131].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900270.asset/MonoBehaviour/skill_control_1900270__1514447479398424667.json|battle-element-assets.jsonl#path_id=1890390088406099200;elementId=19002701|battle-element-assets.jsonl#path_id=8731924757452644000;elementId=19002702"
         }
       },
-      "manifestHash": "73af76629c64f292"
+      "manifestHash": "a3b9f37c17a6c3f6"
     },
     {
       "objectKind": "soul-essence",
@@ -20105,6 +20130,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "source-indexed-composite-effect",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": null,
           "effect": null,
           "sourceClosure": {
@@ -20160,7 +20186,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10132].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900430.asset/MonoBehaviour/skill_control_1900430__-3725567591603608227.json"
         }
       },
-      "manifestHash": "686903b952368b18"
+      "manifestHash": "8a20d703dfc83740"
     },
     {
       "objectKind": "soul-essence",
@@ -20566,6 +20592,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19002101,
             "pathId": 7447841024087717000,
@@ -20927,7 +20954,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10136].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900210.asset/MonoBehaviour/skill_control_1900210__4149299819814011094.json|battle-element-assets.jsonl#path_id=7447841024087717000;elementId=19002101|battle-element-assets.jsonl#path_id=-5684518322628377000;elementId=19002102"
         }
       },
-      "manifestHash": "065ab1943f025774"
+      "manifestHash": "3348fec9c6a0b4a0"
     },
     {
       "objectKind": "soul-essence",
@@ -20994,6 +21021,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "source-indexed-composite-effect",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": null,
           "effect": null,
           "sourceClosure": {
@@ -21046,7 +21074,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10146].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900420.asset/MonoBehaviour/skill_control_1900420__-4853276219982639132.json"
         }
       },
-      "manifestHash": "db40321a6e470421"
+      "manifestHash": "1dc7afdc192988cd"
     },
     {
       "objectKind": "soul-essence",
@@ -21089,6 +21117,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19001101,
             "pathId": -246520716839985300,
@@ -21294,7 +21323,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10147].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900110.asset/MonoBehaviour/skill_control_1900110__4798028882442525532.json|battle-element-assets.jsonl#path_id=-246520716839985300;elementId=19001101|battle-element-assets.jsonl#path_id=2200502015063215000;elementId=19001001|battle-element-assets.jsonl#path_id=-6475704673365761000;elementId=19001002"
         }
       },
-      "manifestHash": "52dedef5f0790a5f"
+      "manifestHash": "5d715762398c9b23"
     },
     {
       "objectKind": "soul-essence",
@@ -21337,6 +21366,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19002201,
             "pathId": 2849866293729341000,
@@ -21534,7 +21564,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10149].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900220.asset/MonoBehaviour/skill_control_1900220__-6482979135949661655.json|battle-element-assets.jsonl#path_id=2849866293729341000;elementId=19002201|battle-element-assets.jsonl#path_id=6856932050092692000;elementId=19002202"
         }
       },
-      "manifestHash": "445a3a942e61dc57"
+      "manifestHash": "1a070f4ec7b38a93"
     },
     {
       "objectKind": "soul-essence",
@@ -21577,6 +21607,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19005600,
             "pathId": 4249731622778222600,
@@ -21805,7 +21836,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10150].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900560.asset/MonoBehaviour/skill_control_1900560__1002074190257504026.json|battle-element-assets.jsonl#path_id=4249731622778222600;elementId=19005600|battle-element-assets.jsonl#path_id=6687059805823089000;elementId=19005601"
         }
       },
-      "manifestHash": "b9a7f074c6ecc3f0"
+      "manifestHash": "22587c35ae77fe74"
     },
     {
       "objectKind": "soul-essence",
@@ -21848,6 +21879,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19001301,
             "pathId": 756477731831644700,
@@ -22035,7 +22067,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10151].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900130.asset/MonoBehaviour/skill_control_1900130__6614751741932084313.json|battle-element-assets.jsonl#path_id=756477731831644700;elementId=19001301|battle-element-assets.jsonl#path_id=3837107787407859700;elementId=19001302"
         }
       },
-      "manifestHash": "05c9ef61835a43ad"
+      "manifestHash": "7b4019c1c8159541"
     },
     {
       "objectKind": "soul-essence",
@@ -22425,6 +22457,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19002401,
             "pathId": -6345955383762432000,
@@ -22612,7 +22645,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10154].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900240.asset/MonoBehaviour/skill_control_1900240__-7012870850065822120.json|battle-element-assets.jsonl#path_id=-6345955383762432000;elementId=19002401|battle-element-assets.jsonl#path_id=2209371490931731500;elementId=19002402"
         }
       },
-      "manifestHash": "93855ed9e30401d7"
+      "manifestHash": "ec34bd02a71cd66b"
     },
     {
       "objectKind": "soul-essence",
@@ -22655,6 +22688,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19002501,
             "pathId": 7681111361882010000,
@@ -22842,7 +22876,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10155].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900250.asset/MonoBehaviour/skill_control_1900250__-4475867281655653105.json|battle-element-assets.jsonl#path_id=7681111361882010000;elementId=19002501|battle-element-assets.jsonl#path_id=6931937794752071000;elementId=19002502"
         }
       },
-      "manifestHash": "96dcfa261d48331c"
+      "manifestHash": "6eb6c0f944796c24"
     },
     {
       "objectKind": "soul-essence",
@@ -23174,6 +23208,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "equipped-actor-shield-acquire-team-property",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19007500,
             "pathId": -7210722185016667000,
@@ -23338,7 +23373,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10169].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900750.asset/MonoBehaviour/skill_control_1900750__4791716372985824884.json|battle-element-assets.jsonl#path_id=-7210722185016667000;elementId=19007500|battle-element-assets.jsonl#path_id=-7968102161953321000;elementId=19007503"
         }
       },
-      "manifestHash": "ffc4ce42caaece39"
+      "manifestHash": "25a0f6606a62149d"
     },
     {
       "objectKind": "soul-essence",
@@ -23401,6 +23436,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19007400,
             "pathId": 1288282584316539400,
@@ -23513,7 +23549,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10170].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900740.asset/MonoBehaviour/skill_control_1900740__3612376006236613009.json|battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400"
         }
       },
-      "manifestHash": "96c36636447ea24a"
+      "manifestHash": "07f88650d120d25e"
     },
     {
       "objectKind": "soul-essence",
@@ -23556,6 +23592,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-heal-event-target-property",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19001401,
             "pathId": -5225606672832072000,
@@ -23743,7 +23780,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10175].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900140.asset/MonoBehaviour/skill_control_1900140__2623401305453258783.json|battle-element-assets.jsonl#path_id=-5225606672832072000;elementId=19001401|battle-element-assets.jsonl#path_id=8237672842561680000;elementId=19001402"
         }
       },
-      "manifestHash": "d15c970696b0ec1f"
+      "manifestHash": "e91c00ca881f7d1f"
     },
     {
       "objectKind": "soul-essence",
@@ -23786,6 +23823,7 @@
           "runtimeStatus": "runtime-applied",
           "mechanismFamily": "equipped-actor-heal-event-target-property",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19001501,
             "pathId": -100069638428322610,
@@ -23973,7 +24011,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10176].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900150.asset/MonoBehaviour/skill_control_1900150__-6680374433071234951.json|battle-element-assets.jsonl#path_id=-100069638428322610;elementId=19001501|battle-element-assets.jsonl#path_id=-398033826930552400;elementId=19001502"
         }
       },
-      "manifestHash": "50e9d8cca250401a"
+      "manifestHash": "91f1fb462f44e0ee"
     },
     {
       "objectKind": "soul-essence",
@@ -24040,6 +24078,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "source-indexed-composite-effect",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": null,
           "effect": null,
           "sourceClosure": {
@@ -24139,7 +24178,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10196].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900790.asset/MonoBehaviour/skill_control_1900790__-7033315392035953286.json"
         }
       },
-      "manifestHash": "dfb4db2108f39053"
+      "manifestHash": "03b393161f9a7cdb"
     },
     {
       "objectKind": "soul-essence",
@@ -24521,6 +24560,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "source-indexed-composite-effect",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": null,
           "effect": null,
           "sourceClosure": {
@@ -24575,7 +24615,7 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10198].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900760.asset/MonoBehaviour/skill_control_1900760__-7896113229959849353.json"
         }
       },
-      "manifestHash": "d5e8e9c9c57b4f58"
+      "manifestHash": "46b48f44a51c2ae8"
     },
     {
       "objectKind": "soul-essence",
@@ -24640,6 +24680,7 @@
           "runtimeStatus": "source-indexed-runtime-unapplied",
           "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
           "activationPrerequisites": [],
+          "activationConditions": [],
           "trigger": {
             "elementId": 19007801,
             "pathId": -9208882666704061000,
@@ -24722,14 +24763,14 @@
           "sourceIdentity": "NewTable/soulessence.rows[id=10216].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900780.asset/MonoBehaviour/skill_control_1900780__6516213473126657462.json|battle-element-assets.jsonl#path_id=-9208882666704061000;elementId=19007801"
         }
       },
-      "manifestHash": "f0d98b577194ca62"
+      "manifestHash": "060087e844d70df2"
     }
   ],
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 187,
-      "runtime-integrated": 78
+      "extracted": 186,
+      "runtime-integrated": 79
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -24740,5 +24781,5 @@
     },
     "optimizationReadyTotal": 0
   },
-  "manifestsHash": "671cda971b8e28d9"
+  "manifestsHash": "2ac6a260e89c769b"
 }

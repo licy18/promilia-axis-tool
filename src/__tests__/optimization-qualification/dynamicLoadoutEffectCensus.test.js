@@ -310,8 +310,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 54,
-      runtimeUnappliedCount: 20,
+      runtimeAppliedCount: 55,
+      runtimeUnappliedCount: 19,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -447,8 +447,17 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     });
 
     expect(definitions.get(10018)).toMatchObject({
-      runtimeStatus: 'source-indexed-runtime-unapplied',
-      runtimeGaps: ['effect-activation-condition-operator-unsupported'],
+      runtimeStatus: 'runtime-applied',
+      runtimeGaps: [],
+      activationConditions: [
+        {
+          kind: 'element-formula-layer-gt',
+          formulaId: 1007,
+          markId: 250,
+          minLayers: 1,
+          status: 'applied',
+        },
+      ],
     });
   });
 
@@ -1262,10 +1271,9 @@ describe('M12-B3-C dynamic loadout effect census', () => {
           record.objectKind === 'soul-essence' && record.objectId === '10018'
       )
     ).toMatchObject({
-      evidenceStatus: 'source-indexed-runtime-unapplied',
-      runtimeGaps: expect.arrayContaining([
-        'effect-activation-condition-operator-unsupported',
-      ]),
+      evidenceStatus: 'runtime-applied',
+      runtimeStatus: 'runtime-applied',
+      runtimeGaps: [],
     });
     expect(
       census.records.find(
@@ -1343,6 +1351,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       [10097, []],
       [10098, [301]],
       [10101, []],
+      [10018, []],
       [10147, [301]],
       [10151, []],
       [10124, []],

@@ -82,6 +82,17 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     attributeId: 222,
   },
   {
+    soulEssenceId: 10018,
+    contextual: true,
+    event: 'BeforeDamage',
+    frameAnchor: 'hit-before-damage',
+    actionKind: 'charged-attack',
+    durationMs: 12000,
+    stackMode: 'stack',
+    maxStacks: 20,
+    attributeId: 58,
+  },
+  {
     soulEssenceId: 10037,
     event: 'BeforeSkill',
     frameAnchor: 'action-start',
@@ -351,8 +362,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 43,
-      unresolvedCount: 19,
+      runtimeAppliedCount: 44,
+      unresolvedCount: 18,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -410,13 +421,12 @@ describe('verified soul essence effect generation', () => {
     });
   });
 
-  it('keeps 10018 blocked by its outer tuning-mark activation condition', () => {
-    expect(
-      soulEssenceEffectCatalog.definitions.find(
-        definition => definition.soulEssenceId === 10018
-      )
-    ).toMatchObject({
-      runtimeStatus: 'source-indexed-runtime-unapplied',
+  it('keeps 10018 gated by its outer tuning-mark 250 activation condition', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10018
+    );
+    expect(definition).toMatchObject({
+      runtimeStatus: 'runtime-applied',
       activationPrerequisites: [
         expect.objectContaining({
           elementId: 19004001,
@@ -429,44 +439,67 @@ describe('verified soul essence effect generation', () => {
           ],
         }),
       ],
-      runtimeGaps: expect.arrayContaining([
-        'effect-activation-condition-operator-unsupported',
-      ]),
+      activationConditions: [
+        {
+          kind: 'element-formula-layer-gt',
+          formulaId: 1007,
+          markId: 250,
+          minLayers: 1,
+          status: 'applied',
+        },
+      ],
+      runtimeGaps: [],
     });
 
-    const matchingPacket = createRealSoulScenario({
+    const suppressedWrongMark = createRealSoulScenario({
       actorCharacterId: 101010,
       soulEssenceId: 10018,
       effectSkillId: 1900400,
       durationMs: 12_000,
       initialRuntimeState: {
-        tuningMarks: [createInheritedTuningMark(750, 1, 20_000)],
+        tuningMarks: [createInheritedTuningMark(750, 2, 20_000)],
       },
       actionPlan: [
         {
-          id: 'c6-10018-a5-context',
-          actionKind: 'normal-attack',
-          actorCharacterId: 101010,
-          startFrame: 60,
-          attackInputSequenceIndex: 5,
-        },
-        {
-          id: 'c6-10018-matching-wind-packet',
+          id: 'c6-10018-charged-wrong-mark',
           actionKind: 'charged-attack',
           actorCharacterId: 101010,
-          startFrame: 97,
+          startFrame: 60,
         },
       ],
     });
     expect(
-      matchingPacket.verifiedCombatRuntime.damageEvents.some(
-        event =>
-          event.type === 'VERIFIED_TUNING_DAMAGE' &&
-          event.payload.elementId === 796
+      suppressedWrongMark.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10018
       )
-    ).toBe(true);
+    ).toEqual([]);
     expect(
-      matchingPacket.verifiedSoulEssenceEffectGeneration?.effectCommands ?? []
+      suppressedWrongMark.verifiedSoulEssenceEffectGeneration.suppressions
+        .map(suppression => suppression.reason)
+        .includes('soulessence-effect-activation-condition-not-matched')
+    ).toBe(true);
+
+    const suppressedBelowThreshold = createRealSoulScenario({
+      actorCharacterId: 101010,
+      soulEssenceId: 10018,
+      effectSkillId: 1900400,
+      durationMs: 12_000,
+      initialRuntimeState: {
+        tuningMarks: [createInheritedTuningMark(250, 1, 20_000)],
+      },
+      actionPlan: [
+        {
+          id: 'c6-10018-charged-single-layer',
+          actionKind: 'charged-attack',
+          actorCharacterId: 101010,
+          startFrame: 60,
+        },
+      ],
+    });
+    expect(
+      suppressedBelowThreshold.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10018
+      )
     ).toEqual([]);
   });
 
@@ -4730,6 +4763,41 @@ describe('verified soul essence effect generation', () => {
           command.modifiers[0].propertyTagMatchMode === 'unscoped'
       )
     ).toBe(true);
+  });
+
+  it('gates real 10018 on tuning mark 250 layers above one', () => {
+    const suppressed = createRealSoulScenario({
+      soulEssenceId: 10018,
+      effectSkillId: 1900400,
+    });
+    expect(
+      suppressed.verifiedSoulEssenceEffectGeneration.suppressions.some(
+        suppression =>
+          suppression.reason ===
+          'soulessence-effect-activation-condition-not-matched'
+      )
+    ).toBe(true);
+    expect(
+      suppressed.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10018
+      )
+    ).toHaveLength(0);
+
+    const active = createRealSoulScenario({
+      soulEssenceId: 10018,
+      effectSkillId: 1900400,
+      initialRuntimeState: {
+        tuningMarks: [createInheritedTuningMark(250, 2, 20_000)],
+      },
+    });
+    const commands = active.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10018
+    );
+    expect(commands.length).toBeGreaterThan(0);
+    expect(commands[0].modifiers[0]).toMatchObject({
+      attributeId: 58,
+      propertyTagMatchMode: 'unscoped',
+    });
   });
 
   it.each([

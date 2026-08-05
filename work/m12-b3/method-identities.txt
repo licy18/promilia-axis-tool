@@ -1,0 +1,1266 @@
+# Lens.Gameplay.Modules.BigWorld.BulletLogic$$CheckCondition
+# RVA=0x1273CD0 size=0x130 next=0x1273E00 fileOffset=0x12724D0 section=il2cpp
+0000000181273CE9  call     0x180c7b870
+0000000181273CF5  call     0x180c7b870
+0000000181273D01  call     0x180c7b870
+0000000181273D26  jmp      rax
+0000000181273D5F  call     0x185f57d70 ; System.Collections.Generic.List<DataPoint<int>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, bool>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, int>>$$get_Item | +71 aliases
+0000000181273D91  call     rax
+0000000181273DA3  ret      
+0000000181273DBF  call     rax
+0000000181273DD2  jmp      0x181273d40
+0000000181273DF3  ret      
+0000000181273DF4  call     0x180c7bb00
+
+# Lens.Gameplay.Modules.BigWorld.ConditionalSelectionElement$$CheckCondition
+# RVA=0x137E810 size=0x340 next=0x137EB50 fileOffset=0x137D010 section=il2cpp
+000000018137E83A  call     0x180c7b870
+000000018137E846  call     0x180c7b870
+000000018137E852  call     0x180c7b870
+000000018137E85E  call     0x180c7b870
+000000018137E86A  call     0x180c7b870
+000000018137E876  call     0x180c7b870
+000000018137E8B0  jmp      rax
+000000018137E8FD  call     0x185f461b0 ; System.Collections.Generic.List<ArraySegment<byte>>$$get_Item | System.Collections.Generic.List<ClassHandler<object>>$$get_Item | System.Collections.Generic.List<CommonActionParam<bool>>$$get_Item | +185 aliases
+000000018137E925  call     0x18137eb50 ; Lens.Gameplay.Modules.BigWorld.ConditionalSelectionElement$$CheckNormalCondition
+000000018137E92A  jmp      0x18137eacc
+000000018137E931  call     0x1816e5e30 ; Lens.Gameplay.Modules.BigWorld.BattleConfigManager$$get_elementFormulaConfig
+000000018137E949  call     0x181b3fb70 ; Lens.Gameplay.Modules.BigWorld.Config.ElementFormulaData$$GetId
+000000018137E956  call     0x18135dd00
+000000018137E968  call     0x18136ea50 ; Lens.Gameplay.Modules.BigWorld.BaseElement$$get_p_attackerData
+000000018137E975  call     0x18136ebc0 ; Lens.Gameplay.Modules.BigWorld.BaseElement$$get_p_executeData
+000000018137E982  call     0x18136ece0 ; Lens.Gameplay.Modules.BigWorld.BaseElement$$get_p_sourceData
+000000018137E99A  call     0x180b8ea90
+000000018137E9AE  jmp      0x18137e9e3
+000000018137E9D6  jmp      0x18137e9da
+000000018137E9EB  jmp      0x18137ea20
+000000018137EA13  jmp      0x18137ea17
+000000018137EA28  jmp      0x18137ea5d
+000000018137EA50  jmp      0x18137ea54
+000000018137EA7E  call     0x18187c840 ; Lens.Gameplay.Modules.BigWorld.FormulaUtility$$Calculate
+000000018137EA96  call     0x180b8ea90
+000000018137EA9F  call     0x1811b2b40 ; Lens.Gameplay.Modules.BigWorld.MyFloat$$op_Implicit
+000000018137EAAD  call     0x1811a2e60
+000000018137EAFF  jmp      0x18137e8e0
+000000018137EB2C  ret      
+000000018137EB33  jmp      0x18137eb06
+000000018137EB3B  jmp      0x18137eb06
+000000018137EB3D  call     0x180c7bb00
+
+# Lens.Gameplay.Modules.BigWorld.ChangePropertyConditionObject$$CheckCondition
+# RVA=0x13845B0 size=0x490 next=0x1384A40 fileOffset=0x1382DB0 section=il2cpp
+00000001813845DA  call     0x180c7b870
+00000001813845E6  call     0x180c7b870
+00000001813845F2  call     0x180c7b870
+00000001813845FE  call     0x180c7b870
+000000018138460A  call     0x180c7b870
+0000000181384616  call     0x180c7b870
+0000000181384644  call     rax
+0000000181384654  ret      
+0000000181384673  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+000000018138467B  jmp      0x181384680
+00000001813846A5  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+00000001813846E1  jmp      rcx
+00000001813846E6  jmp      0x181384a00
+000000018138470C  call     rax
+000000018138472D  call     0x1812d5350 ; Lens.Gameplay.Modules.BigWorld.ElementProperty$$HasTargetElementType
+0000000181384732  jmp      0x1813849fd
+0000000181384749  call     0x1812890e0
+000000018138475C  call     0x1812bca00
+0000000181384775  jmp      0x181384a00
+000000018138479E  call     rax
+00000001813847BF  call     0x1812d5980 ; Lens.Gameplay.Modules.BigWorld.ElementProperty$$hasElementTagCount
+00000001813847EA  call     0x180b8ea90
+00000001813847F6  call     0x1882d7f50 ; System.Math$$Min
+0000000181384804  jmp      0x181384a00
+000000018138482A  call     rax
+000000018138483A  call     0x1812bc440
+0000000181384866  call     0x185f57d70 ; System.Collections.Generic.List<DataPoint<int>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, bool>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, int>>$$get_Item | +71 aliases
+0000000181384887  call     0x180c7b870
+00000001813848A7  call     rax
+00000001813848AB  jmp      0x1813848b3
+00000001813848D9  jmp      0x18138484b
+00000001813848F2  call     rax
+0000000181384919  call     0x180b8ea90
+0000000181384925  call     0x1882d7f50 ; System.Math$$Min
+0000000181384950  call     0x180b8ea90
+000000018138495C  call     0x1882d7f50 ; System.Math$$Min
+0000000181384964  jmp      0x181384a00
+000000018138497B  call     0x1812890e0
+000000018138498E  call     0x1812bca00
+00000001813849A7  call     0x181289090
+00000001813849B9  call     0x1812dee40 ; Lens.Gameplay.Modules.BigWorld.SkillProperty$$GetSkill
+00000001813849C8  call     0x1812bcb00
+00000001813849D8  call     0x1821fab20 ; Azur.Gameplay.Table.TDSkillsubLogic$$GetSkillTag
+00000001813849F8  call     0x1860e9eb0 ; System.Collections.Generic.List<int>$$Contains
+0000000181384A1C  ret      
+0000000181384A1F  jmp      0x181384a04
+0000000181384A21  call     0x180c7bb00
+0000000181384A2C  jmp      0x181384a74
+
+# Lens.Gameplay.Modules.BigWorld.TriggerElement$$CheckCondition
+# RVA=0x13B58F0 size=0x570 next=0x13B5E60 fileOffset=0x13B40F0 section=il2cpp
+00000001813B5928  call     0x180c7b870
+00000001813B5934  call     0x180c7b870
+00000001813B5940  call     0x180c7b870
+00000001813B594C  call     0x180c7b870
+00000001813B5958  call     0x180c7b870
+00000001813B5964  call     0x180c7b870
+00000001813B5970  call     0x180c7b870
+00000001813B597C  call     0x180c7b870
+00000001813B59A2  call     rax
+00000001813B59A4  jmp      0x1813b5e36
+00000001813B59C5  call     0x181790600 ; Gameplay.Utility.ProfilerScopeName$$.ctor
+00000001813B5A03  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+00000001813B5A23  call     0x18136ea50 ; Lens.Gameplay.Modules.BigWorld.BaseElement$$get_p_attackerData
+00000001813B5A35  jmp      0x1813b5a76
+00000001813B5A64  jmp      0x1813b5a68
+00000001813B5A87  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+00000001813B5AA7  call     0x18136ebc0 ; Lens.Gameplay.Modules.BigWorld.BaseElement$$get_p_executeData
+00000001813B5AB9  jmp      0x1813b5afa
+00000001813B5AE8  jmp      0x1813b5aec
+00000001813B5B0B  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+00000001813B5B2B  call     0x18136ece0 ; Lens.Gameplay.Modules.BigWorld.BaseElement$$get_p_sourceData
+00000001813B5B3D  jmp      0x1813b5b7e
+00000001813B5B6C  jmp      0x1813b5b70
+00000001813B5BAB  jmp      0x1813b5bcb
+00000001813B5BBB  jmp      0x1813b5bcb
+00000001813B5BFB  call     0x185f461b0 ; System.Collections.Generic.List<ArraySegment<byte>>$$get_Item | System.Collections.Generic.List<ClassHandler<object>>$$get_Item | System.Collections.Generic.List<CommonActionParam<bool>>$$get_Item | +185 aliases
+00000001813B5C37  call     0x1813b6a50 ; Lens.Gameplay.Modules.BigWorld.TriggerElement$$CheckTriggerCondition
+00000001813B5C40  jmp      0x1813b5d38
+00000001813B5C70  call     0x1813b5e60 ; Lens.Gameplay.Modules.BigWorld.TriggerElement$$CheckNormalCondition
+00000001813B5C79  jmp      0x1813b5d38
+00000001813B5C80  call     0x1816e5e30 ; Lens.Gameplay.Modules.BigWorld.BattleConfigManager$$get_elementFormulaConfig
+00000001813B5C98  call     0x181b3fb70 ; Lens.Gameplay.Modules.BigWorld.Config.ElementFormulaData$$GetId
+00000001813B5CA5  call     0x18135dd00
+00000001813B5CBD  call     0x180b8ea90
+00000001813B5CE9  call     0x18187c840 ; Lens.Gameplay.Modules.BigWorld.FormulaUtility$$Calculate
+00000001813B5D01  call     0x180b8ea90
+00000001813B5D0A  call     0x1811b2b40 ; Lens.Gameplay.Modules.BigWorld.MyFloat$$op_Implicit
+00000001813B5D18  call     0x1811a2e60
+00000001813B5D52  call     0x181790550 ; Gameplay.Utility.ProfilerScopeName$$Dispose
+00000001813B5D57  jmp      0x1813b5e32
+00000001813B5D88  call     0x181790550 ; Gameplay.Utility.ProfilerScopeName$$Dispose
+00000001813B5D8D  jmp      0x1813b5e32
+00000001813B5DAE  jmp      0x1813b5bdf
+00000001813B5DC3  call     0x181790550 ; Gameplay.Utility.ProfilerScopeName$$Dispose
+00000001813B5DC8  jmp      0x1813b5e32
+00000001813B5DDA  call     0x181790550 ; Gameplay.Utility.ProfilerScopeName$$Dispose
+00000001813B5DDF  jmp      0x1813b5e32
+00000001813B5DF3  jmp      0x1813b5dfa
+00000001813B5E07  call     0x181790550 ; Gameplay.Utility.ProfilerScopeName$$Dispose
+00000001813B5E0C  jmp      0x1813b5e32
+00000001813B5E18  call     0x181790550 ; Gameplay.Utility.ProfilerScopeName$$Dispose
+00000001813B5E48  ret      
+00000001813B5E49  call     0x180c7bb00
+00000001813B5E4F  call     0x180c7bb00
+00000001813B5E54  call     0x180c7bb00
+00000001813B5E5A  call     0x180c19b90
+
+# Lens.Gameplay.Modules.BigWorld.SkillValidityConditionArrayObject$$CheckCondition
+# RVA=0x13E1DA0 size=0x1B0 next=0x13E1F50 fileOffset=0x13E05A0 section=il2cpp
+00000001813E1DB9  call     0x180c7b870
+00000001813E1DC5  call     0x180c7b870
+00000001813E1DD1  call     0x180c7b870
+00000001813E1DDD  call     0x180c7b870
+00000001813E1DE9  call     0x180c7b870
+00000001813E1DF5  call     0x180c7b870
+00000001813E1E01  call     0x180c7b870
+00000001813E1E21  call     rax
+00000001813E1E28  ret      
+00000001813E1E3D  call     0x185182f10 ; System.Collections.Generic.Dictionary<TypeTable.KeyPair<object, TypeTable.KeyPair<object, object>>, object>$$get_Count | System.Collections.Generic.Dictionary<TypeTable.KeyPair<object, bool>, object>$$get_Count | System.Collections.Generic.Dictionary<TypeTable.KeyPair<object, int>, object>$$get_Count | +409 aliases
+00000001813E1E5E  call     0x1851782d0 ; System.Collections.Generic.Dictionary<TypeTable.KeyPair<object, TypeTable.KeyPair<object, object>>, object>$$get_Values | System.Collections.Generic.Dictionary<TypeTable.KeyPair<object, bool>, object>$$get_Values | System.Collections.Generic.Dictionary<TypeTable.KeyPair<object, int>, object>$$get_Values | +1230 aliases
+00000001813E1E7B  call     0x185e84b70 ; System.Collections.Generic.Dictionary.KeyCollection<Nullable<int>, object>$$GetEnumerator | System.Collections.Generic.Dictionary.KeyCollection<ValueTuple<int, int>, object>$$GetEnumerator | System.Collections.Generic.Dictionary.KeyCollection<ValueTuple<int, int>, float>$$GetEnumerator | +256 aliases
+00000001813E1EBC  call     0x185680110 ; System.Collections.Generic.Dictionary.ValueCollection.Enumerator<Nullable<int>, object>$$MoveNext | System.Collections.Generic.Dictionary.ValueCollection.Enumerator<ValueTuple<int, int>, object>$$MoveNext | System.Collections.Generic.Dictionary.ValueCollection.Enumerator<bool, object>$$MoveNext | +31 aliases
+00000001813E1EE0  call     rax
+00000001813E1EF0  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001813E1EF5  jmp      0x1813e1f2b
+00000001813E1F01  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001813E1F06  jmp      0x1813e1f23
+00000001813E1F14  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001813E1F2A  ret      
+00000001813E1F32  ret      
+00000001813E1F33  call     0x180c7bb00
+00000001813E1F39  call     0x180c7bb00
+00000001813E1F3F  call     0x180c19b90
+
+# Lens.Gameplay.Modules.BigWorld.PetResponseBreakCondition$$OnCheckCondition
+# RVA=0x1547930 size=0x230 next=0x1547B60 fileOffset=0x1546130 section=il2cpp
+0000000181547961  call     0x180c7b870
+000000018154796D  call     0x180c7b870
+0000000181547979  call     0x180c7b870
+0000000181547985  call     0x180c7b870
+00000001815479B3  call     rax
+00000001815479B5  jmp      0x181547b44
+00000001815479CB  call     0x180c7abb0
+0000000181547A07  call     0x181548890 ; Lens.Gameplay.Modules.BigWorld.PetResponseConditionhBase$$get_m_petEntity
+0000000181547A3C  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+0000000181547A5C  call     0x183e783d0 ; Lens.Gameplay.Modules.BigWorld.BaseData$$get_lockTarget
+0000000181547A6F  call     0x181548300 ; Lens.Gameplay.Modules.BigWorld.PetResponseConditionhBase$$GetSkillByHeroSkillEvent
+0000000181547A8A  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+0000000181547AB8  call     0x180c7b870
+0000000181547AD8  call     rax
+0000000181547ADA  jmp      0x181547ae3
+0000000181547AED  call     0x1812cf070 ; Lens.Gameplay.Modules.BigWorld.ControlProperty$$get_inWeakState
+0000000181547B09  call     0x186148190 ; System.Collections.Generic.List<object>$$Contains
+0000000181547B25  call     0x180004930
+0000000181547B33  call     0x180c7abb0
+0000000181547B59  ret      
+0000000181547B5A  call     0x180c7bb00
+
+# Lens.Gameplay.Modules.BigWorld.PetResponseConditionhBase$$CheckCondition
+# RVA=0x1547FD0 size=0x330 next=0x1548300 fileOffset=0x15467D0 section=il2cpp
+0000000181547FFA  call     0x180c7b870
+0000000181548006  call     0x180c7b870
+0000000181548012  call     0x180c7b870
+000000018154804E  jmp      rax
+0000000181548067  call     0x180c7abb0
+0000000181548078  call     0x181548890 ; Lens.Gameplay.Modules.BigWorld.PetResponseConditionhBase$$get_m_petEntity
+000000018154808B  call     0x183e86080 ; Lens.Gameplay.Modules.BigWorld.Entity$$IsValid
+000000018154809D  call     0x181548890 ; Lens.Gameplay.Modules.BigWorld.PetResponseConditionhBase$$get_m_petEntity
+00000001815480CB  call     0x180c7b870
+00000001815480EB  call     rax
+00000001815480ED  jmp      0x1815480f5
+0000000181548103  call     0x181548890 ; Lens.Gameplay.Modules.BigWorld.PetResponseConditionhBase$$get_m_petEntity
+0000000181548123  call     0x1812632d0
+0000000181548135  call     0x181548890 ; Lens.Gameplay.Modules.BigWorld.PetResponseConditionhBase$$get_m_petEntity
+0000000181548155  call     0x181544540 ; Lens.Gameplay.Modules.BigWorld.PetData$$IsPresent
+0000000181548167  call     0x181548890 ; Lens.Gameplay.Modules.BigWorld.PetResponseConditionhBase$$get_m_petEntity
+000000018154819C  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+00000001815481B2  call     0x183e86080 ; Lens.Gameplay.Modules.BigWorld.Entity$$IsValid
+00000001815481C4  call     0x181548890 ; Lens.Gameplay.Modules.BigWorld.PetResponseConditionhBase$$get_m_petEntity
+00000001815481E4  call     0x1812890e0
+0000000181548205  call     0x180c7b870
+0000000181548225  call     rax
+0000000181548227  jmp      0x18154822c
+0000000181548268  call     0x180b8ea90
+000000018154826F  call     0x181656400 ; Lens.Gameplay.Modules.BigWorld.EntityManager$$get_ControllingHeroEntity
+0000000181548281  call     0x18174a440 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$IsValid
+0000000181548298  call     0x1811eeb80
+00000001815482A4  call     0x181146e10
+00000001815482B9  call     0x1811eeb80
+00000001815482D5  call     0x18003bfc0
+00000001815482F2  ret      
+00000001815482F5  jmp      0x1815482da
+00000001815482F7  call     0x180c7bb00
+
+# Lens.Gameplay.Modules.BigWorld.PetResponseInputKeyCondition$$OnCheckCondition
+# RVA=0x1548B40 size=0x190 next=0x1548CD0 fileOffset=0x1547340 section=il2cpp
+0000000181548B71  call     0x180c7b870
+0000000181548B7D  call     0x180c7b870
+0000000181548B89  call     0x180c7b870
+0000000181548BB7  call     rax
+0000000181548BB9  jmp      0x181548ca9
+0000000181548BCD  call     0x180c7abb0
+0000000181548C34  call     0x181548300 ; Lens.Gameplay.Modules.BigWorld.PetResponseConditionhBase$$GetSkillByHeroSkillEvent
+0000000181548C46  call     0x1812bcb00
+0000000181548C56  call     0x1821faa90 ; Azur.Gameplay.Table.TDSkillsubLogic$$GetPetSkillLogicTag
+0000000181548C6F  call     0x1851f2470 ; System.Collections.Generic.Dictionary<int, float>$$get_Item
+0000000181548C91  call     0x180c7abb0
+0000000181548CBE  ret      
+0000000181548CBF  call     0x180c7bb00
+
+# Lens.Gameplay.Modules.BigWorld.PetResponsePeopertyChangeCondition$$OnCheckCondition
+# RVA=0x1548D60 size=0x260 next=0x1548FC0 fileOffset=0x1547560 section=il2cpp
+0000000181548D8A  call     0x180c7b870
+0000000181548D96  call     0x180c7b870
+0000000181548DA2  call     0x180c7b870
+0000000181548DDE  jmp      rax
+0000000181548DF7  call     0x180c7abb0
+0000000181548E08  call     0x181548890 ; Lens.Gameplay.Modules.BigWorld.PetResponseConditionhBase$$get_m_petEntity
+0000000181548E3D  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+0000000181548E6E  call     0x180c7b870
+0000000181548E8E  call     rax
+0000000181548E90  jmp      0x181548e99
+0000000181548EA7  call     0x1812adb20 ; Lens.Gameplay.Modules.BigWorld.AliveProperty$$get_hp
+0000000181548ECF  call     0x180c7b870
+0000000181548EEF  call     rax
+0000000181548EF1  jmp      0x181548efa
+0000000181548F08  call     0x1812aea60 ; Lens.Gameplay.Modules.BigWorld.AliveProperty$$get_maxHp
+0000000181548F12  call     0x1816e5ba0 ; Lens.Gameplay.Modules.BigWorld.BattleConfigManager$$get_Data
+0000000181548F36  call     0x180b8ea90
+0000000181548F44  call     0x1811a2ac0
+0000000181548F53  call     0x1811b2b40 ; Lens.Gameplay.Modules.BigWorld.MyFloat$$op_Implicit
+0000000181548F61  call     0x1811a3100
+0000000181548F6B  call     0x1811b2a90 ; Lens.Gameplay.Modules.BigWorld.MyFloat$$op_Implicit
+0000000181548F7D  call     0x181548300 ; Lens.Gameplay.Modules.BigWorld.PetResponseConditionhBase$$GetSkillByHeroSkillEvent
+0000000181548F8B  call     0x180c7abb0
+0000000181548FAF  ret      
+0000000181548FB0  call     0x180c7bb00
+
+# Lens.Gameplay.Modules.BigWorld.PetResponseSkillEventCondition$$OnCheckCondition
+# RVA=0x1549050 size=0xB0 next=0x1549100 fileOffset=0x1547850 section=il2cpp
+0000000181549080  call     0x180c7b870
+00000001815490AE  call     rax
+00000001815490C4  ret      
+00000001815490D8  call     0x181548300 ; Lens.Gameplay.Modules.BigWorld.PetResponseConditionhBase$$GetSkillByHeroSkillEvent
+00000001815490E6  call     0x180c7abb0
+00000001815490F2  jmp      0x1815490b0
+00000001815490F4  call     0x180c7bb00
+
+# Lens.Gameplay.Modules.BigWorld.PetResponseSkillSystem$$CheckConditions
+# RVA=0x15492E0 size=0x620 next=0x1549900 fileOffset=0x1547AE0 section=il2cpp
+0000000181549308  call     0x180c7b870
+0000000181549314  call     0x180c7b870
+0000000181549320  call     0x180c7b870
+000000018154932C  call     0x180c7b870
+0000000181549338  call     0x180c7b870
+0000000181549344  call     0x180c7b870
+0000000181549350  call     0x180c7b870
+000000018154935C  call     0x180c7b870
+000000018154937E  call     qword ptr [rax + 0x60]
+0000000181549391  ret      
+00000001815493E0  call     0x185f57d70 ; System.Collections.Generic.List<DataPoint<int>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, bool>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, int>>$$get_Item | +71 aliases
+0000000181549417  call     r10
+000000018154942F  jmp      0x1815493c5
+0000000181549453  call     0x180c7b870
+000000018154945F  call     0x180c7b870
+0000000181549482  call     rax
+0000000181549484  jmp      0x18154954a
+000000018154949D  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+00000001815494CB  call     0x180c7b870
+00000001815494EB  call     rax
+00000001815494F0  jmp      0x1815494f9
+0000000181549512  call     0x180c7b870
+0000000181549532  call     rax
+0000000181549534  jmp      0x181549539
+0000000181549552  jmp      0x18154955b
+000000018154956B  call     0x180b8ea90
+0000000181549577  call     0x184832f80 ; Lens.Framework.ClassManager$$Get<object>
+00000001815495A4  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+00000001815495D0  call     rax
+00000001815495EC  call     0x1812bcba0
+0000000181549608  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+000000018154963B  call     0x18174a440 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$IsValid
+0000000181549658  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+0000000181549672  call     0x181146e10
+000000018154968F  call     0x183e783d0 ; Lens.Gameplay.Modules.BigWorld.BaseData$$get_lockTarget
+00000001815496B4  call     r9
+00000001815496C7  call     0x180b8ea90
+00000001815496D3  call     0x184832f80 ; Lens.Framework.ClassManager$$Get<object>
+000000018154970A  call     0x1812bcba0
+0000000181549737  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+0000000181549757  call     0x181289090
+000000018154976F  call     0x1812bcba0
+0000000181549785  call     0x1812defe0 ; Lens.Gameplay.Modules.BigWorld.SkillProperty$$GetSlotBySkillID
+00000001815497BF  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+00000001815497EE  call     rax
+0000000181549807  call     0x180004810
+0000000181549820  call     0x180004810
+0000000181549825  jmp      0x181549381
+0000000181549840  call     0x180004810
+0000000181549866  call     0x180004810
+0000000181549875  jmp      0x181549381
+000000018154987A  call     0x180c7bb00
+0000000181549880  call     0x180c7bb00
+0000000181549886  call     0x180c7bb00
+000000018154988C  call     0x180c7bb00
+0000000181549891  call     0x180c7bb00
+0000000181549896  call     0x180c7bb00
+000000018154989B  call     0x180c7bb00
+00000001815498A0  call     0x180c7bb00
+00000001815498A6  call     0x180c7bb00
+00000001815498AB  call     0x180c7bb00
+00000001815498B0  call     0x180c7bb00
+00000001815498B5  call     0x180c7bb00
+00000001815498BA  call     0x180c7bb00
+00000001815498BF  call     0x180c7bb00
+00000001815498C4  call     0x180c7bb00
+00000001815498C9  call     0x180c7bb00
+00000001815498CE  call     0x180c7bb00
+00000001815498D3  call     0x180c7bb00
+00000001815498D9  call     0x180c19b90
+00000001815498DF  call     0x180c19b90
+00000001815498E5  call     0x180c7bb00
+00000001815498EA  call     0x180c7bb00
+00000001815498EF  call     0x180c7bb00
+00000001815498F4  call     0x180c7bb00
+00000001815498F9  call     0x180c7bb00
+
+# Lens.Gameplay.Modules.BigWorld.PetResponseSpChangeCondition$$OnCheckCondition
+# RVA=0x154C4F0 size=0x100 next=0x154C5F0 fileOffset=0x154ACF0 section=il2cpp
+000000018154C520  call     0x180c7b870
+000000018154C52C  call     0x180c7b870
+000000018154C55A  call     rax
+000000018154C55C  jmp      0x18154c5cf
+000000018154C593  call     0x18154c060 ; Lens.Gameplay.Modules.BigWorld.PetResponseSpChangeCondition$$GetSkill
+000000018154C5A1  call     0x180c7abb0
+000000018154C5B4  jmp      0x18154c5cf
+000000018154C5C2  call     0x180c7abb0
+000000018154C5E3  ret      
+
+# Gameplay.Utility.FsmCheckConditionUtility$$CharacterSwimCheck
+# RVA=0x1784BD0 size=0x410 next=0x1784FE0 fileOffset=0x17833D0 section=il2cpp
+0000000181784BF0  call     0x180c7b870
+0000000181784BFC  call     0x180c7b870
+0000000181784C08  call     0x180c7b870
+0000000181784C3E  call     qword ptr [r9 + 0x60]
+0000000181784C4C  ret      
+0000000181784C85  call     0x180c7b870
+0000000181784CA5  call     rax
+0000000181784CA7  jmp      0x181784cb0
+0000000181784CBE  call     0x1812c51d0 ; Lens.Gameplay.Modules.BigWorld.CharacterControlProperty$$PreCheckSwimming
+0000000181784CEB  call     0x180c7b870
+0000000181784D0B  call     rax
+0000000181784D10  jmp      0x181784d19
+0000000181784D49  call     r9
+0000000181784D59  call     0x1811efd00
+0000000181784D6C  call     0x18120ad60 ; Lens.Gameplay.Modules.BigWorld.Fsm$$IsSwimming
+0000000181784D7E  call     0x1811efd00
+0000000181784D9C  call     0x18120ca30 ; Lens.Gameplay.Modules.BigWorld.Fsm$$SetBool
+0000000181784DB3  call     0x181215c50
+0000000181784DD1  call     0x181a4f0f0 ; Lens.Gameplay.Modules.BigWorld.PlayableAnimator.PlayableAnimator$$SetBool
+0000000181784DE8  call     0x1811eea90
+0000000181784DFE  call     0x18157ee20
+0000000181784E08  call     0x1811efd00
+0000000181784E23  call     0x18120d5a0 ; Lens.Gameplay.Modules.BigWorld.Fsm$$SetTrigger
+0000000181784E3A  call     0x180c7b870
+0000000181784E5B  call     rax
+0000000181784E67  jmp      0x181784e6d
+0000000181784E81  call     0x180c7b870
+0000000181784EA1  call     rax
+0000000181784EA3  jmp      0x181784ea9
+0000000181784EB7  call     0x18120ad60 ; Lens.Gameplay.Modules.BigWorld.Fsm$$IsSwimming
+0000000181784ED6  call     0x1811eea90
+0000000181784EE9  call     0x1812bbde0
+0000000181784F03  call     0x1811eea90
+0000000181784F16  call     0x1812c8d30 ; Lens.Gameplay.Modules.BigWorld.CharacterControlProperty$$get_leaveSwimmingDepthRatio
+0000000181784F23  call     0x1811eeb30
+0000000181784F36  call     0x1812bc120
+0000000181784F49  call     0x1811efd00
+0000000181784F67  call     0x18120ca30 ; Lens.Gameplay.Modules.BigWorld.Fsm$$SetBool
+0000000181784F7A  call     0x181215c50
+0000000181784F94  call     0x181a4f0f0 ; Lens.Gameplay.Modules.BigWorld.PlayableAnimator.PlayableAnimator$$SetBool
+0000000181784FA7  call     0x1811eea90
+0000000181784FB9  call     0x18157ee20
+0000000181784FD7  ret      
+0000000181784FD8  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$CheckBoolCondition
+# RVA=0x1784FE0 size=0xB0 next=0x1785090 fileOffset=0x17837E0 section=il2cpp
+0000000181785000  call     0x180c7b870
+000000018178502E  jmp      rax
+0000000181785044  call     0x1812081a0 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetBool
+000000018178505F  ret      
+0000000181785074  ret      
+0000000181785081  ret      
+0000000181785082  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$CheckFloatCondition
+# RVA=0x1785090 size=0x1C0 next=0x1785250 fileOffset=0x1783890 section=il2cpp
+00000001817850B0  call     0x180c7b870
+00000001817850BC  call     0x180c7b870
+00000001817850EA  jmp      rax
+000000018178510D  call     0x1812083e0 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetFloat
+0000000181785132  call     0x180b8ea90
+000000018178513C  call     0x1811b2be0 ; Lens.Gameplay.Modules.BigWorld.MyFloat$$op_Implicit
+0000000181785154  call     0x180c7b870
+0000000181785178  call     rax
+000000018178517A  jmp      0x181785182
+000000018178519B  ret      
+00000001817851BA  call     0x180b8ea90
+00000001817851C4  call     0x1811b2be0 ; Lens.Gameplay.Modules.BigWorld.MyFloat$$op_Implicit
+00000001817851DC  call     0x180c7b870
+0000000181785200  call     rax
+0000000181785216  ret      
+0000000181785231  ret      
+0000000181785243  ret      
+0000000181785244  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$CheckIntCondition
+# RVA=0x1785250 size=0xF0 next=0x1785340 fileOffset=0x1783A50 section=il2cpp
+0000000181785270  call     0x180c7b870
+000000018178529E  jmp      rax
+00000001817852BC  call     0x181208560 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetInteger
+00000001817852F1  ret      
+0000000181785308  ret      
+000000018178531F  ret      
+0000000181785335  ret      
+0000000181785336  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$CheckStateAnimCondition
+# RVA=0x1785340 size=0x160 next=0x17854A0 fileOffset=0x1783B40 section=il2cpp
+000000018178535E  call     0x180c7b870
+000000018178536A  call     0x180c7b870
+0000000181785376  call     0x180c7b870
+00000001817853A1  jmp      rax
+00000001817853FB  call     0x185f57d70 ; System.Collections.Generic.List<DataPoint<int>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, bool>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, int>>$$get_Item | +71 aliases
+000000018178541A  call     0x1811efda0
+0000000181785431  call     0x188157060 ; System.String$$Equals | System.String$$op_Equality
+0000000181785443  jmp      0x1817853d0
+000000018178544A  call     0x1811efda0
+000000018178546A  jmp      0x1817853d0
+000000018178548E  ret      
+000000018178548F  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$CheckStateCondition
+# RVA=0x17854A0 size=0x190 next=0x1785630 fileOffset=0x1783CA0 section=il2cpp
+00000001817854C1  call     0x180c7b870
+00000001817854CD  call     0x180c7b870
+00000001817854D9  call     0x180c7b870
+0000000181785508  jmp      rax
+000000018178555A  call     0x185f57d70 ; System.Collections.Generic.List<DataPoint<int>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, bool>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, int>>$$get_Item | +71 aliases
+000000018178557D  call     0x181208660 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetParameterType
+00000001817855A6  call     0x181786170 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckTriggerCondition
+00000001817855B1  jmp      0x181785530
+00000001817855BF  call     0x181784fe0 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckBoolCondition
+00000001817855CA  jmp      0x181785530
+00000001817855D8  call     0x181785250 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckIntCondition
+00000001817855E3  jmp      0x181785530
+00000001817855F1  call     0x181785090 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckFloatCondition
+00000001817855FC  jmp      0x181785530
+000000018178561E  ret      
+000000018178561F  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$CheckStateConditionsParallelOp
+# RVA=0x1785630 size=0xF0 next=0x1785720 fileOffset=0x1783E30 section=il2cpp
+0000000181785661  call     0x180c7b870
+000000018178566D  call     0x180c7b870
+00000001817856A5  call     r10
+00000001817856BC  ret      
+00000001817856D1  call     0x180004750
+00000001817856EA  call     0x180004750
+000000018178570D  call     0x181b061e0 ; Lens.Gameplay.Modules.BigWorld.Runtime.FsmStateRuntimeData$$CheckStateConditionsParallelOp
+0000000181785712  jmp      0x1817856a8
+0000000181785714  jmp      0x1817856a8
+0000000181785716  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$CheckStateConditionsParallel
+# RVA=0x1785720 size=0x480 next=0x1785BA0 fileOffset=0x1783F20 section=il2cpp
+0000000181785751  call     0x180c7b870
+000000018178575D  call     0x180c7b870
+0000000181785769  call     0x180c7b870
+0000000181785775  call     0x180c7b870
+0000000181785781  call     0x180c7b870
+000000018178578D  call     0x180c7b870
+0000000181785799  call     0x180c7b870
+00000001817857A5  call     0x180c7b870
+00000001817857B1  call     0x180c7b870
+00000001817857BD  call     0x180c7b870
+00000001817857C9  call     0x180c7b870
+0000000181785806  jmp      rax
+0000000181785853  call     0x185f57d70 ; System.Collections.Generic.List<DataPoint<int>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, bool>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, int>>$$get_Item | +71 aliases
+0000000181785874  call     0x180c7b870
+0000000181785894  call     rax
+0000000181785896  jmp      0x18178589c
+00000001817858B2  call     0x18534f190 ; System.Collections.Generic.Dictionary<long, long>$$get_Item | System.Collections.Generic.Dictionary<long, object>$$get_Item
+00000001817858C9  call     0x181786b60 ; Gameplay.Utility.FsmCheckConditionUtility$$IsIgnoreTransition
+00000001817858DF  call     0x1817854a0 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateCondition
+000000018178590D  jmp      0x181785830
+000000018178591B  call     0x181785340 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateAnimCondition
+0000000181785943  call     0x1848d6e80 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetState<object>
+0000000181785960  call     0x180004750
+000000018178597D  call     0x180004750
+00000001817859B9  jmp      0x1817859bd
+00000001817859DD  call     0x1848d6e80 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetState<object>
+00000001817859FA  call     0x180004750
+0000000181785A11  call     0x181785720 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateConditionsParallel
+0000000181785A2B  call     0x180004750
+0000000181785A45  call     0x180004750
+0000000181785A81  jmp      0x181785a85
+0000000181785AA5  call     0x1848d6e80 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetState<object>
+0000000181785AC2  call     0x180004750
+0000000181785AD9  call     0x181785720 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateConditionsParallel
+0000000181785B04  ret      
+0000000181785B17  call     0x1812066f0 ; Lens.Gameplay.Modules.BigWorld.Fsm$$ChangeStateParallel
+0000000181785B2B  jmp      0x181785830
+0000000181785B4C  call     0x185f57d70 ; System.Collections.Generic.List<DataPoint<int>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, bool>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, int>>$$get_Item | +71 aliases
+0000000181785B62  call     0x181208660 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetParameterType
+0000000181785B71  call     0x1811efda0
+0000000181785B84  call     0x18121c710 ; Lens.Gameplay.Modules.BigWorld.FsmGlobalData$$UnsetTrigger
+0000000181785B8B  jmp      0x181785b30
+0000000181785B8F  jmp      0x181785ae5
+0000000181785B94  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$CheckStateConditions
+# RVA=0x1785BA0 size=0x480 next=0x1786020 fileOffset=0x17843A0 section=il2cpp
+0000000181785BD1  call     0x180c7b870
+0000000181785BDD  call     0x180c7b870
+0000000181785BE9  call     0x180c7b870
+0000000181785BF5  call     0x180c7b870
+0000000181785C01  call     0x180c7b870
+0000000181785C0D  call     0x180c7b870
+0000000181785C19  call     0x180c7b870
+0000000181785C25  call     0x180c7b870
+0000000181785C31  call     0x180c7b870
+0000000181785C3D  call     0x180c7b870
+0000000181785C49  call     0x180c7b870
+0000000181785C86  jmp      rax
+0000000181785CD3  call     0x185f57d70 ; System.Collections.Generic.List<DataPoint<int>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, bool>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, int>>$$get_Item | +71 aliases
+0000000181785CF4  call     0x180c7b870
+0000000181785D14  call     rax
+0000000181785D16  jmp      0x181785d1c
+0000000181785D32  call     0x18534f190 ; System.Collections.Generic.Dictionary<long, long>$$get_Item | System.Collections.Generic.Dictionary<long, object>$$get_Item
+0000000181785D49  call     0x181786b60 ; Gameplay.Utility.FsmCheckConditionUtility$$IsIgnoreTransition
+0000000181785D5F  call     0x1817854a0 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateCondition
+0000000181785D8D  jmp      0x181785cb0
+0000000181785D9B  call     0x181785340 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateAnimCondition
+0000000181785DC3  call     0x1848d6e80 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetState<object>
+0000000181785DE0  call     0x180004750
+0000000181785DFD  call     0x180004750
+0000000181785E39  jmp      0x181785e3d
+0000000181785E5D  call     0x1848d6e80 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetState<object>
+0000000181785E7A  call     0x180004750
+0000000181785E91  call     0x181785ba0 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateConditions
+0000000181785EAB  call     0x180004750
+0000000181785EC5  call     0x180004750
+0000000181785F01  jmp      0x181785f05
+0000000181785F25  call     0x1848d6e80 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetState<object>
+0000000181785F42  call     0x180004750
+0000000181785F59  call     0x181785ba0 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateConditions
+0000000181785F84  ret      
+0000000181785F97  call     0x1812069b0 ; Lens.Gameplay.Modules.BigWorld.Fsm$$ChangeState
+0000000181785FAB  jmp      0x181785cb0
+0000000181785FCC  call     0x185f57d70 ; System.Collections.Generic.List<DataPoint<int>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, bool>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, int>>$$get_Item | +71 aliases
+0000000181785FE2  call     0x181208660 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetParameterType
+0000000181785FF1  call     0x1811efda0
+0000000181786004  call     0x18121c710 ; Lens.Gameplay.Modules.BigWorld.FsmGlobalData$$UnsetTrigger
+000000018178600B  jmp      0x181785fb0
+000000018178600F  jmp      0x181785f65
+0000000181786014  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$CheckStateLagTime
+# RVA=0x1786020 size=0x150 next=0x1786170 fileOffset=0x1784820 section=il2cpp
+0000000181786040  call     0x180c7b870
+000000018178604C  call     0x180c7b870
+000000018178607A  jmp      rax
+0000000181786096  call     0x180c7b870
+00000001817860B6  call     rax
+00000001817860BB  jmp      0x1817860c1
+0000000181786110  call     0x180c941b0
+000000018178611F  call     r8
+0000000181786148  ret      
+0000000181786165  jmp      0x181786115
+0000000181786167  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$CheckTriggerCondition
+# RVA=0x1786170 size=0xB0 next=0x1786220 fileOffset=0x1784970 section=il2cpp
+0000000181786190  call     0x180c7b870
+00000001817861BE  jmp      rax
+00000001817861D4  call     0x181208850 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetTrigger
+00000001817861EF  ret      
+0000000181786204  ret      
+0000000181786211  ret      
+0000000181786212  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$InitGlobalParameters
+# RVA=0x1786220 size=0x940 next=0x1786B60 fileOffset=0x1784A20 section=il2cpp
+0000000181786239  call     0x180c7b870
+0000000181786245  call     0x180c7b870
+0000000181786251  call     0x180c7b870
+000000018178625D  call     0x180c7b870
+0000000181786269  call     0x180c7b870
+0000000181786275  call     0x180c7b870
+0000000181786281  call     0x180c7b870
+000000018178628D  call     0x180c7b870
+0000000181786299  call     0x180c7b870
+00000001817862A5  call     0x180c7b870
+00000001817862C9  jmp      qword ptr [rax + 0x60]
+0000000181786312  call     0x180c7b870
+0000000181786333  call     rax
+000000018178633F  jmp      0x181786345
+000000018178636F  call     0x180c7b870
+000000018178638F  call     rax
+0000000181786391  jmp      0x181786397
+00000001817863B7  call     0x185f57d70 ; System.Collections.Generic.List<DataPoint<int>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, bool>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, int>>$$get_Item | +71 aliases
+00000001817863CF  call     0x180c7b870
+00000001817863EF  call     r8
+00000001817863F2  jmp      0x1817863f8
+0000000181786425  call     0x1853ccd80 ; System.Collections.Generic.Dictionary<object, int>$$Add
+000000018178643A  call     0x180c7b870
+000000018178645A  call     rax
+000000018178645C  jmp      0x181786462
+0000000181786488  call     0x1851abd40 ; System.Collections.Generic.Dictionary<int, Int32Enum>$$Add
+00000001817864CA  call     0x1811efda0
+00000001817864FA  call     rax
+0000000181786511  call     0x185cfc290 ; System.Collections.Generic.HashSet<int>$$System.Collections.Generic.ICollection<T>.Add | System.Collections.Generic.HashSet<int>$$Add
+000000018178651B  call     0x1811efda0
+000000018178654F  call     0x1811efda0
+000000018178657F  call     rax
+000000018178659C  call     0x1851abd40 ; System.Collections.Generic.Dictionary<int, Int32Enum>$$Add
+00000001817865A6  call     0x1811efda0
+00000001817865DD  jmp      0x181786300
+00000001817865F0  call     0x1811efda0
+0000000181786620  call     rax
+000000018178662C  call     0x1811adf60 ; Lens.Gameplay.Modules.BigWorld.MyFloatExtension$$ToFloat
+000000018178664A  call     0x1851bf580 ; System.Collections.Generic.Dictionary<int, MyFloat>$$Add
+0000000181786654  call     0x1811efda0
+000000018178666D  call     0x1811adf60 ; Lens.Gameplay.Modules.BigWorld.MyFloatExtension$$ToFloat
+0000000181786691  call     0x1811efda0
+00000001817866C1  call     rax
+00000001817866DC  call     0x1851bf6a0 ; System.Collections.Generic.Dictionary<int, object>$$Add
+00000001817866E6  call     0x1811efda0
+000000018178671E  call     0x180c7abb0
+0000000181786728  call     0x1811efda0
+0000000181786758  call     rax
+0000000181786775  call     0x1851abd40 ; System.Collections.Generic.Dictionary<int, Int32Enum>$$Add
+000000018178677F  call     0x1811efda0
+00000001817867B6  jmp      0x181786300
+00000001817867C0  call     0x1811efda0
+00000001817867F0  call     rax
+000000018178680C  call     0x185170970 ; System.Collections.Generic.Dictionary<int, bool>$$Add
+0000000181786816  call     0x1811efda0
+000000018178684A  call     0x1811efda0
+000000018178687A  call     rax
+0000000181786897  call     0x1851abd40 ; System.Collections.Generic.Dictionary<int, Int32Enum>$$Add
+00000001817868A1  call     0x1811efda0
+00000001817868D8  jmp      0x181786300
+00000001817868E2  call     0x1811efda0
+0000000181786912  call     rax
+000000018178692D  call     0x185199a30 ; System.Collections.Generic.Dictionary<int, int>$$Add
+0000000181786937  call     0x1811efda0
+000000018178696A  call     0x1811efda0
+000000018178699A  call     rax
+00000001817869B7  call     0x1851abd40 ; System.Collections.Generic.Dictionary<int, Int32Enum>$$Add
+00000001817869C1  call     0x1811efda0
+00000001817869F8  jmp      0x181786300
+0000000181786A02  call     0x1811efda0
+0000000181786A32  call     rax
+0000000181786A3E  call     0x1811adf60 ; Lens.Gameplay.Modules.BigWorld.MyFloatExtension$$ToFloat
+0000000181786A5C  call     0x1851bf580 ; System.Collections.Generic.Dictionary<int, MyFloat>$$Add
+0000000181786A66  call     0x1811efda0
+0000000181786A7F  call     0x1811adf60 ; Lens.Gameplay.Modules.BigWorld.MyFloatExtension$$ToFloat
+0000000181786AA3  call     0x1811efda0
+0000000181786AD3  call     rax
+0000000181786AEC  call     0x1851abd40 ; System.Collections.Generic.Dictionary<int, Int32Enum>$$Add
+0000000181786AF6  call     0x1811efda0
+0000000181786B21  jmp      0x181786300
+0000000181786B44  ret      
+0000000181786B45  call     0x180c7baf0
+0000000181786B4B  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$IsIgnoreTransition
+# RVA=0x1786B60 size=0x150 next=0x1786CB0 fileOffset=0x1785360 section=il2cpp
+0000000181786B80  call     0x180c7b870
+0000000181786B8C  call     0x180c7b870
+0000000181786B98  call     0x180c7b870
+0000000181786BA4  call     0x180c7b870
+0000000181786BB0  call     0x180c7b870
+0000000181786BD4  call     rax
+0000000181786BE0  ret      
+0000000181786BF9  call     0x185f4bcc0 ; System.Collections.Generic.List<DataPoint<int>>$$GetEnumerator | System.Collections.Generic.List<DataPoint<float>>$$GetEnumerator | System.Collections.Generic.List<KeyValuePair<int, bool>>$$GetEnumerator | +75 aliases
+0000000181786C3C  call     0x185636870 ; System.Collections.Generic.List.Enumerator<DataPoint<int>>$$MoveNext | System.Collections.Generic.List.Enumerator<KeyValuePair<int, bool>>$$MoveNext | System.Collections.Generic.List.Enumerator<KeyValuePair<int, int>>$$MoveNext | +66 aliases
+0000000181786C56  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+0000000181786C67  ret      
+0000000181786C72  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+0000000181786C77  jmp      0x181786c94
+0000000181786C85  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+0000000181786CA0  ret      
+0000000181786CA1  call     0x180c7bb00
+0000000181786CA7  call     0x180c19b90
+
+# Gameplay.Utility.FsmCheckConditionUtility$$KiBoSwimCheck
+# RVA=0x1786CB0 size=0x4E0 next=0x1787190 fileOffset=0x17854B0 section=il2cpp
+0000000181786CD0  call     0x180c7b870
+0000000181786CDC  call     0x180c7b870
+0000000181786D12  call     qword ptr [r9 + 0x60]
+0000000181786D20  ret      
+0000000181786D59  call     0x180c7b870
+0000000181786D79  call     rax
+0000000181786D7B  jmp      0x181786d84
+0000000181786D92  call     0x1812ce820 ; Lens.Gameplay.Modules.BigWorld.ControlProperty$$get_CanWaterSurface
+0000000181786DBF  call     0x180c7b870
+0000000181786DDF  call     rax
+0000000181786DE1  jmp      0x181786dea
+0000000181786DF8  call     0x1812c51d0 ; Lens.Gameplay.Modules.BigWorld.CharacterControlProperty$$PreCheckSwimming
+0000000181786E17  call     0x1811eea90
+0000000181786E4F  call     r9
+0000000181786E68  call     0x1811eeae0
+0000000181786E7B  call     0x1812ce7c0 ; Lens.Gameplay.Modules.BigWorld.ControlProperty$$get_CanGround
+0000000181786E8D  call     0x1811efd00
+0000000181786EAB  call     0x18120ca30 ; Lens.Gameplay.Modules.BigWorld.Fsm$$SetBool
+0000000181786EC2  call     0x181215c50
+0000000181786EE0  call     0x181a4f0f0 ; Lens.Gameplay.Modules.BigWorld.PlayableAnimator.PlayableAnimator$$SetBool
+0000000181786EF7  call     0x1811eea90
+0000000181786F0D  call     0x18157ee20
+0000000181786F32  call     0x180c7b870
+0000000181786F52  call     rax
+0000000181786F57  jmp      0x181786f60
+0000000181786F79  call     0x180c7b870
+0000000181786F99  call     rax
+0000000181786F9B  jmp      0x181786fa4
+0000000181786FB1  call     0x1811efd00
+0000000181786FD1  call     0x1811eea90
+0000000181786FE4  call     0x1812bbde0
+0000000181786FFE  call     0x1811eea90
+0000000181787011  call     0x1812c8d30 ; Lens.Gameplay.Modules.BigWorld.CharacterControlProperty$$get_leaveSwimmingDepthRatio
+000000018178701E  call     0x1811eeb30
+0000000181787031  call     0x1812bc120
+0000000181787048  call     0x1811efd00
+0000000181787066  call     0x18120ca30 ; Lens.Gameplay.Modules.BigWorld.Fsm$$SetBool
+000000018178707D  call     0x181215c50
+000000018178709B  call     0x181a4f0f0 ; Lens.Gameplay.Modules.BigWorld.PlayableAnimator.PlayableAnimator$$SetBool
+00000001817870B2  call     0x1811eea90
+00000001817870C8  call     0x18157ee20
+00000001817870E6  ret      
+0000000181787100  call     0x180c7b870
+0000000181787120  call     rax
+0000000181787125  jmp      0x18178712e
+0000000181787143  call     0x180c7b870
+0000000181787163  call     rax
+0000000181787165  jmp      0x18178716e
+0000000181787176  jmp      0x181787043
+000000018178717B  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$ResetAllTrigger
+# RVA=0x1787190 size=0xA0 next=0x1787230 fileOffset=0x1785990 section=il2cpp
+00000001817871A9  call     0x180c7b870
+00000001817871CD  jmp      qword ptr [rax + 0x60]
+00000001817871E6  call     0x180c7b870
+0000000181787206  call     rax
+0000000181787208  jmp      0x18178720e
+000000018178721D  jmp      0x18121bb30 ; Lens.Gameplay.Modules.BigWorld.FsmGlobalData$$ResetAllTrigger
+0000000181787222  call     0x180c7bb00
+
+# Gameplay.Utility.FsmCheckConditionUtility$$StateRunningCheckConditionsParallelOp
+# RVA=0x1787230 size=0x280 next=0x17874B0 fileOffset=0x1785A30 section=il2cpp
+000000018178726A  call     0x180c7b870
+0000000181787276  call     0x180c7b870
+0000000181787282  call     0x180c7b870
+000000018178728E  call     0x180c7b870
+000000018178729A  call     0x180c7b870
+00000001817872A6  call     0x180c7b870
+00000001817872CF  call     rax
+00000001817872E5  ret      
+000000018178730B  call     0x185f4bcc0 ; System.Collections.Generic.List<DataPoint<int>>$$GetEnumerator | System.Collections.Generic.List<DataPoint<float>>$$GetEnumerator | System.Collections.Generic.List<KeyValuePair<int, bool>>$$GetEnumerator | +75 aliases
+000000018178734C  call     0x185661540 ; System.Collections.Generic.List.Enumerator<object>$$MoveNext
+000000018178736E  call     0x180c7b870
+000000018178738E  call     rax
+0000000181787390  jmp      0x181787396
+00000001817873AE  call     0x180004750
+00000001817873CA  call     0x181785630 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateConditionsParallelOp
+00000001817873E1  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001817873E8  jmp      0x1817872d1
+00000001817873F7  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001817873FC  jmp      0x18178743a
+000000018178740A  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+000000018178744A  call     0x180c7b870
+000000018178746A  call     rax
+000000018178746C  jmp      0x181787472
+0000000181787489  call     0x181785630 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateConditionsParallelOp
+0000000181787493  jmp      0x1817872d1
+0000000181787498  call     0x180c7bb00
+000000018178749E  call     0x180c7bb00
+00000001817874A4  call     0x180c19b90
+
+# Gameplay.Utility.FsmCheckConditionUtility$$StateRunningCheckConditionsParallel
+# RVA=0x17874B0 size=0x250 next=0x1787700 fileOffset=0x1785CB0 section=il2cpp
+00000001817874E3  call     0x180c7b870
+00000001817874EF  call     0x180c7b870
+00000001817874FB  call     0x180c7b870
+0000000181787507  call     0x180c7b870
+0000000181787513  call     0x180c7b870
+000000018178751F  call     0x180c7b870
+0000000181787544  call     rax
+000000018178755B  ret      
+0000000181787575  call     0x180c7b870
+0000000181787595  call     rax
+0000000181787597  jmp      0x18178759d
+00000001817875BF  call     0x185f4bcc0 ; System.Collections.Generic.List<DataPoint<int>>$$GetEnumerator | System.Collections.Generic.List<DataPoint<float>>$$GetEnumerator | System.Collections.Generic.List<KeyValuePair<int, bool>>$$GetEnumerator | +75 aliases
+00000001817875FC  call     0x185661540 ; System.Collections.Generic.List.Enumerator<object>$$MoveNext
+000000018178760F  call     0x181208340 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetCurrentState
+000000018178762C  call     0x180004750
+0000000181787643  call     0x181785720 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateConditionsParallel
+0000000181787656  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+000000018178765D  jmp      0x181787546
+000000018178766C  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+0000000181787671  jmp      0x1817876a2
+000000018178767F  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001817876A7  call     0x181208340 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetCurrentState
+00000001817876C0  call     0x180004750
+00000001817876D7  call     0x181785720 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateConditionsParallel
+00000001817876E1  jmp      0x181787546
+00000001817876E6  call     0x180c7bb00
+00000001817876EC  call     0x180c7bb00
+00000001817876F2  call     0x180c19b90
+
+# Gameplay.Utility.FsmCheckConditionUtility$$StateRunningCheckConditions
+# RVA=0x1787700 size=0x250 next=0x1787950 fileOffset=0x1785F00 section=il2cpp
+0000000181787733  call     0x180c7b870
+000000018178773F  call     0x180c7b870
+000000018178774B  call     0x180c7b870
+0000000181787757  call     0x180c7b870
+0000000181787763  call     0x180c7b870
+000000018178776F  call     0x180c7b870
+0000000181787794  call     rax
+00000001817877AB  ret      
+00000001817877C5  call     0x180c7b870
+00000001817877E5  call     rax
+00000001817877E7  jmp      0x1817877ed
+000000018178780F  call     0x185f4bcc0 ; System.Collections.Generic.List<DataPoint<int>>$$GetEnumerator | System.Collections.Generic.List<DataPoint<float>>$$GetEnumerator | System.Collections.Generic.List<KeyValuePair<int, bool>>$$GetEnumerator | +75 aliases
+000000018178784C  call     0x185661540 ; System.Collections.Generic.List.Enumerator<object>$$MoveNext
+000000018178785F  call     0x181208340 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetCurrentState
+000000018178787C  call     0x180004750
+0000000181787893  call     0x181785ba0 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateConditions
+00000001817878A6  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001817878AD  jmp      0x181787796
+00000001817878BC  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001817878C1  jmp      0x1817878f2
+00000001817878CF  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001817878F7  call     0x181208340 ; Lens.Gameplay.Modules.BigWorld.Fsm$$GetCurrentState
+0000000181787910  call     0x180004750
+0000000181787927  call     0x181785ba0 ; Gameplay.Utility.FsmCheckConditionUtility$$CheckStateConditions
+0000000181787931  jmp      0x181787796
+0000000181787936  call     0x180c7bb00
+000000018178793C  call     0x180c7bb00
+0000000181787942  call     0x180c19b90
+
+# Gameplay.Utility.FsmCheckConditionUtility$$UpdateSwimParameter
+# RVA=0x1787950 size=0x360 next=0x1787CB0 fileOffset=0x1786150 section=il2cpp
+0000000181787970  call     0x180c7b870
+000000018178797C  call     0x180c7b870
+0000000181787988  call     0x180c7b870
+0000000181787994  call     0x180c7b870
+00000001817879CA  call     qword ptr [r9 + 0x60]
+00000001817879D8  ret      
+0000000181787A14  jmp      0x181787a18
+0000000181787A39  call     0x180c7b870
+0000000181787A59  call     rax
+0000000181787A5B  jmp      0x181787a61
+0000000181787A7C  call     0x181215c50
+0000000181787A94  call     0x180b8ea90
+0000000181787AA1  call     0x1894a0ee0 ; UnityEngine.Object$$op_Equality
+0000000181787AC0  call     0x1811eeae0
+0000000181787AD3  call     0x1812cf4f0 ; Lens.Gameplay.Modules.BigWorld.ControlProperty$$get_show
+0000000181787AF2  call     0x1811eea90
+0000000181787B05  call     0x1814b77c0
+0000000181787B24  call     0x1811eea90
+0000000181787B46  call     r8
+0000000181787B56  call     0x1811efd00
+0000000181787B74  call     0x18120ca30 ; Lens.Gameplay.Modules.BigWorld.Fsm$$SetBool
+0000000181787B8B  call     0x181215c50
+0000000181787BA9  call     0x181a4f0f0 ; Lens.Gameplay.Modules.BigWorld.PlayableAnimator.PlayableAnimator$$SetBool
+0000000181787BC0  call     0x1811eea90
+0000000181787BD6  call     0x18157ee20
+0000000181787BEA  ret      
+0000000181787BFD  call     0x1811eebd0
+0000000181787C19  call     0x1811eebd0
+0000000181787C31  call     0x1811eebd0
+0000000181787C57  call     0x181784bd0 ; Gameplay.Utility.FsmCheckConditionUtility$$CharacterSwimCheck
+0000000181787C6B  ret      
+0000000181787C88  call     0x181786cb0 ; Gameplay.Utility.FsmCheckConditionUtility$$KiBoSwimCheck
+0000000181787C9C  ret      
+0000000181787C9D  call     0x180c7bb00
+
+# Lens.Gameplay.Modules.BigWorld.PlayableAnimator.RuntimeTransition$$CheckConditions
+# RVA=0x1AC29A0 size=0x50 next=0x1AC29F0 fileOffset=0x1AC11A0 section=il2cpp
+0000000181AC29B9  call     0x180c7b870
+0000000181AC29DE  jmp      rax
+0000000181AC29EA  ret      
+
+# Lens.Gameplay.Modules.BigWorld.NodeCanvas.Framework.ConditionTask$$CheckCondition
+# RVA=0x1C42460 size=0x80 next=0x1C424E0 fileOffset=0x1C40C60 section=il2cpp
+0000000181C42488  call     0x180c7b870
+0000000181C424BE  jmp      rax
+0000000181C424D3  jmp      0x181c42580 ; Lens.Gameplay.Modules.BigWorld.NodeCanvas.Framework.ConditionTask$$Check
+
+# Azur.Gameplay.Task.TraceInfoBase$$CheckCondition
+# RVA=0x2193350 size=0x200 next=0x2193550 fileOffset=0x2191B50 section=il2cpp
+000000018219336D  call     0x180c7b870
+0000000182193379  call     0x180c7b870
+0000000182193385  call     0x180c7b870
+00000001821933A4  call     qword ptr [rax + 0x60]
+00000001821933AC  ret      
+00000001821933CD  call     0x180c7b870
+00000001821933ED  call     rax
+00000001821933F2  jmp      0x1821933f8
+0000000182193411  call     0x180c7b870
+0000000182193431  call     rax
+0000000182193433  jmp      0x182193439
+0000000182193442  call     0x186eb4350 ; Azur.Gameplay.Table.TDBaseTable<object, TDTaskCondition, int>$$GetData
+0000000182193458  call     0x182193a90 ; Azur.Gameplay.Task.TraceInfoBase$$GetConditionDescIndex
+000000018219346D  call     0x180c7b870
+000000018219348D  call     rax
+000000018219348F  jmp      0x182193494
+00000001821934A6  call     0x182172310
+00000001821934BB  call     0x180c7b870
+00000001821934DB  call     rax
+00000001821934DD  jmp      0x1821934e2
+00000001821934ED  call     0x182205980 ; Azur.Gameplay.Table.TDTaskCondition$$get_guideDesc
+00000001821934FA  call     0x182172220
+0000000182193510  call     0x185f57d70 ; System.Collections.Generic.List<DataPoint<int>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, bool>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, int>>$$get_Item | +71 aliases
+0000000182193521  call     0x182172370
+000000018219352B  call     0x182194dd0 ; Azur.Gameplay.Task.TraceInfoBase$$OnTaskTraceUpdate
+000000018219353F  ret      
+0000000182193540  call     0x180c7bb00
+
+# Azur.Gameplay.EMP.EMPObject$$OnCheckCondition
+# RVA=0x26BFD80 size=0x60 next=0x26BFDE0 fileOffset=0x26BE580 section=il2cpp
+00000001826BFD9F  call     0x180c7b870
+00000001826BFDCA  jmp      qword ptr [rax + 0x60]
+00000001826BFDDA  jmp      0x1826bfde0 ; Azur.Gameplay.EMP.EMPObject$$OnCheckCondition
+
+# Azur.Gameplay.EMP.EMPObject$$OnCheckCondition
+# RVA=0x26BFDE0 size=0x1C0 next=0x26BFFA0 fileOffset=0x26BE5E0 section=il2cpp
+00000001826BFE02  call     0x180c7b870
+00000001826BFE0E  call     0x180c7b870
+00000001826BFE1A  call     0x180c7b870
+00000001826BFE26  call     0x180c7b870
+00000001826BFE32  call     0x180c7b870
+00000001826BFE3E  call     0x180c7b870
+00000001826BFE5D  call     qword ptr [rax + 0x60]
+00000001826BFE6A  ret      
+00000001826BFEA5  call     0x185f4bcc0 ; System.Collections.Generic.List<DataPoint<int>>$$GetEnumerator | System.Collections.Generic.List<DataPoint<float>>$$GetEnumerator | System.Collections.Generic.List<KeyValuePair<int, bool>>$$GetEnumerator | +75 aliases
+00000001826BFEDF  call     0x185661540 ; System.Collections.Generic.List.Enumerator<object>$$MoveNext
+00000001826BFEF8  call     0x18276e090 ; Azur.Gameplay.Condition.WorldCondBase$$CheckCond
+00000001826BFF0B  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001826BFF10  jmp      0x1826bfe60
+00000001826BFF1F  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001826BFF24  jmp      0x1826bff46
+00000001826BFF32  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001826BFF62  call     0x1826d6a80 ; Azur.Gameplay.CommonAction.CommonActionExecutor$$Init
+00000001826BFF72  call     0x1826d74e0 ; Azur.Gameplay.CommonAction.CommonActionExecutor$$Start
+00000001826BFF88  ret      
+00000001826BFF89  call     0x180c7bb00
+00000001826BFF8F  call     0x180c7bb00
+00000001826BFF95  call     0x180c19b90
+
+# Azur.Gameplay.EMP.EMPUnit$$OnCheckCondition
+# RVA=0x26C11E0 size=0x370 next=0x26C1550 fileOffset=0x26BF9E0 section=il2cpp
+00000001826C1212  call     0x180c7b870
+00000001826C121E  call     0x180c7b870
+00000001826C122A  call     0x180c7b870
+00000001826C1236  call     0x180c7b870
+00000001826C1242  call     0x180c7b870
+00000001826C124E  call     0x180c7b870
+00000001826C125A  call     0x180c7b870
+00000001826C1279  call     qword ptr [rax + 0x60]
+00000001826C1299  ret      
+00000001826C12D2  call     0x186068f40 ; System.Collections.Generic.List<Color32>$$GetEnumerator | System.Collections.Generic.List<EasingFunction>$$GetEnumerator | System.Collections.Generic.List<int>$$GetEnumerator | +28 aliases
+00000001826C130C  call     0x1856433e0 ; System.Collections.Generic.List.Enumerator<Color32>$$MoveNext | System.Collections.Generic.List.Enumerator<EasingFunction>$$MoveNext | System.Collections.Generic.List.Enumerator<int>$$MoveNext | +28 aliases
+00000001826C132D  call     0x180c7b870
+00000001826C1339  call     0x180c7b870
+00000001826C1356  call     rax
+00000001826C1358  jmp      0x1826c136f
+00000001826C1380  call     0x18272ae30 ; Azur.Gameplay.Condition.ConditionManager$$GetCond
+00000001826C1399  call     0x180004750
+00000001826C13AB  call     0x1826c26a0 ; Azur.Gameplay.EMP.EMPUnit$$RemovePoint
+00000001826C13BB  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001826C13C0  jmp      0x1826c127c
+00000001826C13CF  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001826C13D4  jmp      0x1826c13fd
+00000001826C13E2  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+00000001826C140D  call     0x180c7b870
+00000001826C1419  call     0x180c7b870
+00000001826C1425  call     0x180c7b870
+00000001826C1431  call     0x180c7b870
+00000001826C1489  call     0x1815e3360
+00000001826C149C  call     0x180c7ba90
+00000001826C14B4  call     0x1854825a0 ; System.Action<int, int>$$.ctor | System.Action<int, Int32Enum>$$.ctor | System.Action<int, uint>$$.ctor | +3 aliases
+00000001826C14C0  call     0x180c7ba90
+00000001826C14D8  call     0x1854825a0 ; System.Action<int, int>$$.ctor | System.Action<int, Int32Enum>$$.ctor | System.Action<int, uint>$$.ctor | +3 aliases
+00000001826C1523  call     0x183d740e0 ; Lens.Gameplay.Modules.Azur.WorldAOIMgr$$CreateEmp
+00000001826C152B  jmp      0x1826c127c
+00000001826C1530  call     0x180c7bb00
+00000001826C1536  call     0x180c7bb00
+00000001826C153C  call     0x180c19b90
+
+# Azur.Gameplay.EMP.EMPUnit$$OnCheckCondition
+# RVA=0x26C1550 size=0x60 next=0x26C15B0 fileOffset=0x26BFD50 section=il2cpp
+00000001826C156F  call     0x180c7b870
+00000001826C159A  jmp      qword ptr [rax + 0x60]
+00000001826C15AA  jmp      0x1826c11e0 ; Azur.Gameplay.EMP.EMPUnit$$OnCheckCondition
+
+# Azur.Gameplay.Condition.ConditionHelper$$CheckConditions
+# RVA=0x2729340 size=0x1F0 next=0x2729530 fileOffset=0x2727B40 section=il2cpp
+0000000182729359  call     0x180c7b870
+0000000182729365  call     0x180c7b870
+0000000182729371  call     0x180c7b870
+000000018272937D  call     0x180c7b870
+0000000182729389  call     0x180c7b870
+0000000182729395  call     0x180c7b870
+00000001827293A1  call     0x180c7b870
+00000001827293C6  jmp      rax
+00000001827293DE  call     0x180004750
+0000000182729406  call     0x187716610 ; Azur.Gameplay.Core.Pool.AzurCollectionPool<object, int>$$Get
+000000018272942C  call     0x180004750
+0000000182729448  call     0x180006220
+0000000182729463  call     0x1860e86e0 ; System.Collections.Generic.List<int>$$AddRange
+0000000182729478  call     0x180c7b870
+0000000182729484  call     0x180c7b870
+00000001827294A1  call     rax
+00000001827294A3  jmp      0x1827294ba
+00000001827294C8  call     0x18272c370 ; Azur.Gameplay.Condition.ConditionManager$$SafeQuickCheck
+00000001827294DC  jmp      0x182729420
+00000001827294EB  call     0x1877187b0 ; Azur.Gameplay.Core.Pool.AzurCollectionPool<object, int>$$Release
+000000018272950B  ret      
+0000000182729516  call     0x1877187b0 ; Azur.Gameplay.Core.Pool.AzurCollectionPool<object, int>$$Release
+000000018272951D  jmp      0x1827294f2
+0000000182729526  ret      
+0000000182729527  call     0x180c7bb00
+
+# XLua.CSObjectWrap.LensGameplayModulesAzurWorldAdapterWrap$$_m_CheckConditionIsComplete_xlua_st_
+# RVA=0x2DB51A0 size=0x110 next=0x2DB52B0 fileOffset=0x2DB39A0 section=il2cpp
+0000000182DB51CC  call     0x180c7b870
+0000000182DB51FB  jmp      rax
+0000000182DB520B  call     0x1834ad360 ; XLua.LuaDLL.Lua$$lua_tostring
+0000000182DB521E  call     0x1843513f0 ; XLua.LuaDLL.LuaRef$$lua_toboolean
+0000000182DB522C  call     0x183d4fd60 ; Lens.Gameplay.Modules.Azur.WorldAdapter$$CheckConditionIsComplete
+0000000182DB523A  call     0x1843509c0 ; XLua.LuaDLL.LuaRef$$lua_pushboolean
+0000000182DB5240  jmp      0x182db529e
+0000000182DB5253  call     0x180c7b890
+0000000182DB526F  call     rax
+0000000182DB5274  jmp      0x182db527e
+0000000182DB5276  call     0x180c7b890
+0000000182DB5287  call     0x188154650 ; System.String$$Concat
+0000000182DB5297  call     0x1834ac8e0 ; XLua.LuaDLL.Lua$$luaL_error
+0000000182DB52AF  ret      
+
+# Lens.Gameplay.UI.MapKiboDuelNode$$CheckConditionAllFinished
+# RVA=0x3902030 size=0xF0 next=0x3902120 fileOffset=0x3900830 section=il2cpp
+0000000183902049  call     0x180c7b870
+0000000183902055  call     0x180c7b870
+0000000183902061  call     0x180c7b870
+0000000183902086  jmp      rax
+0000000183902090  call     0x184abd690 ; Lens.Gameplay.UI.StoreManager$$GetStore<object>
+00000001839020A5  call     0x183966b50 ; Lens.Gameplay.UI.UnlockCSCacheStore$$GetIsUnlock
+00000001839020BF  call     0x184abd690 ; Lens.Gameplay.UI.StoreManager$$GetStore<object>
+00000001839020D5  call     0x180c7abb0
+00000001839020F5  call     0x1838e4ff0 ; Lens.Gameplay.UI.KiBoDuelStore$$GetKiBoDuelNpcShow
+000000018390210C  ret      
+0000000183902114  ret      
+0000000183902115  call     0x180c7bb00
+
+# Lens.Gameplay.Modules.Azur.WorldAdapter$$CheckConditionIsComplete
+# RVA=0x3D4FD60 size=0xB0 next=0x3D4FE10 fileOffset=0x3D4E560 section=il2cpp
+0000000183D4FD80  call     0x180c7b870
+0000000183D4FD8C  call     0x180c7b870
+0000000183D4FD98  call     0x180c7b870
+0000000183D4FDC6  jmp      rax
+0000000183D4FDF8  jmp      0x184985650 ; XLua.LuaFunction$$Func<object, bool, bool>
+0000000183D4FDFD  call     0x180c7bb00
+
+# Lens.Gameplay.Modules.Azur.SimpleFSM.SimpleTransition$$CheckCondition
+# RVA=0x3E649D0 size=0x170 next=0x3E64B40 fileOffset=0x3E631D0 section=il2cpp
+0000000183E649F0  call     0x180c7b870
+0000000183E649FC  call     0x180c7b870
+0000000183E64A08  call     0x180c7b870
+0000000183E64A14  call     0x180c7b870
+0000000183E64A20  call     0x180c7b870
+0000000183E64A44  call     rax
+0000000183E64A50  ret      
+0000000183E64A6A  call     0x185f4bcc0 ; System.Collections.Generic.List<DataPoint<int>>$$GetEnumerator | System.Collections.Generic.List<DataPoint<float>>$$GetEnumerator | System.Collections.Generic.List<KeyValuePair<int, bool>>$$GetEnumerator | +75 aliases
+0000000183E64AAC  call     0x185661540 ; System.Collections.Generic.List.Enumerator<object>$$MoveNext
+0000000183E64AD3  call     rax
+0000000183E64AE3  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+0000000183E64AF4  ret      
+0000000183E64AFF  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+0000000183E64B04  jmp      0x183e64b21
+0000000183E64B12  call     0x18101cf90 ; CustomBattleVerifyInfo$$.cctor | Gameplay.Modules.Service.BigWorld.AttributeService.EntryInfo$$.cctor | Lens.Gameplay.Modules.BigWorld.SkillSource$$.cctor | +15585 aliases
+0000000183E64B2D  ret      
+0000000183E64B2E  call     0x180c7bb00
+0000000183E64B34  call     0x180c7bb00
+0000000183E64B3A  call     0x180c19b90
+
+# RVA 0x137E810
+# RVA=0x137E810 size=0x200 fileOffset=0x137D010 section=il2cpp
+000000018137E83A  call     0x180c7b870
+000000018137E846  call     0x180c7b870
+000000018137E852  call     0x180c7b870
+000000018137E85E  call     0x180c7b870
+000000018137E86A  call     0x180c7b870
+000000018137E876  call     0x180c7b870
+000000018137E8B0  jmp      rax
+000000018137E8FD  call     0x185f461b0 ; System.Collections.Generic.List<ArraySegment<byte>>$$get_Item | System.Collections.Generic.List<ClassHandler<object>>$$get_Item | System.Collections.Generic.List<CommonActionParam<bool>>$$get_Item | +185 aliases
+000000018137E925  call     0x18137eb50 ; Lens.Gameplay.Modules.BigWorld.ConditionalSelectionElement$$CheckNormalCondition
+000000018137E92A  jmp      0x18137eacc
+000000018137E931  call     0x1816e5e30 ; Lens.Gameplay.Modules.BigWorld.BattleConfigManager$$get_elementFormulaConfig
+000000018137E949  call     0x181b3fb70 ; Lens.Gameplay.Modules.BigWorld.Config.ElementFormulaData$$GetId
+000000018137E956  call     0x18135dd00
+000000018137E968  call     0x18136ea50 ; Lens.Gameplay.Modules.BigWorld.BaseElement$$get_p_attackerData
+000000018137E975  call     0x18136ebc0 ; Lens.Gameplay.Modules.BigWorld.BaseElement$$get_p_executeData
+000000018137E982  call     0x18136ece0 ; Lens.Gameplay.Modules.BigWorld.BaseElement$$get_p_sourceData
+000000018137E99A  call     0x180b8ea90
+000000018137E9AE  jmp      0x18137e9e3
+000000018137E9D6  jmp      0x18137e9da
+000000018137E9EB  jmp      0x18137ea20
+
+# RVA 0x137EB50
+# RVA=0x137EB50 size=0x200 fileOffset=0x137D350 section=il2cpp
+000000018137EB78  call     0x180c7b870
+000000018137EB84  call     0x180c7b870
+000000018137EB90  call     0x180c7b870
+000000018137EB9C  call     0x180c7b870
+000000018137EBA8  call     0x180c7b870
+000000018137EBD9  call     rax
+000000018137EBEA  ret      
+000000018137EC15  jmp      rcx
+000000018137EC34  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+000000018137EC63  call     rax
+000000018137EC73  call     0x1812bc440
+000000018137ECA5  call     0x185f57d70 ; System.Collections.Generic.List<DataPoint<int>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, bool>>$$get_Item | System.Collections.Generic.List<KeyValuePair<int, int>>$$get_Item | +71 aliases
+000000018137ECC6  call     0x180c7b870
+000000018137ECE6  call     rax
+000000018137ECE8  jmp      0x18137ecf0
+000000018137ECFD  jmp      0x18137ec90
+000000018137ED0C  jmp      0x18137ee4e
+000000018137ED2E  call     0x18487e540 ; Lens.Gameplay.Modules.BigWorld.EntityHandle$$GetEntity<object>
+
+# RVA 0x16E5E30
+# RVA=0x16E5E30 size=0x200 fileOffset=0x16E4630 section=il2cpp
+00000001816E5E44  call     0x180c7b870
+00000001816E5E50  call     0x180c7b870
+00000001816E5E71  jmp      rax
+00000001816E5E92  ret      
+00000001816E5E93  call     0x180c7bb00
+00000001816E5EB4  call     0x180c7b870
+00000001816E5EC0  call     0x180c7b870
+00000001816E5EE1  jmp      rax
+00000001816E5F02  ret      
+00000001816E5F03  call     0x180c7bb00
+00000001816E5F24  call     0x180c7b870
+00000001816E5F30  call     0x180c7b870
+00000001816E5F51  jmp      rax
+00000001816E5F75  ret      
+00000001816E5F76  call     0x180c7bb00
+00000001816E5F94  call     0x180c7b870
+00000001816E5FA0  call     0x180c7b870
+00000001816E5FC1  jmp      rax
+00000001816E5FE2  ret      
+00000001816E5FE3  call     0x180c7bb00
+00000001816E6009  call     0x180c7b870
+
+# RVA 0x1B3FB70
+# RVA=0x1B3FB70 size=0x200 fileOffset=0x1B3E370 section=il2cpp
+0000000181B3FB94  call     0x180c7b870
+0000000181B3FBA0  call     0x180c7b870
+0000000181B3FBAC  call     0x180c7b870
+0000000181B3FBB8  call     0x180c7b870
+0000000181B3FBC4  call     0x180c7b870
+0000000181B3FBD0  call     0x180c7b870
+0000000181B3FBFD  jmp      rax
+0000000181B3FC25  call     0x180c7b870
+0000000181B3FC31  call     0x180c7b870
+0000000181B3FC3D  call     0x180c7b870
+0000000181B3FC49  call     0x180c7b870
+0000000181B3FC69  call     rax
+0000000181B3FCC0  jmp      0x181b3fc90
+0000000181B3FCE6  call     0x180c7ba90
+0000000181B3FCF8  call     0x1851804b0 ; System.Collections.Generic.Dictionary<int, DynamicHeightVirtualizationController.ContentHeightCacheInfo<object>>$$.ctor | System.Collections.Generic.Dictionary<int, KeyValuePair<object, object>>$$.ctor | System.Collections.Generic.Dictionary<int, Nullable<int>>$$.ctor | +137 aliases
+0000000181B3FD08  call     0x180c7abb0
+0000000181B3FD59  call     0x1851d0e70 ; System.Collections.Generic.Dictionary<int, object>$$set_Item
+0000000181B3FD62  jmp      0x181b3fd20
+
+# RVA 0x187C840
+# RVA=0x187C840 size=0x200 fileOffset=0x187B040 section=il2cpp
+000000018187C870  call     0x180c7b870
+000000018187C87C  call     0x180c7b870
+000000018187C8BE  call     r10
+000000018187C8D5  ret      
+000000018187C8F7  call     0x180b8ea90
+000000018187C937  call     0x18188b280 ; Lens.Gameplay.Modules.BigWorld.FormulaUtility$$innerCalculate
+000000018187C941  jmp      0x18187c8c1
+000000018187C946  call     0x180c7bb00
+000000018187C996  call     0x180c7b870
+000000018187C9A2  call     0x180c7b870
+000000018187C9AE  call     0x180c7b870
+000000018187C9BA  call     0x180c7b870
+000000018187C9C6  call     0x180c7b870
+000000018187C9D2  call     0x180c7b870
+000000018187C9DE  call     0x180c7b870
+000000018187C9EA  call     0x180c7b870
+000000018187C9F6  call     0x180c7b870
+000000018187CA02  call     0x180c7b870
+000000018187CA0E  call     0x180c7b870
+000000018187CA1A  call     0x180c7b870
+

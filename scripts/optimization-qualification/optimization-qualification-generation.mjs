@@ -49,6 +49,11 @@ import {
   readAfterDamageEmptyConditionRuntimeEvidenceSource,
 } from './soulessence-after-damage-empty-condition-evidence.mjs';
 import {
+  ACTIVATION_CONDITION_EVIDENCE_RELATIVE_PATH,
+  assertActivationConditionRuntimeEvidenceReference,
+  readActivationConditionRuntimeEvidenceSource,
+} from './soulessence-activation-condition-evidence.mjs';
+import {
   assertSetThreeSourceIdentityEvidenceReference,
   readSetThreeSourceIdentityEvidenceSource,
   SET_THREE_SOURCE_IDENTITY_EVIDENCE_RELATIVE_PATH,
@@ -140,6 +145,10 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     'c60a582cda07b5e017cb47751a323f8958a6b1e292dc1a7f5bb34e7904374447',
   soulessenceAfterDamageEmptyConditionRuntimeEvidence:
     '6d5ce341ac84ce65013669a691f9e6e6c599b834ffb26e99b0065ad504d88626',
+  soulessenceActivationConditionRuntimeEvidence:
+    'b0c55784e49903448c4003b3fc33f70f895e8a090f8af7bef5910fae576d563e',
+  elementFormula:
+    'ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e',
   setThreeSourceIdentityEvidence:
     '9e8e92d38a1924293aea7b772f7ba2c704913a27db8c5b22df2bb04f76c29418',
 });
@@ -209,6 +218,7 @@ export async function createOptimizationQualificationArtifacts({
   beforeSkillCompositeRuntimeEvidencePath = null,
   afterDamageTargetPropertyRuntimeEvidencePath = null,
   soulessenceAfterDamageEmptyConditionRuntimeEvidencePath = null,
+  soulessenceActivationConditionRuntimeEvidencePath = null,
   setThreeSourceIdentityEvidencePath = null,
   dynamicLoadoutAcceptanceReportPath = null,
   gameAssemblyPath = 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
@@ -416,6 +426,27 @@ export async function createOptimizationQualificationArtifacts({
       il2CppDumpPath: il2cppRuntimeContractsPath,
       projectRoot,
     });
+  const elementFormulaPath = path.join(newTableRoot, 'element_formula.json');
+  const elementFormulaBytes = await fs.readFile(elementFormulaPath);
+  sources.elementFormula = {
+    path: elementFormulaPath.replaceAll('\\', '/'),
+    bytes: elementFormulaBytes.byteLength,
+    sha256: createHash('sha256').update(elementFormulaBytes).digest('hex'),
+    value: JSON.parse(elementFormulaBytes.toString('utf8')),
+  };
+  sources.soulessenceActivationConditionRuntimeEvidence =
+    await readActivationConditionRuntimeEvidenceSource({
+      sourcePath:
+        soulessenceActivationConditionRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          ...ACTIVATION_CONDITION_EVIDENCE_RELATIVE_PATH.split('/')
+        ),
+      gameAssemblyPath,
+      il2CppDumpPath: il2cppRuntimeContractsPath,
+      elementFormulaPath,
+      projectRoot,
+    });
   const setSkillControlRoot = path.resolve(skillControlRoot);
   const formalSetThreeControlRoot = path.join(
     setSkillControlRoot,
@@ -531,6 +562,10 @@ export async function createOptimizationQualificationArtifacts({
   assertAfterDamageEmptyConditionRuntimeEvidenceReference(
     acceptanceReport?.sourceClosure?.afterDamageEmptyConditionRuntimeEvidence,
     sources.soulessenceAfterDamageEmptyConditionRuntimeEvidence
+  );
+  assertActivationConditionRuntimeEvidenceReference(
+    acceptanceReport?.sourceClosure?.soulessenceActivationConditionRuntimeEvidence,
+    sources.soulessenceActivationConditionRuntimeEvidence
   );
   assertSetThreeSourceIdentityEvidenceReference(
     acceptanceReport?.sourceClosure?.setThreeSourceIdentityEvidence,
@@ -655,6 +690,9 @@ export async function createOptimizationQualificationArtifacts({
       sources.afterDamageTargetPropertyRuntimeEvidence.value,
     afterDamageEmptyConditionRuntimeEvidence:
       sources.soulessenceAfterDamageEmptyConditionRuntimeEvidence.value,
+    activationConditionRuntimeEvidence:
+      sources.soulessenceActivationConditionRuntimeEvidence.value,
+    elementFormulaRows: sources.elementFormula.value.rows ?? [],
     setThreeSourceIdentityEvidence:
       sources.setThreeSourceIdentityEvidence.value,
   });
@@ -767,7 +805,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-E1',
+      phase: 'M12-B3-E2',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1733,8 +1771,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-E1',
-    status: 'b3-e1-implemented',
+    phase: 'M12-B3-E2',
+    status: 'b3-e2-implemented',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2164,6 +2202,8 @@ function createSourceSnapshot(sources) {
         key === 'beforeSkillCompositeRuntimeEvidence' ||
         key === 'afterDamageTargetPropertyRuntimeEvidence' ||
         key === 'soulessenceAfterDamageEmptyConditionRuntimeEvidence' ||
+        key === 'soulessenceActivationConditionRuntimeEvidence' ||
+        key === 'elementFormula' ||
         key === 'setThreeSourceIdentityEvidence'
       ) {
         record.value = structuredClone(source.value);
@@ -2181,7 +2221,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-E1 After-Damage Empty Condition\n\n' +
+    '# M12-B3-E2 Activation Element-Formula Condition\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +

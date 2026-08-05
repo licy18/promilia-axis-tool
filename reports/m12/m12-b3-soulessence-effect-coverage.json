@@ -957,6 +957,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19004801,
         "pathId": -4992960068897353000,
@@ -1154,6 +1155,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19006100,
         "pathId": 4614392219156132000,
@@ -1351,6 +1353,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "source-indexed-composite-effect",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": null,
       "effect": null,
       "sourceClosure": {
@@ -1413,6 +1416,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "source-indexed-composite-effect",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": null,
       "effect": null,
       "sourceClosure": {
@@ -1472,7 +1476,7 @@
         "skillLogicType": 6,
         "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900400]"
       },
-      "runtimeStatus": "source-indexed-runtime-unapplied",
+      "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
       "activationPrerequisites": [
         {
@@ -1487,6 +1491,18 @@
             }
           ],
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-8153693107315429000;elementId=19004001"
+        }
+      ],
+      "activationConditions": [
+        {
+          "kind": "element-formula-layer-gt",
+          "formulaId": 1007,
+          "markId": 250,
+          "minLayers": 1,
+          "valueRaw": 10000,
+          "formula": "IF(self.ELEMENT_LAYERS[J]>K,G,0)",
+          "status": "applied",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-8153693107315429000;elementId=19004001.triggerConditionList[0]|NewTable/element_formula.json#rows[id=1007]|GameAssembly.dll#ConditionalSelectionElement.CheckCondition@0x137E810/BattleConfigManager.get_elementFormulaConfig@0x16E5E30/ElementFormulaData.GetId@0x1B3FB70/FormulaUtility.Calculate@0x187C840|NewTable/element_formula.json#rows[id=1007]"
         }
       ],
       "trigger": {
@@ -1676,9 +1692,7 @@
           19004001
         ]
       },
-      "runtimeGaps": [
-        "effect-activation-condition-operator-unsupported"
-      ],
+      "runtimeGaps": [],
       "sourceIdentity": "NewTable/soulessence.rows[id=10018].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900400.asset/MonoBehaviour/skill_control_1900400__-2587960116876469994.json|battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002|battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003"
     },
     {
@@ -1692,6 +1706,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19003401,
         "pathId": -4873163209865115000,
@@ -2368,6 +2383,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19004500,
         "pathId": -5806624494324189000,
@@ -2565,6 +2581,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-get-element-property-before-acquire",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19003301,
         "pathId": -2023989584562330600,
@@ -2772,6 +2789,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19005500,
         "pathId": -4330459562266431000,
@@ -3250,6 +3268,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-switch-enter-team-property",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19009201,
         "pathId": -6515773177271123000,
@@ -3664,6 +3683,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19009101,
         "pathId": -7255963679965377000,
@@ -3982,6 +4002,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19009301,
         "pathId": 6322365379307683000,
@@ -5162,6 +5183,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19009001,
         "pathId": 3763334915368993000,
@@ -5845,6 +5867,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "source-indexed-composite-effect",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19008801,
         "pathId": 8121214350672122000,
@@ -5931,6 +5954,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "source-indexed-composite-effect",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": null,
       "effect": null,
       "sourceClosure": {
@@ -5993,6 +6017,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "source-indexed-composite-effect",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": null,
       "effect": null,
       "sourceClosure": {
@@ -6671,6 +6696,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19002301,
         "pathId": -4157799704864835600,
@@ -6883,6 +6909,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19006601,
         "pathId": 1967620083657371400,
@@ -7082,6 +7109,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "source-indexed-composite-effect",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": null,
       "effect": null,
       "sourceClosure": {
@@ -7147,6 +7175,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19004700,
         "pathId": 4922202484723645000,
@@ -7344,6 +7373,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19006701,
         "pathId": 4493671040636124000,
@@ -7543,6 +7573,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19002001,
         "pathId": -5029048619406844000,
@@ -7715,6 +7746,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19003501,
         "pathId": 1736025164143914200,
@@ -7827,6 +7859,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "source-indexed-composite-effect",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": null,
       "effect": null,
       "sourceClosure": {
@@ -7904,6 +7937,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "source-indexed-composite-effect",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": null,
       "effect": null,
       "sourceClosure": {
@@ -7972,6 +8006,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19005900,
         "pathId": -7832567119319180000,
@@ -8181,6 +8216,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19004101,
         "pathId": -2700117266412374500,
@@ -8405,6 +8441,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19005401,
         "pathId": -8058605269236214000,
@@ -8602,6 +8639,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19002801,
         "pathId": -908628671126506600,
@@ -8811,6 +8849,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19002701,
         "pathId": 1890390088406099200,
@@ -9045,6 +9084,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "source-indexed-composite-effect",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": null,
       "effect": null,
       "sourceClosure": {
@@ -9440,6 +9480,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19002101,
         "pathId": 7447841024087717000,
@@ -9811,6 +9852,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "source-indexed-composite-effect",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": null,
       "effect": null,
       "sourceClosure": {
@@ -9873,6 +9915,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19001101,
         "pathId": -246520716839985300,
@@ -10088,6 +10131,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19002201,
         "pathId": 2849866293729341000,
@@ -10295,6 +10339,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19005600,
         "pathId": 4249731622778222600,
@@ -10533,6 +10578,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19001301,
         "pathId": 756477731831644700,
@@ -11044,6 +11090,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19002401,
         "pathId": -6345955383762432000,
@@ -11241,6 +11288,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19002501,
         "pathId": 7681111361882010000,
@@ -11680,6 +11728,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "equipped-actor-shield-acquire-team-property",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19007500,
         "pathId": -7210722185016667000,
@@ -11854,6 +11903,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19007400,
         "pathId": 1288282584316539400,
@@ -11976,6 +12026,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-heal-event-target-property",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19001401,
         "pathId": -5225606672832072000,
@@ -12173,6 +12224,7 @@
       "runtimeStatus": "runtime-applied",
       "mechanismFamily": "equipped-actor-heal-event-target-property",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19001501,
         "pathId": -100069638428322610,
@@ -12370,6 +12422,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "source-indexed-composite-effect",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": null,
       "effect": null,
       "sourceClosure": {
@@ -12761,6 +12814,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "source-indexed-composite-effect",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": null,
       "effect": null,
       "sourceClosure": {
@@ -12825,6 +12879,7 @@
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "activationPrerequisites": [],
+      "activationConditions": [],
       "trigger": {
         "elementId": 19007801,
         "pathId": -9208882666704061000,
@@ -16604,15 +16659,6 @@
       "sourceIdentity": "NewTable/soulessence.rows[id=10011].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900530.asset/MonoBehaviour/skill_control_1900530__7646815027927349175.json"
     },
     {
-      "soulEssenceId": 10018,
-      "effectSkillId": 1900400,
-      "status": "source-indexed-runtime-unapplied",
-      "reasons": [
-        "effect-activation-condition-operator-unsupported"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10018].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900400.asset/MonoBehaviour/skill_control_1900400__-2587960116876469994.json|battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002|battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003"
-    },
-    {
       "soulEssenceId": 10032,
       "effectSkillId": 1900340,
       "status": "source-indexed-runtime-unapplied",
@@ -16883,8 +16929,8 @@
     "controlClosureCount": 62,
     "resourceReferenceCount": 282,
     "missingResourceReferenceCount": 0,
-    "runtimeAppliedCount": 43,
-    "unresolvedCount": 19,
+    "runtimeAppliedCount": 44,
+    "unresolvedCount": 18,
     "setSkillCount": 12,
     "setSkillThresholdIndexedCount": 12,
     "setSkillRuntimeAppliedCount": 11,
@@ -16903,9 +16949,9 @@
       "source-indexed-composite-effect": 13
     },
     "byRuntimeStatus": {
-      "runtime-applied": 43,
-      "source-indexed-runtime-unapplied": 19
+      "runtime-applied": 44,
+      "source-indexed-runtime-unapplied": 18
     }
   },
-  "catalogHash": "7b2e46610bdc9d2b"
+  "catalogHash": "0bea580d552457a3"
 }

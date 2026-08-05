@@ -57,6 +57,8 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   beforeSkillCompositeRuntimeEvidence = null,
   afterDamageTargetPropertyRuntimeEvidence = null,
   afterDamageEmptyConditionRuntimeEvidence = null,
+  activationConditionRuntimeEvidence = null,
+  elementFormulaRows = [],
   setThreeSourceIdentityEvidence = null,
 } = {}) {
   if (
@@ -172,6 +174,8 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       persistentLoadoutPropertyRuntimeEvidence,
       periodicPersistentPropertyRuntimeEvidence,
       afterDamageEmptyConditionRuntimeEvidence,
+      activationConditionRuntimeEvidence,
+      elementFormulaRows,
       control: controlSource.bySkillId.get(
         Number(definitionBySoulId.get(item.soulEssenceId)?.reishiSkill)
       ),
@@ -2287,6 +2291,69 @@ function resolveFormulaFamily({ commonFunctionId, baseFunctionId }) {
   return `unsupported-${commonFunctionId || 0}-${baseFunctionId || 0}`;
 }
 
+function compileActivationConditions({
+  activationPrerequisiteRows,
+  elementFormulaRows,
+  activationConditionRuntimeEvidence,
+}) {
+  if (activationPrerequisiteRows.length === 0) return [];
+  const supported =
+    activationConditionRuntimeEvidence?.conclusion?.status === 'applied';
+  const formulaById = new Map(
+    (elementFormulaRows ?? []).map(row => [Number(row.id), row])
+  );
+  return activationPrerequisiteRows.flatMap(row => {
+    const tree = row.typetree ?? {};
+    const functionParams = Array.isArray(tree.functionParams)
+      ? tree.functionParams
+      : [];
+    const rowIdentity = createElementIdentity(row);
+    return (tree.triggerConditionList ?? []).map((condition, conditionIndex) => {
+      const conditionType = Number(condition?.conditionParam1);
+      const sourceIdentity = `${rowIdentity}.triggerConditionList[${conditionIndex}]`;
+      if (conditionType !== 10000) {
+        return {
+          kind: 'unsupported-condition-type',
+          conditionType,
+          status: 'static-evidence-gap',
+          sourceIdentity,
+        };
+      }
+      const formulaId = Number(condition?.conditionParam2);
+      const formula = formulaById.get(formulaId);
+      const match = String(formula?.functionOutput ?? '').match(
+        /^IF\(self\.ELEMENT_LAYERS\[([A-Z])\]>([A-Z]),([A-Z]),0\)$/u
+      );
+      const resolveVariable = letter => {
+        const index = letter.charCodeAt(0) - 65;
+        const raw = functionParams[index];
+        return Number.isFinite(Number(raw)) ? Number(raw) : null;
+      };
+      const markId = match ? resolveVariable(match[1]) : null;
+      const minLayers = match ? resolveVariable(match[2]) : null;
+      const valueRaw = match ? resolveVariable(match[3]) : null;
+      if (!supported || !match || markId == null || minLayers == null) {
+        return {
+          kind: 'element-formula-layer-gt',
+          formulaId,
+          status: 'static-evidence-gap',
+          sourceIdentity,
+        };
+      }
+      return {
+        kind: 'element-formula-layer-gt',
+        formulaId,
+        markId,
+        minLayers,
+        valueRaw,
+        formula: formula.functionOutput,
+        status: 'applied',
+        sourceIdentity: `${sourceIdentity}|NewTable/element_formula.json#rows[id=${formulaId}]|${activationConditionRuntimeEvidence.conclusion.sourceIdentity}`,
+      };
+    });
+  });
+}
+
 function compileSoulEffectDefinition({
   soul,
   sourceDefinition,
@@ -2300,6 +2367,8 @@ function compileSoulEffectDefinition({
   persistentLoadoutPropertyRuntimeEvidence,
   periodicPersistentPropertyRuntimeEvidence,
   afterDamageEmptyConditionRuntimeEvidence = null,
+  activationConditionRuntimeEvidence = null,
+  elementFormulaRows = [],
 }) {
   const effectSkillId = Number(sourceDefinition?.reishiSkill);
   const resourcePathIds = uniqueNumbers(control?.resourcePathIds ?? []);
@@ -2500,7 +2569,15 @@ function compileSoulEffectDefinition({
       'effect-shield-refresh-replacement-semantics-evidence-gap'
     );
   }
-  if (activationPrerequisiteRows.length > 0) {
+  const activationConditions = compileActivationConditions({
+    activationPrerequisiteRows,
+    elementFormulaRows,
+    activationConditionRuntimeEvidence,
+  });
+  if (
+    activationPrerequisiteRows.length > 0 &&
+    activationConditions.some(condition => condition.status !== 'applied')
+  ) {
     runtimeGaps.push('effect-activation-condition-operator-unsupported');
   }
   if (compiledCondition?.status !== 'applied') {
@@ -2583,6 +2660,7 @@ function compileSoulEffectDefinition({
       })),
       sourceIdentity: createElementIdentity(row),
     })),
+    activationConditions,
     trigger:
       trigger == null
         ? null

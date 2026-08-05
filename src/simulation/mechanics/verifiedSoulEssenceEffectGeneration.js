@@ -210,6 +210,29 @@ export function createVerifiedSoulEssenceEffectGeneration({
           };
         })
         .filter(occurrence => occurrence.conditionMatch.matched);
+      const activationMatchedOccurrences = matchedOccurrences.filter(
+        occurrence =>
+          matchesActivationConditions(
+            binding.definition.activationConditions,
+            tuningGeneration,
+            occurrence.timeMs,
+            frameAnchor
+          )
+      );
+      if (
+        matchedOccurrences.length > 0 &&
+        activationMatchedOccurrences.length === 0
+      ) {
+        suppressions.push({
+          actionId: action?.id ?? null,
+          actorId: binding.actor.id,
+          ...createBindingDiagnosticIdentity(binding),
+          reason: 'soulessence-effect-activation-condition-not-matched',
+          expectedActivationConditions:
+            binding.definition.activationConditions ?? [],
+        });
+        continue;
+      }
       if (matchedOccurrences.length === 0) {
         const actionContext = resolveSoulTriggerActionContext({
           action,
@@ -247,7 +270,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
       }
       if (binding.definition.effect != null) {
         effectCommands.push(
-          ...matchedOccurrences.flatMap(occurrence =>
+          ...activationMatchedOccurrences.flatMap(occurrence =>
             resolveSoulEffectTargets({
               binding,
               scenario,
@@ -270,7 +293,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
           )
         );
       }
-      for (const occurrence of matchedOccurrences) {
+      for (const occurrence of activationMatchedOccurrences) {
         const immediate = createSoulImmediateEvents({
           binding,
           action,
@@ -1601,6 +1624,55 @@ function resolveHeldTuningElementIdsAt({
     .filter(([_markId, count]) => count > 0)
     .map(([markId]) => markId)
     .sort((left, right) => left - right);
+}
+
+function resolveMarkLayerCountAt({
+  tuningGeneration,
+  timeMs,
+  frameAnchor,
+  markId,
+}) {
+  const countByMarkId = new Map(
+    (tuningGeneration?.initialState ?? []).map(state => [
+      Number(state.markId),
+      Number(state.currentValue) || 0,
+    ])
+  );
+  for (const event of tuningGeneration?.events ?? []) {
+    const eventTimeMs = Number(event.timeMs);
+    if (eventTimeMs > timeMs) continue;
+    if (
+      eventTimeMs === timeMs &&
+      frameAnchor === 'action-start' &&
+      event.kind !== 'expire'
+    ) {
+      continue;
+    }
+    countByMarkId.set(Number(event.markId), Number(event.after) || 0);
+  }
+  return Number(countByMarkId.get(Number(markId)) ?? 0);
+}
+
+function matchesActivationConditions(
+  conditions,
+  tuningGeneration,
+  timeMs,
+  frameAnchor
+) {
+  if (!Array.isArray(conditions) || conditions.length === 0) return true;
+  return conditions.every(condition => {
+    if (condition?.status !== 'applied') return false;
+    if (condition.kind === 'element-formula-layer-gt') {
+      const layerCount = resolveMarkLayerCountAt({
+        tuningGeneration,
+        timeMs,
+        frameAnchor,
+        markId: Number(condition.markId),
+      });
+      return layerCount > Number(condition.minLayers);
+    }
+    return false;
+  });
 }
 
 function matchesSoulTriggerProvenance(condition, actionContext) {

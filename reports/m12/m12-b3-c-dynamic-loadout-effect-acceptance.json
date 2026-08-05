@@ -1,7 +1,7 @@
 {
   "schemaVersion": 25,
-  "phase": "M12-B3-E1",
-  "status": "b3-e1-implemented",
+  "phase": "M12-B3-E2",
+  "status": "b3-e2-implemented",
   "baseCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
@@ -20,7 +20,7 @@
   "acceptedC14Commit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "acceptedC15Commit": "aafb6aa6c645b7b7490fdba0f71b8941da311f6e",
   "implementationCommit": "git-self",
-  "nextStage": "b3-e1-implemented-awaiting-product-acceptance",
+  "nextStage": "b3-e2-implemented-awaiting-product-acceptance",
   "acceptedPredecessor": {
     "phase": "M12-B3-C14",
     "productionMechanicsCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
@@ -291,6 +291,22 @@
       "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
       "conditionRange": "0x13B58F0-0x13B5950",
       "conditionRangeSha256": "f736370cf769dd058d30646193b3ae87527baa4c04deb59d3a661d15b271d65e",
+      "conclusionStatus": "applied"
+    },
+    "soulessenceActivationConditionRuntimeEvidence": {
+      "path": "scripts/optimization-qualification/evidence/soulessence-activation-element-formula-condition-runtime-evidence.json",
+      "bytes": 6368,
+      "sha256": "b0c55784e49903448c4003b3fc33f70f895e8a090f8af7bef5910fae576d563e",
+      "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+      "binaryBytes": 222485544,
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "il2CppDumpPath": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+      "il2CppDumpBytes": 97428254,
+      "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+      "elementFormulaPath": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+      "elementFormulaBytes": 15113,
+      "elementFormulaSha256": "ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e",
+      "conditionKind": "element-formula-condition",
       "conclusionStatus": "applied"
     }
   },
@@ -996,15 +1012,15 @@
     "gameplayLogicChanged": false
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 43,
-    "runtimeUnappliedSoulEssenceCount": 19,
+    "runtimeAppliedSoulEssenceCount": 44,
+    "runtimeUnappliedSoulEssenceCount": 18,
     "runtimeAppliedSetSkillCount": 11,
     "runtimeUnappliedSetSkillCount": 1,
     "newlyAppliedSoulEssenceIds": [
-      10101
+      10018
     ],
     "newlyAppliedSetSkillIds": [],
-    "preservedRuntimeAppliedSoulEssenceCount": 42,
+    "preservedRuntimeAppliedSoulEssenceCount": 43,
     "preservedRuntimeAppliedSetSkillCount": 11,
     "remainingBlockedFourPieceSetSkillIds": [
       "set-skill:3:4"
@@ -1018,9 +1034,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 373,
+    "blockingUniqueGapCount": 371,
     "blockingByCategory": {
-      "not-implemented": 352,
+      "not-implemented": 350,
       "evidence-insufficient": 21
     },
     "formalAdmissions": {
@@ -1032,14 +1048,14 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "2112f6062e7d0982",
-    "rosterHash": "26c5b9f3de5c2dd5",
-    "manifestsHash": "671cda971b8e28d9",
-    "ledgerHash": "9aea582e97522363",
-    "bindingMatrixHash": "dc4a2c1dd1f0bebe",
-    "qualificationCatalogHash": "d1a7ab1aa6682ec9",
-    "dynamicLoadoutEffectCensusHash": "97c998dc6b30c7df",
-    "soulEssenceEffectCatalogHash": "7b2e46610bdc9d2b",
+    "sourceSnapshotHash": "d7144f7b0b4cc956",
+    "rosterHash": "027d033dfdd0ddcf",
+    "manifestsHash": "2ac6a260e89c769b",
+    "ledgerHash": "3f85eb0e769f3472",
+    "bindingMatrixHash": "b1fa483f1ec046b6",
+    "qualificationCatalogHash": "8114ba22e69527ac",
+    "dynamicLoadoutEffectCensusHash": "3801dc143f85f86c",
+    "soulEssenceEffectCatalogHash": "0bea580d552457a3",
     "soulEssenceSourceSnapshotHash": "d5e0287dc75b3c16",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
     "soulEssenceTriggerContractHash": "ee74f6284b3b5118",

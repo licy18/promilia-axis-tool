@@ -3,7 +3,7 @@
   "contractName": "AzPrDynamicLoadoutEffectMechanismCensus",
   "kind": "azpr-dynamic-loadout-effect-mechanism-census",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "sourceCatalogHash": "7b2e46610bdc9d2b",
+  "sourceCatalogHash": "0bea580d552457a3",
   "propertyTagContract": {
     "sourceKind": "il2cpp-battle-property-tag-contract",
     "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag",
@@ -3245,13 +3245,11 @@
       "vitalChanges": [],
       "delayedEvents": [],
       "loopPersistence": {
-        "status": "runtime-unapplied"
+        "status": "canonical-effect-timeline-applied"
       },
-      "evidenceStatus": "source-indexed-runtime-unapplied",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "effect-activation-condition-operator-unsupported"
-      ],
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
       "sourceIdentity": "NewTable/soulessence.rows[id=10018].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900400.asset/MonoBehaviour/skill_control_1900400__-2587960116876469994.json|battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002|battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003"
     },
     {
@@ -11035,8 +11033,8 @@
   "summary": {
     "soulEssenceCount": 62,
     "setSkillCount": 12,
-    "runtimeAppliedCount": 54,
-    "runtimeUnappliedCount": 20,
+    "runtimeAppliedCount": 55,
+    "runtimeUnappliedCount": 19,
     "byMechanismFamily": {
       "equipped-actor-get-element-property-after-acquire": 3,
       "equipped-actor-get-element-property-before-acquire": 1,
@@ -11059,9 +11057,9 @@
     },
     "byEvidenceStatus": {
       "evidence-insufficient": 1,
-      "runtime-applied": 54,
-      "source-indexed-runtime-unapplied": 19
+      "runtime-applied": 55,
+      "source-indexed-runtime-unapplied": 18
     }
   },
-  "censusHash": "97c998dc6b30c7df"
+  "censusHash": "3801dc143f85f86c"
 }

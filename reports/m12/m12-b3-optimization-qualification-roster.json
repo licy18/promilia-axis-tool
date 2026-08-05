@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "phase": "M12-B3-E1",
+  "phase": "M12-B3-E2",
   "sourceSnapshot": {
     "files": {
       "characters": {
@@ -2564,6 +2564,792 @@
           }
         }
       },
+      "elementFormula": {
+        "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+        "sha256": "ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e",
+        "bytes": 15113,
+        "value": {
+          "fields": [
+            {
+              "name": "id",
+              "type": "int",
+              "comment": "序号"
+            },
+            {
+              "name": "functionOutput",
+              "type": "string",
+              "comment": "公式输出值"
+            }
+          ],
+          "rowCount": 152,
+          "rows": [
+            {
+              "id": 1,
+              "functionOutput": "G/10000"
+            },
+            {
+              "id": 2,
+              "functionOutput": "(self.ATK[0]*A)/10000"
+            },
+            {
+              "id": 3,
+              "functionOutput": "A/10000"
+            },
+            {
+              "id": 4,
+              "functionOutput": "source.ATK[0]*A/10000"
+            },
+            {
+              "id": 5,
+              "functionOutput": "A"
+            },
+            {
+              "id": 6,
+              "functionOutput": "(self.SPEED[0]*A)/10000"
+            },
+            {
+              "id": 7,
+              "functionOutput": "self.ELEMENT_LAYERS[A]*B/10000"
+            },
+            {
+              "id": 8,
+              "functionOutput": "IF(target.SPEED[0]>A,(target.SPEED[0]-A)*B,0)"
+            },
+            {
+              "id": 9,
+              "functionOutput": "IF(target.SPEED[0]>A,target.SPEED[0]*self.ATK[0]*B/10000,0)"
+            },
+            {
+              "id": 10,
+              "functionOutput": "(G-target.BLOCKTHROWS[0])/10000"
+            },
+            {
+              "id": 11,
+              "functionOutput": "A"
+            },
+            {
+              "id": 12,
+              "functionOutput": "B"
+            },
+            {
+              "id": 13,
+              "functionOutput": "C"
+            },
+            {
+              "id": 14,
+              "functionOutput": "D"
+            },
+            {
+              "id": 15,
+              "functionOutput": "E"
+            },
+            {
+              "id": 16,
+              "functionOutput": "F"
+            },
+            {
+              "id": 17,
+              "functionOutput": "G"
+            },
+            {
+              "id": 18,
+              "functionOutput": "F_MAX(A-self.COLLISION_COUNT*B,C)"
+            },
+            {
+              "id": 19,
+              "functionOutput": "F_MAX(A-self.FLIGHT_DISTANCE*B,C)"
+            },
+            {
+              "id": 20,
+              "functionOutput": "H"
+            },
+            {
+              "id": 21,
+              "functionOutput": "(self.WP_BREAK_TIME[4]*A)/10000"
+            },
+            {
+              "id": 22,
+              "functionOutput": "(self.DEF[4]*A)/10000"
+            },
+            {
+              "id": 23,
+              "functionOutput": "(self.DEF[0]*A)/10000"
+            },
+            {
+              "id": 101,
+              "functionOutput": "(self.ATK[0]*A)/10000"
+            },
+            {
+              "id": 102,
+              "functionOutput": "(self.MATK[0]*A)/10000"
+            },
+            {
+              "id": 103,
+              "functionOutput": "(self.CURRENT_HEALTH*A)/10000"
+            },
+            {
+              "id": 104,
+              "functionOutput": "(self.MAXHP[0]*A)/10000"
+            },
+            {
+              "id": 105,
+              "functionOutput": "(self.CURRENT_ENERGY*A)/10000"
+            },
+            {
+              "id": 106,
+              "functionOutput": "(self.MAXHP[0]-self.CURRENT_HEALTH)*A/10000"
+            },
+            {
+              "id": 107,
+              "functionOutput": "(target.CURRENT_HEALTH*A)/10000"
+            },
+            {
+              "id": 108,
+              "functionOutput": "(target.MAXHP[0]*A)/10000"
+            },
+            {
+              "id": 109,
+              "functionOutput": "(self.MAXHP[0]-self.CURRENT_HEALTH)*A/10000"
+            },
+            {
+              "id": 110,
+              "functionOutput": "source.ATK[0]*A/10000"
+            },
+            {
+              "id": 111,
+              "functionOutput": "(self.ELEMENT_LAYERS[H])*I/10000"
+            },
+            {
+              "id": 112,
+              "functionOutput": "(self.ELEMENT_LAYERS[101]+self.ELEMENT_LAYERS[201]+self.ELEMENT_LAYERS[301]+self.ELEMENT_LAYERS[401]+self.ELEMENT_LAYERS[501]+self.ELEMENT_LAYERS[601]+self.ELEMENT_LAYERS[701]+self.ELEMENT_LAYERS[801]+self.ELEMENT_LAYERS[901])*I/10000"
+            },
+            {
+              "id": 113,
+              "functionOutput": "(target.ELEMENT_LAYERS[H])*I/10000"
+            },
+            {
+              "id": 114,
+              "functionOutput": "(target.ELEMENT_LAYERS[B]*C/10000+1)*self.ATK[0]*A/10000"
+            },
+            {
+              "id": 115,
+              "functionOutput": "target.ELEMENT_LAYERS[H]*I"
+            },
+            {
+              "id": 116,
+              "functionOutput": "target.ELEMENT_LAYERS[H]*source.ATK[0]*I/10000"
+            },
+            {
+              "id": 117,
+              "functionOutput": "source.MAXHP[0]*I/10000"
+            },
+            {
+              "id": 118,
+              "functionOutput": "target.ELEMENT_LAYERS[H]*source.MAXHP[0]*I/10000"
+            },
+            {
+              "id": 119,
+              "functionOutput": "source.ELEMENT_LAYERS[H]*source.ATK[0]*I/10000"
+            },
+            {
+              "id": 120,
+              "functionOutput": "(source.ELEMENT_LAYERS[H])*I/10000"
+            },
+            {
+              "id": 121,
+              "functionOutput": "(source.ELEMENT_LAYERS[H])*I"
+            },
+            {
+              "id": 122,
+              "functionOutput": "target.ELEMENT_LAYERS[H]*target.MAXHP[0]*I/10000"
+            },
+            {
+              "id": 201,
+              "functionOutput": "F/10000"
+            },
+            {
+              "id": 202,
+              "functionOutput": "F/10000*(1-target.SOLDIER_SUFFERAOEDMGDOWN[0]/10000)"
+            },
+            {
+              "id": 203,
+              "functionOutput": "F/10000/self.PLUGIN_FRAME_HIT_COUNT"
+            },
+            {
+              "id": 204,
+              "functionOutput": "F/10000/self.SKILL_ENEMY_HIT_COUNT"
+            },
+            {
+              "id": 205,
+              "functionOutput": "F/10000/self.SKILL_ALLY_HIT_COUNT"
+            },
+            {
+              "id": 206,
+              "functionOutput": "F/10000*self.SKILL_TOTAL_HIT_COUNT"
+            },
+            {
+              "id": 207,
+              "functionOutput": "F/10000/self.PROJECTILE_FRAME_HIT_COUNT"
+            },
+            {
+              "id": 208,
+              "functionOutput": "IF(target.CURRENT_HEALTH/target.MAXHP[0]>Z/10000,1,0)"
+            },
+            {
+              "id": 209,
+              "functionOutput": "IF(target.CURRENT_HEALTH/target.MAXHP[0]<Z/10000,1,0)"
+            },
+            {
+              "id": 210,
+              "functionOutput": "IF(self.SHIELD[0]>Z,1,0)"
+            },
+            {
+              "id": 211,
+              "functionOutput": "IF(self.CURRENT_HEALTH/self.MAXHP[0]<Z/10000,1,0)"
+            },
+            {
+              "id": 222,
+              "functionOutput": "IF(self.CURRENT_HEALTH/self.MAXHP[0]>Z/10000,1,0)"
+            },
+            {
+              "id": 223,
+              "functionOutput": "target.WEAKNESS_POINT_MAX[0]*target.WP_BREAK_TOUGH[0]/10000*self.WP_BREAK_PERCENT[0]/10000"
+            },
+            {
+              "id": 224,
+              "functionOutput": "IF(target.CURRENT_HEALTH/target.MAXHP[0]=Z/10000,1,0)"
+            },
+            {
+              "id": 225,
+              "functionOutput": "IF(self.CURRENT_HEALTH/self.MAXHP[0]=Z/10000,1,0)"
+            },
+            {
+              "id": 230,
+              "functionOutput": "(self.CRI[0]*B)/10000+H"
+            },
+            {
+              "id": 231,
+              "functionOutput": "(self.ATK[0]*B)/10000+H"
+            },
+            {
+              "id": 232,
+              "functionOutput": "(self.SHIELD[0]*B)/10000"
+            },
+            {
+              "id": 233,
+              "functionOutput": "IF(self.SHIELD[0]<Z,1,0)"
+            },
+            {
+              "id": 234,
+              "functionOutput": "(target.SHIELD[0]*B)/10000"
+            },
+            {
+              "id": 235,
+              "functionOutput": "IF(target.SHIELD[0]>Z,1,0)"
+            },
+            {
+              "id": 1001,
+              "functionOutput": "IF(target.ELEMENT_LAYERS[F]>E,G,0)"
+            },
+            {
+              "id": 1002,
+              "functionOutput": "IF(self.SHIELD[0]<1,G/10000,0)"
+            },
+            {
+              "id": 1003,
+              "functionOutput": "(target.ATK[0]*A)/10000"
+            },
+            {
+              "id": 1004,
+              "functionOutput": "target.ELEMENT_LAYERS[A]*B/10000"
+            },
+            {
+              "id": 1005,
+              "functionOutput": "IF(target.IMPACT_RESISTANCE&F>0,G,0)"
+            },
+            {
+              "id": 1006,
+              "functionOutput": "IF(target.ELEMENT_LAYERS[F]>I,G,0)"
+            },
+            {
+              "id": 1007,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+            },
+            {
+              "id": 1008,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[L]<M,G,0)"
+            },
+            {
+              "id": 1009,
+              "functionOutput": "IF(self.MAXHP[0]/self.CURRENT_HEALTH<I,H,0)"
+            },
+            {
+              "id": 1010,
+              "functionOutput": "IF(self.CONFIG_ID=E,1,0)"
+            },
+            {
+              "id": 1011,
+              "functionOutput": "IF(target.CONFIG_ID=E,1,0)"
+            },
+            {
+              "id": 1012,
+              "functionOutput": "IF(source.CONFIG_ID=E,1,0)"
+            },
+            {
+              "id": 1013,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[X]<1,1,0)"
+            },
+            {
+              "id": 1014,
+              "functionOutput": "IF(target.ELEMENT_LAYERS[F]<I,G,0)"
+            },
+            {
+              "id": 2001,
+              "functionOutput": "(self.ATK[4]*A)/10000"
+            },
+            {
+              "id": 2002,
+              "functionOutput": "(self.CRI[4]*B)/10000+H"
+            },
+            {
+              "id": 2003,
+              "functionOutput": "(self.MAXHP[4]*A)/10000"
+            },
+            {
+              "id": 2004,
+              "functionOutput": "(self.MDEF[4]*A)/10000"
+            },
+            {
+              "id": 2005,
+              "functionOutput": "(self.MASTERY[2]*A)/10000"
+            },
+            {
+              "id": 2006,
+              "functionOutput": "(self.CRI_DMG[4]*A)/10000"
+            },
+            {
+              "id": 2007,
+              "functionOutput": "(self.SHOOT_HEALUP[4]*A)/10000"
+            },
+            {
+              "id": 2008,
+              "functionOutput": "(self.MASTERY[4]*A)/10000"
+            },
+            {
+              "id": 10001,
+              "functionOutput": "IF(OR(target.CONFIG_ID=E,target.IMPACT_RESISTANCE[0]&F>0),G,0)"
+            },
+            {
+              "id": 10002,
+              "functionOutput": "IF(self.CURRENT_HEALTH/self.MAXHP[0]<F,G,0)"
+            },
+            {
+              "id": 100701061,
+              "functionOutput": "(10000+A*self.ELEMENT_LAYERS[B])*self.ATK[0]*C/10000"
+            },
+            {
+              "id": 10070101,
+              "functionOutput": "IF(self.CURRENT_HEALTH/self.MAXHP[0]<F/10000,1,0)"
+            },
+            {
+              "id": 10000,
+              "functionOutput": "1"
+            },
+            {
+              "id": 10003,
+              "functionOutput": "target.WEAKNESS_POINT_MAX[0]*A/10000"
+            },
+            {
+              "id": 108001001,
+              "functionOutput": "IF(target.ELEMENT_LAYERS[F]>E,H,0)"
+            },
+            {
+              "id": 10100301,
+              "functionOutput": "(self.ELEMENT_LAYERS[B]*C/10000+1)*self.ATK[0]*A/10000"
+            },
+            {
+              "id": 200001,
+              "functionOutput": "IF(RANDOM>Z,1,0)"
+            },
+            {
+              "id": 299999,
+              "functionOutput": "IF(Z=1,1,0)"
+            },
+            {
+              "id": 101000,
+              "functionOutput": "IF(target.ELEMENT_LAYERS[M]=I,T,F)"
+            },
+            {
+              "id": 101100,
+              "functionOutput": "IF(target.ELEMENT_LAYERS[M]>I,T,F)"
+            },
+            {
+              "id": 101101,
+              "functionOutput": "IF(target.ELEMENT_LAYERS[N]>I,T,F)"
+            },
+            {
+              "id": 101110,
+              "functionOutput": "IF(target.ELEMENT_LAYERS[M]>J,T,F)"
+            },
+            {
+              "id": 101111,
+              "functionOutput": "IF(target.ELEMENT_LAYERS[N]>J,T,F)"
+            },
+            {
+              "id": 101200,
+              "functionOutput": "IF(target.ELEMENT_LAYERS[M]<I,T,F)"
+            },
+            {
+              "id": 101201,
+              "functionOutput": "IF(target.ELEMENT_LAYERS[N]<I,T,F)"
+            },
+            {
+              "id": 101210,
+              "functionOutput": "IF(target.ELEMENT_LAYERS[M]<J,T,F)"
+            },
+            {
+              "id": 101211,
+              "functionOutput": "IF(target.ELEMENT_LAYERS[N]<J,T,F)"
+            },
+            {
+              "id": 102100,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[M]>I,T,F)"
+            },
+            {
+              "id": 102101,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[N]>I,T,F)"
+            },
+            {
+              "id": 102102,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[M]>I,T,F)"
+            },
+            {
+              "id": 102110,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[M]>J,T,F)"
+            },
+            {
+              "id": 102111,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[N]>J,T,F)"
+            },
+            {
+              "id": 102200,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[M]<I,T,F)"
+            },
+            {
+              "id": 102201,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[N]<I,T,F)"
+            },
+            {
+              "id": 102210,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[M]<J,T,F)"
+            },
+            {
+              "id": 102211,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[N]<J,T,F)"
+            },
+            {
+              "id": 103100,
+              "functionOutput": "IF(source.ELEMENT_LAYERS[M]>I,T,F)"
+            },
+            {
+              "id": 103101,
+              "functionOutput": "IF(source.ELEMENT_LAYERS[N]>I,T,F)"
+            },
+            {
+              "id": 103110,
+              "functionOutput": "IF(source.ELEMENT_LAYERS[M]>J,T,F)"
+            },
+            {
+              "id": 103111,
+              "functionOutput": "IF(source.ELEMENT_LAYERS[N]>J,T,F)"
+            },
+            {
+              "id": 103200,
+              "functionOutput": "IF(source.ELEMENT_LAYERS[M]<I,T,F)"
+            },
+            {
+              "id": 103201,
+              "functionOutput": "IF(source.ELEMENT_LAYERS[N]<I,T,F)"
+            },
+            {
+              "id": 103210,
+              "functionOutput": "IF(source.ELEMENT_LAYERS[M]<J,T,F)"
+            },
+            {
+              "id": 103211,
+              "functionOutput": "IF(source.ELEMENT_LAYERS[N]<J,T,F)"
+            },
+            {
+              "id": 300071051,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[X]>1,0,IF((RANDOM/10000)<(1/(IF(Z>self.ELEMENT_LAYERS[Y],Z-self.ELEMENT_LAYERS[Y],1000000))),1,0))"
+            },
+            {
+              "id": 104100,
+              "functionOutput": "IF((target.ELEMENT_LAYERS[M]+target.ELEMENT_LAYERS[N])>I,T,F)"
+            },
+            {
+              "id": 104200,
+              "functionOutput": "IF((target.ELEMENT_LAYERS[M]+target.ELEMENT_LAYERS[N])<I,T,F)"
+            },
+            {
+              "id": 40011001,
+              "functionOutput": "(self.CURRENT_HEALTH*A)/10000"
+            },
+            {
+              "id": 40011002,
+              "functionOutput": "(self.CURRENT_HEALTH-A)"
+            },
+            {
+              "id": 104101,
+              "functionOutput": "IF((self.ELEMENT_LAYERS[M]+self.ELEMENT_LAYERS[N]+self.ELEMENT_LAYERS[O])>I,T,F)"
+            },
+            {
+              "id": 104202,
+              "functionOutput": "IF((self.ELEMENT_LAYERS[M]+self.ELEMENT_LAYERS[N]+self.ELEMENT_LAYERS[O])<I,T,F)"
+            },
+            {
+              "id": 104203,
+              "functionOutput": "IF((target.ELEMENT_LAYERS[M]+target.ELEMENT_LAYERS[N]+target.ELEMENT_LAYERS[O])>I,T,F)"
+            },
+            {
+              "id": 300071,
+              "functionOutput": "IF(RANDOM/B < self.CURRENT_HEALTH/self.MAXHP[0],T/C,F)"
+            },
+            {
+              "id": 105000,
+              "functionOutput": "FLOOR(self.ELEMENT_LAYERS[M]/H)*I"
+            },
+            {
+              "id": 105100,
+              "functionOutput": "FLOOR(target.ELEMENT_LAYERS[M]/H)*I"
+            },
+            {
+              "id": 105200,
+              "functionOutput": "FLOOR(source.ELEMENT_LAYERS[M]/H)*I"
+            },
+            {
+              "id": 106000,
+              "functionOutput": "CEILING(self.ELEMENT_LAYERS[M]/H)*I"
+            },
+            {
+              "id": 106100,
+              "functionOutput": "CEILING(target.ELEMENT_LAYERS[M]/H)*I"
+            },
+            {
+              "id": 106200,
+              "functionOutput": "CEILING(source.ELEMENT_LAYERS[M]/H)*I"
+            },
+            {
+              "id": 107000,
+              "functionOutput": "ROUND(self.ELEMENT_LAYERS[M]/H)*I"
+            },
+            {
+              "id": 107100,
+              "functionOutput": "ROUND(target.ELEMENT_LAYERS[M]/H)*I"
+            },
+            {
+              "id": 107200,
+              "functionOutput": "ROUND(source.ELEMENT_LAYERS[M]/H)*I"
+            },
+            {
+              "id": 107201,
+              "functionOutput": "target.ACCUMULATE_HIT[M]*I/10000"
+            },
+            {
+              "id": 107202,
+              "functionOutput": "self.CONSUME_PACK_ELEMENT_COUNT [M]*I/10000"
+            },
+            {
+              "id": 107203,
+              "functionOutput": "source.CONSUME_PACK_ELEMENT_COUNT [M]*I/10000"
+            },
+            {
+              "id": 107204,
+              "functionOutput": "self.CONSUME_PACK_ELEMENT_COUNT [M]*self.ATK[0]*A/10000"
+            },
+            {
+              "id": 107205,
+              "functionOutput": "source.CONSUME_PACK_ELEMENT_COUNT [M]*source.ATK[0]*A/10000"
+            },
+            {
+              "id": 107206,
+              "functionOutput": "self.CONSUME_PACK_ELEMENT_COUNT [M]*I"
+            },
+            {
+              "id": 107207,
+              "functionOutput": "source.CONSUME_PACK_ELEMENT_COUNT [M]*I"
+            },
+            {
+              "id": 107208,
+              "functionOutput": "self.CONSUME_PACK_ELEMENT_COUNT [M]*self.MAXHP[0]*A/10000"
+            },
+            {
+              "id": 107209,
+              "functionOutput": "source.CONSUME_PACK_ELEMENT_COUNT [M]*source.MAXHP[0]*A/10000"
+            },
+            {
+              "id": 107210,
+              "functionOutput": "F_MIN(self.ATK[0]*B/10000,target.WEAKNESS_POINT_MAX[0]*A/10000)"
+            }
+          ]
+        }
+      },
+      "soulessenceActivationConditionRuntimeEvidence": {
+        "path": "scripts/optimization-qualification/evidence/soulessence-activation-element-formula-condition-runtime-evidence.json",
+        "sha256": "b0c55784e49903448c4003b3fc33f70f895e8a090f8af7bef5910fae576d563e",
+        "bytes": 6368,
+        "value": {
+          "schemaVersion": 1,
+          "contractName": "AzPrSoulEssenceActivationElementFormulaConditionRuntimeEvidence",
+          "reviewedBinary": {
+            "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+            "bytes": 222485544,
+            "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+          },
+          "reviewedIl2CppDump": {
+            "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+            "bytes": 97428254,
+            "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+          },
+          "reviewedElementFormula": {
+            "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+            "bytes": 15113,
+            "sha256": "ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e"
+          },
+          "dumpBindings": {
+            "methods": [
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.ConditionalSelectionElement.CheckCondition",
+                "rva": "0x137E810",
+                "declaration": "private bool CheckCondition(ElementTriggerDataBase triggerData, List<TTriggerElementParams.TriggerElementCondition> list, EElementTriggerConditionType triggerConditionType) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.ConditionalSelectionElement.CheckNormalCondition",
+                "rva": "0x137EB50",
+                "declaration": "private bool CheckNormalCondition(TTriggerElementParams.TriggerElementCondition condition, ElementTriggerDataBase triggerData) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.BattleConfigManager.get_elementFormulaConfig",
+                "rva": "0x16E5E30",
+                "declaration": "public static ... get_elementFormulaConfig() { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.Config.ElementFormulaData.GetId",
+                "rva": "0x1B3FB70",
+                "declaration": "public ... GetId(int id) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.FormulaUtility.Calculate",
+                "rva": "0x187C840",
+                "declaration": "public static ... Calculate(...) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.BaseElement.get_p_attackerData",
+                "rva": "0x18136EA50",
+                "declaration": "public ... get_p_attackerData() { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.BaseElement.get_p_executeData",
+                "rva": "0x18136EBC0",
+                "declaration": "public ... get_p_executeData() { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.BaseElement.get_p_sourceData",
+                "rva": "0x18136ECE0",
+                "declaration": "public ... get_p_sourceData() { }"
+              }
+            ]
+          },
+          "binaryRanges": [
+            {
+              "identity": "ConditionalSelectionElement.CheckCondition",
+              "range": "0x137E810-0x137EB50",
+              "sha256": "e75b16398db38623043033df1a3e19e159dedcd1b34bdbdddf1e9117b8e9266c"
+            },
+            {
+              "identity": "ConditionalSelectionElement.CheckNormalCondition",
+              "range": "0x137EB50-0x137F050",
+              "sha256": "3d88700e0fb49eaec6f8d08b17dbfc580b275f729691f5967c610318f4b349a4"
+            },
+            {
+              "identity": "BattleConfigManager.get_elementFormulaConfig",
+              "range": "0x16E5E30-0x16E5F30",
+              "sha256": "699eb0cca72f483c03dfb0965c93137aa551635fb14f767760aee36ae6098bb4"
+            },
+            {
+              "identity": "ElementFormulaData.GetId",
+              "range": "0x1B3FB70-0x1B3FCB0",
+              "sha256": "9237414124c347d4ad9678eb9083a2ecd6b251e534a20cca6ac8dcbf89f8f1f1"
+            },
+            {
+              "identity": "FormulaUtility.Calculate",
+              "range": "0x187C840-0x187CC40",
+              "sha256": "84f5906d20c1332ea293f08c162c2c4cb7d271d75dc89b9786bd6fd26472320c"
+            }
+          ],
+          "elementFormulaRows": [
+            {
+              "id": 209,
+              "functionOutput": "IF(target.CURRENT_HEALTH/target.MAXHP[0]<Z/10000,1,0)",
+              "sourceIdentity": "NewTable/element_formula.json#rows[id=209]"
+            },
+            {
+              "id": 211,
+              "functionOutput": "IF(self.CURRENT_HEALTH/self.MAXHP[0]<Z/10000,1,0)",
+              "sourceIdentity": "NewTable/element_formula.json#rows[id=211]"
+            },
+            {
+              "id": 225,
+              "functionOutput": "IF(self.CURRENT_HEALTH/self.MAXHP[0]=Z/10000,1,0)",
+              "sourceIdentity": "NewTable/element_formula.json#rows[id=225]"
+            },
+            {
+              "id": 1007,
+              "functionOutput": "IF(self.ELEMENT_LAYERS[J]>K,G,0)",
+              "sourceIdentity": "NewTable/element_formula.json#rows[id=1007]"
+            }
+          ],
+          "routing": {
+            "normalConditionMaxValue": 10,
+            "extendedThreshold": 5000,
+            "reason": "ConditionalSelectionElement.CheckCondition routes conditionParam1 >= 0x1388 (5000) to the extended element-formula branch; CheckNormalCondition handles values 0-10 through its jump table."
+          },
+          "conditionContract": {
+            "kind": "element-formula-condition",
+            "formulaIdSource": "conditionParam2",
+            "evaluator": "Lens.Gameplay.Modules.BigWorld.FormulaUtility.Calculate",
+            "entitySources": [
+              "BaseElement.get_p_attackerData",
+              "BaseElement.get_p_executeData",
+              "BaseElement.get_p_sourceData"
+            ],
+            "truthSemantics": "formula-result-nonzero",
+            "reason": "The extended branch resolves ElementFormulaData.GetId(conditionParam2) from BattleConfigManager.get_elementFormulaConfig, evaluates FormulaUtility.Calculate against the element entity contexts, converts the MyFloat result to bool, and combines it with the condition-list logic."
+          },
+          "activationExample": {
+            "skillId": 1900400,
+            "soulEssenceId": 10018,
+            "activationElementId": 19004001,
+            "conditionParam1": 10000,
+            "conditionParam2": 1007,
+            "conditionParam3": 0,
+            "formula": "IF(self.ELEMENT_LAYERS[J]>K,G,0)",
+            "variableBindings": {
+              "G": 10000,
+              "J": 250,
+              "K": 1
+            },
+            "semantics": "The activation holds when self.ELEMENT_LAYERS[250] > 1 (tuning mark 250 layer count above one), returning a nonzero value; otherwise the condition returns 0.",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-8153693107315429627;elementId=19004001.triggerConditionList[0]"
+          },
+          "conclusion": {
+            "status": "applied",
+            "eventContract": "activation-element-formula-condition-nonzero",
+            "supportedFormulaFamily": "IF(self.ELEMENT_LAYERS[J]>K,G,0)",
+            "sourceIdentity": "GameAssembly.dll#ConditionalSelectionElement.CheckCondition@0x137E810/BattleConfigManager.get_elementFormulaConfig@0x16E5E30/ElementFormulaData.GetId@0x1B3FB70/FormulaUtility.Calculate@0x187C840|NewTable/element_formula.json#rows[id=1007]"
+          }
+        }
+      },
       "setThreeSourceIdentityEvidence": {
         "path": "scripts/optimization-qualification/evidence/set-three-source-identity-evidence.json",
         "sha256": "9e8e92d38a1924293aea7b772f7ba2c704913a27db8c5b22df2bb04f76c29418",
@@ -2917,7 +3703,7 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "2112f6062e7d0982"
+    "sourceSnapshotHash": "d7144f7b0b4cc956"
   },
   "filterContract": {
     "characterElements": [
@@ -4494,6 +5280,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19004801,
           "pathId": -4992960068897353000,
@@ -4705,6 +5492,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19006100,
           "pathId": 4614392219156132000,
@@ -4916,6 +5704,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -4992,6 +5781,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -5054,7 +5844,7 @@
       "maximumRank": 6,
       "staticProfileApplied": true,
       "effectSkillId": 1900400,
-      "effectStatus": "source-indexed-runtime-unapplied",
+      "effectStatus": "runtime-applied",
       "sourceIdentity": "NewTable/soulessence.rows[id=10018]",
       "sourceEffectStatus": "effect-skill-dynamic-unapplied",
       "effectMechanics": {
@@ -5065,7 +5855,7 @@
           "skillLogicType": 6,
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900400]"
         },
-        "runtimeStatus": "source-indexed-runtime-unapplied",
+        "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
         "activationPrerequisites": [
           {
@@ -5080,6 +5870,18 @@
               }
             ],
             "sourceIdentity": "battle-element-assets.jsonl#path_id=-8153693107315429000;elementId=19004001"
+          }
+        ],
+        "activationConditions": [
+          {
+            "kind": "element-formula-layer-gt",
+            "formulaId": 1007,
+            "markId": 250,
+            "minLayers": 1,
+            "valueRaw": 10000,
+            "formula": "IF(self.ELEMENT_LAYERS[J]>K,G,0)",
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-8153693107315429000;elementId=19004001.triggerConditionList[0]|NewTable/element_formula.json#rows[id=1007]|GameAssembly.dll#ConditionalSelectionElement.CheckCondition@0x137E810/BattleConfigManager.get_elementFormulaConfig@0x16E5E30/ElementFormulaData.GetId@0x1B3FB70/FormulaUtility.Calculate@0x187C840|NewTable/element_formula.json#rows[id=1007]"
           }
         ],
         "trigger": {
@@ -5269,9 +6071,7 @@
             19004001
           ]
         },
-        "runtimeGaps": [
-          "effect-activation-condition-operator-unsupported"
-        ],
+        "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10018].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900400.asset/MonoBehaviour/skill_control_1900400__-2587960116876469994.json|battle-element-assets.jsonl#path_id=6735504116185173000;elementId=19004002|battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003"
       }
     },
@@ -5299,6 +6099,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19003401,
           "pathId": -4873163209865115000,
@@ -6017,6 +6818,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19004500,
           "pathId": -5806624494324189000,
@@ -6228,6 +7030,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-get-element-property-before-acquire",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19003301,
           "pathId": -2023989584562330600,
@@ -6449,6 +7252,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19005500,
           "pathId": -4330459562266431000,
@@ -6955,6 +7759,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-switch-enter-team-property",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19009201,
           "pathId": -6515773177271123000,
@@ -7397,6 +8202,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19009101,
           "pathId": -7255963679965377000,
@@ -7729,6 +8535,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19009301,
           "pathId": 6322365379307683000,
@@ -8979,6 +9786,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19009001,
           "pathId": 3763334915368993000,
@@ -9704,6 +10512,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19008801,
           "pathId": 8121214350672122000,
@@ -9804,6 +10613,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -9880,6 +10690,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -10600,6 +11411,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19002301,
           "pathId": -4157799704864835600,
@@ -10826,6 +11638,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19006601,
           "pathId": 1967620083657371400,
@@ -11039,6 +11852,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -11118,6 +11932,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19004700,
           "pathId": 4922202484723645000,
@@ -11329,6 +12144,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19006701,
           "pathId": 4493671040636124000,
@@ -11542,6 +12358,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19002001,
           "pathId": -5029048619406844000,
@@ -11728,6 +12545,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19003501,
           "pathId": 1736025164143914200,
@@ -11854,6 +12672,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -11945,6 +12764,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -12027,6 +12847,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19005900,
           "pathId": -7832567119319180000,
@@ -12250,6 +13071,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19004101,
           "pathId": -2700117266412374500,
@@ -12488,6 +13310,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19005401,
           "pathId": -8058605269236214000,
@@ -12699,6 +13522,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19002801,
           "pathId": -908628671126506600,
@@ -12922,6 +13746,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19002701,
           "pathId": 1890390088406099200,
@@ -13170,6 +13995,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -13593,6 +14419,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19002101,
           "pathId": 7447841024087717000,
@@ -13978,6 +14805,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -14054,6 +14882,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19001101,
           "pathId": -246520716839985300,
@@ -14283,6 +15112,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19002201,
           "pathId": 2849866293729341000,
@@ -14504,6 +15334,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19005600,
           "pathId": 4249731622778222600,
@@ -14756,6 +15587,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19001301,
           "pathId": 756477731831644700,
@@ -15295,6 +16127,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19002401,
           "pathId": -6345955383762432000,
@@ -15506,6 +16339,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19002501,
           "pathId": 7681111361882010000,
@@ -15973,6 +16807,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-shield-acquire-team-property",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19007500,
           "pathId": -7210722185016667000,
@@ -16161,6 +16996,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19007400,
           "pathId": 1288282584316539400,
@@ -16297,6 +17133,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-heal-event-target-property",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19001401,
           "pathId": -5225606672832072000,
@@ -16508,6 +17345,7 @@
         "runtimeStatus": "runtime-applied",
         "mechanismFamily": "equipped-actor-heal-event-target-property",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19001501,
           "pathId": -100069638428322610,
@@ -16719,6 +17557,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -17138,6 +17977,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "source-indexed-composite-effect",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": null,
         "effect": null,
         "sourceClosure": {
@@ -17216,6 +18056,7 @@
         "runtimeStatus": "source-indexed-runtime-unapplied",
         "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
         "activationPrerequisites": [],
+        "activationConditions": [],
         "trigger": {
           "elementId": 19007801,
           "pathId": -9208882666704061000,
@@ -20041,5 +20882,5 @@
       ]
     }
   },
-  "rosterHash": "26c5b9f3de5c2dd5"
+  "rosterHash": "027d033dfdd0ddcf"
 }

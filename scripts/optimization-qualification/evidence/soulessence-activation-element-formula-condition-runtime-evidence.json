@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrSoulEssenceActivationElementFormulaConditionRuntimeEvidence",
+  "reviewedBinary": {
+    "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+    "bytes": 222485544,
+    "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+  },
+  "reviewedIl2CppDump": {
+    "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+    "bytes": 97428254,
+    "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+  },
+  "reviewedElementFormula": {
+    "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+    "bytes": 15113,
+    "sha256": "ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e"
+  },
+  "dumpBindings": {
+    "methods": [
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.ConditionalSelectionElement.CheckCondition",
+        "rva": "0x137E810",
+        "declaration": "private bool CheckCondition(ElementTriggerDataBase triggerData, List<TTriggerElementParams.TriggerElementCondition> list, EElementTriggerConditionType triggerConditionType) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.ConditionalSelectionElement.CheckNormalCondition",
+        "rva": "0x137EB50",
+        "declaration": "private bool CheckNormalCondition(TTriggerElementParams.TriggerElementCondition condition, ElementTriggerDataBase triggerData) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.BattleConfigManager.get_elementFormulaConfig",
+        "rva": "0x16E5E30",
+        "declaration": "public static ... get_elementFormulaConfig() { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.Config.ElementFormulaData.GetId",
+        "rva": "0x1B3FB70",
+        "declaration": "public ... GetId(int id) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.FormulaUtility.Calculate",
+        "rva": "0x187C840",
+        "declaration": "public static ... Calculate(...) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.BaseElement.get_p_attackerData",
+        "rva": "0x18136EA50",
+        "declaration": "public ... get_p_attackerData() { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.BaseElement.get_p_executeData",
+        "rva": "0x18136EBC0",
+        "declaration": "public ... get_p_executeData() { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.BaseElement.get_p_sourceData",
+        "rva": "0x18136ECE0",
+        "declaration": "public ... get_p_sourceData() { }"
+      }
+    ]
+  },
+  "binaryRanges": [
+    {
+      "identity": "ConditionalSelectionElement.CheckCondition",
+      "range": "0x137E810-0x137EB50",
+      "sha256": "e75b16398db38623043033df1a3e19e159dedcd1b34bdbdddf1e9117b8e9266c"
+    },
+    {
+      "identity": "ConditionalSelectionElement.CheckNormalCondition",
+      "range": "0x137EB50-0x137F050",
+      "sha256": "3d88700e0fb49eaec6f8d08b17dbfc580b275f729691f5967c610318f4b349a4"
+    },
+    {
+      "identity": "BattleConfigManager.get_elementFormulaConfig",
+      "range": "0x16E5E30-0x16E5F30",
+      "sha256": "699eb0cca72f483c03dfb0965c93137aa551635fb14f767760aee36ae6098bb4"
+    },
+    {
+      "identity": "ElementFormulaData.GetId",
+      "range": "0x1B3FB70-0x1B3FCB0",
+      "sha256": "9237414124c347d4ad9678eb9083a2ecd6b251e534a20cca6ac8dcbf89f8f1f1"
+    },
+    {
+      "identity": "FormulaUtility.Calculate",
+      "range": "0x187C840-0x187CC40",
+      "sha256": "84f5906d20c1332ea293f08c162c2c4cb7d271d75dc89b9786bd6fd26472320c"
+    }
+  ],
+  "elementFormulaRows": [
+    {
+      "id": 209,
+      "functionOutput": "IF(target.CURRENT_HEALTH/target.MAXHP[0]<Z/10000,1,0)",
+      "sourceIdentity": "NewTable/element_formula.json#rows[id=209]"
+    },
+    {
+      "id": 211,
+      "functionOutput": "IF(self.CURRENT_HEALTH/self.MAXHP[0]<Z/10000,1,0)",
+      "sourceIdentity": "NewTable/element_formula.json#rows[id=211]"
+    },
+    {
+      "id": 225,
+      "functionOutput": "IF(self.CURRENT_HEALTH/self.MAXHP[0]=Z/10000,1,0)",
+      "sourceIdentity": "NewTable/element_formula.json#rows[id=225]"
+    },
+    {
+      "id": 1007,
+      "functionOutput": "IF(self.ELEMENT_LAYERS[J]>K,G,0)",
+      "sourceIdentity": "NewTable/element_formula.json#rows[id=1007]"
+    }
+  ],
+  "routing": {
+    "normalConditionMaxValue": 10,
+    "extendedThreshold": 5000,
+    "reason": "ConditionalSelectionElement.CheckCondition routes conditionParam1 >= 0x1388 (5000) to the extended element-formula branch; CheckNormalCondition handles values 0-10 through its jump table."
+  },
+  "conditionContract": {
+    "kind": "element-formula-condition",
+    "formulaIdSource": "conditionParam2",
+    "evaluator": "Lens.Gameplay.Modules.BigWorld.FormulaUtility.Calculate",
+    "entitySources": [
+      "BaseElement.get_p_attackerData",
+      "BaseElement.get_p_executeData",
+      "BaseElement.get_p_sourceData"
+    ],
+    "truthSemantics": "formula-result-nonzero",
+    "reason": "The extended branch resolves ElementFormulaData.GetId(conditionParam2) from BattleConfigManager.get_elementFormulaConfig, evaluates FormulaUtility.Calculate against the element entity contexts, converts the MyFloat result to bool, and combines it with the condition-list logic."
+  },
+  "activationExample": {
+    "skillId": 1900400,
+    "soulEssenceId": 10018,
+    "activationElementId": 19004001,
+    "conditionParam1": 10000,
+    "conditionParam2": 1007,
+    "conditionParam3": 0,
+    "formula": "IF(self.ELEMENT_LAYERS[J]>K,G,0)",
+    "variableBindings": {
+      "G": 10000,
+      "J": 250,
+      "K": 1
+    },
+    "semantics": "The activation holds when self.ELEMENT_LAYERS[250] > 1 (tuning mark 250 layer count above one), returning a nonzero value; otherwise the condition returns 0.",
+    "sourceIdentity": "battle-element-assets.jsonl#path_id=-8153693107315429627;elementId=19004001.triggerConditionList[0]"
+  },
+  "conclusion": {
+    "status": "applied",
+    "eventContract": "activation-element-formula-condition-nonzero",
+    "supportedFormulaFamily": "IF(self.ELEMENT_LAYERS[J]>K,G,0)",
+    "sourceIdentity": "GameAssembly.dll#ConditionalSelectionElement.CheckCondition@0x137E810/BattleConfigManager.get_elementFormulaConfig@0x16E5E30/ElementFormulaData.GetId@0x1B3FB70/FormulaUtility.Calculate@0x187C840|NewTable/element_formula.json#rows[id=1007]"
+  }
+}
