@@ -1,14 +1,14 @@
-# M12-B3-E12 Profession-Gated Soul Essence
+# M12-B3-E13 Visual Acceptance Pipeline
 
-- Status: `b3-e12-implemented`
-- Source snapshot: `d7f77da35e3a80b0`
-- Roster: `b6e9596298cda056`
-- Catalog: `f69266d8fdc53092`
+- Status: `b3-e13-implemented`
+- Source snapshot: `81f323993557ac49`
+- Roster: `468f93c3cbf83459`
+- Catalog: `be4ad68bb00072e3`
 - Denominators: characters 11, Kibo 43, soul essence 62, equipment 137, set skills 12
-- Optimization ready: characters 0, Kibo 0, soul essence 0, equipment 0, set skills 0
-- Blocking gaps: not implemented 318, evidence insufficient 17
+- Optimization ready: characters 0, Kibo 0, soul essence 62, equipment 137, set skills 11
+- Blocking gaps: not implemented 108, evidence insufficient 17
 - Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.
-- Dynamic loadout batches: C2-C14 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, target-debuff, and set-three source-conflict contracts. C15 adds a source-driven periodic persistent-root family with native time-loop cadence, condition re-evaluation, finite Cover leaves, right-open expiry, unload provenance, and cycle phase state. Soul essences 10084, 10152, and 10197 are runtime-applied; 10078 remains evidence-insufficient because native multi-PropertyTag matching for tags 302/303 is not closed. E11 registers the product-confirmed dead tuning-intensity branch (element 19003206) of soul 10095 as excluded, closes 10095 as runtime-applied with the single team-attack leaf 19003203, and leaves no runtime-unresolved souls (62/62). E12 gates soul effect activation by character profession: the cultivation catalog carries character position and soul profession, the runtime emits no effect commands for profession-mismatched loadouts while static level/rank growth still applies, formal binding edges remain profession-aware (103 match / 198 universal / 381 mismatch), and the Workbench picker marks mismatched souls as stat-only.
+- Dynamic loadout batches: C2-C14 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, target-debuff, and set-three source-conflict contracts. C15 adds a source-driven periodic persistent-root family with native time-loop cadence, condition re-evaluation, finite Cover leaves, right-open expiry, unload provenance, and cycle phase state. Soul essences 10084, 10152, and 10197 are runtime-applied; 10078 remains evidence-insufficient because native multi-PropertyTag matching for tags 302/303 is not closed. E11 registers the product-confirmed dead tuning-intensity branch (element 19003206) of soul 10095 as excluded, closes 10095 as runtime-applied with the single team-attack leaf 19003203, and leaves no runtime-unresolved souls (62/62). E12 gates soul effect activation by character profession: the cultivation catalog carries character position and soul profession, the runtime emits no effect commands for profession-mismatched loadouts while static level/rank growth still applies, formal binding edges remain profession-aware (103 match / 198 universal / 381 mismatch), and the Workbench picker marks mismatched souls as stat-only. E13 publishes the M12-B3 visual acceptance pipeline: per-object manifests with icon asset evidence, display/effect binding, deterministic requirement matrix and blocking ledger for 62 soul essences, 137 equipment contracts and 12 set skills; 210 objects reach optimization-ready (62 souls / 137 equipment / 11 set skills), set-skill:3:4 remains blocked by its dynamic-unapplied evidence, and blocking gaps drop from 335 to 125.
 - STARBORN alias mechanism hash: `413c5f8d9053d23e` (source aliases 199001/199002 are one optimization object)
 - Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.
 - M12-C remains locked. This baseline does not run team, loadout, or axis search.

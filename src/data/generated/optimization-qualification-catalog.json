@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "b6e9596298cda056",
-  "manifestsHash": "7667eaaf9770679d",
-  "gapLedgerHash": "a3d2d9ece6897e6d",
-  "bindingMatrixHash": "9d338b0e73fb7d16",
-  "sourceSnapshotHash": "d7f77da35e3a80b0",
+  "rosterHash": "468f93c3cbf83459",
+  "manifestsHash": "5ac69533765e1fbc",
+  "gapLedgerHash": "9d751c9ec22c4ebc",
+  "bindingMatrixHash": "5c2638df48c6c7a5",
+  "sourceSnapshotHash": "81f323993557ac49",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -164,1508 +164,1234 @@
       "objectKind": "equipment",
       "objectId": "1010111",
       "displayName": "木制棍棒",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "d8f23cecf15a3c9d"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "74a63de5a31ad007"
     },
     {
       "objectKind": "equipment",
       "objectId": "1010211",
       "displayName": "木制小刀",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "12b7ea0d621c45ba"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "562fa32939ad65e6"
     },
     {
       "objectKind": "equipment",
       "objectId": "1010311",
       "displayName": "木制短弓",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "e699d4da538fb8bb"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "84ceb4d38bef7dbc"
     },
     {
       "objectKind": "equipment",
       "objectId": "1010411",
       "displayName": "狼灵法杖",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "cafa6c81e30b79c4"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "cf876d3b0e18c133"
     },
     {
       "objectKind": "equipment",
       "objectId": "1010511",
       "displayName": "兔灵祷杖",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "70ccc73aef3d46b1"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "611278029b72f703"
     },
     {
       "objectKind": "equipment",
       "objectId": "1010611",
       "displayName": "木制长弓",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "9bbd33767e19a8c6"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "d584f360f8ad5d62"
     },
     {
       "objectKind": "equipment",
       "objectId": "1020111",
       "displayName": "木制轻甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "12cb4b0507f28ef5"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "0ddf90b0ef95d544"
     },
     {
       "objectKind": "equipment",
       "objectId": "1020211",
       "displayName": "新叶斗篷",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "7db2cfc73a3c4044"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "fd1ed6514105483d"
     },
     {
       "objectKind": "equipment",
       "objectId": "1020311",
       "displayName": "陈旧上衣",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "f039772d396a0127"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "1d46e057ac9ca8f7"
     },
     {
       "objectKind": "equipment",
       "objectId": "1030111",
       "displayName": "木制下装",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "525b39390a64d688"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "f763b94bb84bf27a"
     },
     {
       "objectKind": "equipment",
       "objectId": "1030211",
       "displayName": "新叶短裤",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "b8fb99353d264383"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "398abe19c01722bf"
     },
     {
       "objectKind": "equipment",
       "objectId": "1030311",
       "displayName": "陈旧下装",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "10e5503619d5d896"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "2ffef39823e5bb81"
     },
     {
       "objectKind": "equipment",
       "objectId": "1040111",
       "displayName": "草编耳饰",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "87e1f4c8089544e2"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "442daa7fe3cd6528"
     },
     {
       "objectKind": "equipment",
       "objectId": "1040211",
       "displayName": "新叶耳饰",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "7e9f6b69a98beab7"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "e46fbdfbd864dc57"
     },
     {
       "objectKind": "equipment",
       "objectId": "1040311",
       "displayName": "陈旧耳饰",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "ba84d4e5378a9450"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "b5b13b0a8ddbeccb"
     },
     {
       "objectKind": "equipment",
       "objectId": "1050111",
       "displayName": "草编戒指",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "c4b2f79de55400cb"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "3387c3361eb07846"
     },
     {
       "objectKind": "equipment",
       "objectId": "1050211",
       "displayName": "新叶戒指",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "2465593863007794"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "40e56f0ddc5d6b0c"
     },
     {
       "objectKind": "equipment",
       "objectId": "1050311",
       "displayName": "陈旧戒指",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "c9863bac93581ab1"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "bed2ce1b44acde9e"
     },
     {
       "objectKind": "equipment",
       "objectId": "1110111",
       "displayName": "风铜直剑",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "61a9b6c46509e2bb"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "ca30b2de3990d26f"
     },
     {
       "objectKind": "equipment",
       "objectId": "1110211",
       "displayName": "风铜短刃",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "997691e28dc78dd0"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "38bbd07a7dced4fd"
     },
     {
       "objectKind": "equipment",
       "objectId": "1110311",
       "displayName": "风铜短弓",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "0c23f942d38eeb05"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "f0f1de7d94d70895"
     },
     {
       "objectKind": "equipment",
       "objectId": "1110411",
       "displayName": "风铜法杖",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "63f92da8be90664e"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "d3d80cee8cf4b31a"
     },
     {
       "objectKind": "equipment",
       "objectId": "1110511",
       "displayName": "风铜祷杖",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "caf72d28cb98b857"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "294e0878f57a4c1c"
     },
     {
       "objectKind": "equipment",
       "objectId": "1110611",
       "displayName": "铜制长弓",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "210372ecba0cd430"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "9dcd1256130ca1a9"
     },
     {
       "objectKind": "equipment",
       "objectId": "1120111",
       "displayName": "风铜皮甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "3cb52b759939080b"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "91e14159b23766db"
     },
     {
       "objectKind": "equipment",
       "objectId": "1120211",
       "displayName": "风叶斗篷",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "dd4eeabb81c9d20a"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "0215a7cdefbafdfd"
     },
     {
       "objectKind": "equipment",
       "objectId": "1120311",
       "displayName": "亚麻上衣",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "0006fd6b905b95ed"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "50108e4ead6a50f4"
     },
     {
       "objectKind": "equipment",
       "objectId": "1130111",
       "displayName": "风铜腿甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "e04c141e14bbaa82"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "ac31d1398bff423a"
     },
     {
       "objectKind": "equipment",
       "objectId": "1130211",
       "displayName": "风叶短裤",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "767758cf023c233d"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "1d6511e677583e0d"
     },
     {
       "objectKind": "equipment",
       "objectId": "1130311",
       "displayName": "亚麻下装",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "9748060dcc06c73c"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "c93730f1a629d291"
     },
     {
       "objectKind": "equipment",
       "objectId": "1140111",
       "displayName": "风铜耳坠",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "b48fd4f8814915f0"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "f3d94c72d187dafb"
     },
     {
       "objectKind": "equipment",
       "objectId": "1140211",
       "displayName": "风叶耳饰",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "2b6232488db18625"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "9da911238418da7d"
     },
     {
       "objectKind": "equipment",
       "objectId": "1140311",
       "displayName": "微澜耳饰",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "d6da234a433043d6"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "030f8c93da1bf568"
     },
     {
       "objectKind": "equipment",
       "objectId": "1150111",
       "displayName": "风铜指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "38ae8ef5f87c8c09"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "e3c034159237b643"
     },
     {
       "objectKind": "equipment",
       "objectId": "1150211",
       "displayName": "风叶指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "0c8da5f351e2861a"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "d3f0fc555c9b7874"
     },
     {
       "objectKind": "equipment",
       "objectId": "1150311",
       "displayName": "微澜戒指",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "f33b71b27ece5717"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "e543ea54eef06ff5"
     },
     {
       "objectKind": "equipment",
       "objectId": "1210011",
       "displayName": "青木之弓",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "8b6228cb61bfab88"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "05e743ac2ff77eb7"
     },
     {
       "objectKind": "equipment",
       "objectId": "1210111",
       "displayName": "青铜直剑",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "0587aa0ae5f6e505"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "f6385790de79f999"
     },
     {
       "objectKind": "equipment",
       "objectId": "1210121",
       "displayName": "野鬃重剑",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "d594864a70377047"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "fe23878ddd291914"
     },
     {
       "objectKind": "equipment",
       "objectId": "1210211",
       "displayName": "青铜短刃",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "ec66c4da8ad9743e"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "342e4fdc6a9e70cf"
     },
     {
       "objectKind": "equipment",
       "objectId": "1210221",
       "displayName": "蛮角刺剑",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "1273e5c909eeec26"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "3e660a7d122da918"
     },
     {
       "objectKind": "equipment",
       "objectId": "1210311",
       "displayName": "青铜短弓",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "ae3c4dd961fd4007"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "917b2ceaeb3184f6"
     },
     {
       "objectKind": "equipment",
       "objectId": "1210321",
       "displayName": "冰翼刺弓",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "4f6e26ac0120d1e5"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "e6b4db2aadcb1bff"
     },
     {
       "objectKind": "equipment",
       "objectId": "1210411",
       "displayName": "青铜法杖",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "82ef5aff880778fc"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "16ffc0c312875def"
     },
     {
       "objectKind": "equipment",
       "objectId": "1210421",
       "displayName": "蝶语法杖",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "d5edf15ad64ca945"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "4435cc84f0ea3487"
     },
     {
       "objectKind": "equipment",
       "objectId": "1210511",
       "displayName": "青铜牧杖",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "0a8096f50a801b65"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "d738564b687faacc"
     },
     {
       "objectKind": "equipment",
       "objectId": "1210521",
       "displayName": "雷息狂力",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "9dc0319520767689"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "68764dd1b892e16f"
     },
     {
       "objectKind": "equipment",
       "objectId": "1210611",
       "displayName": "柔影弓",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "0f1c85909e1f30b6"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "14a7cee94a9c8480"
     },
     {
       "objectKind": "equipment",
       "objectId": "1220011",
       "displayName": "月雾外袍",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "bc9c50bcf0e56fe2"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "4f2e4a144a5ea9b4"
     },
     {
       "objectKind": "equipment",
       "objectId": "1220111",
       "displayName": "青铜护甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "5553f9ce89633019"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "d79dacb3a6692e61"
     },
     {
       "objectKind": "equipment",
       "objectId": "1220121",
       "displayName": "野鬃重甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "7595971ad47b03f1"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "fdd8d01d9df8dfb9"
     },
     {
       "objectKind": "equipment",
       "objectId": "1220131",
       "displayName": "蛮角战甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "f9398fd33bc3efd6"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "eeabb76fbf4d7d58"
     },
     {
       "objectKind": "equipment",
       "objectId": "1220211",
       "displayName": "月麻斗篷",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "6196b6505757fcdc"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "8e3c2da51aece5f2"
     },
     {
       "objectKind": "equipment",
       "objectId": "1220221",
       "displayName": "蝶语斗篷",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "ae8b7a83f2cc89cd"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "e5b9de967b1f70f0"
     },
     {
       "objectKind": "equipment",
       "objectId": "1220231",
       "displayName": "冰翼披风",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "a58c19fa1a60af75"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "c0fb216b1edbb627"
     },
     {
       "objectKind": "equipment",
       "objectId": "1220311",
       "displayName": "雷息披甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "fbba0031a1b0e240"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "99af9213c43b4921"
     },
     {
       "objectKind": "equipment",
       "objectId": "1220321",
       "displayName": "柔影之束",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "1be3f8ccd234b786"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "aa5ec75187a97a80"
     },
     {
       "objectKind": "equipment",
       "objectId": "1230011",
       "displayName": "漫步下装",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "70caef31a15b1fad"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "73f3735cd807433a"
     },
     {
       "objectKind": "equipment",
       "objectId": "1230111",
       "displayName": "青铜裙甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "07fc6fed8bc5d690"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "b6c25ad1b4743b4b"
     },
     {
       "objectKind": "equipment",
       "objectId": "1230121",
       "displayName": "野鬃护甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "ecc8559f2a8d1c7e"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "62b3340229883e9d"
     },
     {
       "objectKind": "equipment",
       "objectId": "1230131",
       "displayName": "蛮角短甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "2c6f5833dd8c2ce3"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "b3a380b86e5966d2"
     },
     {
       "objectKind": "equipment",
       "objectId": "1230211",
       "displayName": "月麻下衣",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "e466b11713595997"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "0194104b57f97eb1"
     },
     {
       "objectKind": "equipment",
       "objectId": "1230221",
       "displayName": "蝶语护腿",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "3427652449d5cb32"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "262dc3f3ebfab5d0"
     },
     {
       "objectKind": "equipment",
       "objectId": "1230231",
       "displayName": "冰翼护腿",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "46657c0f65f8aef6"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "b710d62a8268a48b"
     },
     {
       "objectKind": "equipment",
       "objectId": "1230311",
       "displayName": "雷息束甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "ec0fdac816d745af"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "f638e60091f51c7f"
     },
     {
       "objectKind": "equipment",
       "objectId": "1230321",
       "displayName": "柔影幽行",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "b9b4a0b6aae9897b"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "ea16a7cd70d7c579"
     },
     {
       "objectKind": "equipment",
       "objectId": "1240011",
       "displayName": "轻扬耳坠",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "435ece1069f23991"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "0d906854960a34a1"
     },
     {
       "objectKind": "equipment",
       "objectId": "1240111",
       "displayName": "青铜耳坠",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "5d4e8e8c0f94591a"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "d475fa4b8d9cc935"
     },
     {
       "objectKind": "equipment",
       "objectId": "1240121",
       "displayName": "野鬃耳坠",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "ca9d945c4abced8e"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "8180d3f91d9ebeb9"
     },
     {
       "objectKind": "equipment",
       "objectId": "1240131",
       "displayName": "蛮角耳环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "833e300b337d4c39"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "bc909909327a556b"
     },
     {
       "objectKind": "equipment",
       "objectId": "1240211",
       "displayName": "蔓叶耳挂",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "684a151a03859f23"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "83f50c95f0d1d84c"
     },
     {
       "objectKind": "equipment",
       "objectId": "1240221",
       "displayName": "蝶语耳饰",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "cf40f78e27891f76"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "cc6a627a6592a52d"
     },
     {
       "objectKind": "equipment",
       "objectId": "1240231",
       "displayName": "冰翼耳坠",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "e04e2eb9f6cacbaa"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "27931c7088001735"
     },
     {
       "objectKind": "equipment",
       "objectId": "1240311",
       "displayName": "雷息降声",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "9ce3c62cd15a0023"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "2944372084d97cec"
     },
     {
       "objectKind": "equipment",
       "objectId": "1240321",
       "displayName": "柔影飞翼",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "37f80f315ec29005"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "94899c43c2a3610a"
     },
     {
       "objectKind": "equipment",
       "objectId": "1250011",
       "displayName": "风羽指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "0f03daafc7bd7772"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "1b147e9b4599a71e"
     },
     {
       "objectKind": "equipment",
       "objectId": "1250111",
       "displayName": "青铜指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "a8e9ff5aef93803b"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "6cd0b0fbd4c7db44"
     },
     {
       "objectKind": "equipment",
       "objectId": "1250121",
       "displayName": "野鬃指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "6980975f1de8d215"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "39e57f7eeac83de9"
     },
     {
       "objectKind": "equipment",
       "objectId": "1250131",
       "displayName": "蛮角戒指",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "21b10081a9cff944"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "f5a1901380da4243"
     },
     {
       "objectKind": "equipment",
       "objectId": "1250211",
       "displayName": "蔓叶指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "f01367ae757ac148"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "ba9446f68adfd522"
     },
     {
       "objectKind": "equipment",
       "objectId": "1250221",
       "displayName": "蝶语指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "378bcb638bd2fe9d"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "d5973ee73a052869"
     },
     {
       "objectKind": "equipment",
       "objectId": "1250231",
       "displayName": "冰翼指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "4b522e9c60a59e79"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "17025420d319dacc"
     },
     {
       "objectKind": "equipment",
       "objectId": "1250311",
       "displayName": "雷息之环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "2b80625e030e8200"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "9debae29625c01dd"
     },
     {
       "objectKind": "equipment",
       "objectId": "1250321",
       "displayName": "柔影辉环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "821e84fa4efefa40"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "992c9816e34d0cfa"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310011",
       "displayName": "明辉长剑",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "bca3d9d70b5e9306"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "0e1c07a7ce529a96"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310111",
       "displayName": "镜铁长剑",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "5d87d578822db3a3"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "a2c6462fb992830e"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310112",
       "displayName": "锻钢阔剑",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "40a937fe90d82094"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "2cfb43791cea3761"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310121",
       "displayName": "狂鬃重剑",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "2da3c69d5ff22dcd"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "15092c3ff7291c9f"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310211",
       "displayName": "镜铁刺刃",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "b4c19d726fa17740"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "a9a0c68c3b54fe9d"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310212",
       "displayName": "锻钢短刃",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "11d6eb723144181f"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "8e9e5bbf5f1f5bae"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310221",
       "displayName": "荒角刺剑",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "be077db9a2d228b4"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "14f2c9096a735d72"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310311",
       "displayName": "镜铁长弓",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "d950057c75d8581d"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "554135db9099e045"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310312",
       "displayName": "锻钢长弓",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "5155a87708555aea"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "2e6b1b67bff3b7a5"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310321",
       "displayName": "寒翼刺弓",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "931ef9980fdc540b"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "75338c54bf19989b"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310411",
       "displayName": "镜铁咒杖",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "a6e9166dab4f50c6"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "8a7759c82c7bcc86"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310412",
       "displayName": "锻钢咒杖",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "83506198e031e9b1"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "34156a1f0f9fcf03"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310421",
       "displayName": "蝶影法杖",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "a414bc458b13f487"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "7024eb5e23e18d84"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310511",
       "displayName": "镜铁祷杖",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "4debe3c937af3e97"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "ee1c18927868b255"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310512",
       "displayName": "锻钢祷杖",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "523529a3339054b0"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "6d82d44460183f24"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310521",
       "displayName": "雷闪狂力",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "647aaaad4cd66b1b"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "c522adce1ec02ea1"
     },
     {
       "objectKind": "equipment",
       "objectId": "1310611",
       "displayName": "泣影弓",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "d94ff25eecaafc20"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "7c85d781afb080d4"
     },
     {
       "objectKind": "equipment",
       "objectId": "1320011",
       "displayName": "尘间上装",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "89915adc3c04acd4"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "774ae50a3acfa29b"
     },
     {
       "objectKind": "equipment",
       "objectId": "1320111",
       "displayName": "镜铁战铠",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "7744832a712593ab"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "3577035a7150f529"
     },
     {
       "objectKind": "equipment",
       "objectId": "1320121",
       "displayName": "狂鬃重甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "beb5ca838a09d78f"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "dc745968ce7a1fad"
     },
     {
       "objectKind": "equipment",
       "objectId": "1320131",
       "displayName": "荒角战甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "a0cd2808279d54e0"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "3c981cabfd2c7ceb"
     },
     {
       "objectKind": "equipment",
       "objectId": "1320211",
       "displayName": "云棉披风",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "fa56c712d379b7c2"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "b4cac25d75989251"
     },
     {
       "objectKind": "equipment",
       "objectId": "1320221",
       "displayName": "蝶影斗篷",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "5e4c6e808ea0f44b"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "abc97b5435f1c40a"
     },
     {
       "objectKind": "equipment",
       "objectId": "1320231",
       "displayName": "寒翼披风",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "050882a3a67d0f53"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "9908d3fcb3d02a66"
     },
     {
       "objectKind": "equipment",
       "objectId": "1320311",
       "displayName": "雷闪披甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "7cb9972896e26f3a"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "7e3b085b4e3f062f"
     },
     {
       "objectKind": "equipment",
       "objectId": "1320321",
       "displayName": "泣影之束",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "74b2c09e06492ff8"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "d0ca230969c0f937"
     },
     {
       "objectKind": "equipment",
       "objectId": "1330011",
       "displayName": "暮时下装",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "9fb6b5520ea685ab"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "f498e113b5863a99"
     },
     {
       "objectKind": "equipment",
       "objectId": "1330111",
       "displayName": "镜铁裤甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "463564a1d24c6e1a"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "6fce9bfeb1389e6e"
     },
     {
       "objectKind": "equipment",
       "objectId": "1330121",
       "displayName": "狂鬃护甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "26833940c1561220"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "ce09d88b51cac180"
     },
     {
       "objectKind": "equipment",
       "objectId": "1330131",
       "displayName": "荒角短甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "d293cf4beb9e75fd"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "fe09cbb1e93ade8c"
     },
     {
       "objectKind": "equipment",
       "objectId": "1330211",
       "displayName": "云棉下装",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "253391a1d40e6f65"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "7baf96e44d4bae51"
     },
     {
       "objectKind": "equipment",
       "objectId": "1330221",
       "displayName": "蝶影护腿",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "0326e8c117032d6c"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "3d0a02c702103aed"
     },
     {
       "objectKind": "equipment",
       "objectId": "1330231",
       "displayName": "寒翼护腿",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "1c615c8c6b5111a0"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "61ddedc8a939a0ad"
     },
     {
       "objectKind": "equipment",
       "objectId": "1330311",
       "displayName": "雷闪束甲",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "910556028603e77d"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "bc819e857679506e"
     },
     {
       "objectKind": "equipment",
       "objectId": "1330321",
       "displayName": "泣影幽行",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "ca069000623d4231"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "299521eb24e5897b"
     },
     {
       "objectKind": "equipment",
       "objectId": "1340011",
       "displayName": "晶坠耳饰",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "c5e787b65f6133eb"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "6e555eb522a4ff91"
     },
     {
       "objectKind": "equipment",
       "objectId": "1340111",
       "displayName": "镜铁耳坠",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "48daa6c85a2accd4"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "471b34fb5687716f"
     },
     {
       "objectKind": "equipment",
       "objectId": "1340121",
       "displayName": "狂鬃耳坠",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "34e3d0185d033cf4"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "fceafa56cd09dbd1"
     },
     {
       "objectKind": "equipment",
       "objectId": "1340131",
       "displayName": "荒角耳环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "170d6a51f021350b"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "8d52b57fc8ab41de"
     },
     {
       "objectKind": "equipment",
       "objectId": "1340211",
       "displayName": "蔓花耳挂",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "e6f5eeaaf3cf1f9d"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "2838aec129dc4aab"
     },
     {
       "objectKind": "equipment",
       "objectId": "1340221",
       "displayName": "蝶影耳饰",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "ed40c9dde740c8d0"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "613bb7e5b63d2b33"
     },
     {
       "objectKind": "equipment",
       "objectId": "1340231",
       "displayName": "寒翼耳坠",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "e08db7a369e00a04"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "e84e807f3ca92bb3"
     },
     {
       "objectKind": "equipment",
       "objectId": "1340311",
       "displayName": "雷闪降声",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "a7425880dcb9877d"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "c530421bc8654569"
     },
     {
       "objectKind": "equipment",
       "objectId": "1340321",
       "displayName": "泣影飞翼",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "d6d36315cc6859c7"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "0a1b62f329e84675"
     },
     {
       "objectKind": "equipment",
       "objectId": "1350011",
       "displayName": "霜影指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "af6e0d459bde4368"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "3cbe82a204ed1333"
     },
     {
       "objectKind": "equipment",
       "objectId": "1350111",
       "displayName": "镜铁指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "d9713cc150f1d765"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "6fa20c057f1e875f"
     },
     {
       "objectKind": "equipment",
       "objectId": "1350121",
       "displayName": "狂鬃指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "7bb7a63612e6f093"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "aec3cd5e58f9c188"
     },
     {
       "objectKind": "equipment",
       "objectId": "1350131",
       "displayName": "荒角戒指",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "fa06879f2bfba4b2"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "715c0824dc39365d"
     },
     {
       "objectKind": "equipment",
       "objectId": "1350211",
       "displayName": "蔓花指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "2898ce3b17c83d66"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "20e4b6dc09058d57"
     },
     {
       "objectKind": "equipment",
       "objectId": "1350221",
       "displayName": "蝶影指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "eb1d2237c260523f"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "8e98c60968e7b4f2"
     },
     {
       "objectKind": "equipment",
       "objectId": "1350231",
       "displayName": "寒翼指环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "b3a2336527f4c153"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "2e75824f602bce08"
     },
     {
       "objectKind": "equipment",
       "objectId": "1350311",
       "displayName": "雷闪之环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "917484b5eee1ad8a"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "304c1146176bbff9"
     },
     {
       "objectKind": "equipment",
       "objectId": "1350321",
       "displayName": "泣影辉环",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "equipment-visual-acceptance-not-published"
-      ],
-      "manifestHash": "f8ecf39807d9034e"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "967535989556a61d"
     },
     {
       "objectKind": "kibo",
@@ -2191,831 +1917,898 @@
       "objectKind": "set-skill",
       "objectId": "1:2",
       "displayName": "套装 1 2件",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "set-skill-visual-acceptance-not-published"
-      ],
-      "manifestHash": "40b3c8e182383bbe"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "86890385580682df"
     },
     {
       "objectKind": "set-skill",
       "objectId": "1:4",
       "displayName": "套装 1 4件",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "set-skill-visual-acceptance-not-published"
-      ],
-      "manifestHash": "500900092e3fc763"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "49dfd00ccd290756"
     },
     {
       "objectKind": "set-skill",
       "objectId": "2:2",
       "displayName": "套装 2 2件",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "set-skill-visual-acceptance-not-published"
-      ],
-      "manifestHash": "35db72efe422d59f"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "03509881e13e4fb5"
     },
     {
       "objectKind": "set-skill",
       "objectId": "2:4",
       "displayName": "套装 2 4件",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "set-skill-visual-acceptance-not-published"
-      ],
-      "manifestHash": "ce27eb04bb43b7a7"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "d6ebbcc27e50e676"
     },
     {
       "objectKind": "set-skill",
       "objectId": "3:2",
       "displayName": "套装 3 2件",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "set-skill-visual-acceptance-not-published"
-      ],
-      "manifestHash": "0357c0bcd1771d2a"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "dd1fa91d8ec4961f"
     },
     {
       "objectKind": "set-skill",
       "objectId": "3:4",
       "displayName": "套装 3 4件",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
         "set-skill-dynamic-unapplied",
-        "set-skill-visual-acceptance-not-published"
+        "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "a2f31076e2bc7f89"
+      "manifestHash": "62e86709bce7d753"
     },
     {
       "objectKind": "set-skill",
       "objectId": "4:2",
       "displayName": "套装 4 2件",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "set-skill-visual-acceptance-not-published"
-      ],
-      "manifestHash": "565674f835017a4a"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "76a05a910bb986f1"
     },
     {
       "objectKind": "set-skill",
       "objectId": "4:4",
       "displayName": "套装 4 4件",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "set-skill-visual-acceptance-not-published"
-      ],
-      "manifestHash": "314559284fa53ec0"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "1a5643510618766a"
     },
     {
       "objectKind": "set-skill",
       "objectId": "5:2",
       "displayName": "套装 5 2件",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "set-skill-visual-acceptance-not-published"
-      ],
-      "manifestHash": "06cfab4f1638c647"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "3ccdcef70470ac94"
     },
     {
       "objectKind": "set-skill",
       "objectId": "5:4",
       "displayName": "套装 5 4件",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "set-skill-visual-acceptance-not-published"
-      ],
-      "manifestHash": "8fe528bd842b0677"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "b4a5b9a6855708f5"
     },
     {
       "objectKind": "set-skill",
       "objectId": "6:2",
       "displayName": "套装 6 2件",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "set-skill-visual-acceptance-not-published"
-      ],
-      "manifestHash": "752298c3f4f34db4"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "1f952c74fe85a579"
     },
     {
       "objectKind": "set-skill",
       "objectId": "6:4",
       "displayName": "套装 6 4件",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "set-skill-visual-acceptance-not-published"
-      ],
-      "manifestHash": "2d5224404a8c3585"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "6e94e28fa915f414"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10001",
       "displayName": "汁石就是力量",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "d649612a3b660916"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "52b98411131d6e86"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10002",
       "displayName": "家书",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "3ae82a58b0232dc7"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "45e944a0ec445d6d"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10008",
       "displayName": "可以吃吗",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "5c71b3f70a041488"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "f6bed97d9ba8ea15"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10011",
       "displayName": "功夫是这样的！",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "c784552d91e0b7d2"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "9a84d80bb262795f"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10018",
       "displayName": "飞行试验",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "bf0735d166b67964"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "774c688bf65c45cb"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10032",
       "displayName": "唤灵",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "9084f786602ef759"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "6f061fffb09438fc"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10033",
       "displayName": "咕嘟咕嘟",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "27265f09dedfc11a"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "226e3212208c72d7"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10034",
       "displayName": "五谷丰登",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "13a3263e5a1e3548"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "a0a91da666117482"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10037",
       "displayName": "厨房的秘密",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "27e277881b558f59"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "a55a848bd77c09b5"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10043",
       "displayName": "宣告黎明之花",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "37aefc02eaecf5ca"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "9703298d05031275"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10044",
       "displayName": "狩猎姿态",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "0ff6720c397b3f3b"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "89114bef3c59889d"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10047",
       "displayName": "传承",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "fcfba6b5999d8fbe"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "6d7746f6dccfd704"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10048",
       "displayName": "璇枢",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "88baaf049cb89106"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "5d1a28b0d5cdcb88"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10050",
       "displayName": "魂引",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "8438340ec908bb3f"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "bc25ed9c296044f2"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10052",
       "displayName": "小小木雕",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "847847c9bef35d96"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "f998c51229ed4580"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10055",
       "displayName": "远古秘钥",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "d2eca6dbbb99c3db"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "7f5cd279a3b8ec5f"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10056",
       "displayName": "淳朴之音",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "28688d9c33aef8a7"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "0575712d3ce7069f"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10057",
       "displayName": "命土",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "fb43e16fd417562b"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "3225d6637cb612ca"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10058",
       "displayName": "往事",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "1c52aca1b4b8b3b2"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "4649eb9b77a2ea26"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10059",
       "displayName": "禁呪",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "1ecb85e46dddbfa0"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "67432f546edcc3f5"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10060",
       "displayName": "宵祝",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "800d6519d0d74465"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "909c7eeee4ea3e38"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10061",
       "displayName": "残局",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "9614b21128b813f5"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "1efae4114d400fd8"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10062",
       "displayName": "分道扬镳",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "b3e18e06ed588f28"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "d446c7db37e8ef5d"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10063",
       "displayName": "屋嘟娃娃",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "ae7b66d25761c244"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "96ffcf10589b4d5b"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10071",
       "displayName": "羽夜的思念",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "995fb9a1da1489c9"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "cec75a42f8fc27a6"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10076",
       "displayName": "碧空之下",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "3c01753bd2cf24aa"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "d11360aa36936dd1"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10078",
       "displayName": "星晚的追忆",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "3d304ef55725ddfa"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "1950b6843bf150b2"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10084",
       "displayName": "风语之愿",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "19153b7cb1bf44cc"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "6357865c80ebb9c8"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10093",
       "displayName": "无法思考",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "5132d37d3ea645c7"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "68343ac3fcf7d786"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10094",
       "displayName": "陪伴",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "749e4af51e61074b"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "6c9898259db2781b"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10095",
       "displayName": "甜点时光",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "bb0012e29dd41caf"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "dcd22205b15a3236"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10097",
       "displayName": "玫瑰色午后",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "9383d2df4a7f6cc4"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "a5e54e0794f1090a"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10098",
       "displayName": "此身为枪",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "e930aaf881de97d1"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "f469d9a20b8ec4c7"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10101",
       "displayName": "归来",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "e6f5a3127a20b2a8"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "3dbbfe0b7cf6aed3"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10107",
       "displayName": "药草大丰收",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "cc447d9af60a0c5f"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "eee362fe4c54df3f"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10121",
       "displayName": "折纸寄情",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "d02b8bd061c98e49"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "c1085d2108473f41"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10122",
       "displayName": "花之舞",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "74641c09de9988c6"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "fd55054b0be57906"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10123",
       "displayName": "桃芳春笺",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "0cc81b0f51dbcb2d"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "62aa0b1d05550a75"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10124",
       "displayName": "夕阳下的约定",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "64185f1005b4b9e8"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "4ae624557b316ac1"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10125",
       "displayName": "高手在此！",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "08eea0daae2765cd"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "bcbf248e730c4743"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10130",
       "displayName": "女仆的疗养日",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "fe6c01d60f9a539b"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "04ac468cafa3e3a4"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10131",
       "displayName": "节日佳肴",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "cc084b6a6f4d78d8"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "c1382e4f7744185e"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10132",
       "displayName": "暗中观察",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "960a2882f25b605c"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "4dc00b4b7ebd64a0"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10133",
       "displayName": "「森林女神」来访",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "866f721a33575525"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "11fc8a42d82223a7"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10136",
       "displayName": "林间野餐",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "281c1aa327ccd6d3"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "37b6e7a4f1c6a082"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10146",
       "displayName": "新生",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "36a57d51190628a4"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "7266a51f9e6898df"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10147",
       "displayName": "充能时间",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "974ba4feea79d4db"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "b34b8a868f9bd3ef"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10149",
       "displayName": "失控飞行",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "112f8f0a2193278d"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "76e9146015224cb2"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10150",
       "displayName": "狼少女的心意",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "ce79ff169913ee8c"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "219c2c4537625852"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10151",
       "displayName": "非常规钓鱼",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "5f43f33b2d4817de"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "6a919a58a961e796"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10152",
       "displayName": "真正的宝藏",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "78ff7d6c09836dcb"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "047326af11d91126"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10154",
       "displayName": "月下秘仪",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "e1ae44c9b6ef6561"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "33606353caa5c47a"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10155",
       "displayName": "恶作剧前奏",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "053b7a1794126de1"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "95e335d45c627b99"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10156",
       "displayName": "在勒布上空",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "5f8d097b88da26ac"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "a5d80a0e5dad34f7"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10169",
       "displayName": "软软棉花肉",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "515c15623838009d"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "b39a3a7f755151a7"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10170",
       "displayName": "攀高的幼崽",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "1f30351519c56fb8"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "76a76fac7657ea3b"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10175",
       "displayName": "一点都不痛",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "804d56af54b0aef5"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "e2e7cb1c760e51a5"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10176",
       "displayName": "温柔的照护",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "2e22a0ff74d5683d"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "7f3bd36617353975"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10196",
       "displayName": "热火朝天",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "3398044432a20ca0"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "e9ff48dd53dd311e"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10197",
       "displayName": "安睡吧，宝贝",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "f50f73c46cbbece7"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "082ade13963dc74f"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10198",
       "displayName": "星之种",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "914ee5ee69c0d6bd"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "b08b0ffdfa5db344"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10216",
       "displayName": "耕种之时",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "soulessence-visual-acceptance-not-published"
-      ],
-      "manifestHash": "58d9b3317f710c39"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "04dd1cf73b1513a0"
     }
   ],
   "admission": {
     "characters": [],
     "kibos": [],
-    "soulEssences": [],
-    "equipment": [],
-    "setSkills": []
+    "soulEssences": [
+      10001,
+      10002,
+      10008,
+      10011,
+      10018,
+      10032,
+      10033,
+      10034,
+      10037,
+      10043,
+      10044,
+      10047,
+      10048,
+      10050,
+      10052,
+      10055,
+      10056,
+      10057,
+      10058,
+      10059,
+      10060,
+      10061,
+      10062,
+      10063,
+      10071,
+      10076,
+      10078,
+      10084,
+      10093,
+      10094,
+      10095,
+      10097,
+      10098,
+      10101,
+      10107,
+      10121,
+      10122,
+      10123,
+      10124,
+      10125,
+      10130,
+      10131,
+      10132,
+      10133,
+      10136,
+      10146,
+      10147,
+      10149,
+      10150,
+      10151,
+      10152,
+      10154,
+      10155,
+      10156,
+      10169,
+      10170,
+      10175,
+      10176,
+      10196,
+      10197,
+      10198,
+      10216
+    ],
+    "equipment": [
+      1010111,
+      1010211,
+      1010311,
+      1010411,
+      1010511,
+      1010611,
+      1020111,
+      1020211,
+      1020311,
+      1030111,
+      1030211,
+      1030311,
+      1040111,
+      1040211,
+      1040311,
+      1050111,
+      1050211,
+      1050311,
+      1110111,
+      1110211,
+      1110311,
+      1110411,
+      1110511,
+      1110611,
+      1120111,
+      1120211,
+      1120311,
+      1130111,
+      1130211,
+      1130311,
+      1140111,
+      1140211,
+      1140311,
+      1150111,
+      1150211,
+      1150311,
+      1210011,
+      1210111,
+      1210121,
+      1210211,
+      1210221,
+      1210311,
+      1210321,
+      1210411,
+      1210421,
+      1210511,
+      1210521,
+      1210611,
+      1220011,
+      1220111,
+      1220121,
+      1220131,
+      1220211,
+      1220221,
+      1220231,
+      1220311,
+      1220321,
+      1230011,
+      1230111,
+      1230121,
+      1230131,
+      1230211,
+      1230221,
+      1230231,
+      1230311,
+      1230321,
+      1240011,
+      1240111,
+      1240121,
+      1240131,
+      1240211,
+      1240221,
+      1240231,
+      1240311,
+      1240321,
+      1250011,
+      1250111,
+      1250121,
+      1250131,
+      1250211,
+      1250221,
+      1250231,
+      1250311,
+      1250321,
+      1310011,
+      1310111,
+      1310112,
+      1310121,
+      1310211,
+      1310212,
+      1310221,
+      1310311,
+      1310312,
+      1310321,
+      1310411,
+      1310412,
+      1310421,
+      1310511,
+      1310512,
+      1310521,
+      1310611,
+      1320011,
+      1320111,
+      1320121,
+      1320131,
+      1320211,
+      1320221,
+      1320231,
+      1320311,
+      1320321,
+      1330011,
+      1330111,
+      1330121,
+      1330131,
+      1330211,
+      1330221,
+      1330231,
+      1330311,
+      1330321,
+      1340011,
+      1340111,
+      1340121,
+      1340131,
+      1340211,
+      1340221,
+      1340231,
+      1340311,
+      1340321,
+      1350011,
+      1350111,
+      1350121,
+      1350131,
+      1350211,
+      1350221,
+      1350231,
+      1350311,
+      1350321
+    ],
+    "setSkills": [
+      "1:2",
+      "1:4",
+      "2:2",
+      "2:4",
+      "3:2",
+      "4:2",
+      "4:4",
+      "5:2",
+      "5:4",
+      "6:2",
+      "6:4"
+    ]
   },
   "bindingMatrix": {
     "schemaVersion": 1,
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "b6e9596298cda056",
+    "rosterHash": "468f93c3cbf83459",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24681,35 +24474,35 @@
         "setId": 1,
         "pieces": 2,
         "skillId": 19998106,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998106].skillType"
       },
       {
         "setId": 1,
         "pieces": 4,
         "skillId": 19998006,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998006].skillType"
       },
       {
         "setId": 2,
         "pieces": 2,
         "skillId": 19998104,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998104].skillType"
       },
       {
         "setId": 2,
         "pieces": 4,
         "skillId": 19998004,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998004].skillType"
       },
       {
         "setId": 3,
         "pieces": 2,
         "skillId": 19998105,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998105].skillType"
       },
       {
@@ -24723,42 +24516,42 @@
         "setId": 4,
         "pieces": 2,
         "skillId": 19998103,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998103].skillType"
       },
       {
         "setId": 4,
         "pieces": 4,
         "skillId": 19998003,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998003].skillType"
       },
       {
         "setId": 5,
         "pieces": 2,
         "skillId": 19998107,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998107].skillType"
       },
       {
         "setId": 5,
         "pieces": 4,
         "skillId": 19998007,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998007].skillType"
       },
       {
         "setId": 6,
         "pieces": 2,
         "skillId": 19998108,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998108].skillType"
       },
       {
         "setId": 6,
         "pieces": 4,
         "skillId": 19998008,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType"
       }
     ],
@@ -24920,10 +24713,10 @@
       "actorEquipmentEdgeCount": 1507,
       "actorEquipmentQualifiedEdgeCount": 0,
       "setSkillThresholdCount": 12,
-      "setSkillThresholdQualifiedCount": 0,
+      "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "9d338b0e73fb7d16"
+    "bindingMatrixHash": "5c2638df48c6c7a5"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44425,19 +44218,20 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 168,
-      "runtime-integrated": 97
+      "extracted": 30,
+      "optimization-ready": 210,
+      "runtime-integrated": 25
     },
     "optimizationReadyCounts": {
       "character": 0,
       "kibo": 0,
-      "soul-essence": 0,
-      "equipment": 0,
-      "set-skill": 0
+      "soul-essence": 62,
+      "equipment": 137,
+      "set-skill": 11
     },
-    "optimizationReadyTotal": 0,
-    "gameplayBlockingGapCount": 335,
-    "bindingQualifiedEdgeCount": 0,
+    "optimizationReadyTotal": 210,
+    "gameplayBlockingGapCount": 125,
+    "bindingQualifiedEdgeCount": 11,
     "qualificationStage": {
       "schemaVersion": 1,
       "contractName": "AzPrOptimizationQualificationStageGate",
@@ -44457,20 +44251,20 @@
         "soul-essence": {
           "total": 62,
           "denominator": 62,
-          "ready": 0,
-          "admission": 0
+          "ready": 62,
+          "admission": 62
         },
         "equipment": {
           "total": 137,
           "denominator": 137,
-          "ready": 0,
-          "admission": 0
+          "ready": 137,
+          "admission": 137
         },
         "set-skill": {
           "total": 12,
           "denominator": 12,
-          "ready": 0,
-          "admission": 0
+          "ready": 11,
+          "admission": 11
         }
       },
       "bindings": {
@@ -44499,7 +44293,7 @@
           "total": 12,
           "expected": 12,
           "unique": 12,
-          "qualified": 0,
+          "qualified": 11,
           "readinessMismatch": 0
         },
         "equipmentSlots": {
@@ -44510,10 +44304,8 @@
       },
       "reasonCodes": [
         "optimization-qualification-object-kind-incomplete:character",
-        "optimization-qualification-object-kind-incomplete:equipment",
         "optimization-qualification-object-kind-incomplete:kibo",
-        "optimization-qualification-object-kind-incomplete:set-skill",
-        "optimization-qualification-object-kind-incomplete:soul-essence"
+        "optimization-qualification-object-kind-incomplete:set-skill"
       ],
       "formalOptimizationUnlocked": false,
       "m12cLocked": true
@@ -44521,5 +44313,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "f69266d8fdc53092"
+  "catalogHash": "be4ad68bb00072e3"
 }

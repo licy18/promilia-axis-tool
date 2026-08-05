@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12B3VisualAcceptanceManifest",
+  "kind": "m12-b3-visual-acceptance-manifest",
+  "owner": {
+    "objectKind": "set-skill",
+    "objectId": "2:2",
+    "displayName": "套装 2 2件"
+  },
+  "source": {
+    "sourceIdentities": [
+      "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998104].skillType"
+    ],
+    "profileHash": "6278ea0a843e4c66"
+  },
+  "evidence": {
+    "icon": null,
+    "displaySummary": "套装 2 2件 · 技能 19998104",
+    "binding": {
+      "setId": 2,
+      "pieces": 2,
+      "skillId": 19998104,
+      "runtimeStatus": "runtime-applied"
+    },
+    "automatedVisualEvidence": [
+      {
+        "scenarioIdentity": "overview-sheet:overview-soul-essences.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-soul-essences.png",
+        "screenshotSha256": "1c576e50accdeac23a0248e3e20d8d497a9ca28a496d9be262970a51f0fc10db"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-1.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-1.png",
+        "screenshotSha256": "497579335049e71e58650d26f1c19b1614a4f36e7a43c83c73d8823d64d00308"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-2.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-2.png",
+        "screenshotSha256": "97efe7d931ff0d11c284a7cd56916382f9419e907bf5f6ccf34cee671d6cda93"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-3.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-3.png",
+        "screenshotSha256": "c616cb3f7f0dc3803ff6820a2c854fb6d06871e6965dbcc20640ed52e03d6431"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-4.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-4.png",
+        "screenshotSha256": "354105a51dce530e9fbca2887435802183ebaba2d7e0f7bc1da695b25e1f1c20"
+      }
+    ],
+    "productVisualAcceptance": {
+      "status": "accepted",
+      "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
+      "acceptanceMode": "automated-icon-and-display-evidence",
+      "bindingStatus": "verified",
+      "acceptanceIdentity": "a9bf45b166644210"
+    }
+  },
+  "matrix": {
+    "requirements": [
+      {
+        "requirementIdentity": "set-skill-source-identity",
+        "dimension": "source",
+        "status": "passed",
+        "sourceIdentities": [
+          "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998104].skillType"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "set-skill-threshold-record",
+        "dimension": "identity",
+        "status": "passed",
+        "sourceIdentities": [
+          "NewTable/accessory_set.json"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "set-skill-effect-runtime-applied",
+        "dimension": "runtime",
+        "status": "passed",
+        "sourceIdentities": [
+          "NewTable/skill.rows[id=19998104]",
+          "src/data/generated/soulessence-effect-mechanics.json#setSkillDefinitions[2:2]"
+        ],
+        "passed": true
+      }
+    ],
+    "requiredCount": 3,
+    "passedCount": 3,
+    "complete": true
+  },
+  "ledger": {
+    "records": [],
+    "blockingCount": 0
+  },
+  "maturity": {
+    "currentState": "optimization-ready",
+    "earnedStates": [
+      "extracted",
+      "runtime-integrated",
+      "visually-accepted",
+      "optimization-ready"
+    ],
+    "optimizationReady": true,
+    "blockers": []
+  },
+  "validation": {
+    "status": "m12-b3-visual-acceptance-manifest-valid",
+    "issues": []
+  },
+  "manifestHash": "d4427c51d77c6c3a"
+}

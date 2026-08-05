@@ -32,6 +32,8 @@
     "audit:character-acceptance": "node scripts/generate-character-acceptance.mjs --assert-clean",
     "data:generate-optimization-qualification": "node scripts/generate-optimization-qualification.mjs --write",
     "audit:optimization-qualification": "node scripts/generate-optimization-qualification.mjs --assert-clean",
+    "data:generate-visual-acceptance": "node scripts/generate-m12-b3-visual-acceptance.mjs --write",
+    "audit:visual-acceptance": "node scripts/generate-m12-b3-visual-acceptance.mjs --assert-clean",
     "data:sync-action-icons": "node scripts/sync-workbench-action-icons.mjs",
     "data:sync-loadout-icons": "node scripts/sync-workbench-loadout-icons.mjs",
     "data:generate-runtime-capture-manifest": "node scripts/generate-runtime-capture-hook-manifest.mjs",

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 25,
-    "phase": "M12-B3-E12",
-    "status": "b3-e12-implemented",
+    "phase": "M12-B3-E13",
+    "status": "b3-e13-implemented",
   "baseCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
@@ -20,7 +20,7 @@
   "acceptedC14Commit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "acceptedC15Commit": "aafb6aa6c645b7b7490fdba0f71b8941da311f6e",
   "implementationCommit": "git-self",
-  "nextStage": "b3-e12-implemented-awaiting-product-acceptance",
+  "nextStage": "b3-e13-implemented-awaiting-product-acceptance",
   "acceptedPredecessor": {
     "phase": "M12-B3-C14",
     "productionMechanicsCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
@@ -1058,9 +1058,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-  "blockingUniqueGapCount": 335,
+  "blockingUniqueGapCount": 125,
   "blockingByCategory": {
-    "not-implemented": 318,
+    "not-implemented": 108,
     "evidence-insufficient": 17
   },
     "formalAdmissions": {
@@ -1072,12 +1072,12 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "d7f77da35e3a80b0",
-    "rosterHash": "b6e9596298cda056",
-    "manifestsHash": "7667eaaf9770679d",
-    "ledgerHash": "a3d2d9ece6897e6d",
-    "bindingMatrixHash": "9d338b0e73fb7d16",
-    "qualificationCatalogHash": "f69266d8fdc53092",
+    "sourceSnapshotHash": "81f323993557ac49",
+    "rosterHash": "468f93c3cbf83459",
+    "manifestsHash": "5ac69533765e1fbc",
+    "ledgerHash": "9d751c9ec22c4ebc",
+    "bindingMatrixHash": "5c2638df48c6c7a5",
+    "qualificationCatalogHash": "be4ad68bb00072e3",
     "dynamicLoadoutEffectCensusHash": "be211ee0a556b51a",
     "soulEssenceEffectCatalogHash": "82a85a401e26c7cf",
     "soulEssenceSourceSnapshotHash": "c45c2e01a48684d7",

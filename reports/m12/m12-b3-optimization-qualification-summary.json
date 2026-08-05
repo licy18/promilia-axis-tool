@@ -1,6 +1,6 @@
 {
-  "phase": "M12-B3-E12",
-  "status": "b3-e12-implemented",
+  "phase": "M12-B3-E13",
+  "status": "b3-e13-implemented",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -9,49 +9,46 @@
     "equipment": 137,
     "setSkills": 12
   },
-  "sourceSnapshotHash": "d7f77da35e3a80b0",
-  "rosterHash": "b6e9596298cda056",
-  "manifestsHash": "7667eaaf9770679d",
-  "ledgerHash": "a3d2d9ece6897e6d",
-  "bindingMatrixHash": "9d338b0e73fb7d16",
-  "catalogHash": "f69266d8fdc53092",
+  "sourceSnapshotHash": "81f323993557ac49",
+  "rosterHash": "468f93c3cbf83459",
+  "manifestsHash": "5ac69533765e1fbc",
+  "ledgerHash": "9d751c9ec22c4ebc",
+  "bindingMatrixHash": "5c2638df48c6c7a5",
+  "catalogHash": "be4ad68bb00072e3",
   "maturityCounts": {
-    "extracted": 168,
-    "runtime-integrated": 97
+    "extracted": 30,
+    "optimization-ready": 210,
+    "runtime-integrated": 25
   },
   "optimizationReadyCounts": {
     "character": 0,
     "kibo": 0,
-    "soul-essence": 0,
-    "equipment": 0,
-    "set-skill": 0
+    "soul-essence": 62,
+    "equipment": 137,
+    "set-skill": 11
   },
   "gapCounts": {
-    "blockingUniqueGapCount": 335,
+    "blockingUniqueGapCount": 125,
     "byCategory": {
       "evidence-insufficient": 17,
-      "not-implemented": 318
+      "not-implemented": 108
     },
     "byCode": {
+      "acceptance-product-visual-signoff-pending": 1,
       "actor-static-profile-missing": 1,
       "character-acceptance-not-published": 9,
       "character-not-optimization-ready": 11,
-      "equipment-visual-acceptance-not-published": 137,
       "kibo-headless-maturity-not-ready": 43,
       "kibo-passive-static-evidence-gap": 4,
       "kibo-visual-acceptance-not-published": 43,
       "level-breakthrough-skill-unlock-source-mismatch": 1,
       "set-skill-dynamic-unapplied": 1,
-      "set-skill-visual-acceptance-not-published": 12,
-      "soulessence-visual-acceptance-not-published": 62,
       "strict-character-cultivation-runtime-partial": 11
     },
     "byObjectKind": {
       "character": 33,
-      "equipment": 137,
       "kibo": 90,
-      "set-skill": 13,
-      "soul-essence": 62
+      "set-skill": 2
     }
   },
   "m12cLocked": true

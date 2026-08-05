@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "phase": "M12-B3-E12",
+  "phase": "M12-B3-E13",
   "sourceSnapshot": {
     "files": {
       "characters": {
@@ -35,6 +35,11 @@
         "path": "src/data/generated/character-acceptance-catalog.json",
         "sha256": "affbfe3c07f50f62a171fc133ac128b8d12c42f6baaf333af9237c504955602c",
         "bytes": 2872
+      },
+      "visualAcceptance": {
+        "path": "src/data/generated/m12-b3-visual-acceptance-catalog.json",
+        "sha256": "ed249d93673ec673f2bb6e7eda34880748d1574f8baad17e5c94a44f7c54658a",
+        "bytes": 143281
       },
       "kiboPassives": {
         "path": "src/data/generated/kibo-passive-mechanics.json",
@@ -3953,7 +3958,7 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "d7f77da35e3a80b0"
+    "sourceSnapshotHash": "81f323993557ac49"
   },
   "filterContract": {
     "characterElements": [
@@ -29211,5 +29216,5 @@
       ]
     }
   },
-  "rosterHash": "b6e9596298cda056"
+  "rosterHash": "468f93c3cbf83459"
 }

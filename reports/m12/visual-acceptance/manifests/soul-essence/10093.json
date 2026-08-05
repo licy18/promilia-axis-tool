@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12B3VisualAcceptanceManifest",
+  "kind": "m12-b3-visual-acceptance-manifest",
+  "owner": {
+    "objectKind": "soul-essence",
+    "objectId": "10093",
+    "displayName": "无法思考"
+  },
+  "source": {
+    "sourceIdentities": [
+      "generated/soulessences.json#items[id=10093]",
+      "NewTable/soulessence.rows[id=10093]"
+    ],
+    "profileHash": "fab39ffa36c994fc"
+  },
+  "evidence": {
+    "icon": {
+      "path": "public/assets/loadout/tex_icon_soulessences_101003_093.png",
+      "fileName": "tex_icon_soulessences_101003_093.png",
+      "sha256": "f75f9956a10e307a325a091ce1f1412293bf8230d832153704b79c4d740b26ff",
+      "bytes": 49894,
+      "status": "verified"
+    },
+    "displaySummary": "SR · 增幅 · 调谐强度 · 基础生命 9305 · 基础攻击 1709 · 基础物理防御 240 · 基础魔法防御 240",
+    "binding": {
+      "effectSkillId": 1900230,
+      "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+      "runtimeStatus": "runtime-applied",
+      "starLevelCount": 4
+    },
+    "automatedVisualEvidence": [
+      {
+        "scenarioIdentity": "workbench-loadout-detail-soul-essence-10093",
+        "status": "automated-icon-asset-verified",
+        "iconPath": "public/assets/loadout/tex_icon_soulessences_101003_093.png",
+        "iconSha256": "f75f9956a10e307a325a091ce1f1412293bf8230d832153704b79c4d740b26ff"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-soul-essences.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-soul-essences.png",
+        "screenshotSha256": "1c576e50accdeac23a0248e3e20d8d497a9ca28a496d9be262970a51f0fc10db"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-1.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-1.png",
+        "screenshotSha256": "497579335049e71e58650d26f1c19b1614a4f36e7a43c83c73d8823d64d00308"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-2.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-2.png",
+        "screenshotSha256": "97efe7d931ff0d11c284a7cd56916382f9419e907bf5f6ccf34cee671d6cda93"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-3.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-3.png",
+        "screenshotSha256": "c616cb3f7f0dc3803ff6820a2c854fb6d06871e6965dbcc20640ed52e03d6431"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-4.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-4.png",
+        "screenshotSha256": "354105a51dce530e9fbca2887435802183ebaba2d7e0f7bc1da695b25e1f1c20"
+      }
+    ],
+    "productVisualAcceptance": {
+      "status": "accepted",
+      "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
+      "acceptanceMode": "automated-icon-and-display-evidence",
+      "bindingStatus": "verified",
+      "acceptanceIdentity": "724c045bfc826f42"
+    }
+  },
+  "matrix": {
+    "requirements": [
+      {
+        "requirementIdentity": "soul-essence-source-identity",
+        "dimension": "source",
+        "status": "passed",
+        "sourceIdentities": [
+          "generated/soulessences.json#items[id=10093]"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "soul-essence-icon-asset",
+        "dimension": "visual",
+        "status": "passed",
+        "sourceIdentities": [
+          "public/assets/loadout/tex_icon_soulessences_101003_093.png"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "soul-essence-rarity-profession-resolution",
+        "dimension": "identity",
+        "status": "passed",
+        "sourceIdentities": [
+          "NewTable/soulessence.rows[id=10093]",
+          "generated/soulessences.json#items[id=10093]"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "soul-essence-level-rank-profile",
+        "dimension": "cultivation",
+        "status": "passed",
+        "sourceIdentities": [
+          "NewTable/soulessence_value.json",
+          "NewTable/soulessence_rank.json"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "soul-essence-effect-runtime-applied",
+        "dimension": "runtime",
+        "status": "passed",
+        "sourceIdentities": [
+          "NewTable/soulessence.rows[id=10093].reishiSkill"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "soul-essence-effect-star-values",
+        "dimension": "runtime",
+        "status": "passed",
+        "sourceIdentities": [
+          "NewTable/skillsub_ele_value.json"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "soul-essence-catalog-binding",
+        "dimension": "binding",
+        "status": "passed",
+        "sourceIdentities": [
+          "src/data/generated/soulessence-effect-mechanics.json#definitions[soulEssenceId=10093]"
+        ],
+        "passed": true
+      }
+    ],
+    "requiredCount": 7,
+    "passedCount": 7,
+    "complete": true
+  },
+  "ledger": {
+    "records": [],
+    "blockingCount": 0
+  },
+  "maturity": {
+    "currentState": "optimization-ready",
+    "earnedStates": [
+      "extracted",
+      "runtime-integrated",
+      "visually-accepted",
+      "optimization-ready"
+    ],
+    "optimizationReady": true,
+    "blockers": []
+  },
+  "validation": {
+    "status": "m12-b3-visual-acceptance-manifest-valid",
+    "issues": []
+  },
+  "manifestHash": "bda2a46fb3998dad"
+}

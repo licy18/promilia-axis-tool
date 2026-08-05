@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationBindingMatrix",
   "kind": "azpr-optimization-qualification-binding-matrix",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "b6e9596298cda056",
+  "rosterHash": "468f93c3cbf83459",
   "policy": {
     "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
     "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -21669,35 +21669,35 @@
       "setId": 1,
       "pieces": 2,
       "skillId": 19998106,
-      "qualificationReady": false,
+      "qualificationReady": true,
       "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998106].skillType"
     },
     {
       "setId": 1,
       "pieces": 4,
       "skillId": 19998006,
-      "qualificationReady": false,
+      "qualificationReady": true,
       "sourceIdentity": "NewTable/accessory_set.rows[id=1].skill|NewTable/skill.rows[id=19998006].skillType"
     },
     {
       "setId": 2,
       "pieces": 2,
       "skillId": 19998104,
-      "qualificationReady": false,
+      "qualificationReady": true,
       "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998104].skillType"
     },
     {
       "setId": 2,
       "pieces": 4,
       "skillId": 19998004,
-      "qualificationReady": false,
+      "qualificationReady": true,
       "sourceIdentity": "NewTable/accessory_set.rows[id=2].skill|NewTable/skill.rows[id=19998004].skillType"
     },
     {
       "setId": 3,
       "pieces": 2,
       "skillId": 19998105,
-      "qualificationReady": false,
+      "qualificationReady": true,
       "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998105].skillType"
     },
     {
@@ -21711,42 +21711,42 @@
       "setId": 4,
       "pieces": 2,
       "skillId": 19998103,
-      "qualificationReady": false,
+      "qualificationReady": true,
       "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998103].skillType"
     },
     {
       "setId": 4,
       "pieces": 4,
       "skillId": 19998003,
-      "qualificationReady": false,
+      "qualificationReady": true,
       "sourceIdentity": "NewTable/accessory_set.rows[id=4].skill|NewTable/skill.rows[id=19998003].skillType"
     },
     {
       "setId": 5,
       "pieces": 2,
       "skillId": 19998107,
-      "qualificationReady": false,
+      "qualificationReady": true,
       "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998107].skillType"
     },
     {
       "setId": 5,
       "pieces": 4,
       "skillId": 19998007,
-      "qualificationReady": false,
+      "qualificationReady": true,
       "sourceIdentity": "NewTable/accessory_set.rows[id=5].skill|NewTable/skill.rows[id=19998007].skillType"
     },
     {
       "setId": 6,
       "pieces": 2,
       "skillId": 19998108,
-      "qualificationReady": false,
+      "qualificationReady": true,
       "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998108].skillType"
     },
     {
       "setId": 6,
       "pieces": 4,
       "skillId": 19998008,
-      "qualificationReady": false,
+      "qualificationReady": true,
       "sourceIdentity": "NewTable/accessory_set.rows[id=6].skill|NewTable/skill.rows[id=19998008].skillType"
     }
   ],
@@ -21908,8 +21908,8 @@
     "actorEquipmentEdgeCount": 1507,
     "actorEquipmentQualifiedEdgeCount": 0,
     "setSkillThresholdCount": 12,
-    "setSkillThresholdQualifiedCount": 0,
+    "setSkillThresholdQualifiedCount": 11,
     "equipmentSlotCount": 5
   },
-  "bindingMatrixHash": "9d338b0e73fb7d16"
+  "bindingMatrixHash": "5c2638df48c6c7a5"
 }

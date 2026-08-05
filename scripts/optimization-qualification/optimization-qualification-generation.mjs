@@ -245,6 +245,10 @@ export async function createOptimizationQualificationArtifacts({
       generatedRoot,
       'character-acceptance-catalog.json'
     ),
+    visualAcceptance: path.join(
+      generatedRoot,
+      'm12-b3-visual-acceptance-catalog.json'
+    ),
     kiboPassives: path.join(generatedRoot, 'kibo-passive-mechanics.json'),
     kiboMaturity: path.join(
       projectRoot,
@@ -841,6 +845,7 @@ export async function createOptimizationQualificationArtifacts({
     setSkills,
     staticCatalog,
     characterAcceptance: sources.characterAcceptance.value,
+    visualAcceptance: sources.visualAcceptance.value,
     kiboPassives: sources.kiboPassives.value,
     kiboMaturity: sources.kiboMaturity.value,
     cultivationCatalog,
@@ -861,7 +866,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-E12',
+      phase: 'M12-B3-E13',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -970,6 +975,7 @@ function createQualificationManifests({
   setSkills,
   staticCatalog,
   characterAcceptance,
+  visualAcceptance,
   kiboPassives,
   kiboMaturity,
   cultivationCatalog,
@@ -983,6 +989,12 @@ function createQualificationManifests({
   const characterAcceptanceById = new Map(
     (characterAcceptance.entries ?? []).map(entry => [
       Number(entry.ownerId),
+      entry,
+    ])
+  );
+  const visualAcceptanceById = new Map(
+    (visualAcceptance?.entries ?? []).map(entry => [
+      `${entry.objectKind}:${entry.objectId}`,
       entry,
     ])
   );
@@ -1153,6 +1165,9 @@ function createQualificationManifests({
     );
   }
   for (const soul of publicSoulEssences) {
+    const soulVisual = visualAcceptanceById.get(
+      `soul-essence:${soul.soulEssenceId}`
+    );
     const effectApplied =
       soul.effectMechanics?.runtimeStatus === 'runtime-applied';
     const effectRuntimeGaps = soul.effectMechanics?.runtimeGaps ?? [
@@ -1184,10 +1199,10 @@ function createQualificationManifests({
               'Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied.'
             ),
           ]),
-      blocker(
+      ...createVisualAcceptanceBlocker(
+        soulVisual,
         'soulessence-visual-acceptance-not-published',
-        'not-implemented',
-        'No product visual acceptance manifest exists for this soul essence.'
+        'soul essence'
       ),
     ];
     records.push(
@@ -1199,18 +1214,26 @@ function createQualificationManifests({
           `generated/soulessences.json#items[id=${soul.soulEssenceId}]`,
           soul.sourceIdentity,
         ].filter(Boolean),
-        maturityState: effectApplied ? 'runtime-integrated' : 'extracted',
+        maturityState:
+          soulVisual?.maturityState ??
+          (effectApplied ? 'runtime-integrated' : 'extracted'),
         blockers,
-        evidence: soul,
+        evidence: {
+          ...soul,
+          visualAcceptanceManifestHash: soulVisual?.manifestHash ?? null,
+        },
       })
     );
   }
   for (const item of publicEquipment) {
+    const equipmentVisual = visualAcceptanceById.get(
+      `equipment:${item.equipmentId}`
+    );
     const blockers = [
-      blocker(
+      ...createVisualAcceptanceBlocker(
+        equipmentVisual,
         'equipment-visual-acceptance-not-published',
-        'not-implemented',
-        'No product visual acceptance manifest exists for this equipment instance contract.'
+        'equipment instance contract'
       ),
     ];
     if (!item.staticProfileApplied) {
@@ -1231,9 +1254,12 @@ function createQualificationManifests({
           `generated/equipment.json#items[id=${item.equipmentId}]`,
           item.sourceIdentity,
         ].filter(Boolean),
-        maturityState: 'extracted',
+        maturityState: equipmentVisual?.maturityState ?? 'extracted',
         blockers,
-        evidence: item,
+        evidence: {
+          ...item,
+          visualAcceptanceManifestHash: equipmentVisual?.manifestHash ?? null,
+        },
       })
     );
   }
@@ -1244,6 +1270,9 @@ function createQualificationManifests({
     ])
   );
   for (const setSkill of setSkills) {
+    const setSkillVisual = visualAcceptanceById.get(
+      `set-skill:${setSkill.setId}:${setSkill.pieces}`
+    );
     const effectMechanics = setSkillEffectByKey.get(
       `${setSkill.setId}:${setSkill.pieces}`
     );
@@ -1264,7 +1293,9 @@ function createQualificationManifests({
         objectId: `${setSkill.setId}:${setSkill.pieces}`,
         displayName: `套装 ${setSkill.setId} ${setSkill.pieces}件`,
         sourceIdentities: [setSkill.sourceIdentity],
-        maturityState: effectApplied ? 'runtime-integrated' : 'extracted',
+        maturityState:
+          setSkillVisual?.maturityState ??
+          (effectApplied ? 'runtime-integrated' : 'extracted'),
         blockers: [
           ...(effectApplied
             ? []
@@ -1279,13 +1310,17 @@ function createQualificationManifests({
                   }
                 ),
               ]),
-          blocker(
+          ...createVisualAcceptanceBlocker(
+            setSkillVisual,
             'set-skill-visual-acceptance-not-published',
-            'not-implemented',
-            'No product visual acceptance manifest exists for this set skill.'
+            'set skill'
           ),
         ],
-        evidence: { ...setSkill, effectMechanics },
+        evidence: {
+          ...setSkill,
+          effectMechanics,
+          visualAcceptanceManifestHash: setSkillVisual?.manifestHash ?? null,
+        },
       })
     );
   }
@@ -1837,8 +1872,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-E12',
-    status: 'b3-e12-implemented',
+    phase: 'M12-B3-E13',
+    status: 'b3-e13-implemented',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2072,6 +2107,36 @@ function blocker(code, category, message, details = {}) {
   return { code, category, message, ...details };
 }
 
+function createVisualAcceptanceBlocker(
+  visualEntry,
+  notPublishedCode,
+  subjectName
+) {
+  if (!visualEntry) {
+    return [
+      blocker(
+        notPublishedCode,
+        'not-implemented',
+        `No product visual acceptance manifest exists for this ${subjectName}.`
+      ),
+    ];
+  }
+  if (visualEntry.optimizationReady !== true) {
+    return [
+      blocker(
+        'acceptance-product-visual-signoff-pending',
+        'not-implemented',
+        'Visual acceptance manifest is published but product signoff or blocking evidence remains.',
+        {
+          manifestHash: visualEntry.manifestHash ?? null,
+          manifestBlockers: visualEntry.blockers ?? [],
+        }
+      ),
+    ];
+  }
+  return [];
+}
+
 function createGapLedger(manifests) {
   return manifests.flatMap(manifest =>
     manifest.blockers.map(item => {
@@ -2289,7 +2354,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-E12 Profession-Gated Soul Essence\n\n' +
+    '# M12-B3-E13 Visual Acceptance Pipeline\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -2298,7 +2363,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: C2-C14 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, target-debuff, and set-three source-conflict contracts. C15 adds a source-driven periodic persistent-root family with native time-loop cadence, condition re-evaluation, finite Cover leaves, right-open expiry, unload provenance, and cycle phase state. Soul essences 10084, 10152, and 10197 are runtime-applied; 10078 remains evidence-insufficient because native multi-PropertyTag matching for tags 302/303 is not closed. E11 registers the product-confirmed dead tuning-intensity branch (element 19003206) of soul 10095 as excluded, closes 10095 as runtime-applied with the single team-attack leaf 19003203, and leaves no runtime-unresolved souls (62/62). E12 gates soul effect activation by character profession: the cultivation catalog carries character position and soul profession, the runtime emits no effect commands for profession-mismatched loadouts while static level/rank growth still applies, formal binding edges remain profession-aware (103 match / 198 universal / 381 mismatch), and the Workbench picker marks mismatched souls as stat-only.\n' +
+    '- Dynamic loadout batches: C2-C14 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, target-debuff, and set-three source-conflict contracts. C15 adds a source-driven periodic persistent-root family with native time-loop cadence, condition re-evaluation, finite Cover leaves, right-open expiry, unload provenance, and cycle phase state. Soul essences 10084, 10152, and 10197 are runtime-applied; 10078 remains evidence-insufficient because native multi-PropertyTag matching for tags 302/303 is not closed. E11 registers the product-confirmed dead tuning-intensity branch (element 19003206) of soul 10095 as excluded, closes 10095 as runtime-applied with the single team-attack leaf 19003203, and leaves no runtime-unresolved souls (62/62). E12 gates soul effect activation by character profession: the cultivation catalog carries character position and soul profession, the runtime emits no effect commands for profession-mismatched loadouts while static level/rank growth still applies, formal binding edges remain profession-aware (103 match / 198 universal / 381 mismatch), and the Workbench picker marks mismatched souls as stat-only. E13 publishes the M12-B3 visual acceptance pipeline: per-object manifests with icon asset evidence, display/effect binding, deterministic requirement matrix and blocking ledger for 62 soul essences, 137 equipment contracts and 12 set skills; 210 objects reach optimization-ready (62 souls / 137 equipment / 11 set skills), set-skill:3:4 remains blocked by its dynamic-unapplied evidence, and blocking gaps drop from 335 to 125.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'

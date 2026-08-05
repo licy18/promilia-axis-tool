@@ -176,13 +176,12 @@ describe('M12-B3 optimization qualification generation', () => {
       sourceCharacterIds: [199001, 199002],
       aliasHashesEqual: true,
     });
-    expect(artifacts.catalog.admission).toEqual({
-      characters: [],
-      kibos: [],
-      soulEssences: [],
-      equipment: [],
-      setSkills: [],
-    });
+    expect(artifacts.catalog.admission.characters).toEqual([]);
+    expect(artifacts.catalog.admission.kibos).toEqual([]);
+    expect(artifacts.catalog.admission.soulEssences).toHaveLength(62);
+    expect(artifacts.catalog.admission.equipment).toHaveLength(137);
+    expect(artifacts.catalog.admission.setSkills).toHaveLength(11);
+    expect(artifacts.catalog.admission.setSkills).not.toContain('3:4');
     expect(
       artifacts.gaps.records.filter(
         record => record.code === 'soulessence-effect-skill-dynamic-unapplied'
@@ -193,6 +192,13 @@ describe('M12-B3 optimization qualification generation', () => {
         record =>
           record.objectKind === 'soul-essence' &&
           record.maturityState === 'runtime-integrated'
+      )
+    ).toHaveLength(0);
+    expect(
+      artifacts.manifests.records.filter(
+        record =>
+          record.objectKind === 'soul-essence' &&
+          record.maturityState === 'optimization-ready'
       )
     ).toHaveLength(62);
     const unappliedSetSkillGaps = artifacts.gaps.records.filter(
@@ -214,6 +220,11 @@ describe('M12-B3 optimization qualification generation', () => {
       setSkillManifests.filter(
         record => record.maturityState === 'runtime-integrated'
       )
+    ).toHaveLength(1);
+    expect(
+      setSkillManifests.filter(
+        record => record.maturityState === 'optimization-ready'
+      )
     ).toHaveLength(11);
     const mechanismFamilyBySetSkillId = new Map([
       ['1:4', 'set-skill-before-skill-composite-immediate'],
@@ -229,8 +240,8 @@ describe('M12-B3 optimization qualification generation', () => {
       expect(manifest).toMatchObject({
         objectKind: 'set-skill',
         objectId,
-        maturityState: 'runtime-integrated',
-        optimizationReady: false,
+        maturityState: 'optimization-ready',
+        optimizationReady: true,
         evidence: {
           effectMechanics: {
             mechanismFamily,
@@ -250,19 +261,35 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 335,
+      blockingUniqueGapCount: 125,
       byCategory: {
-        'not-implemented': 318,
+        'not-implemented': 108,
         'evidence-insufficient': 17,
       },
     });
     expect(artifacts.summary.optimizationReadyCounts).toEqual({
       character: 0,
       kibo: 0,
-      'soul-essence': 0,
-      equipment: 0,
-      'set-skill': 0,
+      'soul-essence': 62,
+      equipment: 137,
+      'set-skill': 11,
     });
+    expect(
+      artifacts.gaps.records.filter(
+        record =>
+          record.code === 'soulessence-visual-acceptance-not-published'
+      )
+    ).toHaveLength(0);
+    expect(
+      artifacts.gaps.records.filter(
+        record => record.code === 'equipment-visual-acceptance-not-published'
+      )
+    ).toHaveLength(0);
+    expect(
+      artifacts.gaps.records.filter(
+        record => record.code === 'acceptance-product-visual-signoff-pending'
+      )
+    ).toHaveLength(1);
     expect(artifacts.summary.m12cLocked).toBe(true);
     expect(
       artifacts.gaps.records.filter(

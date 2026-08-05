@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12B3VisualAcceptanceManifest",
+  "kind": "m12-b3-visual-acceptance-manifest",
+  "owner": {
+    "objectKind": "equipment",
+    "objectId": "1350131",
+    "displayName": "荒角戒指"
+  },
+  "source": {
+    "sourceIdentities": [
+      "generated/equipment.json#items[id=1350131]",
+      "NewTable/accessory.rows[id=1350131]"
+    ],
+    "profileHash": "54651d154233d3bc"
+  },
+  "evidence": {
+    "icon": {
+      "path": "public/assets/loadout/tex_icon_equipment_item_suit15_5.png",
+      "fileName": "tex_icon_equipment_item_suit15_5.png",
+      "sha256": "82f9160cc48e64e6d06417b157fedc30ee1f13d6814ebfd1b8c740e3080cc98b",
+      "bytes": 69314,
+      "status": "verified"
+    },
+    "displaySummary": "攻击 353,433 / 暴击率 3.5%,11.3% / 生命 3.3% / 攻击 3.3% / 攻击 3.3% / 伤害增幅 2.4%",
+    "binding": {
+      "slot": "ring",
+      "rarity": 4,
+      "setId": 4,
+      "maximumLevel": 9
+    },
+    "automatedVisualEvidence": [
+      {
+        "scenarioIdentity": "workbench-loadout-detail-equipment-1350131",
+        "status": "automated-icon-asset-verified",
+        "iconPath": "public/assets/loadout/tex_icon_equipment_item_suit15_5.png",
+        "iconSha256": "82f9160cc48e64e6d06417b157fedc30ee1f13d6814ebfd1b8c740e3080cc98b"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-soul-essences.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-soul-essences.png",
+        "screenshotSha256": "1c576e50accdeac23a0248e3e20d8d497a9ca28a496d9be262970a51f0fc10db"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-1.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-1.png",
+        "screenshotSha256": "497579335049e71e58650d26f1c19b1614a4f36e7a43c83c73d8823d64d00308"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-2.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-2.png",
+        "screenshotSha256": "97efe7d931ff0d11c284a7cd56916382f9419e907bf5f6ccf34cee671d6cda93"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-3.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-3.png",
+        "screenshotSha256": "c616cb3f7f0dc3803ff6820a2c854fb6d06871e6965dbcc20640ed52e03d6431"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-4.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-4.png",
+        "screenshotSha256": "354105a51dce530e9fbca2887435802183ebaba2d7e0f7bc1da695b25e1f1c20"
+      }
+    ],
+    "productVisualAcceptance": {
+      "status": "accepted",
+      "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
+      "acceptanceMode": "automated-icon-and-display-evidence",
+      "bindingStatus": "verified",
+      "acceptanceIdentity": "1a437f0114dec46b"
+    }
+  },
+  "matrix": {
+    "requirements": [
+      {
+        "requirementIdentity": "equipment-source-identity",
+        "dimension": "source",
+        "status": "passed",
+        "sourceIdentities": [
+          "generated/equipment.json#items[id=1350131]"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "equipment-icon-asset",
+        "dimension": "visual",
+        "status": "passed",
+        "sourceIdentities": [
+          "public/assets/loadout/tex_icon_equipment_item_suit15_5.png"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "equipment-slot-rarity-resolution",
+        "dimension": "identity",
+        "status": "passed",
+        "sourceIdentities": [
+          "NewTable/accessory.rows[id=1350131]",
+          "generated/equipment.json#items[id=1350131]"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "equipment-static-profile-applied",
+        "dimension": "cultivation",
+        "status": "passed",
+        "sourceIdentities": [
+          "NewTable/accessory.rows[id=1350131]"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "equipment-set-resolution",
+        "dimension": "identity",
+        "status": "passed",
+        "sourceIdentities": [
+          "NewTable/accessory_set.json"
+        ],
+        "passed": true
+      }
+    ],
+    "requiredCount": 5,
+    "passedCount": 5,
+    "complete": true
+  },
+  "ledger": {
+    "records": [],
+    "blockingCount": 0
+  },
+  "maturity": {
+    "currentState": "optimization-ready",
+    "earnedStates": [
+      "extracted",
+      "runtime-integrated",
+      "visually-accepted",
+      "optimization-ready"
+    ],
+    "optimizationReady": true,
+    "blockers": []
+  },
+  "validation": {
+    "status": "m12-b3-visual-acceptance-manifest-valid",
+    "issues": []
+  },
+  "manifestHash": "4f891144c7c7aaff"
+}

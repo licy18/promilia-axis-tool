@@ -1,0 +1,5128 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12B3VisualAcceptanceCatalog",
+  "kind": "m12-b3-visual-acceptance-catalog",
+  "generatedAt": "2026-08-05T00:00:00.000Z",
+  "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
+  "acceptanceMode": "automated-icon-and-display-evidence",
+  "overviewSheets": [
+    {
+      "fileName": "overview-soul-essences.png",
+      "sha256": "1c576e50accdeac23a0248e3e20d8d497a9ca28a496d9be262970a51f0fc10db",
+      "bytes": 822707
+    },
+    {
+      "fileName": "overview-equipment-1.png",
+      "sha256": "497579335049e71e58650d26f1c19b1614a4f36e7a43c83c73d8823d64d00308",
+      "bytes": 324620
+    },
+    {
+      "fileName": "overview-equipment-2.png",
+      "sha256": "97efe7d931ff0d11c284a7cd56916382f9419e907bf5f6ccf34cee671d6cda93",
+      "bytes": 383195
+    },
+    {
+      "fileName": "overview-equipment-3.png",
+      "sha256": "c616cb3f7f0dc3803ff6820a2c854fb6d06871e6965dbcc20640ed52e03d6431",
+      "bytes": 418884
+    },
+    {
+      "fileName": "overview-equipment-4.png",
+      "sha256": "354105a51dce530e9fbca2887435802183ebaba2d7e0f7bc1da695b25e1f1c20",
+      "bytes": 191039
+    }
+  ],
+  "summary": {
+    "total": 211,
+    "published": 211,
+    "accepted": 210,
+    "optimizationReady": 210,
+    "blockingLedgerCount": 1,
+    "byObjectKind": {
+      "soul-essence": {
+        "total": 62,
+        "accepted": 62,
+        "optimizationReady": 62
+      },
+      "equipment": {
+        "total": 137,
+        "accepted": 137,
+        "optimizationReady": 137
+      },
+      "set-skill": {
+        "total": 12,
+        "accepted": 11,
+        "optimizationReady": 11
+      }
+    }
+  },
+  "entries": [
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10001",
+      "displayName": "汁石就是力量",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "eee9604705746bc5",
+      "evidence": {
+        "iconSha256": "58bf550e9bda474addae14ee7d81b1058b5979922a928d93926c0c2c87aa6bb1",
+        "binding": {
+          "effectSkillId": 1900480,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10002",
+      "displayName": "家书",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "c1f8f2cb929ec8fd",
+      "evidence": {
+        "iconSha256": "8cdc19ee9e4aad07b14c8a0e1983f4f103987712a56d10fe0dfafa2d6a1d1616",
+        "binding": {
+          "effectSkillId": 1900610,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10008",
+      "displayName": "可以吃吗",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "8bf5e993eb90c835",
+      "evidence": {
+        "iconSha256": "6b624fd031fb3febc47ac892d99b63a7709cd77bace1a7df92c2598dd0a5451c",
+        "binding": {
+          "effectSkillId": 1900120,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10011",
+      "displayName": "功夫是这样的！",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "fafe2a69736d15a1",
+      "evidence": {
+        "iconSha256": "1cf703ac38ef41d0814cb0a78a6531839d72c8cbf3467dd7feaff7bf4b7d6797",
+        "binding": {
+          "effectSkillId": 1900530,
+          "mechanismFamily": "equipped-actor-critical-damage-relay-property",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10018",
+      "displayName": "飞行试验",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d1d529e42b51cb6e",
+      "evidence": {
+        "iconSha256": "b891278c98c64cdee789f194f2135e586b8e0380746ad76d61bac772aca59bb9",
+        "binding": {
+          "effectSkillId": 1900400,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10032",
+      "displayName": "唤灵",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "284fde3fa8d52ee2",
+      "evidence": {
+        "iconSha256": "928447c0aefe23343a24ab29b64aa0427a7010cdfb132dc060c1dbf51a3112e7",
+        "binding": {
+          "effectSkillId": 1900340,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10033",
+      "displayName": "咕嘟咕嘟",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "a667e37dabb7775f",
+      "evidence": {
+        "iconSha256": "c0565b78ae5ff37fbcd2c562417799bd0b5c8c558a3578be5046d0e95e12a341",
+        "binding": {
+          "effectSkillId": 1900360,
+          "mechanismFamily": "equipped-actor-persistent-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10034",
+      "displayName": "五谷丰登",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "31341785a5f05cc0",
+      "evidence": {
+        "iconSha256": "5206e1de33aa60e5f0faaaf004882d1e19ca1a2359d951435813ad8b7f612115",
+        "binding": {
+          "effectSkillId": 1900890,
+          "mechanismFamily": "equipped-actor-persistent-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10037",
+      "displayName": "厨房的秘密",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "a372ea721404b75f",
+      "evidence": {
+        "iconSha256": "c138ba915b0a83c07505def3835c995bea375bd52f12c7ac38eda67ee6bf6fd0",
+        "binding": {
+          "effectSkillId": 1900450,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10043",
+      "displayName": "宣告黎明之花",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "25029c4f2e75ce68",
+      "evidence": {
+        "iconSha256": "a49e944c682e2ca2a807496224794663963b173036d2ceff23ca753c3a0ce67d",
+        "binding": {
+          "effectSkillId": 1900330,
+          "mechanismFamily": "equipped-actor-get-element-property-before-acquire",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10044",
+      "displayName": "狩猎姿态",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "8733c508506fb17e",
+      "evidence": {
+        "iconSha256": "2b052d96f50a23fc54713a20b35cc9ba05efa96b20381d24e9ef090cb8a4a72c",
+        "binding": {
+          "effectSkillId": 1900550,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10047",
+      "displayName": "传承",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "40e5172c358e29db",
+      "evidence": {
+        "iconSha256": "d42d8784a363fbfd67db42a54f005f3beb151c5b8936bdd559bde18aa1f328bf",
+        "binding": {
+          "effectSkillId": 1900810,
+          "mechanismFamily": "equipped-actor-persistent-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10048",
+      "displayName": "璇枢",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "e543275b7dc95574",
+      "evidence": {
+        "iconSha256": "ec400d655eee24fbce61a12d1469bb4bb70f65cf3f8f53403511f02587138b47",
+        "binding": {
+          "effectSkillId": 1900920,
+          "mechanismFamily": "equipped-actor-switch-enter-team-property",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10050",
+      "displayName": "魂引",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "07a70aabc1798906",
+      "evidence": {
+        "iconSha256": "c7d49b5317ef60bd51c91504154da20100cec8c8b081f917ed0afe1ebc7f370b",
+        "binding": {
+          "effectSkillId": 1900840,
+          "mechanismFamily": "equipped-actor-persistent-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10052",
+      "displayName": "小小木雕",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "c50ae8003d43474d",
+      "evidence": {
+        "iconSha256": "bcf8b5191387cdf14febbbadd5e46f9b0b57ce56833b43177d283eb0c1ca8365",
+        "binding": {
+          "effectSkillId": 1900910,
+          "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10055",
+      "displayName": "远古秘钥",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "2ba7c7b2fb0f0f01",
+      "evidence": {
+        "iconSha256": "72485e3d91b544ec9271babc1ac4d6b3cd037531dd1ef5fcecbd40b1eebb417a",
+        "binding": {
+          "effectSkillId": 1900930,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10056",
+      "displayName": "淳朴之音",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "32e0b1a265880e9d",
+      "evidence": {
+        "iconSha256": "74a86ca8c5438e3068cde74e9a315321e69828651f87bd17716bad27634f71c5",
+        "binding": {
+          "effectSkillId": 1900820,
+          "mechanismFamily": "equipped-actor-persistent-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10057",
+      "displayName": "命土",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "b7887fe744fecc54",
+      "evidence": {
+        "iconSha256": "76b668e5a3545233093973c6be77d32726e56db26a75f166d5b33e3eed363692",
+        "binding": {
+          "effectSkillId": 1900860,
+          "mechanismFamily": "equipped-actor-persistent-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10058",
+      "displayName": "往事",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "074a09fcf381e125",
+      "evidence": {
+        "iconSha256": "f6d93d0ba168f4e6bd8fff1487cae45302984b818d360a230268c5804d275443",
+        "binding": {
+          "effectSkillId": 1900870,
+          "mechanismFamily": "equipped-actor-persistent-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10059",
+      "displayName": "禁呪",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "ad5cf11b587ca957",
+      "evidence": {
+        "iconSha256": "28a9fc1451ce7c7bd38a77550e64b5e0ede8a8f67b34d712b7338930f8ed97f4",
+        "binding": {
+          "effectSkillId": 1900850,
+          "mechanismFamily": "equipped-actor-persistent-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10060",
+      "displayName": "宵祝",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "92ec302e1bd160c2",
+      "evidence": {
+        "iconSha256": "05e611808657f4148baa2dba3dbf6bb6af36ae37eea0729d90a387d201d75b90",
+        "binding": {
+          "effectSkillId": 1900900,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10061",
+      "displayName": "残局",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "9941c0ecc23b3d7f",
+      "evidence": {
+        "iconSha256": "31e1af84d86cab066c21c45f974b123a30cb714648273a9a7784289a8ad0c449",
+        "binding": {
+          "effectSkillId": 1900800,
+          "mechanismFamily": "equipped-actor-persistent-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10062",
+      "displayName": "分道扬镳",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "b38c4e0ebc391c3d",
+      "evidence": {
+        "iconSha256": "ee5b5657ee486b74aef5e65970e63875ac8d9a714698b11130bcbc827de8313f",
+        "binding": {
+          "effectSkillId": 1900830,
+          "mechanismFamily": "equipped-actor-persistent-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10063",
+      "displayName": "屋嘟娃娃",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "34c91bf74eb27dde",
+      "evidence": {
+        "iconSha256": "83e3c6beb3d4f3bf5bb02aedbb2542c0ee3ba084084389f8748aebd54fa2c41c",
+        "binding": {
+          "effectSkillId": 1900880,
+          "mechanismFamily": "equipped-actor-immediate-resource-heal-effect",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10071",
+      "displayName": "羽夜的思念",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "042128d10f05bab6",
+      "evidence": {
+        "iconSha256": "9d6a9e2d2443cc0544fef51b9a5db014bf641417f9073d46e2d16e48ce2fa828",
+        "binding": {
+          "effectSkillId": 1900650,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10076",
+      "displayName": "碧空之下",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "c9a4390121c8029c",
+      "evidence": {
+        "iconSha256": "f91cf4e1b0f2a16d0cece07cef49117526a1e44a76370f305b56d8f2853d5204",
+        "binding": {
+          "effectSkillId": 1900190,
+          "mechanismFamily": "equipped-actor-composite-property-effects",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10078",
+      "displayName": "星晚的追忆",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "817e6d661ec3cbd1",
+      "evidence": {
+        "iconSha256": "d9335231a2ff3f32bcdd8b82a91aebd1123c062db48a78563907bc0571520a2b",
+        "binding": {
+          "effectSkillId": 1900460,
+          "mechanismFamily": "equipped-loadout-periodic-conditional-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10084",
+      "displayName": "风语之愿",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "4ed8091bdbb7f85d",
+      "evidence": {
+        "iconSha256": "e48f4169fc289db7391eac1c282e5bfe9762f8857392a4698f0e99b807ee415f",
+        "binding": {
+          "effectSkillId": 1900600,
+          "mechanismFamily": "equipped-loadout-periodic-conditional-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10093",
+      "displayName": "无法思考",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "bda2a46fb3998dad",
+      "evidence": {
+        "iconSha256": "f75f9956a10e307a325a091ce1f1412293bf8230d832153704b79c4d740b26ff",
+        "binding": {
+          "effectSkillId": 1900230,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10094",
+      "displayName": "陪伴",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "1c1390f9b84b8166",
+      "evidence": {
+        "iconSha256": "981f4974f8b215baeb09bba72fd675f9e108acebff8dce1c69360c4ad5cc4a78",
+        "binding": {
+          "effectSkillId": 1900660,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10095",
+      "displayName": "甜点时光",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "fc373e123202f7f4",
+      "evidence": {
+        "iconSha256": "edc0bf61a67400ba6e30e8ba4dc89e46d50765c6a5e2353dda0277ebf0ff786d",
+        "binding": {
+          "effectSkillId": 1900320,
+          "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10097",
+      "displayName": "玫瑰色午后",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "305b7eb075532094",
+      "evidence": {
+        "iconSha256": "a07b369130e94d29856c8b56f13885cd1919d16874e9cffa1966cb488ed26006",
+        "binding": {
+          "effectSkillId": 1900470,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10098",
+      "displayName": "此身为枪",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d5797f75c5188e81",
+      "evidence": {
+        "iconSha256": "5df1cc3d6a73ba95a434781c8b15f82a57bbcdd7a05bcab2742260f9107be946",
+        "binding": {
+          "effectSkillId": 1900670,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10101",
+      "displayName": "归来",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "b538aadea898a541",
+      "evidence": {
+        "iconSha256": "95bee25b6cf610b950fef9f841d68eb06cfb24ac6f3463fb704d2639e2f04eef",
+        "binding": {
+          "effectSkillId": 1900200,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10107",
+      "displayName": "药草大丰收",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "23c3381e02183eae",
+      "evidence": {
+        "iconSha256": "135e3eb41992694879c71b8f8e5535a393a4a66fef345faaf581456d90d3c971",
+        "binding": {
+          "effectSkillId": 1900350,
+          "mechanismFamily": "equipped-actor-immediate-resource-heal-effect",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10121",
+      "displayName": "折纸寄情",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "0792e0b7cc0ff670",
+      "evidence": {
+        "iconSha256": "bf29f643b73f6d3c153d0cf20b6d5a78106ab6a0bd2a40393c07416502344d78",
+        "binding": {
+          "effectSkillId": 1900580,
+          "mechanismFamily": "equipped-actor-composite-property-effects",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10122",
+      "displayName": "花之舞",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "94a21a62c92c41ab",
+      "evidence": {
+        "iconSha256": "d167e88cd19de7afc1fbc22a30a6b1ec747a93d9e8d951c95c3217c310f4c4b1",
+        "binding": {
+          "effectSkillId": 1900570,
+          "mechanismFamily": "equipped-actor-composite-property-effects",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10123",
+      "displayName": "桃芳春笺",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "21236c7ef955c798",
+      "evidence": {
+        "iconSha256": "046ec7497e373d233a55aa05fccb92627cb318e2210560e926d313d0de42bd1c",
+        "binding": {
+          "effectSkillId": 1900590,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10124",
+      "displayName": "夕阳下的约定",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "7d1f4d94890c7ef7",
+      "evidence": {
+        "iconSha256": "b2f9bebeb772f5e26aafb755698bb859871543f922a83abc56cc03a8a8fc9611",
+        "binding": {
+          "effectSkillId": 1900410,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10125",
+      "displayName": "高手在此！",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "962e276fa6972133",
+      "evidence": {
+        "iconSha256": "4f9750646338f0df55faf7b0366a2cc6902b6010f404c7622e37fa531cafeec3",
+        "binding": {
+          "effectSkillId": 1900540,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10130",
+      "displayName": "女仆的疗养日",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "3116bd80cbb270fe",
+      "evidence": {
+        "iconSha256": "47a9cbed148cc59558e41205967ef5358376400332f19e47b1b4f7604ff85a1e",
+        "binding": {
+          "effectSkillId": 1900280,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10131",
+      "displayName": "节日佳肴",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "dd5aacad6bc10e81",
+      "evidence": {
+        "iconSha256": "ceafdae89a9b09f7aa17dc93542e1cc0071cf48754de7ea27290e0a04d125677",
+        "binding": {
+          "effectSkillId": 1900270,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10132",
+      "displayName": "暗中观察",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "4f5412294841b41d",
+      "evidence": {
+        "iconSha256": "82161efdfb70700f17c274fa76e96a01b091c66baff5adf88733141bf18b8be3",
+        "binding": {
+          "effectSkillId": 1900430,
+          "mechanismFamily": "equipped-actor-composite-property-effects",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10133",
+      "displayName": "「森林女神」来访",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "004e0f79ba710892",
+      "evidence": {
+        "iconSha256": "87f0e02b316a7a46a760107f27d39e75de97b7bfaf8c92496912f5a8540a2dad",
+        "binding": {
+          "effectSkillId": 1900440,
+          "mechanismFamily": "equipped-actor-persistent-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10136",
+      "displayName": "林间野餐",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "048c184e5d9d9138",
+      "evidence": {
+        "iconSha256": "d799c6a3c5b5b10ca37edec54932482df38a298eb633b092b7b4b21c0ec080b2",
+        "binding": {
+          "effectSkillId": 1900210,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10146",
+      "displayName": "新生",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f04fca28a2df5fee",
+      "evidence": {
+        "iconSha256": "91f527c28f285d13bf8c490ffd87b33650bd96b53214052038206136cb4ef1e4",
+        "binding": {
+          "effectSkillId": 1900420,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10147",
+      "displayName": "充能时间",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "816c6148b5f8f0b3",
+      "evidence": {
+        "iconSha256": "af83e3ed5c80b02a1fe2df390c2d600430f6a77795ed18a0d768d79c0366d8fb",
+        "binding": {
+          "effectSkillId": 1900110,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10149",
+      "displayName": "失控飞行",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f510ef55448bfb4e",
+      "evidence": {
+        "iconSha256": "53a5d862efb88d341212765f1594fac39798f7bc51b5936fbb2f535260c6a84e",
+        "binding": {
+          "effectSkillId": 1900220,
+          "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10150",
+      "displayName": "狼少女的心意",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "de2911cad71dc585",
+      "evidence": {
+        "iconSha256": "5a7ecfa65288b5c87469053adec83c8ef700f5fd4918a9f2f56ac79bf6032a97",
+        "binding": {
+          "effectSkillId": 1900560,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10151",
+      "displayName": "非常规钓鱼",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "8910350108c4cdb0",
+      "evidence": {
+        "iconSha256": "64b12053bd30d2b803df4fa7c2cbbf97a98c7805a4924c3885c00b756eaae903",
+        "binding": {
+          "effectSkillId": 1900130,
+          "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10152",
+      "displayName": "真正的宝藏",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "aaf0d0279e93098b",
+      "evidence": {
+        "iconSha256": "c514d9a0e3d724c0c805dff2eede6ed873fa4516db146c1d7893ddd301d83bfe",
+        "binding": {
+          "effectSkillId": 1900490,
+          "mechanismFamily": "equipped-loadout-periodic-conditional-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10154",
+      "displayName": "月下秘仪",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "b9ef1a0431a5de21",
+      "evidence": {
+        "iconSha256": "19c5a5580e5377c5fc5fb3ce490c70df2ba78bd98689fbecd780c154237b70a0",
+        "binding": {
+          "effectSkillId": 1900240,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10155",
+      "displayName": "恶作剧前奏",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "052f81d559f88f8d",
+      "evidence": {
+        "iconSha256": "ff316dcff8e5b604cf9d54f6a2d2281b9d7c6bdb724da4bc290e528fc236c06d",
+        "binding": {
+          "effectSkillId": 1900250,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10156",
+      "displayName": "在勒布上空",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "3a2e0459ab6a3125",
+      "evidence": {
+        "iconSha256": "779cdde7d2931a8e5875a35012bcafbcf92b7e5c59f1b3967d3a815d1504a3ae",
+        "binding": {
+          "effectSkillId": 1900260,
+          "mechanismFamily": "equipped-actor-persistent-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10169",
+      "displayName": "软软棉花肉",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d99f7fdd56d04159",
+      "evidence": {
+        "iconSha256": "16fefead07600d52beea909ee3883d8fa8dac2719e8c870f61cbd942eaa0e8b3",
+        "binding": {
+          "effectSkillId": 1900750,
+          "mechanismFamily": "equipped-actor-shield-acquire-team-property",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10170",
+      "displayName": "攀高的幼崽",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "53873f8358f53709",
+      "evidence": {
+        "iconSha256": "f432ff92d117ca74d80e9d52c95a48047d71d8bed6a3553434cf196d2ee3508f",
+        "binding": {
+          "effectSkillId": 1900740,
+          "mechanismFamily": "equipped-actor-composite-property-effects",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10175",
+      "displayName": "一点都不痛",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "2dffec068aa95636",
+      "evidence": {
+        "iconSha256": "4502b77cda2fdeeecabe1027f963716977af9d86a92816774370220c4655d51e",
+        "binding": {
+          "effectSkillId": 1900140,
+          "mechanismFamily": "equipped-actor-heal-event-target-property",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10176",
+      "displayName": "温柔的照护",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "41a9989dd1f6961c",
+      "evidence": {
+        "iconSha256": "f7620b7e3a0ead14da1f27efc55050d848080d4e6390e2ec58ec11b3a6b5bda0",
+        "binding": {
+          "effectSkillId": 1900150,
+          "mechanismFamily": "equipped-actor-heal-event-target-property",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10196",
+      "displayName": "热火朝天",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "1879d4bf5829e08c",
+      "evidence": {
+        "iconSha256": "b6e5f104cc0c26c10f5aa9bec829a4f040846a0a0192551045c00e0d16ed4e46",
+        "binding": {
+          "effectSkillId": 1900790,
+          "mechanismFamily": "equipped-actor-composite-property-effects",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10197",
+      "displayName": "安睡吧，宝贝",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "b18460e019323043",
+      "evidence": {
+        "iconSha256": "89a8f2842e7ee8e14ac8e6884826cc1beab86e2aaddb6761c3ca12ef5276fff4",
+        "binding": {
+          "effectSkillId": 1900770,
+          "mechanismFamily": "equipped-loadout-periodic-conditional-property-root",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10198",
+      "displayName": "星之种",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f30d89bfb54b47d8",
+      "evidence": {
+        "iconSha256": "16197098e66a0f6c8d9e56fd1cfb1e1a904b1db34d2523a3c05e2d6be52bf517",
+        "binding": {
+          "effectSkillId": 1900760,
+          "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "soul-essence",
+      "objectId": "10216",
+      "displayName": "耕种之时",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "c055cdd579cd465e",
+      "evidence": {
+        "iconSha256": "ee7b541ee5661c742e1ae54f6fa2fbeaccb738df3628b42574ad93ac70fbc3c2",
+        "binding": {
+          "effectSkillId": 1900780,
+          "mechanismFamily": "equipped-actor-immediate-resource-heal-effect",
+          "runtimeStatus": "runtime-applied",
+          "starLevelCount": 4
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1010111",
+      "displayName": "木制棍棒",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "64e6664219ef9f7f",
+      "evidence": {
+        "iconSha256": "f833308896e2930c454e510126a0d5daee3c73ee86b349284a47d3ef89a66a81",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1010211",
+      "displayName": "木制小刀",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "075ed7d032b9503d",
+      "evidence": {
+        "iconSha256": "6f9a4a91a2612624196aa5f4a4ba21ec7d076abd973b4497e4595e617e7acc8e",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1010311",
+      "displayName": "木制短弓",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d86b8bcaf755e33e",
+      "evidence": {
+        "iconSha256": "9861751f34dac983f390485cd714080dc223cfcf4ab36b21f826fa0f338bf6a1",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1010411",
+      "displayName": "狼灵法杖",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "b7a61984a5ab0fca",
+      "evidence": {
+        "iconSha256": "6700b29b4eb397d0cf91fc1215aba9c8a66db00d816ed923262ba3913a8bd50d",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1010511",
+      "displayName": "兔灵祷杖",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "35aace28a5f2fd6f",
+      "evidence": {
+        "iconSha256": "d38db82bd56b2a3684cbda229ab350b3836a4835498a6315e702395523f97975",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1010611",
+      "displayName": "木制长弓",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "e7f90de2d5fe5e4f",
+      "evidence": {
+        "iconSha256": "1fad884c37fdb00a128321c2ba11f3e654c0444f5d18faf2aabe789492aad8e4",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1020111",
+      "displayName": "木制轻甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "030b12f2135f29be",
+      "evidence": {
+        "iconSha256": "9e449e0db5cb7fd677c5c2d0d574f95e068f5ca0c8194b8384121432452227e3",
+        "binding": {
+          "slot": "top",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1020211",
+      "displayName": "新叶斗篷",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "b67ed51b5cb14112",
+      "evidence": {
+        "iconSha256": "080bf52772b882cac6cf076ad0bcd06af98bb4ac04f94ee23055c3887f3e0cab",
+        "binding": {
+          "slot": "top",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1020311",
+      "displayName": "陈旧上衣",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "eff6a789ca5b0a79",
+      "evidence": {
+        "iconSha256": "bac34fb2132549edb1d9200a874a5987c1aa69e381a7fe41a1e892490ef14dd1",
+        "binding": {
+          "slot": "top",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1030111",
+      "displayName": "木制下装",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "7501bca3e08775d8",
+      "evidence": {
+        "iconSha256": "78e2ada4a0e20a9014ecfaa4f34869fcbd7fede2c43066829c956da55bbc7c28",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1030211",
+      "displayName": "新叶短裤",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "21dd4d9cb03fe44a",
+      "evidence": {
+        "iconSha256": "1c0f699f5c8802de70523efeea3e39f26b84be0d6ce3e6981b4120b27b2fbc77",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1030311",
+      "displayName": "陈旧下装",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f7e91fc8f270d8fe",
+      "evidence": {
+        "iconSha256": "c56dd7d7835049dbabbfee97b7932030293110101e0d26f4fd6265460606e78f",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1040111",
+      "displayName": "草编耳饰",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "09c366b0222a5d47",
+      "evidence": {
+        "iconSha256": "787540834b275e19f8a92159bf51c25d47c083823a77686936bb2ef03405bebf",
+        "binding": {
+          "slot": "earring",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1040211",
+      "displayName": "新叶耳饰",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f537c78aae402b46",
+      "evidence": {
+        "iconSha256": "0aef27d741232da4d221d1ba47174706343247365bef11a3f7c32a237d81bdd5",
+        "binding": {
+          "slot": "earring",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1040311",
+      "displayName": "陈旧耳饰",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "4c1331eb19936c02",
+      "evidence": {
+        "iconSha256": "b3eaa0d22eeae2f55388011dc9bcd1c98e49adfad89bea37c390e20b7d7e96b7",
+        "binding": {
+          "slot": "earring",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1050111",
+      "displayName": "草编戒指",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "0efc1fb9eed7939c",
+      "evidence": {
+        "iconSha256": "698aa94a7bcd78bc464b3000f2b326f3a0587bb58c1846e0fea0fe4f004e5869",
+        "binding": {
+          "slot": "ring",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1050211",
+      "displayName": "新叶戒指",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "361e598810ac4ec8",
+      "evidence": {
+        "iconSha256": "197a786c8888e48cc7fca359f0c0c7671b84c238938432a7cdf41ba1771d2075",
+        "binding": {
+          "slot": "ring",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1050311",
+      "displayName": "陈旧戒指",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "a014ad5ba70476ca",
+      "evidence": {
+        "iconSha256": "d8e0af7a1777bb13c8b513685052ea781e771a194a0c52b98c5b6c7c332dc1da",
+        "binding": {
+          "slot": "ring",
+          "rarity": 1,
+          "setId": null,
+          "maximumLevel": 0
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1110111",
+      "displayName": "风铜直剑",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "2006663315c72ec8",
+      "evidence": {
+        "iconSha256": "827db6e4c9df1a6d3b52439264272c1c752ac342367aec51b98e112f07260027",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1110211",
+      "displayName": "风铜短刃",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "52e01af9407d2450",
+      "evidence": {
+        "iconSha256": "6bb856265f29ae507c2c9fcf14fa8eb51711d6858018634d3ec8010f2538bad5",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1110311",
+      "displayName": "风铜短弓",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f683a3a3e5e0fa0a",
+      "evidence": {
+        "iconSha256": "62994cd234cd8426196cf03dec520c9f2ffcc8b4243e9ee0e497aafeadb092fc",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1110411",
+      "displayName": "风铜法杖",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d1e9899dc3d2188d",
+      "evidence": {
+        "iconSha256": "988cbeef9d3af68648a3f81f4dedee84b51dec578640f71cfef1815770237b75",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1110511",
+      "displayName": "风铜祷杖",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "ca015ef76ed989a5",
+      "evidence": {
+        "iconSha256": "4ec3dfa7db7dc3ac852c05eb14286c4ee10aed89caa2a88e0eabfcc10ac8081f",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1110611",
+      "displayName": "铜制长弓",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d2179d3b94841a84",
+      "evidence": {
+        "iconSha256": "8bd9b34e7d9ae4875a1e055d793ae77ab013754fd498d9c4d4252934d606252d",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1120111",
+      "displayName": "风铜皮甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "95d33f57c0ec20ba",
+      "evidence": {
+        "iconSha256": "5a846fe7a37b9788c0243aaf648159b8854cb58401df4b7897ce9c8c69a4a475",
+        "binding": {
+          "slot": "top",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1120211",
+      "displayName": "风叶斗篷",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "c32616506edc056d",
+      "evidence": {
+        "iconSha256": "0c29677ac9f2cf87b4b9a6677c6046f06b58b293774b16c0848064a39b207b4e",
+        "binding": {
+          "slot": "top",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1120311",
+      "displayName": "亚麻上衣",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "e2e05e8053d59db3",
+      "evidence": {
+        "iconSha256": "31e4e4087f1a6d07894800254397312273083262950ef7c3edae71106c5ebca4",
+        "binding": {
+          "slot": "top",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1130111",
+      "displayName": "风铜腿甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f8ad50c45b806fa1",
+      "evidence": {
+        "iconSha256": "d35b02402b61e3c263b4ca393a92b4937a96b8a25eac6cb4cd61a0b719867097",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1130211",
+      "displayName": "风叶短裤",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "4e60ae3d9e6635c5",
+      "evidence": {
+        "iconSha256": "fc54b83dcdf0fef76b4fd3e764a8d6f902312f5dc01452b82b48a62fe2104caf",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1130311",
+      "displayName": "亚麻下装",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "a9bc1e3f58cd2317",
+      "evidence": {
+        "iconSha256": "cbad65ac81b97a49a6d2235687d4dbb8d12fc4d8ee4c9fadd31a28438b9273b0",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1140111",
+      "displayName": "风铜耳坠",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "fb37e990c7f43b6c",
+      "evidence": {
+        "iconSha256": "7aef03571c55a33104415b6b96f68a14d6cf3fe0a01a453674a2a168368a9b22",
+        "binding": {
+          "slot": "earring",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1140211",
+      "displayName": "风叶耳饰",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "63316ac7eae03e92",
+      "evidence": {
+        "iconSha256": "2ef49f5fd1ade607eb08faa52e332d79efc2abee7c8338c8b65c6abc313b168e",
+        "binding": {
+          "slot": "earring",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1140311",
+      "displayName": "微澜耳饰",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "80d70d098cff035a",
+      "evidence": {
+        "iconSha256": "135a9ec5a3a6d1d853c092384c3fc1df8c439b0574aa99fb85d897a26b393639",
+        "binding": {
+          "slot": "earring",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1150111",
+      "displayName": "风铜指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "a9436320e12d71ec",
+      "evidence": {
+        "iconSha256": "10fab3d400394bf2deedfccebd799dc79eb45b0aa5957e8927428bd8172e1356",
+        "binding": {
+          "slot": "ring",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1150211",
+      "displayName": "风叶指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "ea9224525b906bb4",
+      "evidence": {
+        "iconSha256": "37a9df7ad9992d5e016a2b1f1176a22822a26743563b88f22a7ae1a02b63fcf4",
+        "binding": {
+          "slot": "ring",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1150311",
+      "displayName": "微澜戒指",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f2f1c9b90717b58b",
+      "evidence": {
+        "iconSha256": "a3b5df93d416eae5f254a78f7606a64ee31989f3fc2c968d8a48b8f73253344a",
+        "binding": {
+          "slot": "ring",
+          "rarity": 2,
+          "setId": null,
+          "maximumLevel": 3
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1210011",
+      "displayName": "青木之弓",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f075c2a7730b758f",
+      "evidence": {
+        "iconSha256": "afceb4bf3b61bbcae94c490af9bb45e6d4f29aebc9b82c16b5a2bc0c0072aef8",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1210111",
+      "displayName": "青铜直剑",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "5ddfdf70ce5b2c7a",
+      "evidence": {
+        "iconSha256": "b2e92dd1c72899ddaea7ef4a6aa9d4ba583efa0e7897d9809252555484a01ae2",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1210121",
+      "displayName": "野鬃重剑",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "6710d0c7dc4db419",
+      "evidence": {
+        "iconSha256": "b1f973649c61b802e31d2ed131778eff06fe9c4df21b0bf624d020bdc23fef18",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 3,
+          "setId": 3,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1210211",
+      "displayName": "青铜短刃",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "a146dd6f6556e3d3",
+      "evidence": {
+        "iconSha256": "785ac3fb93bde7c829a4d23f8f3ea8683570238b783a111545c5298b30d9afa6",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1210221",
+      "displayName": "蛮角刺剑",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "8455f45ed30c0bdd",
+      "evidence": {
+        "iconSha256": "5b5d246c61bb5ed046a0e9aad7f292242702ed559a25ba1d7f7c901b7ed7d989",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 3,
+          "setId": 4,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1210311",
+      "displayName": "青铜短弓",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "45e4f807dbffcbeb",
+      "evidence": {
+        "iconSha256": "c1b43ec9fc961d620e0f4bcd0b671e66fb3a83e3d27c87cd4014c96933a76e4f",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1210321",
+      "displayName": "冰翼刺弓",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "39c57f24b2d43c56",
+      "evidence": {
+        "iconSha256": "43e676f1fd6224ba1036d21b9e3a419f1613b0dd7e347fd3ef15221816a3aba9",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 3,
+          "setId": 2,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1210411",
+      "displayName": "青铜法杖",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "18e02a4650aae1a6",
+      "evidence": {
+        "iconSha256": "d2ebc3986b9ed6b8e3f85c9987067758f0478749e5827b66c8f98791d1927f34",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1210421",
+      "displayName": "蝶语法杖",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "8c1e6ff59cb993a6",
+      "evidence": {
+        "iconSha256": "c423fc960a841592d3455c64f191f18c63dd3a977da0858305ab5df1dc467bda",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 3,
+          "setId": 1,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1210511",
+      "displayName": "青铜牧杖",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "12d7815649992e45",
+      "evidence": {
+        "iconSha256": "b0990d5f0908f86111e246261e5f7f73ee8296a1fade279e9bfb03d89fe9e7ee",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1210521",
+      "displayName": "雷息狂力",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "b96813ccf36cf32b",
+      "evidence": {
+        "iconSha256": "b08d1fc7453b85534c66be114c094e8f93213b26563280bbd1ee26c431d4d087",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 3,
+          "setId": 5,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1210611",
+      "displayName": "柔影弓",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "034d10912357ac67",
+      "evidence": {
+        "iconSha256": "648623ca95c7029ebdd3f1fa154ec35ab2046cc1cad51f911a086d0bd9750748",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 3,
+          "setId": 6,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1220011",
+      "displayName": "月雾外袍",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "9b6dcc41c6003b62",
+      "evidence": {
+        "iconSha256": "79a208138e4fa513e116368539c1d0ee040c5a99ac480881be20ec1165604882",
+        "binding": {
+          "slot": "top",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1220111",
+      "displayName": "青铜护甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "a6a25d2e15b5e05a",
+      "evidence": {
+        "iconSha256": "be9f9bd92763c96d8db7cc4c9675dad9ec20f905012b43cdee039fea4df55363",
+        "binding": {
+          "slot": "top",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1220121",
+      "displayName": "野鬃重甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "2b1e01f62750e6df",
+      "evidence": {
+        "iconSha256": "43db980c374d5fa4bd33be25a0a8b0a376f99754b54d625b5aa7fa9ec23bb63e",
+        "binding": {
+          "slot": "top",
+          "rarity": 3,
+          "setId": 3,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1220131",
+      "displayName": "蛮角战甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f64059cde8af7c9b",
+      "evidence": {
+        "iconSha256": "e769616f0a1a5a3b8c2c6dbd0967fcafe3d3d9bfa95ca1fcb6c73ea5680a2a3d",
+        "binding": {
+          "slot": "top",
+          "rarity": 3,
+          "setId": 4,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1220211",
+      "displayName": "月麻斗篷",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "ab80208a0af0a572",
+      "evidence": {
+        "iconSha256": "d71037a7c8942c62ae3282c67c8909107a93d48eea6dc2174f369aaa63522328",
+        "binding": {
+          "slot": "top",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1220221",
+      "displayName": "蝶语斗篷",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "dd26ae43bb432c5e",
+      "evidence": {
+        "iconSha256": "0bd722e509400c57306db4d91452488737dc4de2ade57486d258978d1f940617",
+        "binding": {
+          "slot": "top",
+          "rarity": 3,
+          "setId": 1,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1220231",
+      "displayName": "冰翼披风",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "6fd9b5e473012a30",
+      "evidence": {
+        "iconSha256": "3d9171136c20da1b6c9eed97f072428c020ab08f6b669a767e9fdd9dc885ca81",
+        "binding": {
+          "slot": "top",
+          "rarity": 3,
+          "setId": 2,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1220311",
+      "displayName": "雷息披甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "97f9291e456fba8a",
+      "evidence": {
+        "iconSha256": "aab7cb2d400acf324ed034f426d9e8824ea9bfee756802e1d3e351a53af8b16a",
+        "binding": {
+          "slot": "top",
+          "rarity": 3,
+          "setId": 5,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1220321",
+      "displayName": "柔影之束",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "b6b3feecd09ae7ec",
+      "evidence": {
+        "iconSha256": "d85523c02df4e354c02a4ef03375b9e9ea2e0174a79232f2d035826e909259cb",
+        "binding": {
+          "slot": "top",
+          "rarity": 3,
+          "setId": 6,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1230011",
+      "displayName": "漫步下装",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "5be1aaa82532399f",
+      "evidence": {
+        "iconSha256": "a09dfa4e1444d04d1e5000244a2990e3e3046aeb6b684e188e92ae6f5a774804",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1230111",
+      "displayName": "青铜裙甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "15e1247bf033bee4",
+      "evidence": {
+        "iconSha256": "0b548a59daffa91844d949f6e78ba4c2eaaeba2be73045bd698d1b02cb01b4ce",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1230121",
+      "displayName": "野鬃护甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "7a47c908cd28dc9c",
+      "evidence": {
+        "iconSha256": "d5dde84cbfe0cbe9af57bb6a43a37d959a6bf2538636ad1a0801be4e54aa1103",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 3,
+          "setId": 3,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1230131",
+      "displayName": "蛮角短甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "e68373132ebc0e6f",
+      "evidence": {
+        "iconSha256": "06708ebac62d9c1bdd802f736e7c52c43ed433d3479204e22d6c6773e3031ed0",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 3,
+          "setId": 4,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1230211",
+      "displayName": "月麻下衣",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "ff51720b323b3996",
+      "evidence": {
+        "iconSha256": "a7082e7a4b6e6ed9ff962d2f5d74fdb307044aeced16c961e06a50de444bf709",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1230221",
+      "displayName": "蝶语护腿",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "8c273ca638c43ae6",
+      "evidence": {
+        "iconSha256": "c75cc10baad31d773f6bd3b997c80bc85d4e6b866e9cc550ebf39a3fc395017c",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 3,
+          "setId": 1,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1230231",
+      "displayName": "冰翼护腿",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "e5070f0a4e7a023e",
+      "evidence": {
+        "iconSha256": "35a0bf35f4d2c4f78decd798382664403a78d9de5b4a433b996935c8a13e555e",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 3,
+          "setId": 2,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1230311",
+      "displayName": "雷息束甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f5dc7308033966e8",
+      "evidence": {
+        "iconSha256": "b466370d2d8194a253921b5637402e3c3b5e0b72532984ba125169384962177b",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 3,
+          "setId": 5,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1230321",
+      "displayName": "柔影幽行",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "b0e2ff567e326e6b",
+      "evidence": {
+        "iconSha256": "b03895f94e95bf4440599b608c808d6ad40eb0e3d76fc5a3ee2e5681e5063d43",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 3,
+          "setId": 6,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1240011",
+      "displayName": "轻扬耳坠",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "b55dbdea229932c6",
+      "evidence": {
+        "iconSha256": "71f32e0a4b3f8b6e6e63982f56da8811973a07584f258857c818b49c28b09984",
+        "binding": {
+          "slot": "earring",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1240111",
+      "displayName": "青铜耳坠",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "e0653720d6777ef1",
+      "evidence": {
+        "iconSha256": "606052c6da74844a53e79b1c5eba6386ad340f11c17cdd9df42295bfdd886558",
+        "binding": {
+          "slot": "earring",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1240121",
+      "displayName": "野鬃耳坠",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "a75a89974a2fa6c3",
+      "evidence": {
+        "iconSha256": "07eeb0fef3f1ed8b3bbf95fdd69e2e5c57cec42b1e4de43aa5f0be7849d75952",
+        "binding": {
+          "slot": "earring",
+          "rarity": 3,
+          "setId": 3,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1240131",
+      "displayName": "蛮角耳环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "7d624a469bb21680",
+      "evidence": {
+        "iconSha256": "17e1294d131917b254ed940ae09f9bfedd30f13f455a3edcb72b58693ef1d004",
+        "binding": {
+          "slot": "earring",
+          "rarity": 3,
+          "setId": 4,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1240211",
+      "displayName": "蔓叶耳挂",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "c50d7ac667149f92",
+      "evidence": {
+        "iconSha256": "d789ca835c6a395d73549ca6682941e2d18446524ff00bd7826ff2f0051e9f76",
+        "binding": {
+          "slot": "earring",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1240221",
+      "displayName": "蝶语耳饰",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "277157a0475eb8e9",
+      "evidence": {
+        "iconSha256": "0d513862015562a5cf0f3a8b0139429bd1a15487bb8735698717693216e96290",
+        "binding": {
+          "slot": "earring",
+          "rarity": 3,
+          "setId": 1,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1240231",
+      "displayName": "冰翼耳坠",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "09df6fc8b60fe424",
+      "evidence": {
+        "iconSha256": "0eb2ab58bba57ae581633626ef01563ad298684540f8428b97b5fbc58f30c044",
+        "binding": {
+          "slot": "earring",
+          "rarity": 3,
+          "setId": 2,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1240311",
+      "displayName": "雷息降声",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "bf98ceea72387276",
+      "evidence": {
+        "iconSha256": "bcd834ff64ecaf8ff5dab22cb58024b83e2095a483661eff88f7a2d45b619a15",
+        "binding": {
+          "slot": "earring",
+          "rarity": 3,
+          "setId": 5,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1240321",
+      "displayName": "柔影飞翼",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "dceabbc6edc47f02",
+      "evidence": {
+        "iconSha256": "1e2f5bf17a61b5c43e8df854999fa0609be39194c7eee24dc6a63b97742bd0be",
+        "binding": {
+          "slot": "earring",
+          "rarity": 3,
+          "setId": 6,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1250011",
+      "displayName": "风羽指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "79c8b8c1b52fbafe",
+      "evidence": {
+        "iconSha256": "1938f64f0db5a78de5a3d7e40d5c0fe6fead3766ea62843ad20f319a5d31f31a",
+        "binding": {
+          "slot": "ring",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1250111",
+      "displayName": "青铜指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "7b38f47d7ce0dcea",
+      "evidence": {
+        "iconSha256": "2973a520af68e49b8a16d7f253e37885084209145b2d5e7ff2b571d6895b4d2d",
+        "binding": {
+          "slot": "ring",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1250121",
+      "displayName": "野鬃指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "73eb26c50bf19621",
+      "evidence": {
+        "iconSha256": "d420da9b38b4012852db08b3c93c2b82af8a43095ec7397ebc2585c0fb519eac",
+        "binding": {
+          "slot": "ring",
+          "rarity": 3,
+          "setId": 3,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1250131",
+      "displayName": "蛮角戒指",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "72b872c67a8b0e94",
+      "evidence": {
+        "iconSha256": "15cca7f7c0e73f97d115effd5cac6d1351fb79b8da3cf29ebf51d6e7bfc2b80c",
+        "binding": {
+          "slot": "ring",
+          "rarity": 3,
+          "setId": 4,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1250211",
+      "displayName": "蔓叶指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d4f2a8a9577cca30",
+      "evidence": {
+        "iconSha256": "b6426c22fd6f301cc64fa449beed22e10a66194a0b18dee9b2eff83af03f6dd2",
+        "binding": {
+          "slot": "ring",
+          "rarity": 3,
+          "setId": null,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1250221",
+      "displayName": "蝶语指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "c3e25312a7c6cfac",
+      "evidence": {
+        "iconSha256": "9b1280b14536a415f5552f1a37b189aebd820cf3d54160eedff81b55391c652e",
+        "binding": {
+          "slot": "ring",
+          "rarity": 3,
+          "setId": 1,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1250231",
+      "displayName": "冰翼指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "ef8b8f287c48b8ae",
+      "evidence": {
+        "iconSha256": "a57a3e62a7f784d3e95799aa00f6ca9648dbd0fd77311646d30368d44be7578a",
+        "binding": {
+          "slot": "ring",
+          "rarity": 3,
+          "setId": 2,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1250311",
+      "displayName": "雷息之环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "9bcfbbaed1c5c7ec",
+      "evidence": {
+        "iconSha256": "530c42d791af3f29b90573ebbf5974121caf8d5651a43619f7f50df2a60c6398",
+        "binding": {
+          "slot": "ring",
+          "rarity": 3,
+          "setId": 5,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1250321",
+      "displayName": "柔影辉环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "05cd9b623ce4147d",
+      "evidence": {
+        "iconSha256": "34286cf86b5ace8de2e6fa39e6c38fa7ae48b4694ed20e1f797df7ddc21d804f",
+        "binding": {
+          "slot": "ring",
+          "rarity": 3,
+          "setId": 6,
+          "maximumLevel": 6
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310011",
+      "displayName": "明辉长剑",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "cd187a77b7b7f826",
+      "evidence": {
+        "iconSha256": "772eaa701e5eced61e145ec790bb219d305a1d680cf368ed88955be415134211",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310111",
+      "displayName": "镜铁长剑",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "8c231cf1de226fd1",
+      "evidence": {
+        "iconSha256": "4e3bb33cbd2629f44699617fb7a740db40a8ede2d4b3af0316387c28f20cbedb",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310112",
+      "displayName": "锻钢阔剑",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "c0b6eb7eebf727f4",
+      "evidence": {
+        "iconSha256": "a620050727e5d9383fa67359de964f3ddcdd98b67485a218d492ae16b79b5de4",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310121",
+      "displayName": "狂鬃重剑",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "0cb00c71d60e9275",
+      "evidence": {
+        "iconSha256": "1ac3900b2d7fa6610b1f0edbbb83d55c8041514c89b05e99284ebf2e26ca0df9",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": 3,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310211",
+      "displayName": "镜铁刺刃",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "e77a22b63b931a59",
+      "evidence": {
+        "iconSha256": "72a6a965dd131c5d3374ccde4c6602bfae90a20c51c7b9f83cc7fc51a5261590",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310212",
+      "displayName": "锻钢短刃",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "293c6251d5177aad",
+      "evidence": {
+        "iconSha256": "fa070226200ba45bb9974d30a24298978ff74319ce2074e3a95b9eac91c73a7b",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310221",
+      "displayName": "荒角刺剑",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "e7a3f31abeded212",
+      "evidence": {
+        "iconSha256": "f6b894699016a666168b44c8b5b37cba35ba45cef3a24e85fa1a14147a73ba00",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": 4,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310311",
+      "displayName": "镜铁长弓",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f567725bae0191da",
+      "evidence": {
+        "iconSha256": "75dc64c9af23f327f43054fd8a2c805380d3c6100e41729af3ef7e00dbbbd588",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310312",
+      "displayName": "锻钢长弓",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "1819bf556eff0557",
+      "evidence": {
+        "iconSha256": "96747086add0f317ecbb470c363b4a1eef166210b68d4b7c4a232ce5db8782dc",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310321",
+      "displayName": "寒翼刺弓",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f1494403f247fe9d",
+      "evidence": {
+        "iconSha256": "419877d8785990c9a0924f69a4d3ff086728504b3bb7bf423907e80c87050130",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": 2,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310411",
+      "displayName": "镜铁咒杖",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "65f887a88ed3cb95",
+      "evidence": {
+        "iconSha256": "89ab7fc55ddf226eeb7a82c2665611acac5c485565c839931aa003fc4bfcb8f9",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310412",
+      "displayName": "锻钢咒杖",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "717ca991938180da",
+      "evidence": {
+        "iconSha256": "ec26f93a10927e1d7bf086ceb5555b2c8137248975cd6b510adeb7630cff4824",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310421",
+      "displayName": "蝶影法杖",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f0de4c742f67eb42",
+      "evidence": {
+        "iconSha256": "2e40ef4c900287aaff6323b87ae0f140a61cb3490058d1914f2923adcaa2c94d",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": 1,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310511",
+      "displayName": "镜铁祷杖",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "dd6e9c4a670b9d88",
+      "evidence": {
+        "iconSha256": "409f94e91a805db26470094afa862e861f1197e50adf4c1f8d73f76dd1d91025",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310512",
+      "displayName": "锻钢祷杖",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "aca3bcf2eff8fe7f",
+      "evidence": {
+        "iconSha256": "8a792b570ce5e93f34bbab52323c987ef864bb997bfda837f57240d449c788a0",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310521",
+      "displayName": "雷闪狂力",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "30817cb37d44b390",
+      "evidence": {
+        "iconSha256": "9d49ab354ac8840373c869e4e02ffde0091e322f58e8937cf13d6ce2303ca0e2",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": 5,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1310611",
+      "displayName": "泣影弓",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "2b3c601871308c2a",
+      "evidence": {
+        "iconSha256": "94a1cea2252a6eaa65d309a55390f6b5c599809de84f2ea5e6224cd99f4aa39b",
+        "binding": {
+          "slot": "weapon",
+          "rarity": 4,
+          "setId": 6,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1320011",
+      "displayName": "尘间上装",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "a33e552655b4761a",
+      "evidence": {
+        "iconSha256": "39c845a646a01ceffcc5c6e8d04b38e6ce9f8752beff878ebfe8b123f6856c7f",
+        "binding": {
+          "slot": "top",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1320111",
+      "displayName": "镜铁战铠",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "86cf7141846bc6c6",
+      "evidence": {
+        "iconSha256": "a309eda1eb2d9c728b5f0b0de1a4b06ef8ce43178118c6d007589d18e9b02541",
+        "binding": {
+          "slot": "top",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1320121",
+      "displayName": "狂鬃重甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d6189a58153a67fc",
+      "evidence": {
+        "iconSha256": "0cb148da6c680898c090ad3343e629a3c088308b0a2fce2c3f52f4a1231953a0",
+        "binding": {
+          "slot": "top",
+          "rarity": 4,
+          "setId": 3,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1320131",
+      "displayName": "荒角战甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "cea45aadb7ec15ff",
+      "evidence": {
+        "iconSha256": "a238be923fbbeb56617ca52a4a3bb63c950f1382d075087931c446aa8882a411",
+        "binding": {
+          "slot": "top",
+          "rarity": 4,
+          "setId": 4,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1320211",
+      "displayName": "云棉披风",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "37a07f3f2ec51154",
+      "evidence": {
+        "iconSha256": "88ac7a8f6d96b2d5ecb0c5d78557e0199680fab12b443360cc11dc1a8b9ffb52",
+        "binding": {
+          "slot": "top",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1320221",
+      "displayName": "蝶影斗篷",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "0d47f048cdcd3919",
+      "evidence": {
+        "iconSha256": "500a072e17c9babb49988b24e800e7f7574e685db570f2d649c9cb1a03e416fa",
+        "binding": {
+          "slot": "top",
+          "rarity": 4,
+          "setId": 1,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1320231",
+      "displayName": "寒翼披风",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "2a36ac28e19667ab",
+      "evidence": {
+        "iconSha256": "8ae0a5495c76f968bad7078e1a3af977e0252bf4b5443f70f64e17f7b45d9416",
+        "binding": {
+          "slot": "top",
+          "rarity": 4,
+          "setId": 2,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1320311",
+      "displayName": "雷闪披甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "9e1ae4e1cc3bbe2b",
+      "evidence": {
+        "iconSha256": "8edad9c1b708427a9fb900e462829ddb55e6873b72d34ad7b203eae375dc8af6",
+        "binding": {
+          "slot": "top",
+          "rarity": 4,
+          "setId": 5,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1320321",
+      "displayName": "泣影之束",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "36b8720a676ad059",
+      "evidence": {
+        "iconSha256": "5399c5603bb19451b6a85acc4a563e63af68d15852ddb8d2d0efeedc05a339ec",
+        "binding": {
+          "slot": "top",
+          "rarity": 4,
+          "setId": 6,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1330011",
+      "displayName": "暮时下装",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "51a5acdf803b62fc",
+      "evidence": {
+        "iconSha256": "fb760d445f6d6d34ff29a4fea97438b92db7825b3348d0e8985a6b12aa53e464",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1330111",
+      "displayName": "镜铁裤甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "38e232f5fdb6156b",
+      "evidence": {
+        "iconSha256": "3994d7301b37170e76f825640c97d4b7e4996b80af736aa2bce08a98a4dfa412",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1330121",
+      "displayName": "狂鬃护甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "9cbf5c1d45e02ee7",
+      "evidence": {
+        "iconSha256": "8926b07050b06ab4f72cc0b49ff9e597eaf1fe88a888f4209f7c14c58626fda3",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 4,
+          "setId": 3,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1330131",
+      "displayName": "荒角短甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "803c23a1420d139e",
+      "evidence": {
+        "iconSha256": "54a5cf52b2b17cee3f06dc69d0e961fa2c6e5082f1ddb680a0bde5a96a106202",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 4,
+          "setId": 4,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1330211",
+      "displayName": "云棉下装",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "9d68eea1e8eb7e6c",
+      "evidence": {
+        "iconSha256": "d983944a1cc3916270a8447c6cff2c5a57f1c5ae4944c5042bbb2dd9dcfe367a",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1330221",
+      "displayName": "蝶影护腿",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "382454089327d4c5",
+      "evidence": {
+        "iconSha256": "3f25d8fd6d6f6d6fe21b99609c27fdf57346d13b8218ff3b373ef161a1249c14",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 4,
+          "setId": 1,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1330231",
+      "displayName": "寒翼护腿",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "88df55255a2ad988",
+      "evidence": {
+        "iconSha256": "ed01436d57c548ee0af875612de14bebbd75530762885087a86b961429812dee",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 4,
+          "setId": 2,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1330311",
+      "displayName": "雷闪束甲",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "02747838d37d8198",
+      "evidence": {
+        "iconSha256": "344300530acddee3993a7d00be7f3bb1660aeb71fab7fd28c6c9104e1aaf2eb5",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 4,
+          "setId": 5,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1330321",
+      "displayName": "泣影幽行",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d77d1806f4cca369",
+      "evidence": {
+        "iconSha256": "38a9c3e3f0648c9a3643c270a93dc75dc7060ec04ae68a34ec60edba1b1e2000",
+        "binding": {
+          "slot": "bottom",
+          "rarity": 4,
+          "setId": 6,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1340011",
+      "displayName": "晶坠耳饰",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "2cf04e779b6d990c",
+      "evidence": {
+        "iconSha256": "82259ff67ee2e800ec8a9735fe116ca090b490c2684d55211c6e7c7c4e3f6725",
+        "binding": {
+          "slot": "earring",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1340111",
+      "displayName": "镜铁耳坠",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "c09d05f113c938b6",
+      "evidence": {
+        "iconSha256": "122ec1bffbeb7995207d09cf95bb639fdf0caec0b102c9de87982aaefdf1b787",
+        "binding": {
+          "slot": "earring",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1340121",
+      "displayName": "狂鬃耳坠",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "4f1b94b0bafac6f2",
+      "evidence": {
+        "iconSha256": "52be32b78f16da634fb09738b687298c88a6444c199cea25b7ad0442dae81742",
+        "binding": {
+          "slot": "earring",
+          "rarity": 4,
+          "setId": 3,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1340131",
+      "displayName": "荒角耳环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "3a1b20327d7f4b47",
+      "evidence": {
+        "iconSha256": "752854095afdd0708513ee8b08c8039dfdb33ffa40d44a7cfcbeaf2ca558c549",
+        "binding": {
+          "slot": "earring",
+          "rarity": 4,
+          "setId": 4,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1340211",
+      "displayName": "蔓花耳挂",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d7e510bea9f653c4",
+      "evidence": {
+        "iconSha256": "8142c7d79c9ab3d4e5b60709e077a1c08b83ab988b4253e69b40eb9e2d6b6c79",
+        "binding": {
+          "slot": "earring",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1340221",
+      "displayName": "蝶影耳饰",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "ca659d20f07fed8a",
+      "evidence": {
+        "iconSha256": "168a7a266ed3572adbd1f402ce5c590a07fd27225646e0330beba7b684b6ff24",
+        "binding": {
+          "slot": "earring",
+          "rarity": 4,
+          "setId": 1,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1340231",
+      "displayName": "寒翼耳坠",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "139738ff7bae45f0",
+      "evidence": {
+        "iconSha256": "36b2223e384b092ccb6e26da77f790420bda8b40d86c901920a95797db84852e",
+        "binding": {
+          "slot": "earring",
+          "rarity": 4,
+          "setId": 2,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1340311",
+      "displayName": "雷闪降声",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "07deccb62ea17d9a",
+      "evidence": {
+        "iconSha256": "e2426936eee66195cff1a40a92cbc4fea59dc523d82e0bd3ac7e8ad855ea0f59",
+        "binding": {
+          "slot": "earring",
+          "rarity": 4,
+          "setId": 5,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1340321",
+      "displayName": "泣影飞翼",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "934a4281ded664eb",
+      "evidence": {
+        "iconSha256": "93a1198714533541eb8a526890a199cb80a8abda4820d3ca959fa16240f2eeec",
+        "binding": {
+          "slot": "earring",
+          "rarity": 4,
+          "setId": 6,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1350011",
+      "displayName": "霜影指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d69294a26073c6dc",
+      "evidence": {
+        "iconSha256": "bc0ca10bb16757173de9796d036188261b414c7392359e78817267c94327ca24",
+        "binding": {
+          "slot": "ring",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1350111",
+      "displayName": "镜铁指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "86f10749515cd6c8",
+      "evidence": {
+        "iconSha256": "104cf0c0b9650b0f56c48c9cadd4c013ae8a070cd7886a51d192d3f146da9e80",
+        "binding": {
+          "slot": "ring",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1350121",
+      "displayName": "狂鬃指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "e434cd17ff1e3669",
+      "evidence": {
+        "iconSha256": "86a842343f52403f396abae13857025571cc0c75c99fe66030d4c8b26e132cf0",
+        "binding": {
+          "slot": "ring",
+          "rarity": 4,
+          "setId": 3,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1350131",
+      "displayName": "荒角戒指",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "4f891144c7c7aaff",
+      "evidence": {
+        "iconSha256": "82f9160cc48e64e6d06417b157fedc30ee1f13d6814ebfd1b8c740e3080cc98b",
+        "binding": {
+          "slot": "ring",
+          "rarity": 4,
+          "setId": 4,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1350211",
+      "displayName": "蔓花指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "cda519b72f34fd75",
+      "evidence": {
+        "iconSha256": "ed89ff67df878bcc3b95f2218183feb0370da7d6edcd69754da019bebf02ff86",
+        "binding": {
+          "slot": "ring",
+          "rarity": 4,
+          "setId": null,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1350221",
+      "displayName": "蝶影指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "50a30df32d03546c",
+      "evidence": {
+        "iconSha256": "961586bca41d4b975972366dea065b42b64aeca962d07602097c238e0d092d09",
+        "binding": {
+          "slot": "ring",
+          "rarity": 4,
+          "setId": 1,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1350231",
+      "displayName": "寒翼指环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "c19d71dc1f8b1b14",
+      "evidence": {
+        "iconSha256": "c039685c361d1492088818cd7a4e4a15d3256d22e663a49e7cc30294d8fa3549",
+        "binding": {
+          "slot": "ring",
+          "rarity": 4,
+          "setId": 2,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1350311",
+      "displayName": "雷闪之环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "1c1f4df4d2e69a2c",
+      "evidence": {
+        "iconSha256": "85bf0abb709f1dd5e925a474ef324801639f4182a33b34cb28e275f0360bc70b",
+        "binding": {
+          "slot": "ring",
+          "rarity": 4,
+          "setId": 5,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "equipment",
+      "objectId": "1350321",
+      "displayName": "泣影辉环",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "ddd9e85d361728d9",
+      "evidence": {
+        "iconSha256": "5a396e5a92179b36aa6b753b29c4bc4290ed2b56b8f0a89b2b8fd8e5477abf9e",
+        "binding": {
+          "slot": "ring",
+          "rarity": 4,
+          "setId": 6,
+          "maximumLevel": 9
+        }
+      }
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "1:2",
+      "displayName": "套装 1 2件",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "fd3e451a95d32a82",
+      "evidence": {
+        "iconSha256": null,
+        "binding": {
+          "setId": 1,
+          "pieces": 2,
+          "skillId": 19998106,
+          "runtimeStatus": "runtime-applied"
+        }
+      }
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "1:4",
+      "displayName": "套装 1 4件",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "ab81c348d8abaf2a",
+      "evidence": {
+        "iconSha256": null,
+        "binding": {
+          "setId": 1,
+          "pieces": 4,
+          "skillId": 19998006,
+          "runtimeStatus": "runtime-applied"
+        }
+      }
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "2:2",
+      "displayName": "套装 2 2件",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d4427c51d77c6c3a",
+      "evidence": {
+        "iconSha256": null,
+        "binding": {
+          "setId": 2,
+          "pieces": 2,
+          "skillId": 19998104,
+          "runtimeStatus": "runtime-applied"
+        }
+      }
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "2:4",
+      "displayName": "套装 2 4件",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "ba7a93caa1f3d6af",
+      "evidence": {
+        "iconSha256": null,
+        "binding": {
+          "setId": 2,
+          "pieces": 4,
+          "skillId": 19998004,
+          "runtimeStatus": "runtime-applied"
+        }
+      }
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "3:2",
+      "displayName": "套装 3 2件",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "3e308dceace9a111",
+      "evidence": {
+        "iconSha256": null,
+        "binding": {
+          "setId": 3,
+          "pieces": 2,
+          "skillId": 19998105,
+          "runtimeStatus": "runtime-applied"
+        }
+      }
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "3:4",
+      "displayName": "套装 3 4件",
+      "maturityState": "runtime-integrated",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated"
+      ],
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-required-matrix-incomplete",
+        "acceptance-blocking-ledger-not-empty",
+        "acceptance-product-visual-signoff-pending"
+      ],
+      "manifestHash": "cbd051dcad982a92",
+      "evidence": {
+        "iconSha256": null,
+        "binding": {
+          "setId": 3,
+          "pieces": 4,
+          "skillId": 19998005,
+          "runtimeStatus": "source-indexed-runtime-unapplied"
+        }
+      }
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "4:2",
+      "displayName": "套装 4 2件",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "92fb7e8ac44fa0e0",
+      "evidence": {
+        "iconSha256": null,
+        "binding": {
+          "setId": 4,
+          "pieces": 2,
+          "skillId": 19998103,
+          "runtimeStatus": "runtime-applied"
+        }
+      }
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "4:4",
+      "displayName": "套装 4 4件",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "29efc74a42a21eac",
+      "evidence": {
+        "iconSha256": null,
+        "binding": {
+          "setId": 4,
+          "pieces": 4,
+          "skillId": 19998003,
+          "runtimeStatus": "runtime-applied"
+        }
+      }
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "5:2",
+      "displayName": "套装 5 2件",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "af305c1286004710",
+      "evidence": {
+        "iconSha256": null,
+        "binding": {
+          "setId": 5,
+          "pieces": 2,
+          "skillId": 19998107,
+          "runtimeStatus": "runtime-applied"
+        }
+      }
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "5:4",
+      "displayName": "套装 5 4件",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "b516fd0831a36bd0",
+      "evidence": {
+        "iconSha256": null,
+        "binding": {
+          "setId": 5,
+          "pieces": 4,
+          "skillId": 19998007,
+          "runtimeStatus": "runtime-applied"
+        }
+      }
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "6:2",
+      "displayName": "套装 6 2件",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "994d109c831c98aa",
+      "evidence": {
+        "iconSha256": null,
+        "binding": {
+          "setId": 6,
+          "pieces": 2,
+          "skillId": 19998108,
+          "runtimeStatus": "runtime-applied"
+        }
+      }
+    },
+    {
+      "objectKind": "set-skill",
+      "objectId": "6:4",
+      "displayName": "套装 6 4件",
+      "maturityState": "optimization-ready",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
+      ],
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "f05319a71bfee073",
+      "evidence": {
+        "iconSha256": null,
+        "binding": {
+          "setId": 6,
+          "pieces": 4,
+          "skillId": 19998008,
+          "runtimeStatus": "runtime-applied"
+        }
+      }
+    }
+  ],
+  "catalogHash": "4c495bc26f5efc14"
+}
