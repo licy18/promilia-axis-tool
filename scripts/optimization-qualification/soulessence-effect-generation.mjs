@@ -57,6 +57,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   beforeSkillCompositeRuntimeEvidence = null,
   afterDamageTargetPropertyRuntimeEvidence = null,
   afterDamageEmptyConditionRuntimeEvidence = null,
+  beforeDamageEmptyConditionRuntimeEvidence = null,
   activationConditionRuntimeEvidence = null,
   elementFormulaRows = [],
   setThreeSourceIdentityEvidence = null,
@@ -174,6 +175,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       persistentLoadoutPropertyRuntimeEvidence,
       periodicPersistentPropertyRuntimeEvidence,
       afterDamageEmptyConditionRuntimeEvidence,
+      beforeDamageEmptyConditionRuntimeEvidence,
       activationConditionRuntimeEvidence,
       elementFormulaRows,
       control: controlSource.bySkillId.get(
@@ -2411,6 +2413,7 @@ function buildSoulTriggerEntry({
   elementFormulaRows,
   activationConditionRuntimeEvidence,
   afterDamageEmptyConditionRuntimeEvidence,
+  beforeDamageEmptyConditionRuntimeEvidence = null,
   knownElementIds = null,
   knownElementTypes = null,
 }) {
@@ -2423,8 +2426,9 @@ function buildSoulTriggerEntry({
   const conditions = Array.isArray(tree.triggerConditionList)
     ? tree.triggerConditionList
     : [];
+  const eventId = Number(eventBinding?.value);
   const emptyConditionEvidence =
-    Number(eventBinding?.value) === 2 &&
+    eventId === 2 &&
     afterDamageEmptyConditionRuntimeEvidence?.conclusion?.status === 'applied'
       ? {
           status: afterDamageEmptyConditionRuntimeEvidence.conclusion.status,
@@ -2432,7 +2436,18 @@ function buildSoulTriggerEntry({
           sourceIdentity:
             afterDamageEmptyConditionRuntimeEvidence.conclusion.sourceIdentity,
         }
-      : null;
+      : eventId === 1 &&
+          beforeDamageEmptyConditionRuntimeEvidence?.conclusion?.status ===
+            'applied'
+        ? {
+            status:
+              beforeDamageEmptyConditionRuntimeEvidence.conclusion.status,
+            eventId: 1,
+            sourceIdentity:
+              beforeDamageEmptyConditionRuntimeEvidence.conclusion
+                .sourceIdentity,
+          }
+        : null;
   const compiledCondition = compileTriggerCondition({
     trigger: triggerRow,
     conditions,
@@ -2680,6 +2695,7 @@ function compileSoulEffectDefinition({
   persistentLoadoutPropertyRuntimeEvidence,
   periodicPersistentPropertyRuntimeEvidence,
   afterDamageEmptyConditionRuntimeEvidence = null,
+  beforeDamageEmptyConditionRuntimeEvidence = null,
   activationConditionRuntimeEvidence = null,
   elementFormulaRows = [],
 }) {
@@ -2884,6 +2900,7 @@ function compileSoulEffectDefinition({
       elementFormulaRows,
       activationConditionRuntimeEvidence,
       afterDamageEmptyConditionRuntimeEvidence,
+      beforeDamageEmptyConditionRuntimeEvidence,
       knownElementIds,
       knownElementTypes,
     })

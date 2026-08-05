@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "2aac3ec2d3e351c1",
+  "rosterHash": "ade374673a4982be",
   "records": [
     {
       "objectKind": "character",
@@ -23370,23 +23370,9 @@
         "generated/soulessences.json#items[id=10132]",
         "NewTable/soulessence.rows[id=10132]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "soulessence-effect-skill-dynamic-unapplied",
-          "category": "not-implemented",
-          "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
-          "skillId": 1900430,
-          "reasons": [
-            "effect-active-trigger-not-unique"
-          ]
-        },
-        {
-          "code": "strict-soulessence-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied."
-        },
         {
           "code": "soulessence-visual-acceptance-not-published",
           "category": "not-implemented",
@@ -23403,7 +23389,7 @@
         "maximumRank": 6,
         "staticProfileApplied": true,
         "effectSkillId": 1900430,
-        "effectStatus": "source-indexed-runtime-unapplied",
+        "effectStatus": "runtime-applied",
         "sourceIdentity": "NewTable/soulessence.rows[id=10132]",
         "sourceEffectStatus": "effect-skill-dynamic-unapplied",
         "effectMechanics": {
@@ -23414,8 +23400,8 @@
             "skillLogicType": 6,
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900430]"
           },
-          "runtimeStatus": "source-indexed-runtime-unapplied",
-          "mechanismFamily": "source-indexed-composite-effect",
+          "runtimeStatus": "runtime-applied",
+          "mechanismFamily": "equipped-actor-composite-property-effects",
           "activationPrerequisites": [],
           "activationConditions": [],
           "trigger": {
@@ -23431,13 +23417,14 @@
             "intervalMs": 0,
             "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=-7245115188157259000;elementId=19004302.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
             "condition": {
-              "kind": "condition-group",
+              "kind": "always",
               "logic": "and",
               "logicValue": 0,
+              "logicName": "AND",
               "conditions": [],
               "actionKinds": [],
-              "status": "static-evidence-gap",
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=-7245115188157259000;elementId=19004302.triggerConditionType|triggerConditionList"
+              "status": "applied",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-7245115188157259000;elementId=19004302.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#AliveElementSystem.OnExecuteDamageElement@0x1318800/DamageEventTriggerUtility.OnBeforeAttack@0x1872740/ExecuteDamageElement@0x13151F0/DamageEventTriggerUtility.OnAfterAttack@0x1871F20/SkillUtility.InvokeTriggerElement_DamageHandle@0x18B5F10/TriggerElement.CheckCondition@0x13B58F0"
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-7245115188157259000;elementId=19004302.triggerTargetType",
@@ -23472,13 +23459,14 @@
               "intervalMs": 0,
               "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=-7245115188157259000;elementId=19004302.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
               "condition": {
-                "kind": "condition-group",
+                "kind": "always",
                 "logic": "and",
                 "logicValue": 0,
+                "logicName": "AND",
                 "conditions": [],
                 "actionKinds": [],
-                "status": "static-evidence-gap",
-                "sourceIdentity": "battle-element-assets.jsonl#path_id=-7245115188157259000;elementId=19004302.triggerConditionType|triggerConditionList"
+                "status": "applied",
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=-7245115188157259000;elementId=19004302.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#AliveElementSystem.OnExecuteDamageElement@0x1318800/DamageEventTriggerUtility.OnBeforeAttack@0x1872740/ExecuteDamageElement@0x13151F0/DamageEventTriggerUtility.OnAfterAttack@0x1871F20/SkillUtility.InvokeTriggerElement_DamageHandle@0x18B5F10/TriggerElement.CheckCondition@0x13B58F0"
               },
               "triggerTargetType": 0,
               "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-7245115188157259000;elementId=19004302.triggerTargetType",
@@ -23832,13 +23820,11 @@
             "damageElementIds": [],
             "activationPrerequisiteElementIds": []
           },
-          "runtimeGaps": [
-            "effect-active-trigger-not-unique"
-          ],
+          "runtimeGaps": [],
           "sourceIdentity": "NewTable/soulessence.rows[id=10132].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900430.asset/MonoBehaviour/skill_control_1900430__-3725567591603608227.json|battle-element-assets.jsonl#path_id=-1521385363814632700;elementId=19004306|battle-element-assets.jsonl#path_id=6337378764466493000;elementId=19004303"
         }
       },
-      "manifestHash": "597ac1eb1f4d41b9"
+      "manifestHash": "668557c5e61d71f8"
     },
     {
       "objectKind": "soul-essence",
@@ -31038,8 +31024,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 179,
-      "runtime-integrated": 86
+      "extracted": 178,
+      "runtime-integrated": 87
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -31050,5 +31036,5 @@
     },
     "optimizationReadyTotal": 0
   },
-  "manifestsHash": "535ae323d1daa007"
+  "manifestsHash": "395d643d279ab54f"
 }

@@ -128,7 +128,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   soulEffectGetElementTypeRuntimeEvidence:
     '4054d0d97a146faeb56f1fcb518126c1ca41edb698c3ed722fe5247e4ffff56a',
   soulEffectBeforeDamageRuntimeEvidence:
-    'a1a30e0c70dbfaf49990bddb48bf97c1b9cca31f2a77a303fba9382c239a3f7f',
+    '9a134964698a7bb6dacc25e917759b69b0ec4fb63df4863501d02c9df904d14e',
   soulEffectNonDamageRuntimeEvidence:
     '70035b60930cc755abbff484494c370abbdb306f0af05895f7479f59c050f1e6',
   landedHitRecoveryRuntimeEvidence:
@@ -688,6 +688,8 @@ export async function createOptimizationQualificationArtifacts({
       sources.beforeSkillCompositeRuntimeEvidence.value,
     afterDamageTargetPropertyRuntimeEvidence:
       sources.afterDamageTargetPropertyRuntimeEvidence.value,
+    beforeDamageEmptyConditionRuntimeEvidence:
+      sources.soulEffectBeforeDamageRuntimeEvidence.value,
     afterDamageEmptyConditionRuntimeEvidence:
       sources.soulessenceAfterDamageEmptyConditionRuntimeEvidence.value,
     activationConditionRuntimeEvidence:
@@ -3425,6 +3427,7 @@ function attachSoulEffectBeforeDamageRuntimeEvidence(
       missDispatch: semantics.missDispatch,
       failedOrUnexecutedDispatch: semantics.failedOrUnexecutedDispatch,
       eventElementIdentity: semantics.eventElementIdentity,
+      emptyConditionEvents: evidence.emptyConditionEvents ?? [],
       sourceVisibility: structuredClone(sourceVisibility),
       consumer: structuredClone(evidence.consumer),
       reviewedBinary: structuredClone(evidence.reviewedBinary),

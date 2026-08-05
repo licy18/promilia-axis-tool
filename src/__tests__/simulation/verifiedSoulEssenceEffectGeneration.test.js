@@ -171,6 +171,17 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     attributeId: 1,
   },
   {
+    soulEssenceId: 10132,
+    contextual: true,
+    event: 'BeforeDamage',
+    frameAnchor: 'hit-before-damage',
+    actionKind: null,
+    durationMs: 8000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 4,
+  },
+  {
     soulEssenceId: 10037,
     event: 'BeforeSkill',
     frameAnchor: 'action-start',
@@ -440,8 +451,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 51,
-      unresolvedCount: 11,
+      runtimeAppliedCount: 52,
+      unresolvedCount: 10,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -5015,6 +5026,34 @@ describe('verified soul essence effect generation', () => {
         definition.effectLeaves.every(leaf => leaf.valuesByStar?.length === 4)
       ).toBe(true);
     }
+  });
+
+  it('replays real 10132 unconditional before-damage leaves through canonical settlement', () => {
+    const result = createRealSoulScenario({
+      soulEssenceId: 10132,
+      effectSkillId: 1900430,
+      actionPlan: [
+        { id: 'e3c-10132-charged', actionKind: 'charged-attack', startFrame: 60 },
+      ],
+    });
+    const generation = result.verifiedSoulEssenceEffectGeneration;
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10132
+    );
+    expect(definition.runtimeStatus).toBe('runtime-applied');
+    expect(definition.effectLeaves).toHaveLength(2);
+    expect(
+      definition.triggers.every(
+        trigger => trigger.condition.kind === 'always'
+      )
+    ).toBe(true);
+    expect(
+      generation.suppressions.some(
+        suppression =>
+          suppression.reason === 'soulessence-effect-trigger-condition-missing'
+      )
+    ).toBe(false);
+    expect(generation.unresolved).toEqual([]);
   });
 
   it.each([

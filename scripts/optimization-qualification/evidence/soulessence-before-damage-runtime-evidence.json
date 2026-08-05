@@ -63,6 +63,21 @@
   "conclusion": {
     "status": "applied",
     "eventContract": "paired-before-settlement-after-damage-transaction",
-    "sourceIdentity": "GameAssembly.dll#AliveElementSystem.OnExecuteDamageElement@0x1318800/DamageEventTriggerUtility.OnBeforeAttack@0x1872740/ExecuteDamageElement@0x13151F0/DamageEventTriggerUtility.OnAfterAttack@0x1871F20"
-  }
+    "sourceIdentity": "GameAssembly.dll#AliveElementSystem.OnExecuteDamageElement@0x1318800/DamageEventTriggerUtility.OnBeforeAttack@0x1872740/ExecuteDamageElement@0x13151F0/DamageEventTriggerUtility.OnAfterAttack@0x1871F20/SkillUtility.InvokeTriggerElement_DamageHandle@0x18B5F10/TriggerElement.CheckCondition@0x13B58F0"
+  },
+  "emptyConditionSemantics": {
+    "consumer": "Lens.Gameplay.Modules.BigWorld.TriggerElement.CheckCondition",
+    "rva": "0x13B58F0",
+    "range": "0x13B58F0-0x13B5950",
+    "sha256": "f736370cf769dd058d30646193b3ae87527baa4c04deb59d3a661d15b271d65e",
+    "emptyOrResult": true,
+    "emptyAndResult": true,
+    "supportedEventIds": [
+      1
+    ],
+    "reason": "OnBeforeAttack dispatches event 1 through InvokeTriggerElement_DamageHandle with the trigger’s own condition list; an empty list reaches TriggerElement.CheckCondition’s empty-list branch and both AND=0 and OR=1 return true, so no synthetic condition is required."
+  },
+  "emptyConditionEvents": [
+    1
+  ]
 }
