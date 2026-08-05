@@ -121,3 +121,8 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - Do not run formal team/loadout/action-axis optimization.
 - Do not start M12-C until the full `11/43/62/137/12` denominator and binding matrix qualify.
 - Do not modify the dirty main workspace, UI, package size, performance, or unrelated character/Kibo mechanics.
+
+## 预存外部漂移（非 E2 引入，等待决策）
+
+- `audit:verified-combat` 在已提交基线上即失败：`C:/PC2/Codex/AzPr/BWiki/data/combat-formula-knowledge.json` 外部源已从 v3.1.1（sha256 `ba27896e…`、66263B）漂移到 v3.1.2（`8671ad36…`、87062B）；重生成会改写 verified-combat 包、M10 报告与角色战斗档案，并使 Machine Axis canonical hashes 全部漂移。按规则不静默重定基线，保持已提交基线不动；是否重定基线/重验收由用户决策。
+- E2 仅更新了 `reports/applied-source-binding-audit.json`（loadoutPropertyTagSourceCount 49→51，对应 10101/10018 两个新 runtime-applied 灵魂），单独提交。
