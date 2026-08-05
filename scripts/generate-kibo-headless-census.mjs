@@ -15,7 +15,89 @@ const EXPECTED_DENOMINATORS = Object.freeze({
 });
 
 const FIXED_ACTION_SUPPORT_SLOTS = new Set([205, 401, 402, 403]);
-const FIXED_NON_COMBAT_SLOTS = new Set([501, 502, 504, 507, 508]);
+const FIXED_NON_COMBAT_SLOTS = new Set([
+  501, 502, 504, 505, 506, 507, 508, 602, 603, 50206,
+]);
+const FIXED_SLOT_SEMANTICS = Object.freeze({
+  205: {
+    name: 'PetUltraBlink',
+    scope: 'pve-combat-action-support',
+    sourceIdentity:
+      'dump.cs#ESkillSlotType.PetUltraBlink=205',
+  },
+  401: {
+    name: 'JumpBack',
+    scope: 'pve-combat-action-support',
+    sourceIdentity: 'dump.cs#ESkillSlotType.JumpBack=401',
+  },
+  402: {
+    name: 'JumpLeft',
+    scope: 'pve-combat-action-support',
+    sourceIdentity: 'dump.cs#ESkillSlotType.JumpLeft=402',
+  },
+  403: {
+    name: 'JumpRight',
+    scope: 'pve-combat-action-support',
+    sourceIdentity: 'dump.cs#ESkillSlotType.JumpRight=403',
+  },
+  501: {
+    name: 'PetPuzzleSkill',
+    scope: 'non-combat-capability',
+    sourceIdentity: 'dump.cs#ESkillSlotType.PetPuzzleSkill=501',
+  },
+  502: {
+    name: 'PetPuzzleBlink',
+    scope: 'non-combat-capability',
+    sourceIdentity: 'dump.cs#ESkillSlotType.PetPuzzleBlink=502',
+  },
+  504: {
+    name: 'PetCommunicate',
+    scope: 'non-combat-capability',
+    sourceIdentity: 'dump.cs#ESkillSlotType.PetCommunicate=504',
+  },
+  505: {
+    name: 'PetDecoration',
+    scope: 'non-combat-capability',
+    sourceIdentity:
+      'dump.cs#SystemConst.systemEnum.petDecoration=505',
+  },
+  506: {
+    name: 'PetRelease',
+    scope: 'non-combat-capability',
+    sourceIdentity:
+      'dump.cs#SystemConst.systemEnum.petRelease=506',
+  },
+  507: {
+    name: 'PetFeed',
+    scope: 'non-combat-capability',
+    sourceIdentity:
+      'dump.cs#SystemConst.systemEnum.petFeed=507',
+  },
+  508: {
+    name: 'PetBox',
+    scope: 'non-combat-capability',
+    sourceIdentity:
+      'dump.cs#SystemConst.systemEnum.petBox=508',
+  },
+  602: {
+    name: 'KiBoVersusCommonSkill',
+    scope: 'non-combat-capability',
+    sourceIdentity:
+      'dump.cs#ESkillType.KiBoVersusCommonSkill1=701/KiBoVersusCommonSkill2=702|GameAssembly.dll#EnterKiBoVersusCommonSkill/DoKiBoVersusCommonSkill1/DoKiBoVersusCommonSkill2',
+  },
+  603: {
+    name: 'KiBoVersusCommonSkill',
+    scope: 'non-combat-capability',
+    sourceIdentity:
+      'dump.cs#ESkillType.KiBoVersusCommonSkill1=701/KiBoVersusCommonSkill2=702|GameAssembly.dll#EnterKiBoVersusCommonSkill/DoKiBoVersusCommonSkill1/DoKiBoVersusCommonSkill2',
+  },
+  50206: {
+    name: 'PetPuzzleBlinkTypoAnomaly',
+    scope: 'non-combat-capability',
+    sourceIdentity:
+      'pet.json#rows[id=500007/500024/500025/500043].fixedSkillList#50206|four-occurrence-anomaly-consistent-with-PetPuzzleBlink-502-slot|not-in-public-action-surface',
+  },
+});
 const PROPERTY_BUCKET_BY_CALCULATE_TYPE = Object.freeze({
   0: 'dynamicForce',
   1: 'dynamicExtra',
@@ -189,12 +271,18 @@ export async function createKiboHeadlessCensus({
     })
   );
 
+  const publicActions = (publicRuntimeCoverage.actions ?? []).filter(
+    action => action.ownerKind === 'kibo'
+  );
   const fixedSkills = createFixedSkillRows({
     occurrences: fixedOccurrences,
     skillsById,
     skillLevelsBySkillId,
     skillLogicById,
     languageById,
+    publicActionSkillIds: new Set(
+      publicActions.map(action => Number(action.sourceSkillId))
+    ),
     sources,
   });
   const pvePassiveSkills = await createPvePassiveRows({
@@ -213,9 +301,6 @@ export async function createKiboHeadlessCensus({
     skillLogicById,
     sources,
   });
-  const publicActions = (publicRuntimeCoverage.actions ?? []).filter(
-    action => action.ownerKind === 'kibo'
-  );
   const actionRows = publicActions.map(createPublicActionClosureRow);
 
   assertDenominator(
@@ -464,24 +549,29 @@ function createFixedSkillRows({
   skillLevelsBySkillId,
   skillLogicById,
   languageById,
+  publicActionSkillIds,
   sources,
 }) {
   return [...groupRows(occurrences, row => row.skillId).entries()]
     .map(([skillId, skillOccurrences]) => {
       const slots = uniqueSorted(skillOccurrences.map(row => row.slot));
-      const allActionSupport = slots.every(slot =>
-        FIXED_ACTION_SUPPORT_SLOTS.has(slot)
+      const slotSemantics = slots.map(slot => FIXED_SLOT_SEMANTICS[slot] ?? null);
+      const knownSlotScopes = uniqueSorted(
+        slotSemantics.map(entry => entry?.scope ?? 'unknown')
       );
-      const allNonCombat = slots.every(slot =>
-        FIXED_NON_COMBAT_SLOTS.has(slot)
-      );
-      const scopeClass = allActionSupport
-        ? 'pve-combat-action-support'
-        : allNonCombat
-          ? 'non-combat-capability'
+      const allSlotsKnown = slotSemantics.every(Boolean);
+      const scopeClass =
+        allSlotsKnown && knownSlotScopes.length === 1
+          ? knownSlotScopes[0]
           : 'unresolved';
+      const inPublicActionSurface =
+        publicActionSkillIds?.has(Number(skillId)) === true;
+      const nonCombatGuardFailed =
+        scopeClass === 'non-combat-capability' && inPublicActionSurface;
       const closureClass =
-        scopeClass === 'unresolved' ? 'unresolved' : 'evidence-closed';
+        scopeClass === 'unresolved' || nonCombatGuardFailed
+          ? 'unresolved'
+          : 'evidence-closed';
       const firstLevel = firstSkillLevel(skillLevelsBySkillId, skillId);
       return {
         skillId,
@@ -496,14 +586,21 @@ function createFixedSkillRows({
           languageById,
           firstLevel?.skillDescribe
         ),
+        slotSemantics,
         tableEvidence: {
           skillRow: skillsById.has(skillId),
           skillLevelRow: Boolean(firstLevel),
           skillLogicRow: skillLogicById.has(skillId),
+          inPublicActionSurface,
         },
         unresolvedReasons:
           closureClass === 'unresolved'
-            ? ['fixed-skill-slot-semantics-not-yet-evidence-closed']
+            ? [
+                ...(allSlotsKnown ? [] : ['fixed-skill-slot-semantics-not-yet-evidence-closed']),
+                ...(nonCombatGuardFailed
+                  ? ['fixed-skill-classified-non-combat-but-in-public-action-surface']
+                  : []),
+              ]
             : [],
         provenance: [
           `${sources.petTable}#rows[id].fixedSkillList`,
@@ -511,6 +608,8 @@ function createFixedSkillRows({
           sources.skillLevelTable,
           sources.skillLogicTable,
           sources.il2cppSlotEnum,
+          ...slotSemantics.map(entry => entry?.sourceIdentity).filter(Boolean),
+          'reports/verified-public-runtime-coverage.json#actions[ownerKind=kibo]',
         ],
       };
     })

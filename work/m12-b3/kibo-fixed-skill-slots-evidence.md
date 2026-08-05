@@ -1,6 +1,6 @@
 # Kibo 固定技能槽位语义证据盘点（E15 起点）
 
-2026-08-05，为关闭 25 条 `fixed-skill-slot-semantics-not-yet-evidence-closed` 做的首轮证据盘点。
+2026-08-05，为关闭 25 条 `fixed-skill-slot-semantics-not-yet-evidence-closed` 做的首轮证据盘点。**E15 已于同日收口提交**（172/172 固定技能 evidence-closed）。
 
 ## 现状
 
@@ -27,7 +27,11 @@
 
 ## 下一步（E15 执行）
 
-1. 反汇编 GameAssembly 中 fixedSkillList 的解析/消费方（`PetSkillSlot`、`GetFixedSkillList`、`EnterKiBoVersusCommonSkill` 附近调用链），确认 505/506/602/603 数值槽的枚举来源与语义。
-2. 或换 JP/EN/KR 语言快照定位 7002xx/7003xx 技能名（可能补齐语义）。
-3. 对 50206 做单条异常核对（pet.json 原文、是否 typo）。
-4. 语义确定后在 `generate-kibo-headless-census.mjs` 的 `createFixedSkillRows` 登记槽位分类并补证据 sourceIdentity，25 条转 evidence-closed。
+已完成：
+
+1. 505/506/507/508 语义锁定：`SystemConst.systemEnum.petDecoration=505 / petRelease=506 / petFeed=507 / petBox=508`（dump.cs 147491-147494）。
+2. 602/603 语义锁定：KiBoVersusCommonSkill 槽（`ESkillType.KiBoVersusCommonSkill1=701/2=702` + `EnterKiBoVersusCommonSkill/DoKiBoVersusCommonSkill1/2`），技能 500101/510204x 为对战通用技能，不在 PVE 公开动作面。
+3. 50206：仅 500007/500024/500025/500043 四只，`pet.json#fixedSkillList#50206`，技能不在公开动作面，按与 PetPuzzleBlink（502）一致的异常槽处理，证据 identity 中注明 four-occurrence-anomaly。
+4. `createFixedSkillRows` 登记 `FIXED_SLOT_SEMANTICS`（每槽 name/scope/sourceIdentity），新增 `inPublicActionSurface` 防呆：非战斗分类技能若出现在公开动作（signature/active/break）则回退 unresolved。
+
+结果：172/172 unique fixed skills evidence-closed（147 原有 + 25 新闭），成熟度矩阵不再含 fixed-skill-classification 门。

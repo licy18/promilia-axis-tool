@@ -150,11 +150,11 @@
       {
         "requirementIdentity": "kibo-fixed-skill-classification",
         "dimension": "runtime",
-        "status": "blocked",
+        "status": "passed",
         "sourceIdentities": [
           "reports/kibo-headless/kibo-mechanics-census.json#fixedSkills[kiboId=500082]"
         ],
-        "passed": false
+        "passed": true
       },
       {
         "requirementIdentity": "kibo-pve-passive-runtime-ready",
@@ -176,7 +176,7 @@
       }
     ],
     "requiredCount": 8,
-    "passedCount": 5,
+    "passedCount": 6,
     "complete": false
   },
   "ledger": {
@@ -194,16 +194,9 @@
         "reason": "headless maturity gap: public-action-closure-incomplete",
         "blocking": true,
         "sourceIdentity": "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500082]"
-      },
-      {
-        "uniqueGapIdentity": "fixed-skill-classification-incomplete",
-        "status": "blocking",
-        "reason": "headless maturity gap: fixed-skill-classification-incomplete",
-        "blocking": true,
-        "sourceIdentity": "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500082]"
       }
     ],
-    "blockingCount": 3
+    "blockingCount": 2
   },
   "maturity": {
     "currentState": "runtime-integrated",
@@ -226,5 +219,5 @@
       "acceptance-product-visual-signoff-pending"
     ]
   },
-  "manifestHash": "73df091d9f5375cd"
+  "manifestHash": "9fc814cfcbbcc157"
 }

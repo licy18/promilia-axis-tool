@@ -86,14 +86,14 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - C7-R3 stores the recovery fields, local/remote callsites, executor/source `isMainControl` gates, `EPlayerNetworkState` semantics, SPSystem dispatch and 11 exact binary ranges in a versioned artifact. The generator revalidates its binary/dump/range hashes and the acceptance report reference. `isMainControl` is local network authority, not the active actor timeline, so production runtime remains unchanged.
 - R3 verification passed: focused evidence/runtime `5 / 119`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, nine deterministic audits, and production build. The accepted R2 canonical/runtime `6 / 72` remains applicable with zero production runtime diff.
 - C14 verification and product acceptance are complete. C15 passes focused source/census/runtime/cycle `5 / 179`, complete optimization qualification `11 / 71`, three-character profile/golden/migration `4 / 38`, canonical/runtime/cycle `6 / 187`, Machine Axis `12 / 160`, nine deterministic audits, and the 1875-module production build. Standard Machine Axis hashes remain unchanged.
-- Status: `B3-E14 implemented`（2026-08-05 用户恢复执行，E1-E14 已收口提交）。
-- Next step: 奇波动作闭合（366 个公开动作中 132 evidence-closed / 53 scenario-assumed / 181 unresolved）与固定技能分类（172 个中 147/25）证据批次，随后是 9 个 PVE 被动证据；角色侧需先扩 M11-D 验收 manifest（缺 9 个源身份）并补培养运行时证据；M12-C 与正式搜索保持锁定。
+- Status: `B3-E15 implemented`（2026-08-05 用户恢复执行，E1-E15 已收口提交）。
+- Next step: E16 奇波 PVE 被动证据（9 个 unresolved 技能 → 资格 4 条缺口）；之后 E17 奇波动作闭合（53 scenario-assumed + 181 unresolved，依赖 SkillList 新提取或 sync-verified-combat 重基线决策）；角色侧需先扩 M11-D 验收 manifest（缺 9 个源身份）并补培养运行时证据；M12-C 与正式搜索保持锁定。
 
 ## 剩余阻断按难度排序的阶段计划（2026-08-05 用户确认后顺次推进）
 
 当前缺口 125：角色 33 / 奇波 90 / 套装 2。难度从低到高：
 
-- **E15 奇波固定技能槽位语义（25 条 census unresolved，不直接减资格缺口但解锁成熟度门）**：pet.json 中槽位 505/506（全量配对 7002xx/7003xx）、602/603（500101/510204x 通用）、50206（仅 500007/500024/500025/500043 四只，疑似异常）语义未定；`ESkillSlotType` 枚举（dump.cs 245009）不含这些值、`EPetSkillSlotType`（405775）是 UI 槽位 0-5、CHS lang_skill 快照对应 name 哈希值为空。下一步：反汇编 `PetSkillSlot.fixedSkillList`/`GetFixedSkillList` 解析器或改用日/英文本快照定位 505/506/602/603/50206 语义。
+- **E15 奇波固定技能槽位语义（已完成，2026-08-05）**：505/506/507/508 锁定为 `SystemConst.systemEnum` 宠物装饰/释放/喂食/箱（dump.cs 147491-147494），602/603 锁定为 KiBoVersusCommonSkill 槽（ESkillType/EnterKiBoVersusCommonSkill 链），50206 为 4 只异常、与 PetPuzzleBlink 一致且不在公开动作面；`createFixedSkillRows` 增加 `FIXED_SLOT_SEMANTICS` 证据表 + `inPublicActionSurface` 防呆（非战斗分类若出现在公开动作即回退 unresolved）。172/172 固定技能全部 evidence-closed，成熟度矩阵移除固定技能分类门（105 只仅剩动作闭合、17 只剩动作闭合+PVE 被动）。
 - **E16 奇波 PVE 被动证据（9 个 unresolved 技能 → 资格 4 条 kibo-passive-static-evidence-gap）**：520004/520005/520006/520007 等，原因 `passive-supported-damage-trigger-shape-not-unique` / `passive-additional-trigger-elements-unmodeled`；需元素资产 + 二进制触发形状证据。
 - **E17 奇波动作闭合（53 scenario-assumed + 181 unresolved）**：43 条仅缺 `trigger-frame-missing` + `projectile-impact-frame-runtime-dependent`；但 SkillList 提取物当前是 stub（无 MonoBehaviour 数据），需新提取/运行时捕获或 `data:sync-verified-combat` 重基线决策（涉及外部漂移硬边界）。
 - **E18 奇波视觉签收（43 manifests → optimization-ready）**：E14 已发布 manifest，前置 E15-E17 全闭后产品签收即可；含概览图人工复核。

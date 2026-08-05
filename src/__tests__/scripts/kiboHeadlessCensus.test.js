@@ -47,9 +47,9 @@ describe('kibo headless census', () => {
     });
     expect(outputs.census.summary).toMatchObject({
       fixedSkillClassification: {
-        evidenceClosed: 147,
+        evidenceClosed: 172,
         scenarioAssumed: 0,
-        unresolved: 25,
+        unresolved: 0,
       },
       pvePassiveMechanics: {
         evidenceClosed: 35,
@@ -76,6 +76,16 @@ describe('kibo headless census', () => {
       outputs.census.fixedSkills
         .filter(row => row.closureClass === 'unresolved')
         .every(row => row.unresolvedReasons.length > 0)
+    ).toBe(true);
+    expect(
+      outputs.census.fixedSkills.filter(
+        row => row.closureClass === 'unresolved'
+      )
+    ).toHaveLength(0);
+    expect(
+      outputs.census.fixedSkills
+        .filter(row => row.slots.some(slot => [505, 506, 602, 603, 50206].includes(slot)))
+        .every(row => row.scopeClass === 'non-combat-capability')
     ).toBe(true);
     expect(
       outputs.census.pvePassiveSkills
