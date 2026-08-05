@@ -3,17 +3,17 @@
 - 包：`azpr-tc-2026-07-18`
 - 公开动作分母：563
 - 已关联：563
-- 场景可运行：463
+- 场景可运行：523
 - 来源静态可应用：410
-- 来源运行时依赖：53
-- 零距离场景补全：64
-- 来源静态证据缺口：100
+- 来源运行时依赖：113
+- 零距离场景补全：148
+- 来源静态证据缺口：40
 - 明确零：0
-- 未解析：100
-- 真实命中节点：1618
-- 公开动作变体：593（未解析 130）
+- 未解析：40
+- 真实命中节点：2502
+- 公开动作变体：593（未解析 70）
 - 非零回能元素：667（未关联 464）
-- 零距离投射物命中：833（仍缺发射帧 301、仍缺公式 172、仍缺目标 0）
+- 零距离投射物命中：2418（仍缺发射帧 203、仍缺公式 175、仍缺目标 0）
 - 普攻输入链：20 条 / 95 个输入段（可运行 80，未解析 15）
 - 普攻输入时序：已确认 78，未确认 17
 
@@ -56,9 +56,9 @@
 | actor | star-combo | 20 | 20 | 20 | 0 | 0 | 20 |
 | actor | star-skill | 20 | 20 | 19 | 0 | 1 | 140 |
 | actor | ultimate | 20 | 20 | 20 | 0 | 0 | 139 |
-| kibo | active | 122 | 122 | 66 | 0 | 56 | 457 |
-| kibo | break | 122 | 122 | 112 | 0 | 10 | 112 |
-| kibo | signature | 122 | 122 | 122 | 0 | 0 | 345 |
+| kibo | active | 122 | 122 | 117 | 0 | 5 | 998 |
+| kibo | break | 122 | 122 | 121 | 0 | 1 | 122 |
+| kibo | signature | 122 | 122 | 122 | 0 | 0 | 678 |
 
 ## 未解析动作
 
@@ -189,15 +189,15 @@
 - `kibo|500180|509002|0|509002` 嘻哈蝠 / active / 暗魂影爆阵: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500181|509002|0|509002` 笑面蝠 / active / 暗魂影爆阵: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500185|504009|0|504009` 森彩灵蝶 / active / 旋风涡流: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500186|502001|0|502001` 布鲁达 / active / 水弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
+- `kibo|500186|502001|0|502001` 布鲁达 / active / 水弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent, base-function-unverified, common-function-unverified, level-ratio-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete
 - `kibo|500187|502007|0|502007` 蓝羽西格尼 / active / 泡泡攻击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500213|509001|0|509001` 菇噜噜 / active / 暗魂影: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500220|509010|0|509010` 星云伊欧 / active / 暗影连袭: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500231|507003|0|507003` 铁鬃霸主 / active / 落雷: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500244|501001|0|501001` 焰哞哞 / active / 火球: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500258|505001|0|505001` 小芽狐 / active / 灵木弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500261|502001|0|502001` 河狸仔 / active / 水弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500262|502001|0|502001` 波河狸 / active / 水弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
+- `kibo|500261|502001|0|502001` 河狸仔 / active / 水弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent, base-function-unverified, common-function-unverified, level-ratio-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete
+- `kibo|500262|502001|0|502001` 波河狸 / active / 水弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent, base-function-unverified, common-function-unverified, level-ratio-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete
 - `kibo|500263|502005|0|502005` 河狸大师 / active / 浪袭: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500304|504012|0|504012` 库库 / active / 小风弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500305|504020|0|504020` 库库尔 / active / 旋风回旋镖: trigger-frame-missing, projectile-impact-frame-runtime-dependent

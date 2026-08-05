@@ -389,6 +389,21 @@ export async function createVerifiedCombatMechanicsBuild({
     characterCatalog,
     skills: seed.gameData?.skills ?? [],
   });
+  for (const candidate of candidates) {
+    if (candidate.ownerKind !== 'kibo') continue;
+    const controlSkillId = Number(candidate.controlSkillId);
+    if (!Number.isInteger(controlSkillId) || controlSkillId <= 0) continue;
+    if (controlPolicyBySkillId.has(controlSkillId)) continue;
+    controlPolicyBySkillId.set(controlSkillId, {
+      ownerId: Number(candidate.ownerId) || null,
+      controlSkillId,
+      behaviorTriggerScope: 'skill-player',
+      allowRuntimeTargetZeroDistance: true,
+      bulletInjectionMode: 'recursive-immediate',
+      sourceIdentity:
+        'm12-b3-kibo-zero-distance-profile|user-approved-sync-rebaseline-2026-08-05|frozen-zero-distance-scenario-assumption',
+    });
+  }
   const publicControlIds = new Set([
     ...candidates.map(candidate => candidate.controlSkillId),
     ...candidates.flatMap(candidate =>

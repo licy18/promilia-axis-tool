@@ -17330,8 +17330,7 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -17359,16 +17358,16 @@
           "verified-zero": 2
         },
         "healing": {
-          "verified-zero": 2
+          "verified-zero": 1
         },
         "shield": {
-          "verified-zero": 2
+          "verified-zero": 1
         },
         "dynamicProperty": {
-          "verified-zero": 2
+          "verified-zero": 1
         },
         "tuningMark": {
-          "verified-zero": 2
+          "verified-zero": 1
         }
       },
       "semanticEffects": {
@@ -17616,11 +17615,11 @@
       "actionKind": "break",
       "sourceSkillId": 50000203,
       "controlSkillId": 50000203,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -17740,11 +17739,11 @@
       "actionKind": "active",
       "sourceSkillId": 502019,
       "controlSkillId": 502019,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -17792,11 +17791,11 @@
       "actionKind": "break",
       "sourceSkillId": 50000303,
       "controlSkillId": 50000303,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -17921,11 +17920,11 @@
       "actionKind": "active",
       "sourceSkillId": 502016,
       "controlSkillId": 502016,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -17977,11 +17976,11 @@
       "actionKind": "break",
       "sourceSkillId": 50000417,
       "controlSkillId": 50000417,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -18093,11 +18092,11 @@
       "actionKind": "active",
       "sourceSkillId": 501014,
       "controlSkillId": 501014,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -18268,11 +18267,11 @@
       "actionKind": "active",
       "sourceSkillId": 501017,
       "controlSkillId": 501017,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -18793,11 +18792,11 @@
       "actionKind": "active",
       "sourceSkillId": 503006,
       "controlSkillId": 503006,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -18968,11 +18967,11 @@
       "actionKind": "active",
       "sourceSkillId": 503004,
       "controlSkillId": 503004,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -19302,11 +19301,11 @@
       "actionKind": "active",
       "sourceSkillId": 505006,
       "controlSkillId": 505006,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -19657,11 +19656,11 @@
       "actionKind": "active",
       "sourceSkillId": 505006,
       "controlSkillId": 505006,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -19890,11 +19889,11 @@
       "actionKind": "break",
       "sourceSkillId": 50003501,
       "controlSkillId": 50003501,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -19909,20 +19908,20 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 2,
+          "applied": 3,
           "unresolved": 1
         },
         "enemyToughness": {
-          "applied": 2,
+          "applied": 3,
           "unresolved": 1
         },
         "actorSp": {
           "unresolved": 1,
-          "verified-zero": 2
+          "verified-zero": 3
         },
         "kiboSp": {
           "unresolved": 1,
-          "verified-zero": 2
+          "verified-zero": 3
         },
         "healing": {},
         "shield": {},
@@ -20115,11 +20114,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50003801,
       "controlSkillId": 50003801,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -20291,11 +20290,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50003901,
       "controlSkillId": 50003901,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -21043,11 +21042,11 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -21216,11 +21215,11 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -21390,11 +21389,11 @@
       "actionKind": "active",
       "sourceSkillId": 504020,
       "controlSkillId": 504020,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -21499,11 +21498,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50004604,
       "controlSkillId": 50004604,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -21677,11 +21676,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50004705,
       "controlSkillId": 50004705,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -21746,11 +21745,11 @@
       "actionKind": "active",
       "sourceSkillId": 505014,
       "controlSkillId": 505014,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -21855,11 +21854,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50004805,
       "controlSkillId": 50004805,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -21924,11 +21923,11 @@
       "actionKind": "active",
       "sourceSkillId": 505018,
       "controlSkillId": 505018,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -22608,11 +22607,11 @@
       "actionKind": "active",
       "sourceSkillId": 507001,
       "controlSkillId": 507001,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -22713,11 +22712,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50005801,
       "controlSkillId": 50005801,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -23487,11 +23486,11 @@
       "actionKind": "active",
       "sourceSkillId": 502006,
       "controlSkillId": 502006,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -23631,16 +23630,16 @@
           "verified-zero": 3
         },
         "healing": {
-          "verified-zero": 3
+          "verified-zero": 1
         },
         "shield": {
-          "verified-zero": 3
+          "verified-zero": 1
         },
         "dynamicProperty": {
-          "verified-zero": 3
+          "verified-zero": 1
         },
         "tuningMark": {
-          "verified-zero": 3
+          "verified-zero": 1
         }
       },
       "semanticEffects": {
@@ -23660,11 +23659,11 @@
       "actionKind": "active",
       "sourceSkillId": 502003,
       "controlSkillId": 502003,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -23833,11 +23832,11 @@
       "actionKind": "active",
       "sourceSkillId": 503004,
       "controlSkillId": 503004,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -24005,11 +24004,11 @@
       "actionKind": "active",
       "sourceSkillId": 503007,
       "controlSkillId": 503007,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -24043,16 +24042,25 @@
           "unresolved": 8,
           "verified-zero": 2
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 10
+        },
+        "shield": {
+          "verified-zero": 10
+        },
+        "dynamicProperty": {
+          "unresolved": 8,
+          "verified-zero": 2
+        },
+        "tuningMark": {
+          "verified-zero": 10
+        }
       },
       "semanticEffects": {
-        "total": 0,
+        "total": 6,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 0
+        "unresolved": 6
       },
       "provenance": [
         "workbench-kibo-action-catalog.items[kiboId=500081].actions[skillId=503007].skillId"
@@ -24131,11 +24139,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50008201,
       "controlSkillId": 50008201,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -24669,11 +24677,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50008503,
       "controlSkillId": 50008503,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -25087,11 +25095,11 @@
       "actionKind": "active",
       "sourceSkillId": 509001,
       "controlSkillId": 509001,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -25257,11 +25265,11 @@
       "actionKind": "active",
       "sourceSkillId": 509002,
       "controlSkillId": 509002,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -25788,11 +25796,11 @@
       "actionKind": "active",
       "sourceSkillId": 505001,
       "controlSkillId": 505001,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -26131,11 +26139,11 @@
       "actionKind": "active",
       "sourceSkillId": 503010,
       "controlSkillId": 503010,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -26301,11 +26309,11 @@
       "actionKind": "active",
       "sourceSkillId": 503018,
       "controlSkillId": 503018,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -26633,11 +26641,11 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -26800,11 +26808,11 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -26967,11 +26975,11 @@
       "actionKind": "active",
       "sourceSkillId": 504014,
       "controlSkillId": 504014,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -27138,11 +27146,11 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -27313,11 +27321,11 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -27488,11 +27496,11 @@
       "actionKind": "active",
       "sourceSkillId": 504014,
       "controlSkillId": 504014,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -27661,11 +27669,11 @@
       "actionKind": "active",
       "sourceSkillId": 507001,
       "controlSkillId": 507001,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -28627,11 +28635,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50013801,
       "controlSkillId": 50013801,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -28804,11 +28812,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50013901,
       "controlSkillId": 50013901,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -28982,11 +28990,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50014001,
       "controlSkillId": 50014001,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -29280,11 +29288,11 @@
       "actionKind": "break",
       "sourceSkillId": 50014704,
       "controlSkillId": 50014704,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -29396,11 +29404,11 @@
       "actionKind": "active",
       "sourceSkillId": 505014,
       "controlSkillId": 505014,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -29452,11 +29460,11 @@
       "actionKind": "break",
       "sourceSkillId": 50014804,
       "controlSkillId": 50014804,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -29568,11 +29576,11 @@
       "actionKind": "active",
       "sourceSkillId": 505017,
       "controlSkillId": 505017,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -29624,11 +29632,11 @@
       "actionKind": "break",
       "sourceSkillId": 50014904,
       "controlSkillId": 50014904,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -29796,11 +29804,11 @@
       "actionKind": "break",
       "sourceSkillId": 50015604,
       "controlSkillId": 50015604,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -29852,11 +29860,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50015702,
       "controlSkillId": 50015702,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -29976,11 +29984,11 @@
       "actionKind": "break",
       "sourceSkillId": 50015704,
       "controlSkillId": 50015704,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -30032,11 +30040,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50015802,
       "controlSkillId": 50015802,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -30444,11 +30452,11 @@
       "actionKind": "active",
       "sourceSkillId": 507020,
       "controlSkillId": 507020,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -30952,11 +30960,11 @@
       "actionKind": "active",
       "sourceSkillId": 507020,
       "controlSkillId": 507020,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -31291,11 +31299,11 @@
       "actionKind": "active",
       "sourceSkillId": 509001,
       "controlSkillId": 509001,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -31471,11 +31479,11 @@
       "actionKind": "active",
       "sourceSkillId": 509002,
       "controlSkillId": 509002,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -31651,11 +31659,11 @@
       "actionKind": "active",
       "sourceSkillId": 509002,
       "controlSkillId": 509002,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -31760,11 +31768,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50018502,
       "controlSkillId": 50018502,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -32013,7 +32021,12 @@
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "base-function-unverified",
+        "common-function-unverified",
+        "level-ratio-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "timing": {
         "status": "applied",
@@ -32026,19 +32039,19 @@
       "dimensions": {
         "enemyHp": {
           "applied": 2,
-          "unresolved": 2
+          "unresolved": 3
         },
         "enemyToughness": {
           "applied": 2,
-          "unresolved": 2
+          "unresolved": 3
         },
         "actorSp": {
           "unresolved": 2,
-          "verified-zero": 2
+          "verified-zero": 3
         },
         "kiboSp": {
           "unresolved": 2,
-          "verified-zero": 2
+          "verified-zero": 3
         },
         "healing": {},
         "shield": {},
@@ -32186,11 +32199,11 @@
       "actionKind": "active",
       "sourceSkillId": 502007,
       "controlSkillId": 502007,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -32717,11 +32730,11 @@
       "actionKind": "active",
       "sourceSkillId": 509001,
       "controlSkillId": 509001,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -33963,11 +33976,11 @@
       "actionKind": "active",
       "sourceSkillId": 505001,
       "controlSkillId": 505001,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -34068,11 +34081,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50025901,
       "controlSkillId": 50025901,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "base-function-unverified",
         "trigger-frame-missing",
@@ -34243,11 +34256,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50026001,
       "controlSkillId": 50026001,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "base-function-unverified",
         "trigger-frame-missing",
@@ -34499,7 +34512,12 @@
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "base-function-unverified",
+        "common-function-unverified",
+        "level-ratio-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "timing": {
         "status": "applied",
@@ -34512,19 +34530,19 @@
       "dimensions": {
         "enemyHp": {
           "applied": 2,
-          "unresolved": 2
+          "unresolved": 3
         },
         "enemyToughness": {
           "applied": 2,
-          "unresolved": 2
+          "unresolved": 3
         },
         "actorSp": {
           "unresolved": 2,
-          "verified-zero": 2
+          "verified-zero": 3
         },
         "kiboSp": {
           "unresolved": 2,
-          "verified-zero": 2
+          "verified-zero": 3
         },
         "healing": {},
         "shield": {},
@@ -34674,7 +34692,12 @@
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "base-function-unverified",
+        "common-function-unverified",
+        "level-ratio-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "timing": {
         "status": "applied",
@@ -34687,19 +34710,19 @@
       "dimensions": {
         "enemyHp": {
           "applied": 2,
-          "unresolved": 2
+          "unresolved": 3
         },
         "enemyToughness": {
           "applied": 2,
-          "unresolved": 2
+          "unresolved": 3
         },
         "actorSp": {
           "unresolved": 2,
-          "verified-zero": 2
+          "verified-zero": 3
         },
         "kiboSp": {
           "unresolved": 2,
-          "verified-zero": 2
+          "verified-zero": 3
         },
         "healing": {},
         "shield": {},
@@ -34842,11 +34865,11 @@
       "actionKind": "active",
       "sourceSkillId": 502005,
       "controlSkillId": 502005,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -35122,11 +35145,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50030401,
       "controlSkillId": 50030401,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -35193,11 +35216,11 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -35298,11 +35321,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50030501,
       "controlSkillId": 50030501,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -35369,11 +35392,11 @@
       "actionKind": "active",
       "sourceSkillId": 504020,
       "controlSkillId": 504020,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -35474,11 +35497,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50030601,
       "controlSkillId": 50030601,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -35545,11 +35568,11 @@
       "actionKind": "active",
       "sourceSkillId": 504006,
       "controlSkillId": 504006,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -35650,11 +35673,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50031302,
       "controlSkillId": 50031302,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -35825,11 +35848,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50032201,
       "controlSkillId": 50032201,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -36002,11 +36025,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50032301,
       "controlSkillId": 50032301,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "projectile-impact-frame-runtime-dependent",
         "pack-lifecycle-semantics-evidence-gap",
@@ -36176,11 +36199,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50032401,
       "controlSkillId": 50032401,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -36249,11 +36272,11 @@
       "actionKind": "active",
       "sourceSkillId": 504006,
       "controlSkillId": 504006,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -36425,11 +36448,11 @@
       "actionKind": "active",
       "sourceSkillId": 509001,
       "controlSkillId": 509001,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -36605,11 +36628,11 @@
       "actionKind": "active",
       "sourceSkillId": 509002,
       "controlSkillId": 509002,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -36782,11 +36805,11 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -37128,11 +37151,11 @@
       "actionKind": "active",
       "sourceSkillId": 509002,
       "controlSkillId": 509002,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -37300,11 +37323,11 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -37837,11 +37860,11 @@
       "actionKind": "active",
       "sourceSkillId": 502007,
       "controlSkillId": 502007,
-      "closureClass": "unresolved",
-      "runtimeStatus": "runtime-and-evidence-gap",
-      "runnable": false,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "closureClass": "scenario-assumed",
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -38117,11 +38140,11 @@
       "actionKind": "signature",
       "sourceSkillId": 50046801,
       "controlSkillId": 50046801,
-      "closureClass": "unresolved",
+      "closureClass": "scenario-assumed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -38645,8 +38668,8 @@
     },
     "publicActionClosure": {
       "evidenceClosed": 132,
-      "scenarioAssumed": 53,
-      "unresolved": 181
+      "scenarioAssumed": 137,
+      "unresolved": 97
     },
     "fixedSkillScopeClasses": {
       "non-combat-capability": 45,

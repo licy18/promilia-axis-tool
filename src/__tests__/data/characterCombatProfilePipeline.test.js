@@ -1389,12 +1389,12 @@ describe('M10 character combat profile pipeline', () => {
       project: { durationMs: 120000, actionCount: 27 },
       actions: { blockedActionIds: [] },
       combat: {
-        damageEventCount: 422,
+        damageEventCount: 423,
         ownerDamageEventCount: 247,
         ownerHitEventCount: 115,
         ownerHitTotalHpDamage: 9992,
         ownerHitTotalToughnessDamage: 1766,
-        ownerTotalHpDamage: 699416,
+        ownerTotalHpDamage: 699206,
         ownerTotalToughnessDamage: 0,
         enemy: { initialHp: 862800, finalHp: 0 },
       },
@@ -1472,8 +1472,8 @@ describe('M10 character combat profile pipeline', () => {
       tamperedValidation.assertions.find(item => !item.passed)
     ).toMatchObject({
       jsonPath: 'combat.ownerTotalHpDamage',
-      expected: 699417,
-      actual: 699416,
+      expected: 699207,
+      actual: 699206,
     });
   });
 

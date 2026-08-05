@@ -179,7 +179,7 @@ describe('verified combat project replay consistency', () => {
       'verified-replay-han-star': 8,
       'verified-replay-pangpang-combo': 2,
       'verified-replay-muyin-charged': 3,
-      'verified-replay-wind-kibo': 6,
+      'verified-replay-wind-kibo': 1,
       'verified-replay-wind-kibo-combo': 1,
     });
     expect(signatures[0]).toMatchObject({

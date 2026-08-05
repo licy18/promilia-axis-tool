@@ -1158,9 +1158,16 @@ describe('verified kibo passive generation', () => {
       scenario: activeScenario,
       actionResolutionById: new Map([[activeAction.id, activeResolution]]),
     });
-    expect(activeResolution.ready).toBe(false);
+    expect(activeResolution.ready).toBe(true);
     expect(activeGeneration.effectCommands).toEqual([]);
-    expect(activeGeneration.conditionSuppressions).toEqual([]);
+    expect(activeGeneration.conditionSuppressions).toEqual([
+      expect.objectContaining({
+        actionId: activeAction.id,
+        kiboId: 500043,
+        skillId: 520087,
+        reason: 'kibo-passive-skill-tag-condition-not-matched',
+      }),
+    ]);
 
     const mismatchedTagResolution = {
       ...resolution,

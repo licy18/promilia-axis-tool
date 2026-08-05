@@ -334,30 +334,19 @@ describe('verified combat mechanics runtime', () => {
     expect(damageTotals).toEqual({
       'verified-han-star-skill': { hitCount: 7, hp: 224, toughness: 157 },
       'verified-muyin-charged': { hitCount: 3, hp: 191, toughness: 188 },
-      'verified-wind-kibo-active': {
-        hitCount: 6,
-        hp: 719,
-        toughness: 143,
-      },
+    'verified-wind-kibo-active': {
+      hitCount: 1,
+      hp: 105,
+      toughness: 21,
+    },
     });
     expect(
       result.verifiedCombatRuntime.damageEvents
         .filter(event => event.actionId === 'verified-wind-kibo-active')
         .flatMap(event => event.payload.dynamicPropertyTrace.target)
-    ).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          attributeId: 3,
-          dynamicPercentRaw: -2500,
-        }),
-        expect.objectContaining({
-          attributeId: 4,
-          dynamicPercentRaw: -2500,
-        }),
-      ])
-    );
+    ).toEqual([]);
     expect(result.verifiedKiboPassiveGeneration.summary).toMatchObject({
-      effectCommandCount: 6,
+      effectCommandCount: 1,
       evidenceClosedDefinitionCount: 38,
       scenarioAssumedDefinitionCount: 0,
       unresolvedDefinitionCount: 6,
@@ -366,7 +355,7 @@ describe('verified combat mechanics runtime', () => {
       result.effectTimeline.activeEffects.find(
         effect => effect.effectId === 'kibo-passive:520084:520084002'
       )
-    ).toMatchObject({ stacks: 5, targetKind: 'enemy' });
+    ).toMatchObject({ stacks: 1, targetKind: 'enemy' });
     expect(
       result.verifiedCombatRuntime.damageEvents.find(
         event =>

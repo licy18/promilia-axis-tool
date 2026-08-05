@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "f8c2c1c56cffe147",
+  "rosterHash": "e63b12e148fe9a48",
   "records": [
     {
       "objectKind": "character",
@@ -32,10 +32,10 @@
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "e3370850d1e1d6ea"
+          "87fd8950a84a5cbe"
         ]
       },
-      "manifestHash": "8597fb66425a456a"
+      "manifestHash": "42d5abd80dbe446a"
     },
     {
       "objectKind": "character",
@@ -99,10 +99,10 @@
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "ba4890b77bc9e6ea"
+          "c73662a5da3854c2"
         ]
       },
-      "manifestHash": "dcbb321ea0edbd55"
+      "manifestHash": "545828872fea123f"
     },
     {
       "objectKind": "character",
@@ -4211,14 +4211,14 @@
         "generated/kibos.json#items[id=500043]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500043]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "012219601e979c24",
+          "manifestHash": "f34116b60be016ba",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -4242,7 +4242,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "fcd7739e0dded6e0"
+      "manifestHash": "dab317a8d1325471"
     },
     {
       "objectKind": "kibo",
@@ -4252,14 +4252,14 @@
         "generated/kibos.json#items[id=500044]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500044]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "13ec98e08b269871",
+          "manifestHash": "73e29b45544a204d",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -4283,7 +4283,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "3c4432d65795a3de"
+      "manifestHash": "c0f0b10b3c044d74"
     },
     {
       "objectKind": "kibo",
@@ -4293,14 +4293,14 @@
         "generated/kibos.json#items[id=500045]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500045]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "8fb46e6e9841637f",
+          "manifestHash": "a2a75eaeb9dc6ec1",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -4324,7 +4324,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "a9fdc7dcb99a3f85"
+      "manifestHash": "3632e8095081671f"
     },
     {
       "objectKind": "kibo",
@@ -4334,14 +4334,14 @@
         "generated/kibos.json#items[id=500057]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500057]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "f376a95267b07534",
+          "manifestHash": "27ed995b40173ad8",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -4365,7 +4365,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "01896b5a68d7fabf"
+      "manifestHash": "3ce29526dc2f51fb"
     },
     {
       "objectKind": "kibo",
@@ -4464,7 +4464,7 @@
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "9fc814cfcbbcc157",
+          "manifestHash": "888bebb16f2ac845",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -4494,7 +4494,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "c5b1a705331978a9"
+      "manifestHash": "04a7e38c62de38f4"
     },
     {
       "objectKind": "kibo",
@@ -4545,14 +4545,14 @@
         "generated/kibos.json#items[id=500123]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500123]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "b5c5d1e0c8330b70",
+          "manifestHash": "911ced1592719994",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -4576,7 +4576,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "e005122e357e9684"
+      "manifestHash": "176a2ebc8682b6be"
     },
     {
       "objectKind": "kibo",
@@ -4586,14 +4586,14 @@
         "generated/kibos.json#items[id=500124]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500124]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "56fcc4b529e95498",
+          "manifestHash": "1e491a8ad9d5cdf2",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -4617,7 +4617,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "f49b45701e0c3e06"
+      "manifestHash": "b4551942b41eaf96"
     },
     {
       "objectKind": "kibo",
@@ -4627,14 +4627,14 @@
         "generated/kibos.json#items[id=500125]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500125]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "3a703cfe6cb49f68",
+          "manifestHash": "49330b9a01601fc4",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -4658,7 +4658,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "83e44435c9df5204"
+      "manifestHash": "18ccc182b75b18ac"
     },
     {
       "objectKind": "kibo",
@@ -4668,14 +4668,14 @@
         "generated/kibos.json#items[id=500126]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500126]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "e1ba83e157d135d9",
+          "manifestHash": "da47023b47ff8edb",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -4699,7 +4699,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "90f4cab358fd9fc9"
+      "manifestHash": "8168b92c784a30c2"
     },
     {
       "objectKind": "kibo",
@@ -4709,14 +4709,14 @@
         "generated/kibos.json#items[id=500127]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500127]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "037f56f37401e1c0",
+          "manifestHash": "468595241eb2c278",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -4740,7 +4740,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "12c16977b53efd2b"
+      "manifestHash": "f394d8430d37a035"
     },
     {
       "objectKind": "kibo",
@@ -4750,14 +4750,14 @@
         "generated/kibos.json#items[id=500128]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500128]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "cf00aa6414d9fdcd",
+          "manifestHash": "421ad06268f4442f",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -4781,7 +4781,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "c962f78fcc3b67b1"
+      "manifestHash": "a6f980d84b6a5e77"
     },
     {
       "objectKind": "kibo",
@@ -4791,14 +4791,14 @@
         "generated/kibos.json#items[id=500129]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500129]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "c6738df685265a4e",
+          "manifestHash": "5f73fa7523dab31a",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -4822,7 +4822,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "1751dc4a2293c1e1"
+      "manifestHash": "1e13d8ca92b5c76f"
     },
     {
       "objectKind": "kibo",
@@ -4955,14 +4955,14 @@
         "generated/kibos.json#items[id=500165]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500165]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "2bf31d7e3dcbec24",
+          "manifestHash": "d47e05fc9a782e40",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -4986,7 +4986,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "4b3c75822c9ffe3e"
+      "manifestHash": "f9342c5460556cd8"
     },
     {
       "objectKind": "kibo",
@@ -5078,14 +5078,14 @@
         "generated/kibos.json#items[id=500174]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500174]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "254a6d78bff877be",
+          "manifestHash": "90788fb23fb41b06",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -5109,7 +5109,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "aeae616e63133beb"
+      "manifestHash": "35b588c85850e775"
     },
     {
       "objectKind": "kibo",
@@ -5167,7 +5167,7 @@
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "f1aceee76e88ac4b",
+          "manifestHash": "1b8f2c6e53cb6c15",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -5197,7 +5197,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "3331c8b09d345d57"
+      "manifestHash": "08bb29eb8bd86ef4"
     },
     {
       "objectKind": "kibo",
@@ -5330,14 +5330,14 @@
         "generated/kibos.json#items[id=500304]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500304]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "2845269b659a946f",
+          "manifestHash": "037ee52df00b891f",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -5361,7 +5361,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "bf9e67021ee7e873"
+      "manifestHash": "99856c5121f6d522"
     },
     {
       "objectKind": "kibo",
@@ -5371,14 +5371,14 @@
         "generated/kibos.json#items[id=500305]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500305]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "005d8235c030edf4",
+          "manifestHash": "1e711d81e4a27822",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -5402,7 +5402,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "dc5acea3d2fc71f6"
+      "manifestHash": "e300157842eb8421"
     },
     {
       "objectKind": "kibo",
@@ -5412,14 +5412,14 @@
         "generated/kibos.json#items[id=500306]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500306]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "dc04d357a0d16d50",
+          "manifestHash": "8d1721e7514739b4",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -5443,7 +5443,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "2a16de6166567d7a"
+      "manifestHash": "6bce958a164198bd"
     },
     {
       "objectKind": "kibo",
@@ -5460,7 +5460,7 @@
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "be913bfcbf17258b",
+          "manifestHash": "e1bca3a447f32461",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -5484,7 +5484,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "a7c538e0089fe497"
+      "manifestHash": "f6f79f262a44593a"
     },
     {
       "objectKind": "kibo",
@@ -5501,7 +5501,7 @@
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "ed91d02d70da28e6",
+          "manifestHash": "947481736a2413b0",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -5525,7 +5525,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "81dbc0d0a301bdf1"
+      "manifestHash": "903bd61163527c17"
     },
     {
       "objectKind": "kibo",
@@ -5535,14 +5535,14 @@
         "generated/kibos.json#items[id=500324]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500324]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "db5ca694a3303cca",
+          "manifestHash": "65c27704888c6576",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -5566,7 +5566,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "52756ead25ac8f73"
+      "manifestHash": "2ad31eda8e88af9d"
     },
     {
       "objectKind": "kibo",
@@ -5576,14 +5576,14 @@
         "generated/kibos.json#items[id=500357]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500357]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "635b628ce2af2cb6",
+          "manifestHash": "b0317c507c6f12e4",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -5607,7 +5607,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "a28eb40bae3f405a"
+      "manifestHash": "d8469e9095c4b6f1"
     },
     {
       "objectKind": "kibo",
@@ -5658,14 +5658,14 @@
         "generated/kibos.json#items[id=500360]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500360]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "9616264684787dec",
+          "manifestHash": "8ca4a7a3bf751d98",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -5695,7 +5695,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "3a61db6222d543e7"
+      "manifestHash": "8d201011ce21ee81"
     },
     {
       "objectKind": "kibo",
@@ -5705,14 +5705,14 @@
         "generated/kibos.json#items[id=500368]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500368]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
         {
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "3ad765dbabb895af",
+          "manifestHash": "6b007c6af0b950fd",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -5736,7 +5736,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "a88977b2fd3c774b"
+      "manifestHash": "fe5a56a65a5b9ae4"
     },
     {
       "objectKind": "kibo",
@@ -31664,9 +31664,9 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 30,
+      "extracted": 10,
       "optimization-ready": 210,
-      "runtime-integrated": 25
+      "runtime-integrated": 45
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -31677,5 +31677,5 @@
     },
     "optimizationReadyTotal": 210
   },
-  "manifestsHash": "eecfcf36816009a1"
+  "manifestsHash": "16e1532513e8bcd5"
 }

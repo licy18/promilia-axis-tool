@@ -987,8 +987,8 @@ describe('M10-B1 Ruby character combat profile', () => {
         blockedActionIds: ['ruby-insufficient-shot'],
       },
       combat: {
-        ownerDamageEventCount: 184,
-        ownerHitEventCount: 63,
+        ownerDamageEventCount: 185,
+        ownerHitEventCount: 64,
         ownerHitCountByActionId: {
           'ruby-star-skill': 7,
         },
@@ -1000,11 +1000,11 @@ describe('M10-B1 Ruby character combat profile', () => {
             totalToughnessDamage: 464,
           },
         },
-        ownerTotalHpDamage: 164311,
-        ownerTotalToughnessDamage: 2198,
+        ownerTotalHpDamage: 164422,
+        ownerTotalToughnessDamage: 2220,
         enemy: {
           initialHp: 862800,
-          finalHp: 698395,
+          finalHp: 698284,
         },
       },
       effects: {

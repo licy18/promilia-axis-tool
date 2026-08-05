@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "278e9518ee1585e32b6912bd26788a0751ff12d66feaa9d12ad094306bfab870",
+  "sourcePackageHash": "c51cdd52a80b92e852b08776018d0afad28ae076227870daec5c832342341f69",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "50e9b000cb6c8d96",
-    "traceHash": "64d646fe576c5f5b",
-    "dataHash": "4ce7bf2672749053",
+    "inputHash": "0d064ee70cac23ab",
+    "traceHash": "bf557f4afddddb08",
+    "dataHash": "51f7a317581977c8",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -508,7 +508,7 @@
       }
     },
     "combat": {
-      "damageEventCount": 422,
+      "damageEventCount": 423,
       "ownerDamageEventCount": 247,
       "ownerHitEventCount": 115,
       "ownerHitCountByActionId": {
@@ -807,10 +807,10 @@
       },
       "totalHpDamage": 862800,
       "totalToughnessDamage": 0,
-      "ownerTotalHpDamage": 699416,
+      "ownerTotalHpDamage": 699206,
       "ownerTotalToughnessDamage": 0,
       "enemy": {
-        "pointCount": 609,
+        "pointCount": 611,
         "initialHp": 862800,
         "finalHp": 0,
         "maxHp": 862800,
@@ -5046,7 +5046,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|750|acquire|41050|153",
+          "eventIdentity": "tuning-mark|750|acquire|41050|154",
           "actionId": "normal-a5",
           "frame": 2463,
           "kind": "acquire",
@@ -5094,7 +5094,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|750|consume|42750|162",
+          "eventIdentity": "tuning-mark|750|consume|42750|163",
           "actionId": "normal-special-charged",
           "frame": 2565,
           "kind": "consume",
@@ -5106,7 +5106,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|expire|43400|183",
+          "eventIdentity": "tuning-mark|250|expire|43400|184",
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 2604,
           "kind": "expire",
@@ -5118,7 +5118,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|expire|43450|184",
+          "eventIdentity": "tuning-mark|150|expire|43450|185",
           "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
           "frame": 2607,
           "kind": "expire",
@@ -6126,7 +6126,7 @@
       ],
       "primaryEffectFormulaValuesById": {},
       "baselineEffectFormulaValuesById": {},
-      "baselineReplayHash": "246e9f8fc884cc09bd86de8e19a7b6148588803d3b803caef96d1fea5b1e2ee8"
+      "baselineReplayHash": "0daebf6f44d6748227c7dd3a31d163dc2a438286e2611ef178fb6892814a2b69"
     },
     "trace": {
       "damage": [
@@ -9648,6 +9648,18 @@
         },
         {
           "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "fire-kibo-signature",
+          "frame": 2130,
+          "hitIdentity": null,
+          "rawDamage": 210,
+          "hpDamage": 210,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
           "eventType": "VERIFIED_TUNING_DAMAGE",
           "actionId": "fire-kibo-signature",
           "frame": 2130,
@@ -10876,8 +10888,8 @@
           "actionId": "normal-special-charged",
           "frame": 2565,
           "hitIdentity": null,
-          "rawDamage": 129500,
-          "hpDamage": 129500,
+          "rawDamage": 129290,
+          "hpDamage": 129290,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -11533,7 +11545,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|750|acquire|41050|153",
+          "eventIdentity": "tuning-mark|750|acquire|41050|154",
           "actionId": "normal-a5",
           "frame": 2463,
           "kind": "acquire",
@@ -11581,7 +11593,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|750|consume|42750|162",
+          "eventIdentity": "tuning-mark|750|consume|42750|163",
           "actionId": "normal-special-charged",
           "frame": 2565,
           "kind": "consume",
@@ -11593,7 +11605,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|expire|43400|183",
+          "eventIdentity": "tuning-mark|250|expire|43400|184",
           "actionId": "switch-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 2604,
           "kind": "expire",
@@ -11605,7 +11617,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|expire|43450|184",
+          "eventIdentity": "tuning-mark|150|expire|43450|185",
           "actionId": "switch-to-ruby--on-exit--actor-101003--star-carry",
           "frame": 2607,
           "kind": "expire",
@@ -13369,7 +13381,7 @@
         }
       ]
     },
-    "summaryHash": "6fa24e7026a9372b1eb57c094b5b3c726bf012953b92cc965359f8072b350cb3"
+    "summaryHash": "71b6a34ea01b0afaffc8ce2f6b61e1bda464a3d5cda9ec010c4f2cc49327fbad"
   },
   "expected": {
     "exact": {
@@ -13408,12 +13420,12 @@
       "actions.selectionByActionId.jade-perfect-parry.controlSkillId": 10101049,
       "actions.selectionByActionId.jade-perfect-parry.subSkillIndex": 1,
       "actions.selectionByActionId.jade-perfect-parry.actualDurationFrames": 36,
-      "combat.damageEventCount": 422,
+      "combat.damageEventCount": 423,
       "combat.ownerDamageEventCount": 247,
       "combat.ownerHitEventCount": 115,
       "combat.ownerHitTotalHpDamage": 9992,
       "combat.ownerHitTotalToughnessDamage": 1766,
-      "combat.ownerTotalHpDamage": 699416,
+      "combat.ownerTotalHpDamage": 699206,
       "combat.ownerTotalToughnessDamage": 0,
       "combat.enemy.initialHp": 862800,
       "combat.enemy.finalHp": 0,
@@ -13782,8 +13794,8 @@
       {
         "jsonPath": "combat.damageEventCount",
         "operator": "exact",
-        "expected": 422,
-        "actual": 422,
+        "expected": 423,
+        "actual": 423,
         "passed": true
       },
       {
@@ -13817,8 +13829,8 @@
       {
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "exact",
-        "expected": 699416,
-        "actual": 699416,
+        "expected": 699206,
+        "actual": 699206,
         "passed": true
       },
       {
@@ -14409,7 +14421,7 @@
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 699416,
+        "actual": 699206,
         "passed": true
       },
       {
@@ -14428,6 +14440,6 @@
       }
     ]
   },
-  "replayHash": "01fb85c9b3309dab076a7e222dc4f490beb6e4168e2ea50302df65db7de697e9",
-  "profileHash": "2f1f80ad78a7601921a8a9ae60d29cd5b3eec446f1083af276ddcbb9e5ab11b7"
+  "replayHash": "37c292db7e86bfdf7cd0b1c93ee766de241e1d9b9a0d48ee3268e9d024071837",
+  "profileHash": "4071ed4e85c8f0bee29bb6f57d81bb991922852bd3eac264fadcbdd552520f8a"
 }

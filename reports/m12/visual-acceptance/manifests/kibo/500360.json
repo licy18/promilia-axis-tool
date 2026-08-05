@@ -37,8 +37,8 @@
           "closureClass": "unresolved"
         },
         "active": {
-          "runtimeStatus": "runtime-and-evidence-gap",
-          "closureClass": "unresolved"
+          "runtimeStatus": "runnable",
+          "closureClass": "scenario-assumed"
         },
         "break": {
           "runtimeStatus": "runnable",
@@ -132,11 +132,11 @@
       {
         "requirementIdentity": "kibo-public-actions-runnable",
         "dimension": "runtime",
-        "status": "blocked",
+        "status": "passed",
         "sourceIdentities": [
           "reports/verified-public-runtime-coverage.json#actions[kiboId=500360]"
         ],
-        "passed": false
+        "passed": true
       },
       {
         "requirementIdentity": "kibo-static-attribute-inheritance-audit",
@@ -176,7 +176,7 @@
       }
     ],
     "requiredCount": 8,
-    "passedCount": 5,
+    "passedCount": 6,
     "complete": false
   },
   "ledger": {
@@ -219,5 +219,5 @@
       "acceptance-product-visual-signoff-pending"
     ]
   },
-  "manifestHash": "9616264684787dec"
+  "manifestHash": "8ca4a7a3bf751d98"
 }

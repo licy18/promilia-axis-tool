@@ -1119,11 +1119,11 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.metrics.loopHpDamage).toBe(22.59375);
     expect(report.metrics.cycleDps).toBe(4.51875);
     expect(report.hashes).toMatchObject({
-      input: '233b7566c017cba4',
-      data: '5218b563f08ec7bd',
-      trace: '54eace5453ad3098',
+      input: '33d0e94956ac3253',
+      data: '84ec2cca731f133d',
+      trace: '11155bbb61593705',
       evaluation: '13fc3bf3db5aeb9d',
-      cycle: '6b0e361d60869faa',
+      cycle: 'a808ea8b9b0dd18c',
     });
     expect(report.sampleStatistics.loopHpDamage.variance).toBeGreaterThan(0);
     for (const dimension of ['byActor', 'byAction', 'byHit']) {

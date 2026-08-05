@@ -11,12 +11,12 @@ const GOLDENS = [
     report: xiaoyuGolden,
     assertionCount: 118,
     replayHash:
-      '01fb85c9b3309dab076a7e222dc4f490beb6e4168e2ea50302df65db7de697e9',
+      '37c292db7e86bfdf7cd0b1c93ee766de241e1d9b9a0d48ee3268e9d024071837',
     summaryHash:
-      '6fa24e7026a9372b1eb57c094b5b3c726bf012953b92cc965359f8072b350cb3',
-    inputHash: '50e9b000cb6c8d96',
-    dataHash: '4ce7bf2672749053',
-    traceHash: '64d646fe576c5f5b',
+      '71b6a34ea01b0afaffc8ce2f6b61e1bda464a3d5cda9ec010c4f2cc49327fbad',
+    inputHash: '0d064ee70cac23ab',
+    dataHash: '51f7a317581977c8',
+    traceHash: 'bf557f4afddddb08',
   },
   {
     identity: 'ruby-main',
@@ -24,12 +24,12 @@ const GOLDENS = [
     report: rubyGolden,
     assertionCount: 129,
     replayHash:
-      'c16d0d7d0f2648b8d83f7219a8ad886e4eb85fbb8dcca7fd1610472ae6ec9f35',
+      'f1aa2b155e4eec77ad102b0959e3b85042ac52bcc258276d7af96196c24fd99f',
     summaryHash:
-      'f9144e8d2724b63653363556774ce8d5f64e33439edd39a684e18f12f3f0e2bd',
-    inputHash: 'f9ffca84cea3ba89',
-    dataHash: '2116e79e15e36204',
-    traceHash: '57d9081f5ebb7033',
+      '27925aca23a0a7822ac181d5eabd39192b04872f27c1c7eb7feacfdc1e7027de',
+    inputHash: 'e319e6dfd7e4abd4',
+    dataHash: '22e281c92765e84b',
+    traceHash: '13c7748f0ae101cf',
   },
   {
     identity: 'han-main',
@@ -40,9 +40,9 @@ const GOLDENS = [
       'c0ea863d0c558be4998e4f0cb1399aa6998d92539d74ec3127f0d408f221a649',
     summaryHash:
       '69d7c6c48099766121656ba8e52a26b9e1244e1ed33f80fef4b7d0f965fe4c36',
-    inputHash: '71c0dfb5d1fbcaf2',
-    dataHash: '2225ab49d757d999',
-    traceHash: 'c89f471aba34d155',
+    inputHash: '0ade1d494d1a5d6f',
+    dataHash: '41aec6bc82df5136',
+    traceHash: '0dd412c54c227039',
   },
   {
     identity: 'han-controlled-buff-switch',
@@ -53,9 +53,9 @@ const GOLDENS = [
       '624a48308aafea9cedb9d81db624377ce1620fbc0795ecadc99da8113571cdf6',
     summaryHash:
       '5b6de79f7b816c6749f8bc7cbc5d394db8a43ae030ae7febf4647f59c0c5dc14',
-    inputHash: '1f906a7891b50bf5',
-    dataHash: '36af074a9375f5ba',
-    traceHash: '84245b266485761a',
+    inputHash: '1b5fcd1a218647ef',
+    dataHash: '4851fde5d2f01218',
+    traceHash: '90898480409425ac',
   },
 ];
 

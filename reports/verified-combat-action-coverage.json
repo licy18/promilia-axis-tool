@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "5219a4bb003a9a573682b527f74a9a0a029268a0c25986eda01b2387cdc80422",
+  "packageHash": "6026ea84420c0b625af26ae2aec853b9506cbbf36b874476439aca9c19e1cdcc",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -20,49 +20,49 @@
     "directoryActionCount": 563,
     "classifiedActionCount": 563,
     "linkedActionCount": 563,
-    "runnableActionCount": 463,
+    "runnableActionCount": 523,
     "sourceAppliedActionCount": 410,
-    "sourceRuntimeDependentActionCount": 53,
-    "sourceStaticEvidenceGapActionCount": 100,
-    "scenarioResolvedActionCount": 64,
+    "sourceRuntimeDependentActionCount": 113,
+    "sourceStaticEvidenceGapActionCount": 40,
+    "scenarioResolvedActionCount": 148,
     "verifiedZeroActionCount": 0,
-    "unresolvedActionCount": 100,
-    "hitNodeCount": 1618,
+    "unresolvedActionCount": 40,
+    "hitNodeCount": 2502,
     "dimensions": {
       "hp": {
-        "nonzero": 938,
+        "nonzero": 939,
         "verified-zero": 0,
-        "unresolved": 2118
+        "unresolved": 2121
       },
       "toughness": {
-        "nonzero": 938,
+        "nonzero": 939,
         "verified-zero": 0,
-        "unresolved": 2118
+        "unresolved": 2121
       },
       "actorSp": {
         "nonzero": 267,
-        "verified-zero": 713,
+        "verified-zero": 717,
         "unresolved": 2076
       },
       "kiboSp": {
         "nonzero": 267,
-        "verified-zero": 713,
+        "verified-zero": 717,
         "unresolved": 2076
       }
     },
     "controlVariantCount": 965,
-    "unresolvedControlVariantCount": 535,
+    "unresolvedControlVariantCount": 499,
     "nonzeroRecoveryElementCount": 667,
     "unresolvedNonzeroRecoveryElementCount": 464,
     "scenarioResolvedNonzeroRecoveryElementCount": 212,
-    "scenarioResolvedProjectileHitCount": 833,
+    "scenarioResolvedProjectileHitCount": 2418,
     "disabledScenarioHitCount": 0,
-    "unresolvedProjectileLaunchCount": 301,
-    "unresolvedProjectileFormulaCount": 172,
+    "unresolvedProjectileLaunchCount": 203,
+    "unresolvedProjectileFormulaCount": 175,
     "unresolvedProjectileTargetCount": 0,
-    "unresolvedReferenceCount": 2530,
+    "unresolvedReferenceCount": 2534,
     "publicVariantCount": 593,
-    "unresolvedPublicVariantCount": 130,
+    "unresolvedPublicVariantCount": 70,
     "attackInputChainCount": 20,
     "attackInputSegmentCount": 95,
     "appliedAttackInputSegmentCount": 80,
@@ -447,33 +447,33 @@
       "directoryActionCount": 122,
       "classifiedActionCount": 122,
       "linkedActionCount": 122,
-      "runnableActionCount": 66,
+      "runnableActionCount": 117,
       "sourceAppliedActionCount": 22,
-      "sourceRuntimeDependentActionCount": 44,
-      "sourceStaticEvidenceGapActionCount": 56,
-      "scenarioResolvedActionCount": 44,
+      "sourceRuntimeDependentActionCount": 95,
+      "sourceStaticEvidenceGapActionCount": 5,
+      "scenarioResolvedActionCount": 95,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 56,
-      "hitNodeCount": 457,
+      "unresolvedActionCount": 5,
+      "hitNodeCount": 998,
       "dimensions": {
         "hp": {
           "nonzero": 240,
           "verified-zero": 0,
-          "unresolved": 207
+          "unresolved": 210
         },
         "toughness": {
           "nonzero": 240,
           "verified-zero": 0,
-          "unresolved": 207
+          "unresolved": 210
         },
         "actorSp": {
           "nonzero": 0,
-          "verified-zero": 242,
+          "verified-zero": 245,
           "unresolved": 205
         },
         "kiboSp": {
           "nonzero": 0,
-          "verified-zero": 242,
+          "verified-zero": 245,
           "unresolved": 205
         }
       }
@@ -484,33 +484,33 @@
       "directoryActionCount": 122,
       "classifiedActionCount": 122,
       "linkedActionCount": 122,
-      "runnableActionCount": 112,
+      "runnableActionCount": 121,
       "sourceAppliedActionCount": 111,
-      "sourceRuntimeDependentActionCount": 1,
-      "sourceStaticEvidenceGapActionCount": 10,
-      "scenarioResolvedActionCount": 1,
+      "sourceRuntimeDependentActionCount": 10,
+      "sourceStaticEvidenceGapActionCount": 1,
+      "scenarioResolvedActionCount": 10,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 10,
-      "hitNodeCount": 112,
+      "unresolvedActionCount": 1,
+      "hitNodeCount": 122,
       "dimensions": {
         "hp": {
-          "nonzero": 134,
+          "nonzero": 135,
           "verified-zero": 0,
           "unresolved": 69
         },
         "toughness": {
-          "nonzero": 134,
+          "nonzero": 135,
           "verified-zero": 0,
           "unresolved": 69
         },
         "actorSp": {
           "nonzero": 0,
-          "verified-zero": 134,
+          "verified-zero": 135,
           "unresolved": 69
         },
         "kiboSp": {
           "nonzero": 0,
-          "verified-zero": 134,
+          "verified-zero": 135,
           "unresolved": 69
         }
       }
@@ -525,10 +525,10 @@
       "sourceAppliedActionCount": 122,
       "sourceRuntimeDependentActionCount": 0,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 8,
+      "scenarioResolvedActionCount": 32,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 345,
+      "hitNodeCount": 678,
       "dimensions": {
         "hp": {
           "nonzero": 194,
@@ -1563,7 +1563,7 @@
       "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 16,
+      "hitNodeCount": 11,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -1599,14 +1599,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 1,
-      "sourceRuntimeDependentActionCount": 1,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 1,
+      "sourceRuntimeDependentActionCount": 2,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 9,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 10,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -1642,14 +1642,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 1,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 1,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 2,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 2,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 2,
-      "hitNodeCount": 0,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 49,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -1685,14 +1685,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 1,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 1,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 2,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 2,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 2,
-      "hitNodeCount": 0,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 2,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -1728,14 +1728,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 4,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 8,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -1771,14 +1771,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 4,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 6,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -1821,7 +1821,7 @@
       "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 5,
+      "hitNodeCount": 19,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -1900,14 +1900,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 4,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 9,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -1943,14 +1943,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 4,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 18,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -2029,14 +2029,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 4,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 104,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -2079,7 +2079,7 @@
       "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 3,
+      "hitNodeCount": 4,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -2115,14 +2115,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 13,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 113,
       "dimensions": {
         "hp": {
           "nonzero": 7,
@@ -2158,33 +2158,33 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 1,
-      "sourceRuntimeDependentActionCount": 1,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 1,
+      "sourceRuntimeDependentActionCount": 2,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 72,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 74,
       "dimensions": {
         "hp": {
-          "nonzero": 4,
+          "nonzero": 5,
           "verified-zero": 0,
           "unresolved": 8
         },
         "toughness": {
-          "nonzero": 4,
+          "nonzero": 5,
           "verified-zero": 0,
           "unresolved": 8
         },
         "actorSp": {
           "nonzero": 0,
-          "verified-zero": 5,
+          "verified-zero": 6,
           "unresolved": 7
         },
         "kiboSp": {
           "nonzero": 0,
-          "verified-zero": 5,
+          "verified-zero": 6,
           "unresolved": 7
         }
       },
@@ -2248,10 +2248,10 @@
       "sourceAppliedActionCount": 2,
       "sourceRuntimeDependentActionCount": 1,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 1,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 4,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -2291,10 +2291,10 @@
       "sourceAppliedActionCount": 2,
       "sourceRuntimeDependentActionCount": 1,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 1,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 4,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -2423,7 +2423,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 10,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -2459,14 +2459,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 1,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 4,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -2502,14 +2502,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 1,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 4,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -2545,14 +2545,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 1,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 51,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -2592,10 +2592,10 @@
       "sourceAppliedActionCount": 2,
       "sourceRuntimeDependentActionCount": 1,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 1,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 10,
+      "hitNodeCount": 11,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -2631,14 +2631,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 1,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -2674,14 +2674,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 1,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 74,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -2846,14 +2846,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -2893,10 +2893,10 @@
       "sourceAppliedActionCount": 3,
       "sourceRuntimeDependentActionCount": 0,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 7,
+      "hitNodeCount": 51,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -2982,7 +2982,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 20,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -3061,14 +3061,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 8,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 17,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -3104,14 +3104,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 43,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 19,
       "dimensions": {
         "hp": {
           "nonzero": 8,
@@ -3147,14 +3147,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 8,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 22,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -3190,14 +3190,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 1,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 4,
       "dimensions": {
         "hp": {
           "nonzero": 7,
@@ -3237,10 +3237,10 @@
       "sourceAppliedActionCount": 2,
       "sourceRuntimeDependentActionCount": 1,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 1,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 9,
+      "hitNodeCount": 73,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -3326,7 +3326,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 10,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -3366,10 +3366,10 @@
       "sourceAppliedActionCount": 3,
       "sourceRuntimeDependentActionCount": 0,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 10,
+      "hitNodeCount": 6,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -3412,7 +3412,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 7,
+      "hitNodeCount": 2,
       "dimensions": {
         "hp": {
           "nonzero": 2,
@@ -3448,14 +3448,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 3,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -3491,14 +3491,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 3,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -3620,14 +3620,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 6,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 9,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -3706,14 +3706,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 74,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -3749,14 +3749,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 27,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -3835,14 +3835,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 1,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 4,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -3878,14 +3878,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 1,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 4,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -3921,14 +3921,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 1,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 2,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -3964,14 +3964,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 1,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -4007,14 +4007,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 1,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -4050,14 +4050,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 1,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 3,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -4093,14 +4093,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 4,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 7,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -4143,7 +4143,7 @@
       "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 8,
+      "hitNodeCount": 9,
       "dimensions": {
         "hp": {
           "nonzero": 7,
@@ -4186,7 +4186,7 @@
       "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 13,
+      "hitNodeCount": 14,
       "dimensions": {
         "hp": {
           "nonzero": 9,
@@ -4229,7 +4229,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 8,
+      "hitNodeCount": 3,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -4315,7 +4315,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 7,
+      "hitNodeCount": 2,
       "dimensions": {
         "hp": {
           "nonzero": 2,
@@ -4355,10 +4355,10 @@
       "sourceAppliedActionCount": 2,
       "sourceRuntimeDependentActionCount": 1,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 1,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 4,
+      "hitNodeCount": 13,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -4398,10 +4398,10 @@
       "sourceAppliedActionCount": 2,
       "sourceRuntimeDependentActionCount": 1,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 1,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 2,
+      "hitNodeCount": 20,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -4441,10 +4441,10 @@
       "sourceAppliedActionCount": 2,
       "sourceRuntimeDependentActionCount": 1,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 1,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 2,
+      "hitNodeCount": 74,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -4480,14 +4480,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 1,
-      "sourceRuntimeDependentActionCount": 1,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 1,
+      "sourceRuntimeDependentActionCount": 2,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 12,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 13,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -4523,14 +4523,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 1,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 1,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 2,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 2,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 2,
-      "hitNodeCount": 3,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 7,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -4566,14 +4566,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 1,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 1,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 2,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 2,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 2,
-      "hitNodeCount": 3,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -4609,14 +4609,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 1,
-      "sourceRuntimeDependentActionCount": 1,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 1,
+      "sourceRuntimeDependentActionCount": 2,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 5,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 6,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -4652,14 +4652,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 1,
-      "sourceRuntimeDependentActionCount": 1,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 1,
+      "sourceRuntimeDependentActionCount": 2,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 3,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 26,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 28,
       "dimensions": {
         "hp": {
           "nonzero": 7,
@@ -4699,10 +4699,10 @@
       "sourceAppliedActionCount": 2,
       "sourceRuntimeDependentActionCount": 1,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 1,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 27,
+      "hitNodeCount": 28,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -4781,14 +4781,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 1,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 3,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -4831,7 +4831,7 @@
       "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 2,
+      "hitNodeCount": 8,
       "dimensions": {
         "hp": {
           "nonzero": 7,
@@ -4910,14 +4910,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 4,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -4996,14 +4996,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 3,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -5039,14 +5039,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 3,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 4,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -5082,14 +5082,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 12,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 13,
       "dimensions": {
         "hp": {
           "nonzero": 7,
@@ -5129,10 +5129,10 @@
       "sourceAppliedActionCount": 2,
       "sourceRuntimeDependentActionCount": 1,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 1,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 2,
+      "hitNodeCount": 6,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -5180,21 +5180,21 @@
         "hp": {
           "nonzero": 5,
           "verified-zero": 0,
-          "unresolved": 10
+          "unresolved": 11
         },
         "toughness": {
           "nonzero": 5,
           "verified-zero": 0,
-          "unresolved": 10
+          "unresolved": 11
         },
         "actorSp": {
           "nonzero": 0,
-          "verified-zero": 5,
+          "verified-zero": 6,
           "unresolved": 10
         },
         "kiboSp": {
           "nonzero": 0,
-          "verified-zero": 5,
+          "verified-zero": 6,
           "unresolved": 10
         }
       },
@@ -5211,14 +5211,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 16,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 25,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -5261,7 +5261,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 10,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -5304,7 +5304,7 @@
       "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 9,
+      "hitNodeCount": 4,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -5340,14 +5340,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 4,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -5390,7 +5390,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 26,
+      "hitNodeCount": 11,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -5433,7 +5433,7 @@
       "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 3,
+      "hitNodeCount": 29,
       "dimensions": {
         "hp": {
           "nonzero": 9,
@@ -5476,7 +5476,7 @@
       "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 4,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -5562,7 +5562,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 10,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -5605,7 +5605,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 13,
+      "hitNodeCount": 8,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -5641,14 +5641,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 1,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -5688,10 +5688,10 @@
       "sourceAppliedActionCount": 3,
       "sourceRuntimeDependentActionCount": 0,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 7,
+      "hitNodeCount": 12,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -5731,10 +5731,10 @@
       "sourceAppliedActionCount": 3,
       "sourceRuntimeDependentActionCount": 0,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 7,
+      "hitNodeCount": 29,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -5782,21 +5782,21 @@
         "hp": {
           "nonzero": 6,
           "verified-zero": 0,
-          "unresolved": 6
+          "unresolved": 7
         },
         "toughness": {
           "nonzero": 6,
           "verified-zero": 0,
-          "unresolved": 6
+          "unresolved": 7
         },
         "actorSp": {
           "nonzero": 0,
-          "verified-zero": 6,
+          "verified-zero": 7,
           "unresolved": 6
         },
         "kiboSp": {
           "nonzero": 0,
-          "verified-zero": 6,
+          "verified-zero": 7,
           "unresolved": 6
         }
       },
@@ -5825,21 +5825,21 @@
         "hp": {
           "nonzero": 7,
           "verified-zero": 0,
-          "unresolved": 7
+          "unresolved": 8
         },
         "toughness": {
           "nonzero": 7,
           "verified-zero": 0,
-          "unresolved": 7
+          "unresolved": 8
         },
         "actorSp": {
           "nonzero": 0,
-          "verified-zero": 7,
+          "verified-zero": 8,
           "unresolved": 7
         },
         "kiboSp": {
           "nonzero": 0,
-          "verified-zero": 7,
+          "verified-zero": 8,
           "unresolved": 7
         }
       },
@@ -5856,14 +5856,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 9,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 10,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -5906,7 +5906,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 20,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -5942,14 +5942,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 5,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 9,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -5985,14 +5985,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 5,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 57,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -6028,14 +6028,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 5,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 8,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -6075,10 +6075,10 @@
       "sourceAppliedActionCount": 2,
       "sourceRuntimeDependentActionCount": 1,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 1,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 2,
+      "hitNodeCount": 83,
       "dimensions": {
         "hp": {
           "nonzero": 9,
@@ -6118,10 +6118,10 @@
       "sourceAppliedActionCount": 2,
       "sourceRuntimeDependentActionCount": 1,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 1,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 5,
+      "hitNodeCount": 6,
       "dimensions": {
         "hp": {
           "nonzero": 7,
@@ -6161,10 +6161,10 @@
       "sourceAppliedActionCount": 3,
       "sourceRuntimeDependentActionCount": 0,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 14,
+      "hitNodeCount": 11,
       "dimensions": {
         "hp": {
           "nonzero": 7,
@@ -6200,14 +6200,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 2,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 4,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -6243,13 +6243,13 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
+      "unresolvedActionCount": 0,
       "hitNodeCount": 5,
       "dimensions": {
         "hp": {
@@ -6286,14 +6286,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 9,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 10,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -6329,14 +6329,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 2,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 5,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -6415,14 +6415,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 11,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 12,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -6458,14 +6458,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 1,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 4,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -6508,7 +6508,7 @@
       "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 2,
+      "hitNodeCount": 3,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -6551,7 +6551,7 @@
       "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 2,
+      "hitNodeCount": 3,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -6587,14 +6587,14 @@
       "directoryActionCount": 3,
       "classifiedActionCount": 3,
       "linkedActionCount": 3,
-      "runnableActionCount": 2,
+      "runnableActionCount": 3,
       "sourceAppliedActionCount": 2,
-      "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
-      "scenarioResolvedActionCount": 0,
+      "sourceRuntimeDependentActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
-      "hitNodeCount": 1,
+      "unresolvedActionCount": 0,
+      "hitNodeCount": 10,
       "dimensions": {
         "hp": {
           "nonzero": 3,
@@ -6677,10 +6677,10 @@
       "sourceAppliedActionCount": 3,
       "sourceRuntimeDependentActionCount": 0,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 0,
+      "scenarioResolvedActionCount": 1,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 7,
+      "hitNodeCount": 3,
       "dimensions": {
         "hp": {
           "nonzero": 4,
@@ -6723,7 +6723,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 24,
+      "hitNodeCount": 9,
       "dimensions": {
         "hp": {
           "nonzero": 5,
@@ -6766,7 +6766,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 27,
+      "hitNodeCount": 12,
       "dimensions": {
         "hp": {
           "nonzero": 6,
@@ -7963,8 +7963,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500003|502019|0|502019",
@@ -7986,8 +7986,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500003|50000303|0|50000303",
@@ -8009,8 +8009,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500004|502016|0|502016",
@@ -8032,8 +8032,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500004|50000417|0|50000417",
@@ -8055,8 +8055,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500005|501014|0|501014",
@@ -8078,8 +8078,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500006|501017|0|501017",
@@ -8101,8 +8101,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500007|501016|0|501016",
@@ -8193,8 +8193,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500022|503004|0|503004",
@@ -8216,8 +8216,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500023|505013|0|505013",
@@ -8262,8 +8262,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500025|507003|0|507003",
@@ -8308,8 +8308,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500035|505004|0|505004",
@@ -8354,8 +8354,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500037|501001|0|501001",
@@ -8492,8 +8492,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500044|504012|0|504012",
@@ -8515,8 +8515,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500045|504020|0|504020",
@@ -8538,8 +8538,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500046|505013|0|505013",
@@ -8584,8 +8584,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500048|505018|0|505018",
@@ -8607,8 +8607,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500051|506001|0|506001",
@@ -8699,8 +8699,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500064|504001|0|504001",
@@ -8776,8 +8776,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500068|502003|0|502003",
@@ -8799,8 +8799,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500072|503004|0|503004",
@@ -8822,8 +8822,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500081|503007|0|503007",
@@ -8849,8 +8849,8 @@
         "effect-target-unresolved",
         "property-formula-not-literal-function-5"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500082|507008|0|507008",
@@ -8920,8 +8920,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500096|509002|0|509002",
@@ -8943,8 +8943,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500097|502010|0|502010",
@@ -9034,8 +9034,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500114|503009|0|503009",
@@ -9080,8 +9080,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500116|503018|0|503018",
@@ -9103,8 +9103,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500120|504001|0|504001",
@@ -9149,8 +9149,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500124|504012|0|504012",
@@ -9172,8 +9172,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500125|504014|0|504014",
@@ -9195,8 +9195,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500126|504012|0|504012",
@@ -9218,8 +9218,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500127|504012|0|504012",
@@ -9241,8 +9241,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500128|504014|0|504014",
@@ -9264,8 +9264,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500129|507001|0|507001",
@@ -9287,8 +9287,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500130|507003|0|507003",
@@ -9471,8 +9471,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500148|505014|0|505014",
@@ -9494,8 +9494,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500148|50014804|0|50014804",
@@ -9517,8 +9517,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500149|505017|0|505017",
@@ -9540,8 +9540,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500149|50014904|0|50014904",
@@ -9563,8 +9563,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500156|501001|0|501001",
@@ -9609,8 +9609,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500157|501005|0|501005",
@@ -9655,8 +9655,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500158|501005|0|501005",
@@ -9724,8 +9724,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500166|507019|0|507019",
@@ -9793,8 +9793,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500179|509001|0|509001",
@@ -9816,8 +9816,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500180|509002|0|509002",
@@ -9839,8 +9839,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500181|509002|0|509002",
@@ -9862,8 +9862,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500185|504009|0|504009",
@@ -9906,7 +9906,12 @@
       ],
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "base-function-unverified",
+        "common-function-unverified",
+        "level-ratio-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "sourceEvidenceStatus": "runtime-dependent",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
@@ -9931,8 +9936,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500213|509001|0|509001",
@@ -9954,8 +9959,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500220|509010|0|509010",
@@ -10046,8 +10051,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500261|502001|0|502001",
@@ -10067,7 +10072,12 @@
       ],
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "base-function-unverified",
+        "common-function-unverified",
+        "level-ratio-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "sourceEvidenceStatus": "runtime-dependent",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
@@ -10090,7 +10100,12 @@
       ],
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "base-function-unverified",
+        "common-function-unverified",
+        "level-ratio-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "sourceEvidenceStatus": "runtime-dependent",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
@@ -10115,8 +10130,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500304|504012|0|504012",
@@ -10138,8 +10153,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500305|504020|0|504020",
@@ -10161,8 +10176,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500306|504006|0|504006",
@@ -10184,8 +10199,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500313|501016|0|501016",
@@ -10253,8 +10268,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500354|509001|0|509001",
@@ -10276,8 +10291,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500355|509002|0|509002",
@@ -10299,8 +10314,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500357|504012|0|504012",
@@ -10322,8 +10337,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500358|505011|0|505011",
@@ -10367,8 +10382,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500368|504012|0|504012",
@@ -10390,8 +10405,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500369|507003|0|507003",
@@ -10459,8 +10474,8 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     },
     {
       "identity": "kibo|500467|506001|0|506001",
@@ -33938,7 +33953,7 @@
       "elementId": 500002008,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -34126,7 +34141,7 @@
       "elementId": 50201901,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -34160,7 +34175,7 @@
       "elementId": 500003008,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -34435,7 +34450,7 @@
       "elementId": 50701326,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -34492,7 +34507,7 @@
       "elementId": 500004030,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -34661,7 +34676,7 @@
       "elementId": 50101401,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -34914,7 +34929,7 @@
       "elementId": 50101701,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -34931,7 +34946,7 @@
       "elementId": 50101702,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -35245,7 +35260,7 @@
       "elementId": 50101602,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -35705,7 +35720,7 @@
       "elementId": 50701373,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -35917,7 +35932,7 @@
       "elementId": 50701371,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -36233,7 +36248,7 @@
       "elementId": 50701339,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -36594,7 +36609,7 @@
       "elementId": 50701400,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -36997,7 +37012,7 @@
       "elementId": 50701339,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -37284,11 +37299,28 @@
       "elementId": 500035026,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50003501.asset/MonoBehaviour/skill_control_50003501__-52774665684251750.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=500035026"
+    },
+    {
+      "actionIdentity": "kibo|500035|50003501|0|50003501",
+      "ownerKind": "kibo",
+      "ownerId": 500035,
+      "actionKind": "break",
+      "controlSkillId": 50003501,
+      "subSkillIndex": 0,
+      "pathId": "-7921994997313311733",
+      "elementId": 500024012,
+      "referenceKind": "bulletElements",
+      "threeValueRelevant": true,
+      "scenarioClassification": "applied",
+      "reasons": [
+        "projectile-impact-frame-runtime-dependent"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50003501.asset/MonoBehaviour/skill_control_50003501__-52774665684251750.json#generatedProjectileElements[subSkillIndex=0,elementId=500024012]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50003501.asset/MonoBehaviour/MonoBehaviour_3984564135404546326__3984564135404546326.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50003501.asset/MonoBehaviour/ast_bullet_50003501__-3443387751794894798.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50003501.asset/MonoBehaviour/ast_bullet_50003501__-3443387751794894798.json#bulletLogicObjects[1].actionObjects[0].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50500302.asset/MonoBehaviour/ast_bullet_50500302__-7373749409172263228.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId|battle-element-assets.jsonl#elementConfigId=500024012"
     },
     {
       "actionIdentity": "kibo|500037|50003701|0|50003701",
@@ -37623,7 +37655,7 @@
       "elementId": 500038005,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -37916,7 +37948,7 @@
       "elementId": 500039004,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -38727,7 +38759,7 @@
       "elementId": 50401201,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -38964,7 +38996,7 @@
       "elementId": 50401201,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -39223,7 +39255,7 @@
       "elementId": 50402001,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -39392,7 +39424,7 @@
       "elementId": 500046008,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -39618,7 +39650,7 @@
       "elementId": 500047006,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -39675,7 +39707,7 @@
       "elementId": 50501401,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -39844,7 +39876,7 @@
       "elementId": 500048003,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -39878,7 +39910,7 @@
       "elementId": 50501801,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -40818,7 +40850,7 @@
       "elementId": 50701379,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -40988,7 +41020,7 @@
       "elementId": 500058004,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -41997,7 +42029,7 @@
       "elementId": 50701327,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -42270,7 +42302,7 @@
       "elementId": 50701322,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -42310,7 +42342,7 @@
       "elementId": 50701398,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -42522,7 +42554,7 @@
       "elementId": 50701371,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -42932,7 +42964,7 @@
       "elementId": 50701374,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -43430,7 +43462,7 @@
       "elementId": 500082002,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -44183,7 +44215,7 @@
       "elementId": 500085033,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -44570,7 +44602,7 @@
       "elementId": 50701353,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -44761,7 +44793,7 @@
       "elementId": 50701354,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -45570,7 +45602,7 @@
       "elementId": 50701335,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -45954,7 +45986,7 @@
       "elementId": 50301001,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -46123,7 +46155,7 @@
       "elementId": 50301801,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -46462,7 +46494,7 @@
       "elementId": 50401201,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -46702,7 +46734,7 @@
       "elementId": 50401201,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -46963,7 +46995,7 @@
       "elementId": 50401401,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -47190,7 +47222,7 @@
       "elementId": 50401201,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -47462,7 +47494,7 @@
       "elementId": 50401201,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -47733,7 +47765,7 @@
       "elementId": 50401401,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -47924,7 +47956,7 @@
       "elementId": 50701379,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -48239,7 +48271,7 @@
       "elementId": 50701400,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -48553,7 +48585,7 @@
       "elementId": 50701400,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -49346,7 +49378,7 @@
       "elementId": 500138007,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -49686,7 +49718,7 @@
       "elementId": 500139007,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -50071,7 +50103,7 @@
       "elementId": 500140012,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -50378,7 +50410,7 @@
       "elementId": 500147001,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -50547,7 +50579,7 @@
       "elementId": 50501401,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -50604,7 +50636,7 @@
       "elementId": 500148001,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -50795,7 +50827,7 @@
       "elementId": 50501701,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -50852,7 +50884,7 @@
       "elementId": 500149001,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -51078,7 +51110,7 @@
       "elementId": 500156003,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -51248,7 +51280,7 @@
       "elementId": 500157008,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -51384,7 +51416,7 @@
       "elementId": 500157007,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -51554,7 +51586,7 @@
       "elementId": 500158008,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -52081,7 +52113,7 @@
       "elementId": 50702001,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -52098,7 +52130,7 @@
       "elementId": 50702002,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -52409,7 +52441,7 @@
       "elementId": 50701902,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -52426,7 +52458,7 @@
       "elementId": 50701903,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -52715,7 +52747,7 @@
       "elementId": 50702001,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -52732,7 +52764,7 @@
       "elementId": 50702002,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -53058,7 +53090,7 @@
       "elementId": 50701353,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -53382,7 +53414,7 @@
       "elementId": 50701354,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -53728,7 +53760,7 @@
       "elementId": 50701354,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -53986,7 +54018,7 @@
       "elementId": 500185003,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -54348,6 +54380,28 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/skill_control_502001__-7884478572300192035.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=600017"
     },
     {
+      "actionIdentity": "kibo|500186|502001|0|502001",
+      "ownerKind": "kibo",
+      "ownerId": 500186,
+      "actionKind": "active",
+      "controlSkillId": 502001,
+      "subSkillIndex": 0,
+      "pathId": "-5053220720662523719",
+      "elementId": 510002017,
+      "referenceKind": "bulletElements",
+      "threeValueRelevant": true,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "common-function-unverified",
+        "projectile-impact-frame-runtime-dependent",
+        "level-ratio-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/skill_control_502001__-7884478572300192035.json#generatedProjectileElements[subSkillIndex=0,elementId=510002017]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/MonoBehaviour_8450906465536885314__8450906465536885314.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50200111.asset/MonoBehaviour/ast_bullet_50200111__2346836337019950878.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50200111.asset/MonoBehaviour/ast_bullet_50200111__2346836337019950878.json#bulletLogicObjects[2].actionObjects[0].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_51000202.asset/MonoBehaviour/ast_bullet_51000202__5092098797681438176.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId|battle-element-assets.jsonl#elementConfigId=510002017"
+    },
+    {
       "actionIdentity": "kibo|500186|50018604|0|50018604",
       "ownerKind": "kibo",
       "ownerId": 500186,
@@ -54621,7 +54675,7 @@
       "elementId": 50701328,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -55300,7 +55354,7 @@
       "elementId": 50701353,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -55773,7 +55827,7 @@
       "elementId": 500220002,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -55876,7 +55930,7 @@
       "elementId": 500220004,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -56340,7 +56394,7 @@
       "elementId": 50701400,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -57379,7 +57433,7 @@
       "elementId": 50701335,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -57591,7 +57645,7 @@
       "elementId": 500259004,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -57847,7 +57901,7 @@
       "elementId": 500260004,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -58069,6 +58123,28 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/skill_control_502001__-7884478572300192035.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=600017"
     },
     {
+      "actionIdentity": "kibo|500261|502001|0|502001",
+      "ownerKind": "kibo",
+      "ownerId": 500261,
+      "actionKind": "active",
+      "controlSkillId": 502001,
+      "subSkillIndex": 0,
+      "pathId": "-5053220720662523719",
+      "elementId": 510002017,
+      "referenceKind": "bulletElements",
+      "threeValueRelevant": true,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "common-function-unverified",
+        "projectile-impact-frame-runtime-dependent",
+        "level-ratio-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/skill_control_502001__-7884478572300192035.json#generatedProjectileElements[subSkillIndex=0,elementId=510002017]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/MonoBehaviour_8450906465536885314__8450906465536885314.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50200111.asset/MonoBehaviour/ast_bullet_50200111__2346836337019950878.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50200111.asset/MonoBehaviour/ast_bullet_50200111__2346836337019950878.json#bulletLogicObjects[2].actionObjects[0].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_51000202.asset/MonoBehaviour/ast_bullet_51000202__5092098797681438176.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId|battle-element-assets.jsonl#elementConfigId=510002017"
+    },
+    {
       "actionIdentity": "kibo|500262|50026202|0|50026202",
       "ownerKind": "kibo",
       "ownerId": 500262,
@@ -58259,6 +58335,28 @@
         "kiboSp:petRecoverSP-field-missing"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/skill_control_502001__-7884478572300192035.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=600017"
+    },
+    {
+      "actionIdentity": "kibo|500262|502001|0|502001",
+      "ownerKind": "kibo",
+      "ownerId": 500262,
+      "actionKind": "active",
+      "controlSkillId": 502001,
+      "subSkillIndex": 0,
+      "pathId": "-5053220720662523719",
+      "elementId": 510002017,
+      "referenceKind": "bulletElements",
+      "threeValueRelevant": true,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "base-function-unverified",
+        "common-function-unverified",
+        "projectile-impact-frame-runtime-dependent",
+        "level-ratio-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/skill_control_502001__-7884478572300192035.json#generatedProjectileElements[subSkillIndex=0,elementId=510002017]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/MonoBehaviour_8450906465536885314__8450906465536885314.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50200111.asset/MonoBehaviour/ast_bullet_50200111__2346836337019950878.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50200111.asset/MonoBehaviour/ast_bullet_50200111__2346836337019950878.json#bulletLogicObjects[2].actionObjects[0].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_51000202.asset/MonoBehaviour/ast_bullet_51000202__5092098797681438176.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId|battle-element-assets.jsonl#elementConfigId=510002017"
     },
     {
       "actionIdentity": "kibo|500263|50026302|0|50026302",
@@ -58533,7 +58631,7 @@
       "elementId": 50701326,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -59017,7 +59115,7 @@
       "elementId": 500304001,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -59120,7 +59218,7 @@
       "elementId": 50401201,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -59424,7 +59522,7 @@
       "elementId": 500305001,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -59527,7 +59625,7 @@
       "elementId": 50402001,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -59831,7 +59929,7 @@
       "elementId": 500306001,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -59933,7 +60031,7 @@
       "elementId": 50701307,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -60120,7 +60218,7 @@
       "elementId": 500313001,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -60137,7 +60235,7 @@
       "elementId": 500313002,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -60296,7 +60394,7 @@
       "elementId": 50101602,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -60487,7 +60585,7 @@
       "elementId": 500322006,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -60785,7 +60883,7 @@
       "elementId": 500323002,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -60977,7 +61075,7 @@
       "elementId": 500324004,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -61056,7 +61154,7 @@
       "elementId": 50701307,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -61270,7 +61368,7 @@
       "elementId": 50701353,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -61572,7 +61670,7 @@
       "elementId": 50701354,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -61786,7 +61884,7 @@
       "elementId": 50401201,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -62330,7 +62428,7 @@
       "elementId": 50701354,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -62589,7 +62687,7 @@
       "elementId": 50401201,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -62971,7 +63069,7 @@
       "elementId": 50701400,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -63330,7 +63428,7 @@
       "elementId": 50701400,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -63539,7 +63637,7 @@
       "elementId": 50701328,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -64026,7 +64124,7 @@
       "elementId": 500468001,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
         "projectile-impact-frame-runtime-dependent"
       ],
@@ -68726,8 +68824,7 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500001].actions[skillId=50000102]"
     },
@@ -68803,7 +68900,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "水灵仔-合击",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -68841,7 +68938,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "漂浮水泡",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -68857,7 +68954,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "水灵偶-合击",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -68899,7 +68996,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "大海浪",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -68915,7 +69012,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "汐灵偶-合击",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -68947,7 +69044,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "火球连射",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -68993,7 +69090,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "空降之焰",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -69135,7 +69232,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "寒冰碎片",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -69181,7 +69278,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "冰矛连射",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -69271,7 +69368,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "灵木繁星",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -69372,7 +69469,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "灵木繁星",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -69438,7 +69535,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "叶冠驼-合击",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -69745,7 +69842,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "小风弹",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -69793,7 +69890,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "小风弹",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -69842,7 +69939,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "旋风回旋镖",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -69940,7 +70037,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "花绽飞弹",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -69989,7 +70086,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "种子风暴",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -70183,7 +70280,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "雷球",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -70420,7 +70517,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "水弹散射",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -70465,7 +70562,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "爆裂水球",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -70510,7 +70607,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "冰矛连射",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -70560,7 +70657,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "凛冬矛击",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -70861,7 +70958,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "暗魂影",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -70906,7 +71003,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "暗魂影爆阵",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -71054,7 +71151,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "灵木弹",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -71144,7 +71241,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "冰晶散射",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -71189,7 +71286,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "寒冰之罚",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -71280,7 +71377,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "小风弹",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -71326,7 +71423,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "小风弹",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -71372,7 +71469,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "风刃扩张",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -71419,7 +71516,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "小风弹",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -71466,7 +71563,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "小风弹",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -71513,7 +71610,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "风刃扩张",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -71558,7 +71655,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "雷球",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72004,7 +72101,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "木灵仔-合击",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72036,7 +72133,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "花绽飞弹",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72052,7 +72149,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "木灵偶-合击",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72084,7 +72181,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "地蔓突击",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72100,7 +72197,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "蔓灵偶-合击",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72148,7 +72245,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "火花雀-合击",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72199,7 +72296,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "焰火雀-合击",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72334,7 +72431,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "连锁雷暴",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72475,7 +72572,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "连锁雷暴",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72567,7 +72664,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "暗魂影",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72616,7 +72713,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "暗魂影爆阵",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72665,7 +72762,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "暗魂影爆阵",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72768,7 +72865,12 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "base-function-unverified",
+        "common-function-unverified",
+        "level-ratio-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500186].actions[skillId=502001]"
     },
@@ -72815,7 +72917,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "泡泡攻击",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -72964,7 +73066,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "暗魂影",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -73302,7 +73404,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "灵木弹",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -73460,7 +73562,12 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "base-function-unverified",
+        "common-function-unverified",
+        "level-ratio-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500261].actions[skillId=502001]"
     },
@@ -73509,7 +73616,12 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "base-function-unverified",
+        "common-function-unverified",
+        "level-ratio-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500262].actions[skillId=502001]"
     },
@@ -73555,7 +73667,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "浪袭",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -73650,7 +73762,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "小风弹",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -73700,7 +73812,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "旋风回旋镖",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -73750,7 +73862,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "风龙卷",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -73951,7 +74063,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "风龙卷",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -74000,7 +74112,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "暗魂影",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -74049,7 +74161,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "暗魂影爆阵",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -74096,7 +74208,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "小风弹",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -74195,7 +74307,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "暗魂影爆阵",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -74245,7 +74357,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "小风弹",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -74401,7 +74513,7 @@
       "publicVariantIndex": 0,
       "publicVariantLabel": "泡泡攻击",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -78875,8 +78987,7 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50000102.asset/MonoBehaviour/skill_control_50000102__6660105417009556084.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -79017,7 +79128,7 @@
       "actionIdentities": [
         "kibo|500002|50000203|0|50000203"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -79055,7 +79166,7 @@
       "actionIdentities": [
         "kibo|500003|502019|0|502019"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -79071,7 +79182,7 @@
       "actionIdentities": [
         "kibo|500003|50000303|0|50000303"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -79113,7 +79224,7 @@
       "actionIdentities": [
         "kibo|500004|502016|0|502016"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -79129,7 +79240,7 @@
       "actionIdentities": [
         "kibo|500004|50000417|0|50000417"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -79161,7 +79272,7 @@
       "actionIdentities": [
         "kibo|500005|501014|0|501014"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -79207,7 +79318,7 @@
       "actionIdentities": [
         "kibo|500006|501017|0|501017"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -79415,7 +79526,7 @@
       "actionIdentities": [
         "kibo|500021|503006|0|503006"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -79527,7 +79638,7 @@
         "kibo|500022|503004|0|503004",
         "kibo|500072|503004|0|503004"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -79685,7 +79796,7 @@
         "kibo|500024|505006|0|505006",
         "kibo|500026|505006|0|505006"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -80031,12 +80142,12 @@
       "controlSkillId": 50003501,
       "subSkillIndex": 0,
       "playerSkillId": 50003501,
-      "elementCount": 3,
+      "elementCount": 4,
       "runnableElementCount": 0,
       "actionIdentities": [
         "kibo|500035|50003501|0|50003501"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -80591,7 +80702,7 @@
         "kibo|500357|504012|0|504012",
         "kibo|500368|504012|0|504012"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -80673,7 +80784,7 @@
         "kibo|500045|504020|0|504020",
         "kibo|500305|504020|0|504020"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -80756,7 +80867,7 @@
         "kibo|500047|505014|0|505014",
         "kibo|500148|505014|0|505014"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -80805,7 +80916,7 @@
       "actionIdentities": [
         "kibo|500048|505018|0|505018"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -81034,7 +81145,7 @@
         "kibo|500057|507001|0|507001",
         "kibo|500129|507001|0|507001"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -81612,7 +81723,7 @@
       "actionIdentities": [
         "kibo|500067|502006|0|502006"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -81748,7 +81859,7 @@
       "actionIdentities": [
         "kibo|500068|502003|0|502003"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -81892,7 +82003,7 @@
       "actionIdentities": [
         "kibo|500081|503007|0|503007"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
@@ -82428,7 +82539,7 @@
         "kibo|500213|509001|0|509001",
         "kibo|500354|509001|0|509001"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -82540,7 +82651,7 @@
         "kibo|500355|509002|0|509002",
         "kibo|500360|509002|0|509002"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -82557,7 +82668,7 @@
         "kibo|500180|509002|0|509002",
         "kibo|500181|509002|0|509002"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -82808,7 +82919,7 @@
         "kibo|500110|505001|0|505001",
         "kibo|500258|505001|0|505001"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -82963,7 +83074,7 @@
       "actionIdentities": [
         "kibo|500115|503010|0|503010"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -83008,7 +83119,7 @@
       "actionIdentities": [
         "kibo|500116|503018|0|503018"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -83144,7 +83255,7 @@
         "kibo|500125|504014|0|504014",
         "kibo|500128|504014|0|504014"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -83656,7 +83767,7 @@
       "actionIdentities": [
         "kibo|500147|50014704|0|50014704"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -83688,7 +83799,7 @@
       "actionIdentities": [
         "kibo|500148|50014804|0|50014804"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -83720,7 +83831,7 @@
       "actionIdentities": [
         "kibo|500149|505017|0|505017"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -83736,7 +83847,7 @@
       "actionIdentities": [
         "kibo|500149|50014904|0|50014904"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -83768,7 +83879,7 @@
       "actionIdentities": [
         "kibo|500156|50015604|0|50015604"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -83885,7 +83996,7 @@
       "actionIdentities": [
         "kibo|500157|50015704|0|50015704"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -84006,7 +84117,7 @@
         "kibo|500165|507020|0|507020",
         "kibo|500174|507020|0|507020"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -84417,7 +84528,7 @@
       "controlSkillId": 502001,
       "subSkillIndex": 0,
       "playerSkillId": 1,
-      "elementCount": 4,
+      "elementCount": 5,
       "runnableElementCount": 0,
       "actionIdentities": [
         "kibo|500186|502001|0|502001",
@@ -84427,7 +84538,12 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "base-function-unverified",
+        "common-function-unverified",
+        "level-ratio-missing",
+        "hp:damage-formula-inputs-incomplete",
+        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/skill_control_502001__-7884478572300192035.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -84435,7 +84551,7 @@
       "controlSkillId": 502001,
       "subSkillIndex": 1,
       "playerSkillId": 2,
-      "elementCount": 4,
+      "elementCount": 5,
       "runnableElementCount": 0,
       "actionIdentities": [],
       "classification": "unresolved",
@@ -84448,7 +84564,7 @@
       "controlSkillId": 502001,
       "subSkillIndex": 2,
       "playerSkillId": 3,
-      "elementCount": 4,
+      "elementCount": 5,
       "runnableElementCount": 0,
       "actionIdentities": [],
       "classification": "unresolved",
@@ -84461,7 +84577,7 @@
       "controlSkillId": 502001,
       "subSkillIndex": 3,
       "playerSkillId": 4,
-      "elementCount": 4,
+      "elementCount": 5,
       "runnableElementCount": 0,
       "actionIdentities": [],
       "classification": "unresolved",
@@ -84474,7 +84590,7 @@
       "controlSkillId": 502001,
       "subSkillIndex": 4,
       "playerSkillId": 5,
-      "elementCount": 4,
+      "elementCount": 5,
       "runnableElementCount": 0,
       "actionIdentities": [],
       "classification": "unresolved",
@@ -84487,7 +84603,7 @@
       "controlSkillId": 502001,
       "subSkillIndex": 5,
       "playerSkillId": 6,
-      "elementCount": 4,
+      "elementCount": 5,
       "runnableElementCount": 0,
       "actionIdentities": [],
       "classification": "unresolved",
@@ -84540,7 +84656,7 @@
         "kibo|500187|502007|0|502007",
         "kibo|500399|502007|0|502007"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -85473,7 +85589,7 @@
       "actionIdentities": [
         "kibo|500263|502005|0|502005"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
@@ -85702,7 +85818,7 @@
         "kibo|500306|504006|0|504006",
         "kibo|500324|504006|0|504006"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"

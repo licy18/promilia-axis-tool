@@ -2,21 +2,21 @@
 
 - 包：`azpr-tc-2026-07-18`
 - 公开动作：563
-- 控制：503
-- 直接元素根：4357
-- 原始引用边：1637
-- 效果图节点：3693
-- 去重语义效果：3428
-- 最终玩法效果：1805
-- 结构包装/条件：1623
+- 控制：538
+- 直接元素根：4757
+- 原始引用边：1661
+- 效果图节点：3695
+- 去重语义效果：3469
+- 最终玩法效果：1841
+- 结构包装/条件：1628
 - 语义可计算：409
 - 语义明确零：2
-- 语义未解析：1394
+- 语义未解析：1430
 
 ## 语义放置
 
-- runtime-dependent: 115
-- static-evidence-gap: 468
+- runtime-dependent: 139
+- static-evidence-gap: 480
 - static-resolved: 1222
 
 ## 公式族
@@ -27,7 +27,7 @@
 - unsupported-0-0: 10
 - unsupported-1-0: 64
 - unsupported-1-2: 180
-- unsupported-1-3: 312
+- unsupported-1-3: 348
 - unsupported-1-4: 23
 - unsupported-1-11: 19
 - unsupported-1-101: 2
@@ -52,14 +52,14 @@
 
 ## 原始边审计
 
-- 效果绑定：3686
+- 效果绑定：3739
 - 可计算：372
 - 明确零：2
-- 未解析：3312
+- 未解析：3365
 
 ## 元素类型
 
-- damage: 1116
+- damage: 1118
 - inject: 361
 - judgment: 50
 - other: 1537
@@ -71,16 +71,16 @@
 
 ## 未解析原因
 
-- effect-target-static-evidence-gap: 478
-- effect-trigger-frame-static-evidence-gap: 425
+- effect-target-static-evidence-gap: 490
+- effect-trigger-frame-static-evidence-gap: 437
 - heal-formula-not-literal-function-5: 52
 - nested-damage-runtime-family-unimplemented: 473
 - property-change-type-not-battle-property: 1
 - property-conditions-not-expanded: 33
-- property-formula-not-literal-function-5: 392
-- runtime-target-from-projectile-collision: 101
+- property-formula-not-literal-function-5: 428
+- runtime-target-from-projectile-collision: 125
 - runtime-target-selection-ally: 19
-- runtime-trigger-projectile-collision-frame: 101
+- runtime-trigger-projectile-collision-frame: 125
 - shield-formula-not-literal-function-5: 10
 - sp-formula-not-literal-function-5: 95
 - sp-recover-type-not-direct-sp: 12
