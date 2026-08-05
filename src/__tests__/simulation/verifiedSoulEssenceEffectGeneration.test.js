@@ -208,6 +208,17 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     attributeId: 52,
   },
   {
+    soulEssenceId: 10032,
+    event: 'AfterSkill',
+    frameAnchor: 'action-end',
+    actionKind: 'exit-skill',
+    actionKinds: [],
+    durationMs: 24000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 1,
+  },
+  {
     soulEssenceId: 10037,
     event: 'BeforeSkill',
     frameAnchor: 'action-start',
@@ -477,8 +488,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 56,
-      unresolvedCount: 6,
+      runtimeAppliedCount: 57,
+      unresolvedCount: 5,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -490,11 +501,8 @@ describe('verified soul essence effect generation', () => {
         definition => definition.soulEssenceId === 10032
       )
     ).toMatchObject({
-      runtimeStatus: 'source-indexed-runtime-unapplied',
-      runtimeGaps: expect.arrayContaining([
-        'effect-immediate-effect-unapplied',
-        'effect-skill-tag-condition-operator-unsupported',
-      ]),
+      runtimeStatus: 'runtime-applied',
+      runtimeGaps: [],
     });
   });
 
@@ -729,6 +737,11 @@ describe('verified soul essence effect generation', () => {
           sourceRawValue: 18,
           recoverType: 0,
           shareType: 0,
+          valuesByStar: expect.arrayContaining([
+            expect.objectContaining({ star: 1, valueRaw: 18 }),
+            expect.objectContaining({ star: 2, valueRaw: 24 }),
+            expect.objectContaining({ star: 4, valueRaw: 36 }),
+          ]),
         }),
         expect.objectContaining({
           kind: 'direct-heal',
@@ -736,6 +749,11 @@ describe('verified soul essence effect generation', () => {
           targetType: 15,
           damageType: 5,
           sourceRawValue: 500,
+          valuesByStar: expect.arrayContaining([
+            expect.objectContaining({ star: 1, valueRaw: 500 }),
+            expect.objectContaining({ star: 2, valueRaw: 670 }),
+            expect.objectContaining({ star: 4, valueRaw: 1010 }),
+          ]),
           formula: expect.objectContaining({
             baseFunctionId: 104,
             baseExpression: '(target.MAXHP[0]*A)/10000',
@@ -794,6 +812,33 @@ describe('verified soul essence effect generation', () => {
       });
     }
     expect(generation.effectCommands).toEqual([]);
+
+    const starTwo = createRealSoulScenario({
+      actorCharacterId: 101007,
+      soulEssenceId: 10107,
+      effectSkillId: 1900350,
+      soulEssenceStar: 2,
+      durationMs: 12_000,
+      ownerInitialSp: 0,
+      teamCharacterIds: [101007, 101003, 101010],
+      actionPlan: [
+        {
+          id: 'soul-10107-normal-skill-star-two',
+          actionKind: 'star-skill',
+          startFrame: 60,
+        },
+      ],
+    });
+    const starTwoGeneration =
+      starTwo.verifiedSoulEssenceEffectGeneration;
+    expect(
+      starTwoGeneration.directSpEvents.every(event => event.value === 24)
+    ).toBe(true);
+    expect(
+      starTwoGeneration.directHpEvents.every(
+        event => event.formulaResult.value === 670
+      )
+    ).toBe(true);
   });
 
   it('applies the real 10216 BeforeSkill PetUltraSkill direct-SP to the controlling hero', () => {
@@ -822,6 +867,11 @@ describe('verified soul essence effect generation', () => {
           sourceRawValue: 100000,
           recoverType: 0,
           shareType: 0,
+          valuesByStar: expect.arrayContaining([
+            expect.objectContaining({ star: 1, valueRaw: 100000 }),
+            expect.objectContaining({ star: 2, valueRaw: 133000 }),
+            expect.objectContaining({ star: 4, valueRaw: 200000 }),
+          ]),
         }),
       ],
       runtimeGaps: [],
@@ -841,11 +891,11 @@ describe('verified soul essence effect generation', () => {
               soulessenceId: 10216,
               soulessenceLevel: 80,
               soulessenceRank: 1,
-              soulessenceStar: 1,
+              soulessenceStar: 2,
               soulessenceCultivation: {
                 effectSkill: {
                   skillId: 1900780,
-                  star: 1,
+                  star: 2,
                   skillLevel: 1,
                   runtimeStatus: 'runtime-applied',
                   sourceIdentity: 'fixture:strict-soulessence-star-1',
@@ -896,8 +946,12 @@ describe('verified soul essence effect generation', () => {
     expect(generation.directSpEvents).toHaveLength(1);
     expect(generation.directSpEvents[0]).toMatchObject({
       kind: 'direct-sp',
-      value: 100000,
+      value: 133000,
       target: { kind: 'actor', id: 'actor-101007' },
+      formulaResult: expect.objectContaining({
+        sourceRawA: 133000,
+        starValue: expect.objectContaining({ star: 2, valueRaw: 133000 }),
+      }),
       effect: {
         elementId: 19007802,
         directSp: {
@@ -958,6 +1012,7 @@ describe('verified soul essence effect generation', () => {
       ],
     });
     const generation = result.verifiedSoulEssenceEffectGeneration;
+    expect(generation.unresolved).toEqual([]);
     const commands = generation.effectCommands.filter(
       command => command.sourceSoulEssenceId === 10076
     );
@@ -977,6 +1032,14 @@ describe('verified soul essence effect generation', () => {
         command => command.effectId === 'soulessence:10076:element:19001902'
       )
     ).toBe(false);
+    expect(generation.suppressions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actionId: 'soul-10076-normal-attack',
+          reason: 'soulessence-effect-action-kind-condition-not-matched',
+        }),
+      ])
+    );
   });
 
   it('replays real 10198 AfterSkill owner and pet fire-damage buff on both targets', () => {
@@ -1049,6 +1112,145 @@ describe('verified soul essence effect generation', () => {
         }),
       ],
     });
+  });
+
+  it('replays real 10032 ExitSkill team attack buff and star-scaled team heal', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10032
+    );
+    expect(definition).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'equipped-actor-skill-tag-property-after-skill',
+      trigger: {
+        event: 'AfterSkill',
+        frameAnchor: 'action-end',
+        condition: {
+          kind: 'skill-tag',
+          skillTagId: 8,
+          skillTagName: 'ExitSkill',
+        },
+      },
+      effect: expect.objectContaining({
+        elementId: 19003403,
+        attributeId: 1,
+        durationMs: 24000,
+        stackMode: 'refresh',
+        maxStacks: 1,
+        valuesByStar: expect.arrayContaining([
+          expect.objectContaining({ star: 1, valueRaw: 420 }),
+          expect.objectContaining({ star: 2, valueRaw: 560 }),
+          expect.objectContaining({ star: 4, valueRaw: 840 }),
+        ]),
+      }),
+      immediateEffects: [
+        expect.objectContaining({
+          kind: 'direct-heal',
+          targetKind: 'team-actors',
+          targetType: 15,
+          damageType: 5,
+          sourceRawValue: 600,
+          valuesByStar: expect.arrayContaining([
+            expect.objectContaining({ star: 1, valueRaw: 600 }),
+            expect.objectContaining({ star: 2, valueRaw: 810 }),
+            expect.objectContaining({ star: 4, valueRaw: 1210 }),
+          ]),
+        }),
+      ],
+      runtimeGaps: [],
+    });
+
+    const actorId = 'actor-soul-10032';
+    const simulate = star => {
+      const actions = [
+        {
+          id: 'exit-allowed-1',
+          actorId,
+          actionKind: 'exit-skill',
+          startMs: 100,
+          durationMs: 400,
+        },
+        {
+          id: 'exit-wrong-kind',
+          actorId,
+          actionKind: 'normal-attack',
+          startMs: 700,
+          durationMs: 300,
+        },
+        {
+          id: 'exit-allowed-2',
+          actorId,
+          actionKind: 'exit-skill',
+          startMs: 1000,
+          durationMs: 400,
+        },
+      ];
+      const scenario = {
+        time: { fps: 60, durationMs: 30_000 },
+        actors: [createSoulMatrixActor({ actorId, definition, star })],
+        actions,
+      };
+      const actionExecutionPlan = {
+        actions: actions.map(action => ({
+          actionId: action.id,
+          execute: true,
+        })),
+      };
+      return createVerifiedSoulEssenceEffectGeneration({
+        scenario,
+        actionExecutionPlan,
+        actionResolutionById: new Map(
+          actions.map(action => [
+            action.id,
+            createSyntheticVerifiedActionResolution(action.actionKind),
+          ])
+        ),
+      });
+    };
+    const generation = simulate(1);
+    expect(generation.unresolved).toEqual([]);
+    const commands = generation.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10032
+    );
+    expect(commands.map(command => command.timeMs)).toEqual([500, 1400]);
+    expect(
+      commands.every(
+        command =>
+          command.effectId === 'soulessence:10032:element:19003403' &&
+          command.targetKind === 'actor' &&
+          command.modifiers[0].attributeId === 1 &&
+          command.modifiers[0].sourceElementId === 19003403 &&
+          command.modifiers[0].sourceRawA === 420
+      )
+    ).toBe(true);
+    expect(generation.directHpEvents).toHaveLength(2);
+    expect(
+      generation.directHpEvents.every(
+        event =>
+          event.effect.elementId === 19003402 &&
+          event.value === 600 &&
+          event.formulaResult.starValue.star === 1
+      )
+    ).toBe(true);
+    expect(generation.suppressions).toEqual([
+      expect.objectContaining({
+        actionId: 'exit-wrong-kind',
+        reason: 'soulessence-effect-action-kind-condition-not-matched',
+      }),
+    ]);
+
+    const starTwoGeneration = simulate(2);
+    expect(
+      starTwoGeneration.effectCommands
+        .filter(command => command.sourceSoulEssenceId === 10032)
+        .every(command => command.modifiers[0].sourceRawA === 560)
+    ).toBe(true);
+    expect(
+      starTwoGeneration.directHpEvents.every(
+        event =>
+          event.value === 810 &&
+          event.formulaResult.starValue.star === 2
+      )
+    ).toBe(true);
   });
 
   it.each([
@@ -10039,6 +10241,7 @@ function createSyntheticVerifiedActionResolution(actionKind) {
     'perfect-parry': { skillSlotId: 209, skillTagId: 12 },
     'star-combo': { skillSlotId: 208, skillTagId: 17 },
     'star-carry': { skillSlotId: 200, skillTagId: 22 },
+    'exit-skill': { skillSlotId: 999, skillTagId: 8 },
   };
   const binding = bindingByActionKind[actionKind] ?? {};
   return {

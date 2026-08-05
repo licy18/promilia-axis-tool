@@ -1,7 +1,7 @@
 {
   "schemaVersion": 25,
-    "phase": "M12-B3-E5",
-    "status": "b3-e5-implemented",
+    "phase": "M12-B3-E6",
+    "status": "b3-e6-implemented",
   "baseCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
@@ -20,7 +20,7 @@
   "acceptedC14Commit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "acceptedC15Commit": "aafb6aa6c645b7b7490fdba0f71b8941da311f6e",
   "implementationCommit": "git-self",
-  "nextStage": "b3-e5-implemented-awaiting-product-acceptance",
+  "nextStage": "b3-e6-implemented-awaiting-product-acceptance",
   "acceptedPredecessor": {
     "phase": "M12-B3-C14",
     "productionMechanicsCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
@@ -1012,16 +1012,15 @@
     "gameplayLogicChanged": false
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 56,
-    "runtimeUnappliedSoulEssenceCount": 6,
+    "runtimeAppliedSoulEssenceCount": 57,
+    "runtimeUnappliedSoulEssenceCount": 5,
     "runtimeAppliedSetSkillCount": 11,
     "runtimeUnappliedSetSkillCount": 1,
     "newlyAppliedSoulEssenceIds": [
-      10076,
-      10198
+      10032
     ],
     "newlyAppliedSetSkillIds": [],
-    "preservedRuntimeAppliedSoulEssenceCount": 54,
+    "preservedRuntimeAppliedSoulEssenceCount": 56,
     "preservedRuntimeAppliedSetSkillCount": 11,
     "remainingBlockedFourPieceSetSkillIds": [
       "set-skill:3:4"
@@ -1035,9 +1034,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-  "blockingUniqueGapCount": 347,
+  "blockingUniqueGapCount": 345,
   "blockingByCategory": {
-    "not-implemented": 326,
+    "not-implemented": 324,
     "evidence-insufficient": 21
   },
     "formalAdmissions": {
@@ -1050,16 +1049,16 @@
   },
   "hashes": {
     "sourceSnapshotHash": "6fad7809e7d280e6",
-    "rosterHash": "616ec43a9a385f03",
-    "manifestsHash": "f92229f4f083790b",
-    "ledgerHash": "03876c654eb7d2ab",
-    "bindingMatrixHash": "a4993ad7ab3af702",
-    "qualificationCatalogHash": "4e27581736f44538",
-    "dynamicLoadoutEffectCensusHash": "53bd423ca49bb7f3",
-    "soulEssenceEffectCatalogHash": "d78eacca6f505028",
-    "soulEssenceSourceSnapshotHash": "12e40d75191b2742",
+    "rosterHash": "f231d1cb8d6463b4",
+    "manifestsHash": "7e5abd1ed1c8bb55",
+    "ledgerHash": "d6539bb4059b0935",
+    "bindingMatrixHash": "0d96b3d1020b9c6f",
+    "qualificationCatalogHash": "73bcb318f6abcc80",
+    "dynamicLoadoutEffectCensusHash": "5ad90c31db4c1203",
+    "soulEssenceEffectCatalogHash": "d7c188ce3c2347e5",
+    "soulEssenceSourceSnapshotHash": "11d83acf0e3b1e61",
     "battlePropertyTagContractHash": "146e6a9a7db86606",
-    "soulEssenceTriggerContractHash": "4cdf98f967e9d403",
+    "soulEssenceTriggerContractHash": "2888814887f39dc1",
     "verifiedMechanicsPackageHash": "20498c0f436fdcc3f0e86ebb6308ea75586d4b2379127d23ec4d971e81bb88e9",
     "verifiedMechanicsFileSha256": "b84aaca9cd3fe1384df62cbdde5db531a0339e1c6a988f3fb6c9088d7953a971",
     "machineAxisCanonicalHashes": {

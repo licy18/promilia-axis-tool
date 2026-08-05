@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "applied-source-binding-audit",
-  "generatedAt": "2026-08-05T07:32:52.890Z",
+  "generatedAt": "2026-08-05T07:51:37.882Z",
   "decision": {
     "status": "passed",
     "passed": true,
@@ -14,7 +14,7 @@
     "compatibleUnboundCount": 0,
     "unexplainedCompatibleUnboundCount": 0,
     "missingTrackCount": 0,
-    "loadoutPropertyTagSourceCount": 61,
+    "loadoutPropertyTagSourceCount": 62,
     "loadoutPropertyTagDriftCount": 0,
     "loadoutTuningConditionCount": 17,
     "loadoutTuningConditionDriftCount": 0,
@@ -62,11 +62,11 @@
       "expectedSha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
       "actualSha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
       "propertyTagContractHash": "146e6a9a7db86606",
-      "triggerContractHash": "4cdf98f967e9d403"
+      "triggerContractHash": "2888814887f39dc1"
     },
     "summary": {
-      "sourceCount": 61,
-      "triggeredSourceCount": 39,
+      "sourceCount": 62,
+      "triggeredSourceCount": 40,
       "persistentSourceCount": 22,
       "periodicPersistentSourceCount": 3,
       "driftCount": 0,
@@ -448,6 +448,86 @@
           ]
         },
         "sourceIdentity": "battle-element-assets.jsonl#path_id=-8968084659041655000;elementId=19004003",
+        "status": "applied-source-property-tags-ready",
+        "issueCodes": []
+      },
+      {
+        "soulEssenceId": 10032,
+        "effectElementId": 19003403,
+        "sourcePropertyTags": [],
+        "generatedPropertyTags": [],
+        "propertyTagMatchMode": "unscoped",
+        "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403.defaultPropertyTags",
+        "triggerCondition": {
+          "sourceLogicValue": 0,
+          "generatedLogicValue": 0,
+          "sourceConditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 8
+            }
+          ],
+          "generatedConditions": [
+            {
+              "conditionType": 11,
+              "conditionValue": 8
+            }
+          ],
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0",
+          "tuningConditions": []
+        },
+        "triggerEvent": {
+          "sourceEventId": 6,
+          "generatedEventId": 6,
+          "enumName": "AfterSkill",
+          "frameAnchor": "action-end",
+          "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.AfterSkill=6"
+        },
+        "triggerSourceTarget": {
+          "sourceTriggerTargetType": 0,
+          "generatedTriggerTargetType": 0,
+          "sourceKind": "equipped-actor-source-events",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
+        },
+        "triggerEffectTarget": {
+          "sourceTargetType": 15,
+          "generatedTargetType": 15,
+          "sourceTargetPathId": -6568649023911365000,
+          "generatedTargetPathId": -6568649023911365000,
+          "targetKind": "team-actors",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-4873163209865115000;elementId=19003401.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.AllHero=15"
+        },
+        "formula": {
+          "sourceCommonFunctionId": 1,
+          "generatedCommonFunctionId": 1,
+          "sourceBaseFunctionId": 3,
+          "generatedBaseFunctionId": 3,
+          "formulaIdentity": "battle-effect-formula:soulessence:1900340:19003403:-6568649023911365000",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403.formulaParams|functionParams"
+        },
+        "lifecycle": {
+          "sourceKind": "property-leaf-duration",
+          "durationMs": 24000,
+          "leafDurationMs": 24000,
+          "wrapper": null,
+          "wrapperInjectedPathIds": [],
+          "removalPaths": [
+            {
+              "triggerElementId": 19003405,
+              "triggerPathId": 5427396134452986000,
+              "triggerEventId": 36,
+              "effectIndex": 0,
+              "removerElementId": 19003406,
+              "removerPathId": 8968385713706110000,
+              "removedElementIds": [
+                19003401,
+                19003405
+              ],
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=5427396134452986000;elementId=19003405.triggerEffectList[0]|battle-element-assets.jsonl#path_id=8968385713706110000;elementId=19003406"
+            }
+          ]
+        },
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-6568649023911365000;elementId=19003403",
         "status": "applied-source-property-tags-ready",
         "issueCodes": []
       },

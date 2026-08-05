@@ -807,7 +807,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-E5',
+      phase: 'M12-B3-E6',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1773,8 +1773,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-E5',
-    status: 'b3-e5-implemented',
+    phase: 'M12-B3-E6',
+    status: 'b3-e6-implemented',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2223,7 +2223,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-E5 Composite Multi-Trigger\n\n' +
+    '# M12-B3-E6 Composite Multi-Trigger\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -2551,6 +2551,7 @@ function createSoulEffectTriggerContract({
     ['PetCommandSkill', 5, [], '角色指挥技能'],
     ['Dodge', 6, 'dodge-attack', '角色闪避'],
     ['Jump', 7, 'plunging-attack', '角色跳跃'],
+    ['ExitSkill', 8, [], '角色流场技'],
     ['AerialAttack', 9, 'plunging-attack', '角色下落攻击'],
     ['ExtremityAttack', 11, 'limit-counter', '角色极限反击'],
     ['PerfectDodge', 12, 'perfect-parry', '角色完美闪避'],

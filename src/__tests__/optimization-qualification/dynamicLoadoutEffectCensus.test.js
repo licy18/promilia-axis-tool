@@ -310,8 +310,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 67,
-      runtimeUnappliedCount: 7,
+      runtimeAppliedCount: 68,
+      runtimeUnappliedCount: 6,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -1380,6 +1380,7 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       [10176, []],
       [10076, []],
       [10198, []],
+      [10032, []],
     ]);
     const appliedDefinitions = soulCatalog.definitions.filter(
       definition =>

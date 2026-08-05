@@ -86,8 +86,8 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - C7-R3 stores the recovery fields, local/remote callsites, executor/source `isMainControl` gates, `EPlayerNetworkState` semantics, SPSystem dispatch and 11 exact binary ranges in a versioned artifact. The generator revalidates its binary/dump/range hashes and the acceptance report reference. `isMainControl` is local network authority, not the active actor timeline, so production runtime remains unchanged.
 - R3 verification passed: focused evidence/runtime `5 / 119`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, nine deterministic audits, and production build. The accepted R2 canonical/runtime `6 / 72` remains applicable with zero production runtime diff.
 - C14 verification and product acceptance are complete. C15 passes focused source/census/runtime/cycle `5 / 179`, complete optimization qualification `11 / 71`, three-character profile/golden/migration `4 / 38`, canonical/runtime/cycle `6 / 187`, Machine Axis `12 / 160`, nine deterministic audits, and the 1875-module production build. Standard Machine Axis hashes remain unchanged.
-- Status: `B3-E5 implemented`（2026-08-05 用户恢复执行，E1-E5 已收口提交）。
-- Next step: E6（结构/证据硬项）；M12-C 与正式搜索保持锁定。
+- Status: `B3-E6 implemented`（2026-08-05 用户恢复执行，E1-E6 已收口提交）。
+- Next step: E7（证据硬项）；M12-C 与正式搜索保持锁定。
 
 ## B3 恢复执行计划（2026-08-05，用户已明确恢复）
 
@@ -105,7 +105,9 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - **E4 验证**：优化资格套件 13 文件/76 测试、灵魂效果运行时 115/115（新增 10107 全队 SP+5%MAXHP 治疗、10216 宠物大招回 SP 两条真实回放用例）、Machine Axis 12 文件/160 测试、`audit:optimization-qualification` 幂等、`audit:applied-source-bindings:check` 通过、生产构建通过、`git diff --check` 通过。
 - **E5（已完成，2026-08-05）**：槽位/触发目标/多目标单叶 —— `10076 碧空之下`（普攻/风印记双触发器、双叶复合）与 `10198 星之种`（星鸣技/奇波特技 + 宠物大招双触发器、单叶双目标）已转绿。契约新增 `ESkillSlotType.Attack=1`（normal-attack）、`EElementTriggerTargetType.SelfPet=9`（self-pet-actor）、`ETriggerEffectTargetType.Pet=9`（pet-actor）。生成器：触发器支持多个效果目标（`trigger.targets`，同一叶同时作用英雄/宠物/当前英雄），单叶路径按全部目标行绑定判定；运行时 `resolveSoulEffectTargets` 按目标数组逐实体解析（pet→KIBO 目标、controlling-hero→controlledActorId、目标去重），多叶路径按触发器的 `leafPathIds` 过滤可及叶（修复多触发器多叶误发）。结果：soul 级 runtime-applied 54→56（census 记录 67/7），阻断 351→347（not-implemented 330→326），dynamic-unapplied 8→6。验收报告推进至 `M12-B3-E5 / b3-e5-implemented`。
 - **E5 验证**：优化资格套件 13 文件/76 测试、灵魂效果运行时 117/117（新增 10076 普攻叠层、10198 英雄+宠物双目标两条真实回放用例）、Machine Axis 12 文件/160 测试、`audit:optimization-qualification` 幂等、`audit:applied-source-bindings:check` 通过、生产构建通过、`git diff --check` 通过。
-- **E6**：剩余结构/证据硬项 —— `10032 唤灵`（属性+即时治疗混合，待组合编译）、`10011`（BeforeCriticalDamage 中继链，event25 + wrapper 语义）、`10063`（KillEvent 空条件治疗，event32 + 击杀事件运行时）、`10095`（叶 19003206 缺星级数值源）、`10078`（多 PropertyTag [302,303] 证据）、`10169`（shield refresh/replacement 证据）。
+- **E6（已完成，2026-08-05）**：混合属性+即时编译 + 即时星级缩放 —— `10032 唤灵`（AfterSkill tag8 ExitSkill，AllHero 攻击 buff 24s + 全队 6% MAXHP 治疗）已转绿。契约新增 `ESkillTagType.ExitSkill=8`（流场技）；生成器把即时效果编译抽为 `compileSoulImmediateEffectRows`，属性分支（单叶/多叶）可同时携带 `immediateEffects`（混合定义，运行时同一事件既发属性命令又发即时治疗）；**修复即时效果星级缺失**：10107/10216/10032 的 direct-sp/direct-heal 全部按 `skillsub_ele_value` 编译 `valuesByStar`，运行时按绑定星级取值（10107 SP 18/24/30/36、治疗 500/670/840/1010；10216 SP 100000/133000/167000/200000；10032 治疗 600/810/1010/1210）。结果：soul 级 runtime-applied 56→57（census 记录 68/6），阻断 347→345（not-implemented 326→324），dynamic-unapplied 6→5。验收报告推进至 `M12-B3-E6 / b3-e6-implemented`。
+- **E6 验证**：优化资格套件 13 文件/76 测试、灵魂效果运行时 119/119（新增 10032 合成回放 1/2 星、10107/10216 星级缩放断言）、Machine Axis 12 文件/160 测试、`audit:optimization-qualification` 幂等、`audit:applied-source-bindings:check` 通过、生产构建通过、`git diff --check` 通过。
+- **E7**：剩余证据硬项 —— `10011`（BeforeCriticalDamage 中继链，event25 + wrapper 语义 + 暴击事件运行时证据）、`10063`（KillEvent 空条件治疗，event32 + 击杀事件运行时证据）、`10095`（叶 19003206 调谐强度缺 `skillsub_ele_value` 星级数值源，源缺失）、`10078`（多 PropertyTag [302,303] 原生匹配证据）、`10169`（shield refresh/replacement 证据）。
 - **E6**：证据硬项 —— `10169 软软棉花肉 (1900750)` shield refresh/replacement、`10078 星晚的追忆 (1900460)` 多 PropertyTag、`set-skill:3:4` source identity、4 个 kibo passive evidence（500082/500185/500231/500360）、`112001` 解锁来源 mismatch、hero_rank final-panel 证据（11 角色 + STARBORN）、STARBORN 静态 profile。
 - **E7**：视觉/产品验收 —— 137 装备、62 灵魂、43 奇波、11 角色、12 套装逐对象走四态链与 Workbench 签收；全绿后才解锁 M12-C（不在此阶段执行正式搜索）。
 
@@ -115,7 +117,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 
 ## Remaining Blockers
 
-- Not implemented: `326` unique blockers, including 6 unresolved soul-essence dynamic skills, remaining runtime/visual qualification, and one missing STARBORN static actor profile. DNA contributes zero source or acceptance gaps.
+- Not implemented: `324` unique blockers, including 5 unresolved soul-essence dynamic skills, remaining runtime/visual qualification, and one missing STARBORN static actor profile. DNA contributes zero source or acceptance gaps.
 - Evidence insufficient: `21` unique blockers, including the existing character/Kibo boundaries, the source-bound shield refresh/replacement gaps, `set-skill:3:4`, and the `10078` multi-PropertyTag contract.
 - Formal admission remains empty. B3-B-R1 keeps the static equipment foundation but does not claim `hero_rank` attribute or skill-availability closure, and it does not qualify characters, Kibo, soul essence, equipment, set skills, or their binding matrix for optimization.
 

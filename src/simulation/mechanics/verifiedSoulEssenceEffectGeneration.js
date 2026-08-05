@@ -1312,6 +1312,12 @@ function createSoulImmediateEvents({
     .sort((left, right) => String(left.id).localeCompare(String(right.id)));
 
   for (const immediateEffect of immediateEffects) {
+    const starValue = (immediateEffect.valuesByStar ?? []).find(
+      row => Number(row.star) === Number(binding.star)
+    );
+    const resolvedValue = Number.isFinite(Number(starValue?.valueRaw))
+      ? Number(starValue.valueRaw)
+      : Number(immediateEffect.sourceRawValue);
     const targets = resolveSoulImmediateEffectTargets({
       immediateEffect,
       actors,
@@ -1348,18 +1354,23 @@ function createSoulImmediateEvents({
         actionId: action.id,
         actorId: String(binding.actor.id),
         target,
-        value: Number(immediateEffect.sourceRawValue),
+        value: resolvedValue,
         formulaResult: {
           applied: true,
           status: 'applied',
           formulaIdentity:
             immediateEffect.formula?.formulaIdentity ??
             `${effectIdentity}:formula`,
-          sourceRawA: Number(
-            immediateEffect.formula?.sourceRawA ??
-              immediateEffect.sourceRawValue
-          ),
-          value: Number(immediateEffect.sourceRawValue),
+          sourceRawA: resolvedValue,
+          value: resolvedValue,
+          starValue:
+            starValue == null
+              ? null
+              : {
+                  star: Number(starValue.star),
+                  valueRaw: resolvedValue,
+                  sourceIdentity: starValue.sourceIdentity ?? null,
+                },
           sourceIdentity: immediateEffect.formula?.sourceIdentity ?? null,
         },
         effect: {
