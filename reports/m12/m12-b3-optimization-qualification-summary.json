@@ -1,6 +1,6 @@
 {
-  "phase": "M12-B3-E13",
-  "status": "b3-e13-implemented",
+  "phase": "M12-B3-E14",
+  "status": "b3-e14-implemented",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -9,12 +9,12 @@
     "equipment": 137,
     "setSkills": 12
   },
-  "sourceSnapshotHash": "81f323993557ac49",
-  "rosterHash": "468f93c3cbf83459",
-  "manifestsHash": "5ac69533765e1fbc",
-  "ledgerHash": "9d751c9ec22c4ebc",
-  "bindingMatrixHash": "5c2638df48c6c7a5",
-  "catalogHash": "be4ad68bb00072e3",
+  "sourceSnapshotHash": "8791dfe24ddeaecf",
+  "rosterHash": "28115e5f94cba622",
+  "manifestsHash": "ddf1b391ca5a4a7d",
+  "ledgerHash": "f9ef8f45cbb654ff",
+  "bindingMatrixHash": "768a2ffa1104a3ff",
+  "catalogHash": "c5e49f6b53c6c4e8",
   "maturityCounts": {
     "extracted": 30,
     "optimization-ready": 210,
@@ -40,7 +40,7 @@
       "character-not-optimization-ready": 11,
       "kibo-headless-maturity-not-ready": 43,
       "kibo-passive-static-evidence-gap": 4,
-      "kibo-visual-acceptance-not-published": 43,
+      "kibo-visual-acceptance-evidence-blocked": 43,
       "level-breakthrough-skill-unlock-source-mismatch": 1,
       "set-skill-dynamic-unapplied": 1,
       "strict-character-cultivation-runtime-partial": 11

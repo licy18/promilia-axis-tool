@@ -866,7 +866,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-E13',
+      phase: 'M12-B3-E14',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1113,10 +1113,11 @@ function createQualificationManifests({
     const maturity = kiboMaturityById.get(kibo.kiboId);
     const unresolvedPassive = unresolvedPassiveByKiboId.get(kibo.kiboId);
     const blockers = [
-      blocker(
+      ...createVisualAcceptanceBlocker(
+        visualAcceptanceById.get(`kibo:${kibo.kiboId}`),
         'kibo-visual-acceptance-not-published',
-        'not-implemented',
-        'No product visual acceptance manifest exists for this Kibo.'
+        'Kibo',
+        'kibo-visual-acceptance-evidence-blocked'
       ),
     ];
     if (!maturity || maturity.machineOptimizationReady !== true) {
@@ -1872,8 +1873,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-E13',
-    status: 'b3-e13-implemented',
+    phase: 'M12-B3-E14',
+    status: 'b3-e14-implemented',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2110,7 +2111,8 @@ function blocker(code, category, message, details = {}) {
 function createVisualAcceptanceBlocker(
   visualEntry,
   notPublishedCode,
-  subjectName
+  subjectName,
+  notReadyCode = 'acceptance-product-visual-signoff-pending'
 ) {
   if (!visualEntry) {
     return [
@@ -2124,9 +2126,11 @@ function createVisualAcceptanceBlocker(
   if (visualEntry.optimizationReady !== true) {
     return [
       blocker(
-        'acceptance-product-visual-signoff-pending',
+        notReadyCode,
         'not-implemented',
-        'Visual acceptance manifest is published but product signoff or blocking evidence remains.',
+        notReadyCode === 'kibo-visual-acceptance-evidence-blocked'
+          ? 'Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.'
+          : 'Visual acceptance manifest is published but product signoff or blocking evidence remains.',
         {
           manifestHash: visualEntry.manifestHash ?? null,
           manifestBlockers: visualEntry.blockers ?? [],
@@ -2354,7 +2358,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-E13 Visual Acceptance Pipeline\n\n' +
+    '# M12-B3-E14 Kibo Maturity And Visual Acceptance\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -2363,7 +2367,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: C2-C14 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, target-debuff, and set-three source-conflict contracts. C15 adds a source-driven periodic persistent-root family with native time-loop cadence, condition re-evaluation, finite Cover leaves, right-open expiry, unload provenance, and cycle phase state. Soul essences 10084, 10152, and 10197 are runtime-applied; 10078 remains evidence-insufficient because native multi-PropertyTag matching for tags 302/303 is not closed. E11 registers the product-confirmed dead tuning-intensity branch (element 19003206) of soul 10095 as excluded, closes 10095 as runtime-applied with the single team-attack leaf 19003203, and leaves no runtime-unresolved souls (62/62). E12 gates soul effect activation by character profession: the cultivation catalog carries character position and soul profession, the runtime emits no effect commands for profession-mismatched loadouts while static level/rank growth still applies, formal binding edges remain profession-aware (103 match / 198 universal / 381 mismatch), and the Workbench picker marks mismatched souls as stat-only. E13 publishes the M12-B3 visual acceptance pipeline: per-object manifests with icon asset evidence, display/effect binding, deterministic requirement matrix and blocking ledger for 62 soul essences, 137 equipment contracts and 12 set skills; 210 objects reach optimization-ready (62 souls / 137 equipment / 11 set skills), set-skill:3:4 remains blocked by its dynamic-unapplied evidence, and blocking gaps drop from 335 to 125.\n' +
+    '- Dynamic loadout batches: C2-C14 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, target-debuff, and set-three source-conflict contracts. C15 adds a source-driven periodic persistent-root family with native time-loop cadence, condition re-evaluation, finite Cover leaves, right-open expiry, unload provenance, and cycle phase state. Soul essences 10084, 10152, and 10197 are runtime-applied; 10078 remains evidence-insufficient because native multi-PropertyTag matching for tags 302/303 is not closed. E11 registers the product-confirmed dead tuning-intensity branch (element 19003206) of soul 10095 as excluded, closes 10095 as runtime-applied with the single team-attack leaf 19003203, and leaves no runtime-unresolved souls (62/62). E12 gates soul effect activation by character profession: the cultivation catalog carries character position and soul profession, the runtime emits no effect commands for profession-mismatched loadouts while static level/rank growth still applies, formal binding edges remain profession-aware (103 match / 198 universal / 381 mismatch), and the Workbench picker marks mismatched souls as stat-only. E13 publishes the M12-B3 visual acceptance pipeline: per-object manifests with icon asset evidence, display/effect binding, deterministic requirement matrix and blocking ledger for 62 soul essences, 137 equipment contracts and 12 set skills; 210 objects reach optimization-ready (62 souls / 137 equipment / 11 set skills), set-skill:3:4 remains blocked by its dynamic-unapplied evidence, and blocking gaps drop from 335 to 125. E14 implements the Kibo static-attribute inheritance audit (all 122 Workbench Kibos verified against the combat mechanics package: 83 species attributes, 100 growth rows, 9 hobbies, 10 intimacy levels, 54 comprehension grades) and publishes visual acceptance manifests for all 43 target Kibos; Kibos remain blocked only by action closure, fixed-skill classification and PVE passive runtime evidence (43 + 4 gaps), and the qualification gate now distinguishes published-but-blocked Kibo manifests (kibo-visual-acceptance-evidence-blocked).\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'

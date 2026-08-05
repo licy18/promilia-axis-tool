@@ -290,6 +290,21 @@ describe('M12-B3 optimization qualification generation', () => {
         record => record.code === 'acceptance-product-visual-signoff-pending'
       )
     ).toHaveLength(1);
+    expect(
+      artifacts.gaps.records.filter(
+        record => record.code === 'kibo-visual-acceptance-not-published'
+      )
+    ).toHaveLength(0);
+    expect(
+      artifacts.gaps.records.filter(
+        record => record.code === 'kibo-visual-acceptance-evidence-blocked'
+      )
+    ).toHaveLength(43);
+    expect(
+      artifacts.gaps.records.filter(
+        record => record.code === 'kibo-headless-maturity-not-ready'
+      )
+    ).toHaveLength(43);
     expect(artifacts.summary.m12cLocked).toBe(true);
     expect(
       artifacts.gaps.records.filter(

@@ -66,6 +66,7 @@ async function readOverviewSheets() {
   const sheetNames = [];
   for (const fileName of [
     'overview-soul-essences.png',
+    'overview-kibos.png',
     'overview-equipment-1.png',
     'overview-equipment-2.png',
     'overview-equipment-3.png',
@@ -240,19 +241,32 @@ function createManifest({
 }
 
 export async function createVisualAcceptanceArtifacts() {
-  const [soulessences, equipment, soulMechanics, roster, detailCatalog] =
-    await Promise.all([
-      readJson('src/data/generated/soulessences.json'),
-      readJson('src/data/generated/equipment.json'),
-      readJson('src/data/generated/soulessence-effect-mechanics.json'),
-      readJson('reports/m12/m12-b3-optimization-qualification-roster.json'),
-      readJson('src/data/generated/workbench-loadout-detail-catalog.json'),
-    ]);
+  const [
+    soulessences,
+    equipment,
+    kibos,
+    soulMechanics,
+    roster,
+    detailCatalog,
+    kiboMaturity,
+  ] = await Promise.all([
+    readJson('src/data/generated/soulessences.json'),
+    readJson('src/data/generated/equipment.json'),
+    readJson('src/data/generated/kibos.json'),
+    readJson('src/data/generated/soulessence-effect-mechanics.json'),
+    readJson('reports/m12/m12-b3-optimization-qualification-roster.json'),
+    readJson('src/data/generated/workbench-loadout-detail-catalog.json'),
+    readJson('reports/kibo-headless/kibo-maturity-matrix.json'),
+  ]);
   const soulById = new Map(
     soulessences.items.map(item => [Number(item.id), item])
   );
   const equipmentById = new Map(
     equipment.items.map(item => [Number(item.id), item])
+  );
+  const kiboById = new Map(kibos.items.map(item => [Number(item.id), item]));
+  const kiboMaturityById = new Map(
+    (kiboMaturity.rows ?? []).map(row => [Number(row.kiboId), row])
   );
   const definitionBySoulId = new Map(
     soulMechanics.definitions.map(definition => [
@@ -271,6 +285,9 @@ export async function createVisualAcceptanceArtifacts() {
   );
   const detailEquipmentById = new Map(
     (detailCatalog.equipment ?? []).map(item => [Number(item.id), item])
+  );
+  const detailKiboById = new Map(
+    (detailCatalog.kibos ?? []).map(item => [Number(item.id), item])
   );
   const overviewSheets = await readOverviewSheets();
   const manifests = [];
@@ -439,6 +456,131 @@ export async function createVisualAcceptanceArtifacts() {
     );
   }
 
+  for (const kibo of roster.kibos ?? []) {
+    const id = Number(kibo.kiboId);
+    const sourceItem = kiboById.get(id);
+    const detail = detailKiboById.get(id);
+    const maturity = kiboMaturityById.get(id);
+    const icon = await readIconAsset(detail?.icon ?? null);
+    const actionByKind = maturity?.actions ?? {};
+    const actionsRunnable = ['signature', 'active', 'break'].every(
+      kind => actionByKind[kind]?.runnable === true
+    );
+    const maturityReady = maturity?.machineOptimizationReady === true;
+    const staticAuditReady =
+      maturity?.staticAttributes?.closureClass === 'evidence-closed';
+    const fixedClassified =
+      maturity?.talentPassive?.fixedClassificationStatus === 'evidence-closed';
+    const pvePassiveReady =
+      maturity?.talentPassive?.pveRuntimeStatus === 'runtime-ready';
+    const remainingGaps = maturity?.remainingGaps ?? [];
+    const requirements = [
+      requirement({
+        identity: 'kibo-source-identity',
+        dimension: 'source',
+        passed: Boolean(sourceItem),
+        sourceIdentities: [`generated/kibos.json#items[id=${id}]`],
+      }),
+      requirement({
+        identity: 'kibo-icon-asset',
+        dimension: 'visual',
+        passed: icon?.status === 'verified',
+        sourceIdentities: [icon?.path ?? null].filter(Boolean),
+      }),
+      requirement({
+        identity: 'kibo-element-resolution',
+        dimension: 'identity',
+        passed: (kibo.elements ?? []).length > 0,
+        sourceIdentities: [`generated/kibos.json#items[id=${id}]`],
+      }),
+      requirement({
+        identity: 'kibo-public-actions-runnable',
+        dimension: 'runtime',
+        passed: actionsRunnable,
+        sourceIdentities: [
+          `reports/verified-public-runtime-coverage.json#actions[kiboId=${id}]`,
+        ],
+      }),
+      requirement({
+        identity: 'kibo-static-attribute-inheritance-audit',
+        dimension: 'cultivation',
+        passed: staticAuditReady,
+        sourceIdentities: [
+          'src/data/generated/verified-combat-mechanics-package.json#staticPropertyCatalog.kibo',
+        ],
+      }),
+      requirement({
+        identity: 'kibo-fixed-skill-classification',
+        dimension: 'runtime',
+        passed: fixedClassified,
+        sourceIdentities: [
+          `reports/kibo-headless/kibo-mechanics-census.json#fixedSkills[kiboId=${id}]`,
+        ],
+      }),
+      requirement({
+        identity: 'kibo-pve-passive-runtime-ready',
+        dimension: 'runtime',
+        passed: pvePassiveReady,
+        sourceIdentities: [
+          `src/data/generated/kibo-passive-mechanics.json#definitions[kiboId=${id}]`,
+        ],
+      }),
+      requirement({
+        identity: 'kibo-headless-maturity-ready',
+        dimension: 'runtime',
+        passed: maturityReady,
+        sourceIdentities: [
+          `reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=${id}]`,
+        ],
+      }),
+    ];
+    const ledgerRecords = remainingGaps.map(gap =>
+      ledgerRecord({
+        identity: gap,
+        reason: `headless maturity gap: ${gap}`,
+        blocking: true,
+        sourceIdentity: `reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=${id}]`,
+      })
+    );
+    const accepted = requirements.every(entry => entry.passed);
+    manifests.push(
+      createManifest({
+        objectKind: 'kibo',
+        objectId: id,
+        displayName: kibo.name,
+        sourceIdentities: [
+          `generated/kibos.json#items[id=${id}]`,
+          `reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=${id}]`,
+        ].filter(Boolean),
+        icon,
+        displaySummary: detail?.summary ?? null,
+        binding: {
+          elements: kibo.elements ?? [],
+          elementClass: kibo.elementClass ?? null,
+          stage: kibo.stage ?? null,
+          actionCount: Number(kibo.actionCount) || null,
+          actions: Object.fromEntries(
+            Object.entries(actionByKind).map(([kind, action]) => [
+              kind,
+              {
+                runtimeStatus: action?.runtimeStatus ?? null,
+                closureClass: action?.closureClass ?? null,
+              },
+            ])
+          ),
+          staticAttributeAudit: maturity?.staticAttributes?.closureClass ?? null,
+          machineOptimizationReady: maturityReady,
+        },
+        requirements,
+        ledgerRecords,
+        productVisualAcceptance: accepted
+          ? { status: 'accepted', bindingStatus: 'verified' }
+          : { status: 'pending', bindingStatus: 'pending' },
+        overviewSheets,
+      })
+    );
+  }
+
   for (const setSkill of roster.setSkills ?? []) {
     const key = `${Number(setSkill.setId)}:${Number(setSkill.pieces)}`;
     const definition = setSkillDefinitionByKey.get(key);
@@ -503,7 +645,7 @@ export async function createVisualAcceptanceArtifacts() {
   }
 
   manifests.sort((left, right) => {
-    const kindOrder = ['soul-essence', 'equipment', 'set-skill'];
+    const kindOrder = ['soul-essence', 'equipment', 'kibo', 'set-skill'];
     return (
       kindOrder.indexOf(left.owner.objectKind) -
         kindOrder.indexOf(right.owner.objectKind) ||
@@ -542,7 +684,7 @@ export async function createVisualAcceptanceArtifacts() {
       0
     ),
     byObjectKind: Object.fromEntries(
-      ['soul-essence', 'equipment', 'set-skill'].map(kind => [
+      ['soul-essence', 'equipment', 'kibo', 'set-skill'].map(kind => [
         kind,
         {
           total: manifests.filter(

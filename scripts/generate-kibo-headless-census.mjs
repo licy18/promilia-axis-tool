@@ -111,6 +111,7 @@ export async function createKiboHeadlessCensus({
     skillLogicDocument,
     elementFormulaDocument,
     languageText,
+    verifiedMechanicsDocument,
   ] = await Promise.all([
     readJson(sources.kibos),
     readJson(sources.publicRuntimeCoverage),
@@ -120,6 +121,7 @@ export async function createKiboHeadlessCensus({
     readJson(sources.skillLogicTable),
     readJson(sources.elementFormulaTable),
     fs.readFile(sources.skillLevelLanguage, 'utf8'),
+    readJson(sources.verifiedMechanics),
   ]);
 
   const kibos = kiboDocument.items ?? [];
@@ -141,6 +143,19 @@ export async function createKiboHeadlessCensus({
   );
   const languageById = parseInt64LanguageRows(languageText);
   const kiboById = new Map(kibos.map(kibo => [Number(kibo.id), kibo]));
+  const staticKiboCatalog = verifiedMechanicsDocument.staticPropertyCatalog?.kibo ?? {};
+  const kiboStaticAudit = {
+    profiles: new Map(
+      (staticKiboCatalog.profiles ?? []).map(profile => [
+        Number(profile.kiboId),
+        profile,
+      ])
+    ),
+    levelGrowthRows: staticKiboCatalog.levelGrowth ?? [],
+    hobbyRows: staticKiboCatalog.hobbies ?? [],
+    intimacyRows: staticKiboCatalog.intimacyLevels ?? [],
+    comprehensionGrades: staticKiboCatalog.comprehensionGrades ?? [],
+  };
 
   const fixedOccurrences = pets.flatMap(pet =>
     parseSkillList(pet.fixedSkillList).map(entry => ({
@@ -272,6 +287,7 @@ export async function createKiboHeadlessCensus({
     pvpPassiveSkills,
     publicActions: actionRows,
     sources: reportSources,
+    staticAudit: kiboStaticAudit,
   });
 
   return {
@@ -299,6 +315,13 @@ function createSourcePaths({ repoRoot, azprRoot, extractorBattleRoot }) {
   );
   return {
     kibos: path.join(repoRoot, 'src', 'data', 'generated', 'kibos.json'),
+    verifiedMechanics: path.join(
+      repoRoot,
+      'src',
+      'data',
+      'generated',
+      'verified-combat-mechanics-package.json'
+    ),
     publicRuntimeCoverage: path.join(
       repoRoot,
       'reports',
@@ -4008,6 +4031,7 @@ function createMaturityMatrix({
   pvpPassiveSkills,
   publicActions,
   sources,
+  staticAudit,
 }) {
   const fixedByKibo = groupRows(
     fixedSkills.flatMap(skill =>
@@ -4046,18 +4070,36 @@ function createMaturityMatrix({
     const fixedClassified = fixedRows.every(
       row => row.closureClass === 'evidence-closed'
     );
+    const staticProfile = staticAudit?.profiles.get(kiboId);
+    const staticAuditReady =
+      staticProfile?.applied === true &&
+      (staticProfile.speciesAttributes?.length ?? 0) > 0 &&
+      (staticAudit?.levelGrowthRows?.length ?? 0) === 100 &&
+      (staticAudit?.hobbyRows?.length ?? 0) > 0 &&
+      (staticAudit?.intimacyRows?.length ?? 0) > 0 &&
+      (staticAudit?.comprehensionGrades?.length ?? 0) > 0;
     const remainingGaps = [
       !passiveReady ? 'pve-passive-runtime-incomplete' : null,
       !actionsReady ? 'public-action-closure-incomplete' : null,
       !fixedClassified ? 'fixed-skill-classification-incomplete' : null,
-      'static-attribute-inheritance-audit-pending',
+      !staticAuditReady ? 'static-attribute-inheritance-audit-pending' : null,
     ].filter(Boolean);
     return {
       kiboId,
       kiboName: kibo.name,
       staticAttributes: {
-        status: 'generated-data-present-inheritance-audit-pending',
-        closureClass: 'unresolved',
+        status: staticAuditReady
+          ? 'evidence-closed'
+          : 'generated-data-present-inheritance-audit-pending',
+        closureClass: staticAuditReady ? 'evidence-closed' : 'unresolved',
+        evidence: {
+          profileApplied: staticProfile?.applied === true,
+          speciesAttributeCount: staticProfile?.speciesAttributes?.length ?? 0,
+          levelGrowthRows: staticAudit?.levelGrowthRows?.length ?? 0,
+          hobbyRows: staticAudit?.hobbyRows?.length ?? 0,
+          intimacyRows: staticAudit?.intimacyRows?.length ?? 0,
+          comprehensionGrades: staticAudit?.comprehensionGrades?.length ?? 0,
+        },
       },
       talentPassive: {
         pveSkillIds: pveRows.map(row => row.skillId),
@@ -4117,6 +4159,14 @@ function createMaturityMatrix({
       actionClosure: countClosure(publicActions),
       pvePassiveMechanics: countClosure(pvePassiveSkills),
       fixedSkillClassification: countClosure(fixedSkills),
+      staticAttributeInheritance: {
+        evidenceClosed: rows.filter(
+          row => row.staticAttributes.closureClass === 'evidence-closed'
+        ).length,
+        unresolved: rows.filter(
+          row => row.staticAttributes.closureClass !== 'evidence-closed'
+        ).length,
+      },
     },
   };
 }

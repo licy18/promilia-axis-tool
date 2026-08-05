@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12B3VisualAcceptanceManifest",
+  "kind": "m12-b3-visual-acceptance-manifest",
+  "owner": {
+    "objectKind": "kibo",
+    "objectId": "500304",
+    "displayName": "库库"
+  },
+  "source": {
+    "sourceIdentities": [
+      "generated/kibos.json#items[id=500304]",
+      "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500304]"
+    ],
+    "profileHash": "e4537b6954ad52a3"
+  },
+  "evidence": {
+    "icon": {
+      "path": "public/assets/loadout/tex_icon_pet_500304.png",
+      "fileName": "tex_icon_pet_500304.png",
+      "sha256": "d34c5603fadd8500d6882454e59b2d0f7002053e89b57184aa3c6f92db343a88",
+      "bytes": 49934,
+      "status": "verified"
+    },
+    "displaySummary": "风、水 · 幼年期 · 侵扰 · 风旋 · 小风弹 · 库库-合击",
+    "binding": {
+      "elements": [
+        "风",
+        "水"
+      ],
+      "elementClass": "dual",
+      "stage": "幼年期",
+      "actionCount": 3,
+      "actions": {
+        "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "unresolved"
+        },
+        "active": {
+          "runtimeStatus": "runtime-and-evidence-gap",
+          "closureClass": "unresolved"
+        },
+        "break": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        }
+      },
+      "staticAttributeAudit": "evidence-closed",
+      "machineOptimizationReady": false
+    },
+    "automatedVisualEvidence": [
+      {
+        "scenarioIdentity": "workbench-loadout-detail-kibo-500304",
+        "status": "automated-icon-asset-verified",
+        "iconPath": "public/assets/loadout/tex_icon_pet_500304.png",
+        "iconSha256": "d34c5603fadd8500d6882454e59b2d0f7002053e89b57184aa3c6f92db343a88"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-soul-essences.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-soul-essences.png",
+        "screenshotSha256": "1c576e50accdeac23a0248e3e20d8d497a9ca28a496d9be262970a51f0fc10db"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-kibos.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-kibos.png",
+        "screenshotSha256": "aa171f6f97acb01e8e41c9080f4bbed769d041601ffd96c9052dea7ed742f4a3"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-1.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-1.png",
+        "screenshotSha256": "497579335049e71e58650d26f1c19b1614a4f36e7a43c83c73d8823d64d00308"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-2.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-2.png",
+        "screenshotSha256": "97efe7d931ff0d11c284a7cd56916382f9419e907bf5f6ccf34cee671d6cda93"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-3.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-3.png",
+        "screenshotSha256": "c616cb3f7f0dc3803ff6820a2c854fb6d06871e6965dbcc20640ed52e03d6431"
+      },
+      {
+        "scenarioIdentity": "overview-sheet:overview-equipment-4.png",
+        "status": "overview-sheet-published",
+        "screenshotPath": "reports/m12/visual-acceptance/overview-equipment-4.png",
+        "screenshotSha256": "354105a51dce530e9fbca2887435802183ebaba2d7e0f7bc1da695b25e1f1c20"
+      }
+    ],
+    "productVisualAcceptance": {
+      "status": "pending",
+      "decisionSource": null,
+      "acceptanceMode": null,
+      "bindingStatus": "pending",
+      "acceptanceIdentity": null
+    }
+  },
+  "matrix": {
+    "requirements": [
+      {
+        "requirementIdentity": "kibo-source-identity",
+        "dimension": "source",
+        "status": "passed",
+        "sourceIdentities": [
+          "generated/kibos.json#items[id=500304]"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "kibo-icon-asset",
+        "dimension": "visual",
+        "status": "passed",
+        "sourceIdentities": [
+          "public/assets/loadout/tex_icon_pet_500304.png"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "kibo-element-resolution",
+        "dimension": "identity",
+        "status": "passed",
+        "sourceIdentities": [
+          "generated/kibos.json#items[id=500304]"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "kibo-public-actions-runnable",
+        "dimension": "runtime",
+        "status": "blocked",
+        "sourceIdentities": [
+          "reports/verified-public-runtime-coverage.json#actions[kiboId=500304]"
+        ],
+        "passed": false
+      },
+      {
+        "requirementIdentity": "kibo-static-attribute-inheritance-audit",
+        "dimension": "cultivation",
+        "status": "passed",
+        "sourceIdentities": [
+          "src/data/generated/verified-combat-mechanics-package.json#staticPropertyCatalog.kibo"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "kibo-fixed-skill-classification",
+        "dimension": "runtime",
+        "status": "blocked",
+        "sourceIdentities": [
+          "reports/kibo-headless/kibo-mechanics-census.json#fixedSkills[kiboId=500304]"
+        ],
+        "passed": false
+      },
+      {
+        "requirementIdentity": "kibo-pve-passive-runtime-ready",
+        "dimension": "runtime",
+        "status": "passed",
+        "sourceIdentities": [
+          "src/data/generated/kibo-passive-mechanics.json#definitions[kiboId=500304]"
+        ],
+        "passed": true
+      },
+      {
+        "requirementIdentity": "kibo-headless-maturity-ready",
+        "dimension": "runtime",
+        "status": "blocked",
+        "sourceIdentities": [
+          "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500304]"
+        ],
+        "passed": false
+      }
+    ],
+    "requiredCount": 8,
+    "passedCount": 5,
+    "complete": false
+  },
+  "ledger": {
+    "records": [
+      {
+        "uniqueGapIdentity": "public-action-closure-incomplete",
+        "status": "blocking",
+        "reason": "headless maturity gap: public-action-closure-incomplete",
+        "blocking": true,
+        "sourceIdentity": "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500304]"
+      },
+      {
+        "uniqueGapIdentity": "fixed-skill-classification-incomplete",
+        "status": "blocking",
+        "reason": "headless maturity gap: fixed-skill-classification-incomplete",
+        "blocking": true,
+        "sourceIdentity": "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500304]"
+      }
+    ],
+    "blockingCount": 2
+  },
+  "maturity": {
+    "currentState": "runtime-integrated",
+    "earnedStates": [
+      "extracted",
+      "runtime-integrated"
+    ],
+    "optimizationReady": false,
+    "blockers": [
+      "acceptance-required-matrix-incomplete",
+      "acceptance-blocking-ledger-not-empty",
+      "acceptance-product-visual-signoff-pending"
+    ]
+  },
+  "validation": {
+    "status": "m12-b3-visual-acceptance-manifest-blocked",
+    "issues": [
+      "acceptance-required-matrix-incomplete",
+      "acceptance-blocking-ledger-not-empty",
+      "acceptance-product-visual-signoff-pending"
+    ]
+  },
+  "manifestHash": "6afe6fb152bd30ec"
+}
