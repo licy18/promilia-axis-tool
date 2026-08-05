@@ -3,7 +3,7 @@
   "contractName": "AzPrDynamicLoadoutEffectMechanismCensus",
   "kind": "azpr-dynamic-loadout-effect-mechanism-census",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "sourceCatalogHash": "8be86a1e90eff36d",
+  "sourceCatalogHash": "4b4527b2a9651803",
   "propertyTagContract": {
     "sourceKind": "il2cpp-battle-property-tag-contract",
     "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag",
@@ -2768,6 +2768,9 @@
       "effectSkillId": 1900480,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "trigger": {
+        "leafPathIds": [
+          7615727136823255000
+        ],
         "elementId": 19004801,
         "pathId": -4992960068897353000,
         "eventId": 6,
@@ -2899,6 +2902,9 @@
       "effectSkillId": 1900610,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "trigger": {
+        "leafPathIds": [
+          -131968735896823040
+        ],
         "elementId": 19006100,
         "pathId": 4614392219156132000,
         "eventId": 5,
@@ -3030,6 +3036,9 @@
       "effectSkillId": 1900120,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
       "trigger": {
+        "leafPathIds": [
+          7565174917272651000
+        ],
         "elementId": 19001201,
         "pathId": -7480298753715348000,
         "eventId": 2,
@@ -3190,6 +3199,9 @@
       "effectSkillId": 1900530,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "trigger": {
+        "leafPathIds": [
+          -1219091418453908700
+        ],
         "elementId": 19005301,
         "pathId": -569579431889589300,
         "eventId": 5,
@@ -3324,6 +3336,9 @@
       "effectSkillId": 1900400,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
       "trigger": {
+        "leafPathIds": [
+          -8968084659041655000
+        ],
         "elementId": 19004002,
         "pathId": 6735504116185173000,
         "eventId": 1,
@@ -3469,6 +3484,9 @@
       "effectSkillId": 1900340,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "trigger": {
+        "leafPathIds": [
+          -6568649023911365000
+        ],
         "elementId": 19003401,
         "pathId": -4873163209865115000,
         "eventId": 6,
@@ -3922,6 +3940,9 @@
       "effectSkillId": 1900450,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "trigger": {
+        "leafPathIds": [
+          6108188296881701000
+        ],
         "elementId": 19004500,
         "pathId": -5806624494324189000,
         "eventId": 5,
@@ -4053,6 +4074,9 @@
       "effectSkillId": 1900330,
       "mechanismFamily": "equipped-actor-get-element-property-before-acquire",
       "trigger": {
+        "leafPathIds": [
+          -4023729244501754000
+        ],
         "elementId": 19003301,
         "pathId": -2023989584562330600,
         "eventId": 9,
@@ -4194,6 +4218,9 @@
       "effectSkillId": 1900550,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
       "trigger": {
+        "leafPathIds": [
+          1889171037961678300
+        ],
         "elementId": 19005500,
         "pathId": -4330459562266431000,
         "eventId": 1,
@@ -4528,6 +4555,9 @@
       "effectSkillId": 1900920,
       "mechanismFamily": "equipped-actor-switch-enter-team-property",
       "trigger": {
+        "leafPathIds": [
+          -5655228325641076000
+        ],
         "elementId": 19009201,
         "pathId": -6515773177271123000,
         "eventId": 34,
@@ -4799,6 +4829,9 @@
       "effectSkillId": 1900910,
       "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
       "trigger": {
+        "leafPathIds": [
+          4769837230415874000
+        ],
         "elementId": 19009101,
         "pathId": -7255963679965377000,
         "eventId": 10,
@@ -5051,6 +5084,9 @@
       "effectSkillId": 1900930,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "trigger": {
+        "leafPathIds": [
+          -2274249246834308600
+        ],
         "elementId": 19009301,
         "pathId": 6322365379307683000,
         "eventId": 6,
@@ -5857,6 +5893,9 @@
       "effectSkillId": 1900900,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "trigger": {
+        "leafPathIds": [
+          -2685633708192990000
+        ],
         "elementId": 19009001,
         "pathId": 3763334915368993000,
         "eventId": 6,
@@ -6320,6 +6359,7 @@
       "effectSkillId": 1900880,
       "mechanismFamily": "source-indexed-composite-effect",
       "trigger": {
+        "leafPathIds": [],
         "elementId": 19008801,
         "pathId": 8121214350672122000,
         "eventId": 32,
@@ -6390,6 +6430,9 @@
       "effectSkillId": 1900650,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
       "trigger": {
+        "leafPathIds": [
+          -7924391024652865000
+        ],
         "elementId": 19006501,
         "pathId": -7589891308127638000,
         "eventId": 1,
@@ -6535,8 +6578,11 @@
       "objectId": "10076",
       "displayName": "碧空之下",
       "effectSkillId": 1900190,
-      "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
+      "mechanismFamily": "source-indexed-composite-effect",
       "trigger": {
+        "leafPathIds": [
+          7028756448168345000
+        ],
         "elementId": 19001907,
         "pathId": 1378104299211557000,
         "eventId": 2,
@@ -6663,10 +6709,9 @@
       "evidenceStatus": "source-indexed-runtime-unapplied",
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "runtimeGaps": [
-        "effect-active-trigger-not-unique",
-        "effect-skill-tag-condition-operator-unsupported"
+        "effect-active-trigger-not-unique"
       ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10076].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900190.asset/MonoBehaviour/skill_control_1900190__947113783478568836.json|battle-element-assets.jsonl#path_id=1378104299211557000;elementId=19001907|battle-element-assets.jsonl#path_id=7028756448168345000;elementId=19001908"
+      "sourceIdentity": "NewTable/soulessence.rows[id=10076].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900190.asset/MonoBehaviour/skill_control_1900190__947113783478568836.json|battle-element-assets.jsonl#path_id=7028756448168345000;elementId=19001908|battle-element-assets.jsonl#path_id=6159851672715162000;elementId=19001902"
     },
     {
       "objectKind": "soul-essence",
@@ -7122,6 +7167,9 @@
       "effectSkillId": 1900230,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "trigger": {
+        "leafPathIds": [
+          475903754845527040
+        ],
         "elementId": 19002301,
         "pathId": -4157799704864835600,
         "eventId": 6,
@@ -7268,6 +7316,9 @@
       "effectSkillId": 1900660,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "trigger": {
+        "leafPathIds": [
+          8461738275188953000
+        ],
         "elementId": 19006601,
         "pathId": 1967620083657371400,
         "eventId": 6,
@@ -7399,8 +7450,12 @@
       "objectId": "10095",
       "displayName": "甜点时光",
       "effectSkillId": 1900320,
-      "mechanismFamily": "equipped-actor-get-element-property-before-acquire",
+      "mechanismFamily": "source-indexed-composite-effect",
       "trigger": {
+        "leafPathIds": [
+          -3451754637210168300,
+          7036297722921961000
+        ],
         "elementId": 19003201,
         "pathId": -8698995960148588000,
         "eventId": 9,
@@ -7409,9 +7464,17 @@
         "intervalMs": 0,
         "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=-8698995960148588000;elementId=19003201.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
         "condition": {
-          "kind": "condition-group",
+          "kind": "event-element-id",
+          "conditionType": 13,
+          "skillSlotId": null,
+          "skillSlotName": null,
+          "skillTagId": null,
+          "skillTagName": null,
+          "stayType": null,
+          "stayTypeName": null,
           "logic": "and",
           "logicValue": 0,
+          "logicName": "AND",
           "conditions": [
             {
               "kind": "event-element-id",
@@ -7422,12 +7485,12 @@
               "provenanceRequirement": null,
               "tuningProfiles": [],
               "sourceIdentity": "battle-element-assets.jsonl#path_id=-8698995960148588000;elementId=19003201.triggerConditionList[0]|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.CheckElementId=13|condition-value-unresolved",
-              "status": "static-evidence-gap"
+              "status": "applied"
             }
           ],
           "actionKinds": [],
-          "status": "static-evidence-gap",
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=-8698995960148588000;elementId=19003201.triggerConditionType|triggerConditionList"
+          "status": "applied",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-8698995960148588000;elementId=19003201.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0"
         },
         "triggerTargetType": 0,
         "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=-8698995960148588000;elementId=19003201.triggerTargetType",
@@ -7437,22 +7500,69 @@
           "triggerTargetTypeName": "Self",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-8698995960148588000;elementId=19003201.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
         },
-        "target": null,
-        "targetKind": "unresolved",
+        "target": {
+          "kind": "self-actor",
+          "effectTargetType": 0,
+          "effectTargetTypeName": "Self",
+          "effectListIndex": 0,
+          "targetElementPathId": 1260336059307292200,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-8698995960148588000;elementId=19003201.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        },
+        "targetKind": "self-actor",
         "sourceIdentity": "battle-element-assets.jsonl#path_id=-8698995960148588000;elementId=19003201"
       },
       "activationPrerequisites": [],
       "sourceTarget": {
         "source": "equipped-actor",
-        "target": "unresolved",
-        "targetEvidence": null
+        "target": "self-actor",
+        "targetEvidence": {
+          "kind": "self-actor",
+          "effectTargetType": 0,
+          "effectTargetTypeName": "Self",
+          "effectListIndex": 0,
+          "targetElementPathId": 1260336059307292200,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-8698995960148588000;elementId=19003201.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        }
       },
-      "formula": null,
+      "formula": {
+        "formulaIdentity": "battle-effect-formula:soulessence:1900320:19003203:-3451754637210168300",
+        "commonFunctionId": 1,
+        "commonExpression": "G/10000",
+        "baseFunctionId": 3,
+        "baseExpression": "A/10000",
+        "commonRatioRaw": 10000,
+        "sourceParameterEncoding": "battle-element-raw-a",
+        "family": "basis-point-property-a-with-common-ratio",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203.formulaParams|functionParams"
+      },
       "effectPropertyTags": [],
-      "effectPropertyTagMatchMode": null,
-      "effectPropertyTagSourceIdentity": null,
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203.defaultPropertyTags",
       "persistentRoot": null,
-      "lifecycle": null,
+      "lifecycle": {
+        "durationMs": 16000,
+        "leafDurationMs": 16000,
+        "sourceKind": "property-leaf-duration",
+        "wrapper": null,
+        "removalPaths": [
+          {
+            "triggerElementId": 19003204,
+            "triggerPathId": 7265055193760068000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19003205,
+            "removerPathId": -7953459907989853000,
+            "removedElementIds": [
+              19003201,
+              19003204
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=7265055193760068000;elementId=19003204.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-7953459907989853000;elementId=19003205"
+          }
+        ],
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
       "resourceTransactions": [],
       "vitalChanges": [],
       "delayedEvents": [],
@@ -7462,17 +7572,10 @@
       "evidenceStatus": "source-indexed-runtime-unapplied",
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "runtimeGaps": [
-        "effect-active-trigger-not-unique",
-        "effect-formula-family-operator-unsupported",
-        "effect-property-bucket-unsupported",
-        "effect-property-duration-unresolved",
         "effect-property-leaf-not-unique",
-        "effect-property-stack-operator-unsupported",
-        "effect-skill-tag-condition-operator-unsupported",
-        "effect-star-values-incomplete",
-        "effect-trigger-target-unsupported"
+        "effect-star-values-incomplete"
       ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10095].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900320.asset/MonoBehaviour/skill_control_1900320__-2637092768690775001.json|battle-element-assets.jsonl#path_id=-8698995960148588000;elementId=19003201"
+      "sourceIdentity": "NewTable/soulessence.rows[id=10095].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900320.asset/MonoBehaviour/skill_control_1900320__-2637092768690775001.json|battle-element-assets.jsonl#path_id=-3451754637210168300;elementId=19003203|battle-element-assets.jsonl#path_id=7036297722921961000;elementId=19003206"
     },
     {
       "objectKind": "soul-essence",
@@ -7481,6 +7584,9 @@
       "effectSkillId": 1900470,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "trigger": {
+        "leafPathIds": [
+          -6749174475042234000
+        ],
         "elementId": 19004700,
         "pathId": 4922202484723645000,
         "eventId": 5,
@@ -7612,6 +7718,9 @@
       "effectSkillId": 1900670,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
       "trigger": {
+        "leafPathIds": [
+          -5650259386971768000
+        ],
         "elementId": 19006701,
         "pathId": 4493671040636124000,
         "eventId": 2,
@@ -7745,6 +7854,9 @@
       "effectSkillId": 1900200,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
       "trigger": {
+        "leafPathIds": [
+          447782200906035000
+        ],
         "elementId": 19002001,
         "pathId": -5029048619406844000,
         "eventId": 2,
@@ -7851,6 +7963,7 @@
       "effectSkillId": 1900350,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "trigger": {
+        "leafPathIds": [],
         "elementId": 19003501,
         "pathId": 1736025164143914200,
         "eventId": 6,
@@ -7943,8 +8056,11 @@
       "objectId": "10121",
       "displayName": "折纸寄情",
       "effectSkillId": 1900580,
-      "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
+      "mechanismFamily": "equipped-actor-composite-property-effects",
       "trigger": {
+        "leafPathIds": [
+          -3951307457830891000
+        ],
         "elementId": 19005807,
         "pathId": -6053806038821734000,
         "eventId": 5,
@@ -8065,22 +8181,23 @@
       "vitalChanges": [],
       "delayedEvents": [],
       "loopPersistence": {
-        "status": "runtime-unapplied"
+        "status": "canonical-effect-timeline-applied"
       },
-      "evidenceStatus": "source-indexed-runtime-unapplied",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "effect-active-trigger-not-unique"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10121].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900580.asset/MonoBehaviour/skill_control_1900580__5994700394878693879.json|battle-element-assets.jsonl#path_id=-6053806038821734000;elementId=19005807|battle-element-assets.jsonl#path_id=-3951307457830891000;elementId=19005808"
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10121].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900580.asset/MonoBehaviour/skill_control_1900580__5994700394878693879.json|battle-element-assets.jsonl#path_id=-3951307457830891000;elementId=19005808|battle-element-assets.jsonl#path_id=617870747599547100;elementId=19005804|battle-element-assets.jsonl#path_id=-8623271278801233000;elementId=19005806|battle-element-assets.jsonl#path_id=929843409631741000;elementId=19005802"
     },
     {
       "objectKind": "soul-essence",
       "objectId": "10122",
       "displayName": "花之舞",
       "effectSkillId": 1900570,
-      "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
+      "mechanismFamily": "equipped-actor-composite-property-effects",
       "trigger": {
+        "leafPathIds": [
+          4466764196042693000
+        ],
         "elementId": 19005707,
         "pathId": 4664023450211686000,
         "eventId": 6,
@@ -8147,15 +8264,29 @@
           "triggerTargetTypeName": "Self",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=4664023450211686000;elementId=19005707.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
         },
-        "target": null,
-        "targetKind": "unresolved",
+        "target": {
+          "kind": "self-actor",
+          "effectTargetType": 0,
+          "effectTargetTypeName": "Self",
+          "effectListIndex": 0,
+          "targetElementPathId": 4466764196042693000,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=4664023450211686000;elementId=19005707.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        },
+        "targetKind": "self-actor",
         "sourceIdentity": "battle-element-assets.jsonl#path_id=4664023450211686000;elementId=19005707"
       },
       "activationPrerequisites": [],
       "sourceTarget": {
         "source": "equipped-actor",
-        "target": "unresolved",
-        "targetEvidence": null
+        "target": "self-actor",
+        "targetEvidence": {
+          "kind": "self-actor",
+          "effectTargetType": 0,
+          "effectTargetTypeName": "Self",
+          "effectListIndex": 0,
+          "targetElementPathId": 4466764196042693000,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=4664023450211686000;elementId=19005707.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        }
       },
       "formula": {
         "formulaIdentity": "battle-effect-formula:soulessence:1900570:19005704:4466764196042693000",
@@ -8204,15 +8335,12 @@
       "vitalChanges": [],
       "delayedEvents": [],
       "loopPersistence": {
-        "status": "runtime-unapplied"
+        "status": "canonical-effect-timeline-applied"
       },
-      "evidenceStatus": "source-indexed-runtime-unapplied",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "effect-active-trigger-not-unique",
-        "effect-trigger-target-unsupported"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10122].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900570.asset/MonoBehaviour/skill_control_1900570__334890856914764825.json|battle-element-assets.jsonl#path_id=4664023450211686000;elementId=19005707|battle-element-assets.jsonl#path_id=4466764196042693000;elementId=19005704"
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10122].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900570.asset/MonoBehaviour/skill_control_1900570__334890856914764825.json|battle-element-assets.jsonl#path_id=4466764196042693000;elementId=19005704|battle-element-assets.jsonl#path_id=-2799837647923611000;elementId=19005703"
     },
     {
       "objectKind": "soul-essence",
@@ -8221,6 +8349,9 @@
       "effectSkillId": 1900590,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
       "trigger": {
+        "leafPathIds": [
+          8480096044321114000
+        ],
         "elementId": 19005900,
         "pathId": -7832567119319180000,
         "eventId": 1,
@@ -8364,6 +8495,9 @@
       "effectSkillId": 1900410,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "trigger": {
+        "leafPathIds": [
+          -4751821042418617000
+        ],
         "elementId": 19004101,
         "pathId": -2700117266412374500,
         "eventId": 5,
@@ -8522,6 +8656,9 @@
       "effectSkillId": 1900540,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "trigger": {
+        "leafPathIds": [
+          -3194128450977334000
+        ],
         "elementId": 19005401,
         "pathId": -8058605269236214000,
         "eventId": 5,
@@ -8653,6 +8790,9 @@
       "effectSkillId": 1900280,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
       "trigger": {
+        "leafPathIds": [
+          7184896566896581000
+        ],
         "elementId": 19002801,
         "pathId": -908628671126506600,
         "eventId": 1,
@@ -8796,6 +8936,9 @@
       "effectSkillId": 1900270,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
       "trigger": {
+        "leafPathIds": [
+          8731924757452644000
+        ],
         "elementId": 19002701,
         "pathId": 1890390088406099200,
         "eventId": 2,
@@ -8962,8 +9105,12 @@
       "objectId": "10132",
       "displayName": "暗中观察",
       "effectSkillId": 1900430,
-      "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
+      "mechanismFamily": "source-indexed-composite-effect",
       "trigger": {
+        "leafPathIds": [
+          -1521385363814632700,
+          6337378764466493000
+        ],
         "elementId": 19004302,
         "pathId": -7245115188157259000,
         "eventId": 1,
@@ -8988,22 +9135,69 @@
           "triggerTargetTypeName": "Self",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-7245115188157259000;elementId=19004302.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
         },
-        "target": null,
-        "targetKind": "unresolved",
+        "target": {
+          "kind": "event-target-actor",
+          "effectTargetType": 1,
+          "effectTargetTypeName": "Target",
+          "effectListIndex": 0,
+          "targetElementPathId": 6337378764466493000,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-7245115188157259000;elementId=19004302.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Target=1"
+        },
+        "targetKind": "event-target-actor",
         "sourceIdentity": "battle-element-assets.jsonl#path_id=-7245115188157259000;elementId=19004302"
       },
       "activationPrerequisites": [],
       "sourceTarget": {
         "source": "equipped-actor",
-        "target": "unresolved",
-        "targetEvidence": null
+        "target": "event-target-actor",
+        "targetEvidence": {
+          "kind": "event-target-actor",
+          "effectTargetType": 1,
+          "effectTargetTypeName": "Target",
+          "effectListIndex": 0,
+          "targetElementPathId": 6337378764466493000,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-7245115188157259000;elementId=19004302.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Target=1"
+        }
       },
-      "formula": null,
+      "formula": {
+        "formulaIdentity": "battle-effect-formula:soulessence:1900430:19004306:-1521385363814632700",
+        "commonFunctionId": 1,
+        "commonExpression": "G/10000",
+        "baseFunctionId": 3,
+        "baseExpression": "A/10000",
+        "commonRatioRaw": 10000,
+        "sourceParameterEncoding": "battle-element-raw-a",
+        "family": "basis-point-property-a-with-common-ratio",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-1521385363814632700;elementId=19004306.formulaParams|functionParams"
+      },
       "effectPropertyTags": [],
-      "effectPropertyTagMatchMode": null,
-      "effectPropertyTagSourceIdentity": null,
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-1521385363814632700;elementId=19004306.defaultPropertyTags",
       "persistentRoot": null,
-      "lifecycle": null,
+      "lifecycle": {
+        "durationMs": 8000,
+        "leafDurationMs": 8000,
+        "sourceKind": "property-leaf-duration",
+        "wrapper": null,
+        "removalPaths": [
+          {
+            "triggerElementId": 19004304,
+            "triggerPathId": -8796577414567506000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19004305,
+            "removerPathId": -8131710503492752000,
+            "removedElementIds": [
+              19004304,
+              19004301
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-8796577414567506000;elementId=19004304.triggerEffectList[0]|battle-element-assets.jsonl#path_id=-8131710503492752000;elementId=19004305"
+          }
+        ],
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
       "resourceTransactions": [],
       "vitalChanges": [],
       "delayedEvents": [],
@@ -9013,17 +9207,9 @@
       "evidenceStatus": "source-indexed-runtime-unapplied",
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "runtimeGaps": [
-        "effect-active-trigger-not-unique",
-        "effect-formula-family-operator-unsupported",
-        "effect-property-bucket-unsupported",
-        "effect-property-duration-unresolved",
-        "effect-property-leaf-not-unique",
-        "effect-property-stack-operator-unsupported",
-        "effect-skill-tag-condition-operator-unsupported",
-        "effect-star-values-incomplete",
-        "effect-trigger-target-unsupported"
+        "effect-active-trigger-not-unique"
       ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10132].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900430.asset/MonoBehaviour/skill_control_1900430__-3725567591603608227.json|battle-element-assets.jsonl#path_id=-7245115188157259000;elementId=19004302"
+      "sourceIdentity": "NewTable/soulessence.rows[id=10132].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900430.asset/MonoBehaviour/skill_control_1900430__-3725567591603608227.json|battle-element-assets.jsonl#path_id=-1521385363814632700;elementId=19004306|battle-element-assets.jsonl#path_id=6337378764466493000;elementId=19004303"
     },
     {
       "objectKind": "soul-essence",
@@ -9278,6 +9464,9 @@
       "effectSkillId": 1900210,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-damage",
       "trigger": {
+        "leafPathIds": [
+          -5684518322628377000
+        ],
         "elementId": 19002101,
         "pathId": 7447841024087717000,
         "eventId": 2,
@@ -9583,6 +9772,9 @@
       "effectSkillId": 1900420,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
       "trigger": {
+        "leafPathIds": [
+          17992665022024710
+        ],
         "elementId": 19004202,
         "pathId": -4639353932355848000,
         "eventId": 1,
@@ -9714,6 +9906,9 @@
       "effectSkillId": 1900110,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "trigger": {
+        "leafPathIds": [
+          -6475704673365761000
+        ],
         "elementId": 19001101,
         "pathId": -246520716839985300,
         "eventId": 5,
@@ -9858,6 +10053,9 @@
       "effectSkillId": 1900220,
       "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
       "trigger": {
+        "leafPathIds": [
+          6856932050092692000
+        ],
         "elementId": 19002201,
         "pathId": 2849866293729341000,
         "eventId": 10,
@@ -9999,6 +10197,9 @@
       "effectSkillId": 1900560,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-damage",
       "trigger": {
+        "leafPathIds": [
+          6687059805823089000
+        ],
         "elementId": 19005600,
         "pathId": 4249731622778222600,
         "eventId": 1,
@@ -10170,6 +10371,9 @@
       "effectSkillId": 1900130,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "trigger": {
+        "leafPathIds": [
+          3837107787407859700
+        ],
         "elementId": 19001301,
         "pathId": 756477731831644700,
         "eventId": 5,
@@ -10535,6 +10739,9 @@
       "effectSkillId": 1900240,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "trigger": {
+        "leafPathIds": [
+          2209371490931731500
+        ],
         "elementId": 19002401,
         "pathId": -6345955383762432000,
         "eventId": 6,
@@ -10666,6 +10873,9 @@
       "effectSkillId": 1900250,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "trigger": {
+        "leafPathIds": [
+          6931937794752071000
+        ],
         "elementId": 19002501,
         "pathId": 7681111361882010000,
         "eventId": 6,
@@ -10962,6 +11172,9 @@
       "effectSkillId": 1900750,
       "mechanismFamily": "equipped-actor-shield-acquire-team-property",
       "trigger": {
+        "leafPathIds": [
+          -7968102161953321000
+        ],
         "elementId": 19007500,
         "pathId": -7210722185016667000,
         "eventId": 40,
@@ -11068,8 +11281,12 @@
       "objectId": "10170",
       "displayName": "攀高的幼崽",
       "effectSkillId": 1900740,
-      "mechanismFamily": "equipped-actor-get-element-property-after-acquire",
+      "mechanismFamily": "equipped-actor-composite-property-effects",
       "trigger": {
+        "leafPathIds": [
+          -1316209878453022700,
+          4411393089753127400
+        ],
         "elementId": 19007400,
         "pathId": 1288282584316539400,
         "eventId": 10,
@@ -11130,41 +11347,79 @@
           "triggerTargetTypeName": "Self",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
         },
-        "target": null,
-        "targetKind": "unresolved",
+        "target": {
+          "kind": "self-actor",
+          "effectTargetType": 0,
+          "effectTargetTypeName": "Self",
+          "effectListIndex": 0,
+          "targetElementPathId": -1316209878453022700,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        },
+        "targetKind": "self-actor",
         "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400"
       },
       "activationPrerequisites": [],
       "sourceTarget": {
         "source": "equipped-actor",
-        "target": "unresolved",
-        "targetEvidence": null
+        "target": "self-actor",
+        "targetEvidence": {
+          "kind": "self-actor",
+          "effectTargetType": 0,
+          "effectTargetTypeName": "Self",
+          "effectListIndex": 0,
+          "targetElementPathId": -1316209878453022700,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        }
       },
-      "formula": null,
+      "formula": {
+        "formulaIdentity": "battle-effect-formula:soulessence:1900740:19007403:-1316209878453022700",
+        "commonFunctionId": 1,
+        "commonExpression": "G/10000",
+        "baseFunctionId": 3,
+        "baseExpression": "A/10000",
+        "commonRatioRaw": 10000,
+        "sourceParameterEncoding": "battle-element-raw-a",
+        "family": "basis-point-property-a-with-common-ratio",
+        "sourceIdentity": "battle-element-assets.jsonl#path_id=-1316209878453022700;elementId=19007403.formulaParams|functionParams"
+      },
       "effectPropertyTags": [],
-      "effectPropertyTagMatchMode": null,
-      "effectPropertyTagSourceIdentity": null,
+      "effectPropertyTagMatchMode": "unscoped",
+      "effectPropertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=-1316209878453022700;elementId=19007403.defaultPropertyTags",
       "persistentRoot": null,
-      "lifecycle": null,
+      "lifecycle": {
+        "durationMs": 10000,
+        "leafDurationMs": 10000,
+        "sourceKind": "property-leaf-duration",
+        "wrapper": null,
+        "removalPaths": [
+          {
+            "triggerElementId": 19007401,
+            "triggerPathId": 8764869454748162000,
+            "triggerEventId": 36,
+            "effectIndex": 0,
+            "removerElementId": 19007402,
+            "removerPathId": 8525616751931163000,
+            "removedElementIds": [
+              19007400,
+              19007401
+            ],
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=8764869454748162000;elementId=19007401.triggerEffectList[0]|battle-element-assets.jsonl#path_id=8525616751931163000;elementId=19007402"
+          }
+        ],
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1
+      },
       "resourceTransactions": [],
       "vitalChanges": [],
       "delayedEvents": [],
       "loopPersistence": {
-        "status": "runtime-unapplied"
+        "status": "canonical-effect-timeline-applied"
       },
-      "evidenceStatus": "source-indexed-runtime-unapplied",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "effect-active-trigger-not-unique",
-        "effect-formula-family-operator-unsupported",
-        "effect-property-bucket-unsupported",
-        "effect-property-duration-unresolved",
-        "effect-property-leaf-not-unique",
-        "effect-property-stack-operator-unsupported",
-        "effect-star-values-incomplete",
-        "effect-trigger-target-unsupported"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10170].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900740.asset/MonoBehaviour/skill_control_1900740__3612376006236613009.json|battle-element-assets.jsonl#path_id=1288282584316539400;elementId=19007400"
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10170].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900740.asset/MonoBehaviour/skill_control_1900740__3612376006236613009.json|battle-element-assets.jsonl#path_id=-1316209878453022700;elementId=19007403|battle-element-assets.jsonl#path_id=4411393089753127400;elementId=19007404"
     },
     {
       "objectKind": "soul-essence",
@@ -11173,6 +11428,9 @@
       "effectSkillId": 1900140,
       "mechanismFamily": "equipped-actor-heal-event-target-property",
       "trigger": {
+        "leafPathIds": [
+          8237672842561680000
+        ],
         "elementId": 19001401,
         "pathId": -5225606672832072000,
         "eventId": 44,
@@ -11304,6 +11562,9 @@
       "effectSkillId": 1900150,
       "mechanismFamily": "equipped-actor-heal-event-target-property",
       "trigger": {
+        "leafPathIds": [
+          -398033826930552400
+        ],
         "elementId": 19001501,
         "pathId": -100069638428322610,
         "eventId": 44,
@@ -11433,8 +11694,11 @@
       "objectId": "10196",
       "displayName": "热火朝天",
       "effectSkillId": 1900790,
-      "mechanismFamily": "equipped-actor-get-element-property-before-acquire",
+      "mechanismFamily": "equipped-actor-composite-property-effects",
       "trigger": {
+        "leafPathIds": [
+          8699597337981486000
+        ],
         "elementId": 19007914,
         "pathId": -6906323084063795000,
         "eventId": 9,
@@ -11576,14 +11840,12 @@
       "vitalChanges": [],
       "delayedEvents": [],
       "loopPersistence": {
-        "status": "runtime-unapplied"
+        "status": "canonical-effect-timeline-applied"
       },
-      "evidenceStatus": "source-indexed-runtime-unapplied",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "effect-active-trigger-not-unique"
-      ],
-      "sourceIdentity": "NewTable/soulessence.rows[id=10196].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900790.asset/MonoBehaviour/skill_control_1900790__-7033315392035953286.json|battle-element-assets.jsonl#path_id=-6906323084063795000;elementId=19007914|battle-element-assets.jsonl#path_id=8699597337981486000;elementId=19007915"
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
+      "sourceIdentity": "NewTable/soulessence.rows[id=10196].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900790.asset/MonoBehaviour/skill_control_1900790__-7033315392035953286.json|battle-element-assets.jsonl#path_id=8699597337981486000;elementId=19007915|battle-element-assets.jsonl#path_id=-8064628129931879000;elementId=19007917|battle-element-assets.jsonl#path_id=5178487711844678000;elementId=19007913|battle-element-assets.jsonl#path_id=1170390787759001600;elementId=19007901|battle-element-assets.jsonl#path_id=2556688659965768000;elementId=19007911|battle-element-assets.jsonl#path_id=-5829978218984574000;elementId=19007919|battle-element-assets.jsonl#path_id=-3681341915283005400;elementId=19007907|battle-element-assets.jsonl#path_id=-4746318165591798000;elementId=19007909|battle-element-assets.jsonl#path_id=-3236886696819669000;elementId=19007905"
     },
     {
       "objectKind": "soul-essence",
@@ -11792,6 +12054,9 @@
       "effectSkillId": 1900760,
       "mechanismFamily": "equipped-actor-skill-tag-property-after-skill",
       "trigger": {
+        "leafPathIds": [
+          -5972416317449343000
+        ],
         "elementId": 19007601,
         "pathId": -8856206549049605000,
         "eventId": 6,
@@ -11845,15 +12110,29 @@
           "triggerTargetTypeName": "Self",
           "sourceIdentity": "battle-element-assets.jsonl#path_id=-8856206549049605000;elementId=19007601.triggerTargetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerTargetType.Self=0"
         },
-        "target": null,
-        "targetKind": "unresolved",
+        "target": {
+          "kind": "self-actor",
+          "effectTargetType": 0,
+          "effectTargetTypeName": "Self",
+          "effectListIndex": 0,
+          "targetElementPathId": -5972416317449343000,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-8856206549049605000;elementId=19007601.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        },
+        "targetKind": "self-actor",
         "sourceIdentity": "battle-element-assets.jsonl#path_id=-8856206549049605000;elementId=19007601"
       },
       "activationPrerequisites": [],
       "sourceTarget": {
         "source": "equipped-actor",
-        "target": "unresolved",
-        "targetEvidence": null
+        "target": "self-actor",
+        "targetEvidence": {
+          "kind": "self-actor",
+          "effectTargetType": 0,
+          "effectTargetTypeName": "Self",
+          "effectListIndex": 0,
+          "targetElementPathId": -5972416317449343000,
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=-8856206549049605000;elementId=19007601.triggerEffectList[0].targetType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0"
+        }
       },
       "formula": {
         "formulaIdentity": "battle-effect-formula:soulessence:1900760:19007602:-5972416317449343000",
@@ -11916,6 +12195,7 @@
       "effectSkillId": 1900780,
       "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
       "trigger": {
+        "leafPathIds": [],
         "elementId": 19007801,
         "pathId": -9208882666704061000,
         "eventId": 5,
@@ -11991,18 +12271,19 @@
   "summary": {
     "soulEssenceCount": 62,
     "setSkillCount": 12,
-    "runtimeAppliedCount": 58,
-    "runtimeUnappliedCount": 16,
+    "runtimeAppliedCount": 62,
+    "runtimeUnappliedCount": 12,
     "byMechanismFamily": {
-      "equipped-actor-get-element-property-after-acquire": 3,
-      "equipped-actor-get-element-property-before-acquire": 3,
+      "equipped-actor-composite-property-effects": 4,
+      "equipped-actor-get-element-property-after-acquire": 2,
+      "equipped-actor-get-element-property-before-acquire": 1,
       "equipped-actor-heal-event-target-property": 2,
       "equipped-actor-persistent-property-root": 12,
       "equipped-actor-shield-acquire-team-property": 1,
-      "equipped-actor-skill-tag-property-after-damage": 6,
-      "equipped-actor-skill-tag-property-after-skill": 11,
-      "equipped-actor-skill-tag-property-before-damage": 8,
-      "equipped-actor-skill-tag-property-before-skill": 10,
+      "equipped-actor-skill-tag-property-after-damage": 5,
+      "equipped-actor-skill-tag-property-after-skill": 10,
+      "equipped-actor-skill-tag-property-before-damage": 7,
+      "equipped-actor-skill-tag-property-before-skill": 9,
       "equipped-actor-switch-enter-team-property": 1,
       "equipped-loadout-periodic-conditional-property-root": 3,
       "set-skill-after-damage-target-property": 1,
@@ -12011,13 +12292,13 @@
       "set-skill-before-skill-composite-immediate": 1,
       "set-skill-persistent-property": 6,
       "set-skill-source-identity-conflict": 1,
-      "source-indexed-composite-effect": 2
+      "source-indexed-composite-effect": 5
     },
     "byEvidenceStatus": {
       "evidence-insufficient": 1,
-      "runtime-applied": 58,
-      "source-indexed-runtime-unapplied": 15
+      "runtime-applied": 62,
+      "source-indexed-runtime-unapplied": 11
     }
   },
-  "censusHash": "1cc41d4144ce68ea"
+  "censusHash": "16eee52dfd909783"
 }

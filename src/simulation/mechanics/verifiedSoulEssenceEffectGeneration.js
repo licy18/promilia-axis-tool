@@ -281,30 +281,50 @@ export function createVerifiedSoulEssenceEffectGeneration({
         });
         continue;
       }
-      if (binding.definition.effect != null) {
-        effectCommands.push(
-          ...activationMatchedOccurrences.flatMap(occurrence =>
-            resolveSoulEffectTargets({
-              binding,
-              scenario,
-              occurrence,
-            }).map((target, targetIndex) =>
-              createSoulEffectCommand({
-                binding,
-                action,
-                actionIndex,
-                actionKind: occurrence.actionContext.actionKind,
-                actionContext: occurrence.actionContext,
-                conditionMatch: occurrence.conditionMatch,
-                resolution,
+      const leafEffects =
+        binding.propertyLeafEffects ??
+        (binding.definition.effect ? [binding.definition.effect] : []);
+      if (leafEffects.length > 0) {
+        for (let leafIndex = 0; leafIndex < leafEffects.length; leafIndex += 1) {
+          const isMultiLeafSoul =
+            Array.isArray(binding.propertyLeafEffects) &&
+            binding.propertyLeafEffects.length > 1;
+          const leafBinding = isMultiLeafSoul
+            ? {
+                ...binding,
+                definition: {
+                  ...binding.definition,
+                  effect: leafEffects[leafIndex],
+                },
+                propertyFormulaResults: binding.propertyFormulaResults?.length
+                  ? [binding.propertyFormulaResults[leafIndex] ?? {}]
+                  : [],
+              }
+            : binding;
+          effectCommands.push(
+            ...activationMatchedOccurrences.flatMap(occurrence =>
+              resolveSoulEffectTargets({
+                binding: leafBinding,
+                scenario,
                 occurrence,
-                target,
-                targetIndex,
-                catalog,
-              })
+              }).map((target, targetIndex) =>
+                createSoulEffectCommand({
+                  binding: leafBinding,
+                  action,
+                  actionIndex,
+                  actionKind: occurrence.actionContext.actionKind,
+                  actionContext: occurrence.actionContext,
+                  conditionMatch: occurrence.conditionMatch,
+                  resolution,
+                  occurrence,
+                  target,
+                  targetIndex,
+                  catalog,
+                })
+              )
             )
-          )
-        );
+          );
+        }
       }
       for (const occurrence of activationMatchedOccurrences) {
         const immediate = createSoulImmediateEvents({
@@ -547,10 +567,13 @@ function createEquippedSoulBinding(actor, actorIndex, definitionBySoulId) {
   }
   const star = Number(effectSkill.star);
   const propertyEffects =
-    definition.persistentRoot?.activationMode ===
-    'periodic-conditional-finite-leaf'
-      ? (definition.persistentRoot.effects ?? [])
-      : [definition.effect].filter(Boolean);
+    Array.isArray(definition.effectLeaves) &&
+    definition.effectLeaves.length > 0
+      ? definition.effectLeaves
+      : definition.persistentRoot?.activationMode ===
+          'periodic-conditional-finite-leaf'
+        ? (definition.persistentRoot.effects ?? [])
+        : [definition.effect].filter(Boolean);
   const propertyFormulaResults = propertyEffects.map(effect => {
     const starValue = effect.valuesByStar?.find(
       row => Number(row.star) === star
@@ -581,6 +604,7 @@ function createEquippedSoulBinding(actor, actorIndex, definitionBySoulId) {
     starValue: primary.starValue ?? null,
     formulaResult: primary.formulaResult ?? null,
     propertyFormulaResults,
+    propertyLeafEffects: propertyEffects,
     cultivationSourceIdentity: effectSkill?.sourceIdentity ?? null,
   };
 }

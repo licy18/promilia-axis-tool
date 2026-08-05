@@ -126,6 +126,51 @@ const APPLIED_SOUL_EFFECT_MATRIX = [
     attributeId: 1,
   },
   {
+    soulEssenceId: 10121,
+    contextual: true,
+    event: 'BeforeSkill',
+    frameAnchor: 'action-start',
+    actionKind: 'ultimate',
+    durationMs: 20000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 53,
+  },
+  {
+    soulEssenceId: 10122,
+    contextual: true,
+    event: 'AfterSkill',
+    frameAnchor: 'action-end',
+    actionKind: 'star-skill',
+    actionKinds: ['star-skill', 'ultimate'],
+    durationMs: 2000,
+    stackMode: 'stack',
+    maxStacks: 3,
+    attributeId: 21,
+  },
+  {
+    soulEssenceId: 10170,
+    contextual: true,
+    event: 'AfterGetElement',
+    frameAnchor: 'element-after-acquire',
+    actionKind: null,
+    durationMs: 10000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 3,
+  },
+  {
+    soulEssenceId: 10196,
+    contextual: true,
+    event: 'BeforeGetElement',
+    frameAnchor: 'element-before-acquire',
+    actionKind: null,
+    durationMs: 24000,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    attributeId: 1,
+  },
+  {
     soulEssenceId: 10037,
     event: 'BeforeSkill',
     frameAnchor: 'action-start',
@@ -395,8 +440,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 47,
-      unresolvedCount: 15,
+      runtimeAppliedCount: 51,
+      unresolvedCount: 11,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -604,7 +649,8 @@ describe('verified soul essence effect generation', () => {
           frameAnchor: expected.frameAnchor,
           condition: {
             actionKinds:
-              expected.actionKind == null ? [] : [expected.actionKind],
+              expected.actionKinds ??
+              (expected.actionKind == null ? [] : [expected.actionKind]),
           },
         },
         effect: {
@@ -4921,6 +4967,54 @@ describe('verified soul essence effect generation', () => {
           'soulessence-effect-action-kind-condition-not-matched'
       )
     ).toBe(true);
+  });
+
+  it('replays real 10121 multi-leaf ultimate buff through canonical settlement', () => {
+    const result = createRealSoulScenario({
+      soulEssenceId: 10121,
+      effectSkillId: 1900580,
+      actionPlan: [
+        { id: 'e3b-10121-ultimate', actionKind: 'ultimate', startFrame: 60 },
+      ],
+    });
+    const commands = result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10121
+    );
+    expect(commands.length).toBeGreaterThan(0);
+    expect(
+      commands.some(command => command.modifiers[0].attributeId === 53)
+    ).toBe(true);
+  });
+
+  it('replays real 10122 multi-leaf after-skill buff through canonical settlement', () => {
+    const result = createRealSoulScenario({
+      soulEssenceId: 10122,
+      effectSkillId: 1900570,
+      actionPlan: [
+        { id: 'e3b-10122-star', actionKind: 'star-skill', startFrame: 60 },
+        { id: 'e3b-10122-ult', actionKind: 'ultimate', startFrame: 300 },
+      ],
+    });
+    const commands = result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10122
+    );
+    expect(commands.length).toBeGreaterThan(0);
+  });
+
+  it('exposes compiled multi-leaf definitions for 10170 and 10196', () => {
+    for (const [soulEssenceId, leafCount] of [
+      [10170, 2],
+      [10196, 9],
+    ]) {
+      const definition = soulEssenceEffectCatalog.definitions.find(
+        entry => entry.soulEssenceId === soulEssenceId
+      );
+      expect(definition.runtimeStatus).toBe('runtime-applied');
+      expect(definition.effectLeaves).toHaveLength(leafCount);
+      expect(
+        definition.effectLeaves.every(leaf => leaf.valuesByStar?.length === 4)
+      ).toBe(true);
+    }
   });
 
   it.each([

@@ -2013,6 +2013,8 @@ function compileTriggerCondition({
   elementFormulaRows = [],
   activationConditionRuntimeEvidence = null,
   elementFunctionParams = [],
+  knownElementIds = null,
+  knownElementTypes = null,
 }) {
   if (!trigger) {
     return {
@@ -2091,7 +2093,12 @@ function compileTriggerCondition({
         triggerContract.getElementRuntime?.elementTypeCondition,
     });
     const valueApplied =
-      valueBinding?.status === 'applied' || tuningProfiles.length > 0;
+      valueBinding?.status === 'applied' ||
+      tuningProfiles.length > 0 ||
+      (typeBinding?.selectorKind === 'event-element-id' &&
+        knownElementIds?.has(conditionValue)) ||
+      (typeBinding?.selectorKind === 'event-element-type' &&
+        knownElementTypes?.has(conditionValue));
     const conditionValueSourceIdentity =
       valueBinding?.sourceIdentity ??
       tuningProfiles.map(profile => profile.sourceIdentity).join('|') ??
@@ -2404,6 +2411,8 @@ function buildSoulTriggerEntry({
   elementFormulaRows,
   activationConditionRuntimeEvidence,
   afterDamageEmptyConditionRuntimeEvidence,
+  knownElementIds = null,
+  knownElementTypes = null,
 }) {
   const tree = triggerRow?.typetree ?? {};
   const eventBinding = triggerContract.eventBindings.find(
@@ -2437,35 +2446,12 @@ function buildSoulTriggerEntry({
     elementFunctionParams: Array.isArray(tree.functionParams)
       ? tree.functionParams
       : [],
+    knownElementIds,
+    knownElementTypes,
   });
   const triggerTargetBinding = triggerContract.triggerTargetBindings.find(
     binding => Number(binding.value) === Number(tree.triggerTargetType)
   );
-  const triggerEffectRows = Array.isArray(tree.triggerEffectList)
-    ? tree.triggerEffectList
-        .map((effectRow, effectListIndex) => ({
-          effectRow,
-          effectListIndex,
-          targetPathId: Number(effectRow?.targetElement?.m_PathID),
-        }))
-        .filter(
-          ({ targetPathId }) =>
-            property != null &&
-            findElementPath(
-              targetPathId,
-              Number(property.path_id),
-              closure.edges
-            ) != null
-        )
-    : [];
-  const targetBinding =
-    triggerEffectRows.length === 1
-      ? (triggerContract.targetBindings.find(
-          binding =>
-            Number(binding.value) ===
-            Number(triggerEffectRows[0]?.effectRow?.targetType)
-        ) ?? null)
-      : null;
   const reachablePropertyRows = triggerRow
     ? collectReachableRows(
         Number(triggerRow.path_id),
@@ -2475,19 +2461,47 @@ function buildSoulTriggerEntry({
         propertyRows.some(item => item.path_id === row.path_id)
       )
     : [];
+  const triggerEffectRows = Array.isArray(tree.triggerEffectList)
+    ? tree.triggerEffectList
+        .map((effectRow, effectListIndex) => ({
+          effectRow,
+          effectListIndex,
+          targetPathId: Number(effectRow?.targetElement?.m_PathID),
+          matchesLeaf: reachablePropertyRows.some(
+            leafRow =>
+              findElementPath(
+                Number(effectRow?.targetElement?.m_PathID),
+                Number(leafRow.path_id),
+                closure.edges
+              ) != null
+          ),
+        }))
+        .filter(entry => entry.matchesLeaf)
+    : [];
+  const targetBinding =
+    triggerEffectRows.length >= 1
+      ? (triggerContract.targetBindings.find(
+          binding =>
+            Number(binding.value) ===
+            Number(triggerEffectRows[0]?.effectRow?.targetType)
+        ) ?? null)
+      : null;
   const sharedLeaf =
     property != null &&
     reachablePropertyRows.length === 1 &&
     Number(reachablePropertyRows[0].path_id) === Number(property.path_id);
-  const valid =
+  const baseValid =
     supported &&
     compiledCondition?.status === 'applied' &&
     triggerTargetBinding != null &&
     targetBinding != null &&
-    sharedLeaf;
+    reachablePropertyRows.length > 0;
+  const valid = baseValid && sharedLeaf;
   return {
     valid,
+    baseValid,
     value: {
+      leafPathIds: reachablePropertyRows.map(row => Number(row.path_id)),
       elementId: Number(tree.elementConfigId),
       pathId: Number(triggerRow.path_id),
       eventId: Number(tree.triggerParam1),
@@ -2524,6 +2538,131 @@ function buildSoulTriggerEntry({
             },
       targetKind: targetBinding?.targetKind ?? 'unresolved',
       sourceIdentity: createElementIdentity(triggerRow),
+    },
+  };
+}
+
+function compileSoulEffectLeaf({
+  leafRow,
+  effectSkillId,
+  valueRowsBySkillId,
+  propertyTagContract,
+  unloadTriggers,
+  closure,
+  battleElementsByPathId,
+  triggerContract,
+}) {
+  const tree = leafRow?.typetree ?? {};
+  const commonFunctionId = Number(
+    tree.formulaParams?.function_1 ?? tree.baseIntParams?.[0]
+  );
+  const baseFunctionId = Number(
+    tree.formulaParams?.function_2 ?? tree.baseIntParams?.[1]
+  );
+  const commonRatioRaw = Number(
+    tree.formulaParams?.formulaParamValues?.[6] ?? tree.functionParams?.[6]
+  );
+  const propertyTags = uniqueNumbers(tree.defaultPropertyTags ?? []);
+  const supportedPropertyTags = new Set(
+    (propertyTagContract?.bindings ?? [])
+      .filter(binding => binding.status === 'applied')
+      .map(binding => Number(binding.propertyTag))
+  );
+  const lifecycle = compilePropertyLifecycle({
+    property: leafRow,
+    wrapperRows: [],
+    unloadTriggers,
+    closure,
+    battleElementsByPathId,
+    wrapperContract: triggerContract?.buffElementWrapper,
+  });
+  const formulaFamily = resolveFormulaFamily({
+    commonFunctionId,
+    baseFunctionId,
+  });
+  const starValues = compileStarValues({
+    rows: valueRowsBySkillId.get(effectSkillId) ?? [],
+    elementId: Number(tree.elementConfigId),
+  });
+  const gaps = [];
+  if (!PROPERTY_BUCKET_BY_CALCULATE_TYPE[Number(tree.calculateType)]) {
+    gaps.push('effect-property-bucket-unsupported');
+  }
+  if (!(Number(lifecycle?.durationMs) > 0)) {
+    gaps.push('effect-property-duration-unresolved');
+  }
+  if (![3, 4, 5].includes(Number(tree.combineType))) {
+    gaps.push('effect-property-stack-operator-unsupported');
+  }
+  if (
+    commonFunctionId !== 1 ||
+    ![3, 5].includes(baseFunctionId) ||
+    commonRatioRaw !== 10_000
+  ) {
+    gaps.push('effect-formula-family-operator-unsupported');
+  }
+  if (starValues.length !== 4) gaps.push('effect-star-values-incomplete');
+  if (propertyTags.length > 1) {
+    gaps.push('effect-property-tag-composition-evidence-gap');
+  } else if (
+    propertyTags.length === 1 &&
+    !supportedPropertyTags.has(propertyTags[0])
+  ) {
+    gaps.push('effect-property-tag-action-mapping-evidence-gap');
+  }
+  return {
+    valid: gaps.length === 0,
+    gaps,
+    effect: {
+      elementId: Number(tree.elementConfigId),
+      pathId: Number(leafRow.path_id),
+      name: tree.elementName ?? leafRow.name ?? null,
+      attributeId: Number(tree.attributeID),
+      bucket:
+        PROPERTY_BUCKET_BY_CALCULATE_TYPE[Number(tree.calculateType)] ?? null,
+      calculateType: Number(tree.calculateType),
+      propertyTags,
+      propertyTagMatchMode:
+        propertyTags.length === 0
+          ? 'unscoped'
+          : propertyTags.length === 1
+            ? 'single-exact'
+            : 'evidence-open-multi-tag',
+      propertyTagSourceIdentity: `${createElementIdentity(leafRow)}.defaultPropertyTags`,
+      formula: {
+        formulaIdentity: `battle-effect-formula:soulessence:${effectSkillId}:${Number(tree.elementConfigId)}:${leafRow.path_id}`,
+        commonFunctionId,
+        commonExpression: commonFunctionId === 1 ? 'G/10000' : null,
+        baseFunctionId,
+        baseExpression:
+          baseFunctionId === 3
+            ? 'A/10000'
+            : baseFunctionId === 5
+              ? 'A'
+              : null,
+        commonRatioRaw,
+        sourceParameterEncoding: 'battle-element-raw-a',
+        family: formulaFamily,
+        sourceIdentity: `${createElementIdentity(leafRow)}.formulaParams|functionParams`,
+      },
+      durationMs: Number(lifecycle?.durationMs),
+      leafDurationMs: Number(tree.time),
+      lifecycle,
+      stackMode:
+        Number(tree.combineType) === 4
+          ? 'stack'
+          : Number(tree.combineType) === 5
+            ? 'block'
+            : 'refresh',
+      stackDelta: 1,
+      maxStacks:
+        Number(tree.combineType) === 4
+          ? Math.max(1, Number(tree.combineNumber) || 1)
+          : 1,
+      combineType: Number(tree.combineType),
+      combineNumber: Number(tree.combineNumber),
+      valuesByStar: starValues,
+      sourceIdentity: createElementIdentity(leafRow),
     },
   };
 }
@@ -2721,6 +2860,18 @@ function compileSoulEffectDefinition({
     rows: valueRowsBySkillId.get(effectSkillId) ?? [],
     elementId: Number(propertyTree.elementConfigId),
   });
+  const knownElementIds = new Set(
+    [...battleElementsByPathId.values()]
+      .map(row => Number(row.typetree?.elementConfigId))
+      .filter(value => Number.isInteger(value) && value > 0)
+  );
+  const knownElementTypes = new Set(
+    [...battleElementsByPathId.values()].flatMap(row =>
+      Array.isArray(row.typetree?.types)
+        ? row.typetree.types.map(Number)
+        : []
+    )
+  );
   const triggerEntries = activeTriggers.map(triggerRow =>
     buildSoulTriggerEntry({
       triggerRow,
@@ -2733,8 +2884,142 @@ function compileSoulEffectDefinition({
       elementFormulaRows,
       activationConditionRuntimeEvidence,
       afterDamageEmptyConditionRuntimeEvidence,
+      knownElementIds,
+      knownElementTypes,
     })
   );
+  const leafRowsByPathId = new Map();
+  for (const entry of triggerEntries) {
+    for (const pathId of entry.value.leafPathIds ?? []) {
+      if (leafRowsByPathId.has(pathId)) continue;
+      const row = propertyRows.find(
+        candidate => Number(candidate.path_id) === Number(pathId)
+      );
+      if (row) leafRowsByPathId.set(Number(pathId), row);
+    }
+  }
+  const leafRows = [...leafRowsByPathId.values()];
+  const multiLeaf =
+    leafRows.length > 1 ||
+    triggerEntries.some(
+      entry => (entry.value.leafPathIds ?? []).length > 1
+    );
+  if (multiLeaf) {
+    const compiledLeaves = leafRows.map(leafRow =>
+      compileSoulEffectLeaf({
+        leafRow,
+        effectSkillId,
+        valueRowsBySkillId,
+        propertyTagContract,
+        unloadTriggers,
+        closure,
+        battleElementsByPathId,
+        triggerContract,
+      })
+    );
+    const leafValid =
+      compiledLeaves.length > 0 &&
+      compiledLeaves.every(leaf => leaf.valid);
+    const compiledLeafPathIds = new Set(
+      compiledLeaves.map(leaf => Number(leaf.effect.pathId))
+    );
+    const triggersValid = triggerEntries.every(entry => {
+      const pathIds = entry.value.leafPathIds ?? [];
+      return (
+        entry.baseValid &&
+        pathIds.length > 0 &&
+        pathIds.every(pathId => compiledLeafPathIds.has(Number(pathId)))
+      );
+    });
+    const gaps = [];
+    if (!control) gaps.push('effect-control-source-missing');
+    if (missingPathIds.length) gaps.push('effect-resource-reference-missing');
+    if (!triggersValid) gaps.push('effect-active-trigger-not-unique');
+    if (damageRows.length) gaps.push('effect-damage-branch-unapplied');
+    if (!leafValid) gaps.push('effect-property-leaf-not-unique');
+    for (const leaf of compiledLeaves) gaps.push(...leaf.gaps);
+    const effectLeaves = compiledLeaves.map(leaf => leaf.effect);
+    const multiRuntimeStatus = gaps.length
+      ? 'source-indexed-runtime-unapplied'
+      : 'runtime-applied';
+    return {
+      soulEssenceId: soul.soulEssenceId,
+      name: soul.name,
+      effectSkillId,
+      effectSkillLogic: logicBySkillId.get(effectSkillId)
+        ? {
+            skillLogicType: Number(
+              logicBySkillId.get(effectSkillId).skillLogicType
+            ),
+            sourceIdentity: `NewTable/skillsub_logic.rows[skillId=${effectSkillId}]`,
+          }
+        : null,
+      runtimeStatus: multiRuntimeStatus,
+      mechanismFamily:
+        multiRuntimeStatus === 'runtime-applied'
+          ? 'equipped-actor-composite-property-effects'
+          : 'source-indexed-composite-effect',
+      activationPrerequisites: activationPrerequisiteRows.map(row => ({
+        elementId: Number(row.typetree?.elementConfigId),
+        pathId: Number(row.path_id),
+        triggerType: Number(row.typetree?.triggerType),
+        conditions: (row.typetree?.triggerConditionList ?? []).map(condition => ({
+          conditionType: Number(condition?.conditionParam1),
+          conditionValue: Number(condition?.conditionParam2),
+          conditionExtra: Number.isFinite(Number(condition?.conditionParam3))
+            ? Number(condition.conditionParam3)
+            : null,
+        })),
+        sourceIdentity: createElementIdentity(row),
+      })),
+      activationConditions: compileActivationConditions({
+        activationPrerequisiteRows,
+        elementFormulaRows,
+        activationConditionRuntimeEvidence,
+      }),
+      trigger: triggerEntries[0]?.value ?? null,
+      triggers: triggerEntries.map(entry => entry.value),
+      effect: effectLeaves[0] ?? null,
+      effectLeaves,
+      sourceClosure: {
+        controlSkillId: effectSkillId,
+        controlSourceIdentity: control?.sourceIdentity ?? null,
+        resourcePathIds,
+        missingPathIds,
+        reachablePathIds: closure.rows.map(row => row.path_id),
+        activeTriggerElementIds: activeTriggers.map(row =>
+          Number(row.typetree?.elementConfigId)
+        ),
+        unloadTriggerElementIds: unloadTriggers.map(row =>
+          Number(row.typetree?.elementConfigId)
+        ),
+        propertyElementIds: leafRows.map(row =>
+          Number(row.typetree?.elementConfigId)
+        ),
+        wrapperElementIds: [],
+        effectPathElementIds: leafRows.map(row =>
+          Number(row.typetree?.elementConfigId)
+        ),
+        removalPaths: compiledLeaves.flatMap(leaf =>
+          leaf.effect.lifecycle?.removalPaths ?? []
+        ),
+        damageElementIds: damageRows.map(row =>
+          Number(row.typetree?.elementConfigId)
+        ),
+        activationPrerequisiteElementIds: activationPrerequisiteRows.map(row =>
+          Number(row.typetree?.elementConfigId)
+        ),
+      },
+      runtimeGaps: uniqueStrings(gaps),
+      sourceIdentity: [
+        `NewTable/soulessence.rows[id=${soul.soulEssenceId}].reishiSkill`,
+        control?.sourceIdentity,
+        ...leafRows.map(createElementIdentity),
+      ]
+        .filter(Boolean)
+        .join('|'),
+    };
+  }
   const runtimeGaps = [];
   if (!control) runtimeGaps.push('effect-control-source-missing');
   if (missingPathIds.length)

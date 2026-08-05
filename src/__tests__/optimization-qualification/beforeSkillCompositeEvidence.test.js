@@ -179,7 +179,7 @@ describe('BeforeSkill composite SP and team-heal native evidence', () => {
       acceptedC12R1Commit: '5537e5a59f9776d7045b0ce8ad9915738715a9a4',
       acceptedC13Commit: '36217387c9197702088dfe15244569f86c6e43c5',
       batchResults: {
-        runtimeAppliedSoulEssenceCount: 47,
+        runtimeAppliedSoulEssenceCount: 51,
         runtimeAppliedSetSkillCount: 11,
         remainingBlockedFourPieceSetSkillIds: ['set-skill:3:4'],
       },
