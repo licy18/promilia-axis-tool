@@ -1,6 +1,6 @@
 {
-  "phase": "M12-B3-E15",
-  "status": "b3-e15-implemented",
+  "phase": "M12-B3-E16",
+  "status": "b3-e16-implemented",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -9,12 +9,12 @@
     "equipment": 137,
     "setSkills": 12
   },
-  "sourceSnapshotHash": "14801b58c3c7ef4d",
-  "rosterHash": "58295f6130b38e99",
-  "manifestsHash": "ad0c5dd003cbaf0b",
-  "ledgerHash": "9d70dc212eb0d46e",
-  "bindingMatrixHash": "675728576c4a57ce",
-  "catalogHash": "ef9afe6f0cb7a801",
+  "sourceSnapshotHash": "4bf0f73b24d241d6",
+  "rosterHash": "42919ed82a559ebe",
+  "manifestsHash": "dd1a6bc0febe016c",
+  "ledgerHash": "88e053986bef2cc9",
+  "bindingMatrixHash": "455c3271a01b6517",
+  "catalogHash": "d33b291ee61c1510",
   "maturityCounts": {
     "extracted": 30,
     "optimization-ready": 210,
@@ -28,9 +28,9 @@
     "set-skill": 11
   },
   "gapCounts": {
-    "blockingUniqueGapCount": 125,
+    "blockingUniqueGapCount": 124,
     "byCategory": {
-      "evidence-insufficient": 17,
+      "evidence-insufficient": 16,
       "not-implemented": 108
     },
     "byCode": {
@@ -39,7 +39,7 @@
       "character-acceptance-not-published": 9,
       "character-not-optimization-ready": 11,
       "kibo-headless-maturity-not-ready": 43,
-      "kibo-passive-static-evidence-gap": 4,
+      "kibo-passive-static-evidence-gap": 3,
       "kibo-visual-acceptance-evidence-blocked": 43,
       "level-breakthrough-skill-unlock-source-mismatch": 1,
       "set-skill-dynamic-unapplied": 1,
@@ -47,7 +47,7 @@
     },
     "byObjectKind": {
       "character": 33,
-      "kibo": 90,
+      "kibo": 89,
       "set-skill": 2
     }
   },

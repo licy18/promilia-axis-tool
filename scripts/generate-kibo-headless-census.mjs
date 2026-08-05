@@ -940,9 +940,6 @@ async function parseVerifiedPropertyEffectPassive({
   if (!controlRoot) {
     unresolvedReasons.push('passive-control-root-missing');
   }
-  if (!behavior) {
-    unresolvedReasons.push('passive-control-element-injection-missing');
-  }
   if (elementObjects.length === 0) {
     unresolvedReasons.push('passive-element-assets-missing');
   }
@@ -1031,6 +1028,15 @@ async function parseVerifiedPropertyEffectPassive({
     };
   }
 
+  if (!behavior) {
+    return {
+      mechanic: null,
+      unresolvedReasons: ['passive-control-element-injection-missing'],
+      controlSourceFiles,
+      elementSourceFiles,
+    };
+  }
+
   const petOwnerDamageSourceMechanic =
     parsePetOwnerDamageSourcePropertyEffectPassive({
       controlRoot,
@@ -1083,6 +1089,21 @@ async function parseVerifiedPropertyEffectPassive({
   if (derivedDamageMechanic) {
     return {
       mechanic: derivedDamageMechanic,
+      unresolvedReasons: [],
+      controlSourceFiles,
+      elementSourceFiles,
+    };
+  }
+
+  const receiveDamageMechanic =
+    parseAfterReceiveDamageSelfPropertyEffectPassive({
+      controlRoot,
+      behaviors,
+      elementObjects,
+    });
+  if (receiveDamageMechanic) {
+    return {
+      mechanic: receiveDamageMechanic,
       unresolvedReasons: [],
       controlSourceFiles,
       elementSourceFiles,
@@ -3002,6 +3023,101 @@ function parseCompositeStaticAndDamagePropertyEffectPassive({
   };
 }
 
+function parseAfterReceiveDamageSelfPropertyEffectPassive({
+  controlRoot,
+  behaviors,
+  elementObjects,
+}) {
+  if (behaviors.length !== 1) return null;
+  const behavior = behaviors[0];
+  const triggers = elementObjects.filter(
+    row =>
+      Array.isArray(row.value?.triggerEffectList) &&
+      row.value.triggerEffectList.length === 1 &&
+      Number(row.value.triggerType) === 1 &&
+      Number(row.value.triggerParam1) === 4 &&
+      (row.value.triggerConditionList?.length ?? 0) === 0 &&
+      Number(row.value.triggerEffectList[0]?.effectType) === 0 &&
+      [0, 1].includes(Number(row.value.triggerEffectList[0]?.targetType)) &&
+      Number.isFinite(Number(row.value.triggerInv)) &&
+      Number(row.value.triggerInv) >= 0
+  );
+  const allTriggerElements = elementObjects.filter(row =>
+    Array.isArray(row.value?.triggerEffectList)
+  );
+  if (triggers.length !== 1 || allTriggerElements.length !== 1) return null;
+  const trigger = triggers[0];
+  const targetPathIds = extractObjectPathIds(trigger.raw, 'targetElement');
+  if (targetPathIds.length !== 1) return null;
+  const property =
+    elementObjects.find(row => row.pathId === targetPathIds[0]) ?? null;
+  if (!property || !isPropertyElement(property.value)) return null;
+  const behaviorPathIds = extractArrayPathIds(behavior.raw, 'elementDataList');
+  if (behaviorPathIds.length !== 1 || behaviorPathIds[0] !== trigger.pathId) {
+    return null;
+  }
+  const controlResourcePathIds = extractArrayPathIds(
+    controlRoot.raw,
+    'elements'
+  );
+  const reachablePathIds = [trigger.pathId, property.pathId];
+  if (!hasExactPathCoverage(controlResourcePathIds, reachablePathIds)) {
+    return null;
+  }
+  const targetType = Number(trigger.value.triggerEffectList[0].targetType);
+  const triggerLifetime = classifyTriggerCounterLifetime(
+    trigger.value.triggerCounter
+  );
+  const effect = createPropertyEffectEvidence({
+    element: property,
+    target: targetType === 1 ? 'damaged-kibo' : 'equipped-kibo',
+    runtimeTargetKind: 'kibo',
+    activation: 'after-receive-damage',
+  });
+  return {
+    mechanismFamily: 'after-kibo-receive-damage-self-property-effect',
+    trigger: {
+      event: 'damage-received',
+      eventType: 4,
+      eventName: 'AfterReceiveDamage',
+      sourceScope: 'equipped-kibo',
+      target: targetType === 1 ? 'damaged-kibo' : 'equipped-kibo',
+      internalCooldownMs: Number(trigger.value.triggerInv),
+      activationOrder: 'after-receive-damage-settlement',
+      activationDelayMs: 0,
+      sourceElementId: Number(trigger.value.elementConfigId),
+      sourcePathId: trigger.pathId,
+      ...triggerLifetime,
+      triggerLimitScope: 'passive-element-lifetime',
+      sourceIdentity: [
+        'C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.AfterReceiveDamage=4',
+        `battle-element-assets.jsonl#path_id=${trigger.pathId};elementId=${Number(
+          trigger.value.elementConfigId
+        )}`,
+      ],
+    },
+    effect,
+    ownership: {
+      source: 'equipped-kibo',
+      scenarioStartEffectTarget: null,
+      triggeredEffectTarget:
+        targetType === 1 ? 'damaged-kibo' : 'equipped-kibo',
+      effectAdder: 'equipped-kibo',
+      foregroundRequirement: 'none-in-source-assets',
+    },
+    sourceGraph: {
+      triggerElementId: Number(trigger.value.elementConfigId),
+      triggerPathId: trigger.pathId,
+      propertyElementId: Number(property.value.elementConfigId),
+      propertyPathId: property.pathId,
+      reachablePathIds,
+    },
+    runtimeGaps: [],
+    scenarioAssumptions: [],
+    evidenceStatus: 'source-verified',
+  };
+}
+
 function parseIncomingDamagePropertyEffectEvidence({
   controlRoot,
   behaviors,
@@ -3763,10 +3879,19 @@ function parseStaticPropertyEffectPassive({
   behaviors,
   elementObjects,
 }) {
-  if (behaviors.length === 0) return null;
-  const directInjectTargetTypes = uniqueSorted(
-    behaviors.map(behavior => Number(behavior.value.directInjectTargetType))
+  const resourceRootPathIds = extractArrayPathIds(
+    controlRoot.raw,
+    'elements'
   );
+  if (behaviors.length === 0 && resourceRootPathIds.length === 0) return null;
+  const directInjectTargetTypes =
+    behaviors.length > 0
+      ? uniqueSorted(
+          behaviors.map(behavior =>
+            Number(behavior.value.directInjectTargetType)
+          )
+        )
+      : [0];
   if (
     directInjectTargetTypes.length === 0 ||
     directInjectTargetTypes.some(value => ![0, 7].includes(value))
@@ -3810,16 +3935,20 @@ function parseStaticPropertyEffectPassive({
   const propertyByPathId = new Map(
     propertyCandidates.map(row => [row.pathId, row])
   );
-  const rootPathIds = uniqueValues(
-    behaviors.flatMap(behavior =>
-      extractArrayPathIds(behavior.raw, 'elementDataList')
-    )
-  );
+  const rootPathIds =
+    behaviors.length > 0
+      ? uniqueValues(
+          behaviors.flatMap(behavior =>
+            extractArrayPathIds(behavior.raw, 'elementDataList')
+          )
+        )
+      : resourceRootPathIds;
   if (rootPathIds.length === 0) return null;
   const effectGraphs = [];
   const accountedPathIds = new Set();
+  const wrapperRoots = [];
+  const directRootPathIds = [];
   for (const rootPathId of rootPathIds) {
-    const directProperty = propertyByPathId.get(rootPathId) ?? null;
     const wrapper = reachableElementObjects.find(
       row =>
         row.pathId === rootPathId &&
@@ -3828,32 +3957,37 @@ function parseStaticPropertyEffectPassive({
         Number.isFinite(Number(row.value?.time)) &&
         Number(row.value.time) >= -1
     );
-
-    let effectContainer = directProperty;
-    let properties = directProperty ? [directProperty] : [];
-    if (wrapper) {
-      const childPathIds = extractArrayPathIds(
-        wrapper.raw,
-        'injectElementDataList'
-      );
-      properties = childPathIds
-        .map(pathId => propertyByPathId.get(pathId))
-        .filter(Boolean);
-      if (
-        properties.length === 0 ||
-        properties.length !== childPathIds.length
-      ) {
-        return null;
-      }
-      effectContainer = wrapper;
+    if (wrapper) wrapperRoots.push(wrapper);
+    else directRootPathIds.push(rootPathId);
+  }
+  for (const wrapper of wrapperRoots) {
+    const childPathIds = extractArrayPathIds(
+      wrapper.raw,
+      'injectElementDataList'
+    );
+    const properties = childPathIds
+      .map(pathId => propertyByPathId.get(pathId))
+      .filter(Boolean);
+    if (properties.length === 0 || properties.length !== childPathIds.length) {
+      return null;
     }
-    if (!effectContainer || properties.length === 0) return null;
-    effectGraphs.push({ effectContainer, properties });
-    accountedPathIds.add(effectContainer.pathId);
+    effectGraphs.push({ effectContainer: wrapper, properties });
+    accountedPathIds.add(wrapper.pathId);
     for (const property of properties) {
       accountedPathIds.add(property.pathId);
     }
   }
+  for (const rootPathId of directRootPathIds) {
+    if (accountedPathIds.has(rootPathId)) continue;
+    const directProperty = propertyByPathId.get(rootPathId) ?? null;
+    if (!directProperty) return null;
+    effectGraphs.push({
+      effectContainer: directProperty,
+      properties: [directProperty],
+    });
+    accountedPathIds.add(directProperty.pathId);
+  }
+  if (effectGraphs.length === 0) return null;
   if (
     controlResourcePathIds.length !== accountedPathIds.size ||
     controlResourcePathIds.some(pathId => !accountedPathIds.has(pathId))

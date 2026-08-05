@@ -52,9 +52,9 @@ describe('kibo headless census', () => {
         unresolved: 0,
       },
       pvePassiveMechanics: {
-        evidenceClosed: 35,
+        evidenceClosed: 38,
         scenarioAssumed: 0,
-        unresolved: 9,
+        unresolved: 6,
       },
       pvpPassiveClassification: {
         evidenceClosed: 122,
@@ -68,7 +68,7 @@ describe('kibo headless census', () => {
       },
     });
     expect(outputs.mechanicsCatalog.summary.triggerLifetime).toEqual({
-      unlimited: 10,
+      unlimited: 12,
       finite: 1,
       'evidence-open': 0,
     });
@@ -212,7 +212,7 @@ describe('kibo headless census', () => {
         row =>
           row.mechanic?.mechanismFamily === 'equipped-kibo-self-property-effect'
       )
-    ).toHaveLength(16);
+    ).toHaveLength(17);
     expect(
       generatedCensus.pvePassiveSkills.find(row => row.skillId === 520080)
     ).toMatchObject({
@@ -1045,25 +1045,19 @@ describe('kibo headless census', () => {
     expect(
       generatedCensus.pvePassiveSkills.find(row => row.skillId === 520018)
     ).toMatchObject({
-      closureClass: 'unresolved',
-      runtimeStatus: 'runtime-unresolved',
-      mechanic: null,
-      unresolvedReasons: [
-        'passive-after-receive-damage-event-runtime-not-modeled',
-        'passive-after-receive-damage-target-entity-role-unresolved',
-      ],
-      unresolvedEvidence: {
+      closureClass: 'evidence-closed',
+      runtimeStatus: 'runtime-ready',
+      unresolvedReasons: [],
+      mechanic: {
+        mechanismFamily: 'after-kibo-receive-damage-self-property-effect',
         trigger: {
+          event: 'damage-received',
           eventType: 4,
           eventName: 'AfterReceiveDamage',
-          triggerEffectTargetType: 1,
-          triggerEffectTargetName: 'Target',
-          sustainElementId: 500109103,
-          sustainElementRuntimeStatus:
-            'config-field-not-read-by-trigger-element-parse',
+          target: 'damaged-kibo',
         },
         effect: {
-          targetRole: 'event-target-unresolved',
+          target: 'damaged-kibo',
           durationMs: 8000,
           sourceElementId: 520018002,
           modifiers: [
@@ -1075,23 +1069,51 @@ describe('kibo headless census', () => {
             },
           ],
         },
-        triggerDataContract: {
-          type: 'ElementTriggerData_Damage',
-          fields: ['source', 'target', 'self'],
-        },
-        controlResourceCoverage: 'exact',
-        scenarioAssumptions: [],
+        runtimeGaps: [],
       },
     });
     expect(
-      generatedPassiveCatalog.unresolved.find(row => row.skillId === 520018)
+      generatedPassiveCatalog.unresolved.some(
+        row => row.skillId === 520018
+      )
+    ).toBe(false);
+    expect(
+      generatedCensus.pvePassiveSkills.find(row => row.skillId === 520013)
     ).toMatchObject({
-      evidence: {
+      closureClass: 'evidence-closed',
+      runtimeStatus: 'runtime-ready',
+      mechanic: {
+        mechanismFamily: 'after-kibo-receive-damage-self-property-effect',
         trigger: {
+          event: 'damage-received',
           eventName: 'AfterReceiveDamage',
+          target: 'equipped-kibo',
         },
         effect: {
-          targetRole: 'event-target-unresolved',
+          target: 'equipped-kibo',
+          durationMs: 5000,
+          sourceElementId: 520013002,
+          modifiers: [
+            {
+              kind: 'battle-property',
+              attributeId: 1,
+              bucket: 'dynamicPercent',
+              valueRaw: 3000,
+            },
+          ],
+        },
+        runtimeGaps: [],
+      },
+    });
+    expect(
+      generatedCensus.pvePassiveSkills.find(row => row.skillId === 520015)
+    ).toMatchObject({
+      closureClass: 'evidence-closed',
+      runtimeStatus: 'runtime-ready',
+      mechanic: {
+        mechanismFamily: 'equipped-kibo-self-property-effect',
+        trigger: {
+          event: 'scenario-start',
         },
       },
     });

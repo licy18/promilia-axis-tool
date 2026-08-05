@@ -8225,10 +8225,10 @@
     {
       "skillId": 520013,
       "scopeClass": "pve-combat-talent-passive",
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "classificationStatus": "evidence-closed",
-      "runtimeStatus": "runtime-unresolved",
-      "confidence": "low",
+      "runtimeStatus": "runtime-ready",
+      "confidence": "high",
       "sourceName": "易怒",
       "sourceDescription": "受到伤害后5秒内，自身攻击力提升30%。",
       "kiboIds": [
@@ -8244,10 +8244,78 @@
         "skillControlAsset": true,
         "elementAssetCount": 2
       },
-      "mechanic": null,
-      "unresolvedReasons": [
-        "passive-supported-damage-trigger-shape-not-unique"
-      ],
+      "mechanic": {
+        "mechanismFamily": "after-kibo-receive-damage-self-property-effect",
+        "trigger": {
+          "event": "damage-received",
+          "eventType": 4,
+          "eventName": "AfterReceiveDamage",
+          "sourceScope": "equipped-kibo",
+          "target": "equipped-kibo",
+          "internalCooldownMs": 0,
+          "activationOrder": "after-receive-damage-settlement",
+          "activationDelayMs": 0,
+          "sourceElementId": 520013001,
+          "sourcePathId": "1601542251892042793",
+          "configuredTriggerCounter": 9999999,
+          "triggerLifetime": "unlimited",
+          "maxTriggerCount": null,
+          "triggerLifetimeBasis": "current-client-practical-unlimited-sentinel-9999999",
+          "triggerLimitScope": "passive-element-lifetime",
+          "sourceIdentity": [
+            "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.AfterReceiveDamage=4",
+            "battle-element-assets.jsonl#path_id=1601542251892042793;elementId=520013001"
+          ]
+        },
+        "effect": {
+          "target": "equipped-kibo",
+          "runtimeTargetKind": "kibo",
+          "activation": "after-receive-damage",
+          "durationMs": 5000,
+          "expiration": "duration",
+          "stackMode": "replace",
+          "stackDelta": 1,
+          "maxStacks": 1,
+          "refreshRule": "replace-existing-instance",
+          "combineType": 3,
+          "combineNumber": -1,
+          "exitBattleClear": false,
+          "sourceElementId": 520013002,
+          "sourcePathId": "8491256514177557539",
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": 3000,
+              "sourceElementId": 520013002,
+              "sourcePathId": "8491256514177557539"
+            }
+          ]
+        },
+        "ownership": {
+          "source": "equipped-kibo",
+          "scenarioStartEffectTarget": null,
+          "triggeredEffectTarget": "equipped-kibo",
+          "effectAdder": "equipped-kibo",
+          "foregroundRequirement": "none-in-source-assets"
+        },
+        "sourceGraph": {
+          "triggerElementId": 520013001,
+          "triggerPathId": "1601542251892042793",
+          "propertyElementId": 520013002,
+          "propertyPathId": "8491256514177557539",
+          "reachablePathIds": [
+            "1601542251892042793",
+            "8491256514177557539"
+          ]
+        },
+        "runtimeGaps": [],
+        "scenarioAssumptions": [],
+        "evidenceStatus": "source-verified",
+        "sourceTextDifferences": []
+      },
+      "unresolvedReasons": [],
       "provenance": [
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
@@ -8407,10 +8475,10 @@
     {
       "skillId": 520015,
       "scopeClass": "pve-combat-talent-passive",
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "classificationStatus": "evidence-closed",
-      "runtimeStatus": "runtime-unresolved",
-      "confidence": "low",
+      "runtimeStatus": "runtime-ready",
+      "confidence": "high",
       "sourceName": "厚实毛发",
       "sourceDescription": "受到火属性伤害增加25%，受到火属性以外的伤害减少25%。",
       "kiboIds": [
@@ -8427,10 +8495,151 @@
         "skillControlAsset": true,
         "elementAssetCount": 11
       },
-      "mechanic": null,
-      "unresolvedReasons": [
-        "passive-control-element-injection-missing"
-      ],
+      "mechanic": {
+        "mechanismFamily": "equipped-kibo-self-property-effect",
+        "trigger": {
+          "event": "scenario-start",
+          "sourceScope": "equipped-kibo",
+          "target": "equipped-kibo",
+          "targets": [
+            "equipped-kibo"
+          ],
+          "internalCooldownMs": 0,
+          "activationOrder": "scenario-start",
+          "activationDelayMs": 0,
+          "sourceElementIds": [
+            520015001
+          ],
+          "sourcePathIds": [
+            "4524500214605430540"
+          ]
+        },
+        "effect": {
+          "target": "equipped-kibo",
+          "targets": [
+            "equipped-kibo"
+          ],
+          "durationMs": null,
+          "expiration": "battle-exit",
+          "stackMode": "replace",
+          "stackDelta": 1,
+          "maxStacks": 1,
+          "refreshRule": "not-applicable-single-scenario-start-application",
+          "sourceElementId": 520015001,
+          "sourcePathId": "4524500214605430540",
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 62,
+              "bucket": "dynamicExtra",
+              "valueRaw": -2500,
+              "sourceElementId": 520015002,
+              "sourcePathId": "-1282858317039418811"
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 67,
+              "bucket": "dynamicExtra",
+              "valueRaw": 2500,
+              "sourceElementId": 520015003,
+              "sourcePathId": "3291842599063502701"
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 66,
+              "bucket": "dynamicExtra",
+              "valueRaw": 2500,
+              "sourceElementId": 520015004,
+              "sourcePathId": "1496479534353871963"
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 63,
+              "bucket": "dynamicExtra",
+              "valueRaw": 2500,
+              "sourceElementId": 520015005,
+              "sourcePathId": "-5201789651661431208"
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 65,
+              "bucket": "dynamicExtra",
+              "valueRaw": 2500,
+              "sourceElementId": 520015006,
+              "sourcePathId": "-7251682365365633093"
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 64,
+              "bucket": "dynamicExtra",
+              "valueRaw": 2500,
+              "sourceElementId": 520015007,
+              "sourcePathId": "837242475794612221"
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 68,
+              "bucket": "dynamicExtra",
+              "valueRaw": 2500,
+              "sourceElementId": 520015008,
+              "sourcePathId": "4520169194642832030"
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 69,
+              "bucket": "dynamicExtra",
+              "valueRaw": 2500,
+              "sourceElementId": 520015009,
+              "sourcePathId": "6892210519346839234"
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 70,
+              "bucket": "dynamicExtra",
+              "valueRaw": 2500,
+              "sourceElementId": 520015010,
+              "sourcePathId": "608527707455173779"
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 61,
+              "bucket": "dynamicExtra",
+              "valueRaw": 2500,
+              "sourceElementId": 520015011,
+              "sourcePathId": "8843518158722674367"
+            }
+          ]
+        },
+        "targets": [
+          {
+            "target": "equipped-kibo",
+            "runtimeTargetKind": "kibo",
+            "directInjectTargetType": 0,
+            "directInjectTargetName": "Self"
+          }
+        ],
+        "ownership": {
+          "source": "equipped-kibo",
+          "effectAdder": "equipped-kibo",
+          "effectTarget": "equipped-kibo",
+          "directInjectTargetType": 0,
+          "directInjectTargetName": "Self",
+          "effectTargets": [
+            "equipped-kibo"
+          ],
+          "directInjectTargetTypes": [
+            0
+          ],
+          "directInjectTargetNames": [
+            "Self"
+          ],
+          "foregroundRequirement": "none-in-source-assets"
+        },
+        "scenarioAssumptions": [],
+        "evidenceStatus": "source-verified",
+        "sourceTextDifferences": []
+      },
+      "unresolvedReasons": [],
       "provenance": [
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
@@ -8466,10 +8675,10 @@
     {
       "skillId": 520018,
       "scopeClass": "pve-combat-talent-passive",
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "classificationStatus": "evidence-closed",
-      "runtimeStatus": "runtime-unresolved",
-      "confidence": "low",
+      "runtimeStatus": "runtime-ready",
+      "confidence": "high",
       "sourceName": "低体温",
       "sourceDescription": "受到伤害后，使来源方冰属性伤害减免减少5%，持续8秒。",
       "kiboIds": [
@@ -8485,30 +8694,42 @@
         "skillControlAsset": true,
         "elementAssetCount": 2
       },
-      "mechanic": null,
-      "unresolvedEvidence": {
-        "controlInjection": {
-          "targetType": 0,
-          "targetName": "Self",
-          "triggerElementId": 520018001,
-          "triggerPathId": "-3056280781586302091"
-        },
+      "mechanic": {
+        "mechanismFamily": "after-kibo-receive-damage-self-property-effect",
         "trigger": {
+          "event": "damage-received",
           "eventType": 4,
           "eventName": "AfterReceiveDamage",
-          "triggerEffectTargetType": 1,
-          "triggerEffectTargetName": "Target",
+          "sourceScope": "equipped-kibo",
+          "target": "damaged-kibo",
           "internalCooldownMs": 0,
+          "activationOrder": "after-receive-damage-settlement",
+          "activationDelayMs": 0,
+          "sourceElementId": 520018001,
+          "sourcePathId": "-3056280781586302091",
           "configuredTriggerCounter": -1,
           "triggerLifetime": "unlimited",
           "maxTriggerCount": null,
           "triggerLifetimeBasis": "negative-sentinel-not-limited-by-trigger-element-can-trigger",
-          "sustainElementId": 500109103,
-          "sustainElementRuntimeStatus": "config-field-not-read-by-trigger-element-parse"
+          "triggerLimitScope": "passive-element-lifetime",
+          "sourceIdentity": [
+            "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.AfterReceiveDamage=4",
+            "battle-element-assets.jsonl#path_id=-3056280781586302091;elementId=520018001"
+          ]
         },
         "effect": {
-          "targetRole": "event-target-unresolved",
+          "target": "damaged-kibo",
+          "runtimeTargetKind": "kibo",
+          "activation": "after-receive-damage",
           "durationMs": 8000,
+          "expiration": "duration",
+          "stackMode": "replace",
+          "stackDelta": 1,
+          "maxStacks": 1,
+          "refreshRule": "replace-existing-instance",
+          "combineType": 3,
+          "combineNumber": 1,
+          "exitBattleClear": false,
           "sourceElementId": 520018002,
           "sourcePathId": "9075927342278079511",
           "modifiers": [
@@ -8516,26 +8737,35 @@
               "kind": "battle-property",
               "attributeId": 66,
               "bucket": "dynamicExtra",
-              "valueRaw": -500
+              "valueRaw": -500,
+              "sourceElementId": 520018002,
+              "sourcePathId": "9075927342278079511"
             }
           ]
         },
-        "triggerDataContract": {
-          "type": "ElementTriggerData_Damage",
-          "fields": [
-            "source",
-            "target",
-            "self"
-          ],
-          "unresolvedMapping": "AfterReceiveDamage event producer to ElementTriggerDataBase.target"
+        "ownership": {
+          "source": "equipped-kibo",
+          "scenarioStartEffectTarget": null,
+          "triggeredEffectTarget": "damaged-kibo",
+          "effectAdder": "equipped-kibo",
+          "foregroundRequirement": "none-in-source-assets"
         },
-        "controlResourceCoverage": "exact",
-        "scenarioAssumptions": []
+        "sourceGraph": {
+          "triggerElementId": 520018001,
+          "triggerPathId": "-3056280781586302091",
+          "propertyElementId": 520018002,
+          "propertyPathId": "9075927342278079511",
+          "reachablePathIds": [
+            "-3056280781586302091",
+            "9075927342278079511"
+          ]
+        },
+        "runtimeGaps": [],
+        "scenarioAssumptions": [],
+        "evidenceStatus": "source-verified",
+        "sourceTextDifferences": []
       },
-      "unresolvedReasons": [
-        "passive-after-receive-damage-event-runtime-not-modeled",
-        "passive-after-receive-damage-target-entity-role-unresolved"
-      ],
+      "unresolvedReasons": [],
       "provenance": [
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
@@ -38404,9 +38634,9 @@
       "unresolved": 0
     },
     "pvePassiveMechanics": {
-      "evidenceClosed": 35,
+      "evidenceClosed": 38,
       "scenarioAssumed": 0,
-      "unresolved": 9
+      "unresolved": 6
     },
     "pvpPassiveClassification": {
       "evidenceClosed": 122,

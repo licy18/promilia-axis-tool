@@ -16,7 +16,10 @@ import {
 import { createVerifiedBattleEffectGeneration } from '../mechanics/verifiedBattleEffectGeneration';
 import { createVerifiedTuningMarkGeneration } from '../mechanics/verifiedTuningMarkGeneration';
 import { createVerifiedActionVariantRuntime } from '../mechanics/verifiedActionVariantRuntime';
-import { createVerifiedKiboPassiveGeneration } from '../mechanics/verifiedKiboPassiveGeneration';
+import {
+  createVerifiedKiboPassiveGeneration,
+  deriveKiboReceiveDamageEventsFromCombatRuntime,
+} from '../mechanics/verifiedKiboPassiveGeneration';
 import {
   createVerifiedSoulEssenceEffectGeneration,
   deriveSoulEventSnapshotFromCombatRuntime,
@@ -507,6 +510,20 @@ function createVerifiedRuntimeBundle({
   const soulEventSnapshot = soulEventCombatRuntime
     ? deriveSoulEventSnapshotFromCombatRuntime(soulEventCombatRuntime)
     : null;
+  const kiboReceiveDamageEvents = soulEventCombatRuntime
+    ? deriveKiboReceiveDamageEventsFromCombatRuntime(soulEventCombatRuntime)
+    : [];
+  const finalKiboPassiveGeneration = isVerifiedCombatMechanicsScenario(
+    scenario
+  )
+    ? createVerifiedKiboPassiveGeneration({
+        scenario,
+        actionExecutionPlan,
+        actionResolutionById: actionVariantRuntime?.actionResolutionById,
+        acceptedSkillStartTransitions,
+        kiboReceiveDamageEvents,
+      })
+    : null;
   const soulEssenceEffectGeneration = isVerifiedCombatMechanicsScenario(
     scenario
   )
@@ -529,7 +546,7 @@ function createVerifiedRuntimeBundle({
       ...(actionVariantRuntime?.effectCommands ?? []),
       ...(effectGeneration?.effectCommands ?? []),
       ...(tuningGeneration?.effectCommands ?? []),
-      ...(kiboPassiveGeneration?.effectCommands ?? []),
+      ...(finalKiboPassiveGeneration?.effectCommands ?? []),
       ...(soulEssenceEffectGeneration?.effectCommands ?? []),
     ],
   });
@@ -545,7 +562,7 @@ function createVerifiedRuntimeBundle({
     damageEventGeneration,
     effectTimeline,
     actionVariantRuntime,
-    kiboPassiveGeneration,
+    kiboPassiveGeneration: finalKiboPassiveGeneration,
     soulEssenceEffectGeneration,
     nonDamageEventGeneration,
     criticalRandomSource,
@@ -553,7 +570,7 @@ function createVerifiedRuntimeBundle({
   return {
     actionVariantRuntime,
     effectGeneration,
-    kiboPassiveGeneration,
+    kiboPassiveGeneration: finalKiboPassiveGeneration,
     soulEssenceEffectGeneration,
     nonDamageEventGeneration,
     damageEventGeneration,

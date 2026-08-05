@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "phase": "M12-B3-E15",
+  "phase": "M12-B3-E16",
   "sourceSnapshot": {
     "files": {
       "characters": {
@@ -38,18 +38,18 @@
       },
       "visualAcceptance": {
         "path": "src/data/generated/m12-b3-visual-acceptance-catalog.json",
-        "sha256": "69f478c9845ac409ba950154f3ac6868369357ae725f736d29309d4ddfb4f71d",
+        "sha256": "e078c3aa03c26777ca6842d1a9f6bec24322be6193549089e43bcc2b85cf71bb",
         "bytes": 200262
       },
       "kiboPassives": {
         "path": "src/data/generated/kibo-passive-mechanics.json",
-        "sha256": "5d1ab16d3172a0c810e7c646e7607cf857d582dc35d30d4708a75410ff3ad977",
-        "bytes": 302883
+        "sha256": "ebf4c2bf2a1c2430da124fd752c4f77c6fd7887a46dc7ddceb28c12df0f5fa09",
+        "bytes": 310733
       },
       "kiboMaturity": {
         "path": "reports/kibo-headless/kibo-maturity-matrix.json",
-        "sha256": "31c6e30233f19072223ccfe77b7c9688932a1b7821cecf090fd5c7af51968712",
-        "bytes": 878672
+        "sha256": "33a6fca92ca4796f2e2bde812f8d87aa89dad42406ce2a8dd7754b3b70f599ae",
+        "bytes": 878484
       },
       "newTable:accessory.json": {
         "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/accessory.json",
@@ -3958,7 +3958,7 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "14801b58c3c7ef4d"
+    "sourceSnapshotHash": "4bf0f73b24d241d6"
   },
   "filterContract": {
     "characterElements": [
@@ -29216,5 +29216,5 @@
       ]
     }
   },
-  "rosterHash": "58295f6130b38e99"
+  "rosterHash": "42919ed82a559ebe"
 }

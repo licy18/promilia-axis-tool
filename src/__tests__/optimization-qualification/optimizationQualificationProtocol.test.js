@@ -261,10 +261,10 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 125,
+      blockingUniqueGapCount: 124,
       byCategory: {
         'not-implemented': 108,
-        'evidence-insufficient': 17,
+        'evidence-insufficient': 16,
       },
     });
     expect(artifacts.summary.optimizationReadyCounts).toEqual({
@@ -310,7 +310,7 @@ describe('M12-B3 optimization qualification generation', () => {
       artifacts.gaps.records.filter(
         record => record.code === 'kibo-passive-static-evidence-gap'
       )
-    ).toHaveLength(4);
+    ).toHaveLength(3);
     expect(artifacts.catalog.cultivation.equipment.tuningFormula).toEqual({
       status: 'source-indexed-static-runtime-applied',
       parameters: [8500, 6000, 125, 200000],

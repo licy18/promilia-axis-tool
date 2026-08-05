@@ -155,9 +155,9 @@ describe('verified kibo passive generation', () => {
       }),
     ]);
     expect(integrated.verifiedKiboPassiveGeneration.summary).toMatchObject({
-      evidenceClosedDefinitionCount: 35,
+      evidenceClosedDefinitionCount: 38,
       scenarioAssumedDefinitionCount: 0,
-      unresolvedDefinitionCount: 9,
+      unresolvedDefinitionCount: 6,
       effectCommandCount: generation.effectCommands.length,
     });
     expect(
@@ -1943,56 +1943,65 @@ describe('verified kibo passive generation', () => {
     );
   });
 
-  it('exposes only the unresolved receive-damage event target gaps instead of applying a guessed effect', () => {
+  it('dispatches the AfterReceiveDamage property effect from a kibo receive-damage event', () => {
     const scenario = createActorSkillWithKiboScenario(500081);
-    const generation = createVerifiedKiboPassiveGeneration({ scenario });
-    const gap = generation.unresolved.find(row => row.skillId === 520018);
+    const action = scenario.actions[0];
+    const resolution = resolveVerifiedCombatActionMechanics(action, {
+      combatScenario: scenario.combatScenario,
+    });
+    const actionRuleDiagnostics = createActionRuleDiagnostics({ scenario });
+    const actionExecutionPlan = createActionExecutionPlan({
+      scenario,
+      actionRuleDiagnostics,
+    });
+    const generation = createVerifiedKiboPassiveGeneration({
+      scenario,
+      actionExecutionPlan,
+      actionResolutionById: new Map([[action.id, resolution]]),
+      kiboReceiveDamageEvents: [
+        {
+          kiboId: 500081,
+          actorId: action.actorId,
+          timeMs: 1000,
+          sourceEventIdentity: 'test:receive:520018',
+          applied: true,
+        },
+      ],
+    });
+    const commands = generation.effectCommands.filter(
+      command => command.sourceIdentity?.passiveSkillId === 520018
+    );
 
+    expect(commands).toHaveLength(1);
+    expect(commands[0]).toMatchObject({
+      sourceKiboId: 500081,
+      timeMs: 1000,
+      durationMs: 8000,
+      modifiers: [
+        expect.objectContaining({
+          attributeId: 66,
+          bucket: 'dynamicExtra',
+          valueRaw: -500,
+        }),
+      ],
+      sourceIdentity: expect.objectContaining({
+        triggerEvent: 'damage-received',
+        receiveDamageEventIdentity: 'test:receive:520018',
+      }),
+    });
     expect(
-      generation.effectCommands.some(
+      generation.unresolved.some(row => row.skillId === 520018)
+    ).toBe(false);
+    const withoutEvents = createVerifiedKiboPassiveGeneration({
+      scenario,
+      actionExecutionPlan,
+      actionResolutionById: new Map([[action.id, resolution]]),
+    });
+    expect(
+      withoutEvents.effectCommands.some(
         command => command.sourceIdentity?.passiveSkillId === 520018
       )
     ).toBe(false);
-    expect(gap).toMatchObject({
-      actionId: null,
-      sourceActorId: scenario.actions[0].actorId,
-      kiboId: 500081,
-      skillId: 520018,
-      status: 'kibo-passive-runtime-unresolved',
-      reasons: [
-        'passive-after-receive-damage-event-runtime-not-modeled',
-        'passive-after-receive-damage-target-entity-role-unresolved',
-      ],
-      evidence: {
-        trigger: {
-          eventType: 4,
-          eventName: 'AfterReceiveDamage',
-          triggerEffectTargetType: 1,
-          triggerEffectTargetName: 'Target',
-          sustainElementId: 500109103,
-          sustainElementRuntimeStatus:
-            'config-field-not-read-by-trigger-element-parse',
-        },
-        effect: {
-          targetRole: 'event-target-unresolved',
-          durationMs: 8000,
-          modifiers: [
-            {
-              kind: 'battle-property',
-              attributeId: 66,
-              bucket: 'dynamicExtra',
-              valueRaw: -500,
-            },
-          ],
-        },
-        triggerDataContract: {
-          type: 'ElementTriggerData_Damage',
-          fields: ['source', 'target', 'self'],
-        },
-        controlResourceCoverage: 'exact',
-        scenarioAssumptions: [],
-      },
-    });
   });
 
   it('targets PetOwner as the actor without leaking the effect to the kibo', () => {

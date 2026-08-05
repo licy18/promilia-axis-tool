@@ -37,16 +37,46 @@ const PERIODIC_TEAM_HEAL_MECHANISM_FAMILY =
   'equipped-kibo-player-team-periodic-heal';
 const BEFORE_SKILL_COMPOSITE_MECHANISM_FAMILY =
   'equipped-kibo-before-skill-composite-effect';
+const AFTER_RECEIVE_DAMAGE_SELF_PROPERTY_MECHANISM_FAMILY =
+  'after-kibo-receive-damage-self-property-effect';
+const AFTER_RECEIVE_DAMAGE_MECHANISM_FAMILIES = new Set([
+  AFTER_RECEIVE_DAMAGE_SELF_PROPERTY_MECHANISM_FAMILY,
+]);
 const SCENARIO_START_ONLY_MECHANISM_FAMILIES = new Set([
   ...STATIC_ONLY_PROPERTY_MECHANISM_FAMILIES,
   PERIODIC_TEAM_HEAL_MECHANISM_FAMILY,
 ]);
+
+export function deriveKiboReceiveDamageEventsFromCombatRuntime(combatRuntime) {
+  const events = [];
+  for (const event of combatRuntime?.vitalEvents ?? []) {
+    const payload = event?.payload ?? {};
+    if (payload?.status !== 'verified-kibo-passive-vital-damage') continue;
+    if (payload?.applied !== true) continue;
+    const kiboId = Number(payload?.targetKiboId ?? payload?.sourceKiboId);
+    if (!Number.isInteger(kiboId) || kiboId <= 0) continue;
+    events.push({
+      kiboId,
+      actorId: payload?.targetActorId ?? payload?.sourceActorId ?? null,
+      timeMs: Number(event.timeMs),
+      applied: true,
+      sourceEventIdentity:
+        payload?.sourceEventIdentity ??
+        event?.eventIdentity ??
+        `kibo-receive-damage:${kiboId}:${event.timeMs}`,
+      damageType: payload?.damageType ?? null,
+      eventKind: 'damage-received',
+    });
+  }
+  return events;
+}
 
 export function createVerifiedKiboPassiveGeneration({
   scenario = {},
   actionExecutionPlan = null,
   actionResolutionById = null,
   acceptedSkillStartTransitions = null,
+  kiboReceiveDamageEvents = null,
   catalog = kiboPassiveMechanicsCatalog,
 } = {}) {
   const executionByActionId = new Map(
@@ -259,6 +289,13 @@ export function createVerifiedKiboPassiveGeneration({
         continue;
       }
       if (
+        AFTER_RECEIVE_DAMAGE_MECHANISM_FAMILIES.has(
+          definition.mechanismFamily
+        )
+      ) {
+        continue;
+      }
+      if (
         ![
           ...DAMAGE_DEALT_PROPERTY_MECHANISM_FAMILIES,
           DERIVED_DAMAGE_MECHANISM_FAMILY,
@@ -318,6 +355,39 @@ export function createVerifiedKiboPassiveGeneration({
       effectCommands.push(
         ...createCommands({
           ...commandContext,
+        })
+      );
+    }
+  }
+
+  for (const event of Array.isArray(kiboReceiveDamageEvents)
+    ? kiboReceiveDamageEvents
+    : []) {
+    const binding = equippedKiboBindings.find(
+      candidate => Number(candidate.kiboId) === Number(event.kiboId)
+    );
+    if (!binding) continue;
+    for (const definition of definitionsByKiboId.get(binding.kiboId) ?? []) {
+      if (
+        !AFTER_RECEIVE_DAMAGE_MECHANISM_FAMILIES.has(
+          definition.mechanismFamily
+        ) ||
+        (definition.runtimeGaps?.length ?? 0) > 0
+      ) {
+        continue;
+      }
+      effectCommands.push(
+        ...createAfterReceiveDamageSelfPropertyCommands({
+          scenario,
+          binding,
+          definition,
+          event,
+          catalog,
+          unresolved,
+          internalCooldownSuppressions,
+          triggerLimitSuppressions,
+          lastTriggerAtByPassiveKey,
+          triggerCountByPassiveKey,
         })
       );
     }
@@ -894,6 +964,127 @@ function createStaticSelfPropertyCommands({
       },
     }))
   );
+}
+
+function createAfterReceiveDamageSelfPropertyCommands({
+  scenario,
+  binding,
+  definition,
+  event,
+  catalog,
+  unresolved,
+  internalCooldownSuppressions,
+  triggerLimitSuppressions,
+  lastTriggerAtByPassiveKey,
+  triggerCountByPassiveKey,
+}) {
+  const trigger = definition.trigger ?? {};
+  const effect = definition.effect ?? null;
+  if (!effect || (effect.modifiers?.length ?? 0) === 0) {
+    unresolved.push({
+      actionId: null,
+      sourceActorId: binding.actorId,
+      kiboId: binding.kiboId,
+      skillId: Number(definition.skillId),
+      status: 'kibo-passive-runtime-unresolved',
+      reasons: ['kibo-passive-after-receive-damage-effect-unresolved'],
+      evidence: {
+        trigger,
+        event,
+      },
+      provenance: definition.provenance ?? [],
+    });
+    return [];
+  }
+  const passiveKey = `${binding.kiboId}:${definition.skillId}`;
+  const internalCooldownMs = Number(trigger.internalCooldownMs) || 0;
+  const lastTriggerAt = lastTriggerAtByPassiveKey.get(passiveKey) ?? -Infinity;
+  if (Number(event.timeMs) < lastTriggerAt + internalCooldownMs) {
+    internalCooldownSuppressions.push({
+      actionId: null,
+      sourceActorId: binding.actorId,
+      kiboId: binding.kiboId,
+      skillId: Number(definition.skillId),
+      reason: 'kibo-passive-after-receive-damage-internal-cooldown',
+      lastTriggerAt,
+      internalCooldownMs,
+      eventTimeMs: Number(event.timeMs),
+    });
+    return [];
+  }
+  const triggerCount = triggerCountByPassiveKey.get(passiveKey) ?? 0;
+  const maxTriggerCount =
+    trigger.maxTriggerCount == null ? null : Number(trigger.maxTriggerCount);
+  if (maxTriggerCount != null && triggerCount >= maxTriggerCount) {
+    triggerLimitSuppressions.push({
+      actionId: null,
+      sourceActorId: binding.actorId,
+      kiboId: binding.kiboId,
+      skillId: Number(definition.skillId),
+      reason: 'kibo-passive-after-receive-damage-trigger-limit',
+      triggerCount,
+      maxTriggerCount,
+    });
+    return [];
+  }
+  lastTriggerAtByPassiveKey.set(passiveKey, Number(event.timeMs));
+  triggerCountByPassiveKey.set(passiveKey, triggerCount + 1);
+  const targetKind = EFFECT_TARGET_KINDS.KIBO;
+  const targetId = binding.actorId;
+  return [
+    {
+      id: `kibo-passive|${definition.skillId}|damage-received|${binding.actorId}|${event.sourceEventIdentity}|${effect.sourceElementId}`,
+      sourceActionId: null,
+      sourceActionName: null,
+      sourceActorId: binding.actorId,
+      sourceActorName: binding.actorName,
+      sourceKiboId: binding.kiboId,
+      sourceSlotId: binding.slotId,
+      sourcePosition: binding.position,
+      effectId: `kibo-passive:${definition.skillId}:${effect.sourceElementId}`,
+      effectName: definition.name,
+      operation: EFFECT_OPERATIONS.APPLY,
+      targetKind,
+      targetId: String(targetId),
+      semanticTargetKind: targetKind,
+      timeMs: Number(event.timeMs),
+      durationMs: effect.durationMs ?? null,
+      stackMode: normalizeStackMode(effect.stackMode),
+      stackDelta: effect.stackDelta ?? 1,
+      maxStacks: effect.maxStacks ?? 1,
+      tags: [
+        'kibo-passive',
+        definition.mechanismFamily,
+        `kibo:${binding.kiboId}`,
+        `skill:${definition.skillId}`,
+      ],
+      sourceStatus: 'verified-passive-effect-generated',
+      confidence: definition.confidence ?? 'high',
+      trackingStatus: 'applied',
+      generatedVerified: true,
+      appliedToCalculators: true,
+      formulaSourceActorId: binding.actorId,
+      effectAdderActorId: binding.actorId,
+      modifiers: (effect.modifiers ?? []).map(modifier => ({
+        ...modifier,
+      })),
+      sourceIdentity: {
+        packageId: catalog?.kind ?? 'azpr-kibo-passive-mechanics-catalog',
+        catalogKind: catalog?.kind ?? 'azpr-kibo-passive-mechanics-catalog',
+        actionBindingIdentity: `equipped-kibo|${binding.actorId}|${binding.kiboId}`,
+        effectIdentity: `kibo-passive:${definition.skillId}:${effect.sourceElementId}`,
+        triggerEvent: 'damage-received',
+        receiveDamageEventIdentity: event.sourceEventIdentity ?? null,
+        kiboId: binding.kiboId,
+        passiveSkillId: Number(definition.skillId),
+        effectElementId: effect.sourceElementId ?? null,
+        effectPathId: effect.sourcePathId ?? null,
+        sourceSlotId: binding.slotId,
+        sourcePosition: binding.position,
+        provenance: definition.provenance ?? [],
+      },
+    },
+  ];
 }
 
 function resolveScenarioStartTargets({

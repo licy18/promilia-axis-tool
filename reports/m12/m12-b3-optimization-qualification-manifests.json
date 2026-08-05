@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "58295f6130b38e99",
+  "rosterHash": "42919ed82a559ebe",
   "records": [
     {
       "objectKind": "character",
@@ -5255,7 +5255,7 @@
           "code": "kibo-visual-acceptance-evidence-blocked",
           "category": "not-implemented",
           "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "bd17b6569d9554da",
+          "manifestHash": "a46f88bf15bdfefa",
           "manifestBlockers": [
             "acceptance-required-matrix-incomplete",
             "acceptance-blocking-ledger-not-empty",
@@ -5266,18 +5266,12 @@
           "code": "kibo-headless-maturity-not-ready",
           "category": "not-implemented",
           "message": "Kibo headless maturity has not reached machine optimization ready."
-        },
-        {
-          "code": "kibo-passive-static-evidence-gap",
-          "category": "evidence-insufficient",
-          "message": "passive-supported-damage-trigger-shape-not-unique",
-          "skillId": 520013
         }
       ],
       "evidence": {
         "kiboId": 500231,
         "actionCount": 3,
-        "passiveSkillId": 520013,
+        "passiveSkillId": null,
         "headlessRuntimeReady": false,
         "kiboDna": {
           "status": "not-applicable",
@@ -5285,7 +5279,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "9d31698786811100"
+      "manifestHash": "a31b1e80a7d5d625"
     },
     {
       "objectKind": "kibo",
@@ -31683,5 +31677,5 @@
     },
     "optimizationReadyTotal": 210
   },
-  "manifestsHash": "ad0c5dd003cbaf0b"
+  "manifestsHash": "dd1a6bc0febe016c"
 }

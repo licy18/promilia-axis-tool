@@ -510,6 +510,68 @@ describe('verified Kibo PetOwner damage passive', () => {
       }),
     ]);
   });
+
+  it('dispatches after-receive-damage property commands from kibo vital damage events', () => {
+    const definition = kiboPassiveMechanicsCatalog.definitions.find(
+      row => Number(row.skillId) === 520013
+    );
+    expect(definition).toMatchObject({
+      mechanismFamily: 'after-kibo-receive-damage-self-property-effect',
+    });
+    const catalog = {
+      ...kiboPassiveMechanicsCatalog,
+      definitions: [{ ...definition }],
+      unresolved: [],
+    };
+    const scenario = {
+      actors: [
+        {
+          id: 'actor-500231',
+          name: 'owner',
+          loadout: { kiboId: 500231 },
+        },
+      ],
+      team: {
+        slots: [
+          {
+            id: 'team-slot-1',
+            actorId: 'actor-500231',
+            position: 0,
+          },
+        ],
+      },
+    };
+    const generation = createVerifiedKiboPassiveGeneration({
+      scenario,
+      catalog,
+      kiboReceiveDamageEvents: [
+        {
+          kiboId: 500231,
+          actorId: 'actor-500231',
+          timeMs: 1000,
+          sourceEventIdentity: 'test:receive:1',
+          applied: true,
+        },
+      ],
+    });
+
+    expect(generation.effectCommands).toEqual([
+      expect.objectContaining({
+        sourceKiboId: 500231,
+        sourceIdentity: expect.objectContaining({
+          triggerEvent: 'damage-received',
+          passiveSkillId: 520013,
+          receiveDamageEventIdentity: 'test:receive:1',
+        }),
+        timeMs: 1000,
+        modifiers: [
+          expect.objectContaining({ attributeId: 1, valueRaw: 3000 }),
+        ],
+      }),
+    ]);
+    expect(generation.unresolved).toEqual([]);
+    expect(generation.internalCooldownSuppressions).toEqual([]);
+  });
 });
 
 function createScenario({

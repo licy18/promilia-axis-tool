@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "58295f6130b38e99",
-  "manifestsHash": "ad0c5dd003cbaf0b",
-  "gapLedgerHash": "9d70dc212eb0d46e",
-  "bindingMatrixHash": "675728576c4a57ce",
-  "sourceSnapshotHash": "14801b58c3c7ef4d",
+  "rosterHash": "42919ed82a559ebe",
+  "manifestsHash": "dd1a6bc0febe016c",
+  "gapLedgerHash": "88e053986bef2cc9",
+  "bindingMatrixHash": "455c3271a01b6517",
+  "sourceSnapshotHash": "4bf0f73b24d241d6",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -1727,10 +1727,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-evidence-blocked",
-        "kibo-headless-maturity-not-ready",
-        "kibo-passive-static-evidence-gap"
+        "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "9d31698786811100"
+      "manifestHash": "a31b1e80a7d5d625"
     },
     {
       "objectKind": "kibo",
@@ -2808,7 +2807,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "58295f6130b38e99",
+    "rosterHash": "42919ed82a559ebe",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24716,7 +24715,7 @@
       "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "675728576c4a57ce"
+    "bindingMatrixHash": "455c3271a01b6517"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44230,7 +44229,7 @@
       "set-skill": 11
     },
     "optimizationReadyTotal": 210,
-    "gameplayBlockingGapCount": 125,
+    "gameplayBlockingGapCount": 124,
     "bindingQualifiedEdgeCount": 11,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44313,5 +44312,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "ef9afe6f0cb7a801"
+  "catalogHash": "d33b291ee61c1510"
 }
