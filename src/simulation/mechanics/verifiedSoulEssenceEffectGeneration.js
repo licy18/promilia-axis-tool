@@ -14,11 +14,80 @@ import { resolveControlledActorAt } from '../runtime/controlledActorTimeline';
 export const VERIFIED_SOULESSENCE_EFFECT_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedSoulEssenceEffectGeneration';
 
+export function deriveSoulEventSnapshotFromCombatRuntime(combatRuntime) {
+  const events = [];
+  for (const event of combatRuntime?.damageEvents ?? []) {
+    if (event?.type !== 'VERIFIED_COMBAT_HIT') continue;
+    const payload = event?.payload ?? {};
+    const critical =
+      payload?.formulaBreakdown?.randomBranch?.critical === true;
+    const afterHp = Number(
+      payload?.stateTransaction?.after?.enemyHp ??
+        payload?.stateTransaction?.after?.hp ??
+        0
+    );
+    const beforeHp = Number(
+      payload?.stateTransaction?.before?.enemyHp ??
+        payload?.stateTransaction?.before?.hp ??
+        0
+    );
+    const lethal = beforeHp > 0 && afterHp <= 0;
+    if (!critical && !lethal) continue;
+    const hitIndex = Number(payload?.hitIndex ?? 0);
+    const eventContext = {
+      ...(payload?.damageEventContext ?? {}),
+      actionId: event.actionId,
+      actorId: event.actorId,
+      targetId: event.targetId,
+      hitIndex,
+      critical,
+      lethal,
+    };
+    const sourceSequencePath =
+      payload?.damageEventContext?.sourceSequencePath ?? [hitIndex];
+    const base = {
+      actionId: event.actionId,
+      actorId: event.actorId,
+      targetId: event.targetId,
+      timeMs: Number(event.timeMs),
+      sourceSequencePath,
+      applied: true,
+    };
+    if (critical) {
+      events.push({
+        ...base,
+        kind: 'hit-before-critical-damage',
+        eventContext: {
+          ...eventContext,
+          eventIdentity: `soul-event:crit:${event.hitKey}`,
+        },
+      });
+    }
+    if (lethal) {
+      events.push({
+        ...base,
+        kind: 'kill-event',
+        eventContext: {
+          ...eventContext,
+          eventIdentity: `soul-event:kill:${event.hitKey}`,
+        },
+      });
+    }
+  }
+  return {
+    sourceKind: 'azpr-soul-event-snapshot',
+    eventCount: events.length,
+    events,
+  };
+}
+
 const SOULESSENCE_TRIGGER_OPERATOR_REGISTRY = Object.freeze({
   'action-start': resolveActionTriggerOccurrence,
   'action-end': resolveActionTriggerOccurrence,
   'hit-before-damage': resolveDamageTriggerOccurrences,
   'hit-after-damage': resolveDamageTriggerOccurrences,
+  'hit-before-critical-damage': resolveSoulEventTriggerOccurrences,
+  'kill-event': resolveSoulEventTriggerOccurrences,
   'element-before-acquire': resolveGetElementTriggerOccurrences,
   'element-after-acquire': resolveGetElementTriggerOccurrences,
   'switch-enter': resolveNonDamageTriggerOccurrences,
@@ -33,6 +102,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
   tuningGeneration = null,
   damageEventGeneration = null,
   nonDamageEventGeneration = null,
+  soulEventSnapshot = null,
   controlledActorTimeline = null,
   catalog = soulEssenceEffectCatalog,
 } = {}) {
@@ -179,6 +249,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
             tuningGeneration,
             damageEventGeneration,
             nonDamageEventGeneration,
+            soulEventSnapshot,
             controlledActorTimeline,
             frameAnchor,
           });
@@ -561,6 +632,25 @@ function resolveDamageTriggerOccurrences({
     .map(event => ({
       hit: event.hit ?? null,
       tuningEvent: event.tuningEvent ?? null,
+      timeMs: Number(event.timeMs),
+      triggerSequencePath: event.sourceSequencePath,
+      eventContext: event.eventContext,
+    }));
+}
+
+function resolveSoulEventTriggerOccurrences({
+  action,
+  soulEventSnapshot,
+  frameAnchor,
+}) {
+  return (soulEventSnapshot?.events ?? [])
+    .filter(event => String(event.actionId) === String(action.id))
+    .filter(event => event.kind === frameAnchor)
+    .filter(event => event.applied === true)
+    .map(event => ({
+      hit: event.hit ?? null,
+      tuningEvent: null,
+      soulEvent: event,
       timeMs: Number(event.timeMs),
       triggerSequencePath: event.sourceSequencePath,
       eventContext: event.eventContext,

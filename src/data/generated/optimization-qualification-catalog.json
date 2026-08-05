@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "fdd56dcb62763ef6",
-  "manifestsHash": "9807366d4fcb6a99",
-  "gapLedgerHash": "d762687d197249f4",
-  "bindingMatrixHash": "f909d2d066507049",
-  "sourceSnapshotHash": "4eb4647233a994b0",
+  "rosterHash": "1f9c06743f46f558",
+  "manifestsHash": "2c5cd101e79ae7a0",
+  "gapLedgerHash": "9380b3a997a1b251",
+  "bindingMatrixHash": "2b1d1dcc746ba7fb",
+  "sourceSnapshotHash": "d7f77da35e3a80b0",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -2364,7 +2364,7 @@
         "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "a6ed362db5ee400e"
+      "manifestHash": "d560390062196257"
     },
     {
       "objectKind": "soul-essence",
@@ -2579,14 +2579,12 @@
       "objectKind": "soul-essence",
       "objectId": "10063",
       "displayName": "屋嘟娃娃",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "d80aaa0e552b6232"
+      "manifestHash": "8295b44ec2cc1c17"
     },
     {
       "objectKind": "soul-essence",
@@ -3021,7 +3019,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "fdd56dcb62763ef6",
+    "rosterHash": "1f9c06743f46f558",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24929,7 +24927,7 @@
       "setSkillThresholdQualifiedCount": 0,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "f909d2d066507049"
+    "bindingMatrixHash": "2b1d1dcc746ba7fb"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -39133,7 +39131,7 @@
             ],
             "status": "source-indexed-runtime-unapplied",
             "mechanismFamily": "equipped-actor-skill-tag-property-before-skill",
-            "catalogDefinitionHash": "9a9243ef9e0f69b6",
+            "catalogDefinitionHash": "86edcac18902ae10",
             "sourceIdentity": "NewTable/soulessence.rows[id=10011].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10011]"
@@ -40471,9 +40469,9 @@
                 "sourceIdentity": "NewTable/skill_level.rows[id=2949,skillId=1900880,level=4]"
               }
             ],
-            "status": "source-indexed-runtime-unapplied",
-            "mechanismFamily": "source-indexed-composite-effect",
-            "catalogDefinitionHash": "4cf1ffcc2441f263",
+            "status": "runtime-applied",
+            "mechanismFamily": "equipped-actor-immediate-resource-heal-effect",
+            "catalogDefinitionHash": "9a2223639e817317",
             "sourceIdentity": "NewTable/soulessence.rows[id=10063].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10063]"
@@ -43027,8 +43025,8 @@
       ],
       "effectStatus": {
         "status": "partially-runtime-applied",
-        "runtimeAppliedCount": 59,
-        "unresolvedCount": 3
+        "runtimeAppliedCount": 60,
+        "unresolvedCount": 2
       }
     },
     "equipment": {
@@ -44357,8 +44355,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 171,
-      "runtime-integrated": 94
+      "extracted": 170,
+      "runtime-integrated": 95
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -44368,7 +44366,7 @@
       "set-skill": 0
     },
     "optimizationReadyTotal": 0,
-    "gameplayBlockingGapCount": 341,
+    "gameplayBlockingGapCount": 339,
     "bindingQualifiedEdgeCount": 0,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44453,5 +44451,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "c05bd434fe3b38d1"
+  "catalogHash": "414ca805c524a316"
 }

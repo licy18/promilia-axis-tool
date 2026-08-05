@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrSoulEssenceKillCriticalEventRuntimeEvidence",
+  "reviewedBinary": {
+    "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+    "bytes": 222485544,
+    "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+  },
+  "reviewedIl2CppDump": {
+    "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+    "bytes": 97428254,
+    "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+  },
+  "dumpBindings": {
+    "methods": [
+      {
+        "identity": "FormulaUtility.GetOutputDamage",
+        "rva": "0x187F360",
+        "declaration": "private static FormulaUtility.OutputDamageData GetOutputDamage(IElement element, EntityHandle attackerHandle, EntityHandle executorHandle, EntityHandle sourceHandle, int skillGroupId, int criticalRandom) { }"
+      },
+      {
+        "identity": "DamageService.TriggerKillEvent",
+        "rva": "0x306E6E0",
+        "declaration": "public void TriggerKillEvent(EntityHandle aliveEntityHandle) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElementHandle",
+        "rva": "0x18B5D50",
+        "declaration": "public static void InvokeTriggerElementHandle(EntityHandle source, EntityHandle self, EntityHandle target, EElementTriggerEventType type, TElementParams element) { }"
+      }
+    ],
+    "enums": [
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.EElementTriggerEventType.BeforeCriticalDamage",
+        "declaration": "public const EElementTriggerEventType BeforeCriticalDamage = 25;",
+        "description": "[InspectorName(\"造成暴击伤害前\")]"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.EElementTriggerEventType.KillEvent",
+        "declaration": "public const EElementTriggerEventType KillEvent = 32;",
+        "description": "[InspectorName(\"击杀事件\")]"
+      }
+    ]
+  },
+  "binaryRanges": [
+    {
+      "identity": "before-critical-damage-dispatch",
+      "range": "0x1880179-0x188019E",
+      "bytes": 37,
+      "sha256": "1c11c0f6b12f10ac49872219a7c5a390760a8bdab8ec8ed44b1b11fc38fb3f6f"
+    },
+    {
+      "identity": "kill-event-dispatch",
+      "range": "0x306EC30-0x306EC4E",
+      "bytes": 30,
+      "sha256": "cd239b10beabc295df2849a3e99b33e3254ca389358a221d9103fe68a74ce2c9"
+    }
+  ],
+  "semantics": {
+    "beforeCriticalDamage": {
+      "eventId": 25,
+      "frameAnchor": "hit-before-critical-damage",
+      "consumer": "FormulaUtility.GetOutputDamage",
+      "rva": "0x187F360",
+      "dispatchCallRva": "0x1880199",
+      "triggerInvoker": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElementHandle",
+      "triggerInvokerRva": "0x18B5D50",
+      "reason": "GetOutputDamage sets EElementTriggerEventType.BeforeCriticalDamage (25) and invokes the trigger handle before the damage output record is finalized."
+    },
+    "killEvent": {
+      "eventId": 32,
+      "frameAnchor": "kill-event",
+      "consumer": "DamageService.TriggerKillEvent",
+      "rva": "0x306E6E0",
+      "dispatchCallRva": "0x306EC49",
+      "triggerInvoker": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElementHandle",
+      "triggerInvokerRva": "0x18B5D50",
+      "reason": "TriggerKillEvent sets EElementTriggerEventType.KillEvent (32) and invokes the trigger handle when an entity dies."
+    },
+    "emptyConditionEvents": [25, 32]
+  },
+  "conclusion": {
+    "status": "applied",
+    "eventContract": "canonical-kill-critical-trigger-dispatch",
+    "sourceIdentity": "GameAssembly.dll#FormulaUtility.GetOutputDamage@0x187F360/DamageService.TriggerKillEvent@0x306E6E0/SkillUtility.InvokeTriggerElementHandle@0x18B5D50"
+  }
+}

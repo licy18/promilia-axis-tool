@@ -140,7 +140,7 @@ describe('periodic persistent PropertyElement root native evidence', () => {
     expect(
       appliedSourceAudit.loadoutPropertyTags.summary
         .periodicPersistentSourceCount
-    ).toBe(3);
+    ).toBe(4);
     const records = appliedSourceAudit.loadoutPropertyTags.records.filter(
       record =>
         record.nativeLifecycleMode ===
@@ -156,6 +156,14 @@ describe('periodic persistent PropertyElement root native evidence', () => {
         issueCodes: record.issueCodes,
       }))
     ).toEqual([
+      {
+        ownerId: 10078,
+        effectElementId: 19004601,
+        intervalMs: 1000,
+        targetType: 0,
+        status: 'applied-source-periodic-persistent-property-ready',
+        issueCodes: [],
+      },
       {
         ownerId: 10084,
         effectElementId: 19006001,

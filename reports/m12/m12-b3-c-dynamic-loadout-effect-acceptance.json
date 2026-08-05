@@ -1,7 +1,7 @@
 {
   "schemaVersion": 25,
-    "phase": "M12-B3-E8",
-    "status": "b3-e8-implemented",
+    "phase": "M12-B3-E9",
+    "status": "b3-e9-implemented",
   "baseCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
@@ -20,7 +20,7 @@
   "acceptedC14Commit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "acceptedC15Commit": "aafb6aa6c645b7b7490fdba0f71b8941da311f6e",
   "implementationCommit": "git-self",
-  "nextStage": "b3-e8-implemented-awaiting-product-acceptance",
+  "nextStage": "b3-e9-implemented-awaiting-product-acceptance",
   "acceptedPredecessor": {
     "phase": "M12-B3-C14",
     "productionMechanicsCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
@@ -173,6 +173,18 @@
       "il2CppDumpBytes": 97428254,
       "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
       "rangeCount": 3
+    },
+    "killCriticalEventRuntimeEvidence": {
+      "path": "scripts/optimization-qualification/evidence/soulessence-kill-critical-event-runtime-evidence.json",
+      "bytes": 3714,
+      "sha256": "cd482fcba7d9ff16fc202318744d4098a4dfeedebe1cbde550f7081eac4503f6",
+      "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+      "binaryBytes": 222485544,
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "il2CppDumpPath": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+      "il2CppDumpBytes": 97428254,
+      "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+      "rangeCount": 2
     },
     "landedHitRecoveryRuntimeEvidence": {
       "path": "scripts/optimization-qualification/evidence/landed-hit-recovery-runtime-evidence.json",
@@ -1024,15 +1036,15 @@
     "gameplayLogicChanged": false
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 59,
-    "runtimeUnappliedSoulEssenceCount": 3,
+    "runtimeAppliedSoulEssenceCount": 60,
+    "runtimeUnappliedSoulEssenceCount": 2,
     "runtimeAppliedSetSkillCount": 11,
     "runtimeUnappliedSetSkillCount": 1,
     "newlyAppliedSoulEssenceIds": [
-      10078
+      10063
     ],
     "newlyAppliedSetSkillIds": [],
-    "preservedRuntimeAppliedSoulEssenceCount": 58,
+    "preservedRuntimeAppliedSoulEssenceCount": 59,
     "preservedRuntimeAppliedSetSkillCount": 11,
     "remainingBlockedFourPieceSetSkillIds": [
       "set-skill:3:4"
@@ -1046,9 +1058,9 @@
       "equipment": 137,
       "setSkills": 12
     },
-  "blockingUniqueGapCount": 341,
+  "blockingUniqueGapCount": 339,
   "blockingByCategory": {
-    "not-implemented": 324,
+    "not-implemented": 322,
     "evidence-insufficient": 17
   },
     "formalAdmissions": {
@@ -1060,17 +1072,17 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "4eb4647233a994b0",
-    "rosterHash": "fdd56dcb62763ef6",
-    "manifestsHash": "9807366d4fcb6a99",
-    "ledgerHash": "d762687d197249f4",
-    "bindingMatrixHash": "f909d2d066507049",
-    "qualificationCatalogHash": "c05bd434fe3b38d1",
-    "dynamicLoadoutEffectCensusHash": "48c243527b8ddb68",
-    "soulEssenceEffectCatalogHash": "a0afd3a5d26c69a4",
-    "soulEssenceSourceSnapshotHash": "5ec6cc237244f3ed",
+    "sourceSnapshotHash": "d7f77da35e3a80b0",
+    "rosterHash": "1f9c06743f46f558",
+    "manifestsHash": "2c5cd101e79ae7a0",
+    "ledgerHash": "9380b3a997a1b251",
+    "bindingMatrixHash": "2b1d1dcc746ba7fb",
+    "qualificationCatalogHash": "414ca805c524a316",
+    "dynamicLoadoutEffectCensusHash": "efbd43f5ee84b5ad",
+    "soulEssenceEffectCatalogHash": "75ddd27b5a724022",
+    "soulEssenceSourceSnapshotHash": "c45c2e01a48684d7",
     "battlePropertyTagContractHash": "fc3806b1efc60e56",
-    "soulEssenceTriggerContractHash": "7b50576425fff76e",
+    "soulEssenceTriggerContractHash": "a91689fc08ebd4c2",
     "verifiedMechanicsPackageHash": "20498c0f436fdcc3f0e86ebb6308ea75586d4b2379127d23ec4d971e81bb88e9",
     "verifiedMechanicsFileSha256": "b84aaca9cd3fe1384df62cbdde5db531a0339e1c6a988f3fb6c9088d7953a971",
     "machineAxisCanonicalHashes": {

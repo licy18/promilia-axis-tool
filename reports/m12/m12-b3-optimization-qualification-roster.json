@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "phase": "M12-B3-E8",
+  "phase": "M12-B3-E9",
   "sourceSnapshot": {
     "files": {
       "characters": {
@@ -939,6 +939,111 @@
             "status": "applied",
             "eventContract": "canonical-battle-property-tag-matching",
             "sourceIdentity": "GameAssembly.dll#BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0/BattlePropertyData.GetPropertyValue@0x12BE540|dump.cs#EBattlePropertyTag.None=0/Skill2=302/UltraSkill=303"
+          },
+          "verifiedBinary": {
+            "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+            "bytes": 222485544,
+            "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+          },
+          "verifiedIl2CppDump": {
+            "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+            "bytes": 97428254,
+            "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+          }
+        }
+      },
+      "soulEffectKillCriticalEventRuntimeEvidence": {
+        "path": "scripts/optimization-qualification/evidence/soulessence-kill-critical-event-runtime-evidence.json",
+        "sha256": "cd482fcba7d9ff16fc202318744d4098a4dfeedebe1cbde550f7081eac4503f6",
+        "bytes": 3714,
+        "value": {
+          "schemaVersion": 1,
+          "contractName": "AzPrSoulEssenceKillCriticalEventRuntimeEvidence",
+          "reviewedBinary": {
+            "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+            "bytes": 222485544,
+            "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+          },
+          "reviewedIl2CppDump": {
+            "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+            "bytes": 97428254,
+            "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+          },
+          "dumpBindings": {
+            "methods": [
+              {
+                "identity": "FormulaUtility.GetOutputDamage",
+                "rva": "0x187F360",
+                "declaration": "private static FormulaUtility.OutputDamageData GetOutputDamage(IElement element, EntityHandle attackerHandle, EntityHandle executorHandle, EntityHandle sourceHandle, int skillGroupId, int criticalRandom) { }"
+              },
+              {
+                "identity": "DamageService.TriggerKillEvent",
+                "rva": "0x306E6E0",
+                "declaration": "public void TriggerKillEvent(EntityHandle aliveEntityHandle) { }"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElementHandle",
+                "rva": "0x18B5D50",
+                "declaration": "public static void InvokeTriggerElementHandle(EntityHandle source, EntityHandle self, EntityHandle target, EElementTriggerEventType type, TElementParams element) { }"
+              }
+            ],
+            "enums": [
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.EElementTriggerEventType.BeforeCriticalDamage",
+                "declaration": "public const EElementTriggerEventType BeforeCriticalDamage = 25;",
+                "description": "[InspectorName(\"造成暴击伤害前\")]"
+              },
+              {
+                "identity": "Lens.Gameplay.Modules.BigWorld.EElementTriggerEventType.KillEvent",
+                "declaration": "public const EElementTriggerEventType KillEvent = 32;",
+                "description": "[InspectorName(\"击杀事件\")]"
+              }
+            ]
+          },
+          "binaryRanges": [
+            {
+              "identity": "before-critical-damage-dispatch",
+              "range": "0x1880179-0x188019E",
+              "bytes": 37,
+              "sha256": "1c11c0f6b12f10ac49872219a7c5a390760a8bdab8ec8ed44b1b11fc38fb3f6f"
+            },
+            {
+              "identity": "kill-event-dispatch",
+              "range": "0x306EC30-0x306EC4E",
+              "bytes": 30,
+              "sha256": "cd239b10beabc295df2849a3e99b33e3254ca389358a221d9103fe68a74ce2c9"
+            }
+          ],
+          "semantics": {
+            "beforeCriticalDamage": {
+              "eventId": 25,
+              "frameAnchor": "hit-before-critical-damage",
+              "consumer": "FormulaUtility.GetOutputDamage",
+              "rva": "0x187F360",
+              "dispatchCallRva": "0x1880199",
+              "triggerInvoker": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElementHandle",
+              "triggerInvokerRva": "0x18B5D50",
+              "reason": "GetOutputDamage sets EElementTriggerEventType.BeforeCriticalDamage (25) and invokes the trigger handle before the damage output record is finalized."
+            },
+            "killEvent": {
+              "eventId": 32,
+              "frameAnchor": "kill-event",
+              "consumer": "DamageService.TriggerKillEvent",
+              "rva": "0x306E6E0",
+              "dispatchCallRva": "0x306EC49",
+              "triggerInvoker": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElementHandle",
+              "triggerInvokerRva": "0x18B5D50",
+              "reason": "TriggerKillEvent sets EElementTriggerEventType.KillEvent (32) and invokes the trigger handle when an entity dies."
+            },
+            "emptyConditionEvents": [
+              25,
+              32
+            ]
+          },
+          "conclusion": {
+            "status": "applied",
+            "eventContract": "canonical-kill-critical-trigger-dispatch",
+            "sourceIdentity": "GameAssembly.dll#FormulaUtility.GetOutputDamage@0x187F360/DamageService.TriggerKillEvent@0x306E6E0/SkillUtility.InvokeTriggerElementHandle@0x18B5D50"
           },
           "verifiedBinary": {
             "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
@@ -3848,7 +3953,7 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "4eb4647233a994b0"
+    "sourceSnapshotHash": "d7f77da35e3a80b0"
   },
   "filterContract": {
     "characterElements": [
@@ -6504,18 +6609,19 @@
             "elementId": 19005302,
             "pathId": 706811026081145600,
             "eventId": 25,
-            "event": null,
-            "frameAnchor": null,
+            "event": "BeforeCriticalDamage",
+            "frameAnchor": "hit-before-critical-damage",
             "intervalMs": 0,
             "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=706811026081145600;elementId=19005302.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
             "condition": {
-              "kind": "condition-group",
+              "kind": "always",
               "logic": "and",
               "logicValue": 0,
+              "logicName": "AND",
               "conditions": [],
               "actionKinds": [],
-              "status": "static-evidence-gap",
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=706811026081145600;elementId=19005302.triggerConditionType|triggerConditionList"
+              "status": "applied",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=706811026081145600;elementId=19005302.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#FormulaUtility.GetOutputDamage@0x187F360/DamageService.TriggerKillEvent@0x306E6E0/SkillUtility.InvokeTriggerElementHandle@0x18B5D50"
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=706811026081145600;elementId=19005302.triggerTargetType",
@@ -6674,7 +6780,6 @@
           "activationPrerequisiteElementIds": []
         },
         "runtimeGaps": [
-          "effect-active-trigger-not-unique",
           "effect-wrapper-lifecycle-not-unique"
         ],
         "sourceIdentity": "NewTable/soulessence.rows[id=10011].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900530.asset/MonoBehaviour/skill_control_1900530__7646815027927349175.json|battle-element-assets.jsonl#path_id=-569579431889589300;elementId=19005301|battle-element-assets.jsonl#path_id=-1219091418453908700;elementId=19005303"
@@ -11526,7 +11631,7 @@
       "maximumRank": 6,
       "staticProfileApplied": true,
       "effectSkillId": 1900880,
-      "effectStatus": "source-indexed-runtime-unapplied",
+      "effectStatus": "runtime-applied",
       "sourceIdentity": "NewTable/soulessence.rows[id=10063]",
       "sourceEffectStatus": "effect-skill-dynamic-unapplied",
       "effectMechanics": {
@@ -11537,8 +11642,8 @@
           "skillLogicType": 6,
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900880]"
         },
-        "runtimeStatus": "source-indexed-runtime-unapplied",
-        "mechanismFamily": "source-indexed-composite-effect",
+        "runtimeStatus": "runtime-applied",
+        "mechanismFamily": "equipped-actor-immediate-resource-heal-effect",
         "activationPrerequisites": [],
         "activationConditions": [],
         "trigger": {
@@ -11548,18 +11653,19 @@
           "elementId": 19008801,
           "pathId": 8121214350672122000,
           "eventId": 32,
-          "event": null,
-          "frameAnchor": null,
+          "event": "KillEvent",
+          "frameAnchor": "kill-event",
           "intervalMs": 0,
           "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
           "condition": {
-            "kind": "condition-group",
+            "kind": "always",
             "logic": "and",
             "logicValue": 0,
+            "logicName": "AND",
             "conditions": [],
             "actionKinds": [],
-            "status": "static-evidence-gap",
-            "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerConditionType|triggerConditionList"
+            "status": "applied",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#FormulaUtility.GetOutputDamage@0x187F360/DamageService.TriggerKillEvent@0x306E6E0/SkillUtility.InvokeTriggerElementHandle@0x18B5D50"
           },
           "triggerTargetType": 0,
           "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerTargetType",
@@ -11598,18 +11704,19 @@
             "elementId": 19008801,
             "pathId": 8121214350672122000,
             "eventId": 32,
-            "event": null,
-            "frameAnchor": null,
+            "event": "KillEvent",
+            "frameAnchor": "kill-event",
             "intervalMs": 0,
             "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
             "condition": {
-              "kind": "condition-group",
+              "kind": "always",
               "logic": "and",
               "logicValue": 0,
+              "logicName": "AND",
               "conditions": [],
               "actionKinds": [],
-              "status": "static-evidence-gap",
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerConditionType|triggerConditionList"
+              "status": "applied",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#FormulaUtility.GetOutputDamage@0x187F360/DamageService.TriggerKillEvent@0x306E6E0/SkillUtility.InvokeTriggerElementHandle@0x18B5D50"
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerTargetType",
@@ -11719,9 +11826,7 @@
           "damageElementIds": [],
           "activationPrerequisiteElementIds": []
         },
-        "runtimeGaps": [
-          "effect-active-trigger-not-unique"
-        ],
+        "runtimeGaps": [],
         "sourceIdentity": "NewTable/soulessence.rows[id=10063].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900880.asset/MonoBehaviour/skill_control_1900880__3748949261925534020.json|battle-element-assets.jsonl#path_id=654594980681767700;elementId=19008802"
       }
     },
@@ -28952,5 +29057,5 @@
       ]
     }
   },
-  "rosterHash": "fdd56dcb62763ef6"
+  "rosterHash": "1f9c06743f46f558"
 }

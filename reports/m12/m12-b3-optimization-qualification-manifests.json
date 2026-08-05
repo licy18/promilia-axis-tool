@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "fdd56dcb62763ef6",
+  "rosterHash": "1f9c06743f46f558",
   "records": [
     {
       "objectKind": "character",
@@ -11305,7 +11305,6 @@
           "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
           "skillId": 1900530,
           "reasons": [
-            "effect-active-trigger-not-unique",
             "effect-wrapper-lifecycle-not-unique"
           ]
         },
@@ -11503,18 +11502,19 @@
               "elementId": 19005302,
               "pathId": 706811026081145600,
               "eventId": 25,
-              "event": null,
-              "frameAnchor": null,
+              "event": "BeforeCriticalDamage",
+              "frameAnchor": "hit-before-critical-damage",
               "intervalMs": 0,
               "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=706811026081145600;elementId=19005302.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
               "condition": {
-                "kind": "condition-group",
+                "kind": "always",
                 "logic": "and",
                 "logicValue": 0,
+                "logicName": "AND",
                 "conditions": [],
                 "actionKinds": [],
-                "status": "static-evidence-gap",
-                "sourceIdentity": "battle-element-assets.jsonl#path_id=706811026081145600;elementId=19005302.triggerConditionType|triggerConditionList"
+                "status": "applied",
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=706811026081145600;elementId=19005302.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#FormulaUtility.GetOutputDamage@0x187F360/DamageService.TriggerKillEvent@0x306E6E0/SkillUtility.InvokeTriggerElementHandle@0x18B5D50"
               },
               "triggerTargetType": 0,
               "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=706811026081145600;elementId=19005302.triggerTargetType",
@@ -11673,13 +11673,12 @@
             "activationPrerequisiteElementIds": []
           },
           "runtimeGaps": [
-            "effect-active-trigger-not-unique",
             "effect-wrapper-lifecycle-not-unique"
           ],
           "sourceIdentity": "NewTable/soulessence.rows[id=10011].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900530.asset/MonoBehaviour/skill_control_1900530__7646815027927349175.json|battle-element-assets.jsonl#path_id=-569579431889589300;elementId=19005301|battle-element-assets.jsonl#path_id=-1219091418453908700;elementId=19005303"
         }
       },
-      "manifestHash": "a6ed362db5ee400e"
+      "manifestHash": "d560390062196257"
     },
     {
       "objectKind": "soul-essence",
@@ -16886,23 +16885,9 @@
         "generated/soulessences.json#items[id=10063]",
         "NewTable/soulessence.rows[id=10063]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "soulessence-effect-skill-dynamic-unapplied",
-          "category": "not-implemented",
-          "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
-          "skillId": 1900880,
-          "reasons": [
-            "effect-active-trigger-not-unique"
-          ]
-        },
-        {
-          "code": "strict-soulessence-cultivation-runtime-partial",
-          "category": "not-implemented",
-          "message": "Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied."
-        },
         {
           "code": "soulessence-visual-acceptance-not-published",
           "category": "not-implemented",
@@ -16919,7 +16904,7 @@
         "maximumRank": 6,
         "staticProfileApplied": true,
         "effectSkillId": 1900880,
-        "effectStatus": "source-indexed-runtime-unapplied",
+        "effectStatus": "runtime-applied",
         "sourceIdentity": "NewTable/soulessence.rows[id=10063]",
         "sourceEffectStatus": "effect-skill-dynamic-unapplied",
         "effectMechanics": {
@@ -16930,8 +16915,8 @@
             "skillLogicType": 6,
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900880]"
           },
-          "runtimeStatus": "source-indexed-runtime-unapplied",
-          "mechanismFamily": "source-indexed-composite-effect",
+          "runtimeStatus": "runtime-applied",
+          "mechanismFamily": "equipped-actor-immediate-resource-heal-effect",
           "activationPrerequisites": [],
           "activationConditions": [],
           "trigger": {
@@ -16941,18 +16926,19 @@
             "elementId": 19008801,
             "pathId": 8121214350672122000,
             "eventId": 32,
-            "event": null,
-            "frameAnchor": null,
+            "event": "KillEvent",
+            "frameAnchor": "kill-event",
             "intervalMs": 0,
             "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
             "condition": {
-              "kind": "condition-group",
+              "kind": "always",
               "logic": "and",
               "logicValue": 0,
+              "logicName": "AND",
               "conditions": [],
               "actionKinds": [],
-              "status": "static-evidence-gap",
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerConditionType|triggerConditionList"
+              "status": "applied",
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#FormulaUtility.GetOutputDamage@0x187F360/DamageService.TriggerKillEvent@0x306E6E0/SkillUtility.InvokeTriggerElementHandle@0x18B5D50"
             },
             "triggerTargetType": 0,
             "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerTargetType",
@@ -16991,18 +16977,19 @@
               "elementId": 19008801,
               "pathId": 8121214350672122000,
               "eventId": 32,
-              "event": null,
-              "frameAnchor": null,
+              "event": "KillEvent",
+              "frameAnchor": "kill-event",
               "intervalMs": 0,
               "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
               "condition": {
-                "kind": "condition-group",
+                "kind": "always",
                 "logic": "and",
                 "logicValue": 0,
+                "logicName": "AND",
                 "conditions": [],
                 "actionKinds": [],
-                "status": "static-evidence-gap",
-                "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerConditionType|triggerConditionList"
+                "status": "applied",
+                "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#FormulaUtility.GetOutputDamage@0x187F360/DamageService.TriggerKillEvent@0x306E6E0/SkillUtility.InvokeTriggerElementHandle@0x18B5D50"
               },
               "triggerTargetType": 0,
               "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerTargetType",
@@ -17112,13 +17099,11 @@
             "damageElementIds": [],
             "activationPrerequisiteElementIds": []
           },
-          "runtimeGaps": [
-            "effect-active-trigger-not-unique"
-          ],
+          "runtimeGaps": [],
           "sourceIdentity": "NewTable/soulessence.rows[id=10063].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900880.asset/MonoBehaviour/skill_control_1900880__3748949261925534020.json|battle-element-assets.jsonl#path_id=654594980681767700;elementId=19008802"
         }
       },
-      "manifestHash": "d80aaa0e552b6232"
+      "manifestHash": "8295b44ec2cc1c17"
     },
     {
       "objectKind": "soul-essence",
@@ -32345,8 +32330,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 171,
-      "runtime-integrated": 94
+      "extracted": 170,
+      "runtime-integrated": 95
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -32357,5 +32342,5 @@
     },
     "optimizationReadyTotal": 0
   },
-  "manifestsHash": "9807366d4fcb6a99"
+  "manifestsHash": "2c5cd101e79ae7a0"
 }

@@ -28,6 +28,8 @@ const SUPPORTED_FRAME_ANCHORS = new Set([
   'action-end',
   'hit-before-damage',
   'hit-after-damage',
+  'hit-before-critical-damage',
+  'kill-event',
   'element-before-acquire',
   'element-after-acquire',
   'switch-enter',
@@ -2147,6 +2149,10 @@ function compileTriggerCondition({
     triggerContract.nonDamageRuntime?.emptyConditionEvents ?? []
   ).includes(triggerEventId)
     ? triggerContract.nonDamageRuntime?.sourceIdentity
+    : (triggerContract.soulEventRuntime?.emptyConditionEvents ?? []).includes(
+        triggerEventId
+      )
+      ? triggerContract.soulEventRuntime?.sourceIdentity
     : emptyConditionEvidence?.status === 'applied' &&
         Number(emptyConditionEvidence?.eventId) === triggerEventId
       ? emptyConditionEvidence.sourceIdentity

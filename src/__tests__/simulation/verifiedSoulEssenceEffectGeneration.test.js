@@ -500,8 +500,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 59,
-      unresolvedCount: 3,
+      runtimeAppliedCount: 60,
+      unresolvedCount: 2,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -1356,6 +1356,135 @@ describe('verified soul essence effect generation', () => {
     });
     expect(generation.suppressions).toEqual([]);
     expect(generation.unresolved).toEqual([]);
+  });
+
+  it('replays real 10063 kill-event self heal with star scaling', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10063
+    );
+    expect(definition).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily: 'equipped-actor-immediate-resource-heal-effect',
+      trigger: {
+        event: 'KillEvent',
+        frameAnchor: 'kill-event',
+        condition: {
+          kind: 'always',
+          status: 'applied',
+        },
+        triggerTarget: expect.objectContaining({
+          kind: 'equipped-actor-source-events',
+        }),
+        target: expect.objectContaining({ kind: 'self-actor' }),
+      },
+      immediateEffects: [
+        expect.objectContaining({
+          kind: 'direct-heal',
+          targetKind: 'self-actor',
+          damageType: 5,
+          sourceRawValue: 560,
+          valuesByStar: expect.arrayContaining([
+            expect.objectContaining({ star: 1, valueRaw: 560 }),
+            expect.objectContaining({ star: 2, valueRaw: 700 }),
+            expect.objectContaining({ star: 4, valueRaw: 980 }),
+          ]),
+        }),
+      ],
+      runtimeGaps: [],
+    });
+
+    const simulate = star => {
+      const teamSlots = createDefaultWorkbenchTeamSlots();
+      const actorConfigs = createDefaultWorkbenchActorConfigs(
+        DEFAULT_WORKBENCH_SELECTION
+      ).map(config =>
+        Number(config.characterId) === OWNER_ID
+          ? {
+              ...config,
+              initialSp: 100,
+              loadout: {
+                ...config.loadout,
+                soulessenceId: 10063,
+                soulessenceLevel: 80,
+                soulessenceRank: 1,
+                soulessenceStar: star,
+                soulessenceCultivation: {
+                  effectSkill: {
+                    skillId: 1900880,
+                    star,
+                    skillLevel: 1,
+                    runtimeStatus: 'runtime-applied',
+                    sourceIdentity: `fixture:strict-soulessence-star-${star}`,
+                  },
+                },
+              },
+            }
+          : config
+      );
+      const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+        durationMs: 12_000,
+        teamSlots,
+        actorConfigs,
+        enemyConfig: {
+          hpMultiplier: 0.00001,
+          defenseMultiplier: 0,
+        },
+        actions: [
+          createRealSoulActionDraft({
+            id: 'soul-10063-kill',
+            actionKind: 'charged-attack',
+            startFrame: 0,
+            actorCharacterId: OWNER_ID,
+          }),
+        ],
+        mechanicsProfileSelection:
+          createVerifiedWorkbenchMechanicsProfileSelection(),
+      });
+      return simulateScenario(
+        compileProject(project, getWorkbenchGameData())
+      );
+    };
+
+    const starOne = simulate(1);
+    const starOneGeneration =
+      starOne.verifiedSoulEssenceEffectGeneration;
+    expect(
+      starOne.verifiedCombatRuntime.damageEvents.some(
+        event =>
+          Number(event.payload?.stateTransaction?.before?.hp ?? 0) > 0 &&
+          Number(event.payload?.stateTransaction?.after?.hp ?? 0) <= 0
+      )
+    ).toBe(true);
+    expect(
+      starOneGeneration.summary.equippedBindingCount
+    ).toBeGreaterThan(0);
+    const heals = starOneGeneration.directHpEvents.filter(
+      event => event.effect.elementId === 19008802
+    );
+    expect(heals.length).toBeGreaterThan(0);
+    expect(heals[0]).toMatchObject({
+      kind: 'direct-heal',
+      value: 560,
+      target: { kind: 'actor', id: 'actor-101007' },
+      effect: {
+        elementId: 19008802,
+        heal: {
+          damageType: 5,
+          formula: expect.objectContaining({
+            baseFunctionId: 104,
+            sourceRawA: 560,
+          }),
+        },
+      },
+    });
+    expect(starOneGeneration.unresolved).toEqual([]);
+
+    const starTwo = simulate(2);
+    expect(
+      starTwo.verifiedSoulEssenceEffectGeneration.directHpEvents
+        .filter(event => event.effect.elementId === 19008802)
+        .every(event => event.value === 700)
+    ).toBe(true);
   });
 
   it.each([

@@ -17,7 +17,10 @@ import { createVerifiedBattleEffectGeneration } from '../mechanics/verifiedBattl
 import { createVerifiedTuningMarkGeneration } from '../mechanics/verifiedTuningMarkGeneration';
 import { createVerifiedActionVariantRuntime } from '../mechanics/verifiedActionVariantRuntime';
 import { createVerifiedKiboPassiveGeneration } from '../mechanics/verifiedKiboPassiveGeneration';
-import { createVerifiedSoulEssenceEffectGeneration } from '../mechanics/verifiedSoulEssenceEffectGeneration';
+import {
+  createVerifiedSoulEssenceEffectGeneration,
+  deriveSoulEventSnapshotFromCombatRuntime,
+} from '../mechanics/verifiedSoulEssenceEffectGeneration';
 import { createVerifiedDamageEventGeneration } from '../mechanics/verifiedDamageEventGeneration';
 import { createVerifiedNonDamageEventGeneration } from '../mechanics/verifiedNonDamageEventGeneration';
 import { projectScenarioEffectiveActionTimeline } from '../mechanics/actionEffectiveTimeline';
@@ -84,6 +87,7 @@ export function simulateScenario(
     acceptedSkillStartTransitions:
       actionRuleDiagnostics.acceptedSkillStartTransitions,
     criticalRandomSource: criticalRuntime.createFinalRandomSource(),
+    soulEventCriticalRandomSource: criticalRuntime.createPreflightRandomSource(),
   });
   const verifiedCombatRuntime = attachVerifiedExecutionBlocks(
     runtimeBundle.verifiedCombatRuntime,
@@ -388,6 +392,7 @@ function createVerifiedRuntimeBundle({
   controlledActorTimeline,
   acceptedSkillStartTransitions = null,
   criticalRandomSource,
+  soulEventCriticalRandomSource = null,
 }) {
   const actionVariantRuntime = isVerifiedCombatMechanicsScenario(scenario)
     ? createVerifiedActionVariantRuntime({
@@ -481,6 +486,27 @@ function createVerifiedRuntimeBundle({
         verifiedCombatRuntime: preliminaryCombatRuntime,
       })
     : null;
+  const soulEventCombatRuntime = isVerifiedCombatMechanicsScenario(scenario)
+    ? createVerifiedCombatRuntime({
+        scenario,
+        actionExecutionPlan,
+        controlledActorTimeline,
+        effectGeneration: mergeVerifiedDirectEffectGeneration(
+          effectGeneration,
+          baselineSoulEssenceEffectGeneration
+        ),
+        tuningGeneration,
+        damageEventGeneration,
+        effectTimeline: baselineEffectTimeline,
+        actionVariantRuntime,
+        kiboPassiveGeneration,
+        soulEssenceEffectGeneration: baselineSoulEssenceEffectGeneration,
+        criticalRandomSource: soulEventCriticalRandomSource,
+      })
+    : null;
+  const soulEventSnapshot = soulEventCombatRuntime
+    ? deriveSoulEventSnapshotFromCombatRuntime(soulEventCombatRuntime)
+    : null;
   const soulEssenceEffectGeneration = isVerifiedCombatMechanicsScenario(
     scenario
   )
@@ -491,6 +517,7 @@ function createVerifiedRuntimeBundle({
         tuningGeneration,
         damageEventGeneration,
         nonDamageEventGeneration,
+        soulEventSnapshot,
         controlledActorTimeline,
       })
     : null;

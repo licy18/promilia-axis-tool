@@ -133,6 +133,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     'b70e084ba7f5edfc65f70dbb3b8aab6f8ac30888a252627f4412e2d1b9a768a1',
   battlePropertyTagMatchingRuntimeEvidence:
     'a908a614ebc04462e082cc17f7df28c1da0c072a367e5f99ef208f7cb475b544',
+  soulEffectKillCriticalEventRuntimeEvidence:
+    'cd482fcba7d9ff16fc202318744d4098a4dfeedebe1cbde550f7081eac4503f6',
   landedHitRecoveryRuntimeEvidence:
     '634c979cda572f8fff1509bbf888240aebe8fad7728f357ce06390fee364a248',
   persistentLoadoutPropertyRuntimeEvidence:
@@ -214,6 +216,7 @@ export async function createOptimizationQualificationArtifacts({
   soulEffectBeforeDamageRuntimeEvidencePath = null,
   soulEffectNonDamageRuntimeEvidencePath = null,
   battlePropertyTagMatchingRuntimeEvidencePath = null,
+  soulEffectKillCriticalEventRuntimeEvidencePath = null,
   landedHitRecoveryRuntimeEvidencePath = null,
   persistentLoadoutPropertyRuntimeEvidencePath = null,
   periodicPersistentPropertyRuntimeEvidencePath = null,
@@ -344,6 +347,21 @@ export async function createOptimizationQualificationArtifacts({
           'optimization-qualification',
           'evidence',
           'battle-property-tag-matching-runtime-evidence.json'
+        ),
+      gameAssemblyPath,
+      il2CppDumpPath: il2cppRuntimeContractsPath,
+      projectRoot,
+    });
+  sources.soulEffectKillCriticalEventRuntimeEvidence =
+    await readSoulEffectKillCriticalEventRuntimeEvidenceSource({
+      sourcePath:
+        soulEffectKillCriticalEventRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          'scripts',
+          'optimization-qualification',
+          'evidence',
+          'soulessence-kill-critical-event-runtime-evidence.json'
         ),
       gameAssemblyPath,
       il2CppDumpPath: il2cppRuntimeContractsPath,
@@ -565,6 +583,10 @@ export async function createOptimizationQualificationArtifacts({
     acceptanceReport?.sourceClosure?.battlePropertyTagMatchingRuntimeEvidence,
     sources.battlePropertyTagMatchingRuntimeEvidence
   );
+  assertSoulEffectKillCriticalEventRuntimeEvidenceReference(
+    acceptanceReport?.sourceClosure?.killCriticalEventRuntimeEvidence,
+    sources.soulEffectKillCriticalEventRuntimeEvidence
+  );
   assertPersistentLoadoutPropertyRuntimeEvidenceReference(
     acceptanceReport?.sourceClosure?.persistentLoadoutPropertyRuntimeEvidence,
     sources.persistentLoadoutPropertyRuntimeEvidence
@@ -613,6 +635,11 @@ export async function createOptimizationQualificationArtifacts({
     attachSoulEffectNonDamageRuntimeEvidence(
       sources.il2cppRuntimeContracts.value.soulEffectTriggers,
       sources.soulEffectNonDamageRuntimeEvidence.value
+    );
+  sources.il2cppRuntimeContracts.value.soulEffectTriggers =
+    attachSoulEffectKillCriticalEventRuntimeEvidence(
+      sources.il2cppRuntimeContracts.value.soulEffectTriggers,
+      sources.soulEffectKillCriticalEventRuntimeEvidence.value
     );
   const characters = sources.characters.value.items ?? [];
   const kibos = sources.kibos.value.items ?? [];
@@ -834,7 +861,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-E8',
+      phase: 'M12-B3-E9',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1800,8 +1827,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-E8',
-    status: 'b3-e8-implemented',
+    phase: 'M12-B3-E9',
+    status: 'b3-e9-implemented',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2233,6 +2260,7 @@ function createSourceSnapshot(sources) {
         key === 'soulessenceAfterDamageEmptyConditionRuntimeEvidence' ||
         key === 'soulessenceActivationConditionRuntimeEvidence' ||
         key === 'battlePropertyTagMatchingRuntimeEvidence' ||
+        key === 'soulEffectKillCriticalEventRuntimeEvidence' ||
         key === 'elementFormula' ||
         key === 'setThreeSourceIdentityEvidence'
       ) {
@@ -2251,7 +2279,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-E8 Composite Multi-Trigger\n\n' +
+    '# M12-B3-E9 Composite Multi-Trigger\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -2635,8 +2663,10 @@ function createSoulEffectTriggerContract({
     [6, 'AfterSkill', 'action-end', '释放技能后'],
     [9, 'BeforeGetElement', 'element-before-acquire', '获取元素前'],
     [10, 'AfterGetElement', 'element-after-acquire', '获取元素后'],
+    [25, 'BeforeCriticalDamage', 'hit-before-critical-damage', '造成暴击伤害前'],
     [34, 'SwitchEnter', 'switch-enter', '切入'],
     [36, 'UnloadSkill', 'loadout-uninstall', '卸载技能'],
+    [32, 'KillEvent', 'kill-event', '击杀事件'],
     [40, 'OnGotShield', 'shield-after-acquire', '添加护盾时'],
     [44, 'AfterHeal', 'heal-after-settlement', '造成治疗后'],
   ].map(([value, enumName, frameAnchor, description]) => {
@@ -2965,6 +2995,220 @@ export function assertBattlePropertyTagMatchingRuntimeEvidenceReference(
       'optimization-qualification-property-tag-matching-evidence-report-reference-drift'
     );
   }
+}
+
+export async function readSoulEffectKillCriticalEventRuntimeEvidenceSource({
+  sourcePath,
+  gameAssemblyPath,
+  il2CppDumpPath,
+  projectRoot,
+}) {
+  const bytes = await fs.readFile(sourcePath);
+  const value = JSON.parse(bytes.toString('utf8'));
+  const binaryIdentity = await readBinaryIdentity(gameAssemblyPath);
+  const dumpIdentity = await readBinaryIdentity(il2CppDumpPath);
+  const binary = await fs.readFile(gameAssemblyPath);
+  const dumpText = await fs.readFile(il2CppDumpPath, 'utf8');
+  const rangeHashes = Object.fromEntries(
+    (value.binaryRanges ?? []).map(record => [
+      record.range,
+      createHash('sha256')
+        .update(readPortableExecutableRvaRange(binary, record.range))
+        .digest('hex'),
+    ])
+  );
+  const dumpFragments = [
+    ...(value.dumpBindings?.methods ?? []).flatMap(record => [
+      `// RVA: ${record.rva}`,
+      record.declaration,
+    ]),
+    ...(value.dumpBindings?.enums ?? []).flatMap(record => [
+      record.description,
+      record.declaration,
+    ]),
+  ];
+  const observations = {
+    binaryIdentity,
+    dumpIdentity,
+    rangeHashes,
+    rangeCount: Object.keys(rangeHashes).length,
+    dumpFragmentsPresent: dumpFragments.every(fragment =>
+      dumpText.includes(fragment)
+    ),
+  };
+  validateSoulEffectKillCriticalEventRuntimeEvidence(value, observations);
+  return {
+    path: normalizeSourcePath(sourcePath, projectRoot),
+    bytes: bytes.byteLength,
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+    value: {
+      ...value,
+      verifiedBinary: binaryIdentity,
+      verifiedIl2CppDump: dumpIdentity,
+    },
+    observations,
+  };
+}
+
+export function validateSoulEffectKillCriticalEventRuntimeEvidence(
+  value,
+  observations
+) {
+  if (
+    value?.contractName !== 'AzPrSoulEssenceKillCriticalEventRuntimeEvidence' ||
+    Number(value?.schemaVersion) !== 1 ||
+    value?.conclusion?.status !== 'applied'
+  ) {
+    throw new Error(
+      'optimization-qualification-kill-critical-event-evidence-contract-invalid'
+    );
+  }
+  if (
+    Number(value.reviewedBinary?.bytes) !==
+      Number(observations?.binaryIdentity?.bytes) ||
+    value.reviewedBinary?.sha256 !== observations?.binaryIdentity?.sha256
+  ) {
+    throw new Error(
+      'optimization-qualification-kill-critical-event-evidence-binary-mismatch'
+    );
+  }
+  if (
+    Number(value.reviewedIl2CppDump?.bytes) !==
+      Number(observations?.dumpIdentity?.bytes) ||
+    value.reviewedIl2CppDump?.sha256 !== observations?.dumpIdentity?.sha256 ||
+    observations?.dumpFragmentsPresent !== true
+  ) {
+    throw new Error(
+      'optimization-qualification-kill-critical-event-evidence-dump-drift'
+    );
+  }
+  const expectedMethods = [
+    {
+      identity: 'FormulaUtility.GetOutputDamage',
+      rva: '0x187F360',
+      declaration:
+        'private static FormulaUtility.OutputDamageData GetOutputDamage(IElement element, EntityHandle attackerHandle, EntityHandle executorHandle, EntityHandle sourceHandle, int skillGroupId, int criticalRandom) { }',
+    },
+    {
+      identity: 'DamageService.TriggerKillEvent',
+      rva: '0x306E6E0',
+      declaration:
+        'public void TriggerKillEvent(EntityHandle aliveEntityHandle) { }',
+    },
+    {
+      identity:
+        'Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElementHandle',
+      rva: '0x18B5D50',
+      declaration:
+        'public static void InvokeTriggerElementHandle(EntityHandle source, EntityHandle self, EntityHandle target, EElementTriggerEventType type, TElementParams element) { }',
+    },
+  ];
+  if (
+    JSON.stringify(value.dumpBindings?.methods) !==
+    JSON.stringify(expectedMethods)
+  ) {
+    throw new Error(
+      'optimization-qualification-kill-critical-event-evidence-method-drift'
+    );
+  }
+  if (
+    Number(value.semantics?.beforeCriticalDamage?.eventId) !== 25 ||
+    value.semantics?.beforeCriticalDamage?.frameAnchor !==
+      'hit-before-critical-damage' ||
+    Number(value.semantics?.killEvent?.eventId) !== 32 ||
+    value.semantics?.killEvent?.frameAnchor !== 'kill-event' ||
+    ![25, 32].every(eventId =>
+      value.semantics?.emptyConditionEvents?.includes(eventId)
+    )
+  ) {
+    throw new Error(
+      'optimization-qualification-kill-critical-event-evidence-semantics-drift'
+    );
+  }
+  for (const evidenceRange of value.binaryRanges ?? []) {
+    if (
+      observations?.rangeHashes?.[evidenceRange.range] !== evidenceRange.sha256
+    ) {
+      throw new Error(
+        `optimization-qualification-kill-critical-event-evidence-range-drift:${evidenceRange.range}`
+      );
+    }
+  }
+}
+
+export function assertSoulEffectKillCriticalEventRuntimeEvidenceReference(
+  reference,
+  source
+) {
+  if (
+    reference?.path !== source.path ||
+    Number(reference?.bytes) !== Number(source.bytes) ||
+    reference?.sha256 !== source.sha256 ||
+    reference?.binaryPath !== source.value.reviewedBinary?.path ||
+    Number(reference?.binaryBytes) !==
+      Number(source.value.reviewedBinary?.bytes) ||
+    reference?.binarySha256 !== source.value.reviewedBinary?.sha256 ||
+    reference?.il2CppDumpPath !== source.value.reviewedIl2CppDump?.path ||
+    Number(reference?.il2CppDumpBytes) !==
+      Number(source.value.reviewedIl2CppDump?.bytes) ||
+    reference?.il2CppDumpSha256 !== source.value.reviewedIl2CppDump?.sha256 ||
+    Number(reference?.rangeCount) !==
+      (source.value.binaryRanges ?? []).length
+  ) {
+    throw new Error(
+      'optimization-qualification-kill-critical-event-evidence-report-reference-drift'
+    );
+  }
+}
+
+function attachSoulEffectKillCriticalEventRuntimeEvidence(
+  triggerContract,
+  evidence
+) {
+  if (
+    triggerContract?.sourceKind !== 'il2cpp-soulessence-trigger-contract' ||
+    evidence?.conclusion?.status !== 'applied'
+  ) {
+    throw new Error(
+      'optimization-qualification-kill-critical-event-evidence-attach-invalid'
+    );
+  }
+  const eventBindings = triggerContract.eventBindings ?? [];
+  for (const binding of eventBindings) {
+    if (
+      Number(binding.value) ===
+        Number(evidence.semantics.beforeCriticalDamage.eventId) &&
+      binding.frameAnchor !==
+        evidence.semantics.beforeCriticalDamage.frameAnchor
+    ) {
+      throw new Error(
+        'optimization-qualification-kill-critical-event-frame-anchor-drift'
+      );
+    }
+    if (
+      Number(binding.value) === Number(evidence.semantics.killEvent.eventId) &&
+      binding.frameAnchor !== evidence.semantics.killEvent.frameAnchor
+    ) {
+      throw new Error(
+        'optimization-qualification-kill-event-frame-anchor-drift'
+      );
+    }
+  }
+  const value = {
+    ...triggerContract,
+    soulEventRuntime: {
+      status: evidence.conclusion.status,
+      contractName: evidence.contractName,
+      beforeCriticalDamage: structuredClone(
+        evidence.semantics.beforeCriticalDamage
+      ),
+      killEvent: structuredClone(evidence.semantics.killEvent),
+      emptyConditionEvents: [...(evidence.semantics.emptyConditionEvents ?? [])],
+      consumer: structuredClone(evidence.consumer ?? null),
+      sourceIdentity: evidence.conclusion.sourceIdentity,
+    },
+  };
+  return { ...value, contractHash: hashCanonicalValue(value) };
 }
 
 function attachBattlePropertyTagMatchingEvidence(contract, evidence) {

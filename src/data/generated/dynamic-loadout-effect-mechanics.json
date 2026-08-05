@@ -3,7 +3,7 @@
   "contractName": "AzPrDynamicLoadoutEffectMechanismCensus",
   "kind": "azpr-dynamic-loadout-effect-mechanism-census",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "sourceCatalogHash": "a0afd3a5d26c69a4",
+  "sourceCatalogHash": "75ddd27b5a724022",
   "propertyTagContract": {
     "sourceKind": "il2cpp-battle-property-tag-contract",
     "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyTag",
@@ -294,6 +294,14 @@
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.AfterGetElement=10"
       },
       {
+        "value": 25,
+        "enumName": "BeforeCriticalDamage",
+        "name": "BeforeCriticalDamage",
+        "frameAnchor": "hit-before-critical-damage",
+        "status": "applied",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.BeforeCriticalDamage=25"
+      },
+      {
         "value": 34,
         "enumName": "SwitchEnter",
         "name": "SwitchEnter",
@@ -308,6 +316,14 @@
         "frameAnchor": "loadout-uninstall",
         "status": "applied",
         "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.UnloadSkill=36"
+      },
+      {
+        "value": 32,
+        "enumName": "KillEvent",
+        "name": "KillEvent",
+        "frameAnchor": "kill-event",
+        "status": "applied",
+        "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.KillEvent=32"
       },
       {
         "value": 40,
@@ -984,7 +1000,37 @@
       },
       "sourceIdentity": "GameAssembly.dll#HeroSwitchSystem.TriggerSwitchEnter@0x1596740/ShieldElement.Execute@0x13A2040/DamageUtility.OnAfterHeal@0x1872130/TriggerElement.GetTriggerTarget@0x13BBF50/TriggerElement.CheckCondition@0x13B58F0/AliveElementSystem.OnExecuteNormalElement.Block@0x131A545/ShieldElement.Execute.empty-shield-list-gate@0x13A21D8/AliveProperty.shieldHitValueList@0x88"
     },
-    "contractHash": "7b50576425fff76e"
+    "contractHash": "a91689fc08ebd4c2",
+    "soulEventRuntime": {
+      "status": "applied",
+      "contractName": "AzPrSoulEssenceKillCriticalEventRuntimeEvidence",
+      "beforeCriticalDamage": {
+        "eventId": 25,
+        "frameAnchor": "hit-before-critical-damage",
+        "consumer": "FormulaUtility.GetOutputDamage",
+        "rva": "0x187F360",
+        "dispatchCallRva": "0x1880199",
+        "triggerInvoker": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElementHandle",
+        "triggerInvokerRva": "0x18B5D50",
+        "reason": "GetOutputDamage sets EElementTriggerEventType.BeforeCriticalDamage (25) and invokes the trigger handle before the damage output record is finalized."
+      },
+      "killEvent": {
+        "eventId": 32,
+        "frameAnchor": "kill-event",
+        "consumer": "DamageService.TriggerKillEvent",
+        "rva": "0x306E6E0",
+        "dispatchCallRva": "0x306EC49",
+        "triggerInvoker": "Lens.Gameplay.Modules.BigWorld.SkillUtility.InvokeTriggerElementHandle",
+        "triggerInvokerRva": "0x18B5D50",
+        "reason": "TriggerKillEvent sets EElementTriggerEventType.KillEvent (32) and invokes the trigger handle when an entity dies."
+      },
+      "emptyConditionEvents": [
+        25,
+        32
+      ],
+      "consumer": null,
+      "sourceIdentity": "GameAssembly.dll#FormulaUtility.GetOutputDamage@0x187F360/DamageService.TriggerKillEvent@0x306E6E0/SkillUtility.InvokeTriggerElementHandle@0x18B5D50"
+    }
   },
   "policy": {
     "thresholdActivationIsNotRuntimeApplication": true,
@@ -3474,7 +3520,6 @@
       "evidenceStatus": "source-indexed-runtime-unapplied",
       "runtimeStatus": "source-indexed-runtime-unapplied",
       "runtimeGaps": [
-        "effect-active-trigger-not-unique",
         "effect-wrapper-lifecycle-not-unique"
       ],
       "sourceIdentity": "NewTable/soulessence.rows[id=10011].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900530.asset/MonoBehaviour/skill_control_1900530__7646815027927349175.json|battle-element-assets.jsonl#path_id=-569579431889589300;elementId=19005301|battle-element-assets.jsonl#path_id=-1219091418453908700;elementId=19005303"
@@ -6601,7 +6646,7 @@
       "objectId": "10063",
       "displayName": "屋嘟娃娃",
       "effectSkillId": 1900880,
-      "mechanismFamily": "source-indexed-composite-effect",
+      "mechanismFamily": "equipped-actor-immediate-resource-heal-effect",
       "trigger": {
         "leafPathIds": [
           654594980681767700
@@ -6609,18 +6654,19 @@
         "elementId": 19008801,
         "pathId": 8121214350672122000,
         "eventId": 32,
-        "event": null,
-        "frameAnchor": null,
+        "event": "KillEvent",
+        "frameAnchor": "kill-event",
         "intervalMs": 0,
         "intervalSourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerInv|Lens.Gameplay.Modules.BigWorld.TriggerElement.Parse",
         "condition": {
-          "kind": "condition-group",
+          "kind": "always",
           "logic": "and",
           "logicValue": 0,
+          "logicName": "AND",
           "conditions": [],
           "actionKinds": [],
-          "status": "static-evidence-gap",
-          "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerConditionType|triggerConditionList"
+          "status": "applied",
+          "sourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerConditionType|triggerConditionList|C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerConditionType.AND=0|GameAssembly.dll#FormulaUtility.GetOutputDamage@0x187F360/DamageService.TriggerKillEvent@0x306E6E0/SkillUtility.InvokeTriggerElementHandle@0x18B5D50"
         },
         "triggerTargetType": 0,
         "triggerTargetTypeSourceIdentity": "battle-element-assets.jsonl#path_id=8121214350672122000;elementId=19008801.triggerTargetType",
@@ -6674,13 +6720,11 @@
       "vitalChanges": [],
       "delayedEvents": [],
       "loopPersistence": {
-        "status": "runtime-unapplied"
+        "status": "canonical-effect-timeline-applied"
       },
-      "evidenceStatus": "source-indexed-runtime-unapplied",
-      "runtimeStatus": "source-indexed-runtime-unapplied",
-      "runtimeGaps": [
-        "effect-active-trigger-not-unique"
-      ],
+      "evidenceStatus": "runtime-applied",
+      "runtimeStatus": "runtime-applied",
+      "runtimeGaps": [],
       "sourceIdentity": "NewTable/soulessence.rows[id=10063].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900880.asset/MonoBehaviour/skill_control_1900880__3748949261925534020.json|battle-element-assets.jsonl#path_id=654594980681767700;elementId=19008802"
     },
     {
@@ -12933,14 +12977,14 @@
   "summary": {
     "soulEssenceCount": 62,
     "setSkillCount": 12,
-    "runtimeAppliedCount": 70,
-    "runtimeUnappliedCount": 4,
+    "runtimeAppliedCount": 71,
+    "runtimeUnappliedCount": 3,
     "byMechanismFamily": {
       "equipped-actor-composite-property-effects": 6,
       "equipped-actor-get-element-property-after-acquire": 2,
       "equipped-actor-get-element-property-before-acquire": 1,
       "equipped-actor-heal-event-target-property": 2,
-      "equipped-actor-immediate-resource-heal-effect": 2,
+      "equipped-actor-immediate-resource-heal-effect": 3,
       "equipped-actor-persistent-property-root": 12,
       "equipped-actor-shield-acquire-team-property": 1,
       "equipped-actor-skill-tag-property-after-damage": 5,
@@ -12955,13 +12999,13 @@
       "set-skill-before-skill-composite-immediate": 1,
       "set-skill-persistent-property": 6,
       "set-skill-source-identity-conflict": 1,
-      "source-indexed-composite-effect": 2
+      "source-indexed-composite-effect": 1
     },
     "byEvidenceStatus": {
       "evidence-insufficient": 1,
-      "runtime-applied": 70,
-      "source-indexed-runtime-unapplied": 3
+      "runtime-applied": 71,
+      "source-indexed-runtime-unapplied": 2
     }
   },
-  "censusHash": "48c243527b8ddb68"
+  "censusHash": "efbd43f5ee84b5ad"
 }
