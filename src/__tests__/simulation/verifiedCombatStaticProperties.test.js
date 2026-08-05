@@ -319,6 +319,62 @@ describe('verified static combat properties', () => {
     ).toBe(false);
   });
 
+  it('keeps soulessence stat growth while gating the effect skill by profession', () => {
+    const createActor = () => ({
+      characterId: 101007,
+      level: 80,
+      cultivation: { starGiftRank: 0, favorabilityLevel: 0 },
+      loadout: {
+        soulessenceId: 10095,
+        soulessenceLevel: 80,
+        soulessenceRank: 6,
+        soulessenceStar: 1,
+        soulessenceCultivation: {
+          effectSkill: {
+            skillId: 1900320,
+            star: 1,
+            skillLevel: 1,
+            runtimeStatus: 'runtime-applied',
+            sourceIdentity: 'fixture:soul:10095',
+          },
+        },
+      },
+    });
+    const mismatched = compileVerifiedStaticActorProperties({
+      actor: createActor(),
+      position: '爆发',
+    });
+    const matched = compileVerifiedStaticActorProperties({
+      actor: createActor(),
+      position: '增幅',
+    });
+
+    for (const result of [mismatched, matched]) {
+      expect(result.sources.map(source => source.kind)).toEqual(
+        expect.arrayContaining(['soulessence-level', 'soulessence-rank'])
+      );
+      expect(result.stats.attack).toBeGreaterThan(0);
+    }
+    expect(mismatched.unapplied).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: 'soulessence-effect-skill',
+          reason: 'soulessence-profession-mismatch',
+          requiredProfession: '增幅',
+          actorPosition: '爆发',
+          appliedToStaticPanel: false,
+        }),
+      ])
+    );
+    expect(
+      matched.unapplied.some(
+        source =>
+          source.kind === 'soulessence-effect-skill' &&
+          source.reason === 'soulessence-profession-mismatch'
+      )
+    ).toBe(false);
+  });
+
   it('applies all six two-piece roots from legal equipment sets with stable provenance', () => {
     for (const fixture of PERSISTENT_SET_CASES) {
       const result = compileVerifiedStaticActorProperties({
@@ -595,8 +651,8 @@ describe('verified static combat properties', () => {
     const initialRuntimeState = {
       actorVitalsByActor: [
         {
-          actorId: 'actor-101007',
-          characterId: 101007,
+          actorId: 'actor-107002',
+          characterId: 107002,
           currentValue: 1000,
           maxValue: 100000,
           valueShields: [],
@@ -604,7 +660,7 @@ describe('verified static combat properties', () => {
       ],
     };
     const disabled = simulateActorLoadoutScenario({
-      characterId: 101007,
+      characterId: 107002,
       actionKind: 'normal-attack',
       attackSequenceIndex: 3,
       initialRuntimeState,
@@ -615,7 +671,7 @@ describe('verified static combat properties', () => {
       ),
     });
     const enabled = simulateActorLoadoutScenario({
-      characterId: 101007,
+      characterId: 107002,
       actionKind: 'normal-attack',
       attackSequenceIndex: 3,
       initialRuntimeState,
@@ -634,7 +690,7 @@ describe('verified static combat properties', () => {
     });
     expect(
       enabled.scenario.actors
-        .find(actor => Number(actor.characterId) === 101007)
+        .find(actor => Number(actor.characterId) === 107002)
         .verifiedStaticProperties.sources.filter(
           source => source.kind === 'soulessence-persistent-property'
         )
@@ -718,6 +774,7 @@ function simulateActorLoadoutScenario({
   loadoutPatch,
   initialRuntimeState = undefined,
   repeatActorAction = false,
+  position = null,
 }) {
   const selection = {
     ...DEFAULT_WORKBENCH_SELECTION,
@@ -799,6 +856,18 @@ function simulateActorLoadoutScenario({
       createVerifiedWorkbenchMechanicsProfileSelection(),
   });
   const scenario = compileProject(project, getWorkbenchGameData());
+  const ownerActor = scenario.actors.find(
+    actor => Number(actor.characterId) === Number(characterId)
+  );
+  if (ownerActor) {
+    const soulId = Number(loadoutPatch?.soulessenceId);
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => Number(entry.soulEssenceId) === soulId
+    );
+    ownerActor.position =
+      position ??
+      (definition?.profession ? String(definition.profession) : null);
+  }
   return { scenario, result: simulateScenario(scenario) };
 }
 

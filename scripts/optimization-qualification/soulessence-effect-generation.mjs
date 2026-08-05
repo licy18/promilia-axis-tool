@@ -160,6 +160,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   const publicSouls = (soulEssences ?? []).map(item => ({
     soulEssenceId: Number(item.id ?? item.soulEssenceId),
     name: item.name ?? null,
+    profession: item.profession ? String(item.profession).trim() : null,
   }));
   const effectSkillIds = publicSouls.map(item =>
     Number(definitionBySoulId.get(item.soulEssenceId)?.reishiSkill)
@@ -203,6 +204,9 @@ export async function createSoulEssenceEffectMechanicsCatalog({
     })
   );
   for (const definition of definitions) {
+    definition.profession =
+      publicSouls.find(item => item.soulEssenceId === definition.soulEssenceId)
+        ?.profession ?? null;
     const deadBranches = collectConfirmedDeadBranchesForSoul(
       definition.soulEssenceId
     );

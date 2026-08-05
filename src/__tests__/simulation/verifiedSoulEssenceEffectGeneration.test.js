@@ -6152,6 +6152,123 @@ describe('verified soul essence effect generation', () => {
     );
   });
 
+  it('gates 10095 skill activation by character profession (match activates, mismatch stats-only)', () => {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => entry.soulEssenceId === 10095
+    );
+    const actorId = 'actor-101007';
+    const run = position => {
+      const armAction = {
+        ...createRealSoulActionDraft({
+          id: 'e12-10095-block-arm',
+          actionKind: 'charged-attack',
+          startFrame: 0,
+          actorCharacterId: 101007,
+        }),
+        actorId,
+      };
+      const windAction = {
+        ...createRealSoulActionDraft({
+          id: 'e12-10095-wind-mark',
+          actionKind: 'charged-attack',
+          startFrame: 600,
+          actorCharacterId: 101007,
+        }),
+        actorId,
+      };
+      const resolution = resolveVerifiedCombatActionMechanics(windAction);
+      const scenario = {
+        time: { fps: 60, durationMs: 12_000 },
+        actors: [
+          { ...createSoulMatrixActor({ actorId, definition }), position },
+          { id: 'actor-101003', characterId: 101003, name: 'third-actor' },
+          { id: 'actor-101010', characterId: 101010, name: 'third-actor' },
+        ],
+        actions: [armAction, windAction],
+      };
+      const actionExecutionPlan = {
+        actions: [
+          { actionId: armAction.id, execute: true },
+          { actionId: windAction.id, execute: true },
+        ],
+      };
+      const actionResolutionById = new Map([
+        [armAction.id, resolution],
+        [windAction.id, resolution],
+      ]);
+      const tuningGeneration = {
+        getElementEvents: [
+          {
+            kind: 'element-before-acquire',
+            actionId: armAction.id,
+            actorId,
+            applied: true,
+            timeMs: 100,
+            sourceSequencePath: [0],
+            eventContext: {
+              elementId: 199001234,
+              applied: true,
+              success: true,
+              initialState: false,
+              sourceSequencePath: [0],
+            },
+          },
+          {
+            kind: 'element-after-acquire',
+            actionId: windAction.id,
+            actorId,
+            applied: true,
+            timeMs: 200,
+            sourceSequencePath: [1],
+            eventContext: {
+              elementId: 750,
+              applied: true,
+              success: true,
+              initialState: false,
+              sourceSequencePath: [1],
+            },
+          },
+        ],
+      };
+      return createVerifiedSoulEssenceEffectGeneration({
+        scenario,
+        actionExecutionPlan,
+        actionResolutionById,
+        tuningGeneration,
+      });
+    };
+
+    const mismatched = run('爆发');
+    expect(
+      mismatched.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10095
+      )
+    ).toEqual([]);
+    expect(mismatched.unresolved).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          soulEssenceId: 10095,
+          status: 'soulessence-effect-profession-mismatch',
+          reasons: ['soulessence-profession-mismatch'],
+          requiredProfession: definition.profession,
+          actorPosition: '爆发',
+        }),
+      ])
+    );
+
+    const matched = run('增幅');
+    expect(
+      matched.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10095
+      ).length
+    ).toBeGreaterThan(0);
+    expect(
+      matched.unresolved.some(
+        entry => entry.status === 'soulessence-effect-profession-mismatch'
+      )
+    ).toBe(false);
+  });
+
   it('replays real 10071 charged buff gated by mark 250 layers above one', () => {
     const suppressed = createRealSoulScenario({
       soulEssenceId: 10071,
@@ -10453,6 +10570,7 @@ function createRealSoulScenario({
   initialKiboEnergyByCharacterId = null,
   soulEssenceStar = 1,
   equipment = null,
+  actorPosition = null,
 } = {}) {
   const requestedActions =
     actionPlan ??
@@ -10637,7 +10755,19 @@ function createRealSoulScenario({
     mechanicsProfileSelection:
       createVerifiedWorkbenchMechanicsProfileSelection(),
   });
-  return simulateScenario(compileProject(project, getWorkbenchGameData()));
+  const compiled = compileProject(project, getWorkbenchGameData());
+  const ownerActor = compiled.actors.find(
+    actor => actor.id === `actor-${actorCharacterId}`
+  );
+  if (ownerActor) {
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => Number(entry.soulEssenceId) === Number(soulEssenceId)
+    );
+    ownerActor.position =
+      actorPosition ??
+      (definition?.profession ? String(definition.profession) : null);
+  }
+  return simulateScenario(compiled);
 }
 
 function createRubyEnhancedActionDraft({ id, startFrame, sequenceIndex }) {

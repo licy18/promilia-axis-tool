@@ -18,6 +18,7 @@ const indexCache = new WeakMap();
 export function compileVerifiedStaticActorProperties({
   actor,
   mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage(),
+  position = null,
 } = {}) {
   const catalog = mechanicsPackage?.staticPropertyCatalog;
   if (!catalog) {
@@ -159,6 +160,7 @@ export function compileVerifiedStaticActorProperties({
     sources,
     unresolved,
     unapplied,
+    actorPosition: position,
   });
   const setSkillActivations = applyEquipmentSources({
     characterId,
@@ -560,6 +562,7 @@ function applySoulessenceSource({
   sources,
   unresolved,
   unapplied,
+  actorPosition = null,
 }) {
   const soulessenceId = positiveIntegerOrNull(loadout?.soulessenceId);
   if (!soulessenceId) return;
@@ -619,6 +622,35 @@ function applySoulessenceSource({
   if (profile.effectSkill?.skillId) {
     const cultivationEffect = loadout?.soulessenceCultivation?.effectSkill;
     const effectDefinition = indexes.soulessenceEffects.get(soulessenceId);
+    const requiredProfession = effectDefinition?.profession
+      ? String(effectDefinition.profession).trim()
+      : '';
+    const position = actorPosition ? String(actorPosition).trim() : '';
+    const professionMismatch =
+      Boolean(requiredProfession) &&
+      Boolean(position) &&
+      requiredProfession !== position;
+    if (professionMismatch) {
+      unapplied.push({
+        kind: 'soulessence-effect-skill',
+        sourceId: profile.effectSkill.skillId,
+        ...(Number(cultivationEffect?.skillId) ===
+        Number(profile.effectSkill.skillId)
+          ? {
+              skillLevel: Number(cultivationEffect.skillLevel),
+              star: Number(cultivationEffect.star),
+              cultivationSourceIdentity:
+                cultivationEffect.sourceIdentity ?? null,
+            }
+          : {}),
+        reason: 'soulessence-profession-mismatch',
+        requiredProfession,
+        actorPosition: position,
+        sourceIdentity: profile.effectSkill.sourceIdentity,
+        appliedToStaticPanel: false,
+      });
+      return;
+    }
     const persistentValidation = validatePersistentLoadoutPropertyRoot(
       effectDefinition?.persistentRoot,
       {

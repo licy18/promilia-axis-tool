@@ -20,7 +20,22 @@ const detailCatalog = {
     },
   ],
   kibos: [],
-  soulessences: [],
+  soulessences: [
+    {
+      id: 10095,
+      name: '甜点时光',
+      profession: '增幅',
+      icons: {},
+      summary: 'SR · 增幅',
+    },
+    {
+      id: 10001,
+      name: '汁石就是力量',
+      profession: '破坏',
+      icons: {},
+      summary: 'SR · 破坏',
+    },
+  ],
 };
 
 beforeAll(() => {
@@ -116,5 +131,55 @@ describe('WorkbenchLoadoutPicker', () => {
     wrapper.unmount();
     expect(document.body.style.overflow).toBe('auto');
     document.body.style.overflow = '';
+  });
+
+  it('marks soulessence profession mismatch while keeping the option selectable', async () => {
+    const mismatchedWrapper = mount(WorkbenchLoadoutPicker, {
+      props: {
+        request: {
+          kind: 'soulessence',
+          characterId: 109001,
+          selectedId: null,
+        },
+        characters: [
+          { id: 109001, name: '末音', position: { name: '猛攻' } },
+        ],
+      },
+      global: { stubs: { teleport: true } },
+    });
+    await flushPromises();
+
+    const options = mismatchedWrapper.findAll(
+      '[data-testid="workbench-loadout-option"]'
+    );
+    const mismatched = options.find(option => option.text().includes('甜点时光'));
+    expect(mismatched.classes()).toContain('mismatch');
+    expect(mismatched.text()).toContain(
+      '职业不匹配：增幅 仅数值加成，技能不激活'
+    );
+    await mismatched.trigger('click');
+    expect(mismatchedWrapper.emitted('select')?.at(-1)).toEqual([10095]);
+    mismatchedWrapper.unmount();
+
+    const matchedWrapper = mount(WorkbenchLoadoutPicker, {
+      props: {
+        request: {
+          kind: 'soulessence',
+          characterId: 102001,
+          selectedId: null,
+        },
+        characters: [
+          { id: 102001, name: '涂山小玉', position: { name: '增幅' } },
+        ],
+      },
+      global: { stubs: { teleport: true } },
+    });
+    await flushPromises();
+    const matched = matchedWrapper
+      .findAll('[data-testid="workbench-loadout-option"]')
+      .find(option => option.text().includes('甜点时光'));
+    expect(matched.classes()).not.toContain('mismatch');
+    expect(matched.text()).not.toContain('职业不匹配');
+    matchedWrapper.unmount();
   });
 });

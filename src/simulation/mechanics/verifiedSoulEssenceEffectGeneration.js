@@ -136,11 +136,35 @@ export function createVerifiedSoulEssenceEffectGeneration({
         definition,
       ])
   );
+  const professionMismatches = [];
   const bindings = (scenario.actors ?? [])
-    .flatMap((actor, actorIndex) => [
-      createEquippedSoulBinding(actor, actorIndex, definitionBySoulId),
-      ...createEquippedSetSkillBindings(actor, actorIndex, definitionBySetKey),
-    ])
+    .flatMap((actor, actorIndex) => {
+      const soulEssenceId = Number(actor?.loadout?.soulessenceId);
+      const soulDefinition = definitionBySoulId.get(soulEssenceId);
+      if (
+        soulDefinition &&
+        !isSoulEssenceProfessionAllowed(actor, soulDefinition)
+      ) {
+        professionMismatches.push({
+          actorId: actor.id,
+          soulEssenceId,
+          status: 'soulessence-effect-profession-mismatch',
+          reasons: ['soulessence-profession-mismatch'],
+          requiredProfession: String(soulDefinition.profession),
+          actorPosition: actor?.position ? String(actor.position) : null,
+          sourceIdentity: soulDefinition.sourceIdentity ?? null,
+        });
+        return createEquippedSetSkillBindings(
+          actor,
+          actorIndex,
+          definitionBySetKey
+        );
+      }
+      return [
+        createEquippedSoulBinding(actor, actorIndex, definitionBySoulId),
+        ...createEquippedSetSkillBindings(actor, actorIndex, definitionBySetKey),
+      ];
+    })
     .filter(Boolean);
   const effectCommands = [];
   const directSpEvents = [];
@@ -148,6 +172,7 @@ export function createVerifiedSoulEssenceEffectGeneration({
   const suppressions = [];
   const unresolved = [];
   const periodicRootStates = [];
+  unresolved.push(...professionMismatches);
 
   for (const binding of bindings) {
     const periodicBinding = isPeriodicPersistentPropertyBinding(binding);
@@ -699,6 +724,14 @@ function resolveSoulEventTriggerOccurrences({
       triggerSequencePath: event.sourceSequencePath,
       eventContext: event.eventContext,
     }));
+}
+
+function isSoulEssenceProfessionAllowed(actor, definition) {
+  const required = definition?.profession
+    ? String(definition.profession).trim()
+    : '';
+  const actorPosition = actor?.position ? String(actor.position).trim() : '';
+  return !required || !actorPosition || required === actorPosition;
 }
 
 function createEquippedSoulBinding(actor, actorIndex, definitionBySoulId) {

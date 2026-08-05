@@ -292,7 +292,11 @@ function arrayOrSingle(value) {
 
 function compileActor(actor, charactersById) {
   const character = charactersById.get(Number(actor.characterId));
-  const staticProperties = compileVerifiedStaticActorProperties({ actor });
+  const characterPosition = character?.position?.name ?? null;
+  const staticProperties = compileVerifiedStaticActorProperties({
+    actor,
+    position: characterPosition,
+  });
   const staticCatalogAvailable =
     staticProperties.status !==
     'verified-static-property-catalog-not-installed';
@@ -379,6 +383,7 @@ function compileActor(actor, charactersById) {
 
   return {
     ...actor,
+    position: characterPosition,
     baseAttributes: staticCatalogAvailable
       ? compiledAttributes
       : actor.baseAttributes,

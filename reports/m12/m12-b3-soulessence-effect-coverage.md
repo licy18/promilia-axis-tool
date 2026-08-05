@@ -1,6 +1,6 @@
 # M12-B3 Soul Essence Effect Coverage
 
-- Catalog: `187df5b36ba5063a`
+- Catalog: `82a85a401e26c7cf`
 - Source closure: 62/62 controls, 282 resource references, 0 missing
 - Runtime applied: 62/62
 - Runtime unresolved: 0/62

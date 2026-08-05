@@ -399,16 +399,29 @@ describe('verified non-damage event generation', () => {
       actionResolutionById: createActionResolutionById(),
       nonDamageEventGeneration,
     });
-    expect(shieldGeneration.effectCommands).toEqual([]);
+    expect(
+      shieldGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10169
+      )
+    ).toHaveLength(3);
+    expect(
+      shieldGeneration.effectCommands.every(
+        command =>
+          command.sourceSoulEssenceId === 10169 &&
+          command.effectId === 'soulessence:10169:element:19007503' &&
+          command.durationMs === 20000 &&
+          command.modifiers[0].attributeId === 229 &&
+          command.sourceNonDamageEventIdentity ===
+            'non-damage|subject-routing-shield:event:40'
+      )
+    ).toBe(true);
     expect(
       soulEssenceEffectCatalog.definitions.find(
         definition => definition.soulEssenceId === 10169
       )
     ).toMatchObject({
-      runtimeStatus: 'source-indexed-runtime-unapplied',
-      runtimeGaps: [
-        'effect-shield-refresh-replacement-semantics-evidence-gap',
-      ],
+      runtimeStatus: 'runtime-applied',
+      runtimeGaps: [],
     });
 
     const wrongSourceScenario = equipSoul(sourceScenario, {

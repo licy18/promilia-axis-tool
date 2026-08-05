@@ -52,6 +52,7 @@ export function createWorkbenchLoadoutDetailProjection({
       id: item.id,
       name: item.name,
       icons: item.icons ?? {},
+      profession: item.profession ? String(item.profession).trim() : null,
       summary: [
         item.rarity,
         item.profession,

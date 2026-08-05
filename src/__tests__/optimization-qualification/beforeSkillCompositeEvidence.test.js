@@ -171,8 +171,8 @@ describe('BeforeSkill composite SP and team-heal native evidence', () => {
     );
 
     expect(report).toMatchObject({
-      phase: 'M12-B3-E11',
-      status: 'b3-e11-implemented',
+      phase: 'M12-B3-E12',
+      status: 'b3-e12-implemented',
       baseCommit: 'a5434a1e0b01c2d70db1832064e34f63fb44e279',
       acceptedC15Commit: 'aafb6aa6c645b7b7490fdba0f71b8941da311f6e',
       reviewedC12Commit: 'a432467d4322ee0dae58e3d47df3b5c2eb55447a',
@@ -204,6 +204,6 @@ describe('BeforeSkill composite SP and team-heal native evidence', () => {
           soulCatalog.triggerContract.contractHash,
       },
     });
-    expect(summary.status).toBe('b3-e11-implemented');
+    expect(summary.status).toBe('b3-e12-implemented');
   });
 });

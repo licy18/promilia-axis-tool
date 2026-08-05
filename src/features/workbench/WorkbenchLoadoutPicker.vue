@@ -67,7 +67,10 @@
               v-for="option in options"
               :key="option.id"
               class="loadout-option"
-              :class="{ selected: option.id === selectedId }"
+              :class="{
+                selected: option.id === selectedId,
+                mismatch: option.mismatch,
+              }"
               type="button"
               :data-option-id="option.id"
               :aria-pressed="option.id === selectedId"
@@ -87,7 +90,11 @@
                 <strong>{{ option.name }}</strong>
                 <small>{{ option.summary }}</small>
                 <span v-if="option.markers?.length" class="option-markers">
-                  <em v-for="marker in option.markers" :key="marker">
+                  <em
+                    v-for="marker in option.markers"
+                    :key="marker"
+                    :class="{ mismatch: option.mismatch }"
+                  >
                     {{ marker }}
                   </em>
                 </span>
@@ -235,9 +242,22 @@ const rawOptions = computed(() => {
     return (catalog.value?.kibos ?? []).map(item => detailOption(item));
   }
   if (props.request.kind === 'soulessence') {
-    return (catalog.value?.soulessences ?? []).map(item =>
-      detailOption(item, item.icons?.small)
-    );
+    const characterPosition =
+      props.characters.find(
+        character => Number(character.id) === Number(props.request.characterId)
+      )?.position?.name ?? null;
+    return (catalog.value?.soulessences ?? []).map(item => {
+      const option = detailOption(item, item.icons?.small);
+      const required = item.profession ? String(item.profession).trim() : '';
+      const position = characterPosition ? String(characterPosition).trim() : '';
+      if (required && position && required !== position) {
+        option.mismatch = true;
+        option.markers = [
+          `职业不匹配：${required} 仅数值加成，技能不激活`,
+        ];
+      }
+      return option;
+    });
   }
   const expectedType = EQUIPMENT_TYPE_BY_SLOT[props.request.slotKey];
   return (catalog.value?.equipment ?? [])
@@ -589,6 +609,10 @@ h2 {
   outline: none;
 }
 
+.loadout-option.mismatch {
+  border-color: rgba(230, 162, 60, 0.75);
+}
+
 .option-icon {
   position: relative;
   display: grid;
@@ -648,6 +672,11 @@ h2 {
   color: #9fd5cb;
   font-size: 9px;
   font-style: normal;
+}
+
+.option-markers em.mismatch {
+  background: rgba(230, 162, 60, 0.16);
+  color: #e6b36a;
 }
 
 .picker-state {

@@ -849,7 +849,9 @@ describe('M12-B3 strict cultivation profile', () => {
 
   it('projects only completed star-gift attributes into the authoritative static compiler', () => {
     const service = createMachineAxisService();
-    const compilation = service.compile(createAxis());
+    const axis = createAxis();
+    axis.scenario.team[0].loadout.soulessenceId = 10078;
+    const compilation = service.compile(axis);
     const actorConfig = compilation.project.metadata.actorConfigs[0];
     const actor = compilation.canonicalCompilation.scenario.actors.find(
       entry => entry.characterId === 101010
@@ -1445,6 +1447,46 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(service.catalog().optimizationQualification.summary.m12cLocked).toBe(
       true
     );
+  });
+
+  it('exposes character position and soul profession in the cultivation catalog', () => {
+    const characterProfiles = qualificationCatalog.cultivation.character.profiles;
+    const soulProfiles = qualificationCatalog.cultivation.soulEssence.profiles;
+
+    expect(characterProfiles.length).toBeGreaterThanOrEqual(11);
+    expect(
+      characterProfiles.every(
+        profile =>
+          typeof profile.position === 'string' && profile.position.length > 0
+      )
+    ).toBe(true);
+    expect(soulProfiles).toHaveLength(62);
+    expect(
+      soulProfiles.every(
+        profile =>
+          profile.profession === null ||
+          (typeof profile.profession === 'string' &&
+            profile.profession.length > 0)
+      )
+    ).toBe(true);
+
+    const soul95 = soulProfiles.find(
+      profile => profile.soulEssenceId === 10095
+    );
+    expect(soul95.profession).toBe('增幅');
+    const starbornProfile = characterProfiles.find(
+      profile => profile.characterId === 199001 || profile.characterId === 199002
+    );
+    expect(starbornProfile.position).toBe('增幅');
+    const soul95Edges = qualificationCatalog.bindingMatrix.actorSoulEssence.filter(
+      edge => Number(edge.soulEssenceId) === 10095
+    );
+    expect(
+      soul95Edges.find(edge => edge.actorObjectId === 'STARBORN')?.compatible
+    ).toBe(true);
+    expect(
+      soul95Edges.find(edge => edge.actorObjectId === '111001')?.compatible
+    ).toBe(false);
   });
 });
 
