@@ -51,7 +51,7 @@ const REQUIRED_RANGES = Object.freeze([
 ].map(([identity, range, bytes, sha256]) => ({ identity, range, bytes, sha256 })));
 
 const REQUIRED_ROOTS = Object.freeze([
-  { rootElementId: 19004600, intervalMs: 1000, markElementId: 250, strictThreshold: 1, targetType: 0, leafElementId: 19004601, leafDurationMs: 1100, deleteChildElementOnUnload: true, propertyTags: [302, 303], attributeId: 21, combineNumber: 0, baseFunctionId: 5, disposition: 'evidence-insufficient-multi-property-tag-match' },
+  { rootElementId: 19004600, intervalMs: 1000, markElementId: 250, strictThreshold: 1, targetType: 0, leafElementId: 19004601, leafDurationMs: 1100, deleteChildElementOnUnload: true, propertyTags: [302, 303], attributeId: 21, combineNumber: 0, baseFunctionId: 5, disposition: 'runtime-applied', multiPropertyTagSemantics: { contractName: 'AzPrBattlePropertyTagMatchingRuntimeEvidence', matchMode: 'any-overlap-event-driven', sourceIdentity: 'GameAssembly.dll#BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0/BattlePropertyData.GetPropertyValue@0x12BE540' } },
   { rootElementId: 19006000, intervalMs: 1000, markElementId: 750, strictThreshold: 2, targetType: 0, leafElementId: 19006001, leafDurationMs: 1100, deleteChildElementOnUnload: true, propertyTags: [], attributeId: 8, combineNumber: 0, baseFunctionId: 5, disposition: 'runtime-applied' },
   { rootElementId: 19004901, intervalMs: 1000, markElementId: 650, strictThreshold: 1, targetType: 0, leafElementId: 19004902, leafDurationMs: 1200, deleteChildElementOnUnload: false, propertyTags: [], attributeId: 222, combineNumber: -1, baseFunctionId: 5, disposition: 'runtime-applied', requiresHasElementId: true },
   { rootElementId: 19007701, intervalMs: 2000, markElementId: null, strictThreshold: null, targetType: 13, leafElementId: 19007702, leafDurationMs: 2300, deleteChildElementOnUnload: false, propertyTags: [], attributeId: 21, combineNumber: -1, baseFunctionId: 5, disposition: 'runtime-applied' },
@@ -71,7 +71,7 @@ const REQUIRED_SEMANTICS = Object.freeze({
   rightOpenLifetime: 'active-from-apply-inclusive-until-expiry-exclusive',
   unload: 'root-removal-stops-future-periodic-triggers-and-deleteChildElement-controls-immediate-child-removal',
   sameFrameCanonicalOrder: 'periodic-on-update-settlement-follows-already-materialized-action-and-tuning-transactions-at-the-same-frame',
-  multiPropertyTagMatch: 'evidence-open',
+  multiPropertyTagMatch: 'any-overlap-event-driven',
 });
 
 export async function readPeriodicPersistentPropertyRuntimeEvidenceSource({ sourcePath, gameAssemblyPath, il2CppDumpPath, battleElementAssetsPath, elementFormulaPath, projectRoot }) {
@@ -129,7 +129,7 @@ export function validatePeriodicPersistentPropertyRuntimeEvidence(value, observa
   assertExactProperties(value.semantics, REQUIRED_SEMANTICS, 'semantics-drift');
   const applied = value.conclusion?.runtimeAppliedRootElementIds ?? [];
   const blocked = value.conclusion?.evidenceInsufficientRootElementIds ?? [];
-  if (JSON.stringify(applied) !== JSON.stringify([19004901, 19006000, 19007701]) || JSON.stringify(blocked) !== JSON.stringify([19004600])) fail('conclusion-drift');
+  if (JSON.stringify(applied) !== JSON.stringify([19004600, 19004901, 19006000, 19007701]) || JSON.stringify(blocked) !== JSON.stringify([])) fail('conclusion-drift');
   return true;
 }
 
@@ -159,6 +159,7 @@ function validateRootContract(value, rowsById, required) {
   if (Boolean(required.requiresHasElementId) !== Boolean(hasElementCondition)) fail('root-has-element-condition-drift', required.rootElementId);
   if (Number(leaf.attributeID) !== required.attributeId || Number(leaf.calculateType) !== 1 || Number(leaf.time) !== required.leafDurationMs || Number(leaf.combineType) !== 3 || Number(leaf.combineNumber) !== required.combineNumber || Number(leaf.executeTargetType) !== 0 || Number(leaf.inheritType) !== 0 || Number(leaf.formulaParams?.function_1) !== 1 || Number(leaf.formulaParams?.function_2) !== required.baseFunctionId || Number(leaf.formulaParams?.formulaParamValues?.[6]) !== 10000 || JSON.stringify(leaf.defaultPropertyTags ?? []) !== JSON.stringify(required.propertyTags)) fail('leaf-fields-drift', required.leafElementId);
   if (Number(contract.intervalMs) !== required.intervalMs || Number(contract.targetType) !== required.targetType || Number(contract.leafElementId) !== required.leafElementId || Number(contract.leafDurationMs) !== required.leafDurationMs || contract.deleteChildElementOnUnload !== required.deleteChildElementOnUnload || JSON.stringify(contract.propertyTags ?? []) !== JSON.stringify(required.propertyTags) || contract.disposition !== required.disposition || Number(contract.leaf?.attributeId) !== required.attributeId || Number(contract.leaf?.combineNumber) !== required.combineNumber || Number(contract.leaf?.baseFunctionId) !== required.baseFunctionId) fail('artifact-root-contract-drift', required.rootElementId);
+  if (required.multiPropertyTagSemantics && (JSON.stringify(contract.multiPropertyTagSemantics ?? {}) !== JSON.stringify(required.multiPropertyTagSemantics))) fail('artifact-multi-property-tag-semantics-drift', required.rootElementId);
 }
 
 function readBattleRows(text) {

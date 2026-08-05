@@ -131,12 +131,14 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
     '9a134964698a7bb6dacc25e917759b69b0ec4fb63df4863501d02c9df904d14e',
   soulEffectNonDamageRuntimeEvidence:
     'b70e084ba7f5edfc65f70dbb3b8aab6f8ac30888a252627f4412e2d1b9a768a1',
+  battlePropertyTagMatchingRuntimeEvidence:
+    'a908a614ebc04462e082cc17f7df28c1da0c072a367e5f99ef208f7cb475b544',
   landedHitRecoveryRuntimeEvidence:
     '634c979cda572f8fff1509bbf888240aebe8fad7728f357ce06390fee364a248',
   persistentLoadoutPropertyRuntimeEvidence:
     'c8b9205b959a241f284dcacb4a27cbe63fc62cd028766777f50cca8941ecea57',
   periodicPersistentPropertyRuntimeEvidence:
-    'da295df64cfde1d6770e19b542b9fd1cca35c559606ccf31f65b2b0273b68461',
+    '479c3b907deebb17d8a8d21713b552b5ad4174a032ea0b9dcaea937781dd1c25',
   fourPieceSetStackRuntimeEvidence:
     'ae357c59a494f724c9ce36fde79df3fd505f1434c01c4b87697d5770f9cc98dc',
   beforeSkillCompositeRuntimeEvidence:
@@ -211,6 +213,7 @@ export async function createOptimizationQualificationArtifacts({
   soulEffectGetElementTypeRuntimeEvidencePath = null,
   soulEffectBeforeDamageRuntimeEvidencePath = null,
   soulEffectNonDamageRuntimeEvidencePath = null,
+  battlePropertyTagMatchingRuntimeEvidencePath = null,
   landedHitRecoveryRuntimeEvidencePath = null,
   persistentLoadoutPropertyRuntimeEvidencePath = null,
   periodicPersistentPropertyRuntimeEvidencePath = null,
@@ -331,6 +334,26 @@ export async function createOptimizationQualificationArtifacts({
       gameAssemblyPath,
       projectRoot,
     });
+  sources.battlePropertyTagMatchingRuntimeEvidence =
+    await readBattlePropertyTagMatchingRuntimeEvidenceSource({
+      sourcePath:
+        battlePropertyTagMatchingRuntimeEvidencePath ??
+        path.join(
+          projectRoot,
+          'scripts',
+          'optimization-qualification',
+          'evidence',
+          'battle-property-tag-matching-runtime-evidence.json'
+        ),
+      gameAssemblyPath,
+      il2CppDumpPath: il2cppRuntimeContractsPath,
+      projectRoot,
+    });
+  sources.il2cppRuntimeContracts.value.battlePropertyTags =
+    attachBattlePropertyTagMatchingEvidence(
+      sources.il2cppRuntimeContracts.value.battlePropertyTags,
+      sources.battlePropertyTagMatchingRuntimeEvidence.value
+    );
   sources.landedHitRecoveryRuntimeEvidence =
     await readLandedHitRecoveryRuntimeEvidenceSource({
       sourcePath:
@@ -537,6 +560,10 @@ export async function createOptimizationQualificationArtifacts({
   assertSoulEffectNonDamageRuntimeEvidenceReference(
     acceptanceReport?.sourceClosure?.nonDamageRuntimeEvidence,
     sources.soulEffectNonDamageRuntimeEvidence
+  );
+  assertBattlePropertyTagMatchingRuntimeEvidenceReference(
+    acceptanceReport?.sourceClosure?.battlePropertyTagMatchingRuntimeEvidence,
+    sources.battlePropertyTagMatchingRuntimeEvidence
   );
   assertPersistentLoadoutPropertyRuntimeEvidenceReference(
     acceptanceReport?.sourceClosure?.persistentLoadoutPropertyRuntimeEvidence,
@@ -807,7 +834,7 @@ export async function createOptimizationQualificationArtifacts({
       contractName: 'AzPrOptimizationQualificationRoster',
       kind: 'azpr-optimization-qualification-roster',
       generatedAt: OPTIMIZATION_QUALIFICATION_GENERATED_AT,
-      phase: 'M12-B3-E7',
+      phase: 'M12-B3-E8',
       sourceSnapshot,
       filterContract: {
         characterElements: ['风', '雷'],
@@ -1773,8 +1800,8 @@ function createSummary({
   catalog,
 }) {
   return {
-    phase: 'M12-B3-E7',
-    status: 'b3-e7-implemented',
+    phase: 'M12-B3-E8',
+    status: 'b3-e8-implemented',
     denominators: roster.denominators,
     sourceSnapshotHash: roster.sourceSnapshot.sourceSnapshotHash,
     rosterHash: roster.rosterHash,
@@ -2205,6 +2232,7 @@ function createSourceSnapshot(sources) {
         key === 'afterDamageTargetPropertyRuntimeEvidence' ||
         key === 'soulessenceAfterDamageEmptyConditionRuntimeEvidence' ||
         key === 'soulessenceActivationConditionRuntimeEvidence' ||
+        key === 'battlePropertyTagMatchingRuntimeEvidence' ||
         key === 'elementFormula' ||
         key === 'setThreeSourceIdentityEvidence'
       ) {
@@ -2223,7 +2251,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-E7 Composite Multi-Trigger\n\n' +
+    '# M12-B3-E8 Composite Multi-Trigger\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -2770,6 +2798,205 @@ function createBuffElementWrapperContract({
   };
 }
 
+export async function readBattlePropertyTagMatchingRuntimeEvidenceSource({
+  sourcePath,
+  gameAssemblyPath,
+  il2CppDumpPath,
+  projectRoot,
+}) {
+  const bytes = await fs.readFile(sourcePath);
+  const value = JSON.parse(bytes.toString('utf8'));
+  const binaryIdentity = await readBinaryIdentity(gameAssemblyPath);
+  const dumpIdentity = await readBinaryIdentity(il2CppDumpPath);
+  const binary = await fs.readFile(gameAssemblyPath);
+  const dumpText = await fs.readFile(il2CppDumpPath, 'utf8');
+  const rangeHashes = Object.fromEntries(
+    (value.binaryRanges ?? []).map(record => [
+      record.range,
+      createHash('sha256')
+        .update(readPortableExecutableRvaRange(binary, record.range))
+        .digest('hex'),
+    ])
+  );
+  const dumpFragments = [
+    ...(value.dumpBindings?.methods ?? []).flatMap(record => [
+      `// RVA: ${record.rva}`,
+      record.declaration,
+    ]),
+    ...(value.dumpBindings?.fields ?? []).map(record => record.declaration),
+    ...(value.dumpBindings?.enums ?? []).flatMap(record => [
+      record.description,
+      record.declaration,
+    ]),
+  ];
+  const observations = {
+    binaryIdentity,
+    dumpIdentity,
+    rangeHashes,
+    rangeCount: Object.keys(rangeHashes).length,
+    dumpFragmentsPresent: dumpFragments.every(fragment =>
+      dumpText.includes(fragment)
+    ),
+  };
+  validateBattlePropertyTagMatchingRuntimeEvidence(value, observations);
+  return {
+    path: normalizeSourcePath(sourcePath, projectRoot),
+    bytes: bytes.byteLength,
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+    value: {
+      ...value,
+      verifiedBinary: binaryIdentity,
+      verifiedIl2CppDump: dumpIdentity,
+    },
+    observations,
+  };
+}
+
+export function validateBattlePropertyTagMatchingRuntimeEvidence(
+  value,
+  observations
+) {
+  if (
+    value?.contractName !== 'AzPrBattlePropertyTagMatchingRuntimeEvidence' ||
+    Number(value?.schemaVersion) !== 1 ||
+    value?.conclusion?.status !== 'applied'
+  ) {
+    throw new Error(
+      'optimization-qualification-property-tag-matching-evidence-contract-invalid'
+    );
+  }
+  if (
+    Number(value.reviewedBinary?.bytes) !==
+      Number(observations?.binaryIdentity?.bytes) ||
+    value.reviewedBinary?.sha256 !== observations?.binaryIdentity?.sha256
+  ) {
+    throw new Error(
+      'optimization-qualification-property-tag-matching-evidence-binary-mismatch'
+    );
+  }
+  if (
+    Number(value.reviewedIl2CppDump?.bytes) !==
+      Number(observations?.dumpIdentity?.bytes) ||
+    value.reviewedIl2CppDump?.sha256 !== observations?.dumpIdentity?.sha256 ||
+    observations?.dumpFragmentsPresent !== true
+  ) {
+    throw new Error(
+      'optimization-qualification-property-tag-matching-evidence-dump-drift'
+    );
+  }
+  const expectedMethods = [
+    {
+      identity:
+        'Lens.Gameplay.Modules.BigWorld.BattlePropertyData.DynamicBattlePropertyValue.GetValue',
+      rva: '0x12D3300',
+      declaration: 'public MyFloat GetValue(List<int> tags) { }',
+    },
+    {
+      identity:
+        'Lens.Gameplay.Modules.BigWorld.BattlePropertyData.DynamicBattlePropertyValue.SetValue',
+      rva: '0x12D34F0',
+      declaration: 'public void SetValue(int tag, MyFloat value) { }',
+    },
+    {
+      identity: 'Lens.Gameplay.Modules.BigWorld.BattlePropertyData.GetPropertyValue',
+      rva: '0x12BE540',
+      declaration: 'public MyFloat GetPropertyValue(bool isRatio, List<int> tags) { }',
+    },
+  ];
+  if (
+    JSON.stringify(value.dumpBindings?.methods) !==
+    JSON.stringify(expectedMethods)
+  ) {
+    throw new Error(
+      'optimization-qualification-property-tag-matching-evidence-method-drift'
+    );
+  }
+  if (
+    value.dumpBindings?.fields?.[0]?.identity !==
+      'Lens.Gameplay.Modules.BigWorld.BattlePropertyData.DynamicBattlePropertyValue.m_propertyValues' ||
+    value.dumpBindings?.fields?.[0]?.declaration !==
+      'private Dictionary<int, MyFloat> m_propertyValues; // 0x10'
+  ) {
+    throw new Error(
+      'optimization-qualification-property-tag-matching-evidence-field-drift'
+    );
+  }
+  if (
+    value.semantics?.multipleModifierTags !== 'any-overlap-event-driven' ||
+    value.semantics?.singleModifierTag !== 'exact-membership-special-case' ||
+    value.semantics?.emptyModifierTags !== 'unscoped-base-tag-0' ||
+    Number(value.semantics?.baseTag) !== 0
+  ) {
+    throw new Error(
+      'optimization-qualification-property-tag-matching-evidence-semantics-drift'
+    );
+  }
+  for (const evidenceRange of value.binaryRanges ?? []) {
+    if (
+      observations?.rangeHashes?.[evidenceRange.range] !== evidenceRange.sha256
+    ) {
+      throw new Error(
+        `optimization-qualification-property-tag-matching-evidence-range-drift:${evidenceRange.range}`
+      );
+    }
+  }
+}
+
+export function assertBattlePropertyTagMatchingRuntimeEvidenceReference(
+  reference,
+  source
+) {
+  if (
+    reference?.path !== source.path ||
+    Number(reference?.bytes) !== Number(source.bytes) ||
+    reference?.sha256 !== source.sha256 ||
+    reference?.binaryPath !== source.value.reviewedBinary?.path ||
+    Number(reference?.binaryBytes) !==
+      Number(source.value.reviewedBinary?.bytes) ||
+    reference?.binarySha256 !== source.value.reviewedBinary?.sha256 ||
+    reference?.il2CppDumpPath !== source.value.reviewedIl2CppDump?.path ||
+    Number(reference?.il2CppDumpBytes) !==
+      Number(source.value.reviewedIl2CppDump?.bytes) ||
+    reference?.il2CppDumpSha256 !== source.value.reviewedIl2CppDump?.sha256 ||
+    Number(reference?.rangeCount) !==
+      (source.value.binaryRanges ?? []).length
+  ) {
+    throw new Error(
+      'optimization-qualification-property-tag-matching-evidence-report-reference-drift'
+    );
+  }
+}
+
+function attachBattlePropertyTagMatchingEvidence(contract, evidence) {
+  if (
+    contract?.sourceKind !== 'il2cpp-battle-property-tag-contract' ||
+    evidence?.conclusion?.status !== 'applied'
+  ) {
+    throw new Error(
+      'optimization-qualification-property-tag-matching-evidence-attach-invalid'
+    );
+  }
+  const value = {
+    ...contract,
+    matchSemantics: {
+      emptyModifierTags: evidence.semantics.emptyModifierTags,
+      singleModifierTag: evidence.semantics.singleModifierTag,
+      multipleModifierTags: evidence.semantics.multipleModifierTags,
+    },
+    matchingRuntimeEvidence: {
+      contractName: evidence.contractName,
+      status: evidence.conclusion.status,
+      ranges: (evidence.binaryRanges ?? []).map(record => ({
+        identity: record.identity,
+        range: record.range,
+        sha256: record.sha256,
+      })),
+      sourceIdentity: evidence.conclusion.sourceIdentity,
+    },
+  };
+  return { ...value, contractHash: hashCanonicalValue(value) };
+}
+
 function createBattlePropertyTagContract({
   sourcePath,
   skillTagBlock,
@@ -2793,6 +3020,24 @@ function createBattlePropertyTagContract({
       propertyTagName: 'Skill1',
       propertyTag: 301,
       propertyDescription: '[属性Tag]重击',
+    },
+    {
+      skillTagName: 'NormalSkill',
+      skillTagId: 3,
+      skillDescription: '角色小技能',
+      actionKind: 'star-skill',
+      propertyTagName: 'Skill2',
+      propertyTag: 302,
+      propertyDescription: '[属性Tag]技能',
+    },
+    {
+      skillTagName: 'UltraSkill',
+      skillTagId: 4,
+      skillDescription: '角色大招',
+      actionKind: 'ultimate',
+      propertyTagName: 'UltraSkill',
+      propertyTag: 303,
+      propertyDescription: '[属性Tag]大招',
     },
   ];
   const bindings = bindingDeclarations.map(binding => {
@@ -2821,8 +3066,6 @@ function createBattlePropertyTagContract({
     };
   });
   const unresolvedPropertyTags = [
-    ['Skill2', 302],
-    ['UltraSkill', 303],
     ['EvadeAttack', 304],
     ['ReboundCounterattack', 305],
     ['EvadeBoostAttack', 306],

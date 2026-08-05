@@ -335,6 +335,9 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
       .filter(binding => binding.status === 'applied')
       .map(binding => Number(binding.propertyTag))
   );
+  const anyOverlapTagMatchApplied =
+    catalog?.propertyTagContract?.matchSemantics?.multipleModifierTags ===
+    'any-overlap-event-driven';
   const tuningProfiles =
     mechanicsPackage?.tuningMechanicsCatalog?.profiles ?? [];
   const records = definitions.map(definition => {
@@ -355,6 +358,8 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
         : sourcePropertyTags.length === 1 &&
             supportedPropertyTags.has(sourcePropertyTags[0])
           ? 'single-exact'
+          : sourcePropertyTags.length > 1 && anyOverlapTagMatchApplied
+            ? 'any-overlap-event-driven'
           : null;
     const sourceConditionLogic = Number(triggerTree.triggerConditionType);
     const generatedConditionLogic = Number(
@@ -600,6 +605,7 @@ async function createLoadoutPropertyTagAudit(catalog, mechanicsPackage) {
       ...owner,
       sourceRowsByElementId,
       supportedPropertyTags,
+      anyOverlapTagMatchApplied,
     })
   );
   const allRecords = [...records, ...persistentRecords];
@@ -654,6 +660,7 @@ function createPersistentLoadoutPropertyAuditRecords({
   definition,
   sourceRowsByElementId,
   supportedPropertyTags,
+  anyOverlapTagMatchApplied,
 }) {
   const root = definition.persistentRoot;
   const installationSourceRow = sourceRowsByElementId.get(
@@ -739,6 +746,8 @@ function createPersistentLoadoutPropertyAuditRecords({
         : sourcePropertyTags.length === 1 &&
             supportedPropertyTags.has(sourcePropertyTags[0])
           ? 'single-exact'
+          : sourcePropertyTags.length > 1 && anyOverlapTagMatchApplied
+            ? 'any-overlap-event-driven'
           : null;
     const removalPaths = root.unload?.removalPaths ?? [];
     const issueCodes = [

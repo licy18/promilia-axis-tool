@@ -10,11 +10,7 @@ export function matchesVerifiedBattlePropertyTags(
   const required = normalizeIntegerTags(modifierTags);
   if (required.length === 0) return true;
   const available = normalizeIntegerTags(hitPropertyTags);
-  return (
-    required.length === 1 &&
-    available.length === 1 &&
-    required[0] === available[0]
-  );
+  return available.some(tag => required.includes(tag));
 }
 
 export function resolveVerifiedBattlePropertyTagsForHit({

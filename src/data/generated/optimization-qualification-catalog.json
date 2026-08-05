@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "8bd390b4db8b5942",
-  "manifestsHash": "7f1a6bbd6fae3722",
-  "gapLedgerHash": "3d420ff1c7f92d40",
-  "bindingMatrixHash": "1eb94f9330b1486e",
-  "sourceSnapshotHash": "211b26b7365700a7",
+  "rosterHash": "fdd56dcb62763ef6",
+  "manifestsHash": "9807366d4fcb6a99",
+  "gapLedgerHash": "d762687d197249f4",
+  "bindingMatrixHash": "f909d2d066507049",
+  "sourceSnapshotHash": "4eb4647233a994b0",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -2614,14 +2614,12 @@
       "objectKind": "soul-essence",
       "objectId": "10078",
       "displayName": "星晚的追忆",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "soulessence-effect-skill-dynamic-unapplied",
-        "strict-soulessence-cultivation-runtime-partial",
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "1fbc9df39d6d0cdd"
+      "manifestHash": "2d11fa3c9e19a297"
     },
     {
       "objectKind": "soul-essence",
@@ -2632,7 +2630,7 @@
       "blockerCodes": [
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "926b8a967eb980fe"
+      "manifestHash": "ea19d5c5e8087116"
     },
     {
       "objectKind": "soul-essence",
@@ -2887,7 +2885,7 @@
       "blockerCodes": [
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "3f0fd59ce9069ce7"
+      "manifestHash": "97a7c9e6c4e71e77"
     },
     {
       "objectKind": "soul-essence",
@@ -2986,7 +2984,7 @@
       "blockerCodes": [
         "soulessence-visual-acceptance-not-published"
       ],
-      "manifestHash": "5a5ed398d16227ec"
+      "manifestHash": "e30d92c548bee018"
     },
     {
       "objectKind": "soul-essence",
@@ -3023,7 +3021,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "8bd390b4db8b5942",
+    "rosterHash": "fdd56dcb62763ef6",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24931,7 +24929,7 @@
       "setSkillThresholdQualifiedCount": 0,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "1eb94f9330b1486e"
+    "bindingMatrixHash": "f909d2d066507049"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -40674,9 +40672,9 @@
                 "sourceIdentity": "NewTable/skill_level.rows[id=2781,skillId=1900460,level=4]"
               }
             ],
-            "status": "source-indexed-runtime-unapplied",
-            "mechanismFamily": "source-indexed-composite-effect",
-            "catalogDefinitionHash": "8f68e15dafe75d8a",
+            "status": "runtime-applied",
+            "mechanismFamily": "equipped-loadout-periodic-conditional-property-root",
+            "catalogDefinitionHash": "7c51231d71beb698",
             "sourceIdentity": "NewTable/soulessence.rows[id=10078].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10078]"
@@ -40743,7 +40741,7 @@
             ],
             "status": "runtime-applied",
             "mechanismFamily": "equipped-loadout-periodic-conditional-property-root",
-            "catalogDefinitionHash": "a91c0598214c31d6",
+            "catalogDefinitionHash": "33ecc22072d912c2",
             "sourceIdentity": "NewTable/soulessence.rows[id=10084].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10084]"
@@ -42284,7 +42282,7 @@
             ],
             "status": "runtime-applied",
             "mechanismFamily": "equipped-loadout-periodic-conditional-property-root",
-            "catalogDefinitionHash": "19a79d5eb1cb9c37",
+            "catalogDefinitionHash": "2ce57cb9780a2d13",
             "sourceIdentity": "NewTable/soulessence.rows[id=10152].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10152]"
@@ -42887,7 +42885,7 @@
             ],
             "status": "runtime-applied",
             "mechanismFamily": "equipped-loadout-periodic-conditional-property-root",
-            "catalogDefinitionHash": "3f8a9051ea6386ad",
+            "catalogDefinitionHash": "e8b3f9a0f690fafd",
             "sourceIdentity": "NewTable/soulessence.rows[id=10197].reishiSkill"
           },
           "sourceIdentity": "NewTable/soulessence.rows[id=10197]"
@@ -43029,8 +43027,8 @@
       ],
       "effectStatus": {
         "status": "partially-runtime-applied",
-        "runtimeAppliedCount": 58,
-        "unresolvedCount": 4
+        "runtimeAppliedCount": 59,
+        "unresolvedCount": 3
       }
     },
     "equipment": {
@@ -44359,8 +44357,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 172,
-      "runtime-integrated": 93
+      "extracted": 171,
+      "runtime-integrated": 94
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -44370,7 +44368,7 @@
       "set-skill": 0
     },
     "optimizationReadyTotal": 0,
-    "gameplayBlockingGapCount": 343,
+    "gameplayBlockingGapCount": 341,
     "bindingQualifiedEdgeCount": 0,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44455,5 +44453,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "5814f1bca01e1d81"
+  "catalogHash": "c05bd434fe3b38d1"
 }

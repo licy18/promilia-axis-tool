@@ -86,8 +86,8 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - C7-R3 stores the recovery fields, local/remote callsites, executor/source `isMainControl` gates, `EPlayerNetworkState` semantics, SPSystem dispatch and 11 exact binary ranges in a versioned artifact. The generator revalidates its binary/dump/range hashes and the acceptance report reference. `isMainControl` is local network authority, not the active actor timeline, so production runtime remains unchanged.
 - R3 verification passed: focused evidence/runtime `5 / 119`, three-character profile/migration `4 / 38`, Machine Axis `12 / 157`, nine deterministic audits, and production build. The accepted R2 canonical/runtime `6 / 72` remains applicable with zero production runtime diff.
 - C14 verification and product acceptance are complete. C15 passes focused source/census/runtime/cycle `5 / 179`, complete optimization qualification `11 / 71`, three-character profile/golden/migration `4 / 38`, canonical/runtime/cycle `6 / 187`, Machine Axis `12 / 160`, nine deterministic audits, and the 1875-module production build. Standard Machine Axis hashes remain unchanged.
-- Status: `B3-E7 implemented`（2026-08-05 用户恢复执行，E1-E7 已收口提交）。
-- Next step: E8（剩余证据硬项）；M12-C 与正式搜索保持锁定。
+- Status: `B3-E8 implemented`（2026-08-05 用户恢复执行，E1-E8 已收口提交）。
+- Next step: E9（剩余证据硬项）；M12-C 与正式搜索保持锁定。
 
 ## B3 恢复执行计划（2026-08-05，用户已明确恢复）
 
@@ -109,7 +109,9 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - **E6 验证**：优化资格套件 13 文件/76 测试、灵魂效果运行时 119/119（新增 10032 合成回放 1/2 星、10107/10216 星级缩放断言）、Machine Axis 12 文件/160 测试、`audit:optimization-qualification` 幂等、`audit:applied-source-bindings:check` 通过、生产构建通过、`git diff --check` 通过。
 - **E7（已完成，2026-08-05）**：护盾证据闭合 —— `10169 软软棉花肉`（OnGotShield 全队调谐 20s）已转绿。用 capstone 反汇编 `ShieldElement.Execute@0x13A2040`：事件 40 仅在 `AliveProperty.shieldHitValueList`（`List<ShieldData>` 字段 @0x88，原生 `List._size` @0x18）为空时经 `InvokeTriggerElementHandle@0x18B5D50` 派发；已有护盾实例时跳过派发直接 `SetShield@0x13A33C0`。证据 `soulessence-non-damage-runtime-evidence.json` 新增 `propertyFields`（AliveProperty.shieldHitValueList@0x88）、`consumer.onGotShieldEmptyListGate`（range 0x13A21D8-0x13A21E2，10B，sha256 `f0ae0341…`）、`onGotShield.refreshReplacementSemantics: applied`（emptyShieldListGate 语义：替换/刷新不重复派发）；校验器、FROZEN 源哈希、验收报告同步。结果：soul 级 runtime-applied 57→58（census 记录 69/5），阻断 345→343（evidence-insufficient 21→19），dynamic-unapplied 5→4。验收报告推进至 `M12-B3-E7 / b3-e7-implemented`。
 - **E7 验证**：优化资格套件 14 文件/79 测试（含 nonDamage 证据套件新增 2 个门控突变）、灵魂效果运行时 120/120（新增 10169 原生护盾事件回放）、Machine Axis 12 文件/160 测试、`audit:optimization-qualification` 幂等、`audit:applied-source-bindings:check` 通过、生产构建通过、`git diff --check` 通过。
-- **E8**：剩余证据硬项 —— `10011`（BeforeCriticalDamage 中继链：event25 派发证据 + 暴击事件接入灵魂触发管线）、`10063`（KillEvent：event32 派发证据 + 击杀事件接入灵魂触发管线）、`10078`（多 PropertyTag [302,303] 原生匹配语义证据，候选 `FormulaUtility.SkillDmgUp@0x1889DA0` 标签循环）、`10095`（叶 19003206 调谐强度缺 `skillsub_ele_value` 星级数值源，源缺失）。
+- **E8（已完成，2026-08-05）**：多属性标签匹配证据闭合 —— `10078 星晚的追忆`（周期根 + 2 雷印记条件 + 星鸣技/星决技伤害提升叶，propertyTags [302,303]）已转绿。反汇编确认 `BattlePropertyData.DynamicBattlePropertyValue.GetValue(List<int> tags)@0x12D3300`：先读 tag-0 基值，再遍历**当前事件标签列表**逐项 `Dictionary.TryGetValue(tag)` 累加（any-overlap-event-driven）；`SetValue(int tag, MyFloat)@0x12D34F0` 按 modifier 的每个 defaultPropertyTag 存字典键。新证据 `battle-property-tag-matching-runtime-evidence.json`（3 个二进制 range：baseTagZeroLookup 0x12D33A1-0x12D33C8 / multiTagAccumulateLoop 0x12D33EF-0x12D34A2 / setValuePerTag 0x12D34F0-0x12D358A；方法/字段/枚举绑定）；propertyTagContract 新增 Skill2=302（NormalSkill）与 UltraSkill=303 绑定，`matchSemantics.multipleModifierTags: any-overlap-event-driven`；`periodic-persistent-property-runtime-evidence.json` 19004600 disposition 从 `evidence-insufficient-multi-property-tag-match` 重定为 `runtime-applied`（C15 证据重基线，语义由新证据闭合）；运行时 `matchesVerifiedBattlePropertyTags` 改为事件标签驱动 any-overlap。结果：soul 级 runtime-applied 58→59（census 记录 70/4），阻断 343→341（evidence-insufficient 19→17），dynamic-unapplied 4→3。验收报告推进至 `M12-B3-E8 / b3-e8-implemented`。
+- **E8 验证**：优化资格套件 15 文件/81 测试（含周期证据 disposition 更新 + propertyTag 契约绑定/语义断言）、灵魂效果运行时 121/121（新增 10078 周期 any-overlap 回放 + 匹配矩阵）、Machine Axis 12 文件/160 测试、`audit:optimization-qualification` 幂等、`audit:applied-source-bindings:check` 通过（audit 支持 any-overlap 匹配模式）、生产构建通过、`git diff --check` 通过。
+- **E9**：剩余证据硬项 —— `10011`（BeforeCriticalDamage 中继链：event25 派发证据 + 暴击事件接入灵魂触发管线）、`10063`（KillEvent：event32 派发证据 + 击杀事件接入灵魂触发管线）、`10095`（叶 19003206 调谐强度缺 `skillsub_ele_value` 星级数值源，源缺失）。
 - **E6**：证据硬项 —— `10169 软软棉花肉 (1900750)` shield refresh/replacement、`10078 星晚的追忆 (1900460)` 多 PropertyTag、`set-skill:3:4` source identity、4 个 kibo passive evidence（500082/500185/500231/500360）、`112001` 解锁来源 mismatch、hero_rank final-panel 证据（11 角色 + STARBORN）、STARBORN 静态 profile。
 - **E7**：视觉/产品验收 —— 137 装备、62 灵魂、43 奇波、11 角色、12 套装逐对象走四态链与 Workbench 签收；全绿后才解锁 M12-C（不在此阶段执行正式搜索）。
 
@@ -119,7 +121,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 
 ## Remaining Blockers
 
-- Not implemented: `324` unique blockers, including 4 unresolved soul-essence dynamic skills, remaining runtime/visual qualification, and one missing STARBORN static actor profile. DNA contributes zero source or acceptance gaps.
+- Not implemented: `324` unique blockers, including 3 unresolved soul-essence dynamic skills, remaining runtime/visual qualification, and one missing STARBORN static actor profile. DNA contributes zero source or acceptance gaps.
 - Evidence insufficient: `21` unique blockers, including the existing character/Kibo boundaries, the source-bound shield refresh/replacement gaps, `set-skill:3:4`, and the `10078` multi-PropertyTag contract.
 - Formal admission remains empty. B3-B-R1 keeps the static equipment foundation but does not claim `hero_rank` attribute or skill-availability closure, and it does not qualify characters, Kibo, soul essence, equipment, set skills, or their binding matrix for optimization.
 

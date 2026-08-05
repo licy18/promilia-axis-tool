@@ -500,8 +500,8 @@ describe('verified soul essence effect generation', () => {
       controlClosureCount: 62,
       resourceReferenceCount: 282,
       missingResourceReferenceCount: 0,
-      runtimeAppliedCount: 58,
-      unresolvedCount: 4,
+      runtimeAppliedCount: 59,
+      unresolvedCount: 3,
     });
     expect(
       soulEssenceEffectCatalog.definitions.every(
@@ -4806,13 +4806,18 @@ describe('verified soul essence effect generation', () => {
       propertyTags: [301],
       applied: true,
     });
-    for (const actionKind of ['star-skill', 'ultimate']) {
-      expect(resolutions.get(actionKind)).toMatchObject({
-        status: 'battle-property-tag-action-mapping-evidence-gap',
-        propertyTags: [],
-        applied: false,
-      });
-    }
+    expect(resolutions.get('star-skill')).toMatchObject({
+      status: 'verified-battle-property-tags-ready',
+      skillTags: [3],
+      propertyTags: [302],
+      applied: true,
+    });
+    expect(resolutions.get('ultimate')).toMatchObject({
+      status: 'verified-battle-property-tags-ready',
+      skillTags: [4],
+      propertyTags: [303],
+      applied: true,
+    });
     for (const [skillTag, reason] of [
       [null, 'battle-property-tag-source-skill-tag-missing'],
       ['1|2', 'battle-property-tag-multi-skill-tag-semantics-evidence-gap'],
@@ -4862,8 +4867,10 @@ describe('verified soul essence effect generation', () => {
     expect(matchesVerifiedBattlePropertyTags([301], [301])).toBe(true);
     expect(matchesVerifiedBattlePropertyTags([301], [])).toBe(false);
     expect(matchesVerifiedBattlePropertyTags([301], [300])).toBe(false);
-    expect(matchesVerifiedBattlePropertyTags([301], [300, 301])).toBe(false);
-    expect(matchesVerifiedBattlePropertyTags([300, 301], [301])).toBe(false);
+    expect(matchesVerifiedBattlePropertyTags([301], [300, 301])).toBe(true);
+    expect(matchesVerifiedBattlePropertyTags([300, 301], [301])).toBe(true);
+    expect(matchesVerifiedBattlePropertyTags([302, 303], [303])).toBe(true);
+    expect(matchesVerifiedBattlePropertyTags([302, 303], [301])).toBe(false);
   });
 
   it.each(APPLIED_SOUL_EFFECT_MATRIX.filter(expected => !expected.contextual))(
@@ -9488,11 +9495,47 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
         definition => definition.soulEssenceId === 10078
       )
     ).toMatchObject({
-      runtimeStatus: 'source-indexed-runtime-unapplied',
-      runtimeGaps: [
-        'effect-periodic-root-multi-property-tag-semantics-evidence-gap',
-      ],
+      runtimeStatus: 'runtime-applied',
+      runtimeGaps: [],
     });
+  });
+
+  it('applies the real 10078 periodic Skill2/UltraSkill damage buff with any-overlap tags', () => {
+    const result = createRealSoulScenario({
+      soulEssenceId: 10078,
+      effectSkillId: 1900460,
+      durationMs: frameToMs(200),
+      actionPlan: [],
+      initialRuntimeState: {
+        tuningMarks: [createInheritedTuningMark(250, 2, 20_000)],
+      },
+    });
+    const generation = result.verifiedSoulEssenceEffectGeneration;
+    const commands = generation.effectCommands.filter(
+      command => command.sourceSoulEssenceId === 10078
+    );
+    expect(commands.length).toBeGreaterThan(1);
+    expect(
+      commands.every(
+        command =>
+          command.effectId === 'soulessence:10078:element:19004601' &&
+          command.targetKind === 'actor' &&
+          command.modifiers[0].attributeId === 21 &&
+          command.modifiers[0].sourceElementId === 19004601 &&
+          command.modifiers[0].sourceRawA === 1500 &&
+          JSON.stringify(command.modifiers[0].propertyTags) === '[302,303]' &&
+          command.modifiers[0].propertyTagMatchMode ===
+            'any-overlap-event-driven'
+      )
+    ).toBe(true);
+    expect(matchesVerifiedBattlePropertyTags([302, 303], [303])).toBe(true);
+    expect(matchesVerifiedBattlePropertyTags([302, 303], [302])).toBe(true);
+    expect(matchesVerifiedBattlePropertyTags([302, 303], [301])).toBe(false);
+    expect(matchesVerifiedBattlePropertyTags([302, 303], [300, 303])).toBe(
+      true
+    );
+    expect(matchesVerifiedBattlePropertyTags([], [301])).toBe(true);
+    expect(generation.unresolved).toEqual([]);
   });
 
   it('consumes failed periodic checks, refreshes one Cover leaf, and expires right-open', () => {

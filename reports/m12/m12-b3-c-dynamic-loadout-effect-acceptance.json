@@ -1,7 +1,7 @@
 {
   "schemaVersion": 25,
-    "phase": "M12-B3-E7",
-    "status": "b3-e7-implemented",
+    "phase": "M12-B3-E8",
+    "status": "b3-e8-implemented",
   "baseCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
@@ -20,7 +20,7 @@
   "acceptedC14Commit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "acceptedC15Commit": "aafb6aa6c645b7b7490fdba0f71b8941da311f6e",
   "implementationCommit": "git-self",
-  "nextStage": "b3-e7-implemented-awaiting-product-acceptance",
+  "nextStage": "b3-e8-implemented-awaiting-product-acceptance",
   "acceptedPredecessor": {
     "phase": "M12-B3-C14",
     "productionMechanicsCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
@@ -162,6 +162,18 @@
       "triggerIntervalParser": "TriggerElement.Parse@0x13BD9C0",
       "triggerIntervalGate": "TriggerElement.CanTrigger@0x13B5770"
     },
+    "battlePropertyTagMatchingRuntimeEvidence": {
+      "path": "scripts/optimization-qualification/evidence/battle-property-tag-matching-runtime-evidence.json",
+      "bytes": 3766,
+      "sha256": "a908a614ebc04462e082cc17f7df28c1da0c072a367e5f99ef208f7cb475b544",
+      "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+      "binaryBytes": 222485544,
+      "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "il2CppDumpPath": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+      "il2CppDumpBytes": 97428254,
+      "il2CppDumpSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+      "rangeCount": 3
+    },
     "landedHitRecoveryRuntimeEvidence": {
       "path": "scripts/optimization-qualification/evidence/landed-hit-recovery-runtime-evidence.json",
       "bytes": 8635,
@@ -203,8 +215,8 @@
     },
     "periodicPersistentPropertyRuntimeEvidence": {
       "path": "scripts/optimization-qualification/evidence/periodic-persistent-property-runtime-evidence.json",
-      "bytes": 13603,
-      "sha256": "da295df64cfde1d6770e19b542b9fd1cca35c559606ccf31f65b2b0273b68461",
+      "bytes": 13987,
+      "sha256": "479c3b907deebb17d8a8d21713b552b5ad4174a032ea0b9dcaea937781dd1c25",
       "binaryPath": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
       "binaryBytes": 222485544,
       "binarySha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
@@ -1012,15 +1024,15 @@
     "gameplayLogicChanged": false
   },
   "batchResults": {
-    "runtimeAppliedSoulEssenceCount": 58,
-    "runtimeUnappliedSoulEssenceCount": 4,
+    "runtimeAppliedSoulEssenceCount": 59,
+    "runtimeUnappliedSoulEssenceCount": 3,
     "runtimeAppliedSetSkillCount": 11,
     "runtimeUnappliedSetSkillCount": 1,
     "newlyAppliedSoulEssenceIds": [
-      10169
+      10078
     ],
     "newlyAppliedSetSkillIds": [],
-    "preservedRuntimeAppliedSoulEssenceCount": 57,
+    "preservedRuntimeAppliedSoulEssenceCount": 58,
     "preservedRuntimeAppliedSetSkillCount": 11,
     "remainingBlockedFourPieceSetSkillIds": [
       "set-skill:3:4"
@@ -1034,10 +1046,10 @@
       "equipment": 137,
       "setSkills": 12
     },
-  "blockingUniqueGapCount": 343,
+  "blockingUniqueGapCount": 341,
   "blockingByCategory": {
     "not-implemented": 324,
-    "evidence-insufficient": 19
+    "evidence-insufficient": 17
   },
     "formalAdmissions": {
       "characters": 0,
@@ -1048,16 +1060,16 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "211b26b7365700a7",
-    "rosterHash": "8bd390b4db8b5942",
-    "manifestsHash": "7f1a6bbd6fae3722",
-    "ledgerHash": "3d420ff1c7f92d40",
-    "bindingMatrixHash": "1eb94f9330b1486e",
-    "qualificationCatalogHash": "5814f1bca01e1d81",
-    "dynamicLoadoutEffectCensusHash": "f464cb668a515e0a",
-    "soulEssenceEffectCatalogHash": "1e6b26d4e15ef77e",
-    "soulEssenceSourceSnapshotHash": "f5c9cbf8b6c53a18",
-    "battlePropertyTagContractHash": "146e6a9a7db86606",
+    "sourceSnapshotHash": "4eb4647233a994b0",
+    "rosterHash": "fdd56dcb62763ef6",
+    "manifestsHash": "9807366d4fcb6a99",
+    "ledgerHash": "d762687d197249f4",
+    "bindingMatrixHash": "f909d2d066507049",
+    "qualificationCatalogHash": "c05bd434fe3b38d1",
+    "dynamicLoadoutEffectCensusHash": "48c243527b8ddb68",
+    "soulEssenceEffectCatalogHash": "a0afd3a5d26c69a4",
+    "soulEssenceSourceSnapshotHash": "5ec6cc237244f3ed",
+    "battlePropertyTagContractHash": "fc3806b1efc60e56",
     "soulEssenceTriggerContractHash": "7b50576425fff76e",
     "verifiedMechanicsPackageHash": "20498c0f436fdcc3f0e86ebb6308ea75586d4b2379127d23ec4d971e81bb88e9",
     "verifiedMechanicsFileSha256": "b84aaca9cd3fe1384df62cbdde5db531a0339e1c6a988f3fb6c9088d7953a971",

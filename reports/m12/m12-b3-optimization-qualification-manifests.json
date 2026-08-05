@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "8bd390b4db8b5942",
+  "rosterHash": "fdd56dcb62763ef6",
   "records": [
     {
       "objectKind": "character",
@@ -18360,23 +18360,9 @@
         "generated/soulessences.json#items[id=10078]",
         "NewTable/soulessence.rows[id=10078]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "soulessence-effect-skill-dynamic-unapplied",
-          "category": "evidence-insufficient",
-          "message": "The soul essence effect skill is source-indexed but its dynamic operator is not yet applied.",
-          "skillId": 1900460,
-          "reasons": [
-            "effect-periodic-root-multi-property-tag-semantics-evidence-gap"
-          ]
-        },
-        {
-          "code": "strict-soulessence-cultivation-runtime-partial",
-          "category": "evidence-insufficient",
-          "message": "Soul essence level/rank legality and star-driven skill levels are resolved; this effect skill remains dynamically unapplied."
-        },
         {
           "code": "soulessence-visual-acceptance-not-published",
           "category": "not-implemented",
@@ -18393,7 +18379,7 @@
         "maximumRank": 6,
         "staticProfileApplied": true,
         "effectSkillId": 1900460,
-        "effectStatus": "source-indexed-runtime-unapplied",
+        "effectStatus": "runtime-applied",
         "sourceIdentity": "NewTable/soulessence.rows[id=10078]",
         "sourceEffectStatus": "effect-skill-dynamic-unapplied",
         "effectMechanics": {
@@ -18404,8 +18390,8 @@
             "skillLogicType": 6,
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=1900460]"
           },
-          "runtimeStatus": "source-indexed-runtime-unapplied",
-          "mechanismFamily": "source-indexed-composite-effect",
+          "runtimeStatus": "runtime-applied",
+          "mechanismFamily": "equipped-loadout-periodic-conditional-property-root",
           "activationPrerequisites": [
             {
               "elementId": 19004600,
@@ -18424,7 +18410,7 @@
           "trigger": null,
           "effect": null,
           "persistentRoot": {
-            "status": "source-indexed-runtime-unapplied",
+            "status": "runtime-applied",
             "installation": {
               "frame": 0,
               "targetKind": "self-actor",
@@ -18439,7 +18425,7 @@
                 0,
                 0
               ],
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_1484180074208844438__1484180074208844438.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_-1689848319733835114__-1689848319733835114.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-621015301458273500;elementId=19004600|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_1484180074208844438__1484180074208844438.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_-1689848319733835114__-1689848319733835114.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-621015301458273500;elementId=19004600|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
             },
             "lifecycle": {
               "durationMode": "persistent-root-periodic-finite-property-leaf",
@@ -18472,9 +18458,9 @@
               "target": {
                 "kind": "self-actor",
                 "targetType": 0,
-                "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+                "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
               },
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=-621015301458273500;elementId=19004600|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-621015301458273500;elementId=19004600|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
             },
             "unload": {
               "eventId": 36,
@@ -18513,7 +18499,7 @@
                   302,
                   303
                 ],
-                "propertyTagMatchMode": "evidence-open-multi-tag",
+                "propertyTagMatchMode": "any-overlap-event-driven",
                 "propertyTagSourceIdentity": "battle-element-assets.jsonl#path_id=6596331110900550000;elementId=19004601.defaultPropertyTags",
                 "formula": {
                   "formulaIdentity": "battle-effect-formula:soul-essence:10078:1900460:19004601:6596331110900550000",
@@ -18600,10 +18586,8 @@
               19004600,
               19004601
             ],
-            "runtimeGaps": [
-              "effect-periodic-root-multi-property-tag-semantics-evidence-gap"
-            ],
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_1484180074208844438__1484180074208844438.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_-1689848319733835114__-1689848319733835114.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-621015301458273500;elementId=19004600|battle-element-assets.jsonl#path_id=6596331110900550000;elementId=19004601|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_1484180074208844438__1484180074208844438.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_-1689848319733835114__-1689848319733835114.json|elementDataList[1]|battle-element-assets.jsonl#path_id=-4236207328250796000;elementId=19004602|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+            "runtimeGaps": [],
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_1484180074208844438__1484180074208844438.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_-1689848319733835114__-1689848319733835114.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-621015301458273500;elementId=19004600|battle-element-assets.jsonl#path_id=6596331110900550000;elementId=19004601|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_1484180074208844438__1484180074208844438.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_-1689848319733835114__-1689848319733835114.json|elementDataList[1]|battle-element-assets.jsonl#path_id=-4236207328250796000;elementId=19004602|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
           },
           "sourceClosure": {
             "controlSkillId": 1900460,
@@ -18700,13 +18684,11 @@
               }
             ]
           },
-          "runtimeGaps": [
-            "effect-periodic-root-multi-property-tag-semantics-evidence-gap"
-          ],
-          "sourceIdentity": "NewTable/soulessence.rows[id=10078].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/skill_control_1900460__-8502177423078042080.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_1484180074208844438__1484180074208844438.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_-1689848319733835114__-1689848319733835114.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-621015301458273500;elementId=19004600|battle-element-assets.jsonl#path_id=6596331110900550000;elementId=19004601|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_1484180074208844438__1484180074208844438.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_-1689848319733835114__-1689848319733835114.json|elementDataList[1]|battle-element-assets.jsonl#path_id=-4236207328250796000;elementId=19004602|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+          "runtimeGaps": [],
+          "sourceIdentity": "NewTable/soulessence.rows[id=10078].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/skill_control_1900460__-8502177423078042080.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_1484180074208844438__1484180074208844438.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_-1689848319733835114__-1689848319733835114.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-621015301458273500;elementId=19004600|battle-element-assets.jsonl#path_id=6596331110900550000;elementId=19004601|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_1484180074208844438__1484180074208844438.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900460.asset/MonoBehaviour/MonoBehaviour_-1689848319733835114__-1689848319733835114.json|elementDataList[1]|battle-element-assets.jsonl#path_id=-4236207328250796000;elementId=19004602|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
         }
       },
-      "manifestHash": "1fbc9df39d6d0cdd"
+      "manifestHash": "2d11fa3c9e19a297"
     },
     {
       "objectKind": "soul-essence",
@@ -18781,7 +18763,7 @@
                 0,
                 0
               ],
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/New Timeline__5235606625454068247.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/MonoBehaviour_7004761849945723415__7004761849945723415.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-4746040833970375000;elementId=19006000|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/New Timeline__5235606625454068247.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/MonoBehaviour_7004761849945723415__7004761849945723415.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-4746040833970375000;elementId=19006000|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
             },
             "lifecycle": {
               "durationMode": "persistent-root-periodic-finite-property-leaf",
@@ -18814,9 +18796,9 @@
               "target": {
                 "kind": "self-actor",
                 "targetType": 0,
-                "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+                "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
               },
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=-4746040833970375000;elementId=19006000|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-4746040833970375000;elementId=19006000|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
             },
             "unload": {
               "eventId": 36,
@@ -18940,7 +18922,7 @@
               19006001
             ],
             "runtimeGaps": [],
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/New Timeline__5235606625454068247.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/MonoBehaviour_7004761849945723415__7004761849945723415.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-4746040833970375000;elementId=19006000|battle-element-assets.jsonl#path_id=5335513805115515000;elementId=19006001|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/New Timeline__5235606625454068247.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/MonoBehaviour_7004761849945723415__7004761849945723415.json|elementDataList[1]|battle-element-assets.jsonl#path_id=-5962945396310436000;elementId=19006002|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/New Timeline__5235606625454068247.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/MonoBehaviour_7004761849945723415__7004761849945723415.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-4746040833970375000;elementId=19006000|battle-element-assets.jsonl#path_id=5335513805115515000;elementId=19006001|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/New Timeline__5235606625454068247.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/MonoBehaviour_7004761849945723415__7004761849945723415.json|elementDataList[1]|battle-element-assets.jsonl#path_id=-5962945396310436000;elementId=19006002|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
           },
           "sourceClosure": {
             "controlSkillId": 1900600,
@@ -19038,10 +19020,10 @@
             ]
           },
           "runtimeGaps": [],
-          "sourceIdentity": "NewTable/soulessence.rows[id=10084].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/skill_control_1900600__6392545110535611621.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/New Timeline__5235606625454068247.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/MonoBehaviour_7004761849945723415__7004761849945723415.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-4746040833970375000;elementId=19006000|battle-element-assets.jsonl#path_id=5335513805115515000;elementId=19006001|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/New Timeline__5235606625454068247.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/MonoBehaviour_7004761849945723415__7004761849945723415.json|elementDataList[1]|battle-element-assets.jsonl#path_id=-5962945396310436000;elementId=19006002|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+          "sourceIdentity": "NewTable/soulessence.rows[id=10084].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/skill_control_1900600__6392545110535611621.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/New Timeline__5235606625454068247.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/MonoBehaviour_7004761849945723415__7004761849945723415.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-4746040833970375000;elementId=19006000|battle-element-assets.jsonl#path_id=5335513805115515000;elementId=19006001|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/New Timeline__5235606625454068247.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900600.asset/MonoBehaviour/MonoBehaviour_7004761849945723415__7004761849945723415.json|elementDataList[1]|battle-element-assets.jsonl#path_id=-5962945396310436000;elementId=19006002|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
         }
       },
-      "manifestHash": "926b8a967eb980fe"
+      "manifestHash": "ea19d5c5e8087116"
     },
     {
       "objectKind": "soul-essence",
@@ -27057,7 +27039,7 @@
                 0,
                 0
               ],
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_6618222656261442340__6618222656261442340.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_-7617206040492061916__-7617206040492061916.json|elementDataList[0]|battle-element-assets.jsonl#path_id=293455178027922940;elementId=19004901|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_6618222656261442340__6618222656261442340.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_-7617206040492061916__-7617206040492061916.json|elementDataList[0]|battle-element-assets.jsonl#path_id=293455178027922940;elementId=19004901|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
             },
             "lifecycle": {
               "durationMode": "persistent-root-periodic-finite-property-leaf",
@@ -27096,9 +27078,9 @@
               "target": {
                 "kind": "self-actor",
                 "targetType": 0,
-                "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+                "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
               },
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=293455178027922940;elementId=19004901|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=293455178027922940;elementId=19004901|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
             },
             "unload": {
               "eventId": 36,
@@ -27225,7 +27207,7 @@
               19004902
             ],
             "runtimeGaps": [],
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_6618222656261442340__6618222656261442340.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_-7617206040492061916__-7617206040492061916.json|elementDataList[0]|battle-element-assets.jsonl#path_id=293455178027922940;elementId=19004901|battle-element-assets.jsonl#path_id=3794026193344005600;elementId=19004902|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_2171627772115929892__2171627772115929892.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_5244654183765953316__5244654183765953316.json|elementDataList[0]|battle-element-assets.jsonl#path_id=8886631474257295000;elementId=19004903|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_6618222656261442340__6618222656261442340.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_-7617206040492061916__-7617206040492061916.json|elementDataList[0]|battle-element-assets.jsonl#path_id=293455178027922940;elementId=19004901|battle-element-assets.jsonl#path_id=3794026193344005600;elementId=19004902|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_2171627772115929892__2171627772115929892.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_5244654183765953316__5244654183765953316.json|elementDataList[0]|battle-element-assets.jsonl#path_id=8886631474257295000;elementId=19004903|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
           },
           "sourceClosure": {
             "controlSkillId": 1900490,
@@ -27321,10 +27303,10 @@
             ]
           },
           "runtimeGaps": [],
-          "sourceIdentity": "NewTable/soulessence.rows[id=10152].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/skill_control_1900490__6965820132206929978.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_6618222656261442340__6618222656261442340.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_-7617206040492061916__-7617206040492061916.json|elementDataList[0]|battle-element-assets.jsonl#path_id=293455178027922940;elementId=19004901|battle-element-assets.jsonl#path_id=3794026193344005600;elementId=19004902|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_2171627772115929892__2171627772115929892.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_5244654183765953316__5244654183765953316.json|elementDataList[0]|battle-element-assets.jsonl#path_id=8886631474257295000;elementId=19004903|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+          "sourceIdentity": "NewTable/soulessence.rows[id=10152].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/skill_control_1900490__6965820132206929978.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_6618222656261442340__6618222656261442340.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_-7617206040492061916__-7617206040492061916.json|elementDataList[0]|battle-element-assets.jsonl#path_id=293455178027922940;elementId=19004901|battle-element-assets.jsonl#path_id=3794026193344005600;elementId=19004902|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_2171627772115929892__2171627772115929892.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900490.asset/MonoBehaviour/MonoBehaviour_5244654183765953316__5244654183765953316.json|elementDataList[0]|battle-element-assets.jsonl#path_id=8886631474257295000;elementId=19004903|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
         }
       },
-      "manifestHash": "3f0fd59ce9069ce7"
+      "manifestHash": "97a7c9e6c4e71e77"
     },
     {
       "objectKind": "soul-essence",
@@ -31392,7 +31374,7 @@
                 0,
                 0
               ],
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_-8260296123005999956__-8260296123005999956.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_1342996484479378604__1342996484479378604.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-2823429950423167000;elementId=19007701|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_-8260296123005999956__-8260296123005999956.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_1342996484479378604__1342996484479378604.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-2823429950423167000;elementId=19007701|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
             },
             "lifecycle": {
               "durationMode": "persistent-root-periodic-finite-property-leaf",
@@ -31417,9 +31399,9 @@
               "target": {
                 "kind": "self-kibo",
                 "targetType": 13,
-                "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+                "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
               },
-              "sourceIdentity": "battle-element-assets.jsonl#path_id=-2823429950423167000;elementId=19007701|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-2823429950423167000;elementId=19007701|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
             },
             "unload": {
               "eventId": 36,
@@ -31537,7 +31519,7 @@
               19007702
             ],
             "runtimeGaps": [],
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_-8260296123005999956__-8260296123005999956.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_1342996484479378604__1342996484479378604.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-2823429950423167000;elementId=19007701|battle-element-assets.jsonl#path_id=-7745989274928222000;elementId=19007702|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_2881065271915832492__2881065271915832492.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_-8113656816848083796__-8113656816848083796.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-6231249903244081000;elementId=19007703|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_-8260296123005999956__-8260296123005999956.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_1342996484479378604__1342996484479378604.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-2823429950423167000;elementId=19007701|battle-element-assets.jsonl#path_id=-7745989274928222000;elementId=19007702|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_2881065271915832492__2881065271915832492.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_-8113656816848083796__-8113656816848083796.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-6231249903244081000;elementId=19007703|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
           },
           "sourceClosure": {
             "controlSkillId": 1900770,
@@ -31635,10 +31617,10 @@
             ]
           },
           "runtimeGaps": [],
-          "sourceIdentity": "NewTable/soulessence.rows[id=10197].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/skill_control_1900770__4036970557047763662.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_-8260296123005999956__-8260296123005999956.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_1342996484479378604__1342996484479378604.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-2823429950423167000;elementId=19007701|battle-element-assets.jsonl#path_id=-7745989274928222000;elementId=19007702|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_2881065271915832492__2881065271915832492.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_-8113656816848083796__-8113656816848083796.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-6231249903244081000;elementId=19007703|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+          "sourceIdentity": "NewTable/soulessence.rows[id=10197].reishiSkill|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/skill_control_1900770__4036970557047763662.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_-8260296123005999956__-8260296123005999956.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_1342996484479378604__1342996484479378604.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-2823429950423167000;elementId=19007701|battle-element-assets.jsonl#path_id=-7745989274928222000;elementId=19007702|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_2881065271915832492__2881065271915832492.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_1900770.asset/MonoBehaviour/MonoBehaviour_-8113656816848083796__-8113656816848083796.json|elementDataList[0]|battle-element-assets.jsonl#path_id=-6231249903244081000;elementId=19007703|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
         }
       },
-      "manifestHash": "5a5ed398d16227ec"
+      "manifestHash": "e30d92c548bee018"
     },
     {
       "objectKind": "soul-essence",
@@ -32363,8 +32345,8 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 172,
-      "runtime-integrated": 93
+      "extracted": 171,
+      "runtime-integrated": 94
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -32375,5 +32357,5 @@
     },
     "optimizationReadyTotal": 0
   },
-  "manifestsHash": "7f1a6bbd6fae3722"
+  "manifestsHash": "9807366d4fcb6a99"
 }

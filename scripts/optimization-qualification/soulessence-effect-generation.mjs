@@ -2642,7 +2642,11 @@ function compileSoulEffectLeaf({
     gaps.push('effect-formula-family-operator-unsupported');
   }
   if (starValues.length !== 4) gaps.push('effect-star-values-incomplete');
-  if (propertyTags.length > 1) {
+  if (
+    propertyTags.length > 1 &&
+    propertyTagContract?.matchSemantics?.multipleModifierTags !==
+      'any-overlap-event-driven'
+  ) {
     gaps.push('effect-property-tag-composition-evidence-gap');
   } else if (
     propertyTags.length === 1 &&
@@ -3494,7 +3498,11 @@ function compileSoulEffectDefinition({
   if (!PROPERTY_BUCKET_BY_CALCULATE_TYPE[Number(propertyTree.calculateType)]) {
     runtimeGaps.push('effect-property-bucket-unsupported');
   }
-  if (propertyTags.length > 1) {
+  if (
+    propertyTags.length > 1 &&
+    propertyTagContract?.matchSemantics?.multipleModifierTags !==
+      'any-overlap-event-driven'
+  ) {
     runtimeGaps.push('effect-property-tag-composition-evidence-gap');
   } else if (
     propertyTags.length === 1 &&
@@ -3838,6 +3846,7 @@ function compilePersistentPropertyRoot({
         skillId,
         property,
         values: resolveValues(property),
+        propertyTagContract,
       })
     )
     .sort(
@@ -3952,16 +3961,23 @@ function compilePersistentPropertyRoot({
     ) {
       runtimeGaps.push('effect-persistent-root-formula-unsupported');
     }
+    const multiTagApplied =
+      propertyTagContract?.matchSemantics?.multipleModifierTags ===
+      'any-overlap-event-driven';
     if (
-      effect.propertyTags.length > 1 ||
-      (effect.propertyTags.length === 1 &&
-        !supportedPropertyTags.has(effect.propertyTags[0]))
+      effect.propertyTags.length > 1 &&
+      periodicRoot &&
+      !multiTagApplied
     ) {
       runtimeGaps.push(
-        periodicRoot && effect.propertyTags.length > 1
-          ? 'effect-periodic-root-multi-property-tag-semantics-evidence-gap'
-          : 'effect-persistent-root-property-tag-unsupported'
+        'effect-periodic-root-multi-property-tag-semantics-evidence-gap'
       );
+    }
+    if (
+      effect.propertyTags.length === 1 &&
+      !supportedPropertyTags.has(effect.propertyTags[0])
+    ) {
+      runtimeGaps.push('effect-persistent-root-property-tag-unsupported');
     }
     if (ownerKind === 'soul-essence' && effect.valuesByStar.length !== 4) {
       runtimeGaps.push('effect-persistent-root-star-values-incomplete');
@@ -4130,6 +4146,7 @@ function compilePersistentPropertyEffect({
   skillId,
   property,
   values,
+  propertyTagContract,
 }) {
   const tree = property.typetree ?? {};
   const commonFunctionId = Number(
@@ -4160,7 +4177,10 @@ function compilePersistentPropertyEffect({
         ? 'unscoped'
         : (tree.defaultPropertyTags ?? []).length === 1
           ? 'single-exact'
-          : 'evidence-open-multi-tag',
+          : propertyTagContract?.matchSemantics?.multipleModifierTags ===
+              'any-overlap-event-driven'
+            ? 'any-overlap-event-driven'
+            : 'evidence-open-multi-tag',
     propertyTagSourceIdentity: `${createElementIdentity(property)}.defaultPropertyTags`,
     formula: {
       formulaIdentity: `battle-effect-formula:${ownerKind}:${ownerId}:${skillId}:${Number(tree.elementConfigId)}:${property.path_id}`,

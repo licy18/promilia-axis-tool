@@ -49,20 +49,18 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(definitions.get(10133).persistentRoot.effects).toHaveLength(2);
 
     expect(definitions.get(10078)).toMatchObject({
-      runtimeStatus: 'source-indexed-runtime-unapplied',
+      runtimeStatus: 'runtime-applied',
       persistentRoot: {
         activationMode: 'periodic-conditional-finite-leaf',
         effects: [
           expect.objectContaining({
             elementId: 19004601,
             propertyTags: [302, 303],
-            propertyTagMatchMode: 'evidence-open-multi-tag',
+            propertyTagMatchMode: 'any-overlap-event-driven',
           }),
         ],
       },
-      runtimeGaps: [
-        'effect-periodic-root-multi-property-tag-semantics-evidence-gap',
-      ],
+      runtimeGaps: [],
     });
     for (const [soulEssenceId, rootElementId, leafElementId] of [
       [10084, 19006000, 19006001],
@@ -310,8 +308,8 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 69,
-      runtimeUnappliedCount: 5,
+      runtimeAppliedCount: 70,
+      runtimeUnappliedCount: 4,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -1320,11 +1318,11 @@ describe('M12-B3-C dynamic loadout effect census', () => {
     expect(soulCatalog.propertyTagContract).toMatchObject({
       sourceKind: 'il2cpp-battle-property-tag-contract',
       matchSemantics: {
-        emptyModifierTags: 'unscoped',
-        singleModifierTag: 'exact-membership',
-        multipleModifierTags: 'evidence-open-runtime-blocked',
+        emptyModifierTags: 'unscoped-base-tag-0',
+        singleModifierTag: 'exact-membership-special-case',
+        multipleModifierTags: 'any-overlap-event-driven',
       },
-      bindings: [
+      bindings: expect.arrayContaining([
         expect.objectContaining({
           skillTagId: 1,
           skillTagName: 'NormalAttack',
@@ -1341,7 +1339,23 @@ describe('M12-B3-C dynamic loadout effect census', () => {
           propertyTagName: 'Skill1',
           status: 'applied',
         }),
-      ],
+        expect.objectContaining({
+          skillTagId: 3,
+          skillTagName: 'NormalSkill',
+          actionKind: 'star-skill',
+          propertyTag: 302,
+          propertyTagName: 'Skill2',
+          status: 'applied',
+        }),
+        expect.objectContaining({
+          skillTagId: 4,
+          skillTagName: 'UltraSkill',
+          actionKind: 'ultimate',
+          propertyTag: 303,
+          propertyTagName: 'UltraSkill',
+          status: 'applied',
+        }),
+      ]),
     });
     expect(census.propertyTagContract).toEqual(soulCatalog.propertyTagContract);
 

@@ -82,12 +82,14 @@ describe('periodic persistent PropertyElement root native evidence', () => {
           'finite-property-leaf-duration-is-independent-from-persistent-root-lifetime',
         cover: 'same-source-property-leaf-refreshes-without-stacking',
         rightOpenLifetime: 'active-from-apply-inclusive-until-expiry-exclusive',
-        multiPropertyTagMatch: 'evidence-open',
+        multiPropertyTagMatch: 'any-overlap-event-driven',
       },
       conclusion: {
         status: 'applied',
-        runtimeAppliedRootElementIds: [19004901, 19006000, 19007701],
-        evidenceInsufficientRootElementIds: [19004600],
+        runtimeAppliedRootElementIds: [
+          19004600, 19004901, 19006000, 19007701,
+        ],
+        evidenceInsufficientRootElementIds: [],
       },
     });
     expect(source.value.binaryRanges).toHaveLength(8);
@@ -118,7 +120,11 @@ describe('periodic persistent PropertyElement root native evidence', () => {
         expect.objectContaining({
           rootElementId: 19004600,
           propertyTags: [302, 303],
-          disposition: 'evidence-insufficient-multi-property-tag-match',
+          disposition: 'runtime-applied',
+          multiPropertyTagSemantics: expect.objectContaining({
+            contractName: 'AzPrBattlePropertyTagMatchingRuntimeEvidence',
+            matchMode: 'any-overlap-event-driven',
+          }),
         }),
       ])
     );
@@ -202,7 +208,7 @@ describe('periodic persistent PropertyElement root native evidence', () => {
         value.rootContracts[1].deleteChildElementOnUnload = false;
       },
       value => {
-        value.conclusion.evidenceInsufficientRootElementIds = [];
+        value.conclusion.evidenceInsufficientRootElementIds = [19004600];
       },
     ];
     for (const mutate of mutations) {

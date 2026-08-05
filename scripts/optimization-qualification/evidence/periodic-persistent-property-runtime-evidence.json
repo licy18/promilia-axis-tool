@@ -238,7 +238,12 @@
         "baseFunctionId": 5,
         "commonRatioRaw": 10000
       },
-      "disposition": "evidence-insufficient-multi-property-tag-match"
+  "disposition": "runtime-applied",
+  "multiPropertyTagSemantics": {
+    "contractName": "AzPrBattlePropertyTagMatchingRuntimeEvidence",
+    "matchMode": "any-overlap-event-driven",
+    "sourceIdentity": "GameAssembly.dll#BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0/BattlePropertyData.GetPropertyValue@0x12BE540"
+  }
     },
     {
       "rootElementId": 19006000,
@@ -361,12 +366,12 @@
     "rightOpenLifetime": "active-from-apply-inclusive-until-expiry-exclusive",
     "unload": "root-removal-stops-future-periodic-triggers-and-deleteChildElement-controls-immediate-child-removal",
     "sameFrameCanonicalOrder": "periodic-on-update-settlement-follows-already-materialized-action-and-tuning-transactions-at-the-same-frame",
-    "multiPropertyTagMatch": "evidence-open"
+    "multiPropertyTagMatch": "any-overlap-event-driven"
   },
   "conclusion": {
     "status": "applied",
-    "runtimeAppliedRootElementIds": [19004901, 19006000, 19007701],
-    "evidenceInsufficientRootElementIds": [19004600],
-    "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701"
+    "runtimeAppliedRootElementIds": [19004600, 19004901, 19006000, 19007701],
+    "evidenceInsufficientRootElementIds": [],
+    "sourceIdentity": "GameAssembly.dll#TriggerElement.OnUpdate/CheckCondition/CheckNormalCondition/GetTriggerTarget/GetSelfPet/TriggerEffect+ChangePropertyElement.Parse/Combine|element_formula.json#id=1007|battle-element-assets.jsonl#19004600/19006000/19004901/19007701|BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0"
   }
 }

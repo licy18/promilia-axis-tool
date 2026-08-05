@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrBattlePropertyTagMatchingRuntimeEvidence",
+  "reviewedBinary": {
+    "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+    "bytes": 222485544,
+    "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+  },
+  "reviewedIl2CppDump": {
+    "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+    "bytes": 97428254,
+    "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a"
+  },
+  "dumpBindings": {
+    "methods": [
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.BattlePropertyData.DynamicBattlePropertyValue.GetValue",
+        "rva": "0x12D3300",
+        "declaration": "public MyFloat GetValue(List<int> tags) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.BattlePropertyData.DynamicBattlePropertyValue.SetValue",
+        "rva": "0x12D34F0",
+        "declaration": "public void SetValue(int tag, MyFloat value) { }"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.BattlePropertyData.GetPropertyValue",
+        "rva": "0x12BE540",
+        "declaration": "public MyFloat GetPropertyValue(bool isRatio, List<int> tags) { }"
+      }
+    ],
+    "fields": [
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.BattlePropertyData.DynamicBattlePropertyValue.m_propertyValues",
+        "declaration": "private Dictionary<int, MyFloat> m_propertyValues; // 0x10"
+      }
+    ],
+    "enums": [
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.EBattlePropertyTag.None",
+        "declaration": "public const EBattlePropertyTag None = 0;",
+        "description": "[Description(\"[属性Tag]无Tag\")]"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.EBattlePropertyTag.Skill2",
+        "declaration": "public const EBattlePropertyTag Skill2 = 302;",
+        "description": "[Description(\"[属性Tag]技能\")]"
+      },
+      {
+        "identity": "Lens.Gameplay.Modules.BigWorld.EBattlePropertyTag.UltraSkill",
+        "declaration": "public const EBattlePropertyTag UltraSkill = 303;",
+        "description": "[Description(\"[属性Tag]大招\")]"
+      }
+    ]
+  },
+  "binaryRanges": [
+    {
+      "identity": "base-tag-zero-lookup",
+      "range": "0x12D33A1-0x12D33C8",
+      "bytes": 39,
+      "sha256": "6ac88ca668bc115f993e152ab8f25ac581a23d57723ddf55b574cc4753b0163c"
+    },
+    {
+      "identity": "multi-tag-accumulate-loop",
+      "range": "0x12D33EF-0x12D34A2",
+      "bytes": 179,
+      "sha256": "3991fedbc10b16bc915a81e0ee14fd1611722d7fea76415aa7723d6cae215739"
+    },
+    {
+      "identity": "set-value-per-tag",
+      "range": "0x12D34F0-0x12D358A",
+      "bytes": 154,
+      "sha256": "b96aefbed3758395897363bb2cb7cbff7cfcc2cff2801ea24578998f722120a5"
+    }
+  ],
+  "semantics": {
+    "storage": "per-tag dictionary keyed by EBattlePropertyTag; each modifier defaultPropertyTag becomes one dictionary key through SetValue(tag, value)",
+    "baseTag": 0,
+    "emptyModifierTags": "unscoped-base-tag-0",
+    "eventDriven": "GetValue(List<int> tags) first reads the tag-0 base, then iterates the current event tag list and accumulates each dictionary hit",
+    "singleModifierTag": "exact-membership-special-case",
+    "multipleModifierTags": "any-overlap-event-driven",
+    "contribution": "sum of matched per-tag entries; typical single-tag events contribute exactly one matching entry"
+  },
+  "conclusion": {
+    "status": "applied",
+    "eventContract": "canonical-battle-property-tag-matching",
+    "sourceIdentity": "GameAssembly.dll#BattlePropertyData.DynamicBattlePropertyValue.GetValue@0x12D3300/SetValue@0x12D34F0/BattlePropertyData.GetPropertyValue@0x12BE540|dump.cs#EBattlePropertyTag.None=0/Skill2=302/UltraSkill=303"
+  }
+}
