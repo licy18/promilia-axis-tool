@@ -89,6 +89,19 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - Status: `B3-E14 implemented`（2026-08-05 用户恢复执行，E1-E14 已收口提交）。
 - Next step: 奇波动作闭合（366 个公开动作中 132 evidence-closed / 53 scenario-assumed / 181 unresolved）与固定技能分类（172 个中 147/25）证据批次，随后是 9 个 PVE 被动证据；角色侧需先扩 M11-D 验收 manifest（缺 9 个源身份）并补培养运行时证据；M12-C 与正式搜索保持锁定。
 
+## 剩余阻断按难度排序的阶段计划（2026-08-05 用户确认后顺次推进）
+
+当前缺口 125：角色 33 / 奇波 90 / 套装 2。难度从低到高：
+
+- **E15 奇波固定技能槽位语义（25 条 census unresolved，不直接减资格缺口但解锁成熟度门）**：pet.json 中槽位 505/506（全量配对 7002xx/7003xx）、602/603（500101/510204x 通用）、50206（仅 500007/500024/500025/500043 四只，疑似异常）语义未定；`ESkillSlotType` 枚举（dump.cs 245009）不含这些值、`EPetSkillSlotType`（405775）是 UI 槽位 0-5、CHS lang_skill 快照对应 name 哈希值为空。下一步：反汇编 `PetSkillSlot.fixedSkillList`/`GetFixedSkillList` 解析器或改用日/英文本快照定位 505/506/602/603/50206 语义。
+- **E16 奇波 PVE 被动证据（9 个 unresolved 技能 → 资格 4 条 kibo-passive-static-evidence-gap）**：520004/520005/520006/520007 等，原因 `passive-supported-damage-trigger-shape-not-unique` / `passive-additional-trigger-elements-unmodeled`；需元素资产 + 二进制触发形状证据。
+- **E17 奇波动作闭合（53 scenario-assumed + 181 unresolved）**：43 条仅缺 `trigger-frame-missing` + `projectile-impact-frame-runtime-dependent`；但 SkillList 提取物当前是 stub（无 MonoBehaviour 数据），需新提取/运行时捕获或 `data:sync-verified-combat` 重基线决策（涉及外部漂移硬边界）。
+- **E18 奇波视觉签收（43 manifests → optimization-ready）**：E14 已发布 manifest，前置 E15-E17 全闭后产品签收即可；含概览图人工复核。
+- **E19 角色小项（2 条）**：STARBORN 静态 profile（1，需确认按统一对象豁免或补 alias profile）与 112001 突破解锁来源（1，表冲突证据）。
+- **E20 角色 M11-D 验收扩展（9 个源身份缺失 + 3 份现有 manifest 未到 ready，合计 9+11 条）**：每角色 243 项需求矩阵/场景用例/截图，工程量最大。
+- **E21 hero_rank 培养运行时证据（11 条）**：相邻档最终面板差分或上游构造路径证据。
+- **E22 set-skill:3:4（2 条）**：唯一可达旧图与正式本地化冲突，需新客户端提取或产品决策。
+
 ## B3 恢复执行计划（2026-08-05，用户已明确恢复）
 
 排序原则：先易后难。每批以「源证据 + 生成器/运行时 + 测试 + 聚焦验证 + 提交」收口，逐批把 `source-indexed-runtime-unapplied` 与 `dynamic-unapplied` 转绿；五类 formal admission 与 M12-C 保持锁定直至全分母通过。
