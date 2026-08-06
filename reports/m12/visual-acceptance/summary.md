@@ -1,10 +1,10 @@
 # M12-B3 Visual Acceptance
 
-- Catalog: `886a4031e0a17b1e`
+- Catalog: `f9307eae9aae8211`
 - Total: 254
 - Accepted: 210
 - Optimization ready: 210
-- Blocking ledger: 47
+- Blocking ledger: 46
 - Decision source: `user-directive-2026-08-05-continue-remaining-visual-acceptance`
 
 | Object kind | Total | Accepted | Optimization ready |

@@ -46,6 +46,9 @@ export const VERIFIED_COMBAT_MECHANICS_PROFILE_ID =
 export const VERIFIED_COMBAT_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedCombatRuntime';
 
+const DERIVED_DOT_SELF_HEAL_MECHANISM_FAMILY =
+  'on-kibo-damage-derived-dot-and-self-heal';
+
 const FIXED_STEP_MS = 100;
 const FRAME_RATE = 60;
 const ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE = Object.freeze({
@@ -421,6 +424,32 @@ export function createVerifiedCombatRuntime({
           appliedToCalculators: false,
         },
       });
+      appendRuntimeEvent(vitalEvents, event, state);
+      eventLog.push(event);
+      continue;
+    }
+    if (descriptor.kind === 'passive-derived-dot') {
+      const event = applyKiboPassiveDerivedDotDescriptor({
+        descriptor,
+        state,
+      });
+      appendRuntimeEvent(damageEvents, event, state);
+      eventLog.push(event);
+      continue;
+    }
+    if (descriptor.kind === 'passive-derived-self-heal') {
+      const event = applyKiboPassiveDerivedSelfHealDescriptor({
+        descriptor,
+        state,
+      });
+      appendRuntimeEvent(vitalEvents, event, state);
+      eventLog.push(event);
+      continue;
+    }
+    if (descriptor.kind === 'passive-derived-periodic-contract-unresolved') {
+      const event = createKiboPassiveDerivedPeriodicUnresolvedEvent(
+        descriptor
+      );
       appendRuntimeEvent(vitalEvents, event, state);
       eventLog.push(event);
       continue;
@@ -950,6 +979,13 @@ function qDivNearestPositive(left, right) {
 }
 
 function createPeriodicVitalDescriptors({ schedule, durationMs, frameRate }) {
+  if (schedule?.mechanismFamily === DERIVED_DOT_SELF_HEAL_MECHANISM_FAMILY) {
+    return createDerivedDotSelfHealDescriptors({
+      schedule,
+      durationMs,
+      frameRate,
+    });
+  }
   const intervalMs = positiveNumber(schedule?.trigger?.intervalMs, null);
   const normalizedFrameRate = positiveNumber(frameRate, FRAME_RATE);
   const unresolvedReasons = [];
@@ -1059,6 +1095,97 @@ function createPeriodicVitalDescriptors({ schedule, durationMs, frameRate }) {
   return descriptors;
 }
 
+function createDerivedDotSelfHealDescriptors({
+  schedule,
+  durationMs,
+  frameRate,
+}) {
+  const derivedPeriodic = schedule?.derivedPeriodic ?? {};
+  const intervalMs = positiveNumber(derivedPeriodic.intervalMs, null);
+  const relayDurationMs = positiveNumber(derivedPeriodic.durationMs, null);
+  const startMs = nonNegativeNumber(derivedPeriodic.startMs);
+  const timeExeFirstFrame = derivedPeriodic.timeExeFirstFrame === true;
+  const kind = derivedPeriodic.kind;
+  const unresolvedReasons = [];
+  if (intervalMs == null) {
+    unresolvedReasons.push('derived-periodic-interval-invalid');
+  }
+  if (relayDurationMs == null) {
+    unresolvedReasons.push('derived-periodic-duration-invalid');
+  }
+  if (!timeExeFirstFrame) {
+    unresolvedReasons.push('derived-periodic-first-trigger-policy-unsupported');
+  }
+  if (!['derived-dot', 'self-heal'].includes(kind)) {
+    unresolvedReasons.push('derived-periodic-kind-invalid');
+  }
+  if (
+    schedule?.targetKind == null ||
+    schedule?.targetId == null ||
+    schedule?.rootEffectId == null
+  ) {
+    unresolvedReasons.push('derived-periodic-target-or-root-identity-invalid');
+  }
+  if (unresolvedReasons.length > 0) {
+    return [
+      {
+        kind: 'passive-derived-periodic-contract-unresolved',
+        timeMs: 0,
+        frameIndex: null,
+        tickIndex: null,
+        thresholdMs: null,
+        schedule,
+        unresolvedReasons,
+      },
+    ];
+  }
+  const normalizedFrameRate = positiveNumber(frameRate, FRAME_RATE);
+  const descriptors = [];
+  const maximumTick = Math.floor(relayDurationMs / intervalMs) - 1;
+  for (let tickIndex = 0; tickIndex <= maximumTick; tickIndex += 1) {
+    const thresholdMs = tickIndex * intervalMs;
+    const frameIndex =
+      Math.floor(((startMs + thresholdMs) * normalizedFrameRate) / 1000) + 1;
+    const timeMs = roundValue((frameIndex * 1000) / normalizedFrameRate);
+    if (timeMs > durationMs) break;
+    descriptors.push({
+      kind:
+        kind === 'derived-dot'
+          ? 'passive-derived-dot'
+          : 'passive-derived-self-heal',
+      timeMs,
+      frameIndex,
+      tickIndex,
+      thresholdMs,
+      schedule,
+      sourceSequencePath: createDerivedPeriodicSourceSequencePath({
+        schedule,
+        tickIndex,
+      }),
+    });
+  }
+  return descriptors;
+}
+
+function createDerivedPeriodicSourceSequencePath({ schedule, tickIndex }) {
+  const sourceIdentity = [
+    schedule?.id,
+    schedule?.passiveSkillId,
+    schedule?.rootElementId,
+    schedule?.sourceActorId,
+    schedule?.sourceKiboId,
+    schedule?.sourceSlotId,
+    schedule?.targetKind,
+    schedule?.targetId,
+  ].join('|');
+  return [
+    Number.MAX_SAFE_INTEGER,
+    45,
+    stableSourceSequenceComponent(sourceIdentity),
+    nonNegativeInteger(tickIndex),
+  ];
+}
+
 function createPeriodicVitalSourceSequencePath({ schedule, tickIndex }) {
   const sourceIdentity = [
     schedule?.id,
@@ -1112,7 +1239,9 @@ function annotatePeriodicVitalOrderConflicts({
   }
   for (const rows of descriptorsByTargetAndTime.values()) {
     const periodicRows = rows.filter(
-      descriptor => descriptor.kind === 'passive-periodic-heal'
+      descriptor =>
+        descriptor.kind === 'passive-periodic-heal' ||
+        descriptor.kind === 'passive-derived-self-heal'
     );
     if (periodicRows.length === 0 || rows.length === 1) continue;
     const conflict = {
@@ -1131,6 +1260,12 @@ function resolveVitalMutationDescriptorTarget({
   controlledActorTimeline,
 }) {
   if (descriptor.kind === 'passive-periodic-heal') {
+    return {
+      kind: descriptor.schedule?.targetKind,
+      id: descriptor.schedule?.targetId,
+    };
+  }
+  if (descriptor.kind === 'passive-derived-self-heal') {
     return {
       kind: descriptor.schedule?.targetKind,
       id: descriptor.schedule?.targetId,
@@ -2940,6 +3075,310 @@ function createDirectEffectSourceSequenceUnresolvedEvent(descriptor) {
   };
 }
 
+function applyKiboPassiveDerivedDotDescriptor({ descriptor, state }) {
+  const schedule = descriptor.schedule ?? {};
+  const dot = schedule.derivedPeriodic?.dot ?? null;
+  const basePayload = {
+    passiveSkillId: schedule.passiveSkillId ?? null,
+    sourceKiboId: schedule.sourceKiboId ?? null,
+    sourceActorId: schedule.sourceActorId ?? null,
+    elementId: dot?.sourceElementId ?? null,
+    pathId: dot?.sourcePathId ?? null,
+    damageType: dot?.damage?.damageType ?? null,
+    tickIndex: descriptor.tickIndex,
+    thresholdMs: descriptor.thresholdMs,
+  };
+  const createEvent = (payload) =>
+    createKiboPassiveDerivedDotEvent({ descriptor, schedule, payload });
+  if (!dot) {
+    return createEvent({
+      ...basePayload,
+      beforeValue: null,
+      requestedDamage: null,
+      appliedDamage: 0,
+      change: 0,
+      afterValue: null,
+      lethal: false,
+      applied: false,
+      reason: 'kibo-passive-derived-dot-config-missing',
+      appliedToCalculators: false,
+    });
+  }
+  const timeMs = descriptor.timeMs;
+  const kiboState = findKiboStateByActorId(
+    state,
+    schedule.sourceKiboActorId,
+    schedule.sourceKiboId
+  );
+  const sourceAttribute = resolveRuntimeAttribute({
+    state,
+    targetKind: EFFECT_TARGET_KINDS.KIBO,
+    targetId: String(schedule.sourceKiboActorId),
+    timeMs,
+    attributeId: 1,
+    baseRaw:
+      kiboState?.attributesById?.get(1) ??
+      numberOrNull(kiboState?.profile?.attack),
+    propertyTags: [],
+    settlingSourceSequencePath: descriptor.sourceSequencePath,
+  });
+  if (!sourceAttribute.ready || sourceAttribute.value == null) {
+    return createEvent({
+      ...basePayload,
+      beforeValue: roundValue(state.enemy.hp),
+      requestedDamage: null,
+      appliedDamage: 0,
+      change: 0,
+      afterValue: roundValue(state.enemy.hp),
+      lethal: false,
+      applied: false,
+      reason: 'kibo-passive-derived-dot-source-attribute-unresolved',
+      sourceAttribute,
+      appliedToCalculators: false,
+    });
+  }
+  const coefficientRaw = Number(dot.formula?.coefficientRaw);
+  const formulaRaw = qDivNearestPositive(
+    qMul(qFromFloat(Number(sourceAttribute.value)), qFromInt(coefficientRaw)),
+    qFromInt(10_000)
+  );
+  const before = Number(state.enemy.hp);
+  const damageResult = calculateRealDamage({
+    baseRaw: formulaRaw,
+    worldEventConflictPer: 1,
+    hitLocationRatio: 1,
+    blockMiscellaneous: true,
+    miscellaneous: 1,
+    inWeakState: false,
+    breakDamageUp: 0,
+    currentHp: before,
+    minimumRemainingHp: 0,
+  });
+  const requestedDamage = Math.max(0, Number(damageResult.value));
+  const appliedDamage = Math.min(before, requestedDamage);
+  state.enemy.hp = clampNumber(
+    before - appliedDamage,
+    0,
+    positiveNumber(state.enemy.maxHp, before)
+  );
+  const lethal = before > 0 && state.enemy.hp <= 0;
+  const applied = appliedDamage > 0;
+  return createEvent({
+    ...basePayload,
+    attack: Number(sourceAttribute.value),
+    sourceAttribute,
+    coefficientRaw,
+    coefficientBasisPoints: coefficientRaw,
+    formulaRaw: formulaRaw.toString(),
+    formulaResult: damageResult,
+    beforeValue: roundValue(before),
+    requestedDamage: roundValue(requestedDamage),
+    appliedDamage: roundValue(appliedDamage),
+    rawDamage: roundValue(appliedDamage),
+    change: roundValue(-appliedDamage),
+    afterValue: roundValue(state.enemy.hp),
+    hpLossPercent: ratioOrZero(appliedDamage, state.enemy.maxHp),
+    lethal,
+    applied,
+    reason: applied
+      ? 'kibo-passive-derived-dot-applied'
+      : 'kibo-passive-derived-dot-no-effective-change',
+    appliedToCalculators: true,
+  });
+}
+
+function createKiboPassiveDerivedDotEvent({ descriptor, schedule, payload }) {
+  return {
+    type: 'VERIFIED_COMBAT_HIT',
+    timeMs: roundValue(descriptor.timeMs),
+    actionId: null,
+    actorId: schedule.sourceActorId ?? null,
+    targetId: schedule.targetId ?? null,
+    hitKey: `kibo-passive-derived-dot|${schedule.passiveSkillId ?? 'skill'}|${
+      payload.elementId ?? 'element'
+    }|${descriptor.tickIndex ?? 'tick'}|${roundValue(descriptor.timeMs)}`,
+    hitIndex: (descriptor.tickIndex ?? 0) + 1,
+    hitSkillId: null,
+    payload: {
+      verifiedCombat: true,
+      kiboPassiveDerivedDot: true,
+      toughnessDamage: 0,
+      sourceSequencePath: descriptor.sourceSequencePath ?? null,
+      ...payload,
+    },
+  };
+}
+
+function applyKiboPassiveDerivedSelfHealDescriptor({ descriptor, state }) {
+  const schedule = descriptor.schedule ?? {};
+  const heal = schedule.derivedPeriodic?.heal ?? null;
+  const basePayload = {
+    passiveSkillId: schedule.passiveSkillId ?? null,
+    sourceKiboId: schedule.sourceKiboId ?? null,
+    sourceActorId: schedule.sourceActorId ?? null,
+    targetKiboId: schedule.targetKiboId ?? null,
+    targetSlotId: schedule.targetSlotId ?? null,
+    elementId: heal?.sourceElementId ?? null,
+    pathId: heal?.sourcePathId ?? null,
+    damageType: heal?.heal?.damageType ?? null,
+    tickIndex: descriptor.tickIndex,
+    thresholdMs: descriptor.thresholdMs,
+  };
+  const createEvent = (payload) =>
+    createKiboPassiveDerivedSelfHealEvent({ descriptor, schedule, payload });
+  if (!heal) {
+    return createEvent({
+      ...basePayload,
+      beforeValue: null,
+      requestedHeal: null,
+      appliedHeal: 0,
+      change: 0,
+      afterValue: null,
+      maxValue: null,
+      applied: false,
+      reason: 'kibo-passive-derived-self-heal-config-missing',
+      appliedToCalculators: false,
+    });
+  }
+  const timeMs = descriptor.timeMs;
+  const target = {
+    kind: schedule.targetKind,
+    id: String(schedule.targetId),
+  };
+  const kiboState = findKiboStateByActorId(
+    state,
+    schedule.sourceKiboActorId,
+    schedule.sourceKiboId
+  );
+  const vital = resolveFriendlyVitalState(state, target);
+  if (!vital) {
+    return createEvent({
+      ...basePayload,
+      beforeValue: null,
+      requestedHeal: null,
+      appliedHeal: 0,
+      change: 0,
+      afterValue: null,
+      maxValue: null,
+      applied: false,
+      reason: 'kibo-passive-derived-self-heal-target-state-missing',
+      appliedToCalculators: false,
+    });
+  }
+  const maximum = refreshFriendlyVitalMaximumAt({
+    state,
+    target,
+    timeMs,
+  });
+  if (!maximum.ready) {
+    return createEvent({
+      ...basePayload,
+      beforeValue: roundValue(vital.currentHp),
+      requestedHeal: null,
+      appliedHeal: 0,
+      change: 0,
+      afterValue: roundValue(vital.currentHp),
+      maxValue: roundValue(vital.maximumHp),
+      applied: false,
+      reason: 'kibo-passive-derived-self-heal-maximum-hp-unresolved',
+      maximumResolution: maximum,
+      appliedToCalculators: false,
+    });
+  }
+  const sourceAttribute = resolveRuntimeAttribute({
+    state,
+    targetKind: EFFECT_TARGET_KINDS.KIBO,
+    targetId: String(schedule.sourceKiboActorId),
+    timeMs,
+    attributeId: 1,
+    baseRaw:
+      kiboState?.attributesById?.get(1) ??
+      numberOrNull(kiboState?.profile?.attack),
+    propertyTags: [],
+    settlingSourceSequencePath: descriptor.sourceSequencePath,
+  });
+  if (!sourceAttribute.ready || sourceAttribute.value == null) {
+    return createEvent({
+      ...basePayload,
+      beforeValue: roundValue(vital.currentHp),
+      requestedHeal: null,
+      appliedHeal: 0,
+      change: 0,
+      afterValue: roundValue(vital.currentHp),
+      maxValue: roundValue(vital.maximumHp),
+      applied: false,
+      reason: 'kibo-passive-derived-self-heal-source-attribute-unresolved',
+      sourceAttribute,
+      appliedToCalculators: false,
+    });
+  }
+  const coefficientRaw = Number(heal.formula?.coefficientRaw);
+  const formulaRaw = qDivNearestPositive(
+    qMul(qFromFloat(Number(sourceAttribute.value)), qFromInt(coefficientRaw)),
+    qFromInt(10_000)
+  );
+  const before = Number(vital.currentHp);
+  const maximumHp = Number(vital.maximumHp);
+  const requestedHeal = Math.max(0, qToNumber(formulaRaw));
+  const appliedHeal = Math.min(requestedHeal, Math.max(0, maximumHp - before));
+  vital.currentHp = clampNumber(before + appliedHeal, 0, maximumHp);
+  const applied = appliedHeal > 0;
+  return createEvent({
+    ...basePayload,
+    sourceAttribute,
+    coefficientRaw,
+    coefficientBasisPoints: coefficientRaw,
+    formulaRaw: formulaRaw.toString(),
+    beforeValue: roundValue(before),
+    requestedHeal: roundValue(requestedHeal),
+    appliedHeal: roundValue(appliedHeal),
+    change: roundValue(appliedHeal),
+    afterValue: roundValue(vital.currentHp),
+    maxValue: roundValue(maximumHp),
+    overheal: roundValue(Math.max(0, requestedHeal - appliedHeal)),
+    applied,
+    reason: applied
+      ? 'kibo-passive-derived-self-heal-applied'
+      : 'kibo-passive-derived-self-heal-no-positive-effective-change',
+    appliedToCalculators: true,
+  });
+}
+
+function createKiboPassiveDerivedSelfHealEvent({
+  descriptor,
+  schedule,
+  payload,
+}) {
+  return {
+    type: 'VERIFIED_KIBO_PASSIVE_DERIVED_SELF_HEAL',
+    timeMs: roundValue(descriptor.timeMs),
+    actionId: null,
+    actorId: schedule.sourceActorId ?? null,
+    targetId: schedule.targetId ?? null,
+    sourceSequencePath: descriptor.sourceSequencePath ?? null,
+    payload: {
+      verifiedKiboPassiveDerivedSelfHeal: true,
+      targetKind: schedule.targetKind ?? null,
+      ...payload,
+    },
+  };
+}
+
+function createKiboPassiveDerivedPeriodicUnresolvedEvent(descriptor) {
+  return {
+    type: 'VERIFIED_KIBO_PASSIVE_DERIVED_PERIODIC_UNRESOLVED',
+    timeMs: 0,
+    actionId: null,
+    actorId: descriptor.schedule?.sourceActorId ?? null,
+    sourceSequencePath: null,
+    payload: {
+      unresolvedReasons: descriptor.unresolvedReasons ?? [],
+      schedule: descriptor.schedule ?? null,
+      appliedToCalculators: false,
+    },
+  };
+}
+
 function isNonDamageProjectionDescriptor(descriptor) {
   if (
     descriptor?.kind === 'tuning-combat' &&
@@ -2960,6 +3399,8 @@ function isNonDamageProjectionDescriptor(descriptor) {
     'passive-vital-change',
     'passive-periodic-heal',
     'passive-periodic-heal-contract-unresolved',
+    'passive-derived-self-heal',
+    'passive-derived-periodic-contract-unresolved',
   ].includes(descriptor?.kind);
 }
 
@@ -5168,6 +5609,13 @@ function findKiboStateByAction(state, action) {
   return entry;
 }
 
+function findKiboStateByActorId(state, actorId, expectedKiboId) {
+  const slotId = state.slotIdByActorId.get(String(actorId));
+  const entry = slotId ? state.kiboEnergy.get(slotId) : null;
+  if (!entry || Number(entry.kiboId) !== Number(expectedKiboId)) return null;
+  return entry;
+}
+
 function createResourceExecutionBlock({
   descriptor,
   status,
@@ -5515,8 +5963,11 @@ function resolveDescriptorOrder(kind) {
     'direct-shield': 2,
     'passive-periodic-heal': 2,
     'passive-periodic-heal-contract-unresolved': 2,
+    'passive-derived-self-heal': 2,
+    'passive-derived-periodic-contract-unresolved': 2,
     hit: 3,
     'passive-derived-hit': 3,
+    'passive-derived-dot': 3,
     'tuning-combat': 4,
     'manual-resource': 4,
     'auto-sp-tick': 5,
@@ -5530,8 +5981,11 @@ function resolveDescriptorOrder(kind) {
     'direct-shield': ['direct-effect', 2],
     'passive-periodic-heal': ['direct-effect', 2],
     'passive-periodic-heal-contract-unresolved': ['direct-effect', 2],
+    'passive-derived-self-heal': ['direct-effect', 2],
+    'passive-derived-periodic-contract-unresolved': ['direct-effect', 2],
     hit: ['combat-hit', 3],
     'passive-derived-hit': ['combat-hit', 3],
+    'passive-derived-dot': ['combat-hit', 3],
     'tuning-combat': ['post-hit-resource', 4],
     'manual-resource': ['post-hit-resource', 4],
     'auto-sp-tick': ['automatic-recovery', 5],

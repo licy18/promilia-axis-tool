@@ -1095,6 +1095,21 @@ async function parseVerifiedPropertyEffectPassive({
     };
   }
 
+  const derivedDotSelfHealMechanic = parseDerivedDotAndSelfHealPassive({
+    controlRoot,
+    behaviors,
+    elementObjects,
+    elementFormulasById,
+  });
+  if (derivedDotSelfHealMechanic) {
+    return {
+      mechanic: derivedDotSelfHealMechanic,
+      unresolvedReasons: [],
+      controlSourceFiles,
+      elementSourceFiles,
+    };
+  }
+
   const receiveDamageMechanic =
     parseAfterReceiveDamageSelfPropertyEffectPassive({
       controlRoot,
@@ -3386,6 +3401,315 @@ function parseDerivedDamagePassive({
       formulaSource: 'equipped-kibo',
       effectAdder: 'equipped-kibo',
       target: 'hit-enemy',
+      foregroundRequirement: 'none-in-source-assets',
+    },
+    scenarioAssumptions: [],
+    evidenceStatus: 'source-verified',
+  };
+}
+
+function parseDerivedDotAndSelfHealPassive({
+  controlRoot,
+  behaviors,
+  elementObjects,
+  elementFormulasById,
+}) {
+  if (behaviors.length !== 1) return null;
+  const behavior = behaviors[0];
+  if (Number(behavior.value.directInjectTargetType) !== 0) return null;
+  const behaviorPathIds = extractArrayPathIds(behavior.raw, 'elementDataList');
+  if (behaviorPathIds.length !== 1) return null;
+  const trigger =
+    elementObjects.find(row => row.pathId === behaviorPathIds[0]) ?? null;
+  if (!trigger) return null;
+  const triggerValue = trigger.value ?? {};
+  const triggerEffects = Array.isArray(triggerValue.triggerEffectList)
+    ? triggerValue.triggerEffectList
+    : [];
+  if (
+    Number(triggerValue.triggerType) !== 1 ||
+    Number(triggerValue.triggerParam1) !== 2 ||
+    triggerEffects.length !== 2 ||
+    !triggerEffects.every(effect => Number(effect.effectType) === 0) ||
+    !Number.isFinite(Number(triggerValue.triggerInv)) ||
+    Number(triggerValue.triggerInv) < 0 ||
+    !isSupportedDamageTriggerCondition(triggerValue)
+  ) {
+    return null;
+  }
+  const effectTargetTypes = triggerEffects
+    .map(effect => Number(effect.targetType))
+    .sort((left, right) => left - right);
+  if (effectTargetTypes.join('|') !== '0|1') return null;
+  const triggerTargetPathIds = extractObjectPathIds(
+    trigger.raw,
+    'targetElement'
+  );
+  if (triggerTargetPathIds.length !== 2) return null;
+  const relayPathIdByTargetType = Object.fromEntries(
+    triggerEffects.map((effect, index) => [
+      Number(effect.targetType),
+      triggerTargetPathIds[index],
+    ])
+  );
+  const relayDot =
+    elementObjects.find(
+      row => row.pathId === relayPathIdByTargetType[1]
+    ) ?? null;
+  const relayHeal =
+    elementObjects.find(
+      row => row.pathId === relayPathIdByTargetType[0]
+    ) ?? null;
+  if (!relayDot || !relayHeal) return null;
+  for (const relay of [relayDot, relayHeal]) {
+    const value = relay.value ?? {};
+    const effects = Array.isArray(value.triggerEffectList)
+      ? value.triggerEffectList
+      : [];
+    if (
+      Number(value.triggerType) !== 0 ||
+      Number(value.triggerParam1) !== 1 ||
+      Number(value.triggerParam2) !== 1000 ||
+      Number(value.timeExeFirstFrame) !== 1 ||
+      Number(value.duration) !== 5000 ||
+      effects.length !== 1 ||
+      Number(effects[0].effectType) !== 0 ||
+      Number(effects[0].targetType) !== 0 ||
+      (value.triggerConditionList?.length ?? 0) !== 0
+    ) {
+      return null;
+    }
+  }
+  const relayDotTargetPathIds = extractObjectPathIds(
+    relayDot.raw,
+    'targetElement'
+  );
+  const relayHealTargetPathIds = extractObjectPathIds(
+    relayHeal.raw,
+    'targetElement'
+  );
+  if (
+    relayDotTargetPathIds.length !== 1 ||
+    relayHealTargetPathIds.length !== 1
+  ) {
+    return null;
+  }
+  const dot =
+    elementObjects.find(
+      row => row.pathId === relayDotTargetPathIds[0]
+    ) ?? null;
+  const heal =
+    elementObjects.find(
+      row => row.pathId === relayHealTargetPathIds[0]
+    ) ?? null;
+  if (!dot || !heal) return null;
+  const dotValue = dot.value ?? {};
+  const healValue = heal.value ?? {};
+
+  const readFormula = value => ({
+    commonFunctionId: Number(
+      value.formulaParams?.function_1 ?? value.baseIntParams?.[0]
+    ),
+    baseFunctionId: Number(
+      value.formulaParams?.function_2 ?? value.baseIntParams?.[1]
+    ),
+    coefficientRaw: Number(
+      value.formulaParams?.formulaParamValues?.[0] ?? value.functionParams?.[0]
+    ),
+  });
+  const dotFormula = readFormula(dotValue);
+  const healFormula = readFormula(healValue);
+  const dotCommonFormula =
+    elementFormulasById?.get(dotFormula.commonFunctionId) ?? null;
+  const dotBaseFormula =
+    elementFormulasById?.get(dotFormula.baseFunctionId) ?? null;
+  const healCommonFormula =
+    elementFormulasById?.get(healFormula.commonFunctionId) ?? null;
+  const healBaseFormula =
+    elementFormulasById?.get(healFormula.baseFunctionId) ?? null;
+  const isValidSourceAtkFormula = (common, base, commonFormula, baseFormula) =>
+    common === 1 &&
+    base === 4 &&
+    String(baseFormula?.functionOutput ?? '') === 'source.ATK[0]*A/10000';
+  if (
+    !isValidSourceAtkFormula(
+      dotFormula.commonFunctionId,
+      dotFormula.baseFunctionId,
+      dotCommonFormula,
+      dotBaseFormula
+    ) ||
+    !isValidSourceAtkFormula(
+      healFormula.commonFunctionId,
+      healFormula.baseFunctionId,
+      healCommonFormula,
+      healBaseFormula
+    ) ||
+    !Number.isFinite(dotFormula.coefficientRaw) ||
+    dotFormula.coefficientRaw < 0 ||
+    !Number.isFinite(healFormula.coefficientRaw) ||
+    healFormula.coefficientRaw < 0 ||
+    Number(dotValue.damageSourceType) !== 0 ||
+    Number(dotValue.damageType) !== 7 ||
+    Number(dotValue.damageElementalType) !== 0 ||
+    Number(dotValue.weakBreakDamageRate) !== 2000 ||
+    Number(dotValue.armerPenetration) !== 5000 ||
+    Number(dotValue.magicPenetration) !== 5000 ||
+    Number(dotValue.elementCalFactor) !== 10000 ||
+    Number(dotValue.physicalRatio) !== 0 ||
+    Number(dotValue.magicRatio) !== 0 ||
+    Number(dotValue.ignoreDamageEvent) !== 1 ||
+    Number(dotValue.recoverSP) !== 0 ||
+    Number(dotValue.petRecoverSP) !== 0 ||
+    Number(healValue.damageSourceType) !== 0 ||
+    Number(healValue.damageType) !== 5 ||
+    Number(healValue.damageElementalType) !== 0 ||
+    Number(healValue.healUp) !== 10000 ||
+    Number(healValue.ignoreDamageEvent) !== 0 ||
+    Number(healValue.recoverInterval) !== 9999
+  ) {
+    return null;
+  }
+  const controlResourcePathIds = extractArrayPathIds(
+    controlRoot.raw,
+    'elements'
+  );
+  const reachablePathIds = [
+    trigger.pathId,
+    relayDot.pathId,
+    dot.pathId,
+    relayHeal.pathId,
+    heal.pathId,
+  ];
+  if (
+    controlResourcePathIds.length !== reachablePathIds.length ||
+    uniqueValues(controlResourcePathIds).length !==
+      controlResourcePathIds.length ||
+    controlResourcePathIds.some(
+      pathId => !reachablePathIds.includes(pathId)
+    ) ||
+    reachablePathIds.some(
+      pathId => !controlResourcePathIds.includes(pathId)
+    ) ||
+    elementObjects.some(row => !reachablePathIds.includes(row.pathId))
+  ) {
+    return null;
+  }
+  const triggerLifetime = classifyTriggerCounterLifetime(
+    triggerValue.triggerCounter
+  );
+  const createRatiosByLevel = coefficientRaw =>
+    Object.fromEntries(
+      Array.from({ length: 12 }, (_, index) => [index + 1, coefficientRaw])
+    );
+  return {
+    mechanismFamily: 'on-kibo-damage-derived-dot-and-self-heal',
+    trigger: {
+      event: 'damage-dealt',
+      eventType: 2,
+      eventName: 'AfterDamage',
+      sourceScope: 'equipped-kibo',
+      target: 'hit-enemy',
+      internalCooldownMs: Number(triggerValue.triggerInv),
+      activationOrder: 'after-triggering-hit',
+      activationDelayMs: 0.001,
+      sourceElementId: Number(triggerValue.elementConfigId),
+      sourcePathId: trigger.pathId,
+      ...triggerLifetime,
+      triggerLimitScope: 'passive-element-lifetime',
+    },
+    derivedPeriodic: {
+      durationMs: 5000,
+      intervalMs: 1000,
+      timeExeFirstFrame: true,
+      schedules: [
+        {
+          kind: 'derived-dot',
+          target: 'hit-enemy',
+          targetKind: 'enemy',
+          sourceAttribute: {
+            entityRole: 'element-source-equipped-kibo',
+            attributeId: 1,
+            attributeName: 'ATK',
+          },
+          sourceElementId: Number(dotValue.elementConfigId),
+          sourcePathId: dot.pathId,
+          formula: {
+            commonFunctionId: dotFormula.commonFunctionId,
+            commonExpression: dotCommonFormula?.functionOutput ?? null,
+            baseFunctionId: dotFormula.baseFunctionId,
+            baseExpression: dotBaseFormula.functionOutput,
+            coefficientRaw: dotFormula.coefficientRaw,
+            ratiosByLevel: createRatiosByLevel(dotFormula.coefficientRaw),
+          },
+          damage: {
+            damageSourceType: Number(dotValue.damageSourceType),
+            damageSourceTypeName: 'Attacker',
+            damageType: Number(dotValue.damageType),
+            damageTypeName: 'Dot',
+            elementalType: Number(dotValue.damageElementalType),
+            elementalTypeName: 'None',
+            weakBreakDamageRateBasisPoints: Number(dotValue.weakBreakDamageRate),
+            physicalPenetrationBasisPoints: Number(dotValue.armerPenetration),
+            magicPenetrationBasisPoints: Number(dotValue.magicPenetration),
+            elementCalculationFactorBasisPoints: Number(
+              dotValue.elementCalFactor
+            ),
+            physicalRatioBasisPoints: Number(dotValue.physicalRatio),
+            magicRatioBasisPoints: Number(dotValue.magicRatio),
+            recoverSp: Number(dotValue.recoverSP),
+            petRecoverSp: Number(dotValue.petRecoverSP),
+          },
+          eventPolicy: {
+            ignoreDamageEvent: true,
+            emitsDamageTriggerEvents: false,
+            recursivePassiveTrigger: false,
+          },
+          relay: {
+            sourceElementId: Number(relayDot.value.elementConfigId),
+            sourcePathId: relayDot.pathId,
+            durationMs: 5000,
+            intervalMs: 1000,
+            timeExeFirstFrame: true,
+          },
+        },
+        {
+          kind: 'self-heal',
+          target: 'equipped-kibo',
+          targetKind: 'kibo',
+          sourceElementId: Number(healValue.elementConfigId),
+          sourcePathId: heal.pathId,
+          formula: {
+            commonFunctionId: healFormula.commonFunctionId,
+            commonExpression: healCommonFormula?.functionOutput ?? null,
+            baseFunctionId: healFormula.baseFunctionId,
+            baseExpression: healBaseFormula.functionOutput,
+            coefficientRaw: healFormula.coefficientRaw,
+            ratiosByLevel: createRatiosByLevel(healFormula.coefficientRaw),
+          },
+          heal: {
+            kind: 'heal',
+            damageType: Number(healValue.damageType),
+            damageTypeName: 'Heal',
+            healUp: Number(healValue.healUp),
+            recoverIntervalMs: Number(healValue.recoverInterval),
+            ignoreDamageEvent: Number(healValue.ignoreDamageEvent),
+          },
+          relay: {
+            sourceElementId: Number(relayHeal.value.elementConfigId),
+            sourcePathId: relayHeal.pathId,
+            durationMs: 5000,
+            intervalMs: 1000,
+            timeExeFirstFrame: true,
+          },
+        },
+      ],
+    },
+    ownership: {
+      source: 'equipped-kibo',
+      formulaSource: 'equipped-kibo',
+      effectAdder: 'equipped-kibo',
+      dotTarget: 'hit-enemy',
+      healTarget: 'equipped-kibo',
       foregroundRequirement: 'none-in-source-assets',
     },
     scenarioAssumptions: [],

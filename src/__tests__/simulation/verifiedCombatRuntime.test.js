@@ -347,9 +347,9 @@ describe('verified combat mechanics runtime', () => {
     ).toEqual([]);
     expect(result.verifiedKiboPassiveGeneration.summary).toMatchObject({
       effectCommandCount: 1,
-      evidenceClosedDefinitionCount: 38,
+      evidenceClosedDefinitionCount: 39,
       scenarioAssumedDefinitionCount: 0,
-      unresolvedDefinitionCount: 6,
+      unresolvedDefinitionCount: 5,
     });
     expect(
       result.effectTimeline.activeEffects.find(

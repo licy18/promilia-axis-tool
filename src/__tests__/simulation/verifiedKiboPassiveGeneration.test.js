@@ -155,9 +155,9 @@ describe('verified kibo passive generation', () => {
       }),
     ]);
     expect(integrated.verifiedKiboPassiveGeneration.summary).toMatchObject({
-      evidenceClosedDefinitionCount: 38,
+      evidenceClosedDefinitionCount: 39,
       scenarioAssumedDefinitionCount: 0,
-      unresolvedDefinitionCount: 6,
+      unresolvedDefinitionCount: 5,
       effectCommandCount: generation.effectCommands.length,
     });
     expect(
@@ -1067,6 +1067,79 @@ describe('verified kibo passive generation', () => {
     ).toEqual(['actor', 'kibo']);
     expect(resolution.hits.filter(hit => hit.damage)).toEqual([]);
     expect(generation.summary.beforeSkillEffectCommandCount).toBe(2);
+  });
+
+  it('schedules and settles a 5-tick derived dot and self heal after kibo damage for 520092', () => {
+    const scenario = createActualKiboScenario({
+      kiboId: 500360,
+      skillId: 509002,
+      actionId: 'life-drain-active',
+      eventType: 'active',
+      durationMs: 12000,
+    });
+    scenario.initialRuntimeState.kiboVitalsBySlot = [
+      {
+        slotId: 'team-slot-3',
+        kiboId: 500360,
+        currentValue: 500,
+        maxValue: 5000,
+      },
+    ];
+    const action = scenario.actions[0];
+    const resolution = resolveVerifiedCombatActionMechanics(action, {
+      combatScenario: scenario.combatScenario,
+    });
+    const generation = createVerifiedKiboPassiveGeneration({
+      scenario,
+      actionResolutionById: new Map([[action.id, resolution]]),
+    });
+    expect(resolution.ready).toBe(true);
+    const schedules = generation.periodicVitalSchedules.filter(
+      item => item.passiveSkillId === 520092
+    );
+    expect(schedules.map(item => item.derivedPeriodic.kind).sort()).toEqual([
+      'derived-dot',
+      'self-heal',
+    ]);
+    const dotSchedule = schedules.find(
+      item => item.derivedPeriodic.kind === 'derived-dot'
+    );
+    const healSchedule = schedules.find(
+      item => item.derivedPeriodic.kind === 'self-heal'
+    );
+    expect(dotSchedule.targetKind).toBe('enemy');
+    expect(healSchedule.targetKind).toBe('kibo');
+    expect(dotSchedule.derivedPeriodic.dot.formula.coefficientRaw).toBe(2000);
+    expect(healSchedule.derivedPeriodic.heal.formula.coefficientRaw).toBe(200);
+    expect(generation.unresolved).toEqual([]);
+
+    const result = simulateScenario(scenario);
+    const dotEvents = result.verifiedCombatRuntime.damageEvents.filter(
+      event => event.payload.kiboPassiveDerivedDot === true
+    );
+    const healEvents = result.verifiedCombatRuntime.vitalEvents.filter(
+      event => event.type === 'VERIFIED_KIBO_PASSIVE_DERIVED_SELF_HEAL'
+    );
+    expect(dotEvents).toHaveLength(5);
+    expect(healEvents).toHaveLength(5);
+    for (const event of dotEvents) {
+      expect(event.payload.appliedToCalculators).toBe(true);
+      expect(event.payload.damageType).toBe(7);
+      expect(event.payload.toughnessDamage).toBe(0);
+      const expectedLower = Math.floor(event.payload.attack * 0.2 - 1);
+      const expectedUpper = Math.ceil(event.payload.attack * 0.2 + 1);
+      expect(event.payload.rawDamage).toBeGreaterThanOrEqual(expectedLower);
+      expect(event.payload.rawDamage).toBeLessThanOrEqual(expectedUpper);
+    }
+    for (const event of healEvents) {
+      expect(event.payload.appliedToCalculators).toBe(true);
+      expect(event.payload.targetKind).toBe('kibo');
+      expect(event.payload.appliedHeal).toBeGreaterThan(0);
+      const expectedLower = Math.floor(event.payload.sourceAttribute.value * 0.02 - 1);
+      const expectedUpper = Math.ceil(event.payload.sourceAttribute.value * 0.02 + 1);
+      expect(event.payload.appliedHeal).toBeGreaterThanOrEqual(expectedLower);
+      expect(event.payload.appliedHeal).toBeLessThanOrEqual(expectedUpper);
+    }
   });
 
   it('caps BeforeSkill stacks at six, refreshes both targets, and diagnoses non-signature tags', () => {

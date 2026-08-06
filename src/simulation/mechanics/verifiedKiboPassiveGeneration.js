@@ -33,6 +33,8 @@ const DAMAGE_DEALT_PROPERTY_MECHANISM_FAMILIES = new Set([
 const PET_OWNER_DAMAGE_SOURCE_PROPERTY_MECHANISM_FAMILY =
   'on-pet-owner-damage-source-property-effect';
 const DERIVED_DAMAGE_MECHANISM_FAMILY = 'on-kibo-damage-derived-damage';
+const DERIVED_DOT_SELF_HEAL_MECHANISM_FAMILY =
+  'on-kibo-damage-derived-dot-and-self-heal';
 const PERIODIC_TEAM_HEAL_MECHANISM_FAMILY =
   'equipped-kibo-player-team-periodic-heal';
 const BEFORE_SKILL_COMPOSITE_MECHANISM_FAMILY =
@@ -299,6 +301,7 @@ export function createVerifiedKiboPassiveGeneration({
         ![
           ...DAMAGE_DEALT_PROPERTY_MECHANISM_FAMILIES,
           DERIVED_DAMAGE_MECHANISM_FAMILY,
+          DERIVED_DOT_SELF_HEAL_MECHANISM_FAMILY,
           'before-kibo-skill-property-effect',
           BEFORE_SKILL_COMPOSITE_MECHANISM_FAMILY,
         ].includes(definition.mechanismFamily)
@@ -345,6 +348,14 @@ export function createVerifiedKiboPassiveGeneration({
             ...commandContext,
             derivedHitMissSuppressions,
           })
+        );
+        continue;
+      }
+      if (
+        definition.mechanismFamily === DERIVED_DOT_SELF_HEAL_MECHANISM_FAMILY
+      ) {
+        periodicVitalScheduleCandidates.push(
+          ...createDerivedDotSelfHealScheduleCandidates(commandContext)
         );
         continue;
       }
@@ -762,6 +773,15 @@ function deduplicatePeriodicVitalSchedules(candidates) {
     const key = `${candidate.passiveSkillId}|${candidate.rootElementId}|${candidate.targetKind}|${candidate.targetId}`;
     const existing = schedulesByIdentity.get(key);
     if (!existing) {
+      schedulesByIdentity.set(key, {
+        ...candidate,
+        contributingSources: [...candidate.contributingSources],
+      });
+      continue;
+    }
+    if (
+      candidate.mechanismFamily === DERIVED_DOT_SELF_HEAL_MECHANISM_FAMILY
+    ) {
       schedulesByIdentity.set(key, {
         ...candidate,
         contributingSources: [...candidate.contributingSources],
@@ -2038,6 +2058,226 @@ function createDerivedDamageCommands({
     });
   }
   return commands;
+}
+
+function createDerivedDotSelfHealScheduleCandidates({
+  scenario,
+  action,
+  resolution,
+  definition,
+  kiboId,
+  equippedBinding,
+  lastTriggerAtByPassiveKey,
+  triggerCountByPassiveKey,
+  internalCooldownSuppressions,
+  triggerLimitSuppressions,
+  conditionSuppressions,
+}) {
+  const enemyId = scenario.enemy?.id ?? scenario.enemy?.enemyId ?? null;
+  if (enemyId == null) return [];
+  const conditionResult = evaluateTriggerCondition({
+    condition: definition.trigger?.condition,
+    scenario,
+    resolution,
+  });
+  if (!conditionResult.matched) {
+    conditionSuppressions.push({
+      actionId: action.id,
+      kiboId,
+      skillId: Number(definition.skillId),
+      condition: definition.trigger?.condition ?? null,
+      actualTargetEntityType: conditionResult.actualTargetEntityType,
+      entityTypeSource: conditionResult.entityTypeSource,
+      actualSkillTags: conditionResult.actualSkillTags,
+      skillTagSource: conditionResult.skillTagSource,
+      reason: conditionResult.reason,
+    });
+    return [];
+  }
+  const frameRate =
+    positiveNumber(resolution.controlBinding?.frameRate) ?? DEFAULT_FRAME_RATE;
+  const activationDelayMs = nonNegativeNumber(
+    definition.trigger?.activationDelayMs
+  );
+  const internalCooldownMs = nonNegativeNumber(
+    definition.trigger?.internalCooldownMs
+  );
+  const maxTriggerCount = resolveTriggerLifetime(
+    definition.trigger
+  ).maxTriggerCount;
+  const candidates = (resolution.hits ?? [])
+    .filter(
+      hit =>
+        hit.damage &&
+        Number.isFinite(Number(hit.trigger?.startFrame)) &&
+        isActionFrameWithinContextualOccupancy(
+          action,
+          hit.trigger.startFrame,
+          frameRate
+        )
+    )
+    .map(hit => ({
+      hit,
+      hitTimeMs:
+        Number(action.startMs) +
+        (Number(hit.trigger.startFrame) * 1000) / frameRate,
+    }))
+    .sort(
+      (left, right) =>
+        left.hitTimeMs - right.hitTimeMs ||
+        String(left.hit.hitIdentity).localeCompare(
+          String(right.hit.hitIdentity)
+        )
+    );
+  const schedules = [];
+  for (const candidate of candidates) {
+    const { hit, hitTimeMs } = candidate;
+    const hitIdentity =
+      hit.hitIdentity ??
+      `${hit.elementId ?? 'element'}:${hit.hitIndex ?? 'hit'}`;
+    const passiveKey = createKiboPassiveRuntimeKey({
+      actorId: action.actorId,
+      kiboId,
+      skillId: definition.skillId,
+    });
+    const triggerCount = triggerCountByPassiveKey.get(passiveKey) ?? 0;
+    if (maxTriggerCount != null && triggerCount >= maxTriggerCount) {
+      triggerLimitSuppressions.push({
+        actionId: action.id,
+        kiboId,
+        skillId: Number(definition.skillId),
+        hitIdentity,
+        hitTimeMs,
+        triggerCount,
+        maxTriggerCount,
+        triggerLimitScope:
+          definition.trigger?.triggerLimitScope ?? 'passive-element-lifetime',
+        reason: 'kibo-passive-trigger-count-limit-reached',
+      });
+      continue;
+    }
+    const lastTriggerAtMs = lastTriggerAtByPassiveKey.get(passiveKey);
+    if (
+      lastTriggerAtMs != null &&
+      hitTimeMs - lastTriggerAtMs < internalCooldownMs
+    ) {
+      internalCooldownSuppressions.push({
+        actionId: action.id,
+        kiboId,
+        skillId: Number(definition.skillId),
+        hitIdentity,
+        hitTimeMs,
+        lastTriggerAtMs,
+        internalCooldownMs,
+        reason: 'kibo-passive-internal-cooldown-active',
+      });
+      continue;
+    }
+    lastTriggerAtByPassiveKey.set(passiveKey, hitTimeMs);
+    triggerCountByPassiveKey.set(passiveKey, triggerCount + 1);
+    const derivedPeriodic = definition.derivedPeriodic;
+    if (
+      !derivedPeriodic ||
+      !Array.isArray(derivedPeriodic.schedules) ||
+      derivedPeriodic.schedules.length === 0
+    ) {
+      continue;
+    }
+    const startMs = hitTimeMs + activationDelayMs;
+    for (const schedule of derivedPeriodic.schedules) {
+      const isDot = schedule.kind === 'derived-dot';
+      const targetKind = isDot
+        ? EFFECT_TARGET_KINDS.ENEMY
+        : EFFECT_TARGET_KINDS.KIBO;
+      const targetId = isDot ? String(enemyId) : String(action.actorId);
+      schedules.push({
+        id: `kibo-passive-periodic-vital|${definition.skillId}|${schedule.sourceElementId}|${schedule.kind}|${targetKind}|${targetId}`,
+        passiveSkillId: Number(definition.skillId),
+        passiveName: definition.name,
+        mechanismFamily: definition.mechanismFamily,
+        rootEffectId: schedule.sourceElementId,
+        rootElementId: schedule.sourceElementId,
+        rootPathId: schedule.sourcePathId,
+        targetKind,
+        targetId,
+        targetActorId: isDot ? null : action.actorId,
+        targetKiboId: isDot ? null : kiboId,
+        targetSlotId: isDot ? null : equippedBinding?.slotId ?? null,
+        targetPosition: isDot ? null : equippedBinding?.position ?? null,
+        sourceActorId: action.actorId,
+        sourceActorName: action.actor?.name ?? null,
+        sourceKiboId: kiboId,
+        sourceSlotId: equippedBinding?.slotId ?? null,
+        sourcePosition: equippedBinding?.position ?? null,
+        sourceKiboActorId: action.actorId,
+        trigger: {
+          event: 'time-loop',
+          eventName: 'AfterDamagePeriodicRelay',
+          intervalMs: nonNegativeNumber(derivedPeriodic.intervalMs),
+          durationMs: nonNegativeNumber(derivedPeriodic.durationMs),
+          timeExeFirstFrame: derivedPeriodic.timeExeFirstFrame === true,
+          sourceElementId: definition.trigger?.sourceElementId ?? null,
+          sourcePathId: definition.trigger?.sourcePathId ?? null,
+        },
+        derivedPeriodic: {
+          kind: schedule.kind,
+          intervalMs: nonNegativeNumber(derivedPeriodic.intervalMs),
+          durationMs: nonNegativeNumber(derivedPeriodic.durationMs),
+          timeExeFirstFrame: derivedPeriodic.timeExeFirstFrame === true,
+          startMs,
+          ...(isDot
+            ? {
+                dot: {
+                  sourceAttribute: schedule.sourceAttribute,
+                  sourceElementId: schedule.sourceElementId,
+                  sourcePathId: schedule.sourcePathId,
+                  formula: schedule.formula,
+                  damage: schedule.damage,
+                  eventPolicy: schedule.eventPolicy,
+                  relay: schedule.relay,
+                },
+              }
+            : {}),
+          ...(!isDot
+            ? {
+                heal: {
+                  sourceElementId: schedule.sourceElementId,
+                  sourcePathId: schedule.sourcePathId,
+                  formula: schedule.formula,
+                  heal: schedule.heal,
+                  relay: schedule.relay,
+                },
+              }
+            : {}),
+        },
+        sourceIdentity: {
+          catalogKind: 'azpr-kibo-passive-mechanics-catalog',
+          actionBindingIdentity: resolution.actionBinding?.identity ?? null,
+          triggerEvent: 'damage-dealt-periodic-relay',
+          kiboId,
+          passiveSkillId: Number(definition.skillId),
+          triggerElementId: definition.trigger?.sourceElementId ?? null,
+          triggerPathId: definition.trigger?.sourcePathId ?? null,
+          effectElementId: schedule.sourceElementId,
+          effectPathId: schedule.sourcePathId,
+          hitIdentity,
+          triggerCondition: definition.trigger?.condition ?? null,
+          provenance: definition.provenance ?? [],
+        },
+        contributingSources: equippedBinding
+          ? [createPeriodicSourceContributor(equippedBinding)]
+          : [],
+        formulaSource: 'equipped-kibo',
+        sourceSelectionPolicy: 'native-inject-to-own-root-attacker',
+        sourceAttributionStatus: 'native-first-root-source-verified',
+        appliedToCalculators: true,
+        scenarioAssumptions: [
+          'derived-dot-and-self-heal-relay-refresh-modeled-as-latest-trigger-window',
+        ],
+      });
+    }
+  }
+  return schedules;
 }
 
 function createBeforeSkillPropertyCommands({

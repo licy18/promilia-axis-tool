@@ -1,0 +1,31 @@
+
+> promilia-axis-tool@0.0.0 data:sync-kibo-headless
+> node scripts/generate-kibo-headless-census.mjs --write
+
+{
+  "denominators": {
+    "kiboCount": 122,
+    "publicActionCount": 366,
+    "fixedSkillUniqueCount": 172,
+    "pvePassiveOccurrenceCount": 133,
+    "pvePassiveUniqueCount": 44,
+    "pvpPassiveOccurrenceCount": 122,
+    "pvpPassiveUniqueCount": 122
+  },
+  "fixedSkillClassification": {
+    "evidenceClosed": 172,
+    "scenarioAssumed": 0,
+    "unresolved": 0
+  },
+  "pvePassiveMechanics": {
+    "evidenceClosed": 39,
+    "scenarioAssumed": 0,
+    "unresolved": 5
+  },
+  "publicActionClosure": {
+    "evidenceClosed": 132,
+    "scenarioAssumed": 137,
+    "unresolved": 97
+  },
+  "machineOptimizationReadyCount": 0
+}
