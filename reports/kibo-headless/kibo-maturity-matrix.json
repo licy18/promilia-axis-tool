@@ -9528,7 +9528,7 @@
           520007,
           520080
         ],
-        "pveRuntimeStatus": "runtime-unresolved",
+        "pveRuntimeStatus": "runtime-ready",
         "pvpSkillIds": [
           51020082
         ],
@@ -9768,7 +9768,6 @@
       },
       "machineOptimizationReady": false,
       "remainingGaps": [
-        "pve-passive-runtime-incomplete",
         "public-action-closure-incomplete"
       ]
     },
@@ -29755,9 +29754,9 @@
       "unresolved": 97
     },
     "pvePassiveMechanics": {
-      "evidenceClosed": 39,
+      "evidenceClosed": 40,
       "scenarioAssumed": 0,
-      "unresolved": 5
+      "unresolved": 4
     },
     "fixedSkillClassification": {
       "evidenceClosed": 172,

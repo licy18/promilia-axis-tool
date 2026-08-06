@@ -220,6 +220,17 @@ export function createVerifiedCombatRuntime({
     });
   }
   for (const command of kiboPassiveGeneration?.derivedDamageCommands ?? []) {
+    if (command.retaliationEventIdentity != null) {
+      descriptors.push({
+        kind: 'passive-retaliation-hit',
+        timeMs: command.timeMs,
+        action: null,
+        resolution: null,
+        hit: command.hit,
+        passiveRetaliationCommand: command,
+      });
+      continue;
+    }
     const action = (scenario?.actions ?? []).find(
       item => item.id === command.sourceActionId
     );
@@ -435,6 +446,26 @@ export function createVerifiedCombatRuntime({
       });
       appendRuntimeEvent(damageEvents, event, state);
       eventLog.push(event);
+      continue;
+    }
+    if (descriptor.kind === 'passive-retaliation-hit') {
+      const hitResult = applyKiboPassiveRetaliationHitDescriptor({
+        descriptor,
+        scenario,
+        state,
+      });
+      if (!hitResult.ready) {
+        eventLog.push({
+          type: 'VERIFIED_COMBAT_HIT_UNRESOLVED',
+          timeMs: descriptor.timeMs,
+          actionId: null,
+          actorId: descriptor.passiveRetaliationCommand?.sourceActorId ?? null,
+          payload: hitResult,
+        });
+        continue;
+      }
+      appendRuntimeEvent(damageEvents, hitResult.damageEvent, state);
+      eventLog.push(hitResult.damageEvent);
       continue;
     }
     if (descriptor.kind === 'passive-derived-self-heal') {
@@ -3072,6 +3103,249 @@ function createDirectEffectSourceSequenceUnresolvedEvent(descriptor) {
       appliedToCalculators: false,
     },
     appliedToCalculators: false,
+  };
+}
+
+function applyKiboPassiveRetaliationHitDescriptor({
+  descriptor,
+  scenario,
+  state,
+}) {
+  const command = descriptor.passiveRetaliationCommand ?? {};
+  const hit = descriptor.hit ?? {};
+  const kiboState = findKiboStateByActorId(
+    state,
+    command.sourceActorId,
+    command.sourceKiboId
+  );
+  const propertyTags = [];
+  const settlingSourceSequencePath = descriptor.sourceSequencePath ?? null;
+  const sourceAttribute = resolveRuntimeAttribute({
+    state,
+    targetKind: EFFECT_TARGET_KINDS.KIBO,
+    targetId: String(command.sourceActorId),
+    timeMs: descriptor.timeMs,
+    attributeId: 1,
+    baseRaw:
+      kiboState?.attributesById?.get(1) ??
+      numberOrNull(kiboState?.profile?.attack),
+    propertyTags,
+    settlingSourceSequencePath,
+  });
+  const targetDefenseResult = resolveRuntimeAttribute({
+    state,
+    targetKind: EFFECT_TARGET_KINDS.ENEMY,
+    targetId: scenario?.enemy?.id,
+    timeMs: descriptor.timeMs,
+    attributeId: 3,
+    baseRaw: scenario?.enemy?.stats?.physicalDefense,
+    propertyTags,
+    settlingSourceSequencePath,
+  });
+  const targetMagicDefenseResult = resolveRuntimeAttribute({
+    state,
+    targetKind: EFFECT_TARGET_KINDS.ENEMY,
+    targetId: scenario?.enemy?.id,
+    timeMs: descriptor.timeMs,
+    attributeId: 4,
+    baseRaw: scenario?.enemy?.stats?.magicalDefense,
+    propertyTags,
+    settlingSourceSequencePath,
+  });
+  const targetDefense = numberOrNull(targetDefenseResult.value);
+  const targetMagicDefense = numberOrNull(targetMagicDefenseResult.value);
+  const ratioBasisPoints = numberOrNull(hit.formula?.coefficientRaw);
+  const enemy = state.enemy;
+  const enemyProfile = enemy.profile;
+  let inputIssue = null;
+  if (!sourceAttribute.ready || sourceAttribute.value == null) {
+    inputIssue = sourceAttribute.status ?? 'verified-retaliation-source-missing';
+  } else if (!enemyProfile?.applied) {
+    inputIssue = 'verified-enemy-break-profile-missing';
+  } else if (ratioBasisPoints == null) {
+    inputIssue = 'verified-retaliation-ratio-missing';
+  } else if (targetDefense == null || targetMagicDefense == null) {
+    inputIssue = 'verified-enemy-defense-inputs-missing';
+  }
+  if (inputIssue) {
+    return {
+      status: 'verified-retaliation-hit-inputs-incomplete',
+      reason: inputIssue,
+      source: sourceAttribute,
+      ready: false,
+      applied: false,
+    };
+  }
+  const damageInput = {
+    attack: Number(sourceAttribute.value),
+    ratioBasisPoints,
+    targetLevel: positiveNumber(scenario?.enemy?.level, 1),
+    targetDefense:
+      targetDefense * positiveNumber(scenario?.enemy?.defenseMultiplier, 1),
+    targetMagicDefense:
+      targetMagicDefense *
+      positiveNumber(scenario?.enemy?.defenseMultiplier, 1),
+    physicalPenetrationBasisPoints: combinePenetrationBasisPoints(
+      hit.damage?.physicalPenetrationBasisPoints,
+      null
+    ),
+    magicPenetrationBasisPoints: combinePenetrationBasisPoints(
+      hit.damage?.magicPenetrationBasisPoints,
+      null
+    ),
+    elementCalculationFactor: basisPoints(
+      hit.damage?.elementCalculationFactorBasisPoints,
+      1
+    ),
+    attackerElementUp: 0,
+    targetElementDefense: resolveEnemyElementDefense(
+      scenario.enemy,
+      hit.damage?.elementalType,
+      state,
+      descriptor.timeMs,
+      propertyTags
+    ),
+    physicalRatio: basisPoints(hit.damage?.physicalRatioBasisPoints),
+    magicRatio: basisPoints(hit.damage?.magicRatioBasisPoints),
+    attackerPhysicalUp: 0,
+    attackerMagicUp: 0,
+    targetPhysicalDown: 0,
+    targetMagicDown: 0,
+    attackerDamageUp: 0,
+    targetDamageDown: 0,
+    skillTags: [],
+    hitLocationRatio: 1,
+    critical: false,
+    criticalDamage: 0,
+    levelPressure: 1,
+    restraintDelta: 0,
+    miscellaneous: 1,
+    inWeakState: enemy.inBreak,
+    breakDamageUp: basisPoints(enemyProfile.breakDamageUpBasisPoints),
+    outputType: hit.damage?.damageType,
+    outputElement: hit.damage?.elementalType,
+    ...createEnemyDamageHpProtectionInput(enemy),
+    valueShields: enemy.valueShields,
+    hitCountShields: enemy.hitCountShields,
+  };
+  const damageResult = calculateNormalDamage(damageInput);
+  const stateBefore = createEnemyStateSnapshot(enemy);
+  enemy.hp = clampNumber(
+    Number(enemy.hp) - Number(damageResult.raw ?? 0),
+    0,
+    positiveNumber(enemy.maxHp, enemy.hp)
+  );
+  enemy.hitCountShields = damageResult.remainingHitCountShields ?? [];
+  enemy.valueShields = (damageResult.remainingShields ?? []).map(raw => ({
+    raw: String(raw),
+  }));
+  const toughnessBefore = enemy.toughness;
+  const preShieldHpDamageRaw = damageResult.preShieldRaw ?? damageResult.raw;
+  const weaknessResult = calculateWeaknessDamage({
+    pure: false,
+    attack: Number(sourceAttribute.value),
+    ratioBasisPoints,
+    outputDamageRaw: preShieldHpDamageRaw,
+    outputType: hit.damage?.damageType,
+    inWeakState: enemy.inBreak,
+    worldEventConflictPer: 1,
+    typeMultiplier: 1,
+    elementMultiplier: 1,
+    weaknessSkillDamageUp: 1,
+    weakBreakDamageRateBasisPoints:
+      hit.damage?.weakBreakDamageRateBasisPoints,
+    maximum: positiveNumberOrNull(enemyProfile.weaknessDamageMaximum),
+    minimum: positiveNumberOrNull(enemyProfile.weaknessDamageMinimum),
+  });
+  const toughnessDamage = Math.min(
+    enemy.toughness,
+    Math.max(0, Number(weaknessResult.deducted ?? 0))
+  );
+  enemy.toughness = roundValue(enemy.toughness - toughnessDamage);
+  const breakTriggered =
+    enemy.targetPolicy?.breakMode === 'enabled' &&
+    enemy.targetPolicy?.toughnessMode === 'enabled' &&
+    !enemy.inBreak &&
+    toughnessBefore > 0 &&
+    enemy.toughness <= 0;
+  if (breakTriggered) {
+    enemy.inBreak = true;
+    enemy.breakStartedAtMs = descriptor.timeMs;
+    enemy.breakPhase = 'linear_recovery';
+    enemy.normalRecoveryEligibleAtMs = null;
+  } else if (!enemy.inBreak && toughnessDamage > 0) {
+    enemy.normalRecoveryEligibleAtMs =
+      descriptor.timeMs + nonNegativeNumber(enemyProfile.recoveryDelayMs);
+  }
+  const hpDamage = Math.max(0, Number(damageResult.raw ?? 0));
+  const hitKey = `kibo-passive-retaliation|${command.passiveSkillId ?? 'skill'}|${
+    command.retaliationEventIdentity ?? 'event'
+  }|${roundValue(descriptor.timeMs)}`;
+  const damageEvent = {
+    type: 'VERIFIED_COMBAT_HIT',
+    timeMs: roundValue(descriptor.timeMs),
+    actionId: null,
+    actorId: command.sourceActorId ?? null,
+    targetId: scenario.enemy.id,
+    hitKey,
+    hitIndex: 1,
+    hitSkillId: null,
+    payload: {
+      verifiedCombat: true,
+      kiboPassiveRetaliationDamage: true,
+      passiveSkillId: command.passiveSkillId ?? null,
+      sourceKiboId: command.sourceKiboId ?? null,
+      receiveDamageEventIdentity: command.retaliationEventIdentity ?? null,
+      ignoreDamageEvent: command.ignoreDamageEvent === true,
+      emitsDamageTriggerEvents: command.emitsDamageTriggerEvents === true,
+      recursivePassiveTrigger: command.recursivePassiveTrigger === true,
+      elementId: hit.elementId ?? null,
+      pathId: hit.pathId ?? null,
+      damageType: hit.damage?.damageType ?? null,
+      elementalType: hit.damage?.elementalType ?? null,
+      attack: Number(sourceAttribute.value),
+      attackSource: sourceAttribute.sourceIdentity ?? null,
+      dynamicPropertyTrace: {
+        source: collectDynamicPropertyTrace([sourceAttribute]),
+        target: collectDynamicPropertyTrace([
+          targetDefenseResult,
+          targetMagicDefenseResult,
+        ]),
+      },
+      rawDamage: roundValue(hpDamage),
+      toughnessDamage: roundValue(toughnessDamage),
+      hpLossPercent: ratioOrZero(hpDamage, enemy.maxHp),
+      toughnessLossPercent: ratioOrZero(toughnessDamage, enemy.maxToughness),
+      formulaVersion: 'azpr-verified-q16.16-20260718',
+      formulaBreakdown: {
+        version: 'azpr-verified-retaliation-hit-v1',
+        status: 'verified-retaliation-formula-applied',
+        expression: damageResult.mode ?? 'normal',
+        result: hpDamage,
+        verifiedResult: damageResult,
+        weaknessResult,
+        sourceIdentity: command.sourceIdentity?.catalogKind ?? null,
+        appliedLayerKeys: ['verifiedRetaliationHit'],
+        unappliedLayerKeys: ['cultivationEffects', 'unverifiedCallbacks'],
+        layers: {
+          verifiedRetaliationHit: {
+            value: hpDamage,
+            applied: true,
+            source: command.sourceIdentity?.actionBindingIdentity ?? null,
+          },
+        },
+      },
+      stateBefore,
+      appliedToCalculators: true,
+    },
+  };
+  return {
+    ready: true,
+    status: 'verified-retaliation-hit-applied',
+    hitKey,
+    hpDamage,
+    toughnessDamage,
+    damageEvent,
   };
 }
 
@@ -5968,6 +6242,7 @@ function resolveDescriptorOrder(kind) {
     hit: 3,
     'passive-derived-hit': 3,
     'passive-derived-dot': 3,
+    'passive-retaliation-hit': 3,
     'tuning-combat': 4,
     'manual-resource': 4,
     'auto-sp-tick': 5,
@@ -5986,6 +6261,7 @@ function resolveDescriptorOrder(kind) {
     hit: ['combat-hit', 3],
     'passive-derived-hit': ['combat-hit', 3],
     'passive-derived-dot': ['combat-hit', 3],
+    'passive-retaliation-hit': ['combat-hit', 3],
     'tuning-combat': ['post-hit-resource', 4],
     'manual-resource': ['post-hit-resource', 4],
     'auto-sp-tick': ['automatic-recovery', 5],

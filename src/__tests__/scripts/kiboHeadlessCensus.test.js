@@ -52,9 +52,9 @@ describe('kibo headless census', () => {
         unresolved: 0,
       },
       pvePassiveMechanics: {
-        evidenceClosed: 39,
+        evidenceClosed: 40,
         scenarioAssumed: 0,
-        unresolved: 5,
+        unresolved: 4,
       },
       pvpPassiveClassification: {
         evidenceClosed: 122,
@@ -68,7 +68,7 @@ describe('kibo headless census', () => {
       },
     });
     expect(outputs.mechanicsCatalog.summary.triggerLifetime).toEqual({
-      unlimited: 13,
+      unlimited: 14,
       finite: 1,
       'evidence-open': 0,
     });

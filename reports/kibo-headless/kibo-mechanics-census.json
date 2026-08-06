@@ -7941,10 +7941,10 @@
     {
       "skillId": 520007,
       "scopeClass": "pve-combat-talent-passive",
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "classificationStatus": "evidence-closed",
-      "runtimeStatus": "runtime-unresolved",
-      "confidence": "low",
+      "runtimeStatus": "runtime-ready",
+      "confidence": "high",
       "sourceName": "带电身躯",
       "sourceDescription": "受到伤害时，对伤害来源造成自身攻击75%的<color=#9665ab>雷属性伤害</color>，每15秒触发一次。",
       "kiboIds": [
@@ -7960,10 +7960,94 @@
         "skillControlAsset": true,
         "elementAssetCount": 2
       },
-      "mechanic": null,
-      "unresolvedReasons": [
-        "passive-supported-damage-trigger-shape-not-unique"
-      ],
+      "mechanic": {
+        "mechanismFamily": "after-kibo-receive-damage-retaliation-damage-effect",
+        "trigger": {
+          "event": "damage-received",
+          "eventType": 4,
+          "eventName": "AfterReceiveDamage",
+          "sourceScope": "equipped-kibo",
+          "target": "attacker",
+          "internalCooldownMs": 15000,
+          "activationOrder": "after-receive-damage-settlement",
+          "activationDelayMs": 0.001,
+          "sourceElementId": 520007001,
+          "sourcePathId": "-5349313234721046262",
+          "configuredTriggerCounter": -1,
+          "triggerLifetime": "unlimited",
+          "maxTriggerCount": null,
+          "triggerLifetimeBasis": "negative-sentinel-not-limited-by-trigger-element-can-trigger",
+          "triggerLimitScope": "passive-element-lifetime"
+        },
+        "derivedDamage": {
+          "target": "attacker",
+          "targetRuntimeKind": "enemy",
+          "source": "equipped-kibo",
+          "sourceAttribute": {
+            "entityRole": "element-source-equipped-kibo",
+            "attributeId": 1,
+            "attributeName": "ATK"
+          },
+          "sourceElementId": 520007002,
+          "sourcePathId": "4578466329745451060",
+          "formula": {
+            "commonFunctionId": 1,
+            "commonExpression": "G/10000",
+            "baseFunctionId": 4,
+            "baseExpression": "source.ATK[0]*A/10000",
+            "coefficientRaw": 7500,
+            "ratiosByLevel": {
+              "1": 7500,
+              "2": 7500,
+              "3": 7500,
+              "4": 7500,
+              "5": 7500,
+              "6": 7500,
+              "7": 7500,
+              "8": 7500,
+              "9": 7500,
+              "10": 7500,
+              "11": 7500,
+              "12": 7500
+            }
+          },
+          "damage": {
+            "damageSourceType": 0,
+            "damageSourceTypeName": "Attacker",
+            "damageType": 4,
+            "damageTypeName": "ElementSkill",
+            "elementalType": 7,
+            "elementalTypeName": "Thunder",
+            "weakBreakDamageRateBasisPoints": 2000,
+            "physicalPenetrationBasisPoints": 10000,
+            "magicPenetrationBasisPoints": -1,
+            "elementCalculationFactorBasisPoints": 10000,
+            "physicalRatioBasisPoints": 0,
+            "magicRatioBasisPoints": 10000,
+            "recoverSp": 0,
+            "petRecoverSp": 0
+          },
+          "eventPolicy": {
+            "ignoreDamageEvent": false,
+            "emitsDamageTriggerEvents": false,
+            "recursivePassiveTrigger": false
+          },
+          "criticalPolicy": "scenario-policy-with-derived-hit-override"
+        },
+        "ownership": {
+          "source": "equipped-kibo",
+          "formulaSource": "equipped-kibo",
+          "effectAdder": "equipped-kibo",
+          "target": "attacker",
+          "foregroundRequirement": "none-in-source-assets"
+        },
+        "scenarioAssumptions": [
+          "attacker-resolved-to-scenario-enemy-single-enemy-model"
+        ],
+        "evidenceStatus": "source-verified",
+        "sourceTextDifferences": []
+      },
+      "unresolvedReasons": [],
       "provenance": [
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
@@ -38795,9 +38879,9 @@
       "unresolved": 0
     },
     "pvePassiveMechanics": {
-      "evidenceClosed": 39,
+      "evidenceClosed": 40,
       "scenarioAssumed": 0,
-      "unresolved": 5
+      "unresolved": 4
     },
     "pvpPassiveClassification": {
       "evidenceClosed": 122,

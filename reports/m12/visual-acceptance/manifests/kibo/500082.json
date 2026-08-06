@@ -159,11 +159,11 @@
       {
         "requirementIdentity": "kibo-pve-passive-runtime-ready",
         "dimension": "runtime",
-        "status": "blocked",
+        "status": "passed",
         "sourceIdentities": [
           "src/data/generated/kibo-passive-mechanics.json#definitions[kiboId=500082]"
         ],
-        "passed": false
+        "passed": true
       },
       {
         "requirementIdentity": "kibo-headless-maturity-ready",
@@ -176,18 +176,11 @@
       }
     ],
     "requiredCount": 8,
-    "passedCount": 6,
+    "passedCount": 7,
     "complete": false
   },
   "ledger": {
     "records": [
-      {
-        "uniqueGapIdentity": "pve-passive-runtime-incomplete",
-        "status": "blocking",
-        "reason": "headless maturity gap: pve-passive-runtime-incomplete",
-        "blocking": true,
-        "sourceIdentity": "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500082]"
-      },
       {
         "uniqueGapIdentity": "public-action-closure-incomplete",
         "status": "blocking",
@@ -196,7 +189,7 @@
         "sourceIdentity": "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500082]"
       }
     ],
-    "blockingCount": 2
+    "blockingCount": 1
   },
   "maturity": {
     "currentState": "runtime-integrated",
@@ -219,5 +212,5 @@
       "acceptance-product-visual-signoff-pending"
     ]
   },
-  "manifestHash": "888bebb16f2ac845"
+  "manifestHash": "ca32075c84e4adfd"
 }

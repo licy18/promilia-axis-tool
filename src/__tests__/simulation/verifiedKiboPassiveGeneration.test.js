@@ -155,9 +155,9 @@ describe('verified kibo passive generation', () => {
       }),
     ]);
     expect(integrated.verifiedKiboPassiveGeneration.summary).toMatchObject({
-      evidenceClosedDefinitionCount: 39,
+      evidenceClosedDefinitionCount: 40,
       scenarioAssumedDefinitionCount: 0,
-      unresolvedDefinitionCount: 5,
+      unresolvedDefinitionCount: 4,
       effectCommandCount: generation.effectCommands.length,
     });
     expect(
@@ -2082,6 +2082,116 @@ describe('verified kibo passive generation', () => {
         command => command.sourceIdentity?.passiveSkillId === 520018
       )
     ).toBe(false);
+  });
+
+  it('deals retaliation thunder damage to the attacker after kibo receive damage for 520007', () => {
+    const scenario = createActorSkillWithKiboScenario(500082);
+    const action = scenario.actions[0];
+    const resolution = resolveVerifiedCombatActionMechanics(action, {
+      combatScenario: scenario.combatScenario,
+    });
+    const actionRuleDiagnostics = createActionRuleDiagnostics({ scenario });
+    const actionExecutionPlan = createActionExecutionPlan({
+      scenario,
+      actionRuleDiagnostics,
+    });
+    const generation = createVerifiedKiboPassiveGeneration({
+      scenario,
+      actionExecutionPlan,
+      actionResolutionById: new Map([[action.id, resolution]]),
+      kiboReceiveDamageEvents: [
+        {
+          kiboId: 500082,
+          actorId: action.actorId,
+          timeMs: 1000,
+          sourceEventIdentity: 'test:receive:520007',
+          applied: true,
+        },
+      ],
+    });
+    const commands = generation.derivedDamageCommands.filter(
+      command => command.passiveSkillId === 520007
+    );
+    expect(commands).toHaveLength(1);
+    expect(commands[0]).toMatchObject({
+      sourceKiboId: 500082,
+      targetKind: 'enemy',
+      timeMs: 1000.001,
+      retaliationEventIdentity: 'test:receive:520007',
+      hit: expect.objectContaining({
+        elementId: 520007002,
+        damage: expect.objectContaining({
+          damageType: 4,
+          elementalType: 7,
+          weakBreakDamageRateBasisPoints: 2000,
+          magicRatioBasisPoints: 10000,
+        }),
+      }),
+    });
+    expect(generation.unresolved.some(row => row.skillId === 520007)).toBe(
+      false
+    );
+
+    const controlledActorTimeline = createControlledActorTimeline({
+      scenario,
+      actionExecutionPlan,
+    });
+    const runtime = createVerifiedCombatRuntime({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline,
+      kiboPassiveGeneration: generation,
+    });
+    const retaliationHits = runtime.damageEvents.filter(
+      event => event.payload.kiboPassiveRetaliationDamage === true
+    );
+    expect(retaliationHits).toHaveLength(1);
+    expect(retaliationHits[0]).toMatchObject({
+      timeMs: 1000.001,
+      payload: {
+        elementId: 520007002,
+        damageType: 4,
+        elementalType: 7,
+        toughnessDamage: expect.any(Number),
+        appliedToCalculators: true,
+      },
+    });
+    expect(retaliationHits[0].payload.rawDamage).toBeGreaterThan(0);
+
+    const suppressed = createVerifiedKiboPassiveGeneration({
+      scenario,
+      actionExecutionPlan,
+      actionResolutionById: new Map([[action.id, resolution]]),
+      kiboReceiveDamageEvents: [
+        {
+          kiboId: 500082,
+          actorId: action.actorId,
+          timeMs: 1000,
+          sourceEventIdentity: 'test:receive:520007-first',
+          applied: true,
+        },
+        {
+          kiboId: 500082,
+          actorId: action.actorId,
+          timeMs: 2000,
+          sourceEventIdentity: 'test:receive:520007-second',
+          applied: true,
+        },
+      ],
+    });
+    expect(
+      suppressed.derivedDamageCommands.filter(
+        command => command.passiveSkillId === 520007
+      )
+    ).toHaveLength(1);
+    expect(
+      suppressed.internalCooldownSuppressions.some(
+        suppression =>
+          suppression.skillId === 520007 &&
+          suppression.reason ===
+            'kibo-passive-after-receive-damage-internal-cooldown'
+      )
+    ).toBe(true);
   });
 
   it('targets PetOwner as the actor without leaking the effect to the kibo', () => {
