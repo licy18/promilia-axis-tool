@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "aff4d82684b36ee8253701b2df46370285c305c7bd2c3f98c2ec987260f0324e",
+  "packageHash": "9da9ea985c25aedc0a0b4c8af5ab59cc38d96a6123c0135d96c8830a3d04928e",
   "fixedProductDenominator": {
     "publicActionCount": 563,
     "actorOwnerCount": 20,
@@ -27,22 +27,22 @@
     "publicActionCount": 563,
     "actorOwnerCount": 20,
     "kiboOwnerCount": 122,
-    "runnableActionCount": 525,
-    "sourceAppliedActionCount": 412,
+    "runnableActionCount": 529,
+    "sourceAppliedActionCount": 416,
     "sourceRuntimeDependentActionCount": 113,
-    "sourceStaticEvidenceGapActionCount": 38,
+    "sourceStaticEvidenceGapActionCount": 34,
     "scenarioResolvedActionCount": 148,
     "verifiedZeroActionCount": 0,
-    "unresolvedActionCount": 38,
+    "unresolvedActionCount": 34,
     "unresolvedStatusCounts": {
       "runtime-and-evidence-gap": 9,
-      "static-evidence-gap": 29
+      "static-evidence-gap": 25
     },
     "unclassifiedUnresolvedActionCount": 0,
     "actorCoreActionCount": 60,
     "actorCoreRunnableCount": 59,
     "kiboCoreActionCount": 366,
-    "kiboCoreRunnableCount": 360,
+    "kiboCoreRunnableCount": 363,
     "nonzeroRecoveryElementCount": 667,
     "recoveryScopeCounts": {
       "applied-current-public-action": 203,
@@ -74,42 +74,42 @@
     },
     "effectDimensions": {
       "damage": {
-        "unresolved": 505,
-        "verified-zero": 3254
+        "unresolved": 507,
+        "verified-zero": 3283
       },
       "toughness": {
-        "verified-zero": 3759
+        "verified-zero": 3790
       },
       "sp": {
         "applied": 25,
         "unresolved": 87,
-        "verified-zero": 3647
+        "verified-zero": 3678
       },
       "hp": {
         "unresolved": 63,
-        "verified-zero": 3696
+        "verified-zero": 3727
       },
       "shield": {
         "unresolved": 11,
-        "verified-zero": 3748
+        "verified-zero": 3779
       },
       "dynamicProperty": {
-        "applied": 405,
-        "unresolved": 737,
-        "verified-zero": 2617
+        "applied": 431,
+        "unresolved": 732,
+        "verified-zero": 2627
       },
       "mark": {
         "applied": 141,
-        "unresolved": 439,
-        "verified-zero": 3179
+        "unresolved": 440,
+        "verified-zero": 3209
       }
     },
     "semanticEffects": {
-      "total": 3484,
-      "gameplay": 1848,
+      "total": 3515,
+      "gameplay": 1877,
       "applied": 563,
       "verifiedZero": 2,
-      "unresolved": 1283
+      "unresolved": 1312
     },
     "timing": {
       "appliedActionCount": 552,
@@ -287,9 +287,9 @@
       "actionKind": "star-carry",
       "actionCount": 17,
       "runtimeStatusCounts": {
-        "runnable": 13,
+        "runnable": 14,
         "runtime-and-evidence-gap": 1,
-        "static-evidence-gap": 3
+        "static-evidence-gap": 2
       },
       "timingStatusCounts": {
         "applied": 16,
@@ -335,8 +335,8 @@
       "actionKind": "active",
       "actionCount": 122,
       "runtimeStatusCounts": {
-        "runnable": 117,
-        "static-evidence-gap": 5
+        "runnable": 120,
+        "static-evidence-gap": 2
       },
       "timingStatusCounts": {
         "applied": 122
@@ -9207,8 +9207,7 @@
         "base-function-unverified",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5",
-        "effect-target-ally-unresolved"
+        "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500035].actions[skillId=50003503].skillId"
     },
@@ -15195,7 +15194,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "pack-lifecycle-semantics-evidence-gap",
-        "effect-target-ally-unresolved",
         "heal-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -15824,13 +15822,13 @@
       "sourceSkillName": "唤潮",
       "controlSkillId": 502010,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -15859,21 +15857,27 @@
         "kiboSp": {
           "unresolved": 2
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 2
+        },
+        "shield": {
+          "verified-zero": 2
+        },
+        "dynamicProperty": {
+          "applied": 2
+        },
+        "tuningMark": {
+          "verified-zero": 2
+        }
       },
       "semanticEffects": {
-        "total": 0,
+        "total": 2,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 0
+        "unresolved": 2
       },
       "settlement": null,
-      "reasons": [
-        "effect-target-ally-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500097].actions[skillId=502010].skillId"
     },
     {
@@ -16029,13 +16033,13 @@
       "sourceSkillName": "唤潮",
       "controlSkillId": 502010,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -16064,21 +16068,27 @@
         "kiboSp": {
           "unresolved": 2
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 2
+        },
+        "shield": {
+          "verified-zero": 2
+        },
+        "dynamicProperty": {
+          "applied": 2
+        },
+        "tuningMark": {
+          "verified-zero": 2
+        }
       },
       "semanticEffects": {
-        "total": 0,
+        "total": 2,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 0
+        "unresolved": 2
       },
       "settlement": null,
-      "reasons": [
-        "effect-target-ally-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500098].actions[skillId=502010].skillId"
     },
     {
@@ -17204,7 +17214,7 @@
           "verified-zero": 2
         },
         "dynamicProperty": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 1
         },
         "tuningMark": {
@@ -17218,9 +17228,7 @@
         "unresolved": 1
       },
       "settlement": null,
-      "reasons": [
-        "effect-target-ally-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500123].actions[skillId=50012302].skillId"
     },
     {
@@ -21481,7 +21489,8 @@
           "verified-zero": 8
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 1,
+          "unresolved": 1,
           "verified-zero": 6
         },
         "tuningMark": {
@@ -21497,7 +21506,6 @@
       },
       "settlement": null,
       "reasons": [
-        "effect-target-ally-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
         "effect-trigger-frame-missing",
@@ -21684,7 +21692,8 @@
           "verified-zero": 8
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 1,
+          "unresolved": 1,
           "verified-zero": 6
         },
         "tuningMark": {
@@ -21700,7 +21709,6 @@
       },
       "settlement": null,
       "reasons": [
-        "effect-target-ally-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
         "effect-trigger-frame-missing",
@@ -21883,7 +21891,8 @@
           "verified-zero": 10
         },
         "dynamicProperty": {
-          "unresolved": 4,
+          "applied": 2,
+          "unresolved": 2,
           "verified-zero": 6
         },
         "tuningMark": {
@@ -21899,7 +21908,6 @@
       },
       "settlement": null,
       "reasons": [
-        "effect-target-ally-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
         "effect-trigger-frame-missing",
@@ -29173,7 +29181,7 @@
           "verified-zero": 3
         },
         "dynamicProperty": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 2
         },
         "tuningMark": {
@@ -29188,7 +29196,6 @@
       },
       "settlement": null,
       "reasons": [
-        "effect-target-ally-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500357].actions[skillId=50035701].skillId"
@@ -29377,7 +29384,7 @@
           "verified-zero": 5
         },
         "dynamicProperty": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "tuningMark": {
@@ -29392,7 +29399,6 @@
       },
       "settlement": null,
       "reasons": [
-        "effect-target-ally-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500358].actions[skillId=50035801].skillId"
@@ -29407,13 +29413,13 @@
       "sourceSkillName": "森之守护",
       "controlSkillId": 505011,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -29442,21 +29448,27 @@
         "kiboSp": {
           "unresolved": 1
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 1
+        },
+        "shield": {
+          "verified-zero": 1
+        },
+        "dynamicProperty": {
+          "applied": 1
+        },
+        "tuningMark": {
+          "verified-zero": 1
+        }
       },
       "semanticEffects": {
-        "total": 0,
+        "total": 1,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 0
+        "unresolved": 1
       },
       "settlement": null,
-      "reasons": [
-        "effect-target-ally-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500358].actions[skillId=505011].skillId"
     },
     {
@@ -45167,13 +45179,13 @@
       "sourceSkillName": "后勤保障",
       "controlSkillId": 11200222,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 64,
@@ -45202,21 +45214,31 @@
         "kiboSp": {
           "unresolved": 4
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 8
+        },
+        "shield": {
+          "verified-zero": 8
+        },
+        "dynamicProperty": {
+          "applied": 1,
+          "unresolved": 2,
+          "verified-zero": 5
+        },
+        "tuningMark": {
+          "unresolved": 1,
+          "verified-zero": 7
+        }
       },
       "semanticEffects": {
-        "total": 0,
+        "total": 6,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 0
+        "unresolved": 6
       },
       "settlement": null,
       "reasons": [
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-target-ally-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-max-mismatch",
@@ -50231,8 +50253,7 @@
         "base-function-unverified",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5",
-        "effect-target-ally-unresolved"
+        "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500035].actions[skillId=50003503].skillId"
     },
@@ -56219,7 +56240,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "pack-lifecycle-semantics-evidence-gap",
-        "effect-target-ally-unresolved",
         "heal-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -56848,13 +56868,13 @@
       "sourceSkillName": "唤潮",
       "controlSkillId": 502010,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -56883,21 +56903,27 @@
         "kiboSp": {
           "unresolved": 2
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 2
+        },
+        "shield": {
+          "verified-zero": 2
+        },
+        "dynamicProperty": {
+          "applied": 2
+        },
+        "tuningMark": {
+          "verified-zero": 2
+        }
       },
       "semanticEffects": {
-        "total": 0,
+        "total": 2,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 0
+        "unresolved": 2
       },
       "settlement": null,
-      "reasons": [
-        "effect-target-ally-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500097].actions[skillId=502010].skillId"
     },
     {
@@ -57053,13 +57079,13 @@
       "sourceSkillName": "唤潮",
       "controlSkillId": 502010,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -57088,21 +57114,27 @@
         "kiboSp": {
           "unresolved": 2
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 2
+        },
+        "shield": {
+          "verified-zero": 2
+        },
+        "dynamicProperty": {
+          "applied": 2
+        },
+        "tuningMark": {
+          "verified-zero": 2
+        }
       },
       "semanticEffects": {
-        "total": 0,
+        "total": 2,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 0
+        "unresolved": 2
       },
       "settlement": null,
-      "reasons": [
-        "effect-target-ally-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500098].actions[skillId=502010].skillId"
     },
     {
@@ -58228,7 +58260,7 @@
           "verified-zero": 2
         },
         "dynamicProperty": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 1
         },
         "tuningMark": {
@@ -58242,9 +58274,7 @@
         "unresolved": 1
       },
       "settlement": null,
-      "reasons": [
-        "effect-target-ally-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500123].actions[skillId=50012302].skillId"
     },
     {
@@ -62505,7 +62535,8 @@
           "verified-zero": 8
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 1,
+          "unresolved": 1,
           "verified-zero": 6
         },
         "tuningMark": {
@@ -62521,7 +62552,6 @@
       },
       "settlement": null,
       "reasons": [
-        "effect-target-ally-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
         "effect-trigger-frame-missing",
@@ -62708,7 +62738,8 @@
           "verified-zero": 8
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 1,
+          "unresolved": 1,
           "verified-zero": 6
         },
         "tuningMark": {
@@ -62724,7 +62755,6 @@
       },
       "settlement": null,
       "reasons": [
-        "effect-target-ally-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
         "effect-trigger-frame-missing",
@@ -62907,7 +62937,8 @@
           "verified-zero": 10
         },
         "dynamicProperty": {
-          "unresolved": 4,
+          "applied": 2,
+          "unresolved": 2,
           "verified-zero": 6
         },
         "tuningMark": {
@@ -62923,7 +62954,6 @@
       },
       "settlement": null,
       "reasons": [
-        "effect-target-ally-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
         "effect-trigger-frame-missing",
@@ -70197,7 +70227,7 @@
           "verified-zero": 3
         },
         "dynamicProperty": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 2
         },
         "tuningMark": {
@@ -70212,7 +70242,6 @@
       },
       "settlement": null,
       "reasons": [
-        "effect-target-ally-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500357].actions[skillId=50035701].skillId"
@@ -70401,7 +70430,7 @@
           "verified-zero": 5
         },
         "dynamicProperty": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "tuningMark": {
@@ -70416,7 +70445,6 @@
       },
       "settlement": null,
       "reasons": [
-        "effect-target-ally-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500358].actions[skillId=50035801].skillId"
@@ -70431,13 +70459,13 @@
       "sourceSkillName": "森之守护",
       "controlSkillId": 505011,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -70466,21 +70494,27 @@
         "kiboSp": {
           "unresolved": 1
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 1
+        },
+        "shield": {
+          "verified-zero": 1
+        },
+        "dynamicProperty": {
+          "applied": 1
+        },
+        "tuningMark": {
+          "verified-zero": 1
+        }
       },
       "semanticEffects": {
-        "total": 0,
+        "total": 1,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 0
+        "unresolved": 1
       },
       "settlement": null,
-      "reasons": [
-        "effect-target-ally-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500358].actions[skillId=505011].skillId"
     },
     {
@@ -74149,73 +74183,6 @@
       "sourceIdentity": "characters.items[id=112002].skillSlots[group=ground,slot=204]"
     },
     {
-      "identity": "actor|112002|11200222|0|11200222",
-      "ownerKind": "actor",
-      "ownerId": 112002,
-      "ownerName": "艾妮丝",
-      "actionKind": "star-carry",
-      "sourceSkillId": 11200222,
-      "sourceSkillName": "后勤保障",
-      "controlSkillId": 11200222,
-      "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
-      "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
-      "timing": {
-        "status": "applied",
-        "durationFrames": 64,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
-        "variantModelStatus": "resolved"
-      },
-      "variants": {
-        "status": "not-applicable",
-        "total": 0
-      },
-      "specialResource": {
-        "status": "not-applicable"
-      },
-      "dimensions": {
-        "enemyHp": {
-          "unresolved": 4
-        },
-        "enemyToughness": {
-          "unresolved": 4
-        },
-        "actorSp": {
-          "unresolved": 4
-        },
-        "kiboSp": {
-          "unresolved": 4
-        },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
-      },
-      "semanticEffects": {
-        "total": 0,
-        "applied": 0,
-        "verifiedZero": 0,
-        "unresolved": 0
-      },
-      "settlement": null,
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-target-ally-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap"
-      ],
-      "sourceIdentity": "characters.items[id=112002].skillSlots[skillId=11200222]"
-    },
-    {
       "identity": "actor|112002|11200222|1|11200225",
       "ownerKind": "actor",
       "ownerId": 112002,
@@ -74729,130 +74696,6 @@
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500053].actions[skillId=506008].skillId"
     },
     {
-      "identity": "kibo|500097|502010|0|502010",
-      "ownerKind": "kibo",
-      "ownerId": 500097,
-      "ownerName": "水岩灵",
-      "actionKind": "active",
-      "sourceSkillId": 502010,
-      "sourceSkillName": "唤潮",
-      "controlSkillId": 502010,
-      "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
-      "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
-      "timing": {
-        "status": "applied",
-        "durationFrames": 105,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
-        "variantModelStatus": "variant-condition-not-yet-modeled"
-      },
-      "variants": {
-        "status": "not-applicable",
-        "total": 0
-      },
-      "specialResource": {
-        "status": "not-applicable"
-      },
-      "dimensions": {
-        "enemyHp": {
-          "unresolved": 2
-        },
-        "enemyToughness": {
-          "unresolved": 2
-        },
-        "actorSp": {
-          "unresolved": 2
-        },
-        "kiboSp": {
-          "unresolved": 2
-        },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
-      },
-      "semanticEffects": {
-        "total": 0,
-        "applied": 0,
-        "verifiedZero": 0,
-        "unresolved": 0
-      },
-      "settlement": null,
-      "reasons": [
-        "effect-target-ally-unresolved"
-      ],
-      "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500097].actions[skillId=502010].skillId"
-    },
-    {
-      "identity": "kibo|500098|502010|0|502010",
-      "ownerKind": "kibo",
-      "ownerId": 500098,
-      "ownerName": "水岩卫",
-      "actionKind": "active",
-      "sourceSkillId": 502010,
-      "sourceSkillName": "唤潮",
-      "controlSkillId": 502010,
-      "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
-      "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
-      "timing": {
-        "status": "applied",
-        "durationFrames": 105,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
-        "variantModelStatus": "variant-condition-not-yet-modeled"
-      },
-      "variants": {
-        "status": "not-applicable",
-        "total": 0
-      },
-      "specialResource": {
-        "status": "not-applicable"
-      },
-      "dimensions": {
-        "enemyHp": {
-          "unresolved": 2
-        },
-        "enemyToughness": {
-          "unresolved": 2
-        },
-        "actorSp": {
-          "unresolved": 2
-        },
-        "kiboSp": {
-          "unresolved": 2
-        },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
-      },
-      "semanticEffects": {
-        "total": 0,
-        "applied": 0,
-        "verifiedZero": 0,
-        "unresolved": 0
-      },
-      "settlement": null,
-      "reasons": [
-        "effect-target-ally-unresolved"
-      ],
-      "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500098].actions[skillId=502010].skillId"
-    },
-    {
       "identity": "kibo|500098|50009804|0|50009804",
       "ownerKind": "kibo",
       "ownerId": 500098,
@@ -74917,68 +74760,6 @@
         "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500098].actions[skillId=50009804].skillId"
-    },
-    {
-      "identity": "kibo|500358|505011|0|505011",
-      "ownerKind": "kibo",
-      "ownerId": 500358,
-      "ownerName": "绒绒云",
-      "actionKind": "active",
-      "sourceSkillId": 505011,
-      "sourceSkillName": "森之守护",
-      "controlSkillId": 505011,
-      "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
-      "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
-      "timing": {
-        "status": "applied",
-        "durationFrames": 105,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
-        "variantModelStatus": "variant-condition-not-yet-modeled"
-      },
-      "variants": {
-        "status": "not-applicable",
-        "total": 0
-      },
-      "specialResource": {
-        "status": "not-applicable"
-      },
-      "dimensions": {
-        "enemyHp": {
-          "unresolved": 1
-        },
-        "enemyToughness": {
-          "unresolved": 1
-        },
-        "actorSp": {
-          "unresolved": 1
-        },
-        "kiboSp": {
-          "unresolved": 1
-        },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
-      },
-      "semanticEffects": {
-        "total": 0,
-        "applied": 0,
-        "verifiedZero": 0,
-        "unresolved": 0
-      },
-      "settlement": null,
-      "reasons": [
-        "effect-target-ally-unresolved"
-      ],
-      "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500358].actions[skillId=505011].skillId"
     }
   ],
   "recoveryCoverage": [

@@ -3,15 +3,15 @@
 - 包：`azpr-tc-2026-07-18`
 - 公开动作分母：563
 - 已关联：563
-- 场景可运行：525
-- 来源静态可应用：412
+- 场景可运行：529
+- 来源静态可应用：416
 - 来源运行时依赖：113
 - 零距离场景补全：148
-- 来源静态证据缺口：38
+- 来源静态证据缺口：34
 - 明确零：0
-- 未解析：38
+- 未解析：34
 - 真实命中节点：2502
-- 公开动作变体：593（未解析 68）
+- 公开动作变体：593（未解析 64）
 - 非零回能元素：667（未关联 464）
 - 零距离投射物命中：2418（仍缺发射帧 203、仍缺公式 175、仍缺目标 0）
 - 普攻输入链：20 条 / 95 个输入段（可运行 80，未解析 15）
@@ -52,11 +52,11 @@
 | actor | normal-attack | 20 | 20 | 19 | 0 | 1 | 93 |
 | actor | perfect-parry | 20 | 20 | 3 | 0 | 17 | 10 |
 | actor | plunging-attack | 20 | 20 | 20 | 0 | 0 | 22 |
-| actor | star-carry | 17 | 17 | 13 | 0 | 4 | 74 |
+| actor | star-carry | 17 | 17 | 14 | 0 | 3 | 74 |
 | actor | star-combo | 20 | 20 | 20 | 0 | 0 | 20 |
 | actor | star-skill | 20 | 20 | 20 | 0 | 0 | 140 |
 | actor | ultimate | 20 | 20 | 20 | 0 | 0 | 139 |
-| kibo | active | 122 | 122 | 117 | 0 | 5 | 998 |
+| kibo | active | 122 | 122 | 120 | 0 | 2 | 998 |
 | kibo | break | 122 | 122 | 121 | 0 | 1 | 122 |
 | kibo | signature | 122 | 122 | 122 | 0 | 0 | 678 |
 
@@ -95,7 +95,6 @@
 - `actor|112002|11200201|1|11200210` 艾妮丝 / charged-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200201|3|11200215` 艾妮丝 / dodge-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200212|0|11200212` 艾妮丝 / star-skill / 不许捣乱哦: base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-target-any-unresolved, tuning-mark-max-mismatch, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved, heal-formula-not-literal-function-5
-- `actor|112002|11200222|0|11200222` 艾妮丝 / star-carry / 后勤保障: nested-effect-wrapper-semantics-unresolved, effect-target-ally-unresolved, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-max-mismatch, nested-damage-trigger-lifecycle-not-expanded
 - `actor|112002|11200222|1|11200225` 艾妮丝 / limit-counter / 后勤保障: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200222|2|11200227` 艾妮丝 / perfect-parry / 后勤保障: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|199001|19900122|2|19900127` 女主角 / perfect-parry / 星辉之环: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
@@ -146,8 +145,6 @@
 - `kibo|500083|501001|0|501001` 滚地犰 / active / 火球: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500095|509001|0|509001` 雾粘蛙 / active / 暗魂影: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500096|509002|0|509002` 雾球蛙 / active / 暗魂影爆阵: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500097|502010|0|502010` 水岩灵 / active / 唤潮: effect-target-ally-unresolved
-- `kibo|500098|502010|0|502010` 水岩卫 / active / 唤潮: effect-target-ally-unresolved
 - `kibo|500098|50009804|0|50009804` 水岩卫 / break / 水岩卫-合击: trigger-frame-missing
 - `kibo|500110|505001|0|505001` 宝蓝雏龙 / active / 灵木弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500114|503009|0|503009` 冰灵仔 / active / 冰晶弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
@@ -206,7 +203,6 @@
 - `kibo|500354|509001|0|509001` 小暮鸮 / active / 暗魂影: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500355|509002|0|509002` 夜猫鸮 / active / 暗魂影爆阵: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500357|504012|0|504012` 啵啵丁 / active / 小风弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500358|505011|0|505011` 绒绒云 / active / 森之守护: effect-target-ally-unresolved
 - `kibo|500360|509002|0|509002` 怯影之翼 / active / 暗魂影爆阵: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500368|504012|0|504012` 小音浮 / active / 小风弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500369|507003|0|507003` 乐乐蛙 / active / 落雷: trigger-frame-missing, projectile-impact-frame-runtime-dependent

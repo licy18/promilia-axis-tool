@@ -23,7 +23,7 @@
 | 夏儿 (109002) | 入场 | 203 | 10900221 | applied | applied |
 | 法兰塔 (111001) | 入场 | 203 | 11100121 | applied | applied |
 | 姬瑟贝露 (112001) | 入场 | 203 | 11200121 | applied | applied |
-| 艾妮丝 (112002) | 退场 | 201 | 11200222 | applied | unresolved |
+| 艾妮丝 (112002) | 退场 | 201 | 11200222 | applied | applied |
 | 女主角 (199001) | 退场 | 201 | 19900122 | static-evidence-gap | unresolved |
 | 男主角 (199002) | 退场 | 201 | 19900222 | static-evidence-gap | unresolved |
 | 诺诺 (199003) | 入场 | 203 | 19900321 | applied | applied |

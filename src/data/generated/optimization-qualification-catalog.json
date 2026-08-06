@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "42fb2d341b13810c",
-  "manifestsHash": "de5434d492232ae0",
-  "gapLedgerHash": "cb6059c1f4d29fda",
-  "bindingMatrixHash": "ffc9904d6928fbcb",
-  "sourceSnapshotHash": "918f9bb7d66ce144",
+  "rosterHash": "f94f6a1102f8f9b6",
+  "manifestsHash": "0410d483545797b4",
+  "gapLedgerHash": "74a946af0de1d827",
+  "bindingMatrixHash": "cd68047ffa18cba0",
+  "sourceSnapshotHash": "7c3c9529e306e4e9",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -27,7 +27,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "f8c790f55c77a531"
+      "manifestHash": "9f2bc5c0ab46bd13"
     },
     {
       "objectKind": "character",
@@ -52,7 +52,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "ea605cb379268174"
+      "manifestHash": "0c45efc31ac82a64"
     },
     {
       "objectKind": "character",
@@ -1513,11 +1513,8 @@
       "displayName": "风灵苞",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "kibo-visual-acceptance-evidence-blocked",
-        "kibo-headless-maturity-not-ready"
-      ],
-      "manifestHash": "a27680357de5501f"
+      "blockerCodes": [],
+      "manifestHash": "81b8a13ac8ae4279"
     },
     {
       "objectKind": "kibo",
@@ -1797,13 +1794,13 @@
       "objectKind": "kibo",
       "objectId": "500358",
       "displayName": "绒绒云",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
         "kibo-visual-acceptance-evidence-blocked",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "b614d5e63536ee3c"
+      "manifestHash": "478641988d6c02ea"
     },
     {
       "objectKind": "kibo",
@@ -2772,7 +2769,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "42fb2d341b13810c",
+    "rosterHash": "f94f6a1102f8f9b6",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24680,7 +24677,7 @@
       "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "ffc9904d6928fbcb"
+    "bindingMatrixHash": "cd68047ffa18cba0"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44182,9 +44179,9 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 10,
+      "extracted": 9,
       "optimization-ready": 210,
-      "runtime-integrated": 45
+      "runtime-integrated": 46
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -44194,7 +44191,7 @@
       "set-skill": 11
     },
     "optimizationReadyTotal": 210,
-    "gameplayBlockingGapCount": 100,
+    "gameplayBlockingGapCount": 98,
     "bindingQualifiedEdgeCount": 11,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44277,5 +44274,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "eb0c31fc816d084e"
+  "catalogHash": "a9c340b41805ac0c"
 }

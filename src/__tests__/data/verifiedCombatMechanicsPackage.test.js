@@ -40,12 +40,12 @@ describe('verified combat mechanics package', () => {
       summary: {
         candidateActionCount: 563,
         classifiedActionCount: 563,
-        appliedActionBindingCount: 583,
+        appliedActionBindingCount: 587,
         appliedHitBindingCount: 2737,
-        appliedEffectBindingCount: 1044,
+        appliedEffectBindingCount: 1071,
         verifiedZeroEffectBindingCount: 2,
-        unresolvedEffectBindingCount: 2714,
-        actionVariantSupportControlBindingCount: 70,
+        unresolvedEffectBindingCount: 2718,
+        actionVariantSupportControlBindingCount: 69,
         specialResourceProfileCount: 2,
         specialResourceOperationCount: 46,
         actionVariantNodeCount: 689,
@@ -54,7 +54,7 @@ describe('verified combat mechanics package', () => {
         appliedSwitchTriggerProfileCount: 17,
         unresolvedSwitchTriggerProfileCount: 3,
         battleEffectNodeCount: 3695,
-        unresolvedActionCount: 41,
+        unresolvedActionCount: 37,
         actorProfileCount: 20,
         kiboProfileCount: 122,
         enemyProfileCount: 208,
@@ -69,8 +69,8 @@ describe('verified combat mechanics package', () => {
         unresolvedAttackInputSegmentCount: 15,
         appliedAttackInputTimingCount: 78,
         unresolvedAttackInputTimingCount: 17,
-        semanticEffectCount: 3484,
-        semanticGameplayEffectCount: 1848,
+        semanticEffectCount: 3515,
+        semanticGameplayEffectCount: 1877,
         semanticAppliedEffectCount: 563,
         characterCombatProfileCount: 3,
         characterCombatUiVerifiedProfileCount: 0,
@@ -182,30 +182,30 @@ describe('verified combat mechanics package', () => {
         .some(modifier => modifier.attributeId === 0)
     ).toBe(false);
     expect(effectCoverage.summary).toMatchObject({
-      semanticEffectCount: 3484,
-      semanticGameplayEffectCount: 1848,
-      semanticStructuralCount: 1636,
+      semanticEffectCount: 3515,
+      semanticGameplayEffectCount: 1877,
+      semanticStructuralCount: 1638,
       semanticAppliedCount: 563,
       semanticVerifiedZeroCount: 2,
-      semanticUnresolvedCount: 1283,
+      semanticUnresolvedCount: 1312,
       semanticPlacementCounts: {
-        'runtime-dependent': 139,
-        'static-evidence-gap': 483,
-        'static-resolved': 1226,
+        'runtime-dependent': 163,
+        'static-evidence-gap': 485,
+        'static-resolved': 1229,
       },
-      effectBindingCount: 3759,
-      appliedEffectBindingCount: 1043,
+      effectBindingCount: 3790,
+      appliedEffectBindingCount: 1070,
       verifiedZeroEffectBindingCount: 2,
-      unresolvedEffectBindingCount: 2714,
+      unresolvedEffectBindingCount: 2718,
       bindingKindCounts: {
-        damage: 568,
-        inject: 1409,
+        damage: 570,
+        inject: 1411,
         judgment: 114,
         pack: 231,
-        'property-change': 1144,
+        'property-change': 1170,
         shield: 11,
         sp: 112,
-        stack: 170,
+        stack: 171,
       },
       dimensions: expect.objectContaining({
         damage: expect.any(Object),
@@ -214,9 +214,9 @@ describe('verified combat mechanics package', () => {
         hp: expect.any(Object),
         shield: expect.any(Object),
         dynamicProperty: expect.objectContaining({
-          applied: 405,
-          unresolved: 737,
-          'verified-zero': 2617,
+          applied: 431,
+          unresolved: 732,
+          'verified-zero': 2627,
         }),
         mark: expect.any(Object),
       }),
@@ -297,7 +297,7 @@ describe('verified combat mechanics package', () => {
         unresolvedEdgeCount: 286,
       },
     });
-    expect(effectCoverage.sourceDenominator.rawReferenceEdgeCount).toBe(1682);
+    expect(effectCoverage.sourceDenominator.rawReferenceEdgeCount).toBe(1687);
     expect(variantResourceCoverage.summary).toMatchObject({
       profileCount: 2,
       appliedProfileCount: 2,
@@ -1546,7 +1546,7 @@ describe('verified combat mechanics package', () => {
     });
 
     expect(mechanicsPackage.semanticEffectCatalog.summary).toMatchObject({
-      fullSemanticEffectCount: 3484,
+      fullSemanticEffectCount: 3515,
       runtimeEffectCount: 431,
       compiledPassiveEffectCount: 41,
       runtimeFormulaCount: 123,

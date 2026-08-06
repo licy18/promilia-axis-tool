@@ -3,7 +3,7 @@
   "kind": "azpr-verified-switch-trigger-coverage",
   "status": "verified-switch-trigger-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "aff4d82684b36ee8253701b2df46370285c305c7bd2c3f98c2ec987260f0324e",
+  "packageHash": "9da9ea985c25aedc0a0b4c8af5ab59cc38d96a6123c0135d96c8830a3d04928e",
   "sourceDenominator": {
     "kind": "current-client-public-actor-switch-skill-slots",
     "actorOwnerCount": 20,
@@ -548,10 +548,9 @@
       "triggerFrameOffset": 0,
       "conditions": [],
       "manualReleaseStatus": "switch-trigger-only",
-      "mechanicsClassification": "unresolved",
+      "mechanicsClassification": "applied",
       "mechanicsReasons": [
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-target-ally-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-max-mismatch",

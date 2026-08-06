@@ -40,9 +40,9 @@
   "summary": {
     "total": 254,
     "published": 254,
-    "accepted": 221,
-    "optimizationReady": 221,
-    "blockingLedgerCount": 34,
+    "accepted": 222,
+    "optimizationReady": 222,
+    "blockingLedgerCount": 33,
     "byObjectKind": {
       "soul-essence": {
         "total": 62,
@@ -56,8 +56,8 @@
       },
       "kibo": {
         "total": 43,
-        "accepted": 11,
-        "optimizationReady": 11
+        "accepted": 12,
+        "optimizationReady": 12
       },
       "set-skill": {
         "total": 12,
@@ -5289,18 +5289,16 @@
       "objectKind": "kibo",
       "objectId": "500123",
       "displayName": "风灵苞",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "0e416b5ef9ed1ca3",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "4a412a7967a07daf",
       "evidence": {
         "iconSha256": "dc3f695d8f626c53b4d649ae43f4dd3ae08158ad4164cd99ece8288fda5b0df9",
         "binding": {
@@ -5313,7 +5311,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -5325,7 +5323,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -6434,7 +6432,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "92a0face816dfb06",
+      "manifestHash": "867946a832660c23",
       "evidence": {
         "iconSha256": "56cb14df8efdf0938e80a6bc0092bb0ea600f5191b8814c6213ae6ca9817c832",
         "binding": {
@@ -6451,8 +6449,8 @@
               "closureClass": "unresolved"
             },
             "active": {
-              "runtimeStatus": "static-evidence-gap",
-              "closureClass": "unresolved"
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -7025,5 +7023,5 @@
       }
     }
   ],
-  "catalogHash": "3bae3111ae3a9c26"
+  "catalogHash": "68234d0cb3e9c727"
 }

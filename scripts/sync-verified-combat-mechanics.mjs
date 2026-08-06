@@ -4640,7 +4640,7 @@ function createBehaviorTarget(code, sourceField) {
         : code === 4
           ? 'source-owner'
           : code === 2
-            ? 'ally-unresolved'
+            ? 'ally'
             : code === 3
               ? 'any-unresolved'
               : sourceField === 'directInjectTargetType' && code === 0
@@ -6182,7 +6182,11 @@ function createControlRuntimeEffectBinding({
   if (!trigger || !Number.isInteger(trigger.startFrame)) {
     reasons.push('effect-trigger-frame-missing');
   }
-  if (!['source-owner', 'enemy', 'team-tuning-pool'].includes(target.kind)) {
+  if (
+    !['source-owner', 'enemy', 'team-tuning-pool', 'ally'].includes(
+      target.kind
+    )
+  ) {
     reasons.push(
       target.kind ? `effect-target-${target.kind}` : 'effect-target-unresolved'
     );

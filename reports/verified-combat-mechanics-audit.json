@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "aff4d82684b36ee8253701b2df46370285c305c7bd2c3f98c2ec987260f0324e",
+  "packageHash": "9da9ea985c25aedc0a0b4c8af5ab59cc38d96a6123c0135d96c8830a3d04928e",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
@@ -1274,14 +1274,14 @@
     "classifiedActionCount": 563,
     "foundControlCount": 620,
     "indexedElementPathCount": 2232,
-    "appliedActionBindingCount": 583,
+    "appliedActionBindingCount": 587,
     "appliedHitBindingCount": 2737,
-    "uniqueControlBindingCount": 540,
+    "uniqueControlBindingCount": 543,
     "uniqueControlHitBindingCount": 4579,
-    "appliedEffectBindingCount": 1044,
+    "appliedEffectBindingCount": 1071,
     "verifiedZeroEffectBindingCount": 2,
-    "unresolvedEffectBindingCount": 2714,
-    "unresolvedActionBindingCount": 38,
+    "unresolvedEffectBindingCount": 2718,
+    "unresolvedActionBindingCount": 34,
     "enemyProfileCount": 208,
     "appliedEnemyProfileCount": 204,
     "appliedHitDamageTypeCounts": {
@@ -1723,24 +1723,6 @@
       "applied": false
     },
     {
-      "identity": "actor|112002|11200222|0|11200222",
-      "ownerKind": "actor",
-      "ownerId": 112002,
-      "sourceSkillId": 11200222,
-      "actionVariantIndex": 0,
-      "controlSkillId": 11200222,
-      "status": "unresolved",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-target-ally-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|112002|11200222|1|11200225",
       "ownerKind": "actor",
       "ownerId": 112002,
@@ -1862,32 +1844,6 @@
       "applied": false
     },
     {
-      "identity": "kibo|500097|502010|0|502010",
-      "ownerKind": "kibo",
-      "ownerId": 500097,
-      "sourceSkillId": 502010,
-      "actionVariantIndex": 0,
-      "controlSkillId": 502010,
-      "status": "unresolved",
-      "reasons": [
-        "effect-target-ally-unresolved"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500098|502010|0|502010",
-      "ownerKind": "kibo",
-      "ownerId": 500098,
-      "sourceSkillId": 502010,
-      "actionVariantIndex": 0,
-      "controlSkillId": 502010,
-      "status": "unresolved",
-      "reasons": [
-        "effect-target-ally-unresolved"
-      ],
-      "applied": false
-    },
-    {
       "identity": "kibo|500098|50009804|0|50009804",
       "ownerKind": "kibo",
       "ownerId": 500098,
@@ -1897,19 +1853,6 @@
       "status": "unresolved",
       "reasons": [
         "trigger-frame-missing"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "kibo|500358|505011|0|505011",
-      "ownerKind": "kibo",
-      "ownerId": 500358,
-      "sourceSkillId": 505011,
-      "actionVariantIndex": 0,
-      "controlSkillId": 505011,
-      "status": "unresolved",
-      "reasons": [
-        "effect-target-ally-unresolved"
       ],
       "applied": false
     }
