@@ -21,15 +21,15 @@
 
 | 动作 | 就绪 | 状态 | 剩余缺口 |
 | --- | --- | --- | --- |
-| normal-attack | 是 | applied-with-residual-gaps | projectile-impact-frame-runtime-dependent；trigger-frame-missing |
-| charged-attack | 是 | applied-with-residual-gaps | projectile-impact-frame-runtime-dependent；trigger-frame-missing |
+| normal-attack | 是 | applied-with-residual-gaps | trigger-frame-missing |
+| charged-attack | 是 | applied-with-residual-gaps | trigger-frame-missing |
 | dodge-attack | 是 | applied |  |
 | plunging-attack | 是 | applied |  |
 | star-skill | 是 | applied |  |
 | star-combo | 是 | applied |  |
 | ultimate | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；property-formula-not-literal-function-5 |
 | star-carry | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；verified-action-effective-occupancy-window-unresolved |
-| limit-counter | 是 | applied-with-residual-gaps | projectile-impact-frame-runtime-dependent；trigger-frame-missing |
+| limit-counter | 是 | applied-with-residual-gaps | trigger-frame-missing |
 | perfect-parry | 是 | applied |  |
 
 > 本报告由 owner contract 生成；描述只用于发现与命名，运行状态以 control、资源事务、派生窗口和效果绑定为准。

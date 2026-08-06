@@ -35,7 +35,7 @@ describe('M9 public runtime coverage', () => {
       runnableActionCount: 550,
       sourceAppliedActionCount: 440,
       sourceRuntimeDependentActionCount: 110,
-      scenarioResolvedActionCount: 152,
+      scenarioResolvedActionCount: 504,
       verifiedZeroActionCount: 0,
       unresolvedActionCount: 13,
       unclassifiedUnresolvedActionCount: 0,

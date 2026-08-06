@@ -9,8 +9,8 @@ describe('M12-B3 visual acceptance pipeline', () => {
     expect(artifacts.catalog.summary).toMatchObject({
       total: 254,
       published: 254,
-      accepted: 251,
-      optimizationReady: 251,
+      accepted: 252,
+      optimizationReady: 252,
     });
     expect(artifacts.catalog.summary.byObjectKind).toEqual({
       'soul-essence': {
@@ -25,8 +25,8 @@ describe('M12-B3 visual acceptance pipeline', () => {
       },
       kibo: {
         total: 43,
-        accepted: 41,
-        optimizationReady: 41,
+        accepted: 42,
+        optimizationReady: 42,
       },
       'set-skill': {
         total: 12,
@@ -58,7 +58,7 @@ describe('M12-B3 visual acceptance pipeline', () => {
       kiboManifests.filter(
         manifest => manifest.maturity.optimizationReady === true
       )
-    ).toHaveLength(41);
+    ).toHaveLength(42);
     expect(
       kiboManifests.every(manifest =>
         manifest.matrix.requirements.some(

@@ -6674,6 +6674,9 @@ function createControlRuntimeEffectBinding({
       triggerIndex,
     }),
     target,
+    scenarioRuntimeStatus:
+      trigger?.scenarioRuntimeStatus ??
+      (trigger ? 'source-verified' : 'scenario-runtime-unresolved'),
     lifecycle: {
       durationMs: effectiveDurationMs,
       stackMode: stack.mode,
@@ -10780,6 +10783,14 @@ function createActionMapping(
   const appliedEffects = runtimeEffects.filter(
     effect => effect.classification === 'applied'
   );
+  const scenarioRuntimeEffects = runtimeEffects.filter(
+    effect =>
+      effect.classification === 'applied' &&
+      effect.scenarioRuntimeStatus === 'scenario-assumed-zero-distance'
+  );
+  const scenarioCoveredElements = selectedElements.filter(
+    element => element.scenarioClassification === 'applied'
+  );
   const appliedResourceTransactions = resourceTransactions.filter(
     transaction =>
       transaction.applied === true &&
@@ -10794,7 +10805,9 @@ function createActionMapping(
     element => element.threeValueRelevant
   );
   const blockingUnresolved = relevantElements.filter(
-    element => element.classification === 'unresolved'
+    element =>
+      element.classification === 'unresolved' &&
+      element.scenarioClassification !== 'applied'
   );
   const allRelevantZero =
     relevantElements.length > 0 &&
@@ -10856,18 +10869,24 @@ function createActionMapping(
     sourceEvidenceStatus:
       sourceClassification === 'applied'
         ? 'applied'
-        : scenarioRuntimeHits.length > 0
+        : scenarioRuntimeHits.length > 0 ||
+            scenarioRuntimeEffects.length > 0 ||
+            scenarioCoveredElements.length > 0
           ? 'runtime-dependent'
           : sourceClassification === 'verified-zero'
             ? 'verified-zero'
             : 'static-evidence-gap',
     scenarioRuntimeStatus:
-      scenarioRuntimeHits.length > 0
+      scenarioRuntimeHits.length > 0 ||
+      scenarioRuntimeEffects.length > 0 ||
+      scenarioCoveredElements.length > 0
         ? 'scenario-assumed-zero-distance'
         : classification === 'applied'
           ? 'source-verified'
           : 'scenario-runtime-unresolved',
     scenarioResolvedHitCount: scenarioRuntimeHits.length,
+    scenarioResolvedEffectCount: scenarioRuntimeEffects.length,
+    scenarioResolvedElementCount: scenarioCoveredElements.length,
     complete: unresolvedReasons.length === 0,
     reasons: unresolvedReasons,
     dimensionSummary: summarizeDimensions(selectedElements),
@@ -12452,7 +12471,12 @@ function createActionCoverageReport({
   const unresolvedActions = packageValue.actionMappings
     .filter(
       mapping =>
-        !['applied', 'verified-zero'].includes(mapping.sourceEvidenceStatus)
+        !['applied', 'verified-zero'].includes(mapping.sourceEvidenceStatus) &&
+        !(
+          mapping.scenarioRuntimeStatus ===
+            'scenario-assumed-zero-distance' &&
+          (mapping.reasons ?? []).length === 0
+        )
     )
     .map(mapping => ({
       identity: mapping.identity,

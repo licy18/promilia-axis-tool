@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 103002,
-  "sourcePackageHash": "7af777c8deb1e17c07d0bc569dda3bf6d998a0596b08e6bac5c86e2e5988a41d",
+  "sourcePackageHash": "5402506d3af48362c7f7f186da3d35b6b4ac3e178440dd6454a5a9e464e2f7b6",
   "actionRows": [
     {
       "actionIdentity": "actor|103002|10300201|0|10300203",
@@ -505,7 +505,6 @@
       },
       "reasons": [
         "normal-attack-input-segment-duration-unresolved",
-        "projectile-impact-frame-runtime-dependent",
         "trigger-frame-missing"
       ]
     },
@@ -553,7 +552,7 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 3,
@@ -623,7 +622,7 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 1,
@@ -689,7 +688,7 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 7,
@@ -765,7 +764,7 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 1,
@@ -831,7 +830,7 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 25,
@@ -927,7 +926,7 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 5,
@@ -1000,7 +999,7 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "rawRuntimeReady": true,
       "runtimeReady": true,
       "hitCount": 3,
@@ -1147,5 +1146,5 @@
       "static-evidence-gap": 7
     }
   },
-  "profileHash": "84794910e035bdd5df3a4b43575eee510a30f70b29ee1acc1097ccae2d97c805"
+  "profileHash": "f4deb5149c94ebe04948225c83f82fae93fceace2b3036ab4461d489ee4920a9"
 }

@@ -40,9 +40,9 @@
   "summary": {
     "total": 254,
     "published": 254,
-    "accepted": 251,
-    "optimizationReady": 251,
-    "blockingLedgerCount": 3,
+    "accepted": 252,
+    "optimizationReady": 252,
+    "blockingLedgerCount": 2,
     "byObjectKind": {
       "soul-essence": {
         "total": 62,
@@ -56,8 +56,8 @@
       },
       "kibo": {
         "total": 43,
-        "accepted": 41,
-        "optimizationReady": 41
+        "accepted": 42,
+        "optimizationReady": 42
       },
       "set-skill": {
         "total": 12,
@@ -6248,18 +6248,16 @@
       "objectKind": "kibo",
       "objectId": "500323",
       "displayName": "托纳缇欧",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "947481736a2413b0",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "31f3c1a213a984a8",
       "evidence": {
         "iconSha256": "416290f8e413dc86b54767aa196483c6892b084803a91c6ae3f02f197b3f71e9",
         "binding": {
@@ -6272,7 +6270,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -6284,7 +6282,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -6965,5 +6963,5 @@
       }
     }
   ],
-  "catalogHash": "b2879959aaf712e6"
+  "catalogHash": "32064cb041b9e774"
 }

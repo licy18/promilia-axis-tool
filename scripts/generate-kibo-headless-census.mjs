@@ -4682,7 +4682,6 @@ function createPublicActionClosureRow(action) {
     action.scenarioRuntimeStatus === 'scenario-assumed-zero-distance';
   const policyCovered =
     scenarioAssumed &&
-    reasons.length > 0 &&
     reasons.every(reason => ZERO_DISTANCE_POLICY_COVERED_REASONS.has(reason));
   return {
     identity: action.identity,

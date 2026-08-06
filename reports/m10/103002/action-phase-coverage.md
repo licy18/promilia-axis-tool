@@ -33,7 +33,7 @@
 
 | 动作 | 就绪 | 状态 | 剩余缺口 |
 | --- | --- | --- | --- |
-| normal-attack | 是 | applied-with-residual-gaps | normal-attack-input-segment-duration-unresolved；projectile-impact-frame-runtime-dependent；trigger-frame-missing |
+| normal-attack | 是 | applied-with-residual-gaps | normal-attack-input-segment-duration-unresolved；trigger-frame-missing |
 | charged-attack | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing |
 | dodge-attack | 是 | applied-with-residual-gaps | verified-action-effective-occupancy-window-unresolved |
 | plunging-attack | 是 | applied |  |

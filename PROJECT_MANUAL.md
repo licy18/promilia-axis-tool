@@ -1827,6 +1827,16 @@ sub2d 按计划四连闭：① **tuning-mark-max-mismatch**：印记容量以上
 
 下一阶段任务：**E17 阶段五 sub2e：剩余 4 行证据缺口收口 + E18 视觉签收**。剩余目标行：500066/500186（非伤害效果根 `宠物大招无敌`/`布鲁达-水属性攻击增益` 无行为触发器且效果目标未绑定，需运行时捕获或新提取的行为接线）、500213（`540074 全属性抗性下降` changeType=2 的属性变更类型枚举证据，需 dump.cs/GameAssembly 的 ChangePropertyElement.changeType 语义）、500323（零距离策略已覆盖但 census 把空原因 scenario-assumed 行计为未证据闭合，需决定计数规则）。E18：当前视觉 accepted 251/254，剩余 3 只奇波视觉阻断与成熟度 2 行+passive 1 行一致，sub2e 收口后即可签收。每完成一个子阶段即更新本手册并单独提交。
 
+### M12-B3-E17 阶段五 sub2e 已完成：场景覆盖计数规则、元素级场景证据与剩余证据缺口定位（2026-08-06）
+
+sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 `reasons.length > 0`，空原因 scenario-assumed 行（500323）按策略覆盖闭合；② **动作级场景证据**：`createActionMapping` 把 `scenarioClassification==='applied'` 的元素计为场景覆盖（`scenarioResolvedElementCount`），scenario-assumed 的 applied 效果（`scenarioResolvedEffectCount`）与场景命中一起决定动作 `scenario-assumed-zero-distance` 状态，`blockingUnresolved` 不再包含场景已覆盖元素——500004/500093/500399 及 6 条非目标治疗-only 动作闭合，`publicActionClosure` 未解析降到 0；③ **500213 证据定位**：dump.cs 确认 `TChangePropertyElementParams.EChangeType` 枚举 `BattleProperty=0 / PlayerProperty=1 / SpacialProperty=2`，540074 的 changeType=2 是**空间属性**而非战斗属性，按产品范围属于需决策项（不能按战斗属性闭合）。
+
+结果：目标 signature 开放 5→**3**（500066/500186/500213）；`publicActionClosure 351/8/7 -> 358/8/0`；`machineOptimizationReadyCount 102->109`；视觉 accepted/optimizationReady `251->252`（kibo 42/43）；资格缺口 `40->38`（kibo maturity 3->1、kibo visual-blocked 3->2）；动作覆盖 `scenarioResolvedActionCount 152->504`，未解析动作全部携带显式原因（消除静默遗漏）。包 hash `9c319770f8ae63dcc9ff24c9263363c648f313b1076aa1a2c714587719067f75`（文件 SHA-256 `8fb766285845e1aff36daac9e00625efc17de055d08671b3947af58a926aeaa3`）；Machine Axis 标准哈希 `1c383b0496821da0 / e50711968e6c9cb5 / 8fd73d143ec97d1a / 0b410dc9255d2654`；cycle `847a0aff / 22def2a0 / 38f15b8e / 13fc3bf3 / 34e4e22f`；资格哈希 sourceSnapshot `3c0af523ecbd6bf7` / roster `3476adc279741fcc` / manifests `bf32fcf1de57c734` / ledger `03281bb971624cef` / bindingMatrix `3ae46ba540b95791` / catalog `9f25946d261d3111`。
+
+验证：sync 三角色 authoritative golden 全过；16 个聚焦文件全过；全套 Vitest 1426/1428（2 个已知 process-heavy 并行超时文件单独全过）；9 项确定性审计、production build 与 `git diff --check` 全 clean。
+
+下一阶段任务：**E18 奇波视觉签收收口（外部证据/产品决策门禁）**。剩余 3 行均无法由代码侧闭合：500066/500186 的非伤害效果根（宠物大招无敌、布鲁达水属性攻击增益）需要运行时捕获或新提取的行为接线证明触发器与效果目标；500213 需要产品决策（SpacialProperty 是否计入奇波战斗资格，或运行时捕获证明其不影响三值结算）。当前视觉 accepted 252/254、machineOptimizationReady 109，E18 签收需这 3 行对应的 2 只视觉阻断奇波 + 1 只成熟度阻断奇波通过上述门禁；一旦外部证据或产品决策到位，重跑 sync → 资格 → 视觉 → 守门即可完成 E18。每完成一个子阶段即更新本手册并单独提交。
+
 ### M10-A 小玉闭环缺口修复已通过独立机制验收（2026-07-28）
 
 普通 A3 与普通 A4 现分别按 `18F` 和 `10/14/18/22F` 的真实投射物链结算，A4 四次 hit 与爆发 A2 十二段保持独立。入场星携技保持 `95F` 占轴但允许 `55F/109F` 命中在块外继续结算，逐 hit 选择统一写回父切人事件；完美招架反击由 `successful-parry` 场景前置驱动 `10101049/sub1` 的两次命中。缘结阈值事务会同时清空资源、进入爆发并获得 2 层风印记；极限反击本体不再因仅开放派生窗口而误触发玉未央。

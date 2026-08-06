@@ -22,7 +22,7 @@
 
 | 动作 | 就绪 | 状态 | 剩余缺口 |
 | --- | --- | --- | --- |
-| normal-attack | 是 | applied-with-residual-gaps | projectile-impact-frame-runtime-dependent；trigger-frame-missing |
+| normal-attack | 是 | applied-with-residual-gaps | trigger-frame-missing |
 | charged-attack | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；projectile-impact-frame-runtime-dependent；trigger-frame-missing |
 | dodge-attack | 是 | applied |  |
 | plunging-attack | 是 | applied |  |

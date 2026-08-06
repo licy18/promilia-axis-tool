@@ -1,15 +1,15 @@
 # M12-B3 Visual Acceptance
 
-- Catalog: `b2879959aaf712e6`
+- Catalog: `32064cb041b9e774`
 - Total: 254
-- Accepted: 251
-- Optimization ready: 251
-- Blocking ledger: 3
+- Accepted: 252
+- Optimization ready: 252
+- Blocking ledger: 2
 - Decision source: `user-directive-2026-08-05-continue-remaining-visual-acceptance`
 
 | Object kind | Total | Accepted | Optimization ready |
 | --- | ---: | ---: | ---: |
 | soul-essence | 62 | 62 | 62 |
 | equipment | 137 | 137 | 137 |
-| kibo | 43 | 41 | 41 |
+| kibo | 43 | 42 | 42 |
 | set-skill | 12 | 11 | 11 |
