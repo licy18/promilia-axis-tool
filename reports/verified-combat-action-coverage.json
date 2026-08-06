@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "98ac3a8e514ec11abb6f5ac60b785759d3323cae6909014aa79394a411928e70",
+  "packageHash": "aff4d82684b36ee8253701b2df46370285c305c7bd2c3f98c2ec987260f0324e",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -6974,7 +6974,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "normal-attack-input-segment-duration-unresolved"
       ],
@@ -7690,7 +7689,6 @@
       ],
       "reasons": [
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -8787,8 +8785,7 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceEvidenceStatus": "runtime-dependent",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
@@ -8904,7 +8901,6 @@
         }
       ],
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved"
       ],
       "sourceEvidenceStatus": "static-evidence-gap",
@@ -8927,7 +8923,6 @@
         }
       ],
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved"
       ],
       "sourceEvidenceStatus": "static-evidence-gap",
@@ -65130,10 +65125,10 @@
       "reasons": [
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "effect-target-any-unresolved"
+        "effect-target-any-unresolved",
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10100313].level.labels[0]"
     },
@@ -65148,7 +65143,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
@@ -65404,7 +65398,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "pack-lifecycle-runtime-unimplemented",
-        "property-formula-not-literal-function-5",
         "property-conditions-not-expanded"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10101001].level.labels[2]"
@@ -65549,7 +65542,6 @@
         "effect-combine-semantics-unresolved",
         "tuning-mark-relation-elementDataList-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved",
-        "property-formula-not-literal-function-5",
         "property-conditions-not-expanded"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10101013].level.labels[0]"
@@ -65663,8 +65655,7 @@
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10200112].level.labels[0]"
     },
@@ -65807,7 +65798,6 @@
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10300212].level.labels[0]"
@@ -65902,7 +65892,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "normal-attack-input-segment-duration-unresolved"
       ],
@@ -66111,7 +66100,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -66386,7 +66374,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "sp-formula-not-literal-function-5",
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
@@ -66559,7 +66546,6 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
@@ -66598,7 +66584,6 @@
       "reasons": [
         "trigger-frame-missing",
         "sp-formula-not-literal-function-5",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
@@ -66620,7 +66605,6 @@
       "classification": "applied",
       "reasons": [
         "sp-formula-not-literal-function-5",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -66956,7 +66940,6 @@
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800312].level.labels[0]"
@@ -67228,7 +67211,6 @@
       "classification": "applied",
       "reasons": [
         "judgment-condition-runtime-unimplemented",
-        "sp-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing"
       ],
@@ -67473,7 +67455,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -67869,12 +67850,12 @@
       "reasons": [
         "trigger-frame-missing",
         "pack-lifecycle-runtime-unimplemented",
-        "property-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
-        "nested-damage-trigger-lifecycle-not-expanded"
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=11200113].level.labels[0]"
     },
@@ -68083,7 +68064,6 @@
       "classification": "unresolved",
       "reasons": [
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -68206,8 +68186,7 @@
       "classification": "applied",
       "reasons": [
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900112].level.labels[0]"
     },
@@ -68241,13 +68220,13 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "property-conditions-not-expanded",
         "tuning-mark-max-mismatch",
         "pack-lifecycle-runtime-unimplemented",
-        "heal-formula-not-literal-function-5"
+        "heal-formula-not-literal-function-5",
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900113].level.labels[0]"
     },
@@ -68362,8 +68341,7 @@
       "classification": "applied",
       "reasons": [
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900212].level.labels[0]"
     },
@@ -68397,13 +68375,13 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "property-conditions-not-expanded",
         "tuning-mark-max-mismatch",
         "pack-lifecycle-runtime-unimplemented",
-        "heal-formula-not-literal-function-5"
+        "heal-formula-not-literal-function-5",
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900213].level.labels[0]"
     },
@@ -68895,9 +68873,7 @@
       "publicVariantLabel": "灵偶火环",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500006].actions[skillId=50000602]"
     },
     {
@@ -68940,7 +68916,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-any-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500007].actions[skillId=50000702]"
@@ -68984,9 +68959,7 @@
       "publicVariantLabel": "雪横扫",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500020].actions[skillId=50002001]"
     },
     {
@@ -69031,9 +69004,7 @@
       "publicVariantLabel": "冰速横扫",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500021].actions[skillId=50002102]"
     },
     {
@@ -69075,9 +69046,7 @@
       "publicVariantLabel": "霜刃横扫",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500022].actions[skillId=50002201]"
     },
     {
@@ -69209,8 +69178,7 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "pack-lifecycle-runtime-unimplemented",
-        "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-any-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500025].actions[skillId=50002504]"
     },
@@ -69611,7 +69579,6 @@
       "classification": "applied",
       "reasons": [
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -69658,7 +69625,6 @@
       "classification": "applied",
       "reasons": [
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -69705,7 +69671,6 @@
       "classification": "applied",
       "reasons": [
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "property-conditions-not-expanded"
@@ -69940,7 +69905,6 @@
       "reasons": [
         "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -69989,7 +69953,6 @@
         "projectile-impact-frame-runtime-dependent",
         "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -70418,8 +70381,7 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500081].actions[skillId=503007]"
     },
@@ -70454,7 +70416,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "property-formula-not-literal-function-5",
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
@@ -70506,7 +70467,6 @@
       "reasons": [
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -70554,7 +70514,6 @@
       "reasons": [
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -70601,7 +70560,6 @@
         "projectile-impact-frame-runtime-dependent",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -70796,7 +70754,6 @@
       "selected": true,
       "classification": "unresolved",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500097].actions[skillId=502010]"
@@ -70843,7 +70800,6 @@
       "selected": true,
       "classification": "unresolved",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500098].actions[skillId=502010]"
@@ -71399,9 +71355,7 @@
       "publicVariantLabel": "连抓带扫",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500130].actions[skillId=50013001]"
     },
     {
@@ -71443,9 +71397,7 @@
       "publicVariantLabel": "环影连击",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500131].actions[skillId=50013101]"
     },
     {
@@ -71625,7 +71577,6 @@
         "projectile-impact-frame-runtime-dependent",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -71677,8 +71628,7 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500139].actions[skillId=50013901]"
     },
@@ -71728,8 +71678,7 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500140].actions[skillId=50014001]"
     },
@@ -71954,8 +71903,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "property-formula-not-literal-function-5"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500157].actions[skillId=50015702]"
     },
@@ -72003,8 +71951,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "property-formula-not-literal-function-5"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500158].actions[skillId=50015802]"
     },
@@ -72048,7 +71995,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
@@ -72097,7 +72043,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
@@ -72146,7 +72091,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
@@ -72236,9 +72180,7 @@
       "publicVariantLabel": "灵偶雷环",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500174].actions[skillId=50017402]"
     },
     {
@@ -72280,9 +72222,7 @@
       "publicVariantLabel": "惊骇雷环",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500175].actions[skillId=50017502]"
     },
     {
@@ -72469,7 +72409,6 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -72519,7 +72458,6 @@
         "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "property-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500186].actions[skillId=50018602]"
@@ -72571,7 +72509,6 @@
       "reasons": [
         "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -72718,7 +72655,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "property-change-type-not-battle-property"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500213].actions[skillId=50021301]"
@@ -72854,8 +72790,7 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "pack-lifecycle-runtime-unimplemented",
-        "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-any-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500231].actions[skillId=50023101]"
     },
@@ -72899,7 +72834,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -72947,7 +72881,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -72992,7 +72925,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -73971,7 +73903,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "sp-formula-not-literal-function-5",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -74021,7 +73952,6 @@
       "classification": "applied",
       "reasons": [
         "sp-recover-type-not-direct-sp",
-        "sp-formula-not-literal-function-5",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -74070,7 +74000,6 @@
       "classification": "applied",
       "reasons": [
         "sp-recover-type-not-direct-sp",
-        "sp-formula-not-literal-function-5",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -74460,10 +74389,10 @@
       "reasons": [
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "effect-target-any-unresolved"
+        "effect-target-any-unresolved",
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -74478,7 +74407,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
@@ -74769,7 +74697,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "pack-lifecycle-runtime-unimplemented",
-        "property-formula-not-literal-function-5",
         "property-conditions-not-expanded"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/skill_control_10101010__-4083445640248946767.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -74895,7 +74822,6 @@
         "effect-combine-semantics-unresolved",
         "tuning-mark-relation-elementDataList-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved",
-        "property-formula-not-literal-function-5",
         "property-conditions-not-expanded"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -75048,8 +74974,7 @@
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200112.asset/MonoBehaviour/skill_control_10200112__-7095613606184577220.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -75268,7 +75193,6 @@
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -75376,7 +75300,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "normal-attack-input-segment-duration-unresolved"
       ],
@@ -75713,7 +75636,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -76032,7 +75954,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "sp-formula-not-literal-function-5",
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
@@ -76294,7 +76215,6 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
@@ -76333,7 +76253,6 @@
       "reasons": [
         "trigger-frame-missing",
         "sp-formula-not-literal-function-5",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
@@ -76355,7 +76274,6 @@
       "classification": "applied",
       "reasons": [
         "sp-formula-not-literal-function-5",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -76696,7 +76614,6 @@
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-target-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset/MonoBehaviour/skill_control_10800312__2653349801109799750.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -76994,7 +76911,6 @@
       "classification": "applied",
       "reasons": [
         "judgment-condition-runtime-unimplemented",
-        "sp-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing"
       ],
@@ -77207,7 +77123,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -77660,12 +77575,12 @@
       "reasons": [
         "trigger-frame-missing",
         "pack-lifecycle-runtime-unimplemented",
-        "property-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
-        "nested-damage-trigger-lifecycle-not-expanded"
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset/MonoBehaviour/skill_control_11200113__7086965772956663434.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -77924,7 +77839,6 @@
       "classification": "unresolved",
       "reasons": [
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -78045,8 +77959,7 @@
       "classification": "applied",
       "reasons": [
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/skill_control_19900112__-2500904238031557495.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -78080,13 +77993,13 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "property-conditions-not-expanded",
         "tuning-mark-max-mismatch",
         "pack-lifecycle-runtime-unimplemented",
-        "heal-formula-not-literal-function-5"
+        "heal-formula-not-literal-function-5",
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900113.asset/MonoBehaviour/skill_control_19900113__-2870074648039143124.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -78199,8 +78112,7 @@
       "classification": "applied",
       "reasons": [
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/skill_control_19900212__-2953997094206733183.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -78234,13 +78146,13 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "property-conditions-not-expanded",
         "tuning-mark-max-mismatch",
         "pack-lifecycle-runtime-unimplemented",
-        "heal-formula-not-literal-function-5"
+        "heal-formula-not-literal-function-5",
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/skill_control_19900213__1031463935081374465.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -78804,9 +78716,7 @@
         "kibo|500006|50000602|0|50000602"
       ],
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50000602.asset/MonoBehaviour/skill_control_50000602__6299066215503334755.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -78849,7 +78759,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-any-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50000702.asset/MonoBehaviour/skill_control_50000702__6934170774796089193.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78894,9 +78803,7 @@
         "kibo|500020|50002001|0|50002001"
       ],
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50002001.asset/MonoBehaviour/skill_control_50002001__6776563650476204416.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -79006,9 +78913,7 @@
         "kibo|500021|50002102|0|50002102"
       ],
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50002102.asset/MonoBehaviour/skill_control_50002102__-8084118494563569372.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -79115,9 +79020,7 @@
         "kibo|500022|50002201|0|50002201"
       ],
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50002201.asset/MonoBehaviour/skill_control_50002201__-2494007473377301067.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -79383,8 +79286,7 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "pack-lifecycle-runtime-unimplemented",
-        "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-any-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50002504.asset/MonoBehaviour/skill_control_50002504__8264317425325936143.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -80144,7 +80046,6 @@
       "classification": "applied",
       "reasons": [
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -80199,7 +80100,6 @@
       "classification": "applied",
       "reasons": [
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -80230,7 +80130,6 @@
       "classification": "applied",
       "reasons": [
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "property-conditions-not-expanded"
@@ -80435,7 +80334,6 @@
       "reasons": [
         "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -80550,7 +80448,6 @@
         "projectile-impact-frame-runtime-dependent",
         "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -81446,8 +81343,7 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_503007.asset/MonoBehaviour/skill_control_503007__-9051291449761532633.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -81547,7 +81443,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "property-formula-not-literal-function-5",
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
@@ -81664,7 +81559,6 @@
       "reasons": [
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -81696,7 +81590,6 @@
       "reasons": [
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -81809,7 +81702,6 @@
         "projectile-impact-frame-runtime-dependent",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -82196,7 +82088,6 @@
       ],
       "classification": "unresolved",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502010.asset/MonoBehaviour/skill_control_502010__3215071213846355496.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -82803,9 +82694,7 @@
         "kibo|500130|50013001|0|50013001"
       ],
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50013001.asset/MonoBehaviour/skill_control_50013001__-1634833002364582583.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -82831,9 +82720,7 @@
         "kibo|500131|50013101|0|50013101"
       ],
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50013101.asset/MonoBehaviour/skill_control_50013101__6336807988797909549.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -82955,7 +82842,6 @@
         "projectile-impact-frame-runtime-dependent",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -82991,8 +82877,7 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50013901.asset/MonoBehaviour/skill_control_50013901__2746101871219549426.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -83108,8 +82993,7 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50014001.asset/MonoBehaviour/skill_control_50014001__7134991668923127489.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -83270,8 +83154,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "property-formula-not-literal-function-5"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50015702.asset/MonoBehaviour/skill_control_50015702__5536245560841422362.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -83385,8 +83268,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "property-formula-not-literal-function-5"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50015802.asset/MonoBehaviour/skill_control_50015802__8069867386827255707.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -83414,7 +83296,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
@@ -83464,7 +83345,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
@@ -83514,7 +83394,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
@@ -83588,9 +83467,7 @@
         "kibo|500174|50017402|0|50017402"
       ],
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50017402.asset/MonoBehaviour/skill_control_50017402__7418966072982842626.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -83616,9 +83493,7 @@
         "kibo|500175|50017502|0|50017502"
       ],
       "classification": "applied",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50017502.asset/MonoBehaviour/skill_control_50017502__-1707246423324448178.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -83757,7 +83632,6 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -83872,7 +83746,6 @@
         "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "property-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50018602.asset/MonoBehaviour/skill_control_50018602__-2053194993282615807.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -83991,7 +83864,6 @@
       "reasons": [
         "pack-lifecycle-runtime-unimplemented",
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -84336,7 +84208,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "property-change-type-not-battle-property"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50021301.asset/MonoBehaviour/skill_control_50021301__-6953883832202934071.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -84521,8 +84392,7 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "pack-lifecycle-runtime-unimplemented",
-        "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-any-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50023101.asset/MonoBehaviour/skill_control_50023101__-2543483427136898819.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -84550,7 +84420,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -84582,7 +84451,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -84693,7 +84561,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -85731,7 +85598,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "sp-formula-not-literal-function-5",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -85765,7 +85631,6 @@
       "classification": "applied",
       "reasons": [
         "sp-recover-type-not-direct-sp",
-        "sp-formula-not-literal-function-5",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -85798,7 +85663,6 @@
       "classification": "applied",
       "reasons": [
         "sp-recover-type-not-direct-sp",
-        "sp-formula-not-literal-function-5",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -114561,7 +114425,6 @@
           "reasons": [
             "trigger-frame-missing",
             "projectile-impact-frame-runtime-dependent",
-            "sp-formula-not-literal-function-5",
             "effect-trigger-frame-missing"
           ],
           "sourceIdentity": "characters.items[id=101010].skillSlots[group=backup,skillId=10101004]|NewTable/skillsub_logic.rows[skillId=10101004].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json"
@@ -135889,7 +135752,6 @@
           "reasons": [
             "trigger-frame-missing",
             "projectile-impact-frame-runtime-dependent",
-            "sp-formula-not-literal-function-5",
             "effect-trigger-frame-missing",
             "selected-control-player-variant-duration-unresolved",
             "next-control-event-bridge-window-unavailable"
@@ -137706,7 +137568,6 @@
           "reasons": [
             "trigger-frame-missing",
             "projectile-impact-frame-runtime-dependent",
-            "sp-formula-not-literal-function-5",
             "effect-trigger-frame-missing",
             "selected-control-player-variant-duration-unresolved",
             "next-control-event-bridge-window-unavailable"
@@ -140647,7 +140508,7 @@
             "10700204|0|elements|5|1466117413664505892|element:1466117413664505892|unresolved-frame|0"
           ],
           "hitCount": 9,
-          "effectCount": 1,
+          "effectCount": 3,
           "effectDimensionSummary": {
             "damage": {
               "verified-zero": 5
@@ -140665,7 +140526,8 @@
               "verified-zero": 5
             },
             "dynamicProperty": {
-              "unresolved": 4,
+              "applied": 2,
+              "unresolved": 2,
               "verified-zero": 1
             },
             "mark": {
@@ -140676,7 +140538,6 @@
           "classification": "applied",
           "runtimeReady": true,
           "reasons": [
-            "property-formula-not-literal-function-5",
             "effect-trigger-frame-missing",
             "effect-target-unresolved",
             "selected-control-player-variant-duration-unresolved",
@@ -144664,8 +144525,7 @@
             "property-formula-not-literal-function-5",
             "effect-trigger-frame-missing",
             "effect-target-unresolved",
-            "sp-recover-type-not-direct-sp",
-            "sp-formula-not-literal-function-5"
+            "sp-recover-type-not-direct-sp"
           ],
           "sourceIdentity": "characters.items[id=107003].skillSlots[group=backup,skillId=10700305]|NewTable/skillsub_logic.rows[skillId=10700305].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700305.asset/MonoBehaviour/skill_control_10700305__-7487668593202213511.json"
         }
@@ -148992,7 +148852,7 @@
             "10800105|0|elements|11|-6067357134401363123|element:-6067357134401363123|53|0"
           ],
           "hitCount": 4,
-          "effectCount": 1,
+          "effectCount": 3,
           "effectDimensionSummary": {
             "damage": {
               "verified-zero": 7
@@ -149011,7 +148871,8 @@
               "verified-zero": 7
             },
             "dynamicProperty": {
-              "unresolved": 4,
+              "applied": 2,
+              "unresolved": 2,
               "verified-zero": 3
             },
             "mark": {
@@ -149023,7 +148884,6 @@
           "runtimeReady": true,
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "property-formula-not-literal-function-5",
             "effect-trigger-frame-missing",
             "effect-target-unresolved"
           ],
@@ -175536,7 +175396,7 @@
             "11100105|0|elements|9|1608089504845989313|element:1608089504845989313|unresolved-frame|0"
           ],
           "hitCount": 10,
-          "effectCount": 2,
+          "effectCount": 4,
           "effectDimensionSummary": {
             "damage": {
               "verified-zero": 21
@@ -175554,7 +175414,8 @@
               "verified-zero": 21
             },
             "dynamicProperty": {
-              "unresolved": 3,
+              "applied": 2,
+              "unresolved": 1,
               "verified-zero": 18
             },
             "mark": {
@@ -175565,7 +175426,6 @@
           "classification": "applied",
           "runtimeReady": true,
           "reasons": [
-            "property-formula-not-literal-function-5",
             "effect-trigger-frame-missing",
             "effect-target-unresolved"
           ],

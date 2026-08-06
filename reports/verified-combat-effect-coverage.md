@@ -9,9 +9,9 @@
 - 去重语义效果：3484
 - 最终玩法效果：1848
 - 结构包装/条件：1636
-- 语义可计算：411
+- 语义可计算：563
 - 语义明确零：2
-- 语义未解析：1435
+- 语义未解析：1283
 
 ## 语义放置
 
@@ -22,6 +22,7 @@
 ## 公式族
 
 - basis-point-property-a-with-common-ratio: 2
+- literal-a-direct: 19
 - literal-a-with-common-ratio: 721
 - source-tuning-ratio-with-common-ratio: 1
 - unsupported-0-0: 10
@@ -29,7 +30,6 @@
 - unsupported-1-2: 180
 - unsupported-1-3: 348
 - unsupported-1-4: 23
-- unsupported-1-11: 19
 - unsupported-1-101: 2
 - unsupported-1-104: 17
 - unsupported-1-108: 12
@@ -53,9 +53,9 @@
 ## 原始边审计
 
 - 效果绑定：3759
-- 可计算：897
+- 可计算：1043
 - 明确零：2
-- 未解析：2860
+- 未解析：2714
 
 ## 元素类型
 
@@ -77,12 +77,12 @@
 - nested-damage-runtime-family-unimplemented: 474
 - property-change-type-not-battle-property: 1
 - property-conditions-not-expanded: 33
-- property-formula-not-literal-function-5: 428
+- property-formula-not-literal-function-5: 119
 - runtime-target-from-projectile-collision: 125
 - runtime-target-selection-ally: 19
 - runtime-trigger-projectile-collision-frame: 125
 - shield-formula-not-literal-function-5: 11
-- sp-formula-not-literal-function-5: 95
+- sp-formula-not-literal-function-5: 37
 - sp-recover-type-not-direct-sp: 12
 - tuning-consume-current-packet-not-in-candidate-map: 9
 - tuning-consume-judgment-missing: 9

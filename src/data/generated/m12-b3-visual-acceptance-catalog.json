@@ -40,9 +40,9 @@
   "summary": {
     "total": 254,
     "published": 254,
-    "accepted": 217,
-    "optimizationReady": 217,
-    "blockingLedgerCount": 38,
+    "accepted": 221,
+    "optimizationReady": 221,
+    "blockingLedgerCount": 34,
     "byObjectKind": {
       "soul-essence": {
         "total": 62,
@@ -56,8 +56,8 @@
       },
       "kibo": {
         "total": 43,
-        "accepted": 7,
-        "optimizationReady": 7
+        "accepted": 11,
+        "optimizationReady": 11
       },
       "set-skill": {
         "total": 12,
@@ -5589,18 +5589,16 @@
       "objectKind": "kibo",
       "objectId": "500130",
       "displayName": "环尾猴",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "635a773998ee5927",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "00bf00b59f82471d",
       "evidence": {
         "iconSha256": "49ae17a72be2459ff0181aadff276505986c918ae312bb2b37f126829bb11988",
         "binding": {
@@ -5613,7 +5611,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -5625,7 +5623,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -5633,18 +5631,16 @@
       "objectKind": "kibo",
       "objectId": "500131",
       "displayName": "环影猴",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "ce9a353adc5aa874",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "78d05da178c90644",
       "evidence": {
         "iconSha256": "34cb1971db44b76d49fc044ee264680ce0abbcd7f2f8bbfff0a3c2206477ce9d",
         "binding": {
@@ -5657,7 +5653,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -5669,7 +5665,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -5851,18 +5847,16 @@
       "objectKind": "kibo",
       "objectId": "500174",
       "displayName": "雷灵偶",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "36f4804cd4f01e19",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "06ad78ab42216930",
       "evidence": {
         "iconSha256": "ea326714135af4c741dd0110f9eea146b48b89cec462e308b5cbdf4c135577a9",
         "binding": {
@@ -5875,7 +5869,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -5887,7 +5881,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -5895,18 +5889,16 @@
       "objectKind": "kibo",
       "objectId": "500175",
       "displayName": "电灵偶",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "b7c77224325899b9",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "fd6f9a1f8f744e91",
       "evidence": {
         "iconSha256": "9f6b45aebfddad807b67f2e866124ca62bd778245af4bf0671ccd61511be72e8",
         "binding": {
@@ -5919,7 +5911,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -5931,7 +5923,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -7033,5 +7025,5 @@
       }
     }
   ],
-  "catalogHash": "6b6baf1c91de9bb9"
+  "catalogHash": "3bae3111ae3a9c26"
 }

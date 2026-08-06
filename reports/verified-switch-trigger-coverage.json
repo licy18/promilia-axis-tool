@@ -3,7 +3,7 @@
   "kind": "azpr-verified-switch-trigger-coverage",
   "status": "verified-switch-trigger-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "98ac3a8e514ec11abb6f5ac60b785759d3323cae6909014aa79394a411928e70",
+  "packageHash": "aff4d82684b36ee8253701b2df46370285c305c7bd2c3f98c2ec987260f0324e",
   "sourceDenominator": {
     "kind": "current-client-public-actor-switch-skill-slots",
     "actorOwnerCount": 20,
@@ -42,7 +42,6 @@
       "manualReleaseStatus": "switch-trigger-only",
       "mechanicsClassification": "applied",
       "mechanicsReasons": [
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
@@ -110,7 +109,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
-        "property-formula-not-literal-function-5",
         "property-conditions-not-expanded",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -308,7 +306,6 @@
       "mechanicsClassification": "applied",
       "mechanicsReasons": [
         "sp-formula-not-literal-function-5",
-        "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -554,7 +551,6 @@
       "mechanicsClassification": "unresolved",
       "mechanicsReasons": [
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",

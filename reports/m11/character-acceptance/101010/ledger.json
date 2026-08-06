@@ -3,6 +3,23 @@
   "kind": "character-acceptance-derived-ledger",
   "sourceGaps": [
     {
+      "recordIdentity": "source-gap:014c803ddcb6f614",
+      "uniqueGapIdentity": "source-gap:014c803ddcb6f614",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101010:2:-3124965708053832775:-4705478243083685180:1",
+        "effect:10101010|2|elements|14|601520908186242978|element:-3124965708053832775|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101010|2|elements|14|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:2c179b6017b63cbfeb2d"
+      ],
+      "blocking": true
+    },
+    {
       "recordIdentity": "source-gap:0173c167b2a4f6f1",
       "uniqueGapIdentity": "source-gap:0173c167b2a4f6f1",
       "category": "upstream-source-gap",
@@ -73,19 +90,19 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:08fa37ce97f3a3d4",
-      "uniqueGapIdentity": "source-gap:08fa37ce97f3a3d4",
+      "recordIdentity": "source-gap:09c4bae086948294",
+      "uniqueGapIdentity": "source-gap:09c4bae086948294",
       "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10101042:0:-3124965708053832775:7912538076451400532:1",
-        "effect:10101042|0|elements|0|601520908186242978|element:-3124965708053832775|1|0"
+        "battle-effect:10101013:0:-3124965708053832775:8011000460453943126:1",
+        "effect:10101013|0|elements|28|601520908186242978|element:-3124965708053832775|1|0"
       ],
       "sourceRecordIdentities": [
-        "effect:10101042|0|elements|0|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:1ffd404deadbd4fb503a"
+        "effect:10101013|0|elements|28|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:9f985f0024ca7ccf8072"
       ],
       "blocking": true
     },
@@ -143,6 +160,40 @@
       "sourceRecordIdentities": [
         "effect:10101042|1|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0",
         "semantic-gap:2c66cf621b41eeaba5df"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:0ca81cb334f7e93d",
+      "uniqueGapIdentity": "source-gap:0ca81cb334f7e93d",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101049:1:-3124965708053832775:unresolved:unresolved",
+        "effect:10101049|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101049|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:eb5dc2995c16043d1fc6"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:109e65e6bd43802f",
+      "uniqueGapIdentity": "source-gap:109e65e6bd43802f",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101010:0:-3124965708053832775:2291285195916804435:1",
+        "effect:10101010|0|elements|8|601520908186242978|element:-3124965708053832775|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101010|0|elements|8|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:c6c43b50ea47b309ebc7"
       ],
       "blocking": true
     },
@@ -275,6 +326,23 @@
         "effect:10101049|1|bulletElements|4|element-799|element:4731523060341306954|unresolved-frame|0",
         "effect:10101049|1|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0",
         "semantic-gap:17577f7260c0e60dacfe"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:22c5e03c2bc5c342",
+      "uniqueGapIdentity": "source-gap:22c5e03c2bc5c342",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101010:1:-3124965708053832775:-957019318742535650:1",
+        "effect:10101010|1|elements|8|601520908186242978|element:-3124965708053832775|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101010|1|elements|8|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:98130fe2555b8d4565e8"
       ],
       "blocking": true
     },
@@ -425,23 +493,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:319207cc46b6054a",
-      "uniqueGapIdentity": "source-gap:319207cc46b6054a",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:0:-3124965708053832775:unresolved:unresolved",
-        "effect:10101010|0|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101010|0|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:fa356b0d930f28eebb59"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:357362ba1999a081",
       "uniqueGapIdentity": "source-gap:357362ba1999a081",
       "category": "upstream-source-gap",
@@ -578,19 +629,21 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:3bdee58cee885808",
-      "uniqueGapIdentity": "source-gap:3bdee58cee885808",
+      "recordIdentity": "source-gap:4062b3b0e904b098",
+      "uniqueGapIdentity": "source-gap:4062b3b0e904b098",
       "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10101049:1:-3124965708053832775:unresolved:unresolved",
-        "effect:10101049|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+        "battle-effect:10101004:0:3408929118427374243:unresolved:unresolved",
+        "effect:10101004|0|bulletElements|0|element-101010106|element:3408929118427374243|unresolved-frame|0",
+        "effect:10101004|0|elements|0|3408929118427374243|element:3408929118427374243|unresolved-frame|0"
       ],
       "sourceRecordIdentities": [
-        "effect:10101049|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:d5078caf65489d871e30"
+        "effect:10101004|0|bulletElements|0|element-101010106|element:3408929118427374243|unresolved-frame|0",
+        "effect:10101004|0|elements|0|3408929118427374243|element:3408929118427374243|unresolved-frame|0",
+        "semantic-gap:ef9dfa4581ba842e5498"
       ],
       "blocking": true
     },
@@ -629,40 +682,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:4450b68f79fac324",
-      "uniqueGapIdentity": "source-gap:4450b68f79fac324",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:1:-3124965708053832775:unresolved:unresolved",
-        "effect:10101010|1|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101010|1|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:65a8b46caee0157bb36a"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:44776bb6a0129e16",
-      "uniqueGapIdentity": "source-gap:44776bb6a0129e16",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101021:0:-3124965708053832775:unresolved:unresolved",
-        "effect:10101021|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101021|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:8b83ed0c88ca1dc72111"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:45895a07e7597e61",
       "uniqueGapIdentity": "source-gap:45895a07e7597e61",
       "category": "upstream-source-gap",
@@ -676,23 +695,6 @@
       "sourceRecordIdentities": [
         "actor:101010|control:10101010|sub:2->actor:101010|control:10101010|sub:2->-3332207699858072492->missing",
         "semantic-gap:c2fbce89ab1eca9fabe5"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:464d73f761b56c4a",
-      "uniqueGapIdentity": "source-gap:464d73f761b56c4a",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:1:-3124965708053832775:5151069402565814347:1",
-        "effect:10101042|1|elements|0|601520908186242978|element:-3124965708053832775|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101042|1|elements|0|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:fb6f341b82e0dbd4d905"
       ],
       "blocking": true
     },
@@ -833,23 +835,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:671d6e22f1e2f380",
-      "uniqueGapIdentity": "source-gap:671d6e22f1e2f380",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101049:1:-3124965708053832775:-6189289796810040676:1",
-        "effect:10101049|1|elements|0|601520908186242978|element:-3124965708053832775|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101049|1|elements|0|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:083b4483d7592bf297b6"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:67cb43f50bc2fc30",
       "uniqueGapIdentity": "source-gap:67cb43f50bc2fc30",
       "category": "upstream-source-gap",
@@ -880,6 +865,23 @@
       "sourceRecordIdentities": [
         "actor:101010|control:10101013|sub:0->actor:101010|control:10101042|sub:1->-731372582710671704->264",
         "semantic-gap:8909b191d97ebb7b52d8"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:6a249da611c10a14",
+      "uniqueGapIdentity": "source-gap:6a249da611c10a14",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101010:2:-3124965708053832775:unresolved:unresolved",
+        "effect:10101010|2|elements|15|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101010|2|elements|15|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:98c46abe3eb7506c5aea"
       ],
       "blocking": true
     },
@@ -983,40 +985,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:7388b651669081ed",
-      "uniqueGapIdentity": "source-gap:7388b651669081ed",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:1:-3124965708053832775:-957019318742535650:1",
-        "effect:10101010|1|elements|8|601520908186242978|element:-3124965708053832775|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101010|1|elements|8|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:9490dfca6e9d7335a8bc"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:75fb6666006bf318",
-      "uniqueGapIdentity": "source-gap:75fb6666006bf318",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:0:-3124965708053832775:unresolved:unresolved",
-        "effect:10101042|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101042|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:185d38593313bd009a83"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:769e6e7c695142b3",
       "uniqueGapIdentity": "source-gap:769e6e7c695142b3",
       "category": "upstream-source-gap",
@@ -1072,25 +1040,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:787e419f177a7c79",
-      "uniqueGapIdentity": "source-gap:787e419f177a7c79",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-trigger-frame-missing|sp-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101004:0:3408929118427374243:unresolved:unresolved",
-        "effect:10101004|0|bulletElements|0|element-101010106|element:3408929118427374243|unresolved-frame|0",
-        "effect:10101004|0|elements|0|3408929118427374243|element:3408929118427374243|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101004|0|bulletElements|0|element-101010106|element:3408929118427374243|unresolved-frame|0",
-        "effect:10101004|0|elements|0|3408929118427374243|element:3408929118427374243|unresolved-frame|0",
-        "semantic-gap:c867b726bfd808aeb372"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:7a1a2feed7784218",
       "uniqueGapIdentity": "source-gap:7a1a2feed7784218",
       "category": "upstream-source-gap",
@@ -1125,23 +1074,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:7ce1efe242092572",
-      "uniqueGapIdentity": "source-gap:7ce1efe242092572",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101021:0:-3124965708053832775:115227098582375089:1",
-        "effect:10101021|0|elements|0|601520908186242978|element:-3124965708053832775|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101021|0|elements|0|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:512e99688edd67a96c00"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:7efbc46b7090bf3c",
       "uniqueGapIdentity": "source-gap:7efbc46b7090bf3c",
       "category": "upstream-source-gap",
@@ -1172,6 +1104,40 @@
       "sourceRecordIdentities": [
         "actor:101010|control:10101010|sub:0->actor:101010|control:10101010|sub:1->-2323960829737228709->73",
         "semantic-gap:f35da6a6f0cd6dd52461"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:877b1b3954d729dd",
+      "uniqueGapIdentity": "source-gap:877b1b3954d729dd",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101049:1:-3124965708053832775:-6189289796810040676:1",
+        "effect:10101049|1|elements|0|601520908186242978|element:-3124965708053832775|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101049|1|elements|0|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:ee4fdd2d0b9ecd5fac4a"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:87e3e8acba2c3ccf",
+      "uniqueGapIdentity": "source-gap:87e3e8acba2c3ccf",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101021:0:-3124965708053832775:115227098582375089:1",
+        "effect:10101021|0|elements|0|601520908186242978|element:-3124965708053832775|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101021|0|elements|0|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:3af43c5ee04af8109882"
       ],
       "blocking": true
     },
@@ -1466,6 +1432,23 @@
       "blocking": true
     },
     {
+      "recordIdentity": "source-gap:a858fbaf872acac7",
+      "uniqueGapIdentity": "source-gap:a858fbaf872acac7",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101042:0:-3124965708053832775:7912538076451400532:1",
+        "effect:10101042|0|elements|0|601520908186242978|element:-3124965708053832775|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101042|0|elements|0|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:0a30a2aaf1ab7afa15da"
+      ],
+      "blocking": true
+    },
+    {
       "recordIdentity": "source-gap:abaca62b8e618990",
       "uniqueGapIdentity": "source-gap:abaca62b8e618990",
       "category": "upstream-source-gap",
@@ -1481,6 +1464,23 @@
         "effect:10101042|0|bulletElements|4|element-799|element:4731523060341306954|unresolved-frame|0",
         "effect:10101042|0|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0",
         "semantic-gap:42f8b6182ff4eefa0493"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:acf4a2aa5eb3160f",
+      "uniqueGapIdentity": "source-gap:acf4a2aa5eb3160f",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101021:0:-3124965708053832775:unresolved:unresolved",
+        "effect:10101021|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101021|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:c659d338a2b74c19b524"
       ],
       "blocking": true
     },
@@ -1532,23 +1532,6 @@
       "sourceRecordIdentities": [
         "actor:101010|control:10101010|sub:1->actor:101010|control:10101010|sub:1->-2323960829737228709->73",
         "semantic-gap:e600b902dba74a526ae5"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:b24800beb0c95edd",
-      "uniqueGapIdentity": "source-gap:b24800beb0c95edd",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-3124965708053832775:8011000460453943126:1",
-        "effect:10101013|0|elements|28|601520908186242978|element:-3124965708053832775|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|28|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:2d90d4868b3d18ca6950"
       ],
       "blocking": true
     },
@@ -1679,19 +1662,36 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:c0a0f29a5c1503f8",
-      "uniqueGapIdentity": "source-gap:c0a0f29a5c1503f8",
+      "recordIdentity": "source-gap:c7c3ff06573118e7",
+      "uniqueGapIdentity": "source-gap:c7c3ff06573118e7",
       "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10101010:0:-3124965708053832775:2291285195916804435:1",
-        "effect:10101010|0|elements|8|601520908186242978|element:-3124965708053832775|1|0"
+        "battle-effect:10101010:0:-3124965708053832775:unresolved:unresolved",
+        "effect:10101010|0|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
       ],
       "sourceRecordIdentities": [
-        "effect:10101010|0|elements|8|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:7015c2f969864d9219ec"
+        "effect:10101010|0|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:7899a7b78f3c8ed897c0"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:c908f21bdd7606d9",
+      "uniqueGapIdentity": "source-gap:c908f21bdd7606d9",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101010:1:-3124965708053832775:unresolved:unresolved",
+        "effect:10101010|1|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101010|1|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:b077b4775e05ee2adc76"
       ],
       "blocking": true
     },
@@ -1730,23 +1730,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:ca7f7530afa25e6e",
-      "uniqueGapIdentity": "source-gap:ca7f7530afa25e6e",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:1:-3124965708053832775:unresolved:unresolved",
-        "effect:10101042|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101042|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:b76d735a3c60a5eae1b3"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:cccf13b80fca6f2c",
       "uniqueGapIdentity": "source-gap:cccf13b80fca6f2c",
       "category": "upstream-source-gap",
@@ -1760,23 +1743,6 @@
       "sourceRecordIdentities": [
         "effect:10101021|0|elements|5|-5107736885784262990|element:4731523060341306954|unresolved-frame|0",
         "semantic-gap:fa208310ee83bdbef7b7"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:d2185273ad0be637",
-      "uniqueGapIdentity": "source-gap:d2185273ad0be637",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:2:-3124965708053832775:unresolved:unresolved",
-        "effect:10101010|2|elements|15|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101010|2|elements|15|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:6f3f5c3eb19c60a202b0"
       ],
       "blocking": true
     },
@@ -1917,19 +1883,19 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:e4d5e870552706cf",
-      "uniqueGapIdentity": "source-gap:e4d5e870552706cf",
+      "recordIdentity": "source-gap:e3d1c10def4be8e9",
+      "uniqueGapIdentity": "source-gap:e3d1c10def4be8e9",
       "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10101010:2:-3124965708053832775:-4705478243083685180:1",
-        "effect:10101010|2|elements|14|601520908186242978|element:-3124965708053832775|1|0"
+        "battle-effect:10101042:1:-3124965708053832775:5151069402565814347:1",
+        "effect:10101042|1|elements|0|601520908186242978|element:-3124965708053832775|1|0"
       ],
       "sourceRecordIdentities": [
-        "effect:10101010|2|elements|14|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:4bbc0d2650b6691a8f76"
+        "effect:10101042|1|elements|0|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:4b8a1e56bcfb85cdffbf"
       ],
       "blocking": true
     },
@@ -1983,6 +1949,23 @@
         "effect:10101021|0|bulletElements|4|element-799|element:-7412029037550756065|unresolved-frame|0",
         "effect:10101021|0|elements|6|4731523060341306954|element:-7412029037550756065|unresolved-frame|0",
         "semantic-gap:c677f3890ce9d0b65a51"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:e88d989a2237c043",
+      "uniqueGapIdentity": "source-gap:e88d989a2237c043",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101013:0:-3124965708053832775:unresolved:unresolved",
+        "effect:10101013|0|elements|29|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101013|0|elements|29|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:a33a99dccdacd011721e"
       ],
       "blocking": true
     },
@@ -2061,19 +2044,19 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:efcc08b0fa10ea28",
-      "uniqueGapIdentity": "source-gap:efcc08b0fa10ea28",
+      "recordIdentity": "source-gap:f05b1a69e2a71829",
+      "uniqueGapIdentity": "source-gap:f05b1a69e2a71829",
       "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10101013:0:-3124965708053832775:unresolved:unresolved",
-        "effect:10101013|0|elements|29|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+        "battle-effect:10101042:0:-3124965708053832775:unresolved:unresolved",
+        "effect:10101042|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
       ],
       "sourceRecordIdentities": [
-        "effect:10101013|0|elements|29|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:c7254c62559a425f4b5b"
+        "effect:10101042|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:92c12b364b15d15e22fd"
       ],
       "blocking": true
     },
@@ -2110,6 +2093,23 @@
       "sourceRecordIdentities": [
         "hit:10101042|1|projectile|101010155|101010016|0|0|control:10101042|sub:1|behavior:-1521643003225462709|config:0|bullet:101010016:0:0|element:101010155:0",
         "semantic-gap:3f3be3ad72ac0463b5e0"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:f435f897e4f0e9e7",
+      "uniqueGapIdentity": "source-gap:f435f897e4f0e9e7",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101042:1:-3124965708053832775:unresolved:unresolved",
+        "effect:10101042|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101042|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:be821c4bae1584dbf200"
       ],
       "blocking": true
     },
@@ -7080,6 +7080,23 @@
       "uniqueGapIdentity": "acceptance-gap:febc666a3d1a78ad"
     },
     {
+      "recordIdentity": "source-gap:014c803ddcb6f614",
+      "uniqueGapIdentity": "source-gap:014c803ddcb6f614",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101010:2:-3124965708053832775:-4705478243083685180:1",
+        "effect:10101010|2|elements|14|601520908186242978|element:-3124965708053832775|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101010|2|elements|14|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:2c179b6017b63cbfeb2d"
+      ],
+      "blocking": true
+    },
+    {
       "recordIdentity": "source-gap:0173c167b2a4f6f1",
       "uniqueGapIdentity": "source-gap:0173c167b2a4f6f1",
       "category": "upstream-source-gap",
@@ -7150,19 +7167,19 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:08fa37ce97f3a3d4",
-      "uniqueGapIdentity": "source-gap:08fa37ce97f3a3d4",
+      "recordIdentity": "source-gap:09c4bae086948294",
+      "uniqueGapIdentity": "source-gap:09c4bae086948294",
       "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10101042:0:-3124965708053832775:7912538076451400532:1",
-        "effect:10101042|0|elements|0|601520908186242978|element:-3124965708053832775|1|0"
+        "battle-effect:10101013:0:-3124965708053832775:8011000460453943126:1",
+        "effect:10101013|0|elements|28|601520908186242978|element:-3124965708053832775|1|0"
       ],
       "sourceRecordIdentities": [
-        "effect:10101042|0|elements|0|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:1ffd404deadbd4fb503a"
+        "effect:10101013|0|elements|28|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:9f985f0024ca7ccf8072"
       ],
       "blocking": true
     },
@@ -7220,6 +7237,40 @@
       "sourceRecordIdentities": [
         "effect:10101042|1|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0",
         "semantic-gap:2c66cf621b41eeaba5df"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:0ca81cb334f7e93d",
+      "uniqueGapIdentity": "source-gap:0ca81cb334f7e93d",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101049:1:-3124965708053832775:unresolved:unresolved",
+        "effect:10101049|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101049|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:eb5dc2995c16043d1fc6"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:109e65e6bd43802f",
+      "uniqueGapIdentity": "source-gap:109e65e6bd43802f",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101010:0:-3124965708053832775:2291285195916804435:1",
+        "effect:10101010|0|elements|8|601520908186242978|element:-3124965708053832775|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101010|0|elements|8|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:c6c43b50ea47b309ebc7"
       ],
       "blocking": true
     },
@@ -7352,6 +7403,23 @@
         "effect:10101049|1|bulletElements|4|element-799|element:4731523060341306954|unresolved-frame|0",
         "effect:10101049|1|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0",
         "semantic-gap:17577f7260c0e60dacfe"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:22c5e03c2bc5c342",
+      "uniqueGapIdentity": "source-gap:22c5e03c2bc5c342",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101010:1:-3124965708053832775:-957019318742535650:1",
+        "effect:10101010|1|elements|8|601520908186242978|element:-3124965708053832775|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101010|1|elements|8|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:98130fe2555b8d4565e8"
       ],
       "blocking": true
     },
@@ -7502,23 +7570,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:319207cc46b6054a",
-      "uniqueGapIdentity": "source-gap:319207cc46b6054a",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:0:-3124965708053832775:unresolved:unresolved",
-        "effect:10101010|0|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101010|0|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:fa356b0d930f28eebb59"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:357362ba1999a081",
       "uniqueGapIdentity": "source-gap:357362ba1999a081",
       "category": "upstream-source-gap",
@@ -7655,19 +7706,21 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:3bdee58cee885808",
-      "uniqueGapIdentity": "source-gap:3bdee58cee885808",
+      "recordIdentity": "source-gap:4062b3b0e904b098",
+      "uniqueGapIdentity": "source-gap:4062b3b0e904b098",
       "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10101049:1:-3124965708053832775:unresolved:unresolved",
-        "effect:10101049|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+        "battle-effect:10101004:0:3408929118427374243:unresolved:unresolved",
+        "effect:10101004|0|bulletElements|0|element-101010106|element:3408929118427374243|unresolved-frame|0",
+        "effect:10101004|0|elements|0|3408929118427374243|element:3408929118427374243|unresolved-frame|0"
       ],
       "sourceRecordIdentities": [
-        "effect:10101049|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:d5078caf65489d871e30"
+        "effect:10101004|0|bulletElements|0|element-101010106|element:3408929118427374243|unresolved-frame|0",
+        "effect:10101004|0|elements|0|3408929118427374243|element:3408929118427374243|unresolved-frame|0",
+        "semantic-gap:ef9dfa4581ba842e5498"
       ],
       "blocking": true
     },
@@ -7706,40 +7759,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:4450b68f79fac324",
-      "uniqueGapIdentity": "source-gap:4450b68f79fac324",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:1:-3124965708053832775:unresolved:unresolved",
-        "effect:10101010|1|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101010|1|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:65a8b46caee0157bb36a"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:44776bb6a0129e16",
-      "uniqueGapIdentity": "source-gap:44776bb6a0129e16",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101021:0:-3124965708053832775:unresolved:unresolved",
-        "effect:10101021|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101021|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:8b83ed0c88ca1dc72111"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:45895a07e7597e61",
       "uniqueGapIdentity": "source-gap:45895a07e7597e61",
       "category": "upstream-source-gap",
@@ -7753,23 +7772,6 @@
       "sourceRecordIdentities": [
         "actor:101010|control:10101010|sub:2->actor:101010|control:10101010|sub:2->-3332207699858072492->missing",
         "semantic-gap:c2fbce89ab1eca9fabe5"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:464d73f761b56c4a",
-      "uniqueGapIdentity": "source-gap:464d73f761b56c4a",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:1:-3124965708053832775:5151069402565814347:1",
-        "effect:10101042|1|elements|0|601520908186242978|element:-3124965708053832775|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101042|1|elements|0|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:fb6f341b82e0dbd4d905"
       ],
       "blocking": true
     },
@@ -7910,23 +7912,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:671d6e22f1e2f380",
-      "uniqueGapIdentity": "source-gap:671d6e22f1e2f380",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101049:1:-3124965708053832775:-6189289796810040676:1",
-        "effect:10101049|1|elements|0|601520908186242978|element:-3124965708053832775|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101049|1|elements|0|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:083b4483d7592bf297b6"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:67cb43f50bc2fc30",
       "uniqueGapIdentity": "source-gap:67cb43f50bc2fc30",
       "category": "upstream-source-gap",
@@ -7957,6 +7942,23 @@
       "sourceRecordIdentities": [
         "actor:101010|control:10101013|sub:0->actor:101010|control:10101042|sub:1->-731372582710671704->264",
         "semantic-gap:8909b191d97ebb7b52d8"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:6a249da611c10a14",
+      "uniqueGapIdentity": "source-gap:6a249da611c10a14",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101010:2:-3124965708053832775:unresolved:unresolved",
+        "effect:10101010|2|elements|15|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101010|2|elements|15|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:98c46abe3eb7506c5aea"
       ],
       "blocking": true
     },
@@ -8060,40 +8062,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:7388b651669081ed",
-      "uniqueGapIdentity": "source-gap:7388b651669081ed",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:1:-3124965708053832775:-957019318742535650:1",
-        "effect:10101010|1|elements|8|601520908186242978|element:-3124965708053832775|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101010|1|elements|8|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:9490dfca6e9d7335a8bc"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:75fb6666006bf318",
-      "uniqueGapIdentity": "source-gap:75fb6666006bf318",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:0:-3124965708053832775:unresolved:unresolved",
-        "effect:10101042|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101042|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:185d38593313bd009a83"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:769e6e7c695142b3",
       "uniqueGapIdentity": "source-gap:769e6e7c695142b3",
       "category": "upstream-source-gap",
@@ -8149,25 +8117,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:787e419f177a7c79",
-      "uniqueGapIdentity": "source-gap:787e419f177a7c79",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-trigger-frame-missing|sp-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101004:0:3408929118427374243:unresolved:unresolved",
-        "effect:10101004|0|bulletElements|0|element-101010106|element:3408929118427374243|unresolved-frame|0",
-        "effect:10101004|0|elements|0|3408929118427374243|element:3408929118427374243|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101004|0|bulletElements|0|element-101010106|element:3408929118427374243|unresolved-frame|0",
-        "effect:10101004|0|elements|0|3408929118427374243|element:3408929118427374243|unresolved-frame|0",
-        "semantic-gap:c867b726bfd808aeb372"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:7a1a2feed7784218",
       "uniqueGapIdentity": "source-gap:7a1a2feed7784218",
       "category": "upstream-source-gap",
@@ -8202,23 +8151,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:7ce1efe242092572",
-      "uniqueGapIdentity": "source-gap:7ce1efe242092572",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101021:0:-3124965708053832775:115227098582375089:1",
-        "effect:10101021|0|elements|0|601520908186242978|element:-3124965708053832775|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101021|0|elements|0|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:512e99688edd67a96c00"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:7efbc46b7090bf3c",
       "uniqueGapIdentity": "source-gap:7efbc46b7090bf3c",
       "category": "upstream-source-gap",
@@ -8249,6 +8181,40 @@
       "sourceRecordIdentities": [
         "actor:101010|control:10101010|sub:0->actor:101010|control:10101010|sub:1->-2323960829737228709->73",
         "semantic-gap:f35da6a6f0cd6dd52461"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:877b1b3954d729dd",
+      "uniqueGapIdentity": "source-gap:877b1b3954d729dd",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101049:1:-3124965708053832775:-6189289796810040676:1",
+        "effect:10101049|1|elements|0|601520908186242978|element:-3124965708053832775|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101049|1|elements|0|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:ee4fdd2d0b9ecd5fac4a"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:87e3e8acba2c3ccf",
+      "uniqueGapIdentity": "source-gap:87e3e8acba2c3ccf",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101021:0:-3124965708053832775:115227098582375089:1",
+        "effect:10101021|0|elements|0|601520908186242978|element:-3124965708053832775|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101021|0|elements|0|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:3af43c5ee04af8109882"
       ],
       "blocking": true
     },
@@ -8543,6 +8509,23 @@
       "blocking": true
     },
     {
+      "recordIdentity": "source-gap:a858fbaf872acac7",
+      "uniqueGapIdentity": "source-gap:a858fbaf872acac7",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101042:0:-3124965708053832775:7912538076451400532:1",
+        "effect:10101042|0|elements|0|601520908186242978|element:-3124965708053832775|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101042|0|elements|0|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:0a30a2aaf1ab7afa15da"
+      ],
+      "blocking": true
+    },
+    {
       "recordIdentity": "source-gap:abaca62b8e618990",
       "uniqueGapIdentity": "source-gap:abaca62b8e618990",
       "category": "upstream-source-gap",
@@ -8558,6 +8541,23 @@
         "effect:10101042|0|bulletElements|4|element-799|element:4731523060341306954|unresolved-frame|0",
         "effect:10101042|0|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0",
         "semantic-gap:42f8b6182ff4eefa0493"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:acf4a2aa5eb3160f",
+      "uniqueGapIdentity": "source-gap:acf4a2aa5eb3160f",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101021:0:-3124965708053832775:unresolved:unresolved",
+        "effect:10101021|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101021|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:c659d338a2b74c19b524"
       ],
       "blocking": true
     },
@@ -8609,23 +8609,6 @@
       "sourceRecordIdentities": [
         "actor:101010|control:10101010|sub:1->actor:101010|control:10101010|sub:1->-2323960829737228709->73",
         "semantic-gap:e600b902dba74a526ae5"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:b24800beb0c95edd",
-      "uniqueGapIdentity": "source-gap:b24800beb0c95edd",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-3124965708053832775:8011000460453943126:1",
-        "effect:10101013|0|elements|28|601520908186242978|element:-3124965708053832775|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|28|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:2d90d4868b3d18ca6950"
       ],
       "blocking": true
     },
@@ -8756,19 +8739,36 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:c0a0f29a5c1503f8",
-      "uniqueGapIdentity": "source-gap:c0a0f29a5c1503f8",
+      "recordIdentity": "source-gap:c7c3ff06573118e7",
+      "uniqueGapIdentity": "source-gap:c7c3ff06573118e7",
       "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10101010:0:-3124965708053832775:2291285195916804435:1",
-        "effect:10101010|0|elements|8|601520908186242978|element:-3124965708053832775|1|0"
+        "battle-effect:10101010:0:-3124965708053832775:unresolved:unresolved",
+        "effect:10101010|0|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
       ],
       "sourceRecordIdentities": [
-        "effect:10101010|0|elements|8|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:7015c2f969864d9219ec"
+        "effect:10101010|0|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:7899a7b78f3c8ed897c0"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:c908f21bdd7606d9",
+      "uniqueGapIdentity": "source-gap:c908f21bdd7606d9",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101010:1:-3124965708053832775:unresolved:unresolved",
+        "effect:10101010|1|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101010|1|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:b077b4775e05ee2adc76"
       ],
       "blocking": true
     },
@@ -8807,23 +8807,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:ca7f7530afa25e6e",
-      "uniqueGapIdentity": "source-gap:ca7f7530afa25e6e",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:1:-3124965708053832775:unresolved:unresolved",
-        "effect:10101042|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101042|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:b76d735a3c60a5eae1b3"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:cccf13b80fca6f2c",
       "uniqueGapIdentity": "source-gap:cccf13b80fca6f2c",
       "category": "upstream-source-gap",
@@ -8837,23 +8820,6 @@
       "sourceRecordIdentities": [
         "effect:10101021|0|elements|5|-5107736885784262990|element:4731523060341306954|unresolved-frame|0",
         "semantic-gap:fa208310ee83bdbef7b7"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:d2185273ad0be637",
-      "uniqueGapIdentity": "source-gap:d2185273ad0be637",
-      "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:2:-3124965708053832775:unresolved:unresolved",
-        "effect:10101010|2|elements|15|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10101010|2|elements|15|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:6f3f5c3eb19c60a202b0"
       ],
       "blocking": true
     },
@@ -8994,19 +8960,19 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:e4d5e870552706cf",
-      "uniqueGapIdentity": "source-gap:e4d5e870552706cf",
+      "recordIdentity": "source-gap:e3d1c10def4be8e9",
+      "uniqueGapIdentity": "source-gap:e3d1c10def4be8e9",
       "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "property-conditions-not-expanded|property-formula-not-literal-function-5",
+      "status": "static-evidence-gap",
+      "reason": "property-conditions-not-expanded",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10101010:2:-3124965708053832775:-4705478243083685180:1",
-        "effect:10101010|2|elements|14|601520908186242978|element:-3124965708053832775|1|0"
+        "battle-effect:10101042:1:-3124965708053832775:5151069402565814347:1",
+        "effect:10101042|1|elements|0|601520908186242978|element:-3124965708053832775|1|0"
       ],
       "sourceRecordIdentities": [
-        "effect:10101010|2|elements|14|601520908186242978|element:-3124965708053832775|1|0",
-        "semantic-gap:4bbc0d2650b6691a8f76"
+        "effect:10101042|1|elements|0|601520908186242978|element:-3124965708053832775|1|0",
+        "semantic-gap:4b8a1e56bcfb85cdffbf"
       ],
       "blocking": true
     },
@@ -9060,6 +9026,23 @@
         "effect:10101021|0|bulletElements|4|element-799|element:-7412029037550756065|unresolved-frame|0",
         "effect:10101021|0|elements|6|4731523060341306954|element:-7412029037550756065|unresolved-frame|0",
         "semantic-gap:c677f3890ce9d0b65a51"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:e88d989a2237c043",
+      "uniqueGapIdentity": "source-gap:e88d989a2237c043",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101013:0:-3124965708053832775:unresolved:unresolved",
+        "effect:10101013|0|elements|29|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101013|0|elements|29|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:a33a99dccdacd011721e"
       ],
       "blocking": true
     },
@@ -9138,19 +9121,19 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:efcc08b0fa10ea28",
-      "uniqueGapIdentity": "source-gap:efcc08b0fa10ea28",
+      "recordIdentity": "source-gap:f05b1a69e2a71829",
+      "uniqueGapIdentity": "source-gap:f05b1a69e2a71829",
       "category": "upstream-source-gap",
-      "status": "unknown-formula",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10101013:0:-3124965708053832775:unresolved:unresolved",
-        "effect:10101013|0|elements|29|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+        "battle-effect:10101042:0:-3124965708053832775:unresolved:unresolved",
+        "effect:10101042|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
       ],
       "sourceRecordIdentities": [
-        "effect:10101013|0|elements|29|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:c7254c62559a425f4b5b"
+        "effect:10101042|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:92c12b364b15d15e22fd"
       ],
       "blocking": true
     },
@@ -9187,6 +9170,23 @@
       "sourceRecordIdentities": [
         "hit:10101042|1|projectile|101010155|101010016|0|0|control:10101042|sub:1|behavior:-1521643003225462709|config:0|bullet:101010016:0:0|element:101010155:0",
         "semantic-gap:3f3be3ad72ac0463b5e0"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:f435f897e4f0e9e7",
+      "uniqueGapIdentity": "source-gap:f435f897e4f0e9e7",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10101042:1:-3124965708053832775:unresolved:unresolved",
+        "effect:10101042|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10101042|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
+        "semantic-gap:be821c4bae1584dbf200"
       ],
       "blocking": true
     },
@@ -11179,8 +11179,8 @@
     "nonBlockingCount": 108,
     "statusCounts": {
       "runtime-evidence-required": 13,
-      "static-evidence-gap": 288,
-      "unknown-formula": 22
+      "static-evidence-gap": 305,
+      "unknown-formula": 5
     },
     "reasonCounts": {
       "acceptance-scenario-coverage-missing": 96,
@@ -11192,13 +11192,13 @@
       "effect-target-unresolved|effect-trigger-frame-missing|judgment-condition-runtime-unimplemented": 4,
       "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded": 9,
       "effect-target-unresolved|effect-trigger-frame-missing|pack-lifecycle-runtime-unimplemented": 5,
-      "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded|property-formula-not-literal-function-5": 8,
-      "effect-trigger-frame-missing": 6,
-      "effect-trigger-frame-missing|sp-formula-not-literal-function-5": 6,
+      "effect-target-unresolved|effect-trigger-frame-missing|property-conditions-not-expanded": 8,
+      "effect-trigger-frame-missing": 7,
+      "effect-trigger-frame-missing|sp-formula-not-literal-function-5": 5,
       "effect-trigger-frame-missing|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 7,
       "judgment-condition-runtime-unimplemented": 7,
       "pack-lifecycle-runtime-unimplemented": 5,
-      "property-conditions-not-expanded|property-formula-not-literal-function-5": 8,
+      "property-conditions-not-expanded": 8,
       "runtime-dependent": 13,
       "switch-duration-unresolved": 1,
       "switch-duration-unresolved|switch-wrapper-relation-unresolved": 10,
@@ -11211,7 +11211,7 @@
       "upstream-source-gap": 120
     }
   },
-  "ledgerHash": "ee828f261ecd0850",
+  "ledgerHash": "b5f5e16852c7219f",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:source-gap:01090cce14491d82",

@@ -234,9 +234,9 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       profile.coverage.find(item => item.dimension === 'dynamicProperties')
     ).toMatchObject({
       status: 'static-evidence-gap',
-      recordCount: 7,
-      appliedCount: 6,
-      unresolvedCount: 1,
+      recordCount: 20,
+      appliedCount: 8,
+      unresolvedCount: 12,
     });
   });
 

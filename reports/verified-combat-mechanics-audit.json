@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "98ac3a8e514ec11abb6f5ac60b785759d3323cae6909014aa79394a411928e70",
+  "packageHash": "aff4d82684b36ee8253701b2df46370285c305c7bd2c3f98c2ec987260f0324e",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
@@ -1278,9 +1278,9 @@
     "appliedHitBindingCount": 2737,
     "uniqueControlBindingCount": 540,
     "uniqueControlHitBindingCount": 4579,
-    "appliedEffectBindingCount": 898,
+    "appliedEffectBindingCount": 1044,
     "verifiedZeroEffectBindingCount": 2,
-    "unresolvedEffectBindingCount": 2860,
+    "unresolvedEffectBindingCount": 2714,
     "unresolvedActionBindingCount": 38,
     "enemyProfileCount": 208,
     "appliedEnemyProfileCount": 204,
@@ -1732,7 +1732,6 @@
       "status": "unresolved",
       "reasons": [
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -1871,7 +1870,6 @@
       "controlSkillId": 502010,
       "status": "unresolved",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved"
       ],
       "applied": false
@@ -1885,7 +1883,6 @@
       "controlSkillId": 502010,
       "status": "unresolved",
       "reasons": [
-        "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved"
       ],
       "applied": false

@@ -2,7 +2,7 @@
 
 - Owner: `103002`
 - Profile: `actor:103002:character-combat-profile:v1`
-- Hash: `8dccdf3c03c557896a5e49453b1ad6e708541e7e174af35067b46409fa9d90c5`
+- Hash: `811b83c5673720faade2dc00051e4938854a74325ed8f2af24a6d94a12833536`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -39,7 +39,7 @@
 | teamResourcesAndMarks | applied | 1 | 0 | 1 |
 | buffsAndDebuffs | static-evidence-gap | 7 | 53 | 60 |
 | passives | applied | 1 | 0 | 1 |
-| dynamicProperties | static-evidence-gap | 3 | 6 | 9 |
+| dynamicProperties | static-evidence-gap | 3 | 8 | 11 |
 | healingAndShields | not-applicable | 0 | 0 | 0 |
 | stateMachines | not-applicable | 0 | 0 | 0 |
 | switchAndStarCarry | applied | 1 | 0 | 1 |

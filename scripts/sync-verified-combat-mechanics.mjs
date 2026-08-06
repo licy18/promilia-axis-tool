@@ -5962,7 +5962,7 @@ function classifyBattleEffectNode({
   );
   const literalReady =
     commonFunctionId === 1 &&
-    baseFunctionId === 5 &&
+    [3, 5, 11].includes(baseFunctionId) &&
     literalValues.length === 12;
   const literalZero = literalReady && literalValues.every(value => value === 0);
   const elementId = integerOrNull(tree.elementConfigId);
@@ -8900,6 +8900,15 @@ function createSemanticFormulaRuntimeContract(
       registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
       family: 'literal-a-with-common-ratio',
       evaluator: 'q16.16-literal-a-times-g',
+      status: 'applied',
+      applied: true,
+    };
+  }
+  if (commonFunctionId === 1 && baseFunctionId === 11) {
+    return {
+      registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
+      family: 'literal-a-direct',
+      evaluator: 'q16.16-direct-literal-a',
       status: 'applied',
       applied: true,
     };

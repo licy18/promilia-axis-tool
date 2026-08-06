@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "2a08540200b3beb9",
+  "rosterHash": "42fb2d341b13810c",
   "records": [
     {
       "objectKind": "character",
@@ -32,10 +32,10 @@
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "3c7b33a20881af8d"
+          "bc65983f4c7d04d1"
         ]
       },
-      "manifestHash": "653cc37c19d5196e"
+      "manifestHash": "f8c790f55c77a531"
     },
     {
       "objectKind": "character",
@@ -99,10 +99,10 @@
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "d2aebf4e1eefde6d"
+          "e242fb3b8141c647"
         ]
       },
-      "manifestHash": "9639b6bd3fa32c49"
+      "manifestHash": "ea605cb379268174"
     },
     {
       "objectKind": "character",
@@ -4726,36 +4726,19 @@
       ],
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [
-        {
-          "code": "kibo-visual-acceptance-evidence-blocked",
-          "category": "not-implemented",
-          "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "635a773998ee5927",
-          "manifestBlockers": [
-            "acceptance-required-matrix-incomplete",
-            "acceptance-blocking-ledger-not-empty",
-            "acceptance-product-visual-signoff-pending"
-          ]
-        },
-        {
-          "code": "kibo-headless-maturity-not-ready",
-          "category": "not-implemented",
-          "message": "Kibo headless maturity has not reached machine optimization ready."
-        }
-      ],
+      "blockers": [],
       "evidence": {
         "kiboId": 500130,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false,
+        "headlessRuntimeReady": true,
         "kiboDna": {
           "status": "not-applicable",
           "reason": "kibo-dna-out-of-scope-current-version",
           "canonicalValue": []
         }
       },
-      "manifestHash": "94d53c48f4bb5354"
+      "manifestHash": "f7162cb4e39bff63"
     },
     {
       "objectKind": "kibo",
@@ -4767,36 +4750,19 @@
       ],
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [
-        {
-          "code": "kibo-visual-acceptance-evidence-blocked",
-          "category": "not-implemented",
-          "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "ce9a353adc5aa874",
-          "manifestBlockers": [
-            "acceptance-required-matrix-incomplete",
-            "acceptance-blocking-ledger-not-empty",
-            "acceptance-product-visual-signoff-pending"
-          ]
-        },
-        {
-          "code": "kibo-headless-maturity-not-ready",
-          "category": "not-implemented",
-          "message": "Kibo headless maturity has not reached machine optimization ready."
-        }
-      ],
+      "blockers": [],
       "evidence": {
         "kiboId": 500131,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false,
+        "headlessRuntimeReady": true,
         "kiboDna": {
           "status": "not-applicable",
           "reason": "kibo-dna-out-of-scope-current-version",
           "canonicalValue": []
         }
       },
-      "manifestHash": "b2525b430f365158"
+      "manifestHash": "5add1c3382c75ced"
     },
     {
       "objectKind": "kibo",
@@ -4955,36 +4921,19 @@
       ],
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [
-        {
-          "code": "kibo-visual-acceptance-evidence-blocked",
-          "category": "not-implemented",
-          "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "36f4804cd4f01e19",
-          "manifestBlockers": [
-            "acceptance-required-matrix-incomplete",
-            "acceptance-blocking-ledger-not-empty",
-            "acceptance-product-visual-signoff-pending"
-          ]
-        },
-        {
-          "code": "kibo-headless-maturity-not-ready",
-          "category": "not-implemented",
-          "message": "Kibo headless maturity has not reached machine optimization ready."
-        }
-      ],
+      "blockers": [],
       "evidence": {
         "kiboId": 500174,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false,
+        "headlessRuntimeReady": true,
         "kiboDna": {
           "status": "not-applicable",
           "reason": "kibo-dna-out-of-scope-current-version",
           "canonicalValue": []
         }
       },
-      "manifestHash": "9c1404b5bff2465b"
+      "manifestHash": "b54246b1b6098623"
     },
     {
       "objectKind": "kibo",
@@ -4996,36 +4945,19 @@
       ],
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [
-        {
-          "code": "kibo-visual-acceptance-evidence-blocked",
-          "category": "not-implemented",
-          "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-          "manifestHash": "b7c77224325899b9",
-          "manifestBlockers": [
-            "acceptance-required-matrix-incomplete",
-            "acceptance-blocking-ledger-not-empty",
-            "acceptance-product-visual-signoff-pending"
-          ]
-        },
-        {
-          "code": "kibo-headless-maturity-not-ready",
-          "category": "not-implemented",
-          "message": "Kibo headless maturity has not reached machine optimization ready."
-        }
-      ],
+      "blockers": [],
       "evidence": {
         "kiboId": 500175,
         "actionCount": 3,
         "passiveSkillId": null,
-        "headlessRuntimeReady": false,
+        "headlessRuntimeReady": true,
         "kiboDna": {
           "status": "not-applicable",
           "reason": "kibo-dna-out-of-scope-current-version",
           "canonicalValue": []
         }
       },
-      "manifestHash": "920d5f46632cc4af"
+      "manifestHash": "0689a1f2fdd5d432"
     },
     {
       "objectKind": "kibo",
@@ -31546,5 +31478,5 @@
     },
     "optimizationReadyTotal": 210
   },
-  "manifestsHash": "7e6954b73be0d818"
+  "manifestsHash": "de5434d492232ae0"
 }

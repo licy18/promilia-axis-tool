@@ -133,12 +133,16 @@ describe('verified Battle effect formula registry', () => {
                 },
         });
         const legacyValues = sourceEffect.rawEffectIdentities
-          .map(
-            identity =>
-              rawEffectByIdentity.get(identity)?.propertyChange?.valueByLevel?.[
-                level
-              ]
-          )
+          .map(identity => {
+            const rawEffect = rawEffectByIdentity.get(identity);
+            const valueByLevel =
+              rawEffect?.propertyChange?.valueByLevel ??
+              rawEffect?.directSp?.valueByLevel ??
+              rawEffect?.heal?.valueByLevel ??
+              rawEffect?.shield?.valueByLevel ??
+              null;
+            return valueByLevel?.[level];
+          })
           .filter(Number.isFinite);
 
         expect(legacyValues.length).toBeGreaterThan(0);

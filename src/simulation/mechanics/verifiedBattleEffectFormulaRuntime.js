@@ -21,6 +21,14 @@ export function classifyVerifiedBattleEffectFormula(effect = {}) {
       applied: true,
     };
   }
+  if (commonFunctionId === 1 && baseFunctionId === 11) {
+    return {
+      family: 'literal-a-direct',
+      status: 'applied',
+      evaluator: 'q16.16-direct-literal-a',
+      applied: true,
+    };
+  }
   if (commonFunctionId === 1 && baseFunctionId === 3) {
     return {
       family: 'basis-point-property-a-with-common-ratio',
@@ -170,7 +178,9 @@ export function evaluateVerifiedBattleEffectFormula({
         contract.family ===
         'basis-point-property-a-with-common-ratio'
           ? 'base-function-3-a-per-10000'
-          : 'base-function-5-a',
+          : contract.family === 'literal-a-direct'
+            ? 'base-function-11-a'
+            : 'base-function-5-a',
       input: a,
       raw: evaluatedBaseRaw.toString(),
       sourceRaw: sourceBaseRaw.toString(),

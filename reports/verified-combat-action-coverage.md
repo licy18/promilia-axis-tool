@@ -68,7 +68,7 @@
 - `actor|101010|10101001|0|10101003` 涂山小玉 / normal-attack / 画扇春: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|102001|10200122|2|10200127` 莉莉 / perfect-parry / 骑士加护: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|103002|10300201|0|10300203` 红宝石 / normal-attack / 灵感的火花: trigger-frame-missing, projectile-impact-frame-runtime-dependent, normal-attack-input-segment-duration-unresolved
-- `actor|107001|10700101|0|10700103` 西芙莉雅 / normal-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, sp-formula-not-literal-function-5, effect-trigger-frame-missing, normal-attack-input-segment-duration-unresolved
+- `actor|107001|10700101|0|10700103` 西芙莉雅 / normal-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, normal-attack-input-segment-duration-unresolved
 - `actor|107001|10700101|4|10700110` 西芙莉雅 / charged-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|107001|10700101|6|10700115` 西芙莉雅 / dodge-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, tuning-mark-relation-notDelElementDataList-unresolved, nested-damage-trigger-lifecycle-not-expanded
 - `actor|107001|10700121|0|10700121` 西芙莉雅 / star-carry / 余音之痕: trigger-frame-missing, projectile-impact-frame-runtime-dependent
@@ -95,7 +95,7 @@
 - `actor|112002|11200201|1|11200210` 艾妮丝 / charged-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200201|3|11200215` 艾妮丝 / dodge-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200212|0|11200212` 艾妮丝 / star-skill / 不许捣乱哦: base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-target-any-unresolved, tuning-mark-max-mismatch, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved, heal-formula-not-literal-function-5
-- `actor|112002|11200222|0|11200222` 艾妮丝 / star-carry / 后勤保障: nested-effect-wrapper-semantics-unresolved, property-formula-not-literal-function-5, effect-target-ally-unresolved, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-max-mismatch, nested-damage-trigger-lifecycle-not-expanded
+- `actor|112002|11200222|0|11200222` 艾妮丝 / star-carry / 后勤保障: nested-effect-wrapper-semantics-unresolved, effect-target-ally-unresolved, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-max-mismatch, nested-damage-trigger-lifecycle-not-expanded
 - `actor|112002|11200222|1|11200225` 艾妮丝 / limit-counter / 后勤保障: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200222|2|11200227` 艾妮丝 / perfect-parry / 后勤保障: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|199001|19900122|2|19900127` 女主角 / perfect-parry / 星辉之环: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
@@ -141,13 +141,13 @@
 - `kibo|500067|502006|0|502006` 飞鳐 / active / 水弹散射: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500068|502003|0|502003` 星鳐 / active / 爆裂水球: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500072|503004|0|503004` 乌尔 / active / 冰矛连射: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500081|503007|0|503007` 碎冰兔 / active / 凛冬矛击: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, property-formula-not-literal-function-5
+- `kibo|500081|503007|0|503007` 碎冰兔 / active / 凛冬矛击: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved
 - `kibo|500082|507008|0|507008` 雷冠牦 / active / 滚滚落雷: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved
 - `kibo|500083|501001|0|501001` 滚地犰 / active / 火球: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500095|509001|0|509001` 雾粘蛙 / active / 暗魂影: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500096|509002|0|509002` 雾球蛙 / active / 暗魂影爆阵: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500097|502010|0|502010` 水岩灵 / active / 唤潮: property-formula-not-literal-function-5, effect-target-ally-unresolved
-- `kibo|500098|502010|0|502010` 水岩卫 / active / 唤潮: property-formula-not-literal-function-5, effect-target-ally-unresolved
+- `kibo|500097|502010|0|502010` 水岩灵 / active / 唤潮: effect-target-ally-unresolved
+- `kibo|500098|502010|0|502010` 水岩卫 / active / 唤潮: effect-target-ally-unresolved
 - `kibo|500098|50009804|0|50009804` 水岩卫 / break / 水岩卫-合击: trigger-frame-missing
 - `kibo|500110|505001|0|505001` 宝蓝雏龙 / active / 灵木弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `kibo|500114|503009|0|503009` 冰灵仔 / active / 冰晶弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
