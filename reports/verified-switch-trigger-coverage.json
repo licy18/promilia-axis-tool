@@ -3,7 +3,7 @@
   "kind": "azpr-verified-switch-trigger-coverage",
   "status": "verified-switch-trigger-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "f865d4246996251b78fe7ca169d4959fd4a060319fed1771a5916bb53d0168e9",
+  "packageHash": "25b15a274c408a4153b22a10ff8b1a34b412d189c7d3bc85023654965feafa68",
   "sourceDenominator": {
     "kind": "current-client-public-actor-switch-skill-slots",
     "actorOwnerCount": 20,
@@ -109,7 +109,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
-        "property-conditions-not-expanded",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",

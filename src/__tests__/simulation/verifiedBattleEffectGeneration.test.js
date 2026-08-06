@@ -21,6 +21,7 @@ import { createVerifiedBattleEffectGeneration } from '../../simulation/mechanics
 import { createVerifiedCombatRuntime } from '../../simulation/mechanics/verifiedCombatRuntime';
 import { createActionRuleDiagnostics } from '../../simulation/runtime/actionRuleDiagnostics';
 import { createControlledActorTimeline } from '../../simulation/runtime/controlledActorTimeline';
+import { evaluateVerifiedBattleEffectConditions } from '../../simulation/mechanics/verifiedBattleEffectGeneration';
 import {
   createEffectRuntimeTimeline,
   resolveActiveEffectsAt,
@@ -39,6 +40,54 @@ afterEach(() => {
 });
 
 describe('verified Battle effect generation', () => {
+  it('evaluates property-change activation conditions by current skill id and tag', () => {
+    const action = { controlSkillId: 50004302 };
+    const resolution = {
+      controlBinding: { logic: { skillTag: '14' } },
+    };
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [{ conditionType: 2, skillId: 50004302 }],
+        action,
+        resolution,
+      })
+    ).toEqual({ matched: true, reason: null });
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [{ conditionType: 2, skillId: 50004301 }],
+        action,
+        resolution,
+      })
+    ).toMatchObject({ matched: false });
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [{ conditionType: 5, skillTag: 14 }],
+        action,
+        resolution,
+      })
+    ).toEqual({ matched: true, reason: null });
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [{ conditionType: 5, skillTag: 15 }],
+        action,
+        resolution,
+      })
+    ).toMatchObject({ matched: false });
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [{ conditionType: 3, elementTag: 54 }],
+        action,
+        resolution,
+      })
+    ).toMatchObject({
+      matched: false,
+      reason: 'verified-effect-property-condition-runtime-evidence-required',
+    });
+    expect(
+      evaluateVerifiedBattleEffectConditions({ conditions: [], action, resolution })
+    ).toEqual({ matched: true, reason: null });
+  });
+
   it('generates a real kibo property lifecycle and changes later verified hits', () => {
     const scenario = createFireKiboScenario();
     const actionRuleDiagnostics = createActionRuleDiagnostics({ scenario });

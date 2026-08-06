@@ -10,8 +10,8 @@
 - 最终玩法效果：1755
 - 结构包装/条件：1613
 - 语义可计算：563
-- 语义明确零：2
-- 语义未解析：1190
+- 语义明确零：7
+- 语义未解析：1185
 
 ## 语义放置
 
@@ -55,8 +55,8 @@
 
 - 效果绑定：3680
 - 可计算：1186
-- 明确零：2
-- 未解析：2492
+- 明确零：7
+- 未解析：2487
 
 ## 元素类型
 
@@ -77,7 +77,7 @@
 - heal-formula-not-literal-function-5: 34
 - nested-damage-runtime-family-unimplemented: 463
 - property-change-type-not-battle-property: 1
-- property-conditions-not-expanded: 25
+- property-condition-element-state-runtime-evidence-required: 4
 - property-duration-zero-unresolved: 5
 - property-formula-not-literal-function-5: 119
 - runtime-target-from-projectile-collision: 67

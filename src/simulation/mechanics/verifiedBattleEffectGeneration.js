@@ -18,6 +18,56 @@ import {
 export const VERIFIED_BATTLE_EFFECT_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedBattleEffectGeneration';
 
+export function evaluateVerifiedBattleEffectConditions({
+  conditions = [],
+  action,
+  resolution,
+}) {
+  if (!Array.isArray(conditions) || conditions.length === 0) {
+    return { matched: true, reason: null };
+  }
+  for (const condition of conditions) {
+    const conditionType = Number(condition.conditionType);
+    if (conditionType === 2) {
+      if (Number(action.controlSkillId) !== Number(condition.skillId)) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-current-skill-id-not-matched',
+        };
+      }
+      continue;
+    }
+    if (conditionType === 5) {
+      const rawSkillTags = resolution?.controlBinding?.logic?.skillTag;
+      if (rawSkillTags == null || String(rawSkillTags).trim() === '') {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-current-skill-tag-unresolved',
+        };
+      }
+      const values = String(rawSkillTags)
+        .split('|')
+        .map(value => Number(value.trim()))
+        .filter(Number.isInteger);
+      if (!values.includes(Number(condition.skillTag))) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-current-skill-tag-not-matched',
+        };
+      }
+      continue;
+    }
+    return {
+      matched: false,
+      reason: 'verified-effect-property-condition-runtime-evidence-required',
+    };
+  }
+  return { matched: true, reason: null };
+}
+
 export function createVerifiedBattleEffectGeneration({
   scenario = {},
   actionExecutionPlan = null,
@@ -64,6 +114,17 @@ export function createVerifiedBattleEffectGeneration({
       }
       if (effect.classification !== 'applied') {
         unresolved.push(createUnresolvedEffect(action, effect));
+        continue;
+      }
+      const conditionResult = evaluateVerifiedBattleEffectConditions({
+        conditions: effect.activationConditions,
+        action,
+        resolution,
+      });
+      if (!conditionResult.matched) {
+        unresolved.push(
+          createUnresolvedEffect(action, effect, [conditionResult.reason])
+        );
         continue;
       }
       const targets = resolveEffectTargets({

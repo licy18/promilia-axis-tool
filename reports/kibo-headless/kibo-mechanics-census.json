@@ -21672,7 +21672,7 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "property-conditions-not-expanded"
+        "property-condition-element-state-runtime-evidence-required"
       ],
       "timing": {
         "status": "applied",
@@ -31869,8 +31869,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "property-conditions-not-expanded"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -32052,8 +32051,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "property-conditions-not-expanded"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -32236,8 +32234,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "property-conditions-not-expanded"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -32984,7 +32981,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "shield-formula-not-literal-function-5",
-        "property-conditions-not-expanded",
+        "property-condition-element-state-runtime-evidence-required",
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
@@ -36871,7 +36868,6 @@
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "pack-lifecycle-semantics-evidence-gap",
-        "property-conditions-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "zeroDistancePolicy": {
@@ -36880,7 +36876,6 @@
         "coveredReasons": [],
         "unresolvedReasons": [
           "pack-lifecycle-semantics-evidence-gap",
-          "property-conditions-not-expanded",
           "nested-effect-wrapper-semantics-unresolved"
         ]
       },
@@ -37051,7 +37046,6 @@
       "reasons": [
         "trigger-frame-missing",
         "pack-lifecycle-semantics-evidence-gap",
-        "property-conditions-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "zeroDistancePolicy": {
@@ -37062,7 +37056,6 @@
         ],
         "unresolvedReasons": [
           "pack-lifecycle-semantics-evidence-gap",
-          "property-conditions-not-expanded",
           "nested-effect-wrapper-semantics-unresolved"
         ]
       },
@@ -37242,8 +37235,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "property-conditions-not-expanded"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -37426,8 +37418,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "property-conditions-not-expanded"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "timing": {
         "status": "applied",

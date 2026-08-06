@@ -5840,6 +5840,8 @@ function createBattleEffectGraphNode({
     displayLabel: sourceName.displayLabel,
     kind,
     depth,
+    activationConditions: classification.activationConditions ?? [],
+    propertyConditionStatus: classification.propertyConditionStatus ?? null,
     sourceIdentity: `battle-element-assets.jsonl#path_id=${record.pathId}`,
     sourceScriptPathId: String(tree.m_Script?.m_PathID ?? '') || null,
     mechanic,
@@ -6039,6 +6041,7 @@ function classifyBattleEffectNode({
   depth,
   tuningMechanicsCatalog,
 }) {
+  const propertyConditionResult = parsePropertyChangeActivationConditions(tree);
   const dimensions = Object.fromEntries(
     [
       'damage',
@@ -6078,11 +6081,8 @@ function classifyBattleEffectNode({
     if (![0, 1, 2].includes(integerOrNull(tree.calculateType))) {
       reasons.push('property-calculate-type-not-dynamic-bucket');
     }
-    if (
-      (tree.defaultConditions ?? []).length > 0 ||
-      (tree.changePeopertyConditionArrayDatas ?? []).length > 0
-    ) {
-      reasons.push('property-conditions-not-expanded');
+    if (propertyConditionResult.unsupported.length > 0) {
+      reasons.push('property-condition-element-state-runtime-evidence-required');
     }
     if (![null, 0].includes(integerOrNull(tree.frequencyType))) {
       reasons.push('property-frequency-not-single-application');
@@ -6182,7 +6182,64 @@ function classifyBattleEffectNode({
     : statuses.includes('unresolved') || reasons.length > 0
       ? 'unresolved'
       : 'verified-zero';
-  return { status, reasons: dedupeBy(reasons, value => value), dimensions };
+  return {
+    status,
+    reasons: dedupeBy(reasons, value => value),
+    dimensions,
+    activationConditions: propertyConditionResult?.conditions ?? [],
+    propertyConditionStatus: propertyConditionResult
+      ? propertyConditionResult.unsupported.length > 0
+        ? 'property-condition-element-state-runtime-evidence-required'
+        : propertyConditionResult.conditions.length > 0
+          ? 'property-conditions-expanded'
+          : null
+      : null,
+  };
+}
+
+function parsePropertyChangeActivationConditions(tree = {}) {
+  const rawConditions = [
+    ...(tree.defaultConditions ?? []),
+    ...(tree.changePeopertyConditionArrayDatas ?? []),
+  ].filter(condition => condition && typeof condition === 'object');
+  const conditions = [];
+  const unsupported = [];
+  for (const condition of rawConditions) {
+    const conditionType = integerOrNull(condition.conditionType);
+    if (conditionType == null || conditionType === 0) continue;
+    if ([1, 2, 5].includes(conditionType)) {
+      conditions.push({
+        conditionType,
+        conditionTypeName:
+          conditionType === 1
+            ? 'EntityElementType'
+            : conditionType === 2
+              ? 'CurSkillId'
+              : 'CurSkillTag',
+        entityElementalType: integerOrNull(condition.entityElementalType) ?? 0,
+        skillId: integerOrNull(condition.skillId) ?? 0,
+        skillTag: integerOrNull(condition.skillTag) ?? 0,
+        targetType: integerOrNull(condition.targetType) ?? 0,
+      });
+    } else {
+      unsupported.push({
+        conditionType,
+        conditionTypeName:
+          conditionType === 3
+            ? 'HasElementTag'
+            : conditionType === 4
+              ? 'HasElementId'
+              : `Unknown-${conditionType}`,
+        elementTag: integerOrNull(condition.elementTag) ?? 0,
+        elementId: integerOrNull(condition.elementId) ?? 0,
+        subConditionType:
+          integerOrNull(condition.subConditionType_Element) ?? 0,
+        targetType: integerOrNull(condition.targetType) ?? 0,
+        maxChangeCount: integerOrNull(condition.maxChangeCount) ?? 0,
+      });
+    }
+  }
+  return { conditions, unsupported };
 }
 
 function createControlRuntimeEffects({ effectGraph, control, elements = [] }) {
@@ -6445,6 +6502,8 @@ function createControlRuntimeEffectBinding({
     depth: node.depth,
     relationPath,
     trigger,
+    activationConditions: node.activationConditions ?? [],
+    propertyConditionStatus: node.propertyConditionStatus ?? null,
     sourceOrder: createBattleEffectSourceOrder({
       root,
       node,
@@ -9027,6 +9086,13 @@ function createSemanticEffectCandidate({
     mechanic: node.mechanic,
     formula: node.formula,
     formulaRuntime,
+    activationConditions: dedupeBy(
+      rawEffects.flatMap(effect => effect.activationConditions ?? []),
+      condition => JSON.stringify(condition)
+    ),
+    propertyConditionStatus:
+      rawEffects.find(effect => effect.propertyConditionStatus)?.propertyConditionStatus ??
+      null,
     propertyChange: node.propertyChange && {
       ...node.propertyChange,
       bucket:
