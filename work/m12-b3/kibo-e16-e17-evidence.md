@@ -14,6 +14,8 @@
 - 520059000/520059006（华丽姿态 ATK-20%）为辅助元素，不在触发可达图内。
 - 建模方向：`equipped-kibo-switch-enter-self-property-and-taunt-effect`；运行时需新增 switch-enter 场景起始事件 + taunt 状态；taunt 当前运行时未建模。
 
+**2026-08-06 资产核对修正（重要）**：当前提取快照中 `skill_control_520059.asset` 的 skillResourceMaps 只有 `[520059000, 520059006]`（华丽姿态辅助分支），behavior elementDataList 也只指向 520059000；火力中心 SwitchEnter 链（520059001→002→003/004/005）在 Element 资产中存在，但**不在控制资源图内，属于孤儿元素**（`C:\PC2\Codex\AzPr\Assets\...\SkillList` 亦无此控制）。因此 520059 在现有资产下无法诚实接线到运行时；如需闭合需新提取带完整 resourceMap 的 `skill_control_520059`，或在 census 登记精确阻断 `passive-switch-enter-trigger-chain-not-in-control-resource-map`。此前“000/006 不在触发可达图内”的表述与资产不符，予以更正。
+
 ### 520092 生命虹吸（500360）
 - 触发：AfterDamage（事件 2），effect targets [1→触发链,0→自身]，无 ICD，`triggerCounter` 默认。
 - 链：520092001(AfterDamage) → 520092002/520092004(BeforeDamage type0) → 叶 520092003 / 520092005。
