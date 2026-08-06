@@ -860,10 +860,10 @@ describe('M10-B1 Ruby character combat profile', () => {
         'static-evidence-gap': 415,
       },
       impactClassificationCounts: {
-        'gameplay-impacting': 105,
+        'gameplay-impacting': 137,
         'not-applicable': 22,
         'superseded-by-semantic-transition-closure': 253,
-        'wrapper-or-duplicate': 61,
+        'wrapper-or-duplicate': 29,
       },
       transitionCandidateSupersededCount: 253,
     });
@@ -947,7 +947,7 @@ describe('M10-B1 Ruby character combat profile', () => {
           zeroDistanceRuntimeCapturesResolved: true,
           authoritativeGoldenPassed: true,
         },
-        sourceEvidenceGapCount: 105,
+        sourceEvidenceGapCount: 137,
         sourceEvidenceGapsRemainAuditable: true,
         realClientEvidenceCaptureCount: 4,
       },
@@ -955,7 +955,7 @@ describe('M10-B1 Ruby character combat profile', () => {
         status: 'incomplete',
         complete: false,
         runtimeCaptureCount: 4,
-        staticEvidenceGapCount: 101,
+        staticEvidenceGapCount: 133,
       },
     });
   });

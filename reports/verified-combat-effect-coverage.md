@@ -9,9 +9,9 @@
 - 去重语义效果：3368
 - 最终玩法效果：1755
 - 结构包装/条件：1613
-- 语义可计算：567
+- 语义可计算：574
 - 语义明确零：7
-- 语义未解析：1181
+- 语义未解析：1174
 
 ## 语义放置
 
@@ -54,9 +54,9 @@
 ## 原始边审计
 
 - 效果绑定：3680
-- 可计算：1190
+- 可计算：1201
 - 明确零：7
-- 未解析：2483
+- 未解析：2472
 
 ## 元素类型
 
@@ -93,6 +93,6 @@
 - tuning-mark-relation-elementDataList-unresolved: 2
 - tuning-mark-relation-notDelElementDataList-unresolved: 13
 - tuning-mark-relation-triggerEffectList-unresolved: 1
-- wrapper-condition-semantics-unresolved: 798
+- wrapper-condition-semantics-unresolved: 785
 
 > 只有真实触发帧、唯一目标且公式输入可安全解释的维度进入运行时；其余逐项来源见同名 JSON。

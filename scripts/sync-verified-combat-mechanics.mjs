@@ -6429,9 +6429,11 @@ function createControlRuntimeEffectBinding({
     node.depth > 0 &&
     relationPath.some(
       edge =>
-        !['injectElementDataList', 'notDelElementDataList'].includes(
-          edge.relation
-        )
+        ![
+          'injectElementDataList',
+          'notDelElementDataList',
+          'elementDataList',
+        ].includes(edge.relation)
     )
   ) {
     reasons.push('nested-effect-wrapper-semantics-unresolved');

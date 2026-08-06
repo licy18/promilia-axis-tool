@@ -2,7 +2,7 @@
 
 - Owner: `101010`
 - Profile: `actor:101010:character-combat-profile:v1`
-- Hash: `236a01332328444bd36a5f65700732e21ce03ba349b27a820257bf9d1fb285d9`
+- Hash: `93ccd5c49be04bd5c6e03172d9e6310839d1dee9eb5bfa619d9280a40d1d9ed7`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -49,6 +49,6 @@
 ## 未闭环
 
 - runtime-evidence-required: 13
-- static-evidence-gap: 178
+- static-evidence-gap: 175
 
 > JSON 是权威产物；本摘要不作为运行时输入，也不从描述推断数值。

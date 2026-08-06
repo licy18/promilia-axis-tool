@@ -3,7 +3,7 @@
   "kind": "azpr-verified-switch-trigger-coverage",
   "status": "verified-switch-trigger-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "6c2b15f5b5ae876ffbad9f357f8bcf0aa06ceb8677ae300ba839b40152ba7409",
+  "packageHash": "d9af1f5cf37c227f979d8e592bec72d4f1db9f1525ce448d336160baae2e81e2",
   "sourceDenominator": {
     "kind": "current-client-public-actor-switch-skill-slots",
     "actorOwnerCount": 20,
@@ -548,11 +548,11 @@
       "manualReleaseStatus": "switch-trigger-only",
       "mechanicsClassification": "applied",
       "mechanicsReasons": [
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded"
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "characters.items[id=112002].skillSlots[slot=201,skillId=11200222]",
       "sourceIdentities": [

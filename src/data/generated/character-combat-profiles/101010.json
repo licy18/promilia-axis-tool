@@ -32,7 +32,7 @@
         "zeroDistanceRuntimeCapturesResolved": true,
         "authoritativeGoldenPassed": true
       },
-      "sourceEvidenceGapCount": 120,
+      "sourceEvidenceGapCount": 122,
       "sourceEvidenceGapsRemainAuditable": true,
       "realClientEvidenceCaptureCount": 13
     },
@@ -45,14 +45,14 @@
         "sourceGameplayGapCountIsZero": false
       },
       "runtimeCaptureCount": 13,
-      "staticEvidenceGapCount": 107
+      "staticEvidenceGapCount": 109
     }
   },
   "maturityGates": {
     "requiredCoverageComplete": false,
     "publicActionsComplete": true,
     "actionFormsComplete": true,
-    "gameplayGapCount": 120,
+    "gameplayGapCount": 122,
     "runtimeApplied": true,
     "uiVerified": false
   },
@@ -66,7 +66,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "87bff7cecdc9c6e2a5686739a21e74a870dfce1ff77ef6a080d28fbf9134864e",
+    "packageHash": "9fc27098c416c7a82b8de70568e1204d452de90bbe228074683e1cfbe2b51cef",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -27142,9 +27142,7 @@
               }
             },
             "classification": "unresolved",
-            "reasons": [
-              "nested-effect-wrapper-semantics-unresolved"
-            ],
+            "reasons": [],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
             "applied": false
@@ -27486,9 +27484,7 @@
               }
             },
             "classification": "unresolved",
-            "reasons": [
-              "nested-effect-wrapper-semantics-unresolved"
-            ],
+            "reasons": [],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
             "applied": false
@@ -28013,8 +28009,7 @@
             "classification": "unresolved",
             "reasons": [
               "effect-trigger-frame-missing",
-              "effect-target-unresolved",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-target-unresolved"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -37541,9 +37536,7 @@
               }
             },
             "classification": "unresolved",
-            "reasons": [
-              "nested-effect-wrapper-semantics-unresolved"
-            ],
+            "reasons": [],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
             "applied": false
@@ -37664,7 +37657,6 @@
             },
             "classification": "unresolved",
             "reasons": [
-              "nested-effect-wrapper-semantics-unresolved",
               "effect-combine-semantics-unresolved"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -38443,9 +38435,7 @@
               }
             },
             "classification": "unresolved",
-            "reasons": [
-              "nested-effect-wrapper-semantics-unresolved"
-            ],
+            "reasons": [],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
             "applied": false
@@ -38970,8 +38960,7 @@
             "classification": "unresolved",
             "reasons": [
               "effect-trigger-frame-missing",
-              "effect-target-unresolved",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-target-unresolved"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -85022,9 +85011,7 @@
             }
           },
           "classification": "unresolved",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
           "applied": false
@@ -85148,9 +85135,7 @@
             }
           },
           "classification": "unresolved",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
           "applied": false
@@ -85362,8 +85347,7 @@
           "classification": "unresolved",
           "reasons": [
             "effect-trigger-frame-missing",
-            "effect-target-unresolved",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-target-unresolved"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -87277,7 +87261,6 @@
           },
           "classification": "unresolved",
           "reasons": [
-            "nested-effect-wrapper-semantics-unresolved",
             "effect-combine-semantics-unresolved"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -92083,9 +92066,7 @@
             }
           },
           "classification": "unresolved",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
           "applied": false
@@ -92215,9 +92196,7 @@
             }
           },
           "classification": "unresolved",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
           "applied": false
@@ -92429,8 +92408,7 @@
           "classification": "unresolved",
           "reasons": [
             "effect-trigger-frame-missing",
-            "effect-target-unresolved",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-target-unresolved"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -116396,7 +116374,6 @@
             }
           },
           "reasons": [
-            "wrapper-condition-semantics-unresolved",
             "effect-combine-semantics-unresolved",
             "semantic-wrapper-not-gameplay-effect"
           ],
@@ -122429,7 +122406,6 @@
             }
           },
           "reasons": [
-            "wrapper-condition-semantics-unresolved",
             "semantic-wrapper-not-gameplay-effect"
           ],
           "rawEffectIdentities": [
@@ -122606,7 +122582,6 @@
             }
           },
           "reasons": [
-            "wrapper-condition-semantics-unresolved",
             "semantic-wrapper-not-gameplay-effect"
           ],
           "rawEffectIdentities": [
@@ -122767,8 +122742,7 @@
           "reasons": [
             "effect-trigger-frame-static-evidence-gap",
             "effect-target-static-evidence-gap",
-            "semantic-wrapper-not-gameplay-effect",
-            "wrapper-condition-semantics-unresolved"
+            "semantic-wrapper-not-gameplay-effect"
           ],
           "rawEffectIdentities": [
             "10101013|0|elements|19|4329849906773849220|element:4329849906773849220|unresolved-frame|0",
@@ -131000,7 +130974,7 @@
       "recipeHash": "e98bf716a662b1f5f68f21819b48a0dd4f5bbcb27517ef98493bced93a49b04b",
       "compilerInputHash": "2451ce0b869b0ed24042aaa880e790b3d7e5db348e8dcfd403c176bf0d7584dc",
       "recipeContractHash": "ffd5e5fdffb7c64ef19926b6ce2ba2a28b4bf874e5acc1c4a2b9758e6518459a",
-      "ownerContractHash": "c8bc7f8ea974d5d9aa9b196a3fe37745fee78b3b02d0370d8fe4d96f91d08458"
+      "ownerContractHash": "55ab28ab9823b4731014711664baf21319a80c45f0b959aa6dafe189de4b0d35"
     },
     "operators": [
       "public-action-binding",
@@ -131692,30 +131666,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:02c626d61580c5ac8473",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:4329849906773849220:unresolved:unresolved",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:4329849906773849220:unresolved:unresolved"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101013|0|elements|24|4874764405196817692|element:4329849906773849220|unresolved-frame|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:056c93cbcf5c14dd30be",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -131780,6 +131730,29 @@
         "xiaoyu-normal-default-five-inputs|A4|control:10101004|sub:0|window:0-69:0|target:80102|sub:0"
       ],
       "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:06d9c086997545b84a7e",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101010:2:4329849906773849220:-842786548353666364:0",
+      "sourceIdentities": [
+        "battle-effect:10101010:2:4329849906773849220:-842786548353666364:0"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101010|2|elements|4|-2486706320891858311|element:4329849906773849220|0|0",
+        "effect:10101010|2|elements|7|-1458914462506140012|element:4329849906773849220|0|0"
+      ],
+      "rawRecordCount": 2
     },
     {
       "recordIdentity": "semantic-gap:090e4d91edee07601590",
@@ -132260,18 +132233,20 @@
       "reasons": [
         "effect-combine-semantics-unresolved"
       ],
-      "sourceIdentity": "battle-effect:10101013:0:-1458914462506140012:-1058249236301801642:272",
+      "sourceIdentity": "battle-effect:10101013:0:-1458914462506140012:-6673499874988910762:264",
       "sourceIdentities": [
-        "battle-effect:10101013:0:-1458914462506140012:-1058249236301801642:272"
+        "battle-effect:10101013:0:-1458914462506140012:-1058249236301801642:272",
+        "battle-effect:10101013:0:-1458914462506140012:-6673499874988910762:264"
       ],
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
+        "effect:10101013|0|elements|18|-4364670297239232442|element:-1458914462506140012|264|0",
         "effect:10101013|0|elements|21|-1458914462506140012|element:-1458914462506140012|272|0"
       ],
-      "rawRecordCount": 1
+      "rawRecordCount": 2
     },
     {
       "recordIdentity": "semantic-gap:231cb257f6c52c3b5f92",
@@ -132629,30 +132604,6 @@
       "rawRecordIdentities": [
         "effect:10101049|1|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101049|1|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
-      ],
-      "rawRecordCount": 2
-    },
-    {
-      "recordIdentity": "semantic-gap:2fb8f3726bf492e84ff7",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:4329849906773849220:-6673499874988910762:264",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:4329849906773849220:-1058249236301801642:272",
-        "battle-effect:10101013:0:4329849906773849220:-6673499874988910762:264"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101013|0|elements|18|-4364670297239232442|element:4329849906773849220|264|0",
-        "effect:10101013|0|elements|21|-1458914462506140012|element:4329849906773849220|272|0"
       ],
       "rawRecordCount": 2
     },
@@ -134333,9 +134284,10 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10101013|0|elements|19|4329849906773849220|element:4329849906773849220|unresolved-frame|0"
+        "effect:10101013|0|elements|19|4329849906773849220|element:4329849906773849220|unresolved-frame|0",
+        "effect:10101013|0|elements|24|4874764405196817692|element:4329849906773849220|unresolved-frame|0"
       ],
-      "rawRecordCount": 1
+      "rawRecordCount": 2
     },
     {
       "recordIdentity": "semantic-gap:7e00e1b1d896d0863ba3",
@@ -134926,9 +134878,10 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
+        "effect:10101010|2|elements|10|4874764405196817692|element:4329849906773849220|unresolved-frame|0",
         "effect:10101010|2|elements|5|4329849906773849220|element:4329849906773849220|unresolved-frame|0"
       ],
-      "rawRecordCount": 1
+      "rawRecordCount": 2
     },
     {
       "recordIdentity": "semantic-gap:9573f5e25e5c81b0c6d8",
@@ -135069,29 +135022,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:9a9691e381e50526edb3",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "effect-combine-semantics-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:-1458914462506140012:-6673499874988910762:264",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-1458914462506140012:-6673499874988910762:264"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101013|0|elements|18|-4364670297239232442|element:-1458914462506140012|264|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:9aeaaea064c959755918",
       "ownerId": 101010,
       "sourceKind": "variant-edge",
@@ -135226,6 +135156,30 @@
         "xiaoyu-normal-default-five-inputs|A2|control:10101002|sub:0|window:60-307:2|target:80102|sub:0"
       ],
       "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:a1832f58d50cba9566d4",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101013:0:4329849906773849220:-6673499874988910762:264",
+      "sourceIdentities": [
+        "battle-effect:10101013:0:4329849906773849220:-1058249236301801642:272",
+        "battle-effect:10101013:0:4329849906773849220:-6673499874988910762:264"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101013|0|elements|18|-4364670297239232442|element:4329849906773849220|264|0",
+        "effect:10101013|0|elements|21|-1458914462506140012|element:4329849906773849220|272|0"
+      ],
+      "rawRecordCount": 2
     },
     {
       "recordIdentity": "semantic-gap:a1e8b471c07c8ff87ae7",
@@ -136434,30 +136388,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:ddc59ae9bf9f2f86e859",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10101010:2:4329849906773849220:unresolved:unresolved",
-      "sourceIdentities": [
-        "battle-effect:10101010:2:4329849906773849220:unresolved:unresolved"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101010|2|elements|10|4874764405196817692|element:4329849906773849220|unresolved-frame|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:de98f073831c2bc707c5",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -136848,29 +136778,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:f4d26c02425aaac65ec4",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10101010:2:4329849906773849220:-842786548353666364:0",
-      "sourceIdentities": [
-        "battle-effect:10101010:2:4329849906773849220:-842786548353666364:0"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101010|2|elements|4|-2486706320891858311|element:4329849906773849220|0|0",
-        "effect:10101010|2|elements|7|-1458914462506140012|element:4329849906773849220|0|0"
-      ],
-      "rawRecordCount": 2
-    },
-    {
       "recordIdentity": "semantic-gap:f663a0d707ca3672191a",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -137078,7 +136985,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "cf7d97153ed87484f8828cca989c9d58dd51919587a771c84d0bd4d8c7db0026"
+    "deterministicInputHash": "66149b27675896146528de1c3af252d6104fdd53982612f2ba2f0ed8d41aed5a"
   },
-  "profileHash": "236a01332328444bd36a5f65700732e21ce03ba349b27a820257bf9d1fb285d9"
+  "profileHash": "93ccd5c49be04bd5c6e03172d9e6310839d1dee9eb5bfa619d9280a40d1d9ed7"
 }
