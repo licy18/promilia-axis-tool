@@ -120,15 +120,18 @@ describe('verified Battle effect formula registry', () => {
           contract.family === 'source-tuning-ratio-with-common-ratio'
             ? 100
             : null;
+        const sourceAtkHeal =
+          contract.family === 'source-atk-ratio-heal' ? 10000 : null;
         const result = evaluateVerifiedBattleEffectFormula({
           effect,
           level,
           sourceActor:
-            sourceTuning == null
+            sourceTuning == null && sourceAtkHeal == null
               ? null
               : {
                   stats: {
                     tuningStrength: sourceTuning,
+                    attack: sourceAtkHeal,
                   },
                 },
         });

@@ -24,10 +24,11 @@
 - basis-point-property-a-with-common-ratio: 2
 - literal-a-direct: 19
 - literal-a-with-common-ratio: 734
+- source-atk-ratio-heal: 10
 - source-tuning-ratio-with-common-ratio: 1
 - unsupported-0-0: 10
 - unsupported-1-0: 64
-- unsupported-1-2: 180
+- unsupported-1-2: 170
 - unsupported-1-3: 362
 - unsupported-1-4: 23
 - unsupported-1-101: 2
@@ -53,9 +54,9 @@
 ## 原始边审计
 
 - 效果绑定：3790
-- 可计算：1070
+- 可计算：1074
 - 明确零：2
-- 未解析：2718
+- 未解析：2714
 
 ## 元素类型
 
@@ -73,7 +74,7 @@
 
 - effect-target-static-evidence-gap: 495
 - effect-trigger-frame-static-evidence-gap: 440
-- heal-formula-not-literal-function-5: 52
+- heal-formula-not-literal-function-5: 42
 - nested-damage-runtime-family-unimplemented: 476
 - property-change-type-not-battle-property: 1
 - property-conditions-not-expanded: 33

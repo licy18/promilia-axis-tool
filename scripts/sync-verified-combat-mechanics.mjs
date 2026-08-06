@@ -6004,7 +6004,13 @@ function classifyBattleEffectNode({
       'formulaParams.formulaParamValues[0]'
     );
   } else if (kind === 'damage' && Number(tree.damageType) === 5) {
-    if (!literalReady) reasons.push('heal-formula-not-literal-function-5');
+    const sourceAtkHealReady =
+      commonFunctionId === 1 &&
+      baseFunctionId === 2 &&
+      literalValues.length === 12;
+    if (!literalReady && !sourceAtkHealReady) {
+      reasons.push('heal-formula-not-literal-function-5');
+    }
     dimensions.hp = createDimensionClassification(
       reasons.length ? 'unresolved' : literalZero ? 'verified-zero' : 'applied',
       reasons,
@@ -8913,6 +8919,19 @@ function createSemanticFormulaRuntimeContract(
       registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
       family: 'literal-a-direct',
       evaluator: 'q16.16-direct-literal-a',
+      status: 'applied',
+      applied: true,
+    };
+  }
+  if (
+    commonFunctionId === 1 &&
+    baseFunctionId === 2 &&
+    Number(node.damage?.damageType) === 5
+  ) {
+    return {
+      registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
+      family: 'source-atk-ratio-heal',
+      evaluator: 'q16.16-source-atk-times-a-per-10000',
       status: 'applied',
       applied: true,
     };

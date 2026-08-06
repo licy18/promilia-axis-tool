@@ -21941,7 +21941,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "heal-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -21953,7 +21952,6 @@
           "projectile-impact-frame-runtime-dependent"
         ],
         "unresolvedReasons": [
-          "heal-formula-not-literal-function-5",
           "effect-trigger-frame-missing",
           "effect-target-unresolved"
         ]
@@ -22140,7 +22138,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "heal-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -22152,7 +22149,6 @@
           "projectile-impact-frame-runtime-dependent"
         ],
         "unresolvedReasons": [
-          "heal-formula-not-literal-function-5",
           "effect-trigger-frame-missing",
           "effect-target-unresolved"
         ]
@@ -22339,7 +22335,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "heal-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -22351,7 +22346,6 @@
           "projectile-impact-frame-runtime-dependent"
         ],
         "unresolvedReasons": [
-          "heal-formula-not-literal-function-5",
           "effect-trigger-frame-missing",
           "effect-target-unresolved"
         ]
@@ -38067,14 +38061,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50035701,
       "controlSkillId": 50035701,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "heal-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 100,
@@ -38101,7 +38093,7 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 2
         },
         "shield": {
@@ -38246,14 +38238,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50035801,
       "controlSkillId": 50035801,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "heal-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 316,
@@ -38280,7 +38270,7 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 3,
+          "applied": 3,
           "verified-zero": 2
         },
         "shield": {
@@ -40059,9 +40049,9 @@
       "unresolved": 0
     },
     "publicActionClosure": {
-      "evidenceClosed": 276,
+      "evidenceClosed": 278,
       "scenarioAssumed": 30,
-      "unresolved": 60
+      "unresolved": 58
     },
     "fixedSkillScopeClasses": {
       "non-combat-capability": 45,

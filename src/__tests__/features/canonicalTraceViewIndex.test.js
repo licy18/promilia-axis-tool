@@ -17,7 +17,7 @@ describe('canonicalTraceViewIndex', () => {
     const second = createCanonicalTraceViewIndex(run);
 
     expect(second).toBe(first);
-    expect(first.traceHash).toBe('90529bd74ec9bd1e');
+    expect(first.traceHash).toBe('d16f6c91174154a2');
     expect(first.actionViews).toHaveLength(16);
 
     const kibo = first.actionsById.get('xunlang-signature');

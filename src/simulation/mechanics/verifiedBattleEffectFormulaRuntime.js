@@ -29,6 +29,14 @@ export function classifyVerifiedBattleEffectFormula(effect = {}) {
       applied: true,
     };
   }
+  if (commonFunctionId === 1 && baseFunctionId === 2) {
+    return {
+      family: 'source-atk-ratio-heal',
+      status: 'applied',
+      evaluator: 'q16.16-source-atk-times-a-per-10000',
+      applied: true,
+    };
+  }
   if (commonFunctionId === 1 && baseFunctionId === 3) {
     return {
       family: 'basis-point-property-a-with-common-ratio',
@@ -134,6 +142,60 @@ export function evaluateVerifiedBattleEffectFormula({
       },
       {
         step: 'base-function-2008-a-per-10000',
+        input: a,
+        raw: ratioRaw.toString(),
+      },
+      {
+        step: 'common-function-1-g-per-10000',
+        input: g,
+        raw: commonRaw.toString(),
+      },
+      { step: 'q16.16-multiply', raw: resultRaw.toString() },
+    ];
+    return {
+      ...contract,
+      value: qToNumber(resultRaw),
+      raw: resultRaw.toString(),
+      trace,
+      q16Trace: trace,
+      formulaIdentity,
+      sourceRawA: a,
+      evaluatedValue: qToNumber(resultRaw),
+      evaluatedRaw: resultRaw.toString(),
+      sourceIdentity:
+        effect.sourceIdentity ?? effect.sourceIdentities ?? null,
+      reason: null,
+    };
+  }
+  if (contract.family === 'source-atk-ratio-heal') {
+    const attack = finiteNumberOrNull(sourceActor?.stats?.attack);
+    if (attack == null) {
+      return {
+        ...contract,
+        status: 'unresolved',
+        applied: false,
+        value: null,
+        raw: null,
+        trace: [],
+        formulaIdentity,
+        sourceRawA: a,
+        evaluatedValue: null,
+        evaluatedRaw: null,
+        reason: 'source-actor-attack-missing',
+      };
+    }
+    const attackRaw = qFromFloat(attack);
+    const ratioRaw = qFromBasisPoints(a);
+    const commonRaw = qFromBasisPoints(g);
+    const resultRaw = qMul(qMul(attackRaw, ratioRaw), commonRaw);
+    const trace = [
+      {
+        step: 'source-actor-attack',
+        input: attack,
+        raw: attackRaw.toString(),
+      },
+      {
+        step: 'base-function-2-a-per-10000',
         input: a,
         raw: ratioRaw.toString(),
       },

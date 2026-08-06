@@ -40,9 +40,9 @@
   "summary": {
     "total": 254,
     "published": 254,
-    "accepted": 222,
-    "optimizationReady": 222,
-    "blockingLedgerCount": 33,
+    "accepted": 224,
+    "optimizationReady": 224,
+    "blockingLedgerCount": 31,
     "byObjectKind": {
       "soul-essence": {
         "total": 62,
@@ -56,8 +56,8 @@
       },
       "kibo": {
         "total": 43,
-        "accepted": 12,
-        "optimizationReady": 12
+        "accepted": 14,
+        "optimizationReady": 14
       },
       "set-skill": {
         "total": 12,
@@ -6376,18 +6376,16 @@
       "objectKind": "kibo",
       "objectId": "500357",
       "displayName": "啵啵丁",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "2bc423c4c4a85ec7",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "82b23623c7293d1f",
       "evidence": {
         "iconSha256": "84e8024701c256d037a33e6be99bbb89138a1a624ef35448115c144d271a06b0",
         "binding": {
@@ -6401,7 +6399,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -6413,7 +6411,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -6421,18 +6419,16 @@
       "objectKind": "kibo",
       "objectId": "500358",
       "displayName": "绒绒云",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "867946a832660c23",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "ec9a3960834d36d6",
       "evidence": {
         "iconSha256": "56cb14df8efdf0938e80a6bc0092bb0ea600f5191b8814c6213ae6ca9817c832",
         "binding": {
@@ -6446,7 +6442,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -6458,7 +6454,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -7023,5 +7019,5 @@
       }
     }
   ],
-  "catalogHash": "68234d0cb3e9c727"
+  "catalogHash": "b4e8ef31bc46985f"
 }

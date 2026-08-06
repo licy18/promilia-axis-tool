@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "9da9ea985c25aedc0a0b4c8af5ab59cc38d96a6123c0135d96c8830a3d04928e",
+  "packageHash": "eacb7a5962511d4d466b0a5c4fbc05ed2cf3e9fe1c8af0e150e30ab1dd214e8f",
   "fixedProductDenominator": {
     "publicActionCount": 563,
     "actorOwnerCount": 20,
@@ -86,7 +86,8 @@
         "verified-zero": 3678
       },
       "hp": {
-        "unresolved": 63,
+        "applied": 4,
+        "unresolved": 59,
         "verified-zero": 3727
       },
       "shield": {
@@ -11249,7 +11250,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "heal-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -11459,7 +11459,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "heal-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -11669,7 +11668,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "heal-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -29174,7 +29172,7 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 2
         },
         "shield": {
@@ -29195,9 +29193,7 @@
         "unresolved": 2
       },
       "settlement": null,
-      "reasons": [
-        "heal-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500357].actions[skillId=50035701].skillId"
     },
     {
@@ -29377,7 +29373,7 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 3,
+          "applied": 3,
           "verified-zero": 2
         },
         "shield": {
@@ -29398,9 +29394,7 @@
         "unresolved": 4
       },
       "settlement": null,
-      "reasons": [
-        "heal-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500358].actions[skillId=50035801].skillId"
     },
     {
@@ -52295,7 +52289,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "heal-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -52505,7 +52498,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "heal-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -52715,7 +52707,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "heal-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -70220,7 +70211,7 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 2
         },
         "shield": {
@@ -70241,9 +70232,7 @@
         "unresolved": 2
       },
       "settlement": null,
-      "reasons": [
-        "heal-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500357].actions[skillId=50035701].skillId"
     },
     {
@@ -70423,7 +70412,7 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 3,
+          "applied": 3,
           "verified-zero": 2
         },
         "shield": {
@@ -70444,9 +70433,7 @@
         "unresolved": 4
       },
       "settlement": null,
-      "reasons": [
-        "heal-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500358].actions[skillId=50035801].skillId"
     },
     {
