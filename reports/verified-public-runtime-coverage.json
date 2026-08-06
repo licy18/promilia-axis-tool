@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "d215cd47acf1f384a17276a9a89a806a2dceacfad63201e424831eef35ef8750",
+  "packageHash": "1a8bc794ec138e471a2dabab1aa45c8a81d8179d7bd721b0007d15936510db02",
   "fixedProductDenominator": {
     "publicActionCount": 563,
     "actorOwnerCount": 20,
@@ -27,22 +27,22 @@
     "publicActionCount": 563,
     "actorOwnerCount": 20,
     "kiboOwnerCount": 122,
-    "runnableActionCount": 546,
-    "sourceAppliedActionCount": 437,
-    "sourceRuntimeDependentActionCount": 109,
-    "sourceStaticEvidenceGapActionCount": 17,
-    "scenarioResolvedActionCount": 148,
+    "runnableActionCount": 550,
+    "sourceAppliedActionCount": 440,
+    "sourceRuntimeDependentActionCount": 110,
+    "sourceStaticEvidenceGapActionCount": 13,
+    "scenarioResolvedActionCount": 152,
     "verifiedZeroActionCount": 0,
-    "unresolvedActionCount": 17,
+    "unresolvedActionCount": 13,
     "unresolvedStatusCounts": {
       "runtime-and-evidence-gap": 9,
-      "static-evidence-gap": 8
+      "static-evidence-gap": 4
     },
     "unclassifiedUnresolvedActionCount": 0,
     "actorCoreActionCount": 60,
     "actorCoreRunnableCount": 59,
     "kiboCoreActionCount": 366,
-    "kiboCoreRunnableCount": 363,
+    "kiboCoreRunnableCount": 366,
     "nonzeroRecoveryElementCount": 667,
     "recoveryScopeCounts": {
       "applied-current-public-action": 203,
@@ -52,14 +52,14 @@
     },
     "actionDimensions": {
       "hp": {
-        "nonzero": 781,
+        "nonzero": 803,
         "verified-zero": 0,
-        "unresolved": 1995
+        "unresolved": 1973
       },
       "toughness": {
-        "nonzero": 781,
-        "verified-zero": 0,
-        "unresolved": 1995
+        "nonzero": 777,
+        "verified-zero": 26,
+        "unresolved": 1973
       },
       "actorSp": {
         "nonzero": 267,
@@ -74,44 +74,45 @@
     },
     "effectDimensions": {
       "damage": {
-        "applied": 143,
-        "unresolved": 375,
-        "verified-zero": 3261
+        "applied": 150,
+        "unresolved": 379,
+        "verified-zero": 3272
       },
       "toughness": {
-        "verified-zero": 3779
+        "verified-zero": 3801
       },
       "sp": {
         "applied": 34,
         "unresolved": 78,
-        "verified-zero": 3667
+        "verified-zero": 3689
       },
       "hp": {
-        "applied": 7,
-        "unresolved": 41,
-        "verified-zero": 3731
+        "applied": 38,
+        "unresolved": 14,
+        "verified-zero": 3749
       },
       "shield": {
-        "unresolved": 9,
-        "verified-zero": 3770
+        "applied": 13,
+        "unresolved": 2,
+        "verified-zero": 3786
       },
       "dynamicProperty": {
-        "applied": 686,
-        "unresolved": 457,
-        "verified-zero": 2636
+        "applied": 709,
+        "unresolved": 435,
+        "verified-zero": 2657
       },
       "mark": {
-        "applied": 142,
-        "unresolved": 211,
-        "verified-zero": 3426
+        "applied": 182,
+        "unresolved": 169,
+        "verified-zero": 3450
       }
     },
     "semanticEffects": {
-      "total": 3462,
-      "gameplay": 1825,
-      "applied": 859,
+      "total": 3479,
+      "gameplay": 1842,
+      "applied": 960,
       "verifiedZero": 7,
-      "unresolved": 959
+      "unresolved": 875
     },
     "timing": {
       "appliedActionCount": 552,
@@ -288,9 +289,9 @@
       "actionKind": "star-carry",
       "actionCount": 17,
       "runtimeStatusCounts": {
-        "runnable": 14,
+        "runnable": 15,
         "runtime-and-evidence-gap": 1,
-        "static-evidence-gap": 2
+        "static-evidence-gap": 1
       },
       "timingStatusCounts": {
         "applied": 16,
@@ -336,8 +337,7 @@
       "actionKind": "active",
       "actionCount": 122,
       "runtimeStatusCounts": {
-        "runnable": 120,
-        "static-evidence-gap": 2
+        "runnable": 122
       },
       "timingStatusCounts": {
         "applied": 122
@@ -348,8 +348,7 @@
       "actionKind": "break",
       "actionCount": 122,
       "runtimeStatusCounts": {
-        "runnable": 121,
-        "static-evidence-gap": 1
+        "runnable": 122
       },
       "timingStatusCounts": {
         "applied": 122
@@ -3157,10 +3156,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 4
+          "applied": 2,
+          "unresolved": 2
         },
         "enemyToughness": {
-          "unresolved": 4
+          "unresolved": 2,
+          "verified-zero": 2
         },
         "actorSp": {
           "unresolved": 2,
@@ -3171,7 +3172,8 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 9,
+          "applied": 7,
+          "unresolved": 2,
           "verified-zero": 7
         },
         "shield": {
@@ -3181,24 +3183,19 @@
           "verified-zero": 16
         },
         "tuningMark": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 14
         }
       },
       "semanticEffects": {
         "total": 12,
-        "applied": 2,
+        "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "trigger-frame-missing",
-        "heal-formula-not-literal-function-5",
-        "tuning-mark-max-mismatch",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -3254,19 +3251,19 @@
           "unresolved": 2
         },
         "healing": {
-          "verified-zero": 289
+          "verified-zero": 294
         },
         "shield": {
-          "verified-zero": 289
+          "verified-zero": 294
         },
         "dynamicProperty": {
           "applied": 21,
           "unresolved": 116,
-          "verified-zero": 152
+          "verified-zero": 157
         },
         "tuningMark": {
           "unresolved": 18,
-          "verified-zero": 271
+          "verified-zero": 276
         }
       },
       "semanticEffects": {
@@ -3337,25 +3334,22 @@
           "verified-zero": 17
         },
         "dynamicProperty": {
-          "unresolved": 4,
+          "applied": 4,
           "verified-zero": 13
         },
         "tuningMark": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 15
         }
       },
       "semanticEffects": {
         "total": 17,
-        "applied": 11,
+        "applied": 17,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=107003].skillSlots[group=ground,slot=3]"
     },
     {
@@ -4257,20 +4251,18 @@
           "verified-zero": 4
         },
         "tuningMark": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 2
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=108005].skillSlots[group=ground,slot=3]"
     },
     {
@@ -4331,22 +4323,21 @@
           "verified-zero": 5
         },
         "tuningMark": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         }
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "base-function-unverified",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "tuning-mark-max-mismatch",
         "shield-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=108005].skillSlots[group=ground,slot=4]"
@@ -4636,20 +4627,20 @@
           "verified-zero": 7
         },
         "dynamicProperty": {
-          "applied": 1,
-          "unresolved": 3,
+          "applied": 3,
+          "unresolved": 1,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 6
         }
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 2,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
@@ -4795,21 +4786,20 @@
           "verified-zero": 8
         },
         "tuningMark": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 8
         }
       },
       "semanticEffects": {
         "total": 8,
-        "applied": 5,
+        "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "tuning-mark-max-mismatch",
         "tuning-mark-relation-triggerEffectList-unresolved"
       ],
       "sourceIdentity": "characters.items[id=109002].skillSlots[group=ground,slot=4]"
@@ -5311,12 +5301,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 2,
-          "unresolved": 7
+          "applied": 4,
+          "unresolved": 5
         },
         "enemyToughness": {
           "applied": 2,
-          "unresolved": 7
+          "unresolved": 5,
+          "verified-zero": 2
         },
         "actorSp": {
           "applied": 2,
@@ -5351,14 +5342,10 @@
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "effect-combine-semantics-unresolved",
-        "heal-formula-not-literal-function-5",
         "normal-attack-input-segment-duration-unresolved"
       ],
       "sourceIdentity": "characters.items[id=112002].skillSlots[group=backup,skillId=11200203]"
@@ -5397,12 +5384,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 6,
-          "unresolved": 8
+          "applied": 7,
+          "unresolved": 7
         },
         "enemyToughness": {
           "applied": 6,
-          "unresolved": 8
+          "unresolved": 7,
+          "verified-zero": 1
         },
         "actorSp": {
           "applied": 6,
@@ -5415,7 +5403,7 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "shield": {
@@ -5426,25 +5414,20 @@
           "verified-zero": 4
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 3,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "characters.items[id=112002].skillSlots[group=ground,slot=3]"
     },
@@ -5482,12 +5465,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 10
+          "applied": 2,
+          "unresolved": 9
         },
         "enemyToughness": {
           "applied": 1,
-          "unresolved": 10
+          "unresolved": 9,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 9,
@@ -5498,7 +5482,8 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 3,
+          "applied": 1,
+          "unresolved": 2,
           "verified-zero": 20
         },
         "shield": {
@@ -5517,18 +5502,14 @@
       },
       "semanticEffects": {
         "total": 13,
-        "applied": 4,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 8
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
         "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "effect-trigger-frame-missing",
-        "heal-formula-not-literal-function-5",
         "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
@@ -5712,12 +5693,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 6,
-          "unresolved": 30
+          "applied": 7,
+          "unresolved": 29
         },
         "enemyToughness": {
           "applied": 6,
-          "unresolved": 30
+          "unresolved": 29,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 29,
@@ -5728,40 +5710,35 @@
           "verified-zero": 7
         },
         "healing": {
-          "unresolved": 4,
+          "applied": 1,
+          "unresolved": 3,
           "verified-zero": 75
         },
         "shield": {
           "verified-zero": 79
         },
         "dynamicProperty": {
-          "applied": 7,
-          "unresolved": 18,
+          "applied": 9,
+          "unresolved": 16,
           "verified-zero": 54
         },
         "tuningMark": {
-          "applied": 5,
-          "unresolved": 13,
+          "applied": 9,
+          "unresolved": 9,
           "verified-zero": 61
         }
       },
       "semanticEffects": {
         "total": 58,
-        "applied": 22,
+        "applied": 29,
         "verifiedZero": 0,
-        "unresolved": 36
+        "unresolved": 29
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
         "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=4]"
     },
@@ -5940,12 +5917,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 6,
-          "unresolved": 30
+          "applied": 7,
+          "unresolved": 29
         },
         "enemyToughness": {
           "applied": 6,
-          "unresolved": 30
+          "unresolved": 29,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 29,
@@ -5956,40 +5934,35 @@
           "verified-zero": 7
         },
         "healing": {
-          "unresolved": 4,
+          "applied": 1,
+          "unresolved": 3,
           "verified-zero": 75
         },
         "shield": {
           "verified-zero": 79
         },
         "dynamicProperty": {
-          "applied": 7,
-          "unresolved": 18,
+          "applied": 9,
+          "unresolved": 16,
           "verified-zero": 54
         },
         "tuningMark": {
-          "applied": 5,
-          "unresolved": 13,
+          "applied": 9,
+          "unresolved": 9,
           "verified-zero": 61
         }
       },
       "semanticEffects": {
         "total": 58,
-        "applied": 22,
+        "applied": 29,
         "verifiedZero": 0,
-        "unresolved": 36
+        "unresolved": 29
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
         "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "characters.items[id=199002].skillSlots[group=ground,slot=4]"
     },
@@ -6116,20 +6089,18 @@
           "verified-zero": 2
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 1
         }
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=199003].skillSlots[group=ground,slot=3]"
     },
     {
@@ -6456,10 +6427,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 6
+          "applied": 1,
+          "unresolved": 5
         },
         "enemyToughness": {
-          "unresolved": 6
+          "unresolved": 5,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 5,
@@ -6470,7 +6443,7 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         },
         "shield": {
@@ -6486,17 +6459,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500002].actions[skillId=50000202].skillId"
     },
     {
@@ -6661,10 +6629,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 7
+          "applied": 1,
+          "unresolved": 6
         },
         "enemyToughness": {
-          "unresolved": 7
+          "unresolved": 6,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 6,
@@ -6675,11 +6645,11 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 5
         },
         "shield": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 5
         },
         "dynamicProperty": {
@@ -6692,18 +6662,12 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 2,
+        "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5",
-        "shield-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500003].actions[skillId=50000302].skillId"
     },
     {
@@ -6864,10 +6828,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 9
+          "applied": 2,
+          "unresolved": 7
         },
         "enemyToughness": {
-          "unresolved": 9
+          "unresolved": 7,
+          "verified-zero": 2
         },
         "actorSp": {
           "unresolved": 7,
@@ -6878,11 +6844,11 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 4,
+          "applied": 4,
           "verified-zero": 7
         },
         "shield": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 9
         },
         "dynamicProperty": {
@@ -6895,18 +6861,13 @@
       },
       "semanticEffects": {
         "total": 8,
-        "applied": 2,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5",
-        "shield-formula-not-literal-function-5"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500004].actions[skillId=50000404].skillId"
     },
@@ -8856,7 +8817,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -8901,8 +8862,7 @@
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
-          "verified-zero": 15
+          "verified-zero": 16
         }
       },
       "semanticEffects": {
@@ -8913,8 +8873,7 @@
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "pack-lifecycle-semantics-evidence-gap"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500026].actions[skillId=50002616].skillId"
     },
@@ -9082,10 +9041,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 6
+          "applied": 1,
+          "unresolved": 5
         },
         "enemyToughness": {
-          "unresolved": 6
+          "unresolved": 5,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 5,
@@ -9096,7 +9057,7 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 1
         },
         "shield": {
@@ -9116,12 +9077,7 @@
         "unresolved": 1
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500035].actions[skillId=50003503].skillId"
     },
     {
@@ -11075,7 +11031,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "source-verified",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -11098,8 +11054,8 @@
           "unresolved": 4
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 4
+          "unresolved": 4,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 4,
@@ -11280,7 +11236,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "source-verified",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -11303,8 +11259,8 @@
           "unresolved": 4
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 4
+          "unresolved": 4,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 4,
@@ -11485,7 +11441,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "source-verified",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -11508,8 +11464,8 @@
           "unresolved": 4
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 4
+          "unresolved": 4,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 4,
@@ -11948,13 +11904,13 @@
       "sourceSkillName": "岩固之盾",
       "controlSkillId": 506008,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -11983,21 +11939,27 @@
         "kiboSp": {
           "unresolved": 2
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 1
+        },
+        "shield": {
+          "applied": 1
+        },
+        "dynamicProperty": {
+          "verified-zero": 1
+        },
+        "tuningMark": {
+          "verified-zero": 1
+        }
       },
       "semanticEffects": {
-        "total": 0,
-        "applied": 0,
+        "total": 1,
+        "applied": 1,
         "verifiedZero": 0,
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "shield-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500052].actions[skillId=506008].skillId"
     },
     {
@@ -12143,13 +12105,13 @@
       "sourceSkillName": "岩固之盾",
       "controlSkillId": 506008,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -12178,21 +12140,27 @@
         "kiboSp": {
           "unresolved": 2
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 1
+        },
+        "shield": {
+          "applied": 1
+        },
+        "dynamicProperty": {
+          "verified-zero": 1
+        },
+        "tuningMark": {
+          "verified-zero": 1
+        }
       },
       "semanticEffects": {
-        "total": 0,
-        "applied": 0,
+        "total": 1,
+        "applied": 1,
         "verifiedZero": 0,
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "shield-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500053].actions[skillId=506008].skillId"
     },
     {
@@ -13071,7 +13039,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -13182,23 +13150,23 @@
           "verified-zero": 2
         },
         "healing": {
-          "verified-zero": 3
+          "verified-zero": 4
         },
         "shield": {
-          "verified-zero": 3
+          "verified-zero": 4
         },
         "dynamicProperty": {
-          "verified-zero": 3
+          "verified-zero": 4
         },
         "tuningMark": {
-          "verified-zero": 3
+          "verified-zero": 4
         }
       },
       "semanticEffects": {
-        "total": 2,
+        "total": 3,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
@@ -14039,7 +14007,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -14946,10 +14914,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 7
+          "applied": 2,
+          "unresolved": 5
         },
         "enemyToughness": {
-          "unresolved": 7
+          "unresolved": 5,
+          "verified-zero": 2
         },
         "actorSp": {
           "unresolved": 5,
@@ -14960,7 +14930,7 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 2
         },
         "shield": {
@@ -14981,12 +14951,7 @@
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5",
-        "nested-effect-wrapper-semantics-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500093].actions[skillId=50009305].skillId"
     },
@@ -15576,25 +15541,22 @@
           "verified-zero": 5
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500097].actions[skillId=50009701].skillId"
     },
     {
@@ -15785,25 +15747,22 @@
           "verified-zero": 5
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500098].actions[skillId=50009801].skillId"
     },
     {
@@ -15884,13 +15843,13 @@
       "sourceSkillName": "水岩卫-合击",
       "controlSkillId": 50009804,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 107,
@@ -15990,30 +15949,27 @@
           "verified-zero": 2
         },
         "healing": {
-          "verified-zero": 9
+          "verified-zero": 10
         },
         "shield": {
-          "verified-zero": 9
+          "verified-zero": 10
         },
         "dynamicProperty": {
-          "applied": 6,
+          "applied": 7,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
-          "verified-zero": 8
+          "verified-zero": 10
         }
       },
       "semanticEffects": {
-        "total": 6,
-        "applied": 6,
+        "total": 7,
+        "applied": 7,
         "verifiedZero": 0,
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "pack-lifecycle-semantics-evidence-gap"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500110].actions[skillId=50011001].skillId"
     },
     {
@@ -18993,20 +18949,18 @@
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 3
         }
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500133].actions[skillId=50013302].skillId"
     },
     {
@@ -19184,7 +19138,7 @@
           "verified-zero": 5
         },
         "shield": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "dynamicProperty": {
@@ -19192,21 +19146,18 @@
           "verified-zero": 4
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "shield-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500134].actions[skillId=50013402].skillId"
     },
     {
@@ -23150,7 +23101,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -23604,7 +23555,7 @@
           "verified-zero": 10
         },
         "shield": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 8
         },
         "dynamicProperty": {
@@ -23612,21 +23563,18 @@
           "verified-zero": 8
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 9
         }
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 4,
+        "applied": 7,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "shield-formula-not-literal-function-5",
-        "tuning-mark-max-mismatch"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500206].actions[skillId=50020601].skillId"
     },
     {
@@ -23791,12 +23739,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 8
+          "applied": 2,
+          "unresolved": 7
         },
         "enemyToughness": {
           "applied": 1,
-          "unresolved": 8
+          "unresolved": 7,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 7,
@@ -23807,7 +23756,7 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "shield": {
@@ -23817,24 +23766,19 @@
           "verified-zero": 5
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500209].actions[skillId=50020901].skillId"
     },
@@ -25415,12 +25359,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 7
+          "applied": 2,
+          "unresolved": 6
         },
         "enemyToughness": {
           "applied": 1,
-          "unresolved": 7
+          "unresolved": 6,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 6,
@@ -25431,7 +25376,7 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "shield": {
@@ -25441,24 +25386,19 @@
           "verified-zero": 5
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500258].actions[skillId=50025801].skillId"
     },
@@ -25622,12 +25562,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 7
+          "applied": 2,
+          "unresolved": 6
         },
         "enemyToughness": {
           "applied": 1,
-          "unresolved": 7
+          "unresolved": 6,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 6,
@@ -25638,7 +25579,7 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "shield": {
@@ -25648,24 +25589,19 @@
           "verified-zero": 5
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500259].actions[skillId=50025901].skillId"
     },
@@ -25823,12 +25759,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 10
+          "applied": 2,
+          "unresolved": 9
         },
         "enemyToughness": {
           "applied": 1,
-          "unresolved": 10
+          "unresolved": 9,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 9,
@@ -25839,7 +25776,7 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "shield": {
@@ -25849,24 +25786,19 @@
           "verified-zero": 5
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500260].actions[skillId=50026001].skillId"
     },
@@ -26050,25 +25982,22 @@
           "verified-zero": 5
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500261].actions[skillId=50026102].skillId"
     },
     {
@@ -26259,25 +26188,22 @@
           "verified-zero": 5
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500262].actions[skillId=50026202].skillId"
     },
     {
@@ -26468,25 +26394,22 @@
           "verified-zero": 5
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500263].actions[skillId=50026302].skillId"
     },
     {
@@ -27482,20 +27405,19 @@
           "verified-zero": 4
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 3
         }
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "tuning-mark-max-mismatch"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500313].actions[skillId=50031302].skillId"
     },
@@ -28670,8 +28592,8 @@
           "unresolved": 5
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 5
+          "unresolved": 5,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 5,
@@ -28870,8 +28792,8 @@
           "unresolved": 5
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 5
+          "unresolved": 5,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 5,
@@ -29049,7 +28971,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -29068,12 +28990,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 2,
-          "unresolved": 15
+          "applied": 3,
+          "unresolved": 14
         },
         "enemyToughness": {
-          "applied": 2,
-          "unresolved": 15
+          "applied": 3,
+          "unresolved": 14
         },
         "actorSp": {
           "unresolved": 14,
@@ -29104,10 +29026,7 @@
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500360].actions[skillId=50036001].skillId"
     },
@@ -29871,10 +29790,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 5
+          "applied": 1,
+          "unresolved": 4
         },
         "enemyToughness": {
-          "unresolved": 5
+          "unresolved": 4,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 4,
@@ -29885,36 +29806,30 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 5
         },
         "shield": {
           "verified-zero": 6
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 4
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 5
         }
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 1,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5",
-        "heal-formula-not-literal-function-5"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500399].actions[skillId=50039901].skillId"
     },
@@ -30059,7 +29974,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -30103,20 +30018,19 @@
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 2
         }
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "tuning-mark-max-mismatch"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500467].actions[skillId=50046701].skillId"
     },
@@ -30305,20 +30219,19 @@
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 2
         }
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "tuning-mark-max-mismatch"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500468].actions[skillId=50046801].skillId"
     },
@@ -37552,10 +37465,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 4
+          "applied": 2,
+          "unresolved": 2
         },
         "enemyToughness": {
-          "unresolved": 4
+          "unresolved": 2,
+          "verified-zero": 2
         },
         "actorSp": {
           "unresolved": 2,
@@ -37566,7 +37481,8 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 9,
+          "applied": 7,
+          "unresolved": 2,
           "verified-zero": 7
         },
         "shield": {
@@ -37576,24 +37492,19 @@
           "verified-zero": 16
         },
         "tuningMark": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 14
         }
       },
       "semanticEffects": {
         "total": 12,
-        "applied": 2,
+        "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "trigger-frame-missing",
-        "heal-formula-not-literal-function-5",
-        "tuning-mark-max-mismatch",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -37609,13 +37520,13 @@
       "sourceSkillName": "林隙留影",
       "controlSkillId": 10700222,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 150,
@@ -37633,10 +37544,10 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 1
+          "applied": 1
         },
         "enemyToughness": {
-          "unresolved": 1
+          "verified-zero": 1
         },
         "actorSp": {
           "verified-zero": 1
@@ -37644,24 +37555,27 @@
         "kiboSp": {
           "verified-zero": 1
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "applied": 4
+        },
+        "shield": {
+          "verified-zero": 4
+        },
+        "dynamicProperty": {
+          "verified-zero": 4
+        },
+        "tuningMark": {
+          "verified-zero": 4
+        }
       },
       "semanticEffects": {
-        "total": 0,
-        "applied": 0,
+        "total": 4,
+        "applied": 4,
         "verifiedZero": 0,
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=107002].skillSlots[skillId=10700222]"
     },
     {
@@ -37845,19 +37759,19 @@
           "unresolved": 2
         },
         "healing": {
-          "verified-zero": 289
+          "verified-zero": 294
         },
         "shield": {
-          "verified-zero": 289
+          "verified-zero": 294
         },
         "dynamicProperty": {
           "applied": 21,
           "unresolved": 116,
-          "verified-zero": 152
+          "verified-zero": 157
         },
         "tuningMark": {
           "unresolved": 18,
-          "verified-zero": 271
+          "verified-zero": 276
         }
       },
       "semanticEffects": {
@@ -38141,25 +38055,22 @@
           "verified-zero": 17
         },
         "dynamicProperty": {
-          "unresolved": 4,
+          "applied": 4,
           "verified-zero": 13
         },
         "tuningMark": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 15
         }
       },
       "semanticEffects": {
         "total": 17,
-        "applied": 11,
+        "applied": 17,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=107003].skillSlots[group=ground,slot=3]"
     },
     {
@@ -39365,10 +39276,8 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "tuning-mark-max-mismatch",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "characters.items[id=108002].skillSlots[group=ground,slot=2]"
     },
@@ -40967,20 +40876,18 @@
           "verified-zero": 4
         },
         "tuningMark": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 2
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=108005].skillSlots[group=ground,slot=3]"
     },
     {
@@ -41105,22 +41012,21 @@
           "verified-zero": 5
         },
         "tuningMark": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         }
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "base-function-unverified",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "tuning-mark-max-mismatch",
         "shield-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=108005].skillSlots[group=ground,slot=4]"
@@ -41184,20 +41090,18 @@
           "verified-zero": 2
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 1
         }
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=108005].skillSlots[skillId=10800522]"
     },
     {
@@ -42108,20 +42012,20 @@
           "verified-zero": 7
         },
         "dynamicProperty": {
-          "applied": 1,
-          "unresolved": 3,
+          "applied": 3,
+          "unresolved": 1,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 6
         }
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 2,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
@@ -42539,21 +42443,20 @@
           "verified-zero": 8
         },
         "tuningMark": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 8
         }
       },
       "semanticEffects": {
         "total": 8,
-        "applied": 5,
+        "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "tuning-mark-max-mismatch",
         "tuning-mark-relation-triggerEffectList-unresolved"
       ],
       "sourceIdentity": "characters.items[id=109002].skillSlots[group=ground,slot=4]"
@@ -44203,12 +44106,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 2,
-          "unresolved": 7
+          "applied": 4,
+          "unresolved": 5
         },
         "enemyToughness": {
           "applied": 2,
-          "unresolved": 7
+          "unresolved": 5,
+          "verified-zero": 2
         },
         "actorSp": {
           "applied": 2,
@@ -44243,14 +44147,10 @@
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "effect-combine-semantics-unresolved",
-        "heal-formula-not-literal-function-5",
         "normal-attack-input-segment-duration-unresolved"
       ],
       "sourceIdentity": "characters.items[id=112002].skillSlots[group=backup,skillId=11200203]"
@@ -44495,12 +44395,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 6,
-          "unresolved": 8
+          "applied": 7,
+          "unresolved": 7
         },
         "enemyToughness": {
           "applied": 6,
-          "unresolved": 8
+          "unresolved": 7,
+          "verified-zero": 1
         },
         "actorSp": {
           "applied": 6,
@@ -44513,7 +44414,7 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "shield": {
@@ -44524,25 +44425,20 @@
           "verified-zero": 4
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 3,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "characters.items[id=112002].skillSlots[group=ground,slot=3]"
     },
@@ -44644,12 +44540,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 10
+          "applied": 2,
+          "unresolved": 9
         },
         "enemyToughness": {
           "applied": 1,
-          "unresolved": 10
+          "unresolved": 9,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 9,
@@ -44660,7 +44557,8 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 3,
+          "applied": 1,
+          "unresolved": 2,
           "verified-zero": 20
         },
         "shield": {
@@ -44679,18 +44577,14 @@
       },
       "semanticEffects": {
         "total": 13,
-        "applied": 4,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 8
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
         "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "effect-trigger-frame-missing",
-        "heal-formula-not-literal-function-5",
         "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
@@ -44756,21 +44650,20 @@
           "verified-zero": 5
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 7
         }
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 3,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "tuning-mark-max-mismatch"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "characters.items[id=112002].skillSlots[skillId=11200222]"
     },
@@ -45351,12 +45244,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 6,
-          "unresolved": 30
+          "applied": 7,
+          "unresolved": 29
         },
         "enemyToughness": {
           "applied": 6,
-          "unresolved": 30
+          "unresolved": 29,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 29,
@@ -45367,40 +45261,35 @@
           "verified-zero": 7
         },
         "healing": {
-          "unresolved": 4,
+          "applied": 1,
+          "unresolved": 3,
           "verified-zero": 75
         },
         "shield": {
           "verified-zero": 79
         },
         "dynamicProperty": {
-          "applied": 7,
-          "unresolved": 18,
+          "applied": 9,
+          "unresolved": 16,
           "verified-zero": 54
         },
         "tuningMark": {
-          "applied": 5,
-          "unresolved": 13,
+          "applied": 9,
+          "unresolved": 9,
           "verified-zero": 61
         }
       },
       "semanticEffects": {
         "total": 58,
-        "applied": 22,
+        "applied": 29,
         "verifiedZero": 0,
-        "unresolved": 36
+        "unresolved": 29
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
         "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=4]"
     },
@@ -45982,12 +45871,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 6,
-          "unresolved": 30
+          "applied": 7,
+          "unresolved": 29
         },
         "enemyToughness": {
           "applied": 6,
-          "unresolved": 30
+          "unresolved": 29,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 29,
@@ -45998,40 +45888,35 @@
           "verified-zero": 7
         },
         "healing": {
-          "unresolved": 4,
+          "applied": 1,
+          "unresolved": 3,
           "verified-zero": 75
         },
         "shield": {
           "verified-zero": 79
         },
         "dynamicProperty": {
-          "applied": 7,
-          "unresolved": 18,
+          "applied": 9,
+          "unresolved": 16,
           "verified-zero": 54
         },
         "tuningMark": {
-          "applied": 5,
-          "unresolved": 13,
+          "applied": 9,
+          "unresolved": 9,
           "verified-zero": 61
         }
       },
       "semanticEffects": {
         "total": 58,
-        "applied": 22,
+        "applied": 29,
         "verifiedZero": 0,
-        "unresolved": 36
+        "unresolved": 29
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
         "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "characters.items[id=199002].skillSlots[group=ground,slot=4]"
     },
@@ -46495,20 +46380,18 @@
           "verified-zero": 2
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 1
         }
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=199003].skillSlots[group=ground,slot=3]"
     },
     {
@@ -47100,10 +46983,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 6
+          "applied": 1,
+          "unresolved": 5
         },
         "enemyToughness": {
-          "unresolved": 6
+          "unresolved": 5,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 5,
@@ -47114,7 +46999,7 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         },
         "shield": {
@@ -47130,17 +47015,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500002].actions[skillId=50000202].skillId"
     },
     {
@@ -47305,10 +47185,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 7
+          "applied": 1,
+          "unresolved": 6
         },
         "enemyToughness": {
-          "unresolved": 7
+          "unresolved": 6,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 6,
@@ -47319,11 +47201,11 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 5
         },
         "shield": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 5
         },
         "dynamicProperty": {
@@ -47336,18 +47218,12 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 2,
+        "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5",
-        "shield-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500003].actions[skillId=50000302].skillId"
     },
     {
@@ -47508,10 +47384,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 9
+          "applied": 2,
+          "unresolved": 7
         },
         "enemyToughness": {
-          "unresolved": 9
+          "unresolved": 7,
+          "verified-zero": 2
         },
         "actorSp": {
           "unresolved": 7,
@@ -47522,11 +47400,11 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 4,
+          "applied": 4,
           "verified-zero": 7
         },
         "shield": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 9
         },
         "dynamicProperty": {
@@ -47539,18 +47417,13 @@
       },
       "semanticEffects": {
         "total": 8,
-        "applied": 2,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5",
-        "shield-formula-not-literal-function-5"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500004].actions[skillId=50000404].skillId"
     },
@@ -49500,7 +49373,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -49545,8 +49418,7 @@
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
-          "verified-zero": 15
+          "verified-zero": 16
         }
       },
       "semanticEffects": {
@@ -49557,8 +49429,7 @@
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "pack-lifecycle-semantics-evidence-gap"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500026].actions[skillId=50002616].skillId"
     },
@@ -49726,10 +49597,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 6
+          "applied": 1,
+          "unresolved": 5
         },
         "enemyToughness": {
-          "unresolved": 6
+          "unresolved": 5,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 5,
@@ -49740,7 +49613,7 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 1
         },
         "shield": {
@@ -49760,12 +49633,7 @@
         "unresolved": 1
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500035].actions[skillId=50003503].skillId"
     },
     {
@@ -51719,7 +51587,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "source-verified",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -51742,8 +51610,8 @@
           "unresolved": 4
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 4
+          "unresolved": 4,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 4,
@@ -51924,7 +51792,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "source-verified",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -51947,8 +51815,8 @@
           "unresolved": 4
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 4
+          "unresolved": 4,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 4,
@@ -52129,7 +51997,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "source-verified",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -52152,8 +52020,8 @@
           "unresolved": 4
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 4
+          "unresolved": 4,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 4,
@@ -52592,13 +52460,13 @@
       "sourceSkillName": "岩固之盾",
       "controlSkillId": 506008,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -52627,21 +52495,27 @@
         "kiboSp": {
           "unresolved": 2
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 1
+        },
+        "shield": {
+          "applied": 1
+        },
+        "dynamicProperty": {
+          "verified-zero": 1
+        },
+        "tuningMark": {
+          "verified-zero": 1
+        }
       },
       "semanticEffects": {
-        "total": 0,
-        "applied": 0,
+        "total": 1,
+        "applied": 1,
         "verifiedZero": 0,
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "shield-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500052].actions[skillId=506008].skillId"
     },
     {
@@ -52787,13 +52661,13 @@
       "sourceSkillName": "岩固之盾",
       "controlSkillId": 506008,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "source-verified",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -52822,21 +52696,27 @@
         "kiboSp": {
           "unresolved": 2
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 1
+        },
+        "shield": {
+          "applied": 1
+        },
+        "dynamicProperty": {
+          "verified-zero": 1
+        },
+        "tuningMark": {
+          "verified-zero": 1
+        }
       },
       "semanticEffects": {
-        "total": 0,
-        "applied": 0,
+        "total": 1,
+        "applied": 1,
         "verifiedZero": 0,
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "shield-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500053].actions[skillId=506008].skillId"
     },
     {
@@ -53715,7 +53595,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -53826,23 +53706,23 @@
           "verified-zero": 2
         },
         "healing": {
-          "verified-zero": 3
+          "verified-zero": 4
         },
         "shield": {
-          "verified-zero": 3
+          "verified-zero": 4
         },
         "dynamicProperty": {
-          "verified-zero": 3
+          "verified-zero": 4
         },
         "tuningMark": {
-          "verified-zero": 3
+          "verified-zero": 4
         }
       },
       "semanticEffects": {
-        "total": 2,
+        "total": 3,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
@@ -54683,7 +54563,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -55590,10 +55470,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 7
+          "applied": 2,
+          "unresolved": 5
         },
         "enemyToughness": {
-          "unresolved": 7
+          "unresolved": 5,
+          "verified-zero": 2
         },
         "actorSp": {
           "unresolved": 5,
@@ -55604,7 +55486,7 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 2
         },
         "shield": {
@@ -55625,12 +55507,7 @@
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5",
-        "nested-effect-wrapper-semantics-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500093].actions[skillId=50009305].skillId"
     },
@@ -56220,25 +56097,22 @@
           "verified-zero": 5
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500097].actions[skillId=50009701].skillId"
     },
     {
@@ -56429,25 +56303,22 @@
           "verified-zero": 5
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500098].actions[skillId=50009801].skillId"
     },
     {
@@ -56528,13 +56399,13 @@
       "sourceSkillName": "水岩卫-合击",
       "controlSkillId": 50009804,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
+      "runtimeStatus": "runnable",
+      "runnable": true,
+      "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
         "durationFrames": 107,
@@ -56634,30 +56505,27 @@
           "verified-zero": 2
         },
         "healing": {
-          "verified-zero": 9
+          "verified-zero": 10
         },
         "shield": {
-          "verified-zero": 9
+          "verified-zero": 10
         },
         "dynamicProperty": {
-          "applied": 6,
+          "applied": 7,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
-          "verified-zero": 8
+          "verified-zero": 10
         }
       },
       "semanticEffects": {
-        "total": 6,
-        "applied": 6,
+        "total": 7,
+        "applied": 7,
         "verifiedZero": 0,
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "pack-lifecycle-semantics-evidence-gap"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500110].actions[skillId=50011001].skillId"
     },
     {
@@ -59637,20 +59505,18 @@
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 3
         }
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500133].actions[skillId=50013302].skillId"
     },
     {
@@ -59828,7 +59694,7 @@
           "verified-zero": 5
         },
         "shield": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "dynamicProperty": {
@@ -59836,21 +59702,18 @@
           "verified-zero": 4
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "shield-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500134].actions[skillId=50013402].skillId"
     },
     {
@@ -63794,7 +63657,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -64248,7 +64111,7 @@
           "verified-zero": 10
         },
         "shield": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 8
         },
         "dynamicProperty": {
@@ -64256,21 +64119,18 @@
           "verified-zero": 8
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 9
         }
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 4,
+        "applied": 7,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "shield-formula-not-literal-function-5",
-        "tuning-mark-max-mismatch"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500206].actions[skillId=50020601].skillId"
     },
     {
@@ -64435,12 +64295,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 8
+          "applied": 2,
+          "unresolved": 7
         },
         "enemyToughness": {
           "applied": 1,
-          "unresolved": 8
+          "unresolved": 7,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 7,
@@ -64451,7 +64312,7 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "shield": {
@@ -64461,24 +64322,19 @@
           "verified-zero": 5
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500209].actions[skillId=50020901].skillId"
     },
@@ -66059,12 +65915,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 7
+          "applied": 2,
+          "unresolved": 6
         },
         "enemyToughness": {
           "applied": 1,
-          "unresolved": 7
+          "unresolved": 6,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 6,
@@ -66075,7 +65932,7 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "shield": {
@@ -66085,24 +65942,19 @@
           "verified-zero": 5
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500258].actions[skillId=50025801].skillId"
     },
@@ -66266,12 +66118,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 7
+          "applied": 2,
+          "unresolved": 6
         },
         "enemyToughness": {
           "applied": 1,
-          "unresolved": 7
+          "unresolved": 6,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 6,
@@ -66282,7 +66135,7 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "shield": {
@@ -66292,24 +66145,19 @@
           "verified-zero": 5
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500259].actions[skillId=50025901].skillId"
     },
@@ -66467,12 +66315,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 10
+          "applied": 2,
+          "unresolved": 9
         },
         "enemyToughness": {
           "applied": 1,
-          "unresolved": 10
+          "unresolved": 9,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 9,
@@ -66483,7 +66332,7 @@
           "verified-zero": 2
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         },
         "shield": {
@@ -66493,24 +66342,19 @@
           "verified-zero": 5
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "tuning-mark-max-mismatch",
-        "heal-formula-not-literal-function-5"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500260].actions[skillId=50026001].skillId"
     },
@@ -66694,25 +66538,22 @@
           "verified-zero": 5
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500261].actions[skillId=50026102].skillId"
     },
     {
@@ -66903,25 +66744,22 @@
           "verified-zero": 5
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500262].actions[skillId=50026202].skillId"
     },
     {
@@ -67112,25 +66950,22 @@
           "verified-zero": 5
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500263].actions[skillId=50026302].skillId"
     },
     {
@@ -68126,20 +67961,19 @@
           "verified-zero": 4
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 3
         }
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "tuning-mark-max-mismatch"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500313].actions[skillId=50031302].skillId"
     },
@@ -69314,8 +69148,8 @@
           "unresolved": 5
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 5
+          "unresolved": 5,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 5,
@@ -69514,8 +69348,8 @@
           "unresolved": 5
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 5
+          "unresolved": 5,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 5,
@@ -69693,7 +69527,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -69712,12 +69546,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 2,
-          "unresolved": 15
+          "applied": 3,
+          "unresolved": 14
         },
         "enemyToughness": {
-          "applied": 2,
-          "unresolved": 15
+          "applied": 3,
+          "unresolved": 14
         },
         "actorSp": {
           "unresolved": 14,
@@ -69748,10 +69582,7 @@
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500360].actions[skillId=50036001].skillId"
     },
@@ -70515,10 +70346,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 5
+          "applied": 1,
+          "unresolved": 4
         },
         "enemyToughness": {
-          "unresolved": 5
+          "unresolved": 4,
+          "verified-zero": 1
         },
         "actorSp": {
           "unresolved": 4,
@@ -70529,36 +70362,30 @@
           "verified-zero": 1
         },
         "healing": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 5
         },
         "shield": {
           "verified-zero": 6
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 4
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 5
         }
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 1,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "tuning-mark-max-mismatch",
-        "property-formula-not-literal-function-5",
-        "heal-formula-not-literal-function-5"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500399].actions[skillId=50039901].skillId"
     },
@@ -70703,7 +70530,7 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -70747,20 +70574,19 @@
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 2
         }
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "tuning-mark-max-mismatch"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500467].actions[skillId=50046701].skillId"
     },
@@ -70949,20 +70775,19 @@
           "verified-zero": 3
         },
         "tuningMark": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 2
         }
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "tuning-mark-max-mismatch"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500468].actions[skillId=50046801].skillId"
     },
@@ -71771,71 +71596,6 @@
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=204]"
     },
     {
-      "identity": "actor|107002|10700222|0|10700222",
-      "ownerKind": "actor",
-      "ownerId": 107002,
-      "ownerName": "米砂",
-      "actionKind": "star-carry",
-      "sourceSkillId": 10700222,
-      "sourceSkillName": "林隙留影",
-      "controlSkillId": 10700222,
-      "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
-      "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
-      "timing": {
-        "status": "applied",
-        "durationFrames": 150,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
-        "variantModelStatus": "resolved"
-      },
-      "variants": {
-        "status": "not-applicable",
-        "total": 0
-      },
-      "specialResource": {
-        "status": "not-applicable"
-      },
-      "dimensions": {
-        "enemyHp": {
-          "unresolved": 1
-        },
-        "enemyToughness": {
-          "unresolved": 1
-        },
-        "actorSp": {
-          "verified-zero": 1
-        },
-        "kiboSp": {
-          "verified-zero": 1
-        },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
-      },
-      "semanticEffects": {
-        "total": 0,
-        "applied": 0,
-        "verifiedZero": 0,
-        "unresolved": 0
-      },
-      "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5"
-      ],
-      "sourceIdentity": "characters.items[id=107002].skillSlots[skillId=10700222]"
-    },
-    {
       "identity": "actor|108001|10800101|1|10800110",
       "ownerKind": "actor",
       "ownerId": 108001,
@@ -71953,10 +71713,8 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "tuning-mark-max-mismatch",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "characters.items[id=108002].skillSlots[group=ground,slot=2]"
     },
@@ -72181,12 +71939,13 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 2,
-          "unresolved": 7
+          "applied": 4,
+          "unresolved": 5
         },
         "enemyToughness": {
           "applied": 2,
-          "unresolved": 7
+          "unresolved": 5,
+          "verified-zero": 2
         },
         "actorSp": {
           "applied": 2,
@@ -72221,14 +71980,10 @@
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "base-function-unverified",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "effect-combine-semantics-unresolved",
-        "heal-formula-not-literal-function-5",
         "normal-attack-input-segment-duration-unresolved"
       ],
       "sourceIdentity": "characters.items[id=112002].skillSlots[group=backup,skillId=11200203]"
@@ -72491,196 +72246,6 @@
         "selected-control-variant-has-no-runnable-hit"
       ],
       "sourceIdentity": "characters.items[id=199003].skillSlots[group=ground,slot=2]"
-    },
-    {
-      "identity": "kibo|500052|506008|0|506008",
-      "ownerKind": "kibo",
-      "ownerId": 500052,
-      "ownerName": "穿甲蜥",
-      "actionKind": "active",
-      "sourceSkillId": 506008,
-      "sourceSkillName": "岩固之盾",
-      "controlSkillId": 506008,
-      "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
-      "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
-      "timing": {
-        "status": "applied",
-        "durationFrames": 105,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
-        "variantModelStatus": "variant-condition-not-yet-modeled"
-      },
-      "variants": {
-        "status": "not-applicable",
-        "total": 0
-      },
-      "specialResource": {
-        "status": "not-applicable"
-      },
-      "dimensions": {
-        "enemyHp": {
-          "unresolved": 2
-        },
-        "enemyToughness": {
-          "unresolved": 2
-        },
-        "actorSp": {
-          "unresolved": 2
-        },
-        "kiboSp": {
-          "unresolved": 2
-        },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
-      },
-      "semanticEffects": {
-        "total": 0,
-        "applied": 0,
-        "verifiedZero": 0,
-        "unresolved": 0
-      },
-      "settlement": null,
-      "reasons": [
-        "shield-formula-not-literal-function-5"
-      ],
-      "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500052].actions[skillId=506008].skillId"
-    },
-    {
-      "identity": "kibo|500053|506008|0|506008",
-      "ownerKind": "kibo",
-      "ownerId": 500053,
-      "ownerName": "钻山蜥",
-      "actionKind": "active",
-      "sourceSkillId": 506008,
-      "sourceSkillName": "岩固之盾",
-      "controlSkillId": 506008,
-      "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
-      "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
-      "timing": {
-        "status": "applied",
-        "durationFrames": 105,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
-        "variantModelStatus": "variant-condition-not-yet-modeled"
-      },
-      "variants": {
-        "status": "not-applicable",
-        "total": 0
-      },
-      "specialResource": {
-        "status": "not-applicable"
-      },
-      "dimensions": {
-        "enemyHp": {
-          "unresolved": 2
-        },
-        "enemyToughness": {
-          "unresolved": 2
-        },
-        "actorSp": {
-          "unresolved": 2
-        },
-        "kiboSp": {
-          "unresolved": 2
-        },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
-      },
-      "semanticEffects": {
-        "total": 0,
-        "applied": 0,
-        "verifiedZero": 0,
-        "unresolved": 0
-      },
-      "settlement": null,
-      "reasons": [
-        "shield-formula-not-literal-function-5"
-      ],
-      "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500053].actions[skillId=506008].skillId"
-    },
-    {
-      "identity": "kibo|500098|50009804|0|50009804",
-      "ownerKind": "kibo",
-      "ownerId": 500098,
-      "ownerName": "水岩卫",
-      "actionKind": "break",
-      "sourceSkillId": 50009804,
-      "sourceSkillName": "水岩卫-合击",
-      "controlSkillId": 50009804,
-      "selectedSubSkillIndex": 0,
-      "runtimeStatus": "static-evidence-gap",
-      "runnable": false,
-      "rawRuntimeReady": false,
-      "schedulable": true,
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
-      "mechanicsClassification": "unresolved",
-      "timing": {
-        "status": "applied",
-        "durationFrames": 107,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
-        "planningDurationFrames": null,
-        "variantModelStatus": "resolved"
-      },
-      "variants": {
-        "status": "not-applicable",
-        "total": 0
-      },
-      "specialResource": {
-        "status": "not-applicable"
-      },
-      "dimensions": {
-        "enemyHp": {
-          "applied": 1,
-          "unresolved": 1
-        },
-        "enemyToughness": {
-          "applied": 1,
-          "unresolved": 1
-        },
-        "actorSp": {
-          "unresolved": 1,
-          "verified-zero": 1
-        },
-        "kiboSp": {
-          "unresolved": 1,
-          "verified-zero": 1
-        },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
-      },
-      "semanticEffects": {
-        "total": 0,
-        "applied": 0,
-        "verifiedZero": 0,
-        "unresolved": 0
-      },
-      "settlement": null,
-      "reasons": [
-        "trigger-frame-missing"
-      ],
-      "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500098].actions[skillId=50009804].skillId"
     }
   ],
   "recoveryCoverage": [

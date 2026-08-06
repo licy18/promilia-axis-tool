@@ -3,17 +3,17 @@
 - 包：`azpr-tc-2026-07-18`
 - 公开动作分母：563
 - 已关联：563
-- 场景可运行：546
-- 来源静态可应用：437
-- 来源运行时依赖：109
-- 零距离场景补全：148
-- 来源静态证据缺口：17
+- 场景可运行：550
+- 来源静态可应用：440
+- 来源运行时依赖：110
+- 零距离场景补全：152
+- 来源静态证据缺口：13
 - 明确零：0
-- 未解析：17
-- 真实命中节点：2502
-- 公开动作变体：593（未解析 47）
+- 未解析：13
+- 真实命中节点：2504
+- 公开动作变体：593（未解析 43）
 - 非零回能元素：667（未关联 464）
-- 零距离投射物命中：2418（仍缺发射帧 73、仍缺公式 49、仍缺目标 0）
+- 零距离投射物命中：2424（仍缺发射帧 73、仍缺公式 10、仍缺目标 0）
 - 普攻输入链：20 条 / 95 个输入段（可运行 80，未解析 15）
 - 普攻输入时序：已确认 78，未确认 17
 
@@ -52,12 +52,12 @@
 | actor | normal-attack | 20 | 20 | 19 | 0 | 1 | 93 |
 | actor | perfect-parry | 20 | 20 | 20 | 0 | 0 | 10 |
 | actor | plunging-attack | 20 | 20 | 20 | 0 | 0 | 22 |
-| actor | star-carry | 17 | 17 | 14 | 0 | 3 | 74 |
+| actor | star-carry | 17 | 17 | 15 | 0 | 2 | 74 |
 | actor | star-combo | 20 | 20 | 20 | 0 | 0 | 20 |
 | actor | star-skill | 20 | 20 | 20 | 0 | 0 | 140 |
 | actor | ultimate | 20 | 20 | 20 | 0 | 0 | 139 |
-| kibo | active | 122 | 122 | 120 | 0 | 2 | 998 |
-| kibo | break | 122 | 122 | 121 | 0 | 1 | 122 |
+| kibo | active | 122 | 122 | 122 | 0 | 0 | 998 |
+| kibo | break | 122 | 122 | 122 | 0 | 0 | 124 |
 | kibo | signature | 122 | 122 | 122 | 0 | 0 | 678 |
 
 ## 未解析动作
@@ -71,14 +71,13 @@
 - `actor|107001|10700101|6|10700115` 西芙莉雅 / dodge-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-relation-notDelElementDataList-unresolved
 - `actor|107001|10700121|0|10700121` 西芙莉雅 / star-carry / 余音之痕: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|107002|10700201|2|10700215` 米砂 / dodge-attack / 轻语: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|107002|10700222|0|10700222` 米砂 / star-carry / 林隙留影: base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, heal-formula-not-literal-function-5
 - `actor|108001|10800101|1|10800110` 忒拉拉 / charged-attack / 狼行焰影: selected-control-variant-has-no-three-value-elements
-- `actor|108002|10800201|1|10800210` 璐璐卡 / charged-attack / 涟漪之舞: trigger-frame-missing, projectile-impact-frame-runtime-dependent, tuning-mark-max-mismatch, effect-trigger-frame-missing, effect-target-unresolved, property-formula-not-literal-function-5
+- `actor|108002|10800201|1|10800210` 璐璐卡 / charged-attack / 涟漪之舞: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|108002|10800201|4|10800215` 璐璐卡 / dodge-attack / 涟漪之舞: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|108002|10800222|0|10800222` 璐璐卡 / star-carry / 幽浪之声: selected-control-variant-has-no-runnable-hit
 - `actor|108003|10800301|1|10800310` 米蒂 / charged-attack / 破空箭: selected-control-variant-has-no-runnable-hit
 - `actor|108003|10800301|6|10800315` 米蒂 / dodge-attack / 破空箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|112002|11200201|0|11200203` 艾妮丝 / normal-attack / 慈爱的惩戒: trigger-frame-missing, base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, effect-combine-semantics-unresolved, heal-formula-not-literal-function-5, normal-attack-input-segment-duration-unresolved
+- `actor|112002|11200201|0|11200203` 艾妮丝 / normal-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, effect-combine-semantics-unresolved, normal-attack-input-segment-duration-unresolved
 - `actor|112002|11200201|1|11200210` 艾妮丝 / charged-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200201|3|11200215` 艾妮丝 / dodge-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200222|1|11200225` 艾妮丝 / limit-counter / 后勤保障: trigger-frame-missing, projectile-impact-frame-runtime-dependent
@@ -114,8 +113,6 @@
 - `kibo|500047|505014|0|505014` 木灵朵 / active / 花绽飞弹: trigger-frame-missing
 - `kibo|500048|505018|0|505018` 蔓音花 / active / 种子风暴: trigger-frame-missing
 - `kibo|500051|506001|0|506001` 岩甲蜥 / active / 岩锥: trigger-frame-missing
-- `kibo|500052|506008|0|506008` 穿甲蜥 / active / 岩固之盾: shield-formula-not-literal-function-5
-- `kibo|500053|506008|0|506008` 钻山蜥 / active / 岩固之盾: shield-formula-not-literal-function-5
 - `kibo|500057|507001|0|507001` 猪古力 / active / 雷球: trigger-frame-missing
 - `kibo|500064|504001|0|504001` 柔风鹰 / active / 风刃: trigger-frame-missing
 - `kibo|500067|502006|0|502006` 飞鳐 / active / 水弹散射: trigger-frame-missing

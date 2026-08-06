@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "2af3cc7079e12421",
-  "manifestsHash": "7c8d802de216d14a",
-  "gapLedgerHash": "77deb8458534ada3",
-  "bindingMatrixHash": "47857e778be98007",
-  "sourceSnapshotHash": "fd1e0c09ddd36383",
+  "rosterHash": "737cbf7d852a3962",
+  "manifestsHash": "50f3649b490bdb49",
+  "gapLedgerHash": "7617b0e0c5207205",
+  "bindingMatrixHash": "85c9172903c8fac8",
+  "sourceSnapshotHash": "7fbd2d35f3432b62",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -27,7 +27,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "35068914c9f98c03"
+      "manifestHash": "364512f400c4e7bc"
     },
     {
       "objectKind": "character",
@@ -52,7 +52,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "4b54979110627c4a"
+      "manifestHash": "c89c5a2f014b0334"
     },
     {
       "objectKind": "character",
@@ -1739,11 +1739,8 @@
       "displayName": "怯影之翼",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "kibo-visual-acceptance-evidence-blocked",
-        "kibo-headless-maturity-not-ready"
-      ],
-      "manifestHash": "8a5497eef68f7c82"
+      "blockerCodes": [],
+      "manifestHash": "3191287c7df1a4bf"
     },
     {
       "objectKind": "kibo",
@@ -2685,7 +2682,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "2af3cc7079e12421",
+    "rosterHash": "737cbf7d852a3962",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24593,7 +24590,7 @@
       "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "47857e778be98007"
+    "bindingMatrixHash": "85c9172903c8fac8"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44107,7 +44104,7 @@
       "set-skill": 11
     },
     "optimizationReadyTotal": 210,
-    "gameplayBlockingGapCount": 42,
+    "gameplayBlockingGapCount": 40,
     "bindingQualifiedEdgeCount": 11,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44190,5 +44187,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "cc3acf62861a8c80"
+  "catalogHash": "ffdde0ee0e89287c"
 }

@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-timing-coverage",
   "status": "verified-combat-action-timing-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "d215cd47acf1f384a17276a9a89a806a2dceacfad63201e424831eef35ef8750",
+  "packageHash": "1a8bc794ec138e471a2dabab1aa45c8a81d8179d7bd721b0007d15936510db02",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "publicActionCount": 563,
@@ -38493,10 +38493,11 @@
         "conversion": "234 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 56,
+        "firstFrame": 0,
         "lastFrame": 158,
         "status": "applied",
         "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50002616.asset/MonoBehaviour/skill_control_50002616__-7501972194768759180.json#skillResourceMaps[0].elements[14]|zero-distance-skill-execution",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50002616.asset/MonoBehaviour/MonoBehaviour_2039487676962256575__2039487676962256575.json#startFrame|targetType",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50002616.asset/MonoBehaviour/MonoBehaviour_-1575670089746008385__-1575670089746008385.json#startFrame|targetType",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50002616.asset/MonoBehaviour/MonoBehaviour_-8318920353857718593__-8318920353857718593.json#startFrame|targetType",
@@ -38512,6 +38513,7 @@
         ]
       },
       "hitFrames": [
+        0,
         56,
         78,
         81,
@@ -43371,16 +43373,12 @@
         "conversion": "104 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 27,
-        "lastFrame": 27,
-        "status": "applied",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50004604.asset/MonoBehaviour/MonoBehaviour_-4547823260084065857__-4547823260084065857.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50004602.asset/MonoBehaviour/ast_bullet_50004602__-9204051919740846884.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50004602.asset/MonoBehaviour/ast_bullet_50004602__-9204051919740846884.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId"
-        ]
+        "firstFrame": null,
+        "lastFrame": null,
+        "status": "unresolved",
+        "sourceIdentities": []
       },
-      "hitFrames": [
-        27
-      ],
+      "hitFrames": [],
       "windows": [],
       "cooldown": {
         "cooldownMs": 24000,
@@ -43603,16 +43601,12 @@
         "conversion": "136 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 22,
-        "lastFrame": 22,
-        "status": "applied",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50004705.asset/MonoBehaviour/MonoBehaviour_105420496612481529__105420496612481529.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50004702.asset/MonoBehaviour/ast_bullet_50004702__3372901423698890609.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50004702.asset/MonoBehaviour/ast_bullet_50004702__3372901423698890609.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId"
-        ]
+        "firstFrame": null,
+        "lastFrame": null,
+        "status": "unresolved",
+        "sourceIdentities": []
       },
-      "hitFrames": [
-        22
-      ],
+      "hitFrames": [],
       "windows": [],
       "cooldown": {
         "cooldownMs": 24000,
@@ -43823,16 +43817,12 @@
         "conversion": "97 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 22,
-        "lastFrame": 22,
-        "status": "applied",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50004805.asset/MonoBehaviour/MonoBehaviour_4244938349015464548__4244938349015464548.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50004802.asset/MonoBehaviour/ast_bullet_50004802__174614390287438552.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50004802.asset/MonoBehaviour/ast_bullet_50004802__174614390287438552.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId"
-        ]
+        "firstFrame": null,
+        "lastFrame": null,
+        "status": "unresolved",
+        "sourceIdentities": []
       },
-      "hitFrames": [
-        22
-      ],
+      "hitFrames": [],
       "windows": [],
       "cooldown": {
         "cooldownMs": 24000,
@@ -47666,12 +47656,18 @@
         "conversion": "161 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": null,
-        "lastFrame": null,
-        "status": "unresolved",
-        "sourceIdentities": []
+        "firstFrame": 0,
+        "lastFrame": 0,
+        "status": "applied",
+        "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50006601.asset/MonoBehaviour/skill_control_50006601__-7802215928654020246.json#skillResourceMaps[0].elements[0]|zero-distance-skill-execution",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50006601.asset/MonoBehaviour/skill_control_50006601__-7802215928654020246.json#skillResourceMaps[0].elements[1]|zero-distance-skill-execution"
+        ]
       },
-      "hitFrames": [],
+      "hitFrames": [
+        0,
+        0
+      ],
       "windows": [],
       "cooldown": {
         "cooldownMs": 24000,
@@ -50130,14 +50126,16 @@
         "conversion": "120 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 40,
+        "firstFrame": 0,
         "lastFrame": 40,
         "status": "applied",
         "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50008104.asset/MonoBehaviour/skill_control_50008104__6365458493819851550.json#skillResourceMaps[0].elements[2]|zero-distance-skill-execution",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50008104.asset/MonoBehaviour/MonoBehaviour_-7413618094285088699__-7413618094285088699.json#startFrame|targetType"
         ]
       },
       "hitFrames": [
+        0,
         40
       ],
       "windows": [],
@@ -54387,12 +54385,16 @@
         "conversion": "107 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": null,
-        "lastFrame": null,
-        "status": "unresolved",
-        "sourceIdentities": []
+        "firstFrame": 0,
+        "lastFrame": 0,
+        "status": "applied",
+        "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50009804.asset/MonoBehaviour/skill_control_50009804__7091064864035247593.json#skillResourceMaps[0].elements[1]|zero-distance-skill-execution"
+        ]
       },
-      "hitFrames": [],
+      "hitFrames": [
+        0
+      ],
       "windows": [],
       "cooldown": {
         "cooldownMs": 5000,
@@ -67299,12 +67301,18 @@
         "conversion": "138 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": null,
-        "lastFrame": null,
-        "status": "unresolved",
-        "sourceIdentities": []
+        "firstFrame": 0,
+        "lastFrame": 0,
+        "status": "applied",
+        "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50018602.asset/MonoBehaviour/skill_control_50018602__-2053194993282615807.json#skillResourceMaps[0].elements[0]|zero-distance-skill-execution",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50018602.asset/MonoBehaviour/skill_control_50018602__-2053194993282615807.json#skillResourceMaps[0].elements[3]|zero-distance-skill-execution"
+        ]
       },
-      "hitFrames": [],
+      "hitFrames": [
+        0,
+        0
+      ],
       "windows": [],
       "cooldown": {
         "cooldownMs": 24000,
@@ -79565,16 +79573,12 @@
         "conversion": "100 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 39,
-        "lastFrame": 39,
-        "status": "applied",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50035701.asset/MonoBehaviour/MonoBehaviour_-9093355669788082148__-9093355669788082148.json#startFrame|targetType"
-        ]
+        "firstFrame": null,
+        "lastFrame": null,
+        "status": "unresolved",
+        "sourceIdentities": []
       },
-      "hitFrames": [
-        39
-      ],
+      "hitFrames": [],
       "windows": [],
       "cooldown": {
         "cooldownMs": 24000,
@@ -79785,20 +79789,12 @@
         "conversion": "316 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 40,
-        "lastFrame": 220,
-        "status": "applied",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50035801.asset/MonoBehaviour/MonoBehaviour_-3660652881672481210__-3660652881672481210.json#startFrame|targetType",
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50035801.asset/MonoBehaviour/MonoBehaviour_3667377745272165958__3667377745272165958.json#startFrame|targetType",
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50035801.asset/MonoBehaviour/MonoBehaviour_6435621636753118790__6435621636753118790.json#startFrame|targetType"
-        ]
+        "firstFrame": null,
+        "lastFrame": null,
+        "status": "unresolved",
+        "sourceIdentities": []
       },
-      "hitFrames": [
-        40,
-        130,
-        220
-      ],
+      "hitFrames": [],
       "windows": [],
       "cooldown": {
         "cooldownMs": 24000,
@@ -80378,10 +80374,11 @@
         "conversion": "453 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 53,
+        "firstFrame": 0,
         "lastFrame": 215,
         "status": "applied",
         "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036001.asset/MonoBehaviour/skill_control_50036001__1742972783783325707.json#skillResourceMaps[0].elements[13]|zero-distance-skill-execution",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036001.asset/MonoBehaviour/MonoBehaviour_5242897146301063839__5242897146301063839.json#startFrame|targetType",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036001.asset/MonoBehaviour/MonoBehaviour_-8748681151205530977__-8748681151205530977.json#startFrame|targetType",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036001.asset/MonoBehaviour/MonoBehaviour_-541203529517555041__-541203529517555041.json#startFrame|targetType",
@@ -80395,6 +80392,7 @@
         ]
       },
       "hitFrames": [
+        0,
         53,
         60,
         80,
@@ -82566,12 +82564,16 @@
         "conversion": "100 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": null,
-        "lastFrame": null,
-        "status": "unresolved",
-        "sourceIdentities": []
+        "firstFrame": 0,
+        "lastFrame": 0,
+        "status": "applied",
+        "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50046701.asset/MonoBehaviour/skill_control_50046701__3383498511271564554.json#skillResourceMaps[0].elements[5]|zero-distance-skill-execution"
+        ]
       },
-      "hitFrames": [],
+      "hitFrames": [
+        0
+      ],
       "windows": [],
       "cooldown": {
         "cooldownMs": 16000,
@@ -153651,10 +153653,11 @@
         "conversion": "234 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 56,
+        "firstFrame": 0,
         "lastFrame": 158,
         "status": "applied",
         "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50002616.asset/MonoBehaviour/skill_control_50002616__-7501972194768759180.json#skillResourceMaps[0].elements[14]|zero-distance-skill-execution",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50002616.asset/MonoBehaviour/MonoBehaviour_2039487676962256575__2039487676962256575.json#startFrame|targetType",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50002616.asset/MonoBehaviour/MonoBehaviour_-1575670089746008385__-1575670089746008385.json#startFrame|targetType",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50002616.asset/MonoBehaviour/MonoBehaviour_-8318920353857718593__-8318920353857718593.json#startFrame|targetType",
@@ -160330,12 +160333,10 @@
         "conversion": "104 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 27,
-        "lastFrame": 27,
-        "status": "applied",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50004604.asset/MonoBehaviour/MonoBehaviour_-4547823260084065857__-4547823260084065857.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50004602.asset/MonoBehaviour/ast_bullet_50004602__-9204051919740846884.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50004602.asset/MonoBehaviour/ast_bullet_50004602__-9204051919740846884.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId"
-        ]
+        "firstFrame": null,
+        "lastFrame": null,
+        "status": "unresolved",
+        "sourceIdentities": []
       },
       "windows": [],
       "cooldown": {
@@ -160518,12 +160519,10 @@
         "conversion": "136 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 22,
-        "lastFrame": 22,
-        "status": "applied",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50004705.asset/MonoBehaviour/MonoBehaviour_105420496612481529__105420496612481529.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50004702.asset/MonoBehaviour/ast_bullet_50004702__3372901423698890609.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50004702.asset/MonoBehaviour/ast_bullet_50004702__3372901423698890609.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId"
-        ]
+        "firstFrame": null,
+        "lastFrame": null,
+        "status": "unresolved",
+        "sourceIdentities": []
       },
       "windows": [],
       "cooldown": {
@@ -160700,12 +160699,10 @@
         "conversion": "97 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 22,
-        "lastFrame": 22,
-        "status": "applied",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50004805.asset/MonoBehaviour/MonoBehaviour_4244938349015464548__4244938349015464548.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50004802.asset/MonoBehaviour/ast_bullet_50004802__174614390287438552.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50004802.asset/MonoBehaviour/ast_bullet_50004802__174614390287438552.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId"
-        ]
+        "firstFrame": null,
+        "lastFrame": null,
+        "status": "unresolved",
+        "sourceIdentities": []
       },
       "windows": [],
       "cooldown": {
@@ -165478,10 +165475,13 @@
         "conversion": "161 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": null,
-        "lastFrame": null,
-        "status": "unresolved",
-        "sourceIdentities": []
+        "firstFrame": 0,
+        "lastFrame": 0,
+        "status": "applied",
+        "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50006601.asset/MonoBehaviour/skill_control_50006601__-7802215928654020246.json#skillResourceMaps[0].elements[0]|zero-distance-skill-execution",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50006601.asset/MonoBehaviour/skill_control_50006601__-7802215928654020246.json#skillResourceMaps[0].elements[1]|zero-distance-skill-execution"
+        ]
       },
       "windows": [],
       "cooldown": {
@@ -168870,10 +168870,11 @@
         "conversion": "120 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 40,
+        "firstFrame": 0,
         "lastFrame": 40,
         "status": "applied",
         "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50008104.asset/MonoBehaviour/skill_control_50008104__6365458493819851550.json#skillResourceMaps[0].elements[2]|zero-distance-skill-execution",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50008104.asset/MonoBehaviour/MonoBehaviour_-7413618094285088699__-7413618094285088699.json#startFrame|targetType"
         ]
       },
@@ -174625,10 +174626,12 @@
         "conversion": "107 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": null,
-        "lastFrame": null,
-        "status": "unresolved",
-        "sourceIdentities": []
+        "firstFrame": 0,
+        "lastFrame": 0,
+        "status": "applied",
+        "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50009804.asset/MonoBehaviour/skill_control_50009804__7091064864035247593.json#skillResourceMaps[0].elements[1]|zero-distance-skill-execution"
+        ]
       },
       "windows": [],
       "cooldown": {
@@ -189912,10 +189915,13 @@
         "conversion": "138 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": null,
-        "lastFrame": null,
-        "status": "unresolved",
-        "sourceIdentities": []
+        "firstFrame": 0,
+        "lastFrame": 0,
+        "status": "applied",
+        "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50018602.asset/MonoBehaviour/skill_control_50018602__-2053194993282615807.json#skillResourceMaps[0].elements[0]|zero-distance-skill-execution",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50018602.asset/MonoBehaviour/skill_control_50018602__-2053194993282615807.json#skillResourceMaps[0].elements[3]|zero-distance-skill-execution"
+        ]
       },
       "windows": [],
       "cooldown": {
@@ -205681,12 +205687,10 @@
         "conversion": "100 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 39,
-        "lastFrame": 39,
-        "status": "applied",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50035701.asset/MonoBehaviour/MonoBehaviour_-9093355669788082148__-9093355669788082148.json#startFrame|targetType"
-        ]
+        "firstFrame": null,
+        "lastFrame": null,
+        "status": "unresolved",
+        "sourceIdentities": []
       },
       "windows": [],
       "cooldown": {
@@ -205863,14 +205867,10 @@
         "conversion": "316 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 40,
-        "lastFrame": 220,
-        "status": "applied",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50035801.asset/MonoBehaviour/MonoBehaviour_-3660652881672481210__-3660652881672481210.json#startFrame|targetType",
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50035801.asset/MonoBehaviour/MonoBehaviour_3667377745272165958__3667377745272165958.json#startFrame|targetType",
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50035801.asset/MonoBehaviour/MonoBehaviour_6435621636753118790__6435621636753118790.json#startFrame|targetType"
-        ]
+        "firstFrame": null,
+        "lastFrame": null,
+        "status": "unresolved",
+        "sourceIdentities": []
       },
       "windows": [],
       "cooldown": {
@@ -206483,10 +206483,11 @@
         "conversion": "453 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 53,
+        "firstFrame": 0,
         "lastFrame": 215,
         "status": "applied",
         "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036001.asset/MonoBehaviour/skill_control_50036001__1742972783783325707.json#skillResourceMaps[0].elements[13]|zero-distance-skill-execution",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036001.asset/MonoBehaviour/MonoBehaviour_5242897146301063839__5242897146301063839.json#startFrame|targetType",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036001.asset/MonoBehaviour/MonoBehaviour_-8748681151205530977__-8748681151205530977.json#startFrame|targetType",
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036001.asset/MonoBehaviour/MonoBehaviour_-541203529517555041__-541203529517555041.json#startFrame|targetType",
@@ -209373,10 +209374,12 @@
         "conversion": "100 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": null,
-        "lastFrame": null,
-        "status": "unresolved",
-        "sourceIdentities": []
+        "firstFrame": 0,
+        "lastFrame": 0,
+        "status": "applied",
+        "sourceIdentities": [
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50046701.asset/MonoBehaviour/skill_control_50046701__3383498511271564554.json#skillResourceMaps[0].elements[5]|zero-distance-skill-execution"
+        ]
       },
       "windows": [],
       "cooldown": {

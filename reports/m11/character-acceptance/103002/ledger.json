@@ -4348,7 +4348,7 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:18:b646295d0a8719b0",
+      "requirementIdentity": "contract:effect:effect:18:e36cdcb16ea3ec6e",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4357,8 +4357,8 @@
         "battle-element-assets.jsonl#path_id=-1498771669867596146"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:e3c0c179ef49de55",
-      "uniqueGapIdentity": "acceptance-gap:e3c0c179ef49de55"
+      "recordIdentity": "acceptance-gap:6096aebc54c0947a",
+      "uniqueGapIdentity": "acceptance-gap:6096aebc54c0947a"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -4460,7 +4460,7 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:53:25b2b6de785a1b8b",
+      "requirementIdentity": "contract:effect:effect:53:e4c5a5a53126b3b5",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4469,8 +4469,8 @@
         "battle-element-assets.jsonl#path_id=-3809486317990090417"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:70bb56a20d6cf0b0",
-      "uniqueGapIdentity": "acceptance-gap:70bb56a20d6cf0b0"
+      "recordIdentity": "acceptance-gap:0d41f8a2bd931c39",
+      "uniqueGapIdentity": "acceptance-gap:0d41f8a2bd931c39"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -6867,6 +6867,20 @@
     },
     {
       "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:53:e4c5a5a53126b3b5",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]",
+        "battle-element-assets.jsonl#path_id=-3809486317990090417"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:0d41f8a2bd931c39",
+      "uniqueGapIdentity": "acceptance-gap:0d41f8a2bd931c39"
+    },
+    {
+      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:hit:10300205|0|elements|10|-7744082854167148367|34|4",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
@@ -8420,6 +8434,20 @@
     },
     {
       "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:18:e36cdcb16ea3ec6e",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-6096481972427987931.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[28]",
+        "battle-element-assets.jsonl#path_id=-1498771669867596146"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:6096aebc54c0947a",
+      "uniqueGapIdentity": "acceptance-gap:6096aebc54c0947a"
+    },
+    {
+      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:9",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
@@ -8705,20 +8733,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:7090936e5bc8e1dd",
       "uniqueGapIdentity": "acceptance-gap:7090936e5bc8e1dd"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:53:25b2b6de785a1b8b",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]",
-        "battle-element-assets.jsonl#path_id=-3809486317990090417"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:70bb56a20d6cf0b0",
-      "uniqueGapIdentity": "acceptance-gap:70bb56a20d6cf0b0"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -10573,20 +10587,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:e1fd78fe58bc7a65",
       "uniqueGapIdentity": "acceptance-gap:e1fd78fe58bc7a65"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:18:b646295d0a8719b0",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-6096481972427987931.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[28]",
-        "battle-element-assets.jsonl#path_id=-1498771669867596146"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:e3c0c179ef49de55",
-      "uniqueGapIdentity": "acceptance-gap:e3c0c179ef49de55"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -18512,7 +18512,7 @@
       "upstream-source-gap": 132
     }
   },
-  "ledgerHash": "a9b5c530b363d10c",
+  "ledgerHash": "9fb5e4f71e944b14",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:source-gap:0090f2ac6f468ecc",

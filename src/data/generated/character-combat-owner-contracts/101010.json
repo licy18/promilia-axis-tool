@@ -6,7 +6,7 @@
   "ownerName": "涂山小玉",
   "recipeIdentity": "actor:101010:character-combat-recipe:v1",
   "recipeHash": "e98bf716a662b1f5f68f21819b48a0dd4f5bbcb27517ef98493bced93a49b04b",
-  "compilerInputHash": "750028f998e6172c93fbbbbf39f338b0fe0003ab236cd618bc53a6fa15e4920d",
+  "compilerInputHash": "5928027e4732b56b2e473f724b143a893ad6e907b84df51d45205d0f0f0fe916",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": false,
   "reachableControlSkillIds": [
@@ -22451,6 +22451,7 @@
               "element": "风",
               "markId": 750,
               "maxStacks": 5,
+              "effectLayerCount": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
               "layerComponentIds": [
@@ -22964,6 +22965,7 @@
               "element": "风",
               "markId": 750,
               "maxStacks": 5,
+              "effectLayerCount": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
               "layerComponentIds": [
@@ -23923,6 +23925,12 @@
                 "to": "0",
                 "relation": "triggerEffectList",
                 "status": "battle-element-source-missing"
+              },
+              {
+                "from": "element:-1567847835636339578",
+                "to": "element:10101010",
+                "relation": "triggerEffectList",
+                "status": "battle-element-source-missing"
               }
             ],
             "appliedNodeCount": 1,
@@ -24252,6 +24260,12 @@
               {
                 "from": "element:-1567847835636339578",
                 "to": "0",
+                "relation": "triggerEffectList",
+                "status": "battle-element-source-missing"
+              },
+              {
+                "from": "element:-1567847835636339578",
+                "to": "element:10101010",
                 "relation": "triggerEffectList",
                 "status": "battle-element-source-missing"
               }
@@ -30524,8 +30538,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -30761,8 +30774,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -33142,6 +33154,7 @@
               "element": "风",
               "markId": 750,
               "maxStacks": 5,
+              "effectLayerCount": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
               "layerComponentIds": [
@@ -33920,6 +33933,7 @@
               "element": "风",
               "markId": 750,
               "maxStacks": 5,
+              "effectLayerCount": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
               "layerComponentIds": [
@@ -34433,6 +34447,7 @@
               "element": "风",
               "markId": 750,
               "maxStacks": 5,
+              "effectLayerCount": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
               "layerComponentIds": [
@@ -37731,8 +37746,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -37968,8 +37982,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -39276,8 +39289,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -39513,8 +39525,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -47924,6 +47935,7 @@
               "element": "风",
               "markId": 750,
               "maxStacks": 5,
+              "effectLayerCount": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
               "layerComponentIds": [
@@ -50897,8 +50909,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -51134,8 +51145,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -52442,8 +52452,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -52679,8 +52688,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -54293,8 +54301,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -54530,8 +54537,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -55838,8 +55844,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -56075,8 +56080,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -58936,8 +58940,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -59173,8 +59176,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -60481,8 +60483,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -60718,8 +60719,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -77543,6 +77543,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -85120,6 +85121,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -85243,6 +85245,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -88296,8 +88299,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -88427,8 +88429,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -91539,6 +91540,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -91686,6 +91688,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -91810,6 +91813,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -95320,8 +95324,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -95451,8 +95454,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -95711,8 +95713,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -95842,8 +95843,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -101305,8 +101305,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -101436,8 +101435,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -101696,8 +101694,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -101827,8 +101824,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -104701,8 +104697,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -104832,8 +104827,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -105092,8 +105086,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -105223,8 +105216,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -108207,8 +108199,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -108338,8 +108329,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -108598,8 +108588,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -108729,8 +108718,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -111512,6 +111500,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -117866,7 +117855,6 @@
           },
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "wrapper-condition-semantics-unresolved",
             "effect-trigger-frame-static-evidence-gap",
             "effect-target-static-evidence-gap"
           ],
@@ -122112,6 +122100,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -122301,6 +122290,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -122480,6 +122470,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -125955,7 +125946,6 @@
           },
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "wrapper-condition-semantics-unresolved",
             "runtime-trigger-projectile-collision-frame",
             "runtime-target-from-projectile-collision"
           ],
@@ -126484,7 +126474,6 @@
           },
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "wrapper-condition-semantics-unresolved",
             "runtime-trigger-projectile-collision-frame",
             "runtime-target-from-projectile-collision"
           ],
@@ -132505,7 +132494,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=101010].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=229]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-119715824990577950__-119715824990577950.json#startFrame|toOwnElementDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1058249236301801642__-1058249236301801642.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[21]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6673499874988910762__-6673499874988910762.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[26]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[27]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-7068593164247836478__-7068593164247836478.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/skill_control_10101027__6614629684779963080.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=4277244978079165007|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/skill_control_10101027__6614629684779963080.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=4277244978079165007"
     }
   },
-  "contractHash": "def6c48723e549eb93267612795299922d4bca66c8fec03c10e0609edf58ffaa",
+  "contractHash": "5b2873a4c4ce5ab26a9e34510fda73c8e8985d3bb7bb1704a06966ea145cbf94",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 7,

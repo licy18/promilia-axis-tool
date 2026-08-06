@@ -66,7 +66,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "8db7b884429dd2dadd2bf4c8cfabf3d9420bca00cea769b354494bddf164a67b",
+    "packageHash": "7af777c8deb1e17c07d0bc569dda3bf6d998a0596b08e6bac5c86e2e5988a41d",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -18960,6 +18960,7 @@
               "element": "风",
               "markId": 750,
               "maxStacks": 5,
+              "effectLayerCount": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
               "layerComponentIds": [
@@ -27642,6 +27643,7 @@
               "element": "风",
               "markId": 750,
               "maxStacks": 5,
+              "effectLayerCount": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
               "layerComponentIds": [
@@ -28155,6 +28157,7 @@
               "element": "风",
               "markId": 750,
               "maxStacks": 5,
+              "effectLayerCount": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
               "layerComponentIds": [
@@ -29114,6 +29117,12 @@
                 "to": "0",
                 "relation": "triggerEffectList",
                 "status": "battle-element-source-missing"
+              },
+              {
+                "from": "element:-1567847835636339578",
+                "to": "element:10101010",
+                "relation": "triggerEffectList",
+                "status": "battle-element-source-missing"
               }
             ],
             "appliedNodeCount": 1,
@@ -29443,6 +29452,12 @@
               {
                 "from": "element:-1567847835636339578",
                 "to": "0",
+                "relation": "triggerEffectList",
+                "status": "battle-element-source-missing"
+              },
+              {
+                "from": "element:-1567847835636339578",
+                "to": "element:10101010",
                 "relation": "triggerEffectList",
                 "status": "battle-element-source-missing"
               }
@@ -35281,8 +35296,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -35518,8 +35532,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -37899,6 +37912,7 @@
               "element": "风",
               "markId": 750,
               "maxStacks": 5,
+              "effectLayerCount": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
               "layerComponentIds": [
@@ -38677,6 +38691,7 @@
               "element": "风",
               "markId": 750,
               "maxStacks": 5,
+              "effectLayerCount": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
               "layerComponentIds": [
@@ -39190,6 +39205,7 @@
               "element": "风",
               "markId": 750,
               "maxStacks": 5,
+              "effectLayerCount": 5,
               "layerDurationMs": 20000,
               "heldReadyMs": 5000,
               "layerComponentIds": [
@@ -42976,8 +42992,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -43213,8 +43228,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -44521,8 +44535,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -44758,8 +44771,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -50957,8 +50969,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -51194,8 +51205,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -52502,8 +52512,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -52739,8 +52748,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -54353,8 +54361,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -54590,8 +54597,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -55898,8 +55904,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -56135,8 +56140,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -58996,8 +59000,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -59233,8 +59236,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -60541,8 +60543,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -60778,8 +60779,7 @@
             "classification": "unresolved",
             "reasons": [
               "sp-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -77602,6 +77602,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -85179,6 +85180,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -85302,6 +85304,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -88355,8 +88358,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -88486,8 +88488,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -91598,6 +91599,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -91745,6 +91747,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -91869,6 +91872,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -95379,8 +95383,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -95510,8 +95513,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -95770,8 +95772,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -95901,8 +95902,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -101364,8 +101364,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -101495,8 +101494,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -101755,8 +101753,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -101886,8 +101883,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -104760,8 +104756,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -104891,8 +104886,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -105151,8 +105145,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -105282,8 +105275,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -108266,8 +108258,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -108397,8 +108388,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -108657,8 +108647,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -108788,8 +108777,7 @@
           "classification": "unresolved",
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -111571,6 +111559,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -117925,7 +117914,6 @@
           },
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "wrapper-condition-semantics-unresolved",
             "effect-trigger-frame-static-evidence-gap",
             "effect-target-static-evidence-gap"
           ],
@@ -122009,6 +121997,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -122198,6 +122187,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -122377,6 +122367,7 @@
             "element": "风",
             "markId": 750,
             "maxStacks": 5,
+            "effectLayerCount": 5,
             "layerDurationMs": 20000,
             "heldReadyMs": 5000,
             "layerComponentIds": [
@@ -126014,7 +126005,6 @@
           },
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "wrapper-condition-semantics-unresolved",
             "runtime-trigger-projectile-collision-frame",
             "runtime-target-from-projectile-collision"
           ],
@@ -126543,7 +126533,6 @@
           },
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "wrapper-condition-semantics-unresolved",
             "runtime-trigger-projectile-collision-frame",
             "runtime-target-from-projectile-collision"
           ],
@@ -132575,9 +132564,9 @@
       "compilerVersion": 3,
       "recipeIdentity": "actor:101010:character-combat-recipe:v1",
       "recipeHash": "e98bf716a662b1f5f68f21819b48a0dd4f5bbcb27517ef98493bced93a49b04b",
-      "compilerInputHash": "750028f998e6172c93fbbbbf39f338b0fe0003ab236cd618bc53a6fa15e4920d",
+      "compilerInputHash": "5928027e4732b56b2e473f724b143a893ad6e907b84df51d45205d0f0f0fe916",
       "recipeContractHash": "ffd5e5fdffb7c64ef19926b6ce2ba2a28b4bf874e5acc1c4a2b9758e6518459a",
-      "ownerContractHash": "def6c48723e549eb93267612795299922d4bca66c8fec03c10e0609edf58ffaa"
+      "ownerContractHash": "5b2873a4c4ce5ab26a9e34510fda73c8e8985d3bb7bb1704a06966ea145cbf94"
     },
     "operators": [
       "public-action-binding",
@@ -133426,10 +133415,14 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
+        "effect:10101042|1|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101042|1|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101042|1|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101042|1|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101042|1|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101042|1|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 2
+      "rawRecordCount": 6
     },
     {
       "recordIdentity": "semantic-gap:0941808e1a31d759df46",
@@ -134258,10 +134251,14 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
+        "effect:10101049|1|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101049|1|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101049|1|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101049|1|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101049|1|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101049|1|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 2
+      "rawRecordCount": 6
     },
     {
       "recordIdentity": "semantic-gap:30857d1eb744aee2f1ce",
@@ -135153,13 +135150,9 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10101042|1|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0"
+        "effect:10101042|1|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 5
+      "rawRecordCount": 1
     },
     {
       "recordIdentity": "semantic-gap:5fca62b0e080c05a66f5",
@@ -135326,13 +135319,9 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10101049|1|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0"
+        "effect:10101049|1|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 5
+      "rawRecordCount": 1
     },
     {
       "recordIdentity": "semantic-gap:6b3339def1f24a3a1397",
@@ -136032,10 +136021,14 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
+        "effect:10101021|0|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101021|0|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101021|0|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101021|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101021|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101021|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 2
+      "rawRecordCount": 6
     },
     {
       "recordIdentity": "semantic-gap:8b449361d6939a508612",
@@ -136293,13 +136286,9 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10101042|0|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0"
+        "effect:10101042|0|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 5
+      "rawRecordCount": 1
     },
     {
       "recordIdentity": "semantic-gap:95d0f08205a7b2756cec",
@@ -136614,13 +136603,9 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10101021|0|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0"
+        "effect:10101021|0|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 5
+      "rawRecordCount": 1
     },
     {
       "recordIdentity": "semantic-gap:aa327433b33330cab213",
@@ -136956,9 +136941,11 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
+        "effect:10101013|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101013|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101013|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 1
+      "rawRecordCount": 3
     },
     {
       "recordIdentity": "semantic-gap:b859cb3d89539c3283bc",
@@ -137151,31 +137138,6 @@
         "actor:101010|control:10101010|sub:1->actor:101010|control:10101010|sub:1->-2323960829737228709->0"
       ],
       "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:c136992dfa89b6144f23",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:-1722401594839030113:unresolved:unresolved",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-1722401594839030113:unresolved:unresolved"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101013|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101013|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0"
-      ],
-      "rawRecordCount": 2
     },
     {
       "recordIdentity": "semantic-gap:c1ab0cfe2bc3fbafa83e",
@@ -137545,10 +137507,14 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
+        "effect:10101042|0|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101042|0|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101042|0|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101042|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101042|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101042|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 2
+      "rawRecordCount": 6
     },
     {
       "recordIdentity": "semantic-gap:d5dc7e408a36f78c311e",
@@ -138251,7 +138217,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "54b2cb1b67b351638af67e0fc4d211d80667addc02eebbb604c9774782a936cf"
+    "deterministicInputHash": "55f98d7720549eefebf646c1ed930e14e9b4b633fcab8cb50fc6938fbb72092b"
   },
-  "profileHash": "0a824ae59cdee45b58ae46f80af95cc26ad6d3b0332efff7bd9113b79112316a"
+  "profileHash": "93b3ff0c3374d05386a71b1c0d51fc38b18e56bec5bdf90ea16292a5285283d0"
 }

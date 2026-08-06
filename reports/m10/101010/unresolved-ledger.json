@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-unresolved-ledger",
   "ownerId": 101010,
-  "profileHash": "0a824ae59cdee45b58ae46f80af95cc26ad6d3b0332efff7bd9113b79112316a",
+  "profileHash": "93b3ff0c3374d05386a71b1c0d51fc38b18e56bec5bdf90ea16292a5285283d0",
   "summary": {
-    "semanticRecordCount": 211,
+    "semanticRecordCount": 210,
     "rawRecordCount": 302,
     "semanticStatusCounts": {
       "not-applicable": 37,
       "runtime-evidence-required": 13,
-      "static-evidence-gap": 161
+      "static-evidence-gap": 160
     },
     "rawStatusCounts": {
       "not-applicable": 37,
@@ -20,10 +20,10 @@
       "gameplay-impacting": 119,
       "not-applicable": 37,
       "unreachable": 22,
-      "wrapper-or-duplicate": 33
+      "wrapper-or-duplicate": 32
     },
     "gameplayImpactingCount": 119,
-    "wrapperOrDuplicateCount": 33,
+    "wrapperOrDuplicateCount": 32,
     "transitionCandidateSupersededCount": 0,
     "unreachableOrNotApplicableCount": 59
   },
@@ -209,10 +209,14 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
+        "effect:10101042|1|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101042|1|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101042|1|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101042|1|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101042|1|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101042|1|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 2
+      "rawRecordCount": 6
     },
     {
       "recordIdentity": "semantic-gap:0941808e1a31d759df46",
@@ -1041,10 +1045,14 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
+        "effect:10101049|1|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101049|1|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101049|1|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101049|1|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101049|1|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101049|1|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 2
+      "rawRecordCount": 6
     },
     {
       "recordIdentity": "semantic-gap:30857d1eb744aee2f1ce",
@@ -1936,13 +1944,9 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10101042|1|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0"
+        "effect:10101042|1|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 5
+      "rawRecordCount": 1
     },
     {
       "recordIdentity": "semantic-gap:5fca62b0e080c05a66f5",
@@ -2109,13 +2113,9 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10101049|1|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0"
+        "effect:10101049|1|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 5
+      "rawRecordCount": 1
     },
     {
       "recordIdentity": "semantic-gap:6b3339def1f24a3a1397",
@@ -2815,10 +2815,14 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
+        "effect:10101021|0|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101021|0|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101021|0|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101021|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101021|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101021|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 2
+      "rawRecordCount": 6
     },
     {
       "recordIdentity": "semantic-gap:8b449361d6939a508612",
@@ -3076,13 +3080,9 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10101042|0|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0"
+        "effect:10101042|0|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 5
+      "rawRecordCount": 1
     },
     {
       "recordIdentity": "semantic-gap:95d0f08205a7b2756cec",
@@ -3397,13 +3397,9 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10101021|0|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0"
+        "effect:10101021|0|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 5
+      "rawRecordCount": 1
     },
     {
       "recordIdentity": "semantic-gap:aa327433b33330cab213",
@@ -3739,9 +3735,11 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
+        "effect:10101013|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101013|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101013|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 1
+      "rawRecordCount": 3
     },
     {
       "recordIdentity": "semantic-gap:b859cb3d89539c3283bc",
@@ -3934,31 +3932,6 @@
         "actor:101010|control:10101010|sub:1->actor:101010|control:10101010|sub:1->-2323960829737228709->0"
       ],
       "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:c136992dfa89b6144f23",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:-1722401594839030113:unresolved:unresolved",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-1722401594839030113:unresolved:unresolved"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101013|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101013|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0"
-      ],
-      "rawRecordCount": 2
     },
     {
       "recordIdentity": "semantic-gap:c1ab0cfe2bc3fbafa83e",
@@ -4328,10 +4301,14 @@
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
+        "effect:10101042|0|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101042|0|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101042|0|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101042|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
+        "effect:10101042|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
         "effect:10101042|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
       ],
-      "rawRecordCount": 2
+      "rawRecordCount": 6
     },
     {
       "recordIdentity": "semantic-gap:d5dc7e408a36f78c311e",
@@ -7151,7 +7128,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-1722401594839030113:unresolved:unresolved",
@@ -7216,7 +7192,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-1722401594839030113:unresolved:unresolved",
@@ -7320,7 +7295,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101021:0:-1722401594839030113:unresolved:unresolved",
@@ -7385,7 +7359,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101021:0:-1722401594839030113:unresolved:unresolved",
@@ -7539,7 +7512,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101021:0:-1722401594839030113:unresolved:unresolved",
@@ -7604,7 +7576,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101021:0:-1722401594839030113:unresolved:unresolved",
@@ -7865,7 +7836,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101042:0:-1722401594839030113:unresolved:unresolved",
@@ -7930,7 +7900,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101042:0:-1722401594839030113:unresolved:unresolved",
@@ -8084,7 +8053,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101042:0:-1722401594839030113:unresolved:unresolved",
@@ -8149,7 +8117,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101042:0:-1722401594839030113:unresolved:unresolved",
@@ -8253,7 +8220,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101042:1:-1722401594839030113:unresolved:unresolved",
@@ -8318,7 +8284,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101042:1:-1722401594839030113:unresolved:unresolved",
@@ -8472,7 +8437,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101042:1:-1722401594839030113:unresolved:unresolved",
@@ -8537,7 +8501,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101042:1:-1722401594839030113:unresolved:unresolved",
@@ -8655,7 +8618,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101049:1:-1722401594839030113:unresolved:unresolved",
@@ -8720,7 +8682,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101049:1:-1722401594839030113:unresolved:unresolved",
@@ -8874,7 +8835,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101049:1:-1722401594839030113:unresolved:unresolved",
@@ -8939,7 +8899,6 @@
       "status": "static-evidence-gap",
       "reasons": [
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "battle-effect:10101049:1:-1722401594839030113:unresolved:unresolved",

@@ -273,7 +273,7 @@ const STATIC_PROPERTY_TABLE_PATHS = Object.freeze(
 const bulletInjectionContractCache = new Map();
 const unityObjectFileIndexCache = new Map();
 let externalGameplayObjectFileIndexCache = null;
-const SUPPORTED_BASE_FUNCTION_IDS = new Set([2, 101]);
+const SUPPORTED_BASE_FUNCTION_IDS = new Set([2, 101, 116, 119]);
 const BATTLE_MECHANIC_SCRIPT_PATH_IDS = Object.freeze({
   layerControl: '-7197581663443823049',
   immuneElement: '-6202966891751637497',
@@ -5298,6 +5298,33 @@ function createControlBinding({
               sourceIdentity: launch.sourceIdentity,
             }))
         : [];
+    if (
+      kiboZeroDistancePolicy &&
+      triggers.length === 0 &&
+      scenarioTriggers.length === 0 &&
+      [1, 2, 3, 4, 5, 6, 7, 9, 10].includes(Number(tree?.damageType))
+    ) {
+      // Approved zero-distance scenario: a kibo damage element without a
+      // behavior track or bullet launch still lands immediately at skill
+      // execution (frame 0) under the frozen zero-distance assumption.
+      scenarioTriggers.push({
+        kind: 'zero-distance-skill-execution',
+        behaviorPathId: null,
+        startFrame: 0,
+        launchFrame: 0,
+        travelFrames: 0,
+        impactFrame: 0,
+        frameCount: 1,
+        bulletId: null,
+        bulletIndex: null,
+        repeatIndex: null,
+        launchIdentity: null,
+        targetKind: 'enemy',
+        sourceEvidenceStatus: 'runtime-dependent',
+        scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+        sourceIdentity: `${relativeExternalPath(control.filePath)}#${ref.sourceIdentity}|zero-distance-skill-execution`,
+      });
+    }
     const baseValues =
       tree?.formulaParams?.formulaParamValues ?? tree?.functionParams ?? [];
     const baseFunctionId = Number(
@@ -5316,10 +5343,25 @@ function createControlBinding({
         return [level, finiteNumberOrNull(effective[0])];
       }).filter(([, value]) => value != null)
     );
+    const threeValueRelevant = Boolean(
+      tree &&
+      ['damageType', 'weakBreakDamageRate', 'recoverSP', 'petRecoverSP'].some(
+        field => Object.hasOwn(tree, field)
+      )
+    );
+    const healElementVerified =
+      Number(tree?.damageType) === 5 &&
+      commonFunctionId === 1 &&
+      [2, 3, 5, 11, 104, 108, 122].includes(baseFunctionId) &&
+      finiteNumberOrNull(ratiosByLevel[1]) != null;
     const issues = [];
     if (uniqueIndexed.length !== 1) issues.push('element-path-not-unique');
     if (!Number.isInteger(elementId)) issues.push('element-id-missing');
-    if (!SUPPORTED_BASE_FUNCTION_IDS.has(baseFunctionId)) {
+    if (
+      threeValueRelevant &&
+      !healElementVerified &&
+      !SUPPORTED_BASE_FUNCTION_IDS.has(baseFunctionId)
+    ) {
       issues.push('base-function-unverified');
     }
     if (commonFunctionId !== 1) issues.push('common-function-unverified');
@@ -5339,6 +5381,7 @@ function createControlBinding({
     const dimensions = classifyHitDimensions({
       tree,
       uniqueElement: uniqueIndexed.length === 1,
+      healElementVerified,
       formulaReady:
         uniqueIndexed.length === 1 &&
         SUPPORTED_BASE_FUNCTION_IDS.has(baseFunctionId) &&
@@ -5346,12 +5389,6 @@ function createControlBinding({
         finiteNumberOrNull(tree?.damageType) != null &&
         finiteNumberOrNull(ratiosByLevel[1]) != null,
     });
-    const threeValueRelevant = Boolean(
-      tree &&
-      ['damageType', 'weakBreakDamageRate', 'recoverSP', 'petRecoverSP'].some(
-        field => Object.hasOwn(tree, field)
-      )
-    );
     const runtimeDimensionReady = Object.values(dimensions).some(
       dimension => dimension.status === 'applied'
     );
@@ -5763,6 +5800,23 @@ function collectBattleElementChildReferences(tree = {}) {
       references.push({ pathId: null, elementIdHint, relation: field });
     }
   }
+  // triggerEffectList/zeroEffectList/finishEffectList entries reference the
+  // child element by `param1` (elementConfigId) alongside the PPtr target.
+  const effectListFields = [
+    'triggerEffectList',
+    'zeroEffectList',
+    'finishEffectList',
+  ];
+  for (const field of effectListFields) {
+    for (const entry of Array.isArray(tree[field]) ? tree[field] : []) {
+      if (entry && Number(entry.effectType) === 0) {
+        const elementIdHint = integerOrNull(entry.param1);
+        if (elementIdHint != null && elementIdHint > 0) {
+          references.push({ pathId: null, elementIdHint, relation: field });
+        }
+      }
+    }
+  }
   return dedupeBy(
     references,
     reference =>
@@ -6119,7 +6173,13 @@ function classifyBattleEffectNode({
   );
 
   if (kind === 'property-change') {
-    if (!literalReady) reasons.push('property-formula-not-literal-function-5');
+    const elementLayerPropertyReady =
+      commonFunctionId === 1 &&
+      baseFunctionId === 120 &&
+      literalValues.length === 12;
+    if (!literalReady && !elementLayerPropertyReady) {
+      reasons.push('property-formula-not-literal-function-5');
+    }
     if (integerOrNull(tree.changeType) !== 0) {
       reasons.push('property-change-type-not-battle-property');
     }
@@ -6153,7 +6213,11 @@ function classifyBattleEffectNode({
       commonFunctionId === 1 &&
       baseFunctionId === 2 &&
       literalValues.length === 12;
-    if (!literalReady && !sourceAtkHealReady) {
+    const maxHpRatioHealReady =
+      commonFunctionId === 1 &&
+      [104, 108, 122].includes(baseFunctionId) &&
+      literalValues.length === 12;
+    if (!literalReady && !sourceAtkHealReady && !maxHpRatioHealReady) {
       reasons.push('heal-formula-not-literal-function-5');
     }
     dimensions.hp = createDimensionClassification(
@@ -6165,7 +6229,13 @@ function classifyBattleEffectNode({
     kind === 'shield' ||
     (kind === 'damage' && Number(tree.damageType) === 11)
   ) {
-    if (!literalReady) reasons.push('shield-formula-not-literal-function-5');
+    const maxHpRatioShieldReady =
+      [1, 104, 108].includes(commonFunctionId) &&
+      baseFunctionId === 12 &&
+      literalValues.length === 12;
+    if (!literalReady && !maxHpRatioShieldReady) {
+      reasons.push('shield-formula-not-literal-function-5');
+    }
     dimensions.shield = createDimensionClassification(
       reasons.length ? 'unresolved' : literalZero ? 'verified-zero' : 'applied',
       reasons,
@@ -6215,6 +6285,12 @@ function classifyBattleEffectNode({
         [],
         'elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList'
       );
+    } else if (Number(tree.sustainElement) === 0) {
+      // Leaf marker packs (e.g. 标记元素) only register the element id on the
+      // target; they produce no three-value delta, so keep them non-blocking.
+      dimensions.mark = createDimensionClassification('verified-zero', [
+        'marker-leaf-does-not-write-mark',
+      ]);
     } else {
       reasons.push('pack-lifecycle-runtime-unimplemented');
       dimensions.mark = createDimensionClassification(
@@ -6511,6 +6587,8 @@ function createControlRuntimeEffectBinding({
           'additionalHitElementDataList',
           'triggerEffectList',
           'layerInfoList',
+          'zeroEffectList',
+          'finishEffectList',
         ].includes(edge.relation)
     )
   ) {
@@ -6971,7 +7049,12 @@ function positiveIntegerOrNull(value) {
   return Number.isInteger(number) && number > 0 ? number : null;
 }
 
-function classifyHitDimensions({ tree, uniqueElement, formulaReady }) {
+function classifyHitDimensions({
+  tree,
+  uniqueElement,
+  healElementVerified = false,
+  formulaReady,
+}) {
   if (!uniqueElement || !tree) {
     return Object.fromEntries(
       ['hp', 'toughness', 'actorSp', 'kiboSp'].map(key => [
@@ -6984,6 +7067,20 @@ function classifyHitDimensions({ tree, uniqueElement, formulaReady }) {
   }
   const damageType = finiteNumberOrNull(tree.damageType);
   const weakBreakDamageRate = finiteNumberOrNull(tree.weakBreakDamageRate);
+  if (damageType === 5) {
+    return {
+      hp: healElementVerified
+        ? createDimensionClassification('applied', [], 'formulaParams')
+        : createDimensionClassification('unresolved', [
+            'heal-formula-not-literal-function-5',
+          ]),
+      toughness: createDimensionClassification('verified-zero', [
+        'heal-element-no-toughness',
+      ]),
+      actorSp: classifyExplicitNumericField(tree, 'recoverSP'),
+      kiboSp: classifyExplicitNumericField(tree, 'petRecoverSP'),
+    };
+  }
   const hp =
     damageType === 8
       ? createDimensionClassification(
@@ -7542,10 +7639,15 @@ function resolveTuningProfileForBattleElement(
 
 function createTuningMarkNodeContract(tree, profile) {
   const layers = tree.layerInfoList ?? [];
-  const maxStacks = Math.max(
+  const effectLayerCount = Math.max(
     0,
     ...layers.map(layer => integerOrNull(layer.layerCnt) ?? 0)
   );
+  // The mark stack capacity is a game-wide evidence-backed cap from
+  // combat-overlimit-mechanics (maxStacks=5 for every tuning profile).
+  // layerInfoList only declares which layer levels carry an extra effect;
+  // marks with fewer declared effect layers (e.g. wood 550) still cap at 5.
+  const maxStacks = profile.maxStacks;
   const durationValues = [
     ...new Set(
       layers
@@ -7559,7 +7661,9 @@ function createTuningMarkNodeContract(tree, profile) {
     durationValues.length === 1 ? durationValues[0] : null;
   const heldReadyMs = Number(tree.additionalHitRefreshTime) * 1000;
   const reasons = [];
-  if (maxStacks !== profile.maxStacks) reasons.push('tuning-mark-max-mismatch');
+  if (effectLayerCount > profile.maxStacks) {
+    reasons.push('tuning-mark-max-mismatch');
+  }
   if (layerDurationMs !== profile.layerDurationMs) {
     reasons.push('tuning-mark-layer-duration-mismatch');
   }
@@ -7571,6 +7675,7 @@ function createTuningMarkNodeContract(tree, profile) {
     element: profile.element,
     markId: profile.markId,
     maxStacks,
+    effectLayerCount,
     layerDurationMs,
     heldReadyMs,
     layerComponentIds: profile.layerComponentIds,
@@ -8650,8 +8755,9 @@ function createControlRuntimeHits(control) {
   return (control?.elements ?? [])
     .filter(
       element =>
-        element.classification === 'applied' ||
-        element.scenarioClassification === 'applied'
+        (element.classification === 'applied' ||
+          element.scenarioClassification === 'applied') &&
+        Number(element.damage?.damageType) !== 5
     )
     .flatMap(element => [
       ...(element.classification === 'applied'
@@ -8945,6 +9051,7 @@ function createSemanticEffectRuntimeCatalog(catalog, passiveProfiles = []) {
       effect.role === 'gameplay-effect' &&
       !effect.tuningMark &&
       !effect.tuningOverlimit &&
+      effect.formulaRuntime?.applied === true &&
       !isCompiledPassiveEffect(effect) &&
       Boolean(
         effect.propertyChange || effect.directSp || effect.heal || effect.shield

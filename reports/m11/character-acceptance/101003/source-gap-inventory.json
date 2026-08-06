@@ -310,23 +310,6 @@
       "sourceRecordHash": "5a2637855fa9b57c"
     },
     {
-      "uniqueGapIdentity": "source-gap:74fb4cfb6f44ace5",
-      "sourceRecordIdentities": [
-        "effect:10100360|0|elements|0|-6820191037001031513|element:7469149193335658296|0|0",
-        "semantic-gap:fb3d15df1c851abe4705"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100360:0:7469149193335658296:6450702672474073568:0",
-        "effect:10100360|0|elements|0|-6820191037001031513|element:7469149193335658296|0|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "50e572ac40b14b38"
-    },
-    {
       "uniqueGapIdentity": "source-gap:90015662cabe3aec",
       "sourceRecordIdentities": [
         "effect:10100313|0|elements|7|-4841411980842434486|element:-4841411980842434486|unresolved-frame|0",
@@ -481,11 +464,11 @@
     }
   ],
   "summary": {
-    "uniqueGapCount": 27,
+    "uniqueGapCount": 26,
     "blockingCount": 22,
-    "nonBlockingCount": 5,
+    "nonBlockingCount": 4,
     "statusCounts": {
-      "not-applicable": 5,
+      "not-applicable": 4,
       "runtime-evidence-required": 10,
       "static-evidence-gap": 11,
       "unknown-formula": 1
@@ -496,11 +479,10 @@
       "effect-trigger-frame-missing": 1,
       "hidden-ultimate-firework-explosion-discarded-current-client|legacy-or-unreachable-current-client": 1,
       "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 2,
-      "nested-effect-wrapper-semantics-unresolved": 1,
       "runtime-dependent": 10,
       "unnamed-secondary-passive-not-implemented-current-client": 1,
       "unresolved": 3
     }
   },
-  "inventoryHash": "2dd8f61f0092d3b4"
+  "inventoryHash": "ad56e075d2cf80e2"
 }

@@ -40,9 +40,9 @@
   "summary": {
     "total": 254,
     "published": 254,
-    "accepted": 250,
-    "optimizationReady": 250,
-    "blockingLedgerCount": 4,
+    "accepted": 251,
+    "optimizationReady": 251,
+    "blockingLedgerCount": 3,
     "byObjectKind": {
       "soul-essence": {
         "total": 62,
@@ -56,8 +56,8 @@
       },
       "kibo": {
         "total": 43,
-        "accepted": 40,
-        "optimizationReady": 40
+        "accepted": 41,
+        "optimizationReady": 41
       },
       "set-skill": {
         "total": 12,
@@ -6420,18 +6420,16 @@
       "objectKind": "kibo",
       "objectId": "500360",
       "displayName": "怯影之翼",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "49a522acd4ea4422",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d11f626ff1d629bc",
       "evidence": {
         "iconSha256": "2669a2abb9eca97a0601a843f517ab2f94e626d48e751ec2f69d50fb481bc136",
         "binding": {
@@ -6445,7 +6443,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -6457,7 +6455,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -6967,5 +6965,5 @@
       }
     }
   ],
-  "catalogHash": "8bef56d9b94e506b"
+  "catalogHash": "b2879959aaf712e6"
 }

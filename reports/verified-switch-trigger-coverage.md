@@ -13,7 +13,7 @@
 | 莉莉 (102001) | 退场 | 201 | 10200122 | static-evidence-gap | unresolved |
 | 红宝石 (103002) | 入场 | 203 | 10300221 | applied | applied |
 | 西芙莉雅 (107001) | 入场 | 203 | 10700121 | applied | unresolved |
-| 米砂 (107002) | 退场 | 201 | 10700222 | applied | unresolved |
+| 米砂 (107002) | 退场 | 201 | 10700222 | applied | applied |
 | 阿比 (107003) | 入场 | 203 | 10700321 | applied | applied |
 | 忒拉拉 (108001) | 入场 | 203 | 10800121 | applied | applied |
 | 璐璐卡 (108002) | 退场 | 201 | 10800222 | applied | unresolved |
