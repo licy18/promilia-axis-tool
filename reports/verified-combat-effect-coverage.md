@@ -3,21 +3,21 @@
 - 包：`azpr-tc-2026-07-18`
 - 公开动作：563
 - 控制：566
-- 直接元素根：4124
+- 直接元素根：4122
 - 原始引用边：1809
 - 效果图节点：3699
 - 去重语义效果：3479
 - 最终玩法效果：1842
 - 结构包装/条件：1637
-- 语义可计算：960
+- 语义可计算：961
 - 语义明确零：7
-- 语义未解析：875
+- 语义未解析：874
 
 ## 语义放置
 
 - runtime-dependent: 105
-- static-evidence-gap: 410
-- static-resolved: 1327
+- static-evidence-gap: 409
+- static-resolved: 1328
 
 ## 公式族
 
@@ -54,10 +54,10 @@
 
 ## 原始边审计
 
-- 效果绑定：3801
-- 可计算：1760
+- 效果绑定：3786
+- 可计算：1749
 - 明确零：9
-- 未解析：2032
+- 未解析：2028
 
 ## 元素类型
 
@@ -73,8 +73,8 @@
 
 ## 未解析原因
 
-- effect-target-static-evidence-gap: 420
-- effect-trigger-frame-static-evidence-gap: 404
+- effect-target-static-evidence-gap: 419
+- effect-trigger-frame-static-evidence-gap: 403
 - nested-damage-runtime-family-unimplemented: 278
 - property-change-type-not-battle-property: 1
 - property-duration-zero-unresolved: 5

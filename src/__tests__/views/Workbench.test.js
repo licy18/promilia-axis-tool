@@ -12541,7 +12541,7 @@ describe('Workbench view', () => {
     await vi.waitFor(
       () => {
         expect(wrapper.get('main.workbench').attributes()).toMatchObject({
-          'data-canonical-trace-hash': '8fd73d143ec97d1a',
+          'data-canonical-trace-hash': 'b1c3c9a8d6eba69e',
           'data-canonical-trace-action-count': '16',
           'data-machine-axis-import-active': 'true',
         });
@@ -12589,7 +12589,7 @@ describe('Workbench view', () => {
     const inspector = wrapper.get(
       '[data-testid="workbench-canonical-trace-inspector"]'
     );
-    expect(inspector.attributes('data-trace-hash')).toBe('8fd73d143ec97d1a');
+    expect(inspector.attributes('data-trace-hash')).toBe('b1c3c9a8d6eba69e');
     expect(inspector.text()).toContain('control 10100703 / sub 0');
     const hitRow = inspector.get('[data-testid="canonical-trace-hit-row"]');
     const landedSelect = hitRow.get(
@@ -12614,7 +12614,7 @@ describe('Workbench view', () => {
         ).toBe('miss');
         expect(
           wrapper.get('main.workbench').attributes('data-canonical-trace-hash')
-        ).not.toBe('8fd73d143ec97d1a');
+        ).not.toBe('b1c3c9a8d6eba69e');
       },
       { timeout: 30_000 }
     );
@@ -12628,7 +12628,7 @@ describe('Workbench view', () => {
       () => {
         expect(
           wrapper.get('main.workbench').attributes('data-canonical-trace-hash')
-        ).toBe('8fd73d143ec97d1a');
+        ).toBe('b1c3c9a8d6eba69e');
         expect(
           wrapper.get('[data-testid="canonical-trace-hit-landed"]').element.value
         ).toBe('hit');

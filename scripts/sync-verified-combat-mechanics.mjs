@@ -36,6 +36,8 @@ const BATTLE_ROOT =
   'C:\\Codex\\AzPr Extractor\\ExtractedAssets\\Unity\\default_package\\ResourcesAssets\\Config\\Battle';
 const HERO_SUBSKILL_ROOT =
   'C:\\Codex\\AzPr Extractor\\ExtractedAssets\\Unity\\default_package\\Program\\Battle\\Character\\Config\\Hero';
+const PET_SUBSKILL_ROOT =
+  'C:\\Codex\\AzPr Extractor\\ExtractedAssets\\Unity\\default_package\\Program\\Battle\\Character\\Config\\Pet';
 const FORMULA_ROOT = path.join(AZPR_ROOT, 'work', 'combat-formulas');
 const OUTPUT_ROOT = path.join(AZPR_ROOT, 'outputs');
 const NEW_TABLE_ROOT = path.join(
@@ -273,6 +275,7 @@ const STATIC_PROPERTY_TABLE_PATHS = Object.freeze(
 const bulletInjectionContractCache = new Map();
 const unityObjectFileIndexCache = new Map();
 let externalGameplayObjectFileIndexCache = null;
+let petExternalGameplayObjectFileIndexCache = null;
 const SUPPORTED_BASE_FUNCTION_IDS = new Set([2, 101, 116, 119]);
 const BATTLE_MECHANIC_SCRIPT_PATH_IDS = Object.freeze({
   layerControl: '-7197581663443823049',
@@ -4371,19 +4374,13 @@ function createUnityObjectFileIndex(directory) {
   return result;
 }
 
-function createExternalGameplayObjectFileIndex() {
-  if (externalGameplayObjectFileIndexCache) {
-    return externalGameplayObjectFileIndexCache;
-  }
+function collectSubSkillObjectIndex(root) {
   const result = new Map();
-  if (!fs.existsSync(HERO_SUBSKILL_ROOT)) {
-    externalGameplayObjectFileIndexCache = result;
-    return result;
-  }
+  if (!fs.existsSync(root)) return result;
   const ownerDirectories = fs
-    .readdirSync(HERO_SUBSKILL_ROOT, { withFileTypes: true })
+    .readdirSync(root, { withFileTypes: true })
     .filter(entry => entry.isDirectory())
-    .map(entry => path.join(HERO_SUBSKILL_ROOT, entry.name))
+    .map(entry => path.join(root, entry.name))
     .sort();
   for (const ownerDirectory of ownerDirectories) {
     const subSkillDirectory = path.join(ownerDirectory, 'SubSkill');
@@ -4405,8 +4402,35 @@ function createExternalGameplayObjectFileIndex() {
   for (const entries of result.values()) {
     entries.sort((left, right) => left.filePath.localeCompare(right.filePath));
   }
-  externalGameplayObjectFileIndexCache = result;
   return result;
+}
+
+function createExternalGameplayObjectFileIndex() {
+  if (externalGameplayObjectFileIndexCache) {
+    return externalGameplayObjectFileIndexCache;
+  }
+  externalGameplayObjectFileIndexCache = collectSubSkillObjectIndex(
+    HERO_SUBSKILL_ROOT
+  );
+  return externalGameplayObjectFileIndexCache;
+}
+
+function createPetExternalGameplayObjectFileIndex() {
+  if (petExternalGameplayObjectFileIndexCache) {
+    return petExternalGameplayObjectFileIndexCache;
+  }
+  petExternalGameplayObjectFileIndexCache = collectSubSkillObjectIndex(
+    PET_SUBSKILL_ROOT
+  );
+  return petExternalGameplayObjectFileIndexCache;
+}
+
+function resolveExternalGameplayObjectFileIndex(directory) {
+  const assetDirectory = path.basename(path.dirname(directory));
+  if (/^skill_control_5\d+\.asset$/i.test(assetDirectory)) {
+    return createPetExternalGameplayObjectFileIndex();
+  }
+  return createExternalGameplayObjectFileIndex();
 }
 
 function readGameplayObjectReference(directory, reference) {
@@ -4418,7 +4442,8 @@ function readGameplayObjectReference(directory, reference) {
     );
   }
   const pathId = String(reference?.m_PathID ?? '');
-  const candidates = createExternalGameplayObjectFileIndex().get(pathId) ?? [];
+  const candidates =
+    resolveExternalGameplayObjectFileIndex(directory).get(pathId) ?? [];
   const completeCandidates = candidates.filter(
     candidate => !readUnityJson(candidate.filePath).stubOnly
   );
@@ -4526,13 +4551,35 @@ function collectGameplayBehaviorSourceFiles(directory, mainFilePath, graph) {
         .map(name => path.join(directory, name))
         .filter(filePath => filePath !== mainFilePath)
     : [];
-  return dedupeBy(
+  const mainHash = fs.existsSync(mainFilePath)
+    ? sha256File(mainFilePath)
+    : null;
+  const files = dedupeBy(
     [
       ...localFiles,
       ...(graph?.behaviors ?? []).map(entry => entry.behavior.filePath),
     ],
     filePath => path.resolve(filePath).toLowerCase()
   ).sort();
+  // Re-export artifacts can leave byte-identical `__2.json` copies of the
+  // main control file next to the canonical export. Such duplicates are not
+  // behavior sources and would otherwise publish bogus frameless triggers
+  // for every resource-map element reference.
+  const byContent = new Map();
+  for (const filePath of files) {
+    if (mainHash != null && sha256File(filePath) === mainHash) continue;
+    const contentHash = sha256File(filePath);
+    const current = byContent.get(contentHash);
+    const score = (candidate) =>
+      path.basename(candidate).endsWith('.json') &&
+      /__\d+\.json$/.test(path.basename(candidate))
+        ? 1
+        : 0;
+    if (!current || score(filePath) < score(current)) {
+      byContent.set(contentHash, filePath);
+    }
+  }
+  return [...byContent.values()].sort();
 }
 
 function readReferencedUnityObject(objectFiles, reference) {

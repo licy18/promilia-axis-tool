@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-timing-coverage",
   "status": "verified-combat-action-timing-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "9c319770f8ae63dcc9ff24c9263363c648f313b1076aa1a2c714587719067f75",
+  "packageHash": "3965abec7c994f17b536916d07485043fd9a22f32a067e735ae0a57e6d9297a5",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "publicActionCount": 563,
@@ -47656,17 +47656,21 @@
         "conversion": "161 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 0,
-        "lastFrame": 0,
+        "firstFrame": 24,
+        "lastFrame": 93,
         "status": "applied",
         "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50006601.asset/MonoBehaviour/skill_control_50006601__-7802215928654020246.json#skillResourceMaps[0].elements[0]|zero-distance-skill-execution",
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50006601.asset/MonoBehaviour/skill_control_50006601__-7802215928654020246.json#skillResourceMaps[0].elements[1]|zero-distance-skill-execution"
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500066/SubSkill/ast_17398825655870000.asset/MonoBehaviour/ast_17398825655870000__2406907562643779532.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500066/SubSkill/ast_17398825655870000.asset/MonoBehaviour/ast_17398825655870000__2705941891102175180.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500066/SubSkill/ast_17398825655870000.asset/MonoBehaviour/ast_17398825655870000__-2213614232444571700.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500066/SubSkill/ast_17398825655870000.asset/MonoBehaviour/ast_17398825655870000__-6925979309139005492.json#startFrame|targetType"
         ]
       },
       "hitFrames": [
-        0,
-        0
+        24,
+        43,
+        57,
+        93
       ],
       "windows": [],
       "cooldown": {
@@ -54385,15 +54389,15 @@
         "conversion": "107 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 0,
-        "lastFrame": 0,
+        "firstFrame": 40,
+        "lastFrame": 40,
         "status": "applied",
         "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50009804.asset/MonoBehaviour/skill_control_50009804__7091064864035247593.json#skillResourceMaps[0].elements[1]|zero-distance-skill-execution"
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500098/SubSkill/ast_17333872974790000.asset/MonoBehaviour/ast_17333872974790000__3991745650441382977.json#startFrame|targetType"
         ]
       },
       "hitFrames": [
-        0
+        40
       ],
       "windows": [],
       "cooldown": {
@@ -67301,17 +67305,31 @@
         "conversion": "138 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 0,
-        "lastFrame": 0,
+        "firstFrame": 26,
+        "lastFrame": 81,
         "status": "applied",
         "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50018602.asset/MonoBehaviour/skill_control_50018602__-2053194993282615807.json#skillResourceMaps[0].elements[0]|zero-distance-skill-execution",
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50018602.asset/MonoBehaviour/skill_control_50018602__-2053194993282615807.json#skillResourceMaps[0].elements[3]|zero-distance-skill-execution"
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__7717004472595489957.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__9124564303396119717.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__4349096671037072549.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__6290657740117812389.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__2906005267816883365.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__2321733181955744933.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__5399749001163023525.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__-4391076379007212379.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__-2134720962582633307.json#startFrame|targetType"
         ]
       },
       "hitFrames": [
-        0,
-        0
+        26,
+        28,
+        41,
+        43,
+        56,
+        58,
+        71,
+        76,
+        81
       ],
       "windows": [],
       "cooldown": {
@@ -165475,12 +165493,14 @@
         "conversion": "161 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 0,
-        "lastFrame": 0,
+        "firstFrame": 24,
+        "lastFrame": 93,
         "status": "applied",
         "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50006601.asset/MonoBehaviour/skill_control_50006601__-7802215928654020246.json#skillResourceMaps[0].elements[0]|zero-distance-skill-execution",
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50006601.asset/MonoBehaviour/skill_control_50006601__-7802215928654020246.json#skillResourceMaps[0].elements[1]|zero-distance-skill-execution"
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500066/SubSkill/ast_17398825655870000.asset/MonoBehaviour/ast_17398825655870000__2406907562643779532.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500066/SubSkill/ast_17398825655870000.asset/MonoBehaviour/ast_17398825655870000__2705941891102175180.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500066/SubSkill/ast_17398825655870000.asset/MonoBehaviour/ast_17398825655870000__-2213614232444571700.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500066/SubSkill/ast_17398825655870000.asset/MonoBehaviour/ast_17398825655870000__-6925979309139005492.json#startFrame|targetType"
         ]
       },
       "windows": [],
@@ -174626,11 +174646,11 @@
         "conversion": "107 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 0,
-        "lastFrame": 0,
+        "firstFrame": 40,
+        "lastFrame": 40,
         "status": "applied",
         "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50009804.asset/MonoBehaviour/skill_control_50009804__7091064864035247593.json#skillResourceMaps[0].elements[1]|zero-distance-skill-execution"
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500098/SubSkill/ast_17333872974790000.asset/MonoBehaviour/ast_17333872974790000__3991745650441382977.json#startFrame|targetType"
         ]
       },
       "windows": [],
@@ -189915,12 +189935,19 @@
         "conversion": "138 source frames at 60fps"
       },
       "hitEnvelope": {
-        "firstFrame": 0,
-        "lastFrame": 0,
+        "firstFrame": 26,
+        "lastFrame": 81,
         "status": "applied",
         "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50018602.asset/MonoBehaviour/skill_control_50018602__-2053194993282615807.json#skillResourceMaps[0].elements[0]|zero-distance-skill-execution",
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50018602.asset/MonoBehaviour/skill_control_50018602__-2053194993282615807.json#skillResourceMaps[0].elements[3]|zero-distance-skill-execution"
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__7717004472595489957.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__9124564303396119717.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__4349096671037072549.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__6290657740117812389.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__2906005267816883365.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__2321733181955744933.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__5399749001163023525.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__-4391076379007212379.json#startFrame|targetType",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Pet/500186/SubSkill/ast_17417605276300000.asset/MonoBehaviour/ast_17417605276300000__-2134720962582633307.json#startFrame|targetType"
         ]
       },
       "windows": [],

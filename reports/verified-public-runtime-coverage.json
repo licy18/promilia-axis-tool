@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "9c319770f8ae63dcc9ff24c9263363c648f313b1076aa1a2c714587719067f75",
+  "packageHash": "3965abec7c994f17b536916d07485043fd9a22f32a067e735ae0a57e6d9297a5",
   "fixedProductDenominator": {
     "publicActionCount": 563,
     "actorOwnerCount": 20,
@@ -28,8 +28,8 @@
     "actorOwnerCount": 20,
     "kiboOwnerCount": 122,
     "runnableActionCount": 550,
-    "sourceAppliedActionCount": 440,
-    "sourceRuntimeDependentActionCount": 110,
+    "sourceAppliedActionCount": 441,
+    "sourceRuntimeDependentActionCount": 109,
     "sourceStaticEvidenceGapActionCount": 13,
     "scenarioResolvedActionCount": 504,
     "verifiedZeroActionCount": 0,
@@ -74,45 +74,45 @@
     },
     "effectDimensions": {
       "damage": {
-        "applied": 150,
+        "applied": 149,
         "unresolved": 379,
-        "verified-zero": 3272
+        "verified-zero": 3258
       },
       "toughness": {
-        "verified-zero": 3801
+        "verified-zero": 3786
       },
       "sp": {
         "applied": 34,
         "unresolved": 78,
-        "verified-zero": 3689
+        "verified-zero": 3674
       },
       "hp": {
         "applied": 38,
         "unresolved": 14,
-        "verified-zero": 3749
+        "verified-zero": 3734
       },
       "shield": {
         "applied": 13,
         "unresolved": 2,
-        "verified-zero": 3786
+        "verified-zero": 3771
       },
       "dynamicProperty": {
-        "applied": 709,
-        "unresolved": 435,
-        "verified-zero": 2657
+        "applied": 705,
+        "unresolved": 434,
+        "verified-zero": 2647
       },
       "mark": {
-        "applied": 182,
+        "applied": 181,
         "unresolved": 169,
-        "verified-zero": 3450
+        "verified-zero": 3436
       }
     },
     "semanticEffects": {
       "total": 3479,
       "gameplay": 1842,
-      "applied": 960,
+      "applied": 961,
       "verifiedZero": 7,
-      "unresolved": 875
+      "unresolved": 874
     },
     "timing": {
       "appliedActionCount": 552,
@@ -8614,18 +8614,18 @@
           "verified-zero": 1
         },
         "healing": {
-          "verified-zero": 14
+          "verified-zero": 7
         },
         "shield": {
-          "verified-zero": 14
+          "verified-zero": 7
         },
         "dynamicProperty": {
-          "applied": 6,
-          "verified-zero": 8
+          "applied": 3,
+          "verified-zero": 4
         },
         "tuningMark": {
-          "applied": 2,
-          "verified-zero": 12
+          "applied": 1,
+          "verified-zero": 6
         }
       },
       "semanticEffects": {
@@ -13004,10 +13004,7 @@
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500066].actions[skillId=50006601].skillId"
     },
     {
@@ -15732,7 +15729,7 @@
       "runnable": true,
       "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "runtime-dependent",
+      "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
@@ -17004,17 +17001,17 @@
           "unresolved": 5
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "verified-zero": 3
+          "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
@@ -17197,17 +17194,17 @@
           "unresolved": 6
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "verified-zero": 3
+          "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
@@ -22728,17 +22725,17 @@
           "verified-zero": 1
         },
         "healing": {
-          "verified-zero": 10
+          "verified-zero": 5
         },
         "shield": {
-          "verified-zero": 10
+          "verified-zero": 5
         },
         "dynamicProperty": {
-          "applied": 4,
-          "verified-zero": 6
+          "applied": 2,
+          "verified-zero": 3
         },
         "tuningMark": {
-          "verified-zero": 10
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
@@ -22931,7 +22928,7 @@
           "verified-zero": 3
         },
         "dynamicProperty": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 2
         },
         "tuningMark": {
@@ -22940,15 +22937,12 @@
       },
       "semanticEffects": {
         "total": 1,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500186].actions[skillId=50018602].skillId"
     },
     {
@@ -24139,17 +24133,17 @@
           "verified-zero": 3
         },
         "healing": {
-          "verified-zero": 24
+          "verified-zero": 23
         },
         "shield": {
-          "verified-zero": 24
+          "verified-zero": 23
         },
         "dynamicProperty": {
           "applied": 22,
-          "verified-zero": 2
+          "verified-zero": 1
         },
         "tuningMark": {
-          "verified-zero": 24
+          "verified-zero": 23
         }
       },
       "semanticEffects": {
@@ -48876,18 +48870,18 @@
           "verified-zero": 1
         },
         "healing": {
-          "verified-zero": 14
+          "verified-zero": 7
         },
         "shield": {
-          "verified-zero": 14
+          "verified-zero": 7
         },
         "dynamicProperty": {
-          "applied": 6,
-          "verified-zero": 8
+          "applied": 3,
+          "verified-zero": 4
         },
         "tuningMark": {
-          "applied": 2,
-          "verified-zero": 12
+          "applied": 1,
+          "verified-zero": 6
         }
       },
       "semanticEffects": {
@@ -53266,10 +53260,7 @@
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500066].actions[skillId=50006601].skillId"
     },
     {
@@ -55994,7 +55985,7 @@
       "runnable": true,
       "rawRuntimeReady": true,
       "schedulable": true,
-      "sourceEvidenceStatus": "runtime-dependent",
+      "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "mechanicsClassification": "applied",
       "timing": {
@@ -57266,17 +57257,17 @@
           "unresolved": 5
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "verified-zero": 3
+          "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
@@ -57459,17 +57450,17 @@
           "unresolved": 6
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "verified-zero": 3
+          "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
@@ -62990,17 +62981,17 @@
           "verified-zero": 1
         },
         "healing": {
-          "verified-zero": 10
+          "verified-zero": 5
         },
         "shield": {
-          "verified-zero": 10
+          "verified-zero": 5
         },
         "dynamicProperty": {
-          "applied": 4,
-          "verified-zero": 6
+          "applied": 2,
+          "verified-zero": 3
         },
         "tuningMark": {
-          "verified-zero": 10
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
@@ -63193,7 +63184,7 @@
           "verified-zero": 3
         },
         "dynamicProperty": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 2
         },
         "tuningMark": {
@@ -63202,15 +63193,12 @@
       },
       "semanticEffects": {
         "total": 1,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500186].actions[skillId=50018602].skillId"
     },
     {
@@ -64401,17 +64389,17 @@
           "verified-zero": 3
         },
         "healing": {
-          "verified-zero": 24
+          "verified-zero": 23
         },
         "shield": {
-          "verified-zero": 24
+          "verified-zero": 23
         },
         "dynamicProperty": {
           "applied": 22,
-          "verified-zero": 2
+          "verified-zero": 1
         },
         "tuningMark": {
-          "verified-zero": 24
+          "verified-zero": 23
         }
       },
       "semanticEffects": {

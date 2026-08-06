@@ -3089,18 +3089,18 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 14
+              "verified-zero": 7
             },
             "shield": {
-              "verified-zero": 14
+              "verified-zero": 7
             },
             "dynamicProperty": {
-              "applied": 6,
-              "verified-zero": 8
+              "applied": 3,
+              "verified-zero": 4
             },
             "tuningMark": {
-              "applied": 2,
-              "verified-zero": 12
+              "applied": 1,
+              "verified-zero": 6
             }
           },
           "semanticEffects": {
@@ -3244,8 +3244,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 48,
-          "applied": 8
+          "verified-zero": 24,
+          "applied": 4
         },
         "closureClass": "evidence-closed"
       },
@@ -8528,23 +8528,17 @@
           "actionKind": "signature",
           "sourceSkillId": 50006601,
           "controlSkillId": 50006601,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
-          "reasons": [
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
-          ],
+          "reasons": [],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [],
-            "unresolvedReasons": [
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -8757,8 +8751,8 @@
         "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 1,
-        "scenarioAssumed": 2,
+        "evidenceClosed": 2,
+        "scenarioAssumed": 1,
         "unresolved": 0
       },
       "machineOptimizationReady": false,
@@ -11991,7 +11985,7 @@
           "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
-          "sourceEvidenceStatus": "runtime-dependent",
+          "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [],
           "zeroDistancePolicy": {
@@ -13623,17 +13617,17 @@
               "unresolved": 5
             },
             "healing": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "shield": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "dynamicProperty": {
               "applied": 1,
-              "verified-zero": 3
+              "verified-zero": 2
             },
             "tuningMark": {
-              "verified-zero": 4
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
@@ -13777,7 +13771,7 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 15,
+          "verified-zero": 11,
           "applied": 1
         },
         "closureClass": "evidence-closed"
@@ -13867,17 +13861,17 @@
               "unresolved": 6
             },
             "healing": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "shield": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "dynamicProperty": {
               "applied": 1,
-              "verified-zero": 3
+              "verified-zero": 2
             },
             "tuningMark": {
-              "verified-zero": 4
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
@@ -14021,7 +14015,7 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 15,
+          "verified-zero": 11,
           "applied": 1
         },
         "closureClass": "evidence-closed"
@@ -20807,17 +20801,17 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 10
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 10
+              "verified-zero": 5
             },
             "dynamicProperty": {
-              "applied": 4,
-              "verified-zero": 6
+              "applied": 2,
+              "verified-zero": 3
             },
             "tuningMark": {
-              "verified-zero": 10
+              "verified-zero": 5
             }
           },
           "semanticEffects": {
@@ -20961,8 +20955,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 36,
-          "applied": 4
+          "verified-zero": 18,
+          "applied": 2
         },
         "closureClass": "evidence-closed"
       },
@@ -21019,23 +21013,17 @@
           "actionKind": "signature",
           "sourceSkillId": 50018602,
           "controlSkillId": 50018602,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
-          "reasons": [
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
-          ],
+          "reasons": [],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [],
-            "unresolvedReasons": [
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -21069,7 +21057,7 @@
               "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 2
             },
             "tuningMark": {
@@ -21078,9 +21066,9 @@
           },
           "semanticEffects": {
             "total": 1,
-            "applied": 0,
+            "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500186].actions[skillId=50018602].skillId"
@@ -21237,13 +21225,13 @@
       "effects": {
         "statuses": {
           "verified-zero": 11,
-          "unresolved": 1
+          "applied": 1
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 1,
-        "scenarioAssumed": 2,
+        "evidenceClosed": 2,
+        "scenarioAssumed": 1,
         "unresolved": 0
       },
       "machineOptimizationReady": false,
@@ -22598,17 +22586,17 @@
               "verified-zero": 3
             },
             "healing": {
-              "verified-zero": 24
+              "verified-zero": 23
             },
             "shield": {
-              "verified-zero": 24
+              "verified-zero": 23
             },
             "dynamicProperty": {
               "applied": 22,
-              "verified-zero": 2
+              "verified-zero": 1
             },
             "tuningMark": {
-              "verified-zero": 24
+              "verified-zero": 23
             }
           },
           "semanticEffects": {
@@ -22756,7 +22744,7 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 74,
+          "verified-zero": 70,
           "applied": 22
         },
         "closureClass": "evidence-closed"
@@ -30676,8 +30664,8 @@
       500470
     ],
     "actionClosure": {
-      "evidenceClosed": 358,
-      "scenarioAssumed": 8,
+      "evidenceClosed": 360,
+      "scenarioAssumed": 6,
       "unresolved": 0
     },
     "pvePassiveMechanics": {

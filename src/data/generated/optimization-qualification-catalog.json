@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "3476adc279741fcc",
-  "manifestsHash": "bf32fcf1de57c734",
-  "gapLedgerHash": "03281bb971624cef",
-  "bindingMatrixHash": "3ae46ba540b95791",
-  "sourceSnapshotHash": "3c0af523ecbd6bf7",
+  "rosterHash": "4d85f98ec2232853",
+  "manifestsHash": "d60244f55a7c58ef",
+  "gapLedgerHash": "2dc0e41c7a8ac3ca",
+  "bindingMatrixHash": "dc8fbb0a9c4741f4",
+  "sourceSnapshotHash": "454e65b0b01a2147",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -2679,7 +2679,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "3476adc279741fcc",
+    "rosterHash": "4d85f98ec2232853",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24587,7 +24587,7 @@
       "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "3ae46ba540b95791"
+    "bindingMatrixHash": "dc8fbb0a9c4741f4"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44184,5 +44184,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "9f25946d261d3111"
+  "catalogHash": "4c076abef5f4bafa"
 }
