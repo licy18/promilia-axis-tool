@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "azpr-kibo-passive-mechanics-catalog",
-  "status": "kibo-passive-mechanics-ready-with-explicit-gaps",
+  "status": "kibo-passive-mechanics-ready",
   "generatedAt": "2026-07-08T03:35:51.289Z",
   "source": {
     "petTable": "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json",
@@ -299,6 +299,385 @@
       },
       "scenarioAssumptions": [],
       "evidenceStatus": "source-verified",
+      "sourceTextDifferences": []
+    },
+    {
+      "skillId": 520004,
+      "kiboIds": [
+        500313
+      ],
+      "name": "激运",
+      "description": "每间隔2秒，下一次攻击必定暴击。",
+      "confidence": "high",
+      "provenance": [
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill_level.json",
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skillsub_logic.json",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#DataPropertyUtility.InitPetData/ResetPetAttr/IsFpropertyskill",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EDirectInjectTargetType.Self=0",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyType.SHOOT_DMGUP=21/SPEED_RATIO=45/WATER_SHOOTDMGUP=57/CD_SKILL=115",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.TargetEntityType=2/CheckSkillType=11/EElementTriggerConditionType.AND=0/OR=1/EEntityType",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.AfterDamage=2/AfterReceiveDamage=4/BeforeSkill=5",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0/Target=1/PetOwner=8/ElementOwner=11",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ElementTriggerDataBase.source/target/self+ElementTriggerData_Damage",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.PetNormalSkill=13/PetUltraSkill=14/PetJointStrikeSkill=15/PetBreakSkill=16/PetPassiveSkill=21",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TTriggerElementParams.triggerCounter=检测事件次数",
+        "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#TriggerElement.Parse@0x1813BD9C0/CanTrigger@0x1813B5770/Trigger@0x1813BFE80/OnReset_Internal@0x1813BC7F0/get_triggerCount@0x1813C04C0",
+        "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#TriggerElement.Parse@0x1813BD9C0 reads TTriggerElementParams offsets 0x13c/0x140/0x144 but not sustainElement offset 0x138",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TDamageElementParams.EDamageSourceType.Attacker=0/EDamageType.MeleePhysical=1/Real=6/EDamageElementalType.Fire=1/ignoreDamageEvent=忽略受承伤事件",
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\element_formula.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520004.asset/MonoBehaviour/MonoBehaviour_2274340200594900449__2274340200594900449.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520004.asset/MonoBehaviour/MonoBehaviour_7996548406570419681__7996548406570419681.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520004.asset/MonoBehaviour/skill_control_520004__406654285886627715.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520004001.asset/MonoBehaviour/ast_520004001__-3872647025177758857.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520004002.asset/MonoBehaviour/ast_520004002__-2772062166436126210.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520004003.asset/MonoBehaviour/ast_520004003__8508845581050106911.json"
+      ],
+      "mechanismFamily": "equipped-kibo-periodic-before-damage-crit-effect",
+      "trigger": {
+        "event": "time-loop",
+        "triggerType": 0,
+        "triggerTypeName": "TimeEvent",
+        "loopType": 1,
+        "loopTypeName": "LoopEvent",
+        "intervalMs": 2000,
+        "timeExeFirstFrame": true,
+        "sourceElementId": 520004001,
+        "sourcePathId": "-3872647025177758857",
+        "triggerLifetime": "unlimited",
+        "triggerLimitScope": "passive-element-lifetime"
+      },
+      "armedTrigger": {
+        "event": "damage-dealt-before",
+        "eventType": 1,
+        "eventName": "BeforeDamage",
+        "sourceElementId": 520004002,
+        "sourcePathId": "-2772062166436126210",
+        "armConditionParam2BasisPoints": 10000,
+        "consumesOnTrigger": true
+      },
+      "effect": {
+        "targets": [
+          "equipped-kibo"
+        ],
+        "durationMs": null,
+        "expiration": "single-damage-event-consumed",
+        "sourceElementId": 520004003,
+        "sourcePathId": "8508845581050106911",
+        "modifiers": [
+          {
+            "kind": "battle-property",
+            "attributeId": 7,
+            "attributeName": "CRI",
+            "bucket": "dynamicExtra",
+            "valueRaw": 10000,
+            "sourceElementId": 520004003,
+            "sourcePathId": "8508845581050106911"
+          }
+        ]
+      },
+      "ownership": {
+        "source": "equipped-kibo",
+        "effectAdder": "equipped-kibo",
+        "effectTargets": [
+          "equipped-kibo"
+        ],
+        "foregroundRequirement": "none-in-source-assets"
+      },
+      "scenarioAssumptions": [],
+      "evidenceStatus": "source-verified",
+      "runtimeGaps": [],
+      "sourceTextDifferences": []
+    },
+    {
+      "skillId": 520005,
+      "kiboIds": [
+        500095,
+        500096,
+        500213
+      ],
+      "name": "剧毒皮肤",
+      "description": "受到物理伤害时，有30%概率使伤害来源附加10秒的中毒效果。\\n中毒：每2秒造成自身攻击力30%的<color=#1696b1>水属性伤害</color>。",
+      "confidence": "high",
+      "provenance": [
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill_level.json",
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skillsub_logic.json",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#DataPropertyUtility.InitPetData/ResetPetAttr/IsFpropertyskill",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EDirectInjectTargetType.Self=0",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyType.SHOOT_DMGUP=21/SPEED_RATIO=45/WATER_SHOOTDMGUP=57/CD_SKILL=115",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.TargetEntityType=2/CheckSkillType=11/EElementTriggerConditionType.AND=0/OR=1/EEntityType",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.AfterDamage=2/AfterReceiveDamage=4/BeforeSkill=5",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0/Target=1/PetOwner=8/ElementOwner=11",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ElementTriggerDataBase.source/target/self+ElementTriggerData_Damage",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.PetNormalSkill=13/PetUltraSkill=14/PetJointStrikeSkill=15/PetBreakSkill=16/PetPassiveSkill=21",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TTriggerElementParams.triggerCounter=检测事件次数",
+        "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#TriggerElement.Parse@0x1813BD9C0/CanTrigger@0x1813B5770/Trigger@0x1813BFE80/OnReset_Internal@0x1813BC7F0/get_triggerCount@0x1813C04C0",
+        "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#TriggerElement.Parse@0x1813BD9C0 reads TTriggerElementParams offsets 0x13c/0x140/0x144 but not sustainElement offset 0x138",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TDamageElementParams.EDamageSourceType.Attacker=0/EDamageType.MeleePhysical=1/Real=6/EDamageElementalType.Fire=1/ignoreDamageEvent=忽略受承伤事件",
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\element_formula.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520005.asset/MonoBehaviour/MonoBehaviour_-2656192327827135997__-2656192327827135997.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520005.asset/MonoBehaviour/MonoBehaviour_-4416507603065511421__-4416507603065511421.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520005.asset/MonoBehaviour/skill_control_520005__-1679420220943114210.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520005001.asset/MonoBehaviour/ast_520005001__7137892923090361266.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520005002.asset/MonoBehaviour/ast_520005002__-8811944350277579428.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520005003.asset/MonoBehaviour/ast_520005003__1909857819870704049.json"
+      ],
+      "mechanismFamily": "after-kibo-receive-damage-poison-dot-effect",
+      "trigger": {
+        "event": "damage-received",
+        "eventType": 4,
+        "eventName": "AfterReceiveDamage",
+        "sourceScope": "equipped-kibo",
+        "target": "attacker",
+        "internalCooldownMs": 0,
+        "activationOrder": "after-receive-damage-settlement",
+        "activationDelayMs": 0.001,
+        "probability": {
+          "kind": "probability",
+          "chanceBasisPoints": 3000,
+          "missBasisPoints": 7000,
+          "sourceField": "functionParams[25]",
+          "describedPercent": 30,
+          "describedText": "受到攻击，30%概率给攻击者注入中毒"
+        },
+        "sourceElementId": 520005001,
+        "sourcePathId": "7137892923090361266",
+        "triggerLifetime": "unlimited",
+        "triggerLimitScope": "passive-element-lifetime"
+      },
+      "derivedPeriodic": {
+        "durationMs": 10000,
+        "intervalMs": 2000,
+        "timeExeFirstFrame": true,
+        "schedules": [
+          {
+            "kind": "derived-dot",
+            "target": "attacker",
+            "targetKind": "enemy",
+            "sourceAttribute": {
+              "entityRole": "element-source-equipped-kibo",
+              "attributeId": 1,
+              "attributeName": "ATK"
+            },
+            "sourceElementId": 520005003,
+            "sourcePathId": "1909857819870704049",
+            "formula": {
+              "commonFunctionId": 1,
+              "commonExpression": "G/10000",
+              "baseFunctionId": 4,
+              "baseExpression": "source.ATK[0]*A/10000",
+              "coefficientRaw": 3000,
+              "ratiosByLevel": {
+                "1": 3000,
+                "2": 3000,
+                "3": 3000,
+                "4": 3000,
+                "5": 3000,
+                "6": 3000,
+                "7": 3000,
+                "8": 3000,
+                "9": 3000,
+                "10": 3000,
+                "11": 3000,
+                "12": 3000
+              }
+            },
+            "damage": {
+              "damageSourceType": 0,
+              "damageSourceTypeName": "Attacker",
+              "damageType": 7,
+              "damageTypeName": "Dot",
+              "elementalType": 6,
+              "elementalTypeName": "Aqua",
+              "weakBreakDamageRateBasisPoints": 2000,
+              "physicalPenetrationBasisPoints": 5000,
+              "magicPenetrationBasisPoints": 5000,
+              "elementCalculationFactorBasisPoints": 10000,
+              "physicalRatioBasisPoints": 0,
+              "magicRatioBasisPoints": 0,
+              "recoverSp": 0,
+              "petRecoverSp": 0
+            },
+            "eventPolicy": {
+              "ignoreDamageEvent": true,
+              "emitsDamageTriggerEvents": false,
+              "recursivePassiveTrigger": false
+            },
+            "relay": {
+              "sourceElementId": 520005002,
+              "sourcePathId": "-8811944350277579428",
+              "durationMs": 10000,
+              "intervalMs": 2000,
+              "timeExeFirstFrame": true
+            }
+          }
+        ]
+      },
+      "ownership": {
+        "source": "equipped-kibo",
+        "formulaSource": "equipped-kibo",
+        "effectAdder": "equipped-kibo",
+        "dotTarget": "attacker",
+        "foregroundRequirement": "none-in-source-assets"
+      },
+      "scenarioAssumptions": [
+        "attacker-resolved-to-scenario-enemy-single-enemy-model"
+      ],
+      "evidenceStatus": "source-verified",
+      "runtimeGaps": [],
+      "sourceTextDifferences": []
+    },
+    {
+      "skillId": 520006,
+      "kiboIds": [
+        500083,
+        500084,
+        500085
+      ],
+      "name": "燃火甲壳",
+      "description": "防御力上升30%，受到伤害时，有50%概率对来源方造成自身攻击力30%的<color=#dd6f67>火属性伤害</color>。",
+      "confidence": "high",
+      "provenance": [
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill_level.json",
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skillsub_logic.json",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#DataPropertyUtility.InitPetData/ResetPetAttr/IsFpropertyskill",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EDirectInjectTargetType.Self=0",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyType.SHOOT_DMGUP=21/SPEED_RATIO=45/WATER_SHOOTDMGUP=57/CD_SKILL=115",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.TargetEntityType=2/CheckSkillType=11/EElementTriggerConditionType.AND=0/OR=1/EEntityType",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.AfterDamage=2/AfterReceiveDamage=4/BeforeSkill=5",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0/Target=1/PetOwner=8/ElementOwner=11",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ElementTriggerDataBase.source/target/self+ElementTriggerData_Damage",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.PetNormalSkill=13/PetUltraSkill=14/PetJointStrikeSkill=15/PetBreakSkill=16/PetPassiveSkill=21",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TTriggerElementParams.triggerCounter=检测事件次数",
+        "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#TriggerElement.Parse@0x1813BD9C0/CanTrigger@0x1813B5770/Trigger@0x1813BFE80/OnReset_Internal@0x1813BC7F0/get_triggerCount@0x1813C04C0",
+        "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#TriggerElement.Parse@0x1813BD9C0 reads TTriggerElementParams offsets 0x13c/0x140/0x144 but not sustainElement offset 0x138",
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TDamageElementParams.EDamageSourceType.Attacker=0/EDamageType.MeleePhysical=1/Real=6/EDamageElementalType.Fire=1/ignoreDamageEvent=忽略受承伤事件",
+        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\element_formula.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520006.asset/MonoBehaviour/MonoBehaviour_-3049301568459412118__-3049301568459412118.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520006.asset/MonoBehaviour/MonoBehaviour_1268006567266577770__1268006567266577770.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520006.asset/MonoBehaviour/skill_control_520006__-2009086486981569540.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520006000.asset/MonoBehaviour/ast_520006000__-2597872024041955788.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520006001.asset/MonoBehaviour/ast_520006001__2489023409574652652.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520006002.asset/MonoBehaviour/ast_520006002__5631171419111160267.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520006003.asset/MonoBehaviour/ast_520006003__-1573513689535923677.json",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520006004.asset/MonoBehaviour/ast_520006004__-4339615325089076057.json"
+      ],
+      "mechanismFamily": "after-kibo-receive-damage-retaliation-with-static-property-effect",
+      "trigger": {
+        "event": "damage-received",
+        "eventType": 4,
+        "eventName": "AfterReceiveDamage",
+        "sourceScope": "equipped-kibo",
+        "target": "attacker",
+        "internalCooldownMs": 0,
+        "activationOrder": "after-receive-damage-settlement",
+        "activationDelayMs": 0.001,
+        "probability": {
+          "kind": "probability",
+          "chanceBasisPoints": 5000,
+          "missBasisPoints": 5000,
+          "sourceField": "functionParams[25]",
+          "describedPercent": 50,
+          "describedText": "受到攻击，50%概率对攻击者造成伤害 "
+        },
+        "sourceElementId": 520006003,
+        "sourcePathId": "-1573513689535923677",
+        "triggerLifetime": "unlimited",
+        "triggerLimitScope": "passive-element-lifetime"
+      },
+      "staticProperties": [
+        {
+          "kind": "battle-property",
+          "attributeId": 3,
+          "bucket": "dynamicPercent",
+          "valueRaw": 3000,
+          "durationMs": null,
+          "expiration": "battle-exit",
+          "sourceElementId": 520006001,
+          "sourcePathId": "2489023409574652652"
+        },
+        {
+          "kind": "battle-property",
+          "attributeId": 4,
+          "bucket": "dynamicPercent",
+          "valueRaw": 3000,
+          "durationMs": null,
+          "expiration": "battle-exit",
+          "sourceElementId": 520006002,
+          "sourcePathId": "5631171419111160267"
+        }
+      ],
+      "derivedDamage": {
+        "target": "attacker",
+        "targetRuntimeKind": "enemy",
+        "source": "equipped-kibo",
+        "sourceAttribute": {
+          "entityRole": "element-source-equipped-kibo",
+          "attributeId": 1,
+          "attributeName": "ATK"
+        },
+        "sourceElementId": 520006004,
+        "sourcePathId": "-4339615325089076057",
+        "formula": {
+          "commonFunctionId": 1,
+          "commonExpression": "G/10000",
+          "baseFunctionId": 4,
+          "baseExpression": "source.ATK[0]*A/10000",
+          "coefficientRaw": 3000,
+          "ratiosByLevel": {
+            "1": 3000,
+            "2": 3000,
+            "3": 3000,
+            "4": 3000,
+            "5": 3000,
+            "6": 3000,
+            "7": 3000,
+            "8": 3000,
+            "9": 3000,
+            "10": 3000,
+            "11": 3000,
+            "12": 3000
+          }
+        },
+        "damage": {
+          "damageSourceType": 0,
+          "damageSourceTypeName": "Attacker",
+          "damageType": 7,
+          "damageTypeName": "Dot",
+          "elementalType": 1,
+          "elementalTypeName": "Fire",
+          "weakBreakDamageRateBasisPoints": 2000,
+          "physicalPenetrationBasisPoints": 5000,
+          "magicPenetrationBasisPoints": 5000,
+          "elementCalculationFactorBasisPoints": 10000,
+          "physicalRatioBasisPoints": 0,
+          "magicRatioBasisPoints": 0,
+          "recoverSp": 0,
+          "petRecoverSp": 0
+        },
+        "eventPolicy": {
+          "ignoreDamageEvent": true,
+          "emitsDamageTriggerEvents": false,
+          "recursivePassiveTrigger": false
+        }
+      },
+      "ownership": {
+        "source": "equipped-kibo",
+        "formulaSource": "equipped-kibo",
+        "effectAdder": "equipped-kibo",
+        "target": "attacker",
+        "foregroundRequirement": "none-in-source-assets"
+      },
+      "scenarioAssumptions": [
+        "attacker-resolved-to-scenario-enemy-single-enemy-model"
+      ],
+      "evidenceStatus": "source-verified",
+      "runtimeGaps": [],
       "sourceTextDifferences": []
     },
     {
@@ -5907,125 +6286,14 @@
       "sourceTextDifferences": []
     }
   ],
-  "unresolved": [
-    {
-      "skillId": 520004,
-      "kiboIds": [
-        500313
-      ],
-      "reasons": [
-        "passive-supported-damage-trigger-shape-not-unique",
-        "passive-additional-trigger-elements-unmodeled"
-      ],
-      "provenance": [
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill_level.json",
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skillsub_logic.json",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#DataPropertyUtility.InitPetData/ResetPetAttr/IsFpropertyskill",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EDirectInjectTargetType.Self=0",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyType.SHOOT_DMGUP=21/SPEED_RATIO=45/WATER_SHOOTDMGUP=57/CD_SKILL=115",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.TargetEntityType=2/CheckSkillType=11/EElementTriggerConditionType.AND=0/OR=1/EEntityType",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.AfterDamage=2/AfterReceiveDamage=4/BeforeSkill=5",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0/Target=1/PetOwner=8/ElementOwner=11",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ElementTriggerDataBase.source/target/self+ElementTriggerData_Damage",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.PetNormalSkill=13/PetUltraSkill=14/PetJointStrikeSkill=15/PetBreakSkill=16/PetPassiveSkill=21",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TTriggerElementParams.triggerCounter=检测事件次数",
-        "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#TriggerElement.Parse@0x1813BD9C0/CanTrigger@0x1813B5770/Trigger@0x1813BFE80/OnReset_Internal@0x1813BC7F0/get_triggerCount@0x1813C04C0",
-        "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#TriggerElement.Parse@0x1813BD9C0 reads TTriggerElementParams offsets 0x13c/0x140/0x144 but not sustainElement offset 0x138",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TDamageElementParams.EDamageSourceType.Attacker=0/EDamageType.MeleePhysical=1/Real=6/EDamageElementalType.Fire=1/ignoreDamageEvent=忽略受承伤事件",
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\element_formula.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520004.asset/MonoBehaviour/MonoBehaviour_2274340200594900449__2274340200594900449.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520004.asset/MonoBehaviour/MonoBehaviour_7996548406570419681__7996548406570419681.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520004.asset/MonoBehaviour/skill_control_520004__406654285886627715.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520004001.asset/MonoBehaviour/ast_520004001__-3872647025177758857.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520004002.asset/MonoBehaviour/ast_520004002__-2772062166436126210.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520004003.asset/MonoBehaviour/ast_520004003__8508845581050106911.json"
-      ]
-    },
-    {
-      "skillId": 520005,
-      "kiboIds": [
-        500095,
-        500096,
-        500213
-      ],
-      "reasons": [
-        "passive-supported-damage-trigger-shape-not-unique",
-        "passive-additional-trigger-elements-unmodeled"
-      ],
-      "provenance": [
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill_level.json",
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skillsub_logic.json",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#DataPropertyUtility.InitPetData/ResetPetAttr/IsFpropertyskill",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EDirectInjectTargetType.Self=0",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyType.SHOOT_DMGUP=21/SPEED_RATIO=45/WATER_SHOOTDMGUP=57/CD_SKILL=115",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.TargetEntityType=2/CheckSkillType=11/EElementTriggerConditionType.AND=0/OR=1/EEntityType",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.AfterDamage=2/AfterReceiveDamage=4/BeforeSkill=5",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0/Target=1/PetOwner=8/ElementOwner=11",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ElementTriggerDataBase.source/target/self+ElementTriggerData_Damage",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.PetNormalSkill=13/PetUltraSkill=14/PetJointStrikeSkill=15/PetBreakSkill=16/PetPassiveSkill=21",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TTriggerElementParams.triggerCounter=检测事件次数",
-        "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#TriggerElement.Parse@0x1813BD9C0/CanTrigger@0x1813B5770/Trigger@0x1813BFE80/OnReset_Internal@0x1813BC7F0/get_triggerCount@0x1813C04C0",
-        "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#TriggerElement.Parse@0x1813BD9C0 reads TTriggerElementParams offsets 0x13c/0x140/0x144 but not sustainElement offset 0x138",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TDamageElementParams.EDamageSourceType.Attacker=0/EDamageType.MeleePhysical=1/Real=6/EDamageElementalType.Fire=1/ignoreDamageEvent=忽略受承伤事件",
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\element_formula.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520005.asset/MonoBehaviour/MonoBehaviour_-2656192327827135997__-2656192327827135997.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520005.asset/MonoBehaviour/MonoBehaviour_-4416507603065511421__-4416507603065511421.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520005.asset/MonoBehaviour/skill_control_520005__-1679420220943114210.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520005001.asset/MonoBehaviour/ast_520005001__7137892923090361266.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520005002.asset/MonoBehaviour/ast_520005002__-8811944350277579428.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520005003.asset/MonoBehaviour/ast_520005003__1909857819870704049.json"
-      ]
-    },
-    {
-      "skillId": 520006,
-      "kiboIds": [
-        500083,
-        500084,
-        500085
-      ],
-      "reasons": [
-        "passive-supported-damage-trigger-shape-not-unique"
-      ],
-      "provenance": [
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill_level.json",
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skillsub_logic.json",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#DataPropertyUtility.InitPetData/ResetPetAttr/IsFpropertyskill",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EDirectInjectTargetType.Self=0",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EBattlePropertyType.SHOOT_DMGUP=21/SPEED_RATIO=45/WATER_SHOOTDMGUP=57/CD_SKILL=115",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerFixedConditionType.TargetEntityType=2/CheckSkillType=11/EElementTriggerConditionType.AND=0/OR=1/EEntityType",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#EElementTriggerEventType.AfterDamage=2/AfterReceiveDamage=4/BeforeSkill=5",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETriggerEffectTargetType.Self=0/Target=1/PetOwner=8/ElementOwner=11",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ElementTriggerDataBase.source/target/self+ElementTriggerData_Damage",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillTagType.PetNormalSkill=13/PetUltraSkill=14/PetJointStrikeSkill=15/PetBreakSkill=16/PetPassiveSkill=21",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TTriggerElementParams.triggerCounter=检测事件次数",
-        "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#TriggerElement.Parse@0x1813BD9C0/CanTrigger@0x1813B5770/Trigger@0x1813BFE80/OnReset_Internal@0x1813BC7F0/get_triggerCount@0x1813C04C0",
-        "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll#TriggerElement.Parse@0x1813BD9C0 reads TTriggerElementParams offsets 0x13c/0x140/0x144 but not sustainElement offset 0x138",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#TDamageElementParams.EDamageSourceType.Attacker=0/EDamageType.MeleePhysical=1/Real=6/EDamageElementalType.Fire=1/ignoreDamageEvent=忽略受承伤事件",
-        "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\element_formula.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520006.asset/MonoBehaviour/MonoBehaviour_-3049301568459412118__-3049301568459412118.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520006.asset/MonoBehaviour/MonoBehaviour_1268006567266577770__1268006567266577770.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_520006.asset/MonoBehaviour/skill_control_520006__-2009086486981569540.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520006000.asset/MonoBehaviour/ast_520006000__-2597872024041955788.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520006001.asset/MonoBehaviour/ast_520006001__2489023409574652652.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520006002.asset/MonoBehaviour/ast_520006002__5631171419111160267.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520006003.asset/MonoBehaviour/ast_520006003__-1573513689535923677.json",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_520006004.asset/MonoBehaviour/ast_520006004__-4339615325089076057.json"
-      ]
-    }
-  ],
+  "unresolved": [],
   "summary": {
     "uniquePvePassiveCount": 44,
-    "evidenceClosed": 41,
+    "evidenceClosed": 44,
     "scenarioAssumed": 0,
-    "unresolved": 3,
+    "unresolved": 0,
     "triggerLifetime": {
-      "unlimited": 15,
+      "unlimited": 18,
       "finite": 1,
       "evidence-open": 0
     },

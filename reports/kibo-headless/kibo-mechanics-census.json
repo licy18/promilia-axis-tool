@@ -7777,10 +7777,10 @@
     {
       "skillId": 520004,
       "scopeClass": "pve-combat-talent-passive",
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "classificationStatus": "evidence-closed",
-      "runtimeStatus": "runtime-unresolved",
-      "confidence": "low",
+      "runtimeStatus": "runtime-ready",
+      "confidence": "high",
       "sourceName": "激运",
       "sourceDescription": "每间隔2秒，下一次攻击必定暴击。",
       "kiboIds": [
@@ -7796,11 +7796,64 @@
         "skillControlAsset": true,
         "elementAssetCount": 3
       },
-      "mechanic": null,
-      "unresolvedReasons": [
-        "passive-supported-damage-trigger-shape-not-unique",
-        "passive-additional-trigger-elements-unmodeled"
-      ],
+      "mechanic": {
+        "mechanismFamily": "equipped-kibo-periodic-before-damage-crit-effect",
+        "trigger": {
+          "event": "time-loop",
+          "triggerType": 0,
+          "triggerTypeName": "TimeEvent",
+          "loopType": 1,
+          "loopTypeName": "LoopEvent",
+          "intervalMs": 2000,
+          "timeExeFirstFrame": true,
+          "sourceElementId": 520004001,
+          "sourcePathId": "-3872647025177758857",
+          "triggerLifetime": "unlimited",
+          "triggerLimitScope": "passive-element-lifetime"
+        },
+        "armedTrigger": {
+          "event": "damage-dealt-before",
+          "eventType": 1,
+          "eventName": "BeforeDamage",
+          "sourceElementId": 520004002,
+          "sourcePathId": "-2772062166436126210",
+          "armConditionParam2BasisPoints": 10000,
+          "consumesOnTrigger": true
+        },
+        "effect": {
+          "targets": [
+            "equipped-kibo"
+          ],
+          "durationMs": null,
+          "expiration": "single-damage-event-consumed",
+          "sourceElementId": 520004003,
+          "sourcePathId": "8508845581050106911",
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "attributeName": "CRI",
+              "bucket": "dynamicExtra",
+              "valueRaw": 10000,
+              "sourceElementId": 520004003,
+              "sourcePathId": "8508845581050106911"
+            }
+          ]
+        },
+        "ownership": {
+          "source": "equipped-kibo",
+          "effectAdder": "equipped-kibo",
+          "effectTargets": [
+            "equipped-kibo"
+          ],
+          "foregroundRequirement": "none-in-source-assets"
+        },
+        "scenarioAssumptions": [],
+        "evidenceStatus": "source-verified",
+        "runtimeGaps": [],
+        "sourceTextDifferences": []
+      },
+      "unresolvedReasons": [],
       "provenance": [
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
@@ -7830,10 +7883,10 @@
     {
       "skillId": 520005,
       "scopeClass": "pve-combat-talent-passive",
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "classificationStatus": "evidence-closed",
-      "runtimeStatus": "runtime-unresolved",
-      "confidence": "low",
+      "runtimeStatus": "runtime-ready",
+      "confidence": "high",
       "sourceName": "剧毒皮肤",
       "sourceDescription": "受到物理伤害时，有30%概率使伤害来源附加10秒的中毒效果。\\n中毒：每2秒造成自身攻击力30%的<color=#1696b1>水属性伤害</color>。",
       "kiboIds": [
@@ -7851,11 +7904,113 @@
         "skillControlAsset": true,
         "elementAssetCount": 3
       },
-      "mechanic": null,
-      "unresolvedReasons": [
-        "passive-supported-damage-trigger-shape-not-unique",
-        "passive-additional-trigger-elements-unmodeled"
-      ],
+      "mechanic": {
+        "mechanismFamily": "after-kibo-receive-damage-poison-dot-effect",
+        "trigger": {
+          "event": "damage-received",
+          "eventType": 4,
+          "eventName": "AfterReceiveDamage",
+          "sourceScope": "equipped-kibo",
+          "target": "attacker",
+          "internalCooldownMs": 0,
+          "activationOrder": "after-receive-damage-settlement",
+          "activationDelayMs": 0.001,
+          "probability": {
+            "kind": "probability",
+            "chanceBasisPoints": 3000,
+            "missBasisPoints": 7000,
+            "sourceField": "functionParams[25]",
+            "describedPercent": 30,
+            "describedText": "受到攻击，30%概率给攻击者注入中毒"
+          },
+          "sourceElementId": 520005001,
+          "sourcePathId": "7137892923090361266",
+          "triggerLifetime": "unlimited",
+          "triggerLimitScope": "passive-element-lifetime"
+        },
+        "derivedPeriodic": {
+          "durationMs": 10000,
+          "intervalMs": 2000,
+          "timeExeFirstFrame": true,
+          "schedules": [
+            {
+              "kind": "derived-dot",
+              "target": "attacker",
+              "targetKind": "enemy",
+              "sourceAttribute": {
+                "entityRole": "element-source-equipped-kibo",
+                "attributeId": 1,
+                "attributeName": "ATK"
+              },
+              "sourceElementId": 520005003,
+              "sourcePathId": "1909857819870704049",
+              "formula": {
+                "commonFunctionId": 1,
+                "commonExpression": "G/10000",
+                "baseFunctionId": 4,
+                "baseExpression": "source.ATK[0]*A/10000",
+                "coefficientRaw": 3000,
+                "ratiosByLevel": {
+                  "1": 3000,
+                  "2": 3000,
+                  "3": 3000,
+                  "4": 3000,
+                  "5": 3000,
+                  "6": 3000,
+                  "7": 3000,
+                  "8": 3000,
+                  "9": 3000,
+                  "10": 3000,
+                  "11": 3000,
+                  "12": 3000
+                }
+              },
+              "damage": {
+                "damageSourceType": 0,
+                "damageSourceTypeName": "Attacker",
+                "damageType": 7,
+                "damageTypeName": "Dot",
+                "elementalType": 6,
+                "elementalTypeName": "Aqua",
+                "weakBreakDamageRateBasisPoints": 2000,
+                "physicalPenetrationBasisPoints": 5000,
+                "magicPenetrationBasisPoints": 5000,
+                "elementCalculationFactorBasisPoints": 10000,
+                "physicalRatioBasisPoints": 0,
+                "magicRatioBasisPoints": 0,
+                "recoverSp": 0,
+                "petRecoverSp": 0
+              },
+              "eventPolicy": {
+                "ignoreDamageEvent": true,
+                "emitsDamageTriggerEvents": false,
+                "recursivePassiveTrigger": false
+              },
+              "relay": {
+                "sourceElementId": 520005002,
+                "sourcePathId": "-8811944350277579428",
+                "durationMs": 10000,
+                "intervalMs": 2000,
+                "timeExeFirstFrame": true
+              }
+            }
+          ]
+        },
+        "ownership": {
+          "source": "equipped-kibo",
+          "formulaSource": "equipped-kibo",
+          "effectAdder": "equipped-kibo",
+          "dotTarget": "attacker",
+          "foregroundRequirement": "none-in-source-assets"
+        },
+        "scenarioAssumptions": [
+          "attacker-resolved-to-scenario-enemy-single-enemy-model"
+        ],
+        "evidenceStatus": "source-verified",
+        "runtimeGaps": [],
+        "sourceTextDifferences": []
+      },
+      "unresolvedReasons": [],
       "provenance": [
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
@@ -7885,10 +8040,10 @@
     {
       "skillId": 520006,
       "scopeClass": "pve-combat-talent-passive",
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "classificationStatus": "evidence-closed",
-      "runtimeStatus": "runtime-unresolved",
-      "confidence": "low",
+      "runtimeStatus": "runtime-ready",
+      "confidence": "high",
       "sourceName": "燃火甲壳",
       "sourceDescription": "防御力上升30%，受到伤害时，有50%概率对来源方造成自身攻击力30%的<color=#dd6f67>火属性伤害</color>。",
       "kiboIds": [
@@ -7906,10 +8061,121 @@
         "skillControlAsset": true,
         "elementAssetCount": 5
       },
-      "mechanic": null,
-      "unresolvedReasons": [
-        "passive-supported-damage-trigger-shape-not-unique"
-      ],
+      "mechanic": {
+        "mechanismFamily": "after-kibo-receive-damage-retaliation-with-static-property-effect",
+        "trigger": {
+          "event": "damage-received",
+          "eventType": 4,
+          "eventName": "AfterReceiveDamage",
+          "sourceScope": "equipped-kibo",
+          "target": "attacker",
+          "internalCooldownMs": 0,
+          "activationOrder": "after-receive-damage-settlement",
+          "activationDelayMs": 0.001,
+          "probability": {
+            "kind": "probability",
+            "chanceBasisPoints": 5000,
+            "missBasisPoints": 5000,
+            "sourceField": "functionParams[25]",
+            "describedPercent": 50,
+            "describedText": "受到攻击，50%概率对攻击者造成伤害 "
+          },
+          "sourceElementId": 520006003,
+          "sourcePathId": "-1573513689535923677",
+          "triggerLifetime": "unlimited",
+          "triggerLimitScope": "passive-element-lifetime"
+        },
+        "staticProperties": [
+          {
+            "kind": "battle-property",
+            "attributeId": 3,
+            "bucket": "dynamicPercent",
+            "valueRaw": 3000,
+            "durationMs": null,
+            "expiration": "battle-exit",
+            "sourceElementId": 520006001,
+            "sourcePathId": "2489023409574652652"
+          },
+          {
+            "kind": "battle-property",
+            "attributeId": 4,
+            "bucket": "dynamicPercent",
+            "valueRaw": 3000,
+            "durationMs": null,
+            "expiration": "battle-exit",
+            "sourceElementId": 520006002,
+            "sourcePathId": "5631171419111160267"
+          }
+        ],
+        "derivedDamage": {
+          "target": "attacker",
+          "targetRuntimeKind": "enemy",
+          "source": "equipped-kibo",
+          "sourceAttribute": {
+            "entityRole": "element-source-equipped-kibo",
+            "attributeId": 1,
+            "attributeName": "ATK"
+          },
+          "sourceElementId": 520006004,
+          "sourcePathId": "-4339615325089076057",
+          "formula": {
+            "commonFunctionId": 1,
+            "commonExpression": "G/10000",
+            "baseFunctionId": 4,
+            "baseExpression": "source.ATK[0]*A/10000",
+            "coefficientRaw": 3000,
+            "ratiosByLevel": {
+              "1": 3000,
+              "2": 3000,
+              "3": 3000,
+              "4": 3000,
+              "5": 3000,
+              "6": 3000,
+              "7": 3000,
+              "8": 3000,
+              "9": 3000,
+              "10": 3000,
+              "11": 3000,
+              "12": 3000
+            }
+          },
+          "damage": {
+            "damageSourceType": 0,
+            "damageSourceTypeName": "Attacker",
+            "damageType": 7,
+            "damageTypeName": "Dot",
+            "elementalType": 1,
+            "elementalTypeName": "Fire",
+            "weakBreakDamageRateBasisPoints": 2000,
+            "physicalPenetrationBasisPoints": 5000,
+            "magicPenetrationBasisPoints": 5000,
+            "elementCalculationFactorBasisPoints": 10000,
+            "physicalRatioBasisPoints": 0,
+            "magicRatioBasisPoints": 0,
+            "recoverSp": 0,
+            "petRecoverSp": 0
+          },
+          "eventPolicy": {
+            "ignoreDamageEvent": true,
+            "emitsDamageTriggerEvents": false,
+            "recursivePassiveTrigger": false
+          }
+        },
+        "ownership": {
+          "source": "equipped-kibo",
+          "formulaSource": "equipped-kibo",
+          "effectAdder": "equipped-kibo",
+          "target": "attacker",
+          "foregroundRequirement": "none-in-source-assets"
+        },
+        "scenarioAssumptions": [
+          "attacker-resolved-to-scenario-enemy-single-enemy-model"
+        ],
+        "evidenceStatus": "source-verified",
+        "runtimeGaps": [],
+        "sourceTextDifferences": []
+      },
+      "unresolvedReasons": [],
       "provenance": [
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
@@ -40013,9 +40279,9 @@
       "unresolved": 0
     },
     "pvePassiveMechanics": {
-      "evidenceClosed": 41,
+      "evidenceClosed": 44,
       "scenarioAssumed": 0,
-      "unresolved": 3
+      "unresolved": 0
     },
     "pvpPassiveClassification": {
       "evidenceClosed": 122,

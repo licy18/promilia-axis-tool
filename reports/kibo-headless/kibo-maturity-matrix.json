@@ -10065,7 +10065,7 @@
         "pveSkillIds": [
           520006
         ],
-        "pveRuntimeStatus": "runtime-unresolved",
+        "pveRuntimeStatus": "runtime-ready",
         "pvpSkillIds": [
           51020083
         ],
@@ -10294,10 +10294,8 @@
         "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "pve-passive-runtime-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500084,
@@ -10318,7 +10316,7 @@
         "pveSkillIds": [
           520006
         ],
-        "pveRuntimeStatus": "runtime-unresolved",
+        "pveRuntimeStatus": "runtime-ready",
         "pvpSkillIds": [
           51020084
         ],
@@ -10547,10 +10545,8 @@
         "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "pve-passive-runtime-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500085,
@@ -10571,7 +10567,7 @@
         "pveSkillIds": [
           520006
         ],
-        "pveRuntimeStatus": "runtime-unresolved",
+        "pveRuntimeStatus": "runtime-ready",
         "pvpSkillIds": [
           51020085
         ],
@@ -10800,10 +10796,8 @@
         "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "pve-passive-runtime-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500093,
@@ -11077,7 +11071,7 @@
         "pveSkillIds": [
           520005
         ],
-        "pveRuntimeStatus": "runtime-unresolved",
+        "pveRuntimeStatus": "runtime-ready",
         "pvpSkillIds": [
           51020095
         ],
@@ -11303,10 +11297,8 @@
         "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "pve-passive-runtime-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500096,
@@ -11327,7 +11319,7 @@
         "pveSkillIds": [
           520005
         ],
-        "pveRuntimeStatus": "runtime-unresolved",
+        "pveRuntimeStatus": "runtime-ready",
         "pvpSkillIds": [
           51020096
         ],
@@ -11557,10 +11549,8 @@
         "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "pve-passive-runtime-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500097,
@@ -22009,7 +21999,7 @@
         "pveSkillIds": [
           520005
         ],
-        "pveRuntimeStatus": "runtime-unresolved",
+        "pveRuntimeStatus": "runtime-ready",
         "pvpSkillIds": [
           51020213
         ],
@@ -22239,10 +22229,8 @@
         "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "pve-passive-runtime-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500216,
@@ -26321,7 +26309,7 @@
           520002,
           520004
         ],
-        "pveRuntimeStatus": "runtime-unresolved",
+        "pveRuntimeStatus": "runtime-ready",
         "pvpSkillIds": [
           51020313
         ],
@@ -26548,10 +26536,8 @@
         "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "pve-passive-runtime-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500322,
@@ -30542,7 +30528,7 @@
   ],
   "summary": {
     "kiboCount": 122,
-    "machineOptimizationReadyCount": 110,
+    "machineOptimizationReadyCount": 117,
     "machineOptimizationReadyKiboIds": [
       500001,
       500002,
@@ -30582,7 +30568,12 @@
       500068,
       500072,
       500082,
+      500083,
+      500084,
+      500085,
       500093,
+      500095,
+      500096,
       500097,
       500098,
       500110,
@@ -30624,6 +30615,7 @@
       500187,
       500206,
       500209,
+      500213,
       500216,
       500220,
       500231,
@@ -30638,6 +30630,7 @@
       500304,
       500305,
       500306,
+      500313,
       500322,
       500323,
       500324,
@@ -30661,9 +30654,9 @@
       "unresolved": 0
     },
     "pvePassiveMechanics": {
-      "evidenceClosed": 41,
+      "evidenceClosed": 44,
       "scenarioAssumed": 0,
-      "unresolved": 3
+      "unresolved": 0
     },
     "fixedSkillClassification": {
       "evidenceClosed": 172,

@@ -155,9 +155,9 @@ describe('verified kibo passive generation', () => {
       }),
     ]);
     expect(integrated.verifiedKiboPassiveGeneration.summary).toMatchObject({
-      evidenceClosedDefinitionCount: 41,
+      evidenceClosedDefinitionCount: 44,
       scenarioAssumedDefinitionCount: 0,
-      unresolvedDefinitionCount: 3,
+      unresolvedDefinitionCount: 0,
       effectCommandCount: generation.effectCommands.length,
     });
     expect(

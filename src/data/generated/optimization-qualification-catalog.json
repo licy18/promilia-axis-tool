@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "9cc0bdd822c789e0",
-  "manifestsHash": "f4e8a71e1deaf8d5",
-  "gapLedgerHash": "fe44f482a1d35ef7",
-  "bindingMatrixHash": "63a4de455e02a998",
-  "sourceSnapshotHash": "d53c8c1b8712fe36",
+  "rosterHash": "5dc5125cc0dd94b1",
+  "manifestsHash": "50c24650a7fe796a",
+  "gapLedgerHash": "898cd99f9b8434df",
+  "bindingMatrixHash": "e752553157e4a290",
+  "sourceSnapshotHash": "bd7aaf989cfe510b",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -27,7 +27,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "c7134d700a1abb3d"
+      "manifestHash": "f55d1632fca06438"
     },
     {
       "objectKind": "character",
@@ -52,7 +52,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "37b6250d2c51e539"
+      "manifestHash": "90eb1f90843093ee"
     },
     {
       "objectKind": "character",
@@ -2675,7 +2675,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "9cc0bdd822c789e0",
+    "rosterHash": "5dc5125cc0dd94b1",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24583,7 +24583,7 @@
       "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "63a4de455e02a998"
+    "bindingMatrixHash": "e752553157e4a290"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44180,5 +44180,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "cbbf175ee6dc7e24"
+  "catalogHash": "a9ee6c545c248f72"
 }

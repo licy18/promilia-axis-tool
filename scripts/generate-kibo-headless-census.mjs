@@ -1170,6 +1170,51 @@ async function parseVerifiedPropertyEffectPassive({
     };
   }
 
+  const retaliationWithStaticMechanic =
+    parseAfterReceiveDamageRetaliationWithStaticPropertyPassive({
+      controlRoot,
+      behaviors,
+      elementObjects,
+      elementFormulasById,
+    });
+  if (retaliationWithStaticMechanic) {
+    return {
+      mechanic: retaliationWithStaticMechanic,
+      unresolvedReasons: [],
+      controlSourceFiles,
+      elementSourceFiles,
+    };
+  }
+
+  const poisonDotMechanic = parseAfterReceiveDamagePoisonDotPassive({
+    controlRoot,
+    behaviors,
+    elementObjects,
+    elementFormulasById,
+  });
+  if (poisonDotMechanic) {
+    return {
+      mechanic: poisonDotMechanic,
+      unresolvedReasons: [],
+      controlSourceFiles,
+      elementSourceFiles,
+    };
+  }
+
+  const periodicCritMechanic = parsePeriodicBeforeDamageCritPassive({
+    controlRoot,
+    behaviors,
+    elementObjects,
+  });
+  if (periodicCritMechanic) {
+    return {
+      mechanic: periodicCritMechanic,
+      unresolvedReasons: [],
+      controlSourceFiles,
+      elementSourceFiles,
+    };
+  }
+
   const damageTriggerCandidates = elementObjects.filter(
     row =>
       Array.isArray(row.value?.triggerEffectList) &&
@@ -2977,6 +3022,545 @@ function parseAreaAuraPropertyPassive({
       source: 'equipped-kibo',
       effectAdder: 'area-detection-element',
       effectTargets: ['enemies-in-radius'],
+      foregroundRequirement: 'none-in-source-assets',
+    },
+    scenarioAssumptions: [],
+    evidenceStatus: 'source-verified',
+    runtimeGaps: [],
+  };
+}
+
+function dedupeBehaviorRows(behaviors) {
+  const uniqueBehaviors = [];
+  const seenBehaviorPathIds = new Set();
+  for (const row of behaviors) {
+    if (row.pathId != null && seenBehaviorPathIds.has(row.pathId)) continue;
+    if (row.pathId != null) seenBehaviorPathIds.add(row.pathId);
+    uniqueBehaviors.push(row);
+  }
+  return uniqueBehaviors;
+}
+
+function parseTriggerProbability(trigger, element) {
+  const conditions = trigger?.triggerConditionList ?? [];
+  if (conditions.length !== 1) return null;
+  const condition = conditions[0];
+  if (
+    Number(trigger.triggerConditionType) !== 0 ||
+    Number(condition.conditionParam1) !== 10000 ||
+    Number(condition.conditionParam2) !== 200001 ||
+    Number(condition.conditionParam3) !== 0 ||
+    Number(condition.conditionParam4) !== 0
+  ) {
+    return null;
+  }
+  const missBasisPoints = Number(
+    Array.isArray(trigger.functionParams) ? trigger.functionParams[25] : NaN
+  );
+  if (!Number.isFinite(missBasisPoints) || missBasisPoints < 0) return null;
+  const chanceBasisPoints = 10000 - missBasisPoints;
+  const describeText = String(
+    element?.describe ?? element?.elementName ?? ''
+  );
+  const percentMatch = describeText.match(/(\d+(?:\.\d+)?)%\s*概率/u);
+  if (!percentMatch) return null;
+  const describedPercent = Number(percentMatch[1]);
+  if (Math.round(chanceBasisPoints / 100) !== describedPercent) return null;
+  return {
+    kind: 'probability',
+    chanceBasisPoints,
+    missBasisPoints,
+    sourceField: 'functionParams[25]',
+    describedPercent,
+    describedText: describeText,
+  };
+}
+
+function resolveElementFormulaIds(value) {
+  return {
+    commonFunctionId: Number(
+      value?.formulaParams?.function_1 ?? value?.baseIntParams?.[0]
+    ),
+    baseFunctionId: Number(
+      value?.formulaParams?.function_2 ?? value?.baseIntParams?.[1]
+    ),
+    coefficientRaw: Number(
+      value?.formulaParams?.formulaParamValues?.[0] ?? value?.functionParams?.[0]
+    ),
+  };
+}
+
+function isVerifiedSourceAtkRatioDamage(value, elementalType) {
+  const { commonFunctionId, baseFunctionId, coefficientRaw } =
+    resolveElementFormulaIds(value);
+  return (
+    commonFunctionId === 1 &&
+    baseFunctionId === 4 &&
+    Number.isFinite(coefficientRaw) &&
+    coefficientRaw > 0 &&
+    Number(value?.damageSourceType) === 0 &&
+    Number(value?.damageType) === 7 &&
+    Number(value?.damageElementalType) === elementalType &&
+    Number(value?.weakBreakDamageRate) === 2000 &&
+    Number(value?.armerPenetration) === 5000 &&
+    Number(value?.magicPenetration) === 5000 &&
+    Number(value?.elementCalFactor) === 10000 &&
+    Number(value?.physicalRatio) === 0 &&
+    Number(value?.magicRatio) === 0 &&
+    Number(value?.ignoreDamageEvent) === 1 &&
+    Number(value?.recoverSP) === 0 &&
+    Number(value?.petRecoverSP) === 0
+  );
+}
+
+function assertControlAccounted(controlRoot, elementObjects, accountedPathIds) {
+  const controlResourcePathIds = uniqueValues(
+    extractArrayPathIds(controlRoot.raw, 'elements')
+  );
+  const accounted = new Set(accountedPathIds);
+  return (
+    controlResourcePathIds.length === accountedPathIds.length &&
+    controlResourcePathIds.every(pathId => accounted.has(pathId)) &&
+    elementObjects.every(row => accounted.has(row.pathId))
+  );
+}
+
+function parseAfterReceiveDamageRetaliationWithStaticPropertyPassive({
+  controlRoot,
+  behaviors,
+  elementObjects,
+  elementFormulasById,
+}) {
+  const uniqueBehaviors = dedupeBehaviorRows(behaviors);
+  if (uniqueBehaviors.length !== 1) return null;
+  const behavior = uniqueBehaviors[0];
+  if (Number(behavior.value?.directInjectTargetType) !== 0) return null;
+  const behaviorPathIds = extractArrayPathIds(behavior.raw, 'elementDataList');
+  if (behaviorPathIds.length !== 1) return null;
+  const wrapper = elementObjects.find(row => row.pathId === behaviorPathIds[0]);
+  if (!wrapper) return null;
+  const wrapperValue = wrapper.value ?? {};
+  if (!Array.isArray(wrapperValue.injectElementDataList)) return null;
+  const injectedPathIds = uniqueValues(
+    extractArrayPathIds(wrapper.raw, 'injectElementDataList')
+  );
+  if (injectedPathIds.length !== wrapperValue.injectElementDataList.length) {
+    return null;
+  }
+  const injected = injectedPathIds.map(pathId =>
+    elementObjects.find(row => row.pathId === pathId)
+  );
+  const plainProperties = injected.filter(row =>
+    isPlainPropertyElement(row?.value)
+  );
+  const triggers = injected.filter(row =>
+    Array.isArray(row?.value?.triggerEffectList)
+  );
+  if (plainProperties.length !== 2 || triggers.length !== 1) return null;
+  const trigger = triggers[0];
+  const triggerValue = trigger.value ?? {};
+  const probability = parseTriggerProbability(
+    triggerValue,
+    trigger.value
+  );
+  if (
+    Number(triggerValue.triggerType) !== 1 ||
+    Number(triggerValue.triggerParam1) !== 4 ||
+    !Number.isFinite(Number(triggerValue.triggerInv)) ||
+    Number(triggerValue.triggerInv) !== 0 ||
+    !probability ||
+    triggerValue.triggerEffectList?.length !== 1 ||
+    Number(triggerValue.triggerEffectList[0]?.effectType) !== 0 ||
+    Number(triggerValue.triggerEffectList[0]?.targetType) !== 1
+  ) {
+    return null;
+  }
+  const damagePathIds = extractObjectPathIds(trigger.raw, 'targetElement');
+  if (damagePathIds.length !== 1) return null;
+  const damageElement =
+    elementObjects.find(row => row.pathId === damagePathIds[0]) ?? null;
+  if (!damageElement || !isVerifiedSourceAtkRatioDamage(damageElement.value, 1)) {
+    return null;
+  }
+  if (
+    !assertControlAccounted(controlRoot, elementObjects, [
+      wrapper.pathId,
+      ...plainProperties.map(row => row.pathId),
+      trigger.pathId,
+      damageElement.pathId,
+    ])
+  ) {
+    return null;
+  }
+  const damage = damageElement.value ?? {};
+  const { commonFunctionId, baseFunctionId, coefficientRaw } =
+    resolveElementFormulaIds(damage);
+  const commonFormula = elementFormulasById?.get(commonFunctionId) ?? null;
+  const baseFormula = elementFormulasById?.get(baseFunctionId) ?? null;
+  const ratiosByLevel = Object.fromEntries(
+    Array.from({ length: 12 }, (_, index) => [index + 1, coefficientRaw])
+  );
+  return {
+    mechanismFamily:
+      'after-kibo-receive-damage-retaliation-with-static-property-effect',
+    trigger: {
+      event: 'damage-received',
+      eventType: 4,
+      eventName: 'AfterReceiveDamage',
+      sourceScope: 'equipped-kibo',
+      target: 'attacker',
+      internalCooldownMs: 0,
+      activationOrder: 'after-receive-damage-settlement',
+      activationDelayMs: 0.001,
+      probability,
+      sourceElementId: Number(triggerValue.elementConfigId),
+      sourcePathId: trigger.pathId,
+      triggerLifetime: 'unlimited',
+      triggerLimitScope: 'passive-element-lifetime',
+    },
+    staticProperties: plainProperties.map(property => ({
+      kind: 'battle-property',
+      attributeId: Number(property.value.attributeID),
+      bucket:
+        PROPERTY_BUCKET_BY_CALCULATE_TYPE[
+          Number(property.value.calculateType)
+        ],
+      valueRaw: Number(property.value.functionParams[0]),
+      durationMs: Number(property.value.time) === -1 ? null : Number(property.value.time),
+      expiration: Number(property.value.time) === -1 ? 'battle-exit' : 'duration',
+      sourceElementId: Number(property.value.elementConfigId),
+      sourcePathId: property.pathId,
+    })),
+    derivedDamage: {
+      target: 'attacker',
+      targetRuntimeKind: 'enemy',
+      source: 'equipped-kibo',
+      sourceAttribute: {
+        entityRole: 'element-source-equipped-kibo',
+        attributeId: 1,
+        attributeName: 'ATK',
+      },
+      sourceElementId: Number(damage.elementConfigId),
+      sourcePathId: damageElement.pathId,
+      formula: {
+        commonFunctionId,
+        commonExpression: commonFormula?.functionOutput ?? null,
+        baseFunctionId,
+        baseExpression: baseFormula?.functionOutput ?? null,
+        coefficientRaw,
+        ratiosByLevel,
+      },
+      damage: {
+        damageSourceType: Number(damage.damageSourceType),
+        damageSourceTypeName: 'Attacker',
+        damageType: Number(damage.damageType),
+        damageTypeName: 'Dot',
+        elementalType: Number(damage.damageElementalType),
+        elementalTypeName: 'Fire',
+        weakBreakDamageRateBasisPoints: Number(damage.weakBreakDamageRate),
+        physicalPenetrationBasisPoints: Number(damage.armerPenetration),
+        magicPenetrationBasisPoints: Number(damage.magicPenetration),
+        elementCalculationFactorBasisPoints: Number(damage.elementCalFactor),
+        physicalRatioBasisPoints: Number(damage.physicalRatio),
+        magicRatioBasisPoints: Number(damage.magicRatio),
+        recoverSp: Number(damage.recoverSP),
+        petRecoverSp: Number(damage.petRecoverSP),
+      },
+      eventPolicy: {
+        ignoreDamageEvent: true,
+        emitsDamageTriggerEvents: false,
+        recursivePassiveTrigger: false,
+      },
+    },
+    ownership: {
+      source: 'equipped-kibo',
+      formulaSource: 'equipped-kibo',
+      effectAdder: 'equipped-kibo',
+      target: 'attacker',
+      foregroundRequirement: 'none-in-source-assets',
+    },
+    scenarioAssumptions: [
+      'attacker-resolved-to-scenario-enemy-single-enemy-model',
+    ],
+    evidenceStatus: 'source-verified',
+    runtimeGaps: [],
+  };
+}
+
+function parseAfterReceiveDamagePoisonDotPassive({
+  controlRoot,
+  behaviors,
+  elementObjects,
+  elementFormulasById,
+}) {
+  const uniqueBehaviors = dedupeBehaviorRows(behaviors);
+  if (uniqueBehaviors.length !== 1) return null;
+  const behavior = uniqueBehaviors[0];
+  if (Number(behavior.value?.directInjectTargetType) !== 0) return null;
+  const behaviorPathIds = extractArrayPathIds(behavior.raw, 'elementDataList');
+  if (behaviorPathIds.length !== 1) return null;
+  const trigger = elementObjects.find(row => row.pathId === behaviorPathIds[0]);
+  if (!trigger) return null;
+  const triggerValue = trigger.value ?? {};
+  const probability = parseTriggerProbability(triggerValue, trigger.value);
+  if (
+    Number(triggerValue.triggerType) !== 1 ||
+    Number(triggerValue.triggerParam1) !== 4 ||
+    !Number.isFinite(Number(triggerValue.triggerInv)) ||
+    Number(triggerValue.triggerInv) !== 0 ||
+    !probability ||
+    triggerValue.triggerEffectList?.length !== 1 ||
+    Number(triggerValue.triggerEffectList[0]?.effectType) !== 0 ||
+    Number(triggerValue.triggerEffectList[0]?.targetType) !== 1
+  ) {
+    return null;
+  }
+  const relayPathIds = extractObjectPathIds(trigger.raw, 'targetElement');
+  if (relayPathIds.length !== 1) return null;
+  const relay = elementObjects.find(row => row.pathId === relayPathIds[0]);
+  if (!relay) return null;
+  const relayValue = relay.value ?? {};
+  if (
+    Number(relayValue.triggerType) !== 0 ||
+    Number(relayValue.triggerParam1) !== 1 ||
+    !Number.isFinite(Number(relayValue.triggerParam2)) ||
+    Number(relayValue.triggerParam2) <= 0 ||
+    !Number.isFinite(Number(relayValue.duration)) ||
+    Number(relayValue.duration) <= 0 ||
+    relayValue.triggerEffectList?.length !== 1 ||
+    Number(relayValue.triggerEffectList[0]?.effectType) !== 0 ||
+    Number(relayValue.triggerEffectList[0]?.targetType) !== 0
+  ) {
+    return null;
+  }
+  const damagePathIds = extractObjectPathIds(relay.raw, 'targetElement');
+  if (damagePathIds.length !== 1) return null;
+  const damageElement =
+    elementObjects.find(row => row.pathId === damagePathIds[0]) ?? null;
+  if (!damageElement || !isVerifiedSourceAtkRatioDamage(damageElement.value, 6)) {
+    return null;
+  }
+  if (
+    !assertControlAccounted(controlRoot, elementObjects, [
+      trigger.pathId,
+      relay.pathId,
+      damageElement.pathId,
+    ])
+  ) {
+    return null;
+  }
+  const damage = damageElement.value ?? {};
+  const { commonFunctionId, baseFunctionId, coefficientRaw } =
+    resolveElementFormulaIds(damage);
+  const commonFormula = elementFormulasById?.get(commonFunctionId) ?? null;
+  const baseFormula = elementFormulasById?.get(baseFunctionId) ?? null;
+  const ratiosByLevel = Object.fromEntries(
+    Array.from({ length: 12 }, (_, index) => [index + 1, coefficientRaw])
+  );
+  return {
+    mechanismFamily: 'after-kibo-receive-damage-poison-dot-effect',
+    trigger: {
+      event: 'damage-received',
+      eventType: 4,
+      eventName: 'AfterReceiveDamage',
+      sourceScope: 'equipped-kibo',
+      target: 'attacker',
+      internalCooldownMs: 0,
+      activationOrder: 'after-receive-damage-settlement',
+      activationDelayMs: 0.001,
+      probability,
+      sourceElementId: Number(triggerValue.elementConfigId),
+      sourcePathId: trigger.pathId,
+      triggerLifetime: 'unlimited',
+      triggerLimitScope: 'passive-element-lifetime',
+    },
+    derivedPeriodic: {
+      durationMs: Number(relayValue.duration),
+      intervalMs: Number(relayValue.triggerParam2),
+      timeExeFirstFrame: true,
+      schedules: [
+        {
+          kind: 'derived-dot',
+          target: 'attacker',
+          targetKind: 'enemy',
+          sourceAttribute: {
+            entityRole: 'element-source-equipped-kibo',
+            attributeId: 1,
+            attributeName: 'ATK',
+          },
+          sourceElementId: Number(damage.elementConfigId),
+          sourcePathId: damageElement.pathId,
+          formula: {
+            commonFunctionId,
+            commonExpression: commonFormula?.functionOutput ?? null,
+            baseFunctionId,
+            baseExpression: baseFormula?.functionOutput ?? null,
+            coefficientRaw,
+            ratiosByLevel,
+          },
+          damage: {
+            damageSourceType: Number(damage.damageSourceType),
+            damageSourceTypeName: 'Attacker',
+            damageType: Number(damage.damageType),
+            damageTypeName: 'Dot',
+            elementalType: Number(damage.damageElementalType),
+            elementalTypeName: 'Aqua',
+            weakBreakDamageRateBasisPoints: Number(damage.weakBreakDamageRate),
+            physicalPenetrationBasisPoints: Number(damage.armerPenetration),
+            magicPenetrationBasisPoints: Number(damage.magicPenetration),
+            elementCalculationFactorBasisPoints: Number(damage.elementCalFactor),
+            physicalRatioBasisPoints: Number(damage.physicalRatio),
+            magicRatioBasisPoints: Number(damage.magicRatio),
+            recoverSp: Number(damage.recoverSP),
+            petRecoverSp: Number(damage.petRecoverSP),
+          },
+          eventPolicy: {
+            ignoreDamageEvent: true,
+            emitsDamageTriggerEvents: false,
+            recursivePassiveTrigger: false,
+          },
+          relay: {
+            sourceElementId: Number(relayValue.elementConfigId),
+            sourcePathId: relay.pathId,
+            durationMs: Number(relayValue.duration),
+            intervalMs: Number(relayValue.triggerParam2),
+            timeExeFirstFrame: true,
+          },
+        },
+      ],
+    },
+    ownership: {
+      source: 'equipped-kibo',
+      formulaSource: 'equipped-kibo',
+      effectAdder: 'equipped-kibo',
+      dotTarget: 'attacker',
+      foregroundRequirement: 'none-in-source-assets',
+    },
+    scenarioAssumptions: [
+      'attacker-resolved-to-scenario-enemy-single-enemy-model',
+    ],
+    evidenceStatus: 'source-verified',
+    runtimeGaps: [],
+  };
+}
+
+function parsePeriodicBeforeDamageCritPassive({
+  controlRoot,
+  behaviors,
+  elementObjects,
+}) {
+  const uniqueBehaviors = dedupeBehaviorRows(behaviors);
+  if (uniqueBehaviors.length !== 1) return null;
+  const behavior = uniqueBehaviors[0];
+  if (Number(behavior.value?.directInjectTargetType) !== 0) return null;
+  const behaviorPathIds = extractArrayPathIds(behavior.raw, 'elementDataList');
+  if (behaviorPathIds.length !== 1) return null;
+  const periodicRoot = elementObjects.find(
+    row => row.pathId === behaviorPathIds[0]
+  );
+  if (!periodicRoot) return null;
+  const periodicValue = periodicRoot.value ?? {};
+  if (
+    Number(periodicValue.triggerType) !== 0 ||
+    Number(periodicValue.triggerParam1) !== 1 ||
+    !Number.isFinite(Number(periodicValue.triggerParam2)) ||
+    Number(periodicValue.triggerParam2) <= 0 ||
+    periodicValue.triggerEffectList?.length !== 1 ||
+    Number(periodicValue.triggerEffectList[0]?.effectType) !== 0 ||
+    Number(periodicValue.triggerEffectList[0]?.targetType) !== 0
+  ) {
+    return null;
+  }
+  const damageEventPathIds = extractObjectPathIds(
+    periodicRoot.raw,
+    'targetElement'
+  );
+  if (damageEventPathIds.length !== 1) return null;
+  const damageEvent = elementObjects.find(
+    row => row.pathId === damageEventPathIds[0]
+  );
+  if (!damageEvent) return null;
+  const damageEventValue = damageEvent.value ?? {};
+  if (
+    Number(damageEventValue.triggerType) !== 1 ||
+    Number(damageEventValue.triggerParam1) !== 1 ||
+    !Number.isFinite(Number(damageEventValue.triggerParam2)) ||
+    Number(damageEventValue.triggerParam2) !== 10000 ||
+    damageEventValue.triggerEffectList?.length !== 1 ||
+    Number(damageEventValue.triggerEffectList[0]?.effectType) !== 0 ||
+    Number(damageEventValue.triggerEffectList[0]?.targetType) !== 0
+  ) {
+    return null;
+  }
+  const propertyPathIds = extractObjectPathIds(damageEvent.raw, 'targetElement');
+  if (propertyPathIds.length !== 1) return null;
+  const property = elementObjects.find(row => row.pathId === propertyPathIds[0]);
+  if (!property || !isPlainPropertyElement(property?.value)) return null;
+  if (
+    Number(property.value.attributeID) !== 7 ||
+    Number(property.value.calculateType) !== 1 ||
+    Number(property.value.functionParams?.[0]) !== 10000
+  ) {
+    return null;
+  }
+  if (
+    !assertControlAccounted(controlRoot, elementObjects, [
+      periodicRoot.pathId,
+      damageEvent.pathId,
+      property.pathId,
+    ])
+  ) {
+    return null;
+  }
+  return {
+    mechanismFamily: 'equipped-kibo-periodic-before-damage-crit-effect',
+    trigger: {
+      event: 'time-loop',
+      triggerType: 0,
+      triggerTypeName: 'TimeEvent',
+      loopType: 1,
+      loopTypeName: 'LoopEvent',
+      intervalMs: Number(periodicValue.triggerParam2),
+      timeExeFirstFrame: true,
+      sourceElementId: Number(periodicValue.elementConfigId),
+      sourcePathId: periodicRoot.pathId,
+      triggerLifetime: 'unlimited',
+      triggerLimitScope: 'passive-element-lifetime',
+    },
+    armedTrigger: {
+      event: 'damage-dealt-before',
+      eventType: 1,
+      eventName: 'BeforeDamage',
+      sourceElementId: Number(damageEventValue.elementConfigId),
+      sourcePathId: damageEvent.pathId,
+      armConditionParam2BasisPoints: Number(damageEventValue.triggerParam2),
+      consumesOnTrigger: true,
+    },
+    effect: {
+      targets: ['equipped-kibo'],
+      durationMs: null,
+      expiration: 'single-damage-event-consumed',
+      sourceElementId: Number(property.value.elementConfigId),
+      sourcePathId: property.pathId,
+      modifiers: [
+        {
+          kind: 'battle-property',
+          attributeId: Number(property.value.attributeID),
+          attributeName: 'CRI',
+          bucket:
+            PROPERTY_BUCKET_BY_CALCULATE_TYPE[
+              Number(property.value.calculateType)
+            ],
+          valueRaw: Number(property.value.functionParams[0]),
+          sourceElementId: Number(property.value.elementConfigId),
+          sourcePathId: property.pathId,
+        },
+      ],
+    },
+    ownership: {
+      source: 'equipped-kibo',
+      effectAdder: 'equipped-kibo',
+      effectTargets: ['equipped-kibo'],
       foregroundRequirement: 'none-in-source-assets',
     },
     scenarioAssumptions: [],
