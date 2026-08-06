@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/ultimate-controlled-buff-switch-golden.json",
-        "reportHash": "5f08bfc720f95e6d",
+        "reportHash": "c6388ca38a293d99",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "89a4f6bc22bd4d68",
-          "data": "04e722245bf7eb31",
-          "trace": "96bd4cd61c139015",
+          "input": "b25750077ff9b715",
+          "data": "ab6619ee7bedef4a",
+          "trace": "c687d345bee3411a",
           "evaluation": null
         }
       },
@@ -808,7 +808,7 @@
           "assertionHash": "a105b0c3214ea211"
         }
       ],
-      "scenarioCaseHash": "fe61f0fd055704fd"
+      "scenarioCaseHash": "917b177cb95adae0"
     },
     {
       "schemaVersion": 1,
@@ -816,7 +816,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/golden-trace.json",
-        "reportHash": "f7bee66b02ad4644",
+        "reportHash": "5e5f7794af057c21",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -824,9 +824,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "3aa62764212085c9",
-          "data": "a67db00a89e25418",
-          "trace": "d7daadb8eb655f45",
+          "input": "8f11445676b5eb82",
+          "data": "5478b23733e7a799",
+          "trace": "b3105ee3d3d57845",
           "evaluation": null
         }
       },
@@ -3347,7 +3347,7 @@
           "assertionHash": "9b24a5aeab528c8e"
         }
       ],
-      "scenarioCaseHash": "332156c79d6baef7"
+      "scenarioCaseHash": "68f716785c7d7bb0"
     },
     {
       "schemaVersion": 1,
@@ -3355,7 +3355,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/101003-visual.json",
-        "inputHash": "478ecbef7c17d15b",
+        "inputHash": "d486471cb2f6af6a",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/101003-visual.json"
       },
       "execution": {
@@ -3364,9 +3364,9 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "478ecbef7c17d15b",
-          "data": "d1dbe1db5d3da048",
-          "trace": "cb859806693aca3f",
+          "input": "d486471cb2f6af6a",
+          "data": "ef7b852fceeb7b93",
+          "trace": "2c842824139ae456",
           "evaluation": "920e7363ae12290d"
         }
       },
@@ -5789,7 +5789,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "6f34ab13e7c64cf8"
+      "scenarioCaseHash": "06fa758835a17c7f"
     }
   ],
   "summary": {
@@ -5802,5 +5802,5 @@
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "54fc66c4eab14763"
+  "scenarioSetHash": "a6c622696819cb66"
 }

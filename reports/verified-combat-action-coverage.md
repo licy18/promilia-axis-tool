@@ -4,8 +4,8 @@
 - 公开动作分母：563
 - 已关联：563
 - 场景可运行：529
-- 来源静态可应用：416
-- 来源运行时依赖：113
+- 来源静态可应用：418
+- 来源运行时依赖：111
 - 零距离场景补全：148
 - 来源静态证据缺口：34
 - 明确零：0
@@ -13,7 +13,7 @@
 - 真实命中节点：2502
 - 公开动作变体：593（未解析 64）
 - 非零回能元素：667（未关联 464）
-- 零距离投射物命中：2418（仍缺发射帧 203、仍缺公式 175、仍缺目标 0）
+- 零距离投射物命中：2418（仍缺发射帧 73、仍缺公式 49、仍缺目标 0）
 - 普攻输入链：20 条 / 95 个输入段（可运行 80，未解析 15）
 - 普攻输入时序：已确认 78，未确认 17
 
@@ -101,114 +101,112 @@
 - `actor|199002|19900222|2|19900227` 男主角 / perfect-parry / 星辉之环: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|199003|19900301|1|19900310` 诺诺 / charged-attack / 咻咻嘿咻: selected-control-variant-has-no-runnable-hit
 - `actor|199003|19900321|2|19900327` 诺诺 / perfect-parry / 嘭咚锤: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
-- `kibo|500002|502015|0|502015` 水灵仔 / active / 水弹连射: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500002|50000203|0|50000203` 水灵仔 / break / 水灵仔-合击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500003|502019|0|502019` 水灵偶 / active / 漂浮水泡: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500003|50000303|0|50000303` 水灵偶 / break / 水灵偶-合击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500004|502016|0|502016` 汐灵偶 / active / 大海浪: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500004|50000417|0|50000417` 汐灵偶 / break / 汐灵偶-合击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500005|501014|0|501014` 火灵仔 / active / 火球连射: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500006|501017|0|501017` 火灵偶 / active / 空降之焰: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500007|501016|0|501016` 焰灵偶 / active / 分裂之焰: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500020|503001|0|503001` 小雪狼 / active / 冰锥: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500020|50002004|0|50002004` 小雪狼 / break / 小雪狼-合击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500021|503006|0|503006` 冰速狼 / active / 寒冰碎片: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500022|503004|0|503004` 霜刃狼 / active / 冰矛连射: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500023|505013|0|505013` 苗鸡 / active / 种子飞弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500024|505006|0|505006` 菜鸡 / active / 灵木繁星: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500025|507003|0|507003` 拉加野猪 / active / 落雷: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500026|505006|0|505006` 碧羽灵龙 / active / 灵木繁星: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500035|505004|0|505004` 叶冠驼 / active / 株连灵木: trigger-frame-missing, projectile-impact-frame-runtime-dependent
+- `kibo|500002|502015|0|502015` 水灵仔 / active / 水弹连射: trigger-frame-missing
+- `kibo|500002|50000203|0|50000203` 水灵仔 / break / 水灵仔-合击: trigger-frame-missing
+- `kibo|500003|502019|0|502019` 水灵偶 / active / 漂浮水泡: trigger-frame-missing
+- `kibo|500003|50000303|0|50000303` 水灵偶 / break / 水灵偶-合击: trigger-frame-missing
+- `kibo|500004|502016|0|502016` 汐灵偶 / active / 大海浪: trigger-frame-missing
+- `kibo|500004|50000417|0|50000417` 汐灵偶 / break / 汐灵偶-合击: trigger-frame-missing
+- `kibo|500005|501014|0|501014` 火灵仔 / active / 火球连射: trigger-frame-missing
+- `kibo|500006|501017|0|501017` 火灵偶 / active / 空降之焰: trigger-frame-missing
+- `kibo|500007|501016|0|501016` 焰灵偶 / active / 分裂之焰: trigger-frame-missing
+- `kibo|500020|503001|0|503001` 小雪狼 / active / 冰锥: trigger-frame-missing
+- `kibo|500020|50002004|0|50002004` 小雪狼 / break / 小雪狼-合击: trigger-frame-missing
+- `kibo|500021|503006|0|503006` 冰速狼 / active / 寒冰碎片: trigger-frame-missing
+- `kibo|500022|503004|0|503004` 霜刃狼 / active / 冰矛连射: trigger-frame-missing
+- `kibo|500023|505013|0|505013` 苗鸡 / active / 种子飞弹: trigger-frame-missing
+- `kibo|500024|505006|0|505006` 菜鸡 / active / 灵木繁星: trigger-frame-missing
+- `kibo|500025|507003|0|507003` 拉加野猪 / active / 落雷: trigger-frame-missing
+- `kibo|500026|505006|0|505006` 碧羽灵龙 / active / 灵木繁星: trigger-frame-missing
+- `kibo|500035|505004|0|505004` 叶冠驼 / active / 株连灵木: trigger-frame-missing
 - `kibo|500035|50003501|0|50003501` 叶冠驼 / break / 叶冠驼-合击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500037|501001|0|501001` 焰羊羊 / active / 火球: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500038|501003|0|501003` 尾火羊 / active / 烈焰弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500039|501003|0|501003` 炎灼角羊 / active / 烈焰弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500040|506001|0|506001` 铁球蜥 / active / 岩锥: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500041|506001|0|506001` 三角蜥 / active / 岩锥: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500043|504012|0|504012` 小浮蝶 / active / 小风弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500044|504012|0|504012` 浮蝶 / active / 小风弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500045|504020|0|504020` 幻蝶 / active / 旋风回旋镖: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500046|505013|0|505013` 木灵苞 / active / 种子飞弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500047|505014|0|505014` 木灵朵 / active / 花绽飞弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500048|505018|0|505018` 蔓音花 / active / 种子风暴: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500051|506001|0|506001` 岩甲蜥 / active / 岩锥: trigger-frame-missing, projectile-impact-frame-runtime-dependent
+- `kibo|500037|501001|0|501001` 焰羊羊 / active / 火球: trigger-frame-missing
+- `kibo|500038|501003|0|501003` 尾火羊 / active / 烈焰弹: trigger-frame-missing
+- `kibo|500039|501003|0|501003` 炎灼角羊 / active / 烈焰弹: trigger-frame-missing
+- `kibo|500040|506001|0|506001` 铁球蜥 / active / 岩锥: trigger-frame-missing
+- `kibo|500041|506001|0|506001` 三角蜥 / active / 岩锥: trigger-frame-missing
+- `kibo|500043|504012|0|504012` 小浮蝶 / active / 小风弹: trigger-frame-missing
+- `kibo|500044|504012|0|504012` 浮蝶 / active / 小风弹: trigger-frame-missing
+- `kibo|500045|504020|0|504020` 幻蝶 / active / 旋风回旋镖: trigger-frame-missing
+- `kibo|500046|505013|0|505013` 木灵苞 / active / 种子飞弹: trigger-frame-missing
+- `kibo|500047|505014|0|505014` 木灵朵 / active / 花绽飞弹: trigger-frame-missing
+- `kibo|500048|505018|0|505018` 蔓音花 / active / 种子风暴: trigger-frame-missing
+- `kibo|500051|506001|0|506001` 岩甲蜥 / active / 岩锥: trigger-frame-missing
 - `kibo|500052|506008|0|506008` 穿甲蜥 / active / 岩固之盾: shield-formula-not-literal-function-5
 - `kibo|500053|506008|0|506008` 钻山蜥 / active / 岩固之盾: shield-formula-not-literal-function-5
-- `kibo|500057|507001|0|507001` 猪古力 / active / 雷球: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500064|504001|0|504001` 柔风鹰 / active / 风刃: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500066|502004|0|502004` 兔耳鳐 / active / 毒液弹: trigger-frame-missing, base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, projectile-impact-frame-runtime-dependent, pack-lifecycle-runtime-unimplemented, effect-trigger-frame-missing, effect-target-unresolved, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved
-- `kibo|500067|502006|0|502006` 飞鳐 / active / 水弹散射: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500068|502003|0|502003` 星鳐 / active / 爆裂水球: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500072|503004|0|503004` 乌尔 / active / 冰矛连射: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500081|503007|0|503007` 碎冰兔 / active / 凛冬矛击: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved
-- `kibo|500082|507008|0|507008` 雷冠牦 / active / 滚滚落雷: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved
-- `kibo|500083|501001|0|501001` 滚地犰 / active / 火球: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500095|509001|0|509001` 雾粘蛙 / active / 暗魂影: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500096|509002|0|509002` 雾球蛙 / active / 暗魂影爆阵: trigger-frame-missing, projectile-impact-frame-runtime-dependent
+- `kibo|500057|507001|0|507001` 猪古力 / active / 雷球: trigger-frame-missing
+- `kibo|500064|504001|0|504001` 柔风鹰 / active / 风刃: trigger-frame-missing
+- `kibo|500066|502004|0|502004` 兔耳鳐 / active / 毒液弹: trigger-frame-missing, base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, pack-lifecycle-runtime-unimplemented, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved
+- `kibo|500067|502006|0|502006` 飞鳐 / active / 水弹散射: trigger-frame-missing
+- `kibo|500068|502003|0|502003` 星鳐 / active / 爆裂水球: trigger-frame-missing
+- `kibo|500072|503004|0|503004` 乌尔 / active / 冰矛连射: trigger-frame-missing
+- `kibo|500083|501001|0|501001` 滚地犰 / active / 火球: trigger-frame-missing
+- `kibo|500095|509001|0|509001` 雾粘蛙 / active / 暗魂影: trigger-frame-missing
+- `kibo|500096|509002|0|509002` 雾球蛙 / active / 暗魂影爆阵: trigger-frame-missing
 - `kibo|500098|50009804|0|50009804` 水岩卫 / break / 水岩卫-合击: trigger-frame-missing
-- `kibo|500110|505001|0|505001` 宝蓝雏龙 / active / 灵木弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500114|503009|0|503009` 冰灵仔 / active / 冰晶弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500115|503010|0|503010` 冰灵偶 / active / 冰晶散射: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500116|503018|0|503018` 霜灵偶 / active / 寒冰之罚: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500120|504001|0|504001` 哈加 / active / 风刃: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500123|504012|0|504012` 风灵苞 / active / 小风弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500124|504012|0|504012` 风灵朵 / active / 小风弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500125|504014|0|504014` 岚音花 / active / 风刃扩张: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500126|504012|0|504012` 风灵仔 / active / 小风弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500127|504012|0|504012` 风灵偶 / active / 小风弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500128|504014|0|504014` 岚灵偶 / active / 风刃扩张: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500129|507001|0|507001` 呼姆猴 / active / 雷球: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500130|507003|0|507003` 环尾猴 / active / 落雷: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500131|507003|0|507003` 环影猴 / active / 落雷: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500133|506001|0|506001` 加多利 / active / 岩锥: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500138|501001|0|501001` 红宝虫 / active / 火球: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500139|506005|0|506005` 赤晶甲 / active / 巨石投掷: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500140|506005|0|506005` 炎晶甲 / active / 巨石投掷: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500147|505013|0|505013` 木灵仔 / active / 种子飞弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500147|50014704|0|50014704` 木灵仔 / break / 木灵仔-合击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500148|505014|0|505014` 木灵偶 / active / 花绽飞弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500148|50014804|0|50014804` 木灵偶 / break / 木灵偶-合击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500149|505017|0|505017` 蔓灵偶 / active / 地蔓突击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500149|50014904|0|50014904` 蔓灵偶 / break / 蔓灵偶-合击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500156|501001|0|501001` 火花雀 / active / 火球: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500156|50015604|0|50015604` 火花雀 / break / 火花雀-合击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500157|501005|0|501005` 焰火雀 / active / 焰弹连发: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500157|50015704|0|50015704` 焰火雀 / break / 焰火雀-合击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500158|501005|0|501005` 火烈鹰 / active / 焰弹连发: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500164|507012|0|507012` 雷灵苞 / active / 电能子弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500165|507020|0|507020` 雷灵朵 / active / 连锁雷暴: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500166|507019|0|507019` 电音花 / active / 雷电惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500173|507012|0|507012` 雷灵仔 / active / 电能子弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500174|507020|0|507020` 雷灵偶 / active / 连锁雷暴: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500179|509001|0|509001` 竖耳蝠 / active / 暗魂影: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500180|509002|0|509002` 嘻哈蝠 / active / 暗魂影爆阵: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500181|509002|0|509002` 笑面蝠 / active / 暗魂影爆阵: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500185|504009|0|504009` 森彩灵蝶 / active / 旋风涡流: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500186|502001|0|502001` 布鲁达 / active / 水弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent, base-function-unverified, common-function-unverified, level-ratio-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete
-- `kibo|500187|502007|0|502007` 蓝羽西格尼 / active / 泡泡攻击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500213|509001|0|509001` 菇噜噜 / active / 暗魂影: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500220|509010|0|509010` 星云伊欧 / active / 暗影连袭: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500231|507003|0|507003` 铁鬃霸主 / active / 落雷: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500244|501001|0|501001` 焰哞哞 / active / 火球: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500258|505001|0|505001` 小芽狐 / active / 灵木弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500261|502001|0|502001` 河狸仔 / active / 水弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent, base-function-unverified, common-function-unverified, level-ratio-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete
-- `kibo|500262|502001|0|502001` 波河狸 / active / 水弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent, base-function-unverified, common-function-unverified, level-ratio-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete
-- `kibo|500263|502005|0|502005` 河狸大师 / active / 浪袭: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500304|504012|0|504012` 库库 / active / 小风弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500305|504020|0|504020` 库库尔 / active / 旋风回旋镖: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500306|504006|0|504006` 库库尔克 / active / 风龙卷: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500313|501016|0|501016` 绒心布里尼 / active / 分裂之焰: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500322|504001|0|504001` 赛可洛 / active / 风刃: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500324|504006|0|504006` 伊欧利安 / active / 风龙卷: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500354|509001|0|509001` 小暮鸮 / active / 暗魂影: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500355|509002|0|509002` 夜猫鸮 / active / 暗魂影爆阵: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500357|504012|0|504012` 啵啵丁 / active / 小风弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500360|509002|0|509002` 怯影之翼 / active / 暗魂影爆阵: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500368|504012|0|504012` 小音浮 / active / 小风弹: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500369|507003|0|507003` 乐乐蛙 / active / 落雷: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500370|507003|0|507003` 音霸蛙 / active / 落雷: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500399|502007|0|502007` 浮云 / active / 泡泡攻击: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `kibo|500467|506001|0|506001` 小岩蹄 / active / 岩锥: trigger-frame-missing, projectile-impact-frame-runtime-dependent
+- `kibo|500110|505001|0|505001` 宝蓝雏龙 / active / 灵木弹: trigger-frame-missing
+- `kibo|500114|503009|0|503009` 冰灵仔 / active / 冰晶弹: trigger-frame-missing
+- `kibo|500115|503010|0|503010` 冰灵偶 / active / 冰晶散射: trigger-frame-missing
+- `kibo|500116|503018|0|503018` 霜灵偶 / active / 寒冰之罚: trigger-frame-missing
+- `kibo|500120|504001|0|504001` 哈加 / active / 风刃: trigger-frame-missing
+- `kibo|500123|504012|0|504012` 风灵苞 / active / 小风弹: trigger-frame-missing
+- `kibo|500124|504012|0|504012` 风灵朵 / active / 小风弹: trigger-frame-missing
+- `kibo|500125|504014|0|504014` 岚音花 / active / 风刃扩张: trigger-frame-missing
+- `kibo|500126|504012|0|504012` 风灵仔 / active / 小风弹: trigger-frame-missing
+- `kibo|500127|504012|0|504012` 风灵偶 / active / 小风弹: trigger-frame-missing
+- `kibo|500128|504014|0|504014` 岚灵偶 / active / 风刃扩张: trigger-frame-missing
+- `kibo|500129|507001|0|507001` 呼姆猴 / active / 雷球: trigger-frame-missing
+- `kibo|500130|507003|0|507003` 环尾猴 / active / 落雷: trigger-frame-missing
+- `kibo|500131|507003|0|507003` 环影猴 / active / 落雷: trigger-frame-missing
+- `kibo|500133|506001|0|506001` 加多利 / active / 岩锥: trigger-frame-missing
+- `kibo|500138|501001|0|501001` 红宝虫 / active / 火球: trigger-frame-missing
+- `kibo|500139|506005|0|506005` 赤晶甲 / active / 巨石投掷: trigger-frame-missing
+- `kibo|500140|506005|0|506005` 炎晶甲 / active / 巨石投掷: trigger-frame-missing
+- `kibo|500147|505013|0|505013` 木灵仔 / active / 种子飞弹: trigger-frame-missing
+- `kibo|500147|50014704|0|50014704` 木灵仔 / break / 木灵仔-合击: trigger-frame-missing
+- `kibo|500148|505014|0|505014` 木灵偶 / active / 花绽飞弹: trigger-frame-missing
+- `kibo|500148|50014804|0|50014804` 木灵偶 / break / 木灵偶-合击: trigger-frame-missing
+- `kibo|500149|505017|0|505017` 蔓灵偶 / active / 地蔓突击: trigger-frame-missing
+- `kibo|500149|50014904|0|50014904` 蔓灵偶 / break / 蔓灵偶-合击: trigger-frame-missing
+- `kibo|500156|501001|0|501001` 火花雀 / active / 火球: trigger-frame-missing
+- `kibo|500156|50015604|0|50015604` 火花雀 / break / 火花雀-合击: trigger-frame-missing
+- `kibo|500157|501005|0|501005` 焰火雀 / active / 焰弹连发: trigger-frame-missing
+- `kibo|500157|50015704|0|50015704` 焰火雀 / break / 焰火雀-合击: trigger-frame-missing
+- `kibo|500158|501005|0|501005` 火烈鹰 / active / 焰弹连发: trigger-frame-missing
+- `kibo|500164|507012|0|507012` 雷灵苞 / active / 电能子弹: trigger-frame-missing
+- `kibo|500165|507020|0|507020` 雷灵朵 / active / 连锁雷暴: trigger-frame-missing
+- `kibo|500166|507019|0|507019` 电音花 / active / 雷电惩戒: trigger-frame-missing
+- `kibo|500173|507012|0|507012` 雷灵仔 / active / 电能子弹: trigger-frame-missing
+- `kibo|500174|507020|0|507020` 雷灵偶 / active / 连锁雷暴: trigger-frame-missing
+- `kibo|500179|509001|0|509001` 竖耳蝠 / active / 暗魂影: trigger-frame-missing
+- `kibo|500180|509002|0|509002` 嘻哈蝠 / active / 暗魂影爆阵: trigger-frame-missing
+- `kibo|500181|509002|0|509002` 笑面蝠 / active / 暗魂影爆阵: trigger-frame-missing
+- `kibo|500185|504009|0|504009` 森彩灵蝶 / active / 旋风涡流: trigger-frame-missing
+- `kibo|500186|502001|0|502001` 布鲁达 / active / 水弹: trigger-frame-missing, base-function-unverified, common-function-unverified, projectile-impact-frame-runtime-dependent, level-ratio-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete
+- `kibo|500187|502007|0|502007` 蓝羽西格尼 / active / 泡泡攻击: trigger-frame-missing
+- `kibo|500213|509001|0|509001` 菇噜噜 / active / 暗魂影: trigger-frame-missing
+- `kibo|500220|509010|0|509010` 星云伊欧 / active / 暗影连袭: trigger-frame-missing
+- `kibo|500231|507003|0|507003` 铁鬃霸主 / active / 落雷: trigger-frame-missing
+- `kibo|500244|501001|0|501001` 焰哞哞 / active / 火球: trigger-frame-missing
+- `kibo|500258|505001|0|505001` 小芽狐 / active / 灵木弹: trigger-frame-missing
+- `kibo|500261|502001|0|502001` 河狸仔 / active / 水弹: trigger-frame-missing, base-function-unverified, common-function-unverified, projectile-impact-frame-runtime-dependent, level-ratio-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete
+- `kibo|500262|502001|0|502001` 波河狸 / active / 水弹: trigger-frame-missing, base-function-unverified, common-function-unverified, projectile-impact-frame-runtime-dependent, level-ratio-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete
+- `kibo|500263|502005|0|502005` 河狸大师 / active / 浪袭: trigger-frame-missing
+- `kibo|500304|504012|0|504012` 库库 / active / 小风弹: trigger-frame-missing
+- `kibo|500305|504020|0|504020` 库库尔 / active / 旋风回旋镖: trigger-frame-missing
+- `kibo|500306|504006|0|504006` 库库尔克 / active / 风龙卷: trigger-frame-missing
+- `kibo|500313|501016|0|501016` 绒心布里尼 / active / 分裂之焰: trigger-frame-missing
+- `kibo|500322|504001|0|504001` 赛可洛 / active / 风刃: trigger-frame-missing
+- `kibo|500324|504006|0|504006` 伊欧利安 / active / 风龙卷: trigger-frame-missing
+- `kibo|500354|509001|0|509001` 小暮鸮 / active / 暗魂影: trigger-frame-missing
+- `kibo|500355|509002|0|509002` 夜猫鸮 / active / 暗魂影爆阵: trigger-frame-missing
+- `kibo|500357|504012|0|504012` 啵啵丁 / active / 小风弹: trigger-frame-missing
+- `kibo|500360|509002|0|509002` 怯影之翼 / active / 暗魂影爆阵: trigger-frame-missing
+- `kibo|500368|504012|0|504012` 小音浮 / active / 小风弹: trigger-frame-missing
+- `kibo|500369|507003|0|507003` 乐乐蛙 / active / 落雷: trigger-frame-missing
+- `kibo|500370|507003|0|507003` 音霸蛙 / active / 落雷: trigger-frame-missing
+- `kibo|500399|502007|0|502007` 浮云 / active / 泡泡攻击: trigger-frame-missing
+- `kibo|500467|506001|0|506001` 小岩蹄 / active / 岩锥: trigger-frame-missing
 
 ## 未关联非零回能元素
 

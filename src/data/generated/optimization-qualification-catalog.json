@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "f6602befedc51ee7",
-  "manifestsHash": "159b59ed426fa9a8",
-  "gapLedgerHash": "b06e25c99936e6f2",
-  "bindingMatrixHash": "54b696089f572fa7",
-  "sourceSnapshotHash": "56d62dbb9f22724b",
+  "rosterHash": "e6ffc66cc7cf3330",
+  "manifestsHash": "a1c61519ed7fec7a",
+  "gapLedgerHash": "97593f83e3275dce",
+  "bindingMatrixHash": "6a3b314ce462915a",
+  "sourceSnapshotHash": "38f0fac71776250a",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -1496,7 +1496,7 @@
         "kibo-visual-acceptance-evidence-blocked",
         "kibo-headless-maturity-not-ready"
       ],
-      "manifestHash": "760717e649350c01"
+      "manifestHash": "2a34cb2fe10fd1bd"
     },
     {
       "objectKind": "kibo",
@@ -1522,11 +1522,8 @@
       "displayName": "风灵朵",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "kibo-visual-acceptance-evidence-blocked",
-        "kibo-headless-maturity-not-ready"
-      ],
-      "manifestHash": "c41943973bdb6953"
+      "blockerCodes": [],
+      "manifestHash": "ee7dabcc468397f3"
     },
     {
       "objectKind": "kibo",
@@ -1534,11 +1531,8 @@
       "displayName": "岚音花",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "kibo-visual-acceptance-evidence-blocked",
-        "kibo-headless-maturity-not-ready"
-      ],
-      "manifestHash": "fd925e1152bf7341"
+      "blockerCodes": [],
+      "manifestHash": "a11e8d2399609962"
     },
     {
       "objectKind": "kibo",
@@ -1676,11 +1670,8 @@
       "displayName": "星云伊欧",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "kibo-visual-acceptance-evidence-blocked",
-        "kibo-headless-maturity-not-ready"
-      ],
-      "manifestHash": "ebbf9221fd6733e6"
+      "blockerCodes": [],
+      "manifestHash": "00d6ec292b23e09a"
     },
     {
       "objectKind": "kibo",
@@ -2763,7 +2754,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "f6602befedc51ee7",
+    "rosterHash": "e6ffc66cc7cf3330",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24671,7 +24662,7 @@
       "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "54b696089f572fa7"
+    "bindingMatrixHash": "6a3b314ce462915a"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44185,7 +44176,7 @@
       "set-skill": 11
     },
     "optimizationReadyTotal": 210,
-    "gameplayBlockingGapCount": 94,
+    "gameplayBlockingGapCount": 88,
     "bindingQualifiedEdgeCount": 11,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44268,5 +44259,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "713390fc8ff69d37"
+  "catalogHash": "12e66b32cc1959ae"
 }

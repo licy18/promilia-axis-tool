@@ -40,9 +40,9 @@
   "summary": {
     "total": 254,
     "published": 254,
-    "accepted": 224,
-    "optimizationReady": 224,
-    "blockingLedgerCount": 31,
+    "accepted": 227,
+    "optimizationReady": 227,
+    "blockingLedgerCount": 28,
     "byObjectKind": {
       "soul-essence": {
         "total": 62,
@@ -56,8 +56,8 @@
       },
       "kibo": {
         "total": 43,
-        "accepted": 14,
-        "optimizationReady": 14
+        "accepted": 17,
+        "optimizationReady": 17
       },
       "set-skill": {
         "total": 12,
@@ -5213,7 +5213,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "ca32075c84e4adfd",
+      "manifestHash": "0e72eb05c01f3d30",
       "evidence": {
         "iconSha256": "9322c754c52852e35cba8d4e8ef1561512052b375d6aa26bd1dc21c44ef55b75",
         "binding": {
@@ -5231,7 +5231,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5331,18 +5331,16 @@
       "objectKind": "kibo",
       "objectId": "500124",
       "displayName": "风灵朵",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "dae1f6f29a30c135",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "d835a764ff885bd8",
       "evidence": {
         "iconSha256": "1b9585841b8cc067d2aab0f447bcb1a32931c0e333290e205addcbf09cf5631b",
         "binding": {
@@ -5355,7 +5353,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -5367,7 +5365,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -5375,18 +5373,16 @@
       "objectKind": "kibo",
       "objectId": "500125",
       "displayName": "岚音花",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "32da259a1986a4b3",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "63cb8192429f175c",
       "evidence": {
         "iconSha256": "f32d637161254284be6855c1997fd768bcbb660fb3798a4d5c62f8a2f68b039a",
         "binding": {
@@ -5399,7 +5395,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -5411,7 +5407,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -5974,18 +5970,16 @@
       "objectKind": "kibo",
       "objectId": "500220",
       "displayName": "星云伊欧",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "b6f6caec13b80cc0",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "e2eda7196a5623fe",
       "evidence": {
         "iconSha256": "423bf2eb6b479eb1ba9f6fcfb41d5bf6c8c4590fbb1cce753b1ac4a18a0c4778",
         "binding": {
@@ -5999,7 +5993,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -6011,7 +6005,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -7019,5 +7013,5 @@
       }
     }
   ],
-  "catalogHash": "b4e8ef31bc46985f"
+  "catalogHash": "8a03c4c56bd9e6d5"
 }

@@ -400,6 +400,7 @@ export async function createVerifiedCombatMechanicsBuild({
       behaviorTriggerScope: 'skill-player',
       allowRuntimeTargetZeroDistance: true,
       bulletInjectionMode: 'recursive-immediate',
+      runtimeEffectsUseScenarioTriggers: true,
       sourceIdentity:
         'm12-b3-kibo-zero-distance-profile|user-approved-sync-rebaseline-2026-08-05|frozen-zero-distance-scenario-assumption',
     });
@@ -5253,8 +5254,13 @@ function createControlBinding({
       value => `${value.behaviorPathId}|${value.startFrame}`
     ).filter(trigger => Number.isInteger(trigger.startFrame));
     const elementId = Number(tree?.elementConfigId);
+    const kiboZeroDistancePolicy =
+      String(control.runtimePolicy?.sourceIdentity ?? '').startsWith(
+        'm12-b3-kibo-zero-distance-profile'
+      );
     const scenarioTriggers =
-      ref.referenceKind === 'bulletElements' && Number.isInteger(elementId)
+      Number.isInteger(elementId) &&
+      (ref.referenceKind === 'bulletElements' || kiboZeroDistancePolicy)
         ? (control.bulletLaunches ?? [])
             .filter(
               launch =>
@@ -5432,6 +5438,31 @@ function createControlBinding({
   });
   const players = control.value.skillControlData?.skillPlayers ?? [];
   const resourceMaps = control.value.skillResourceMaps ?? [];
+  const kiboZeroDistancePolicy = String(
+    control.runtimePolicy?.sourceIdentity ?? ''
+  ).startsWith('m12-b3-kibo-zero-distance-profile');
+  const resolvedElements = kiboZeroDistancePolicy
+    ? Array.from(
+        elements
+          .reduce((byElement, element) => {
+            const key = `${element.mapIndex}|${
+              Number.isInteger(element.elementId)
+                ? element.elementId
+                : `path:${element.pathId ?? `${element.referenceKind}:${element.elementIndex}`}`
+            }`;
+            const current = byElement.get(key);
+            if (
+              !current ||
+              kiboElementBindingRank(element) >
+                kiboElementBindingRank(current)
+            ) {
+              byElement.set(key, element);
+            }
+            return byElement;
+          }, new Map())
+          .values()
+      )
+    : elements;
   const effectGraph = createControlEffectGraph({
     control: {
       ...control,
@@ -5446,13 +5477,13 @@ function createControlBinding({
   const effects = createControlRuntimeEffects({
     effectGraph,
     control,
-    elements,
+    elements: resolvedElements,
   });
   const variantCount = Math.max(players.length, resourceMaps.length);
   const variants = Array.from({ length: variantCount }, (_, mapIndex) => {
     const player = players[mapIndex] ?? null;
     const resourceMap = resourceMaps[mapIndex] ?? null;
-    const variantElements = elements.filter(
+    const variantElements = resolvedElements.filter(
       element => element.mapIndex === mapIndex
     );
     return {
@@ -5490,7 +5521,7 @@ function createControlBinding({
     sourcePath: relativeExternalPath(control.filePath),
     logic: createControlSkillLogic(skillLogicById.get(control.skillId)),
     variants,
-    elements,
+    elements: resolvedElements,
     effectGraph,
     effects,
     semanticBehaviorTriggers: control.semanticBehaviorTriggers,
@@ -5505,7 +5536,7 @@ function createControlEffectGraph({
   overridesBySkillAndElement,
   tuningMechanicsCatalog,
 }) {
-  return control.elementRefs.map(ref => {
+  const roots = control.elementRefs.map(ref => {
     const rootResolution = resolveIndexedElementReference({
       reference: ref,
       elementsByPathId: allIndexedElements,
@@ -5599,6 +5630,33 @@ function createControlEffectGraph({
       }
     }
   });
+  if (
+    !String(control.runtimePolicy?.sourceIdentity ?? '').startsWith(
+      'm12-b3-kibo-zero-distance-profile'
+    )
+  ) {
+    return roots;
+  }
+  return Array.from(
+    roots
+      .reduce((byElement, root) => {
+        const key = `${root.mapIndex}|${
+          Number.isInteger(root.rootElementId)
+            ? root.rootElementId
+            : `path:${root.rootPathId ?? `${root.referenceKind}:${root.elementIndex}`}`
+        }`;
+        const current = byElement.get(key);
+        if (
+          !current ||
+          (root.referenceKind === 'elements' &&
+            current.referenceKind !== 'elements')
+        ) {
+          byElement.set(key, root);
+        }
+        return byElement;
+      }, new Map())
+      .values()
+  );
 }
 
 function resolveIndexedElementReference({
@@ -6087,7 +6145,10 @@ function classifyBattleEffectNode({
 }
 
 function createControlRuntimeEffects({ effectGraph, control, elements = [] }) {
-  return effectGraph.flatMap(root => {
+  const kiboZeroDistancePolicy = String(
+    control.runtimePolicy?.sourceIdentity ?? ''
+  ).startsWith('m12-b3-kibo-zero-distance-profile');
+  const bindings = effectGraph.flatMap(root => {
     const runtimeNodes = root.nodes.filter(node => {
       if (
         [
@@ -6136,6 +6197,25 @@ function createControlRuntimeEffects({ effectGraph, control, elements = [] }) {
       )
     );
   });
+  if (!kiboZeroDistancePolicy) return bindings;
+  // Kibo controls can list the same element in both `elements` and
+  // `bulletElements`; after the zero-distance scenario triggers are shared,
+  // both refs resolve to the same runtime effect. Emit one binding per
+  // element/node/trigger so the runtime does not apply the element twice.
+  return dedupeBy(
+    bindings,
+    effect =>
+      [
+        effect.mapIndex,
+        effect.elementId,
+        effect.pathId,
+        effect.kind,
+        effect.depth,
+        effect.trigger?.startFrame ?? 'unresolved-frame',
+        effect.sourceOrder?.triggerIndex ?? 0,
+        effect.target?.kind ?? 'unresolved',
+      ].join('|')
+  );
 }
 
 function createControlRuntimeEffectBinding({
@@ -8310,6 +8390,20 @@ function createPackage({
       ),
     },
   };
+}
+
+function kiboElementBindingRank(element) {
+  const status =
+    element.classification === 'applied'
+      ? 4
+      : element.scenarioClassification === 'applied'
+        ? 3
+        : element.classification === 'verified-zero' ||
+            element.scenarioClassification === 'verified-zero'
+          ? 2
+          : 1;
+  const refTieBreak = element.referenceKind === 'elements' ? 1 : 0;
+  return status * 2 + refTieBreak;
 }
 
 function createControlRuntimeHits(control) {

@@ -261,10 +261,10 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 124,
+      blockingUniqueGapCount: 88,
       byCategory: {
-        'not-implemented': 108,
-        'evidence-insufficient': 16,
+        'not-implemented': 74,
+        'evidence-insufficient': 14,
       },
     });
     expect(artifacts.summary.optimizationReadyCounts).toEqual({
@@ -299,18 +299,18 @@ describe('M12-B3 optimization qualification generation', () => {
       artifacts.gaps.records.filter(
         record => record.code === 'kibo-visual-acceptance-evidence-blocked'
       )
-    ).toHaveLength(43);
+    ).toHaveLength(26);
     expect(
       artifacts.gaps.records.filter(
         record => record.code === 'kibo-headless-maturity-not-ready'
       )
-    ).toHaveLength(43);
+    ).toHaveLength(26);
     expect(artifacts.summary.m12cLocked).toBe(true);
     expect(
       artifacts.gaps.records.filter(
         record => record.code === 'kibo-passive-static-evidence-gap'
       )
-    ).toHaveLength(3);
+    ).toHaveLength(1);
     expect(artifacts.catalog.cultivation.equipment.tuningFormula).toEqual({
       status: 'source-indexed-static-runtime-applied',
       parameters: [8500, 6000, 125, 200000],

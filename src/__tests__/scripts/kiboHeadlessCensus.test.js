@@ -62,9 +62,9 @@ describe('kibo headless census', () => {
         unresolved: 0,
       },
       publicActionClosure: {
-        evidenceClosed: 278,
-        scenarioAssumed: 30,
-        unresolved: 58,
+        evidenceClosed: 285,
+        scenarioAssumed: 25,
+        unresolved: 56,
       },
     });
     expect(outputs.mechanicsCatalog.summary.triggerLifetime).toEqual({
@@ -109,11 +109,11 @@ describe('kibo headless census', () => {
       )
     ).toBe(true);
     expect(outputs.maturityMatrix.summary.machineOptimizationReadyCount).toBe(
-      42
+      48
     );
     expect(
       outputs.maturityMatrix.rows.filter(row => row.remainingGaps.length === 0)
-    ).toHaveLength(42);
+    ).toHaveLength(48);
 
     expect(outputs.census).toEqual(generatedCensus);
     expect(outputs.mechanicsCatalog).toEqual(generatedPassiveCatalog);
