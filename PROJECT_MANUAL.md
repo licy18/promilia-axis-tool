@@ -1787,6 +1787,16 @@ M12-C 首个末音优化场景的输入条件仍固定为：全体候选角色 8
 
 B3-A-R1 与 B3-B-R1 已分别在 `f902de10c42c2c4dc750be2316fabe3bc026f8cc`、`f846161c4a71bbc2de2b5bed3f598f03344fc692` 通过；普通/缘星实例、固定培养与 DNA=`[]` 合同保持不变。C10-R1 至 C13 均已按各自基线通过。C14 在 `a5434a1e0b01c2d70db1832064e34f63fb44e279` 通过来源身份核查，正式文本与唯一可达旧图冲突的 `set-skill:3:4` 继续保持 `evidence-insufficient`。C15 通过版本化原生证据闭合持久安装根、周期条件复评、有限 Cover 叶与 cycle 相位，接入 `10084/10152/10197`；`10078` 因 `[302,303]` 多 PropertyTag 匹配语义未闭合而不应用。C15 已在 `aafb6aa6c645b7b7490fdba0f71b8941da311f6e` 通过产品验收。当前为 42/62 灵子、11/12 套装技能 runtime-applied、375 条阻断（354 not-implemented + 21 evidence-insufficient）；五类准入仍为空，整个 B3 尚未完成且 M12-C 锁定。任务现暂停待命，未收到用户明确恢复指令前不启动 C16、正式搜索或任何新机制批次。
 
+### M12-B3-E17 阶段五 sub2a 已完成：additionalHitElementDataList 附加命中子叶继承父触发器（2026-08-06）
+
+用户恢复 B3 推进后按 `E17 -> E18` 顺序执行。阶段五 sub2a 把 `additionalHitElementDataList` 的 depth>0 伤害子叶（如 50002504 的 `500251 雷属性共鸣 5秒伤害`，damageType=10）从 `nested-damage-trigger-lifecycle-not-expanded` 提升为 `applied`：子叶继承父根的行为触发器与目标（父命中时派发附加命中/DoT），并加入 nested-wrapper 允许关系集；同时**不修改 `createControlRuntimeHits` 的既有排序/编号**，避免把附加命中当独立 action hit 结算，因此三角色 golden 数值全部保持稳定（对比上一轮失败尝试：附加命中误入 hit 结算导致 101003 多 2-3 hit 与额外韧性/HP，本轮已回退该路径）。
+
+结果：`appliedEffectBindingCount 1202->1321`、`unresolvedEffectBindingCount 2472->2358`、`semanticAppliedEffectCount 574->688`、battle effect catalog `appliedNodeCount 633->739` / `unresolvedNodeCount 2201->2095`；角色 unresolved ledger 的 gameplay-impacting 与 wrapper-or-duplicate 计数同步下降（101010/103002/101003）。包 hash `cbf1dac3723c6ff4b29b5669599999a3edb5938e87ed4c8a1cc6f0890de96b53`（文件 SHA-256 `b1ec554d35dad9ef310bf5260beb0352bbc70270b4cc045e9604f557f34a1164`）；Machine Axis 标准哈希更新为 `9343ae372587433b / fa9920709e3c0aac / 53ac813d8f879176 / 0b410dc9255d2654`。目标 signature 行数未变（每行仍带 layerInfoList/triggerEffectList/pack 等其他阻断），但 `kibo-passive-static-evidence-gap` 与 520059 资产缺口结论不变。
+
+验证：`data:sync-verified-combat` 三角色 authoritative golden 全过；12 个聚焦文件（migration/canonical replay/trace index/package/census/qualification/visual/before-skill/machine-axis/cycle/Workbench）全部通过；全套 Vitest 1422/1428 通过，5 个 process-heavy 文件单独运行全部通过（其中 characterCombatProfilePipeline 与 rubyCharacterCombatProfile 为真实的 unresolved ledger 计数断言，已按新包更新）；8 项确定性审计、production build 与 `git diff --check` 全 clean。
+
+下一阶段任务：**E17 阶段五 sub2b：triggerEffectList/layerInfoList 子叶的真实层数门控**。不能把这两个关系直接并入 nested-wrapper 允许集——101010 的风/雷共鸣层子叶（attributeId 105 能量回复增幅）一旦无条件 applied 会改变角色 golden SP（已实测 currentValue 35.419->36.065 漂移）。实现路径：① 编译期从父 stack 的 `layerInfoList`（layerCnt 1..5 + elementDataList 引用）为子叶生成 `activationConditions`（stackElementId + minLayerCount）；② 运行时为 stack 效果登记实体层数（复用 part3 的 `elementTagLayers`/`elementIdsHeld` 状态通道），条件评估按目标层数 fail-closed；③ 闭合后可顺次处理 pack-lifecycle、`sp-recover-type-not-direct-sp`（recoverType=3 冷却缩减）、`base-function-unverified` 与 `property-formula-not-literal-function-5` 公式族。每完成一个子阶段即更新本手册并单独提交。
+
 ### M10-A 小玉闭环缺口修复已通过独立机制验收（2026-07-28）
 
 普通 A3 与普通 A4 现分别按 `18F` 和 `10/14/18/22F` 的真实投射物链结算，A4 四次 hit 与爆发 A2 十二段保持独立。入场星携技保持 `95F` 占轴但允许 `55F/109F` 命中在块外继续结算，逐 hit 选择统一写回父切人事件；完美招架反击由 `successful-parry` 场景前置驱动 `10101049/sub1` 的两次命中。缘结阈值事务会同时清空资源、进入爆发并获得 2 层风印记；极限反击本体不再因仅开放派生窗口而误触发玉未央。

@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/103002/golden-trace.json",
-        "reportHash": "d0b4c47003807248",
+        "reportHash": "ff53e9a49733b8eb",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 103002 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "58e3bb024cd15c81",
-          "data": "91429edf846645ec",
-          "trace": "e1cb530f180aa8df",
+          "input": "2969e95819a958b6",
+          "data": "44dec031210271b9",
+          "trace": "c10fbc75bf509377",
           "evaluation": null
         }
       },
@@ -1361,7 +1361,7 @@
           "assertionHash": "4e0ca9761fbfa162"
         }
       ],
-      "scenarioCaseHash": "dd2a43f699c91316"
+      "scenarioCaseHash": "3efdaad913df3557"
     },
     {
       "schemaVersion": 1,
@@ -1369,7 +1369,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/103002-visual.json",
-        "inputHash": "14cee7ae6e4b4987",
+        "inputHash": "4aff068e69da971f",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/103002-visual.json"
       },
       "execution": {
@@ -1378,9 +1378,9 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "14cee7ae6e4b4987",
-          "data": "73507f7be42fc126",
-          "trace": "dbc8f4c5daa8ff07",
+          "input": "4aff068e69da971f",
+          "data": "3cff64e8092ce17a",
+          "trace": "5160016eadee8f0f",
           "evaluation": "b06186eaa569be69"
         }
       },
@@ -2530,7 +2530,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "e4cae9d83b981d10"
+      "scenarioCaseHash": "be0e5991b3133712"
     }
   ],
   "summary": {
@@ -2543,5 +2543,5 @@
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "6bde85304b6b10d7"
+  "scenarioSetHash": "746114d0bed6021f"
 }

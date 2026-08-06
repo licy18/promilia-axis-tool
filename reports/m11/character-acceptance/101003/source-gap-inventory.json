@@ -37,26 +37,6 @@
       "sourceRecordHash": "731c4c3ee31e14a7"
     },
     {
-      "uniqueGapIdentity": "source-gap:0ccaf6540b177a5d",
-      "sourceRecordIdentities": [
-        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|63|1",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0",
-        "semantic-gap:763d9314e894bc9fa7ef"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100312:0:3879285143630828198:1011852803228526128:70",
-        "battle-effect:10100312:0:3879285143630828198:2749505792865494576:63",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|63|1",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "3e900201b02a9fb6"
-    },
-    {
       "uniqueGapIdentity": "source-gap:16e24ad6cdd386b6",
       "sourceRecordIdentities": [
         "hit:10100310|0|projectile|101003066|101003101|0|0|control:10100310|sub:0|behavior:-78150393795048980|config:0|bullet:101003101:0:0|element:101003066:0",
@@ -72,23 +52,6 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "c1b2a3696e787ebe"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:18330e4f8f4a2bb5",
-      "sourceRecordIdentities": [
-        "effect:10100322|0|elements|6|-1498771669867596146|element:3879285143630828198|57|0",
-        "semantic-gap:7793d9e91e5dd5af3954"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100322:0:3879285143630828198:-5797025868792535592:57",
-        "effect:10100322|0|elements|6|-1498771669867596146|element:3879285143630828198|57|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "f250f7f35aaeff6a"
     },
     {
       "uniqueGapIdentity": "source-gap:1d906f49e01832f4",
@@ -354,29 +317,6 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "612131467722baae"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:60f18f68f7824d94",
-      "sourceRecordIdentities": [
-        "effect:10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|193|2",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|207|0",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|223|1",
-        "semantic-gap:cb051328fbe13dc50b07"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100313:0:3879285143630828198:-6215383830795215380:207",
-        "battle-effect:10100313:0:3879285143630828198:2700200137312345580:223",
-        "battle-effect:10100313:0:3879285143630828198:6998348329063063020:193",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|193|2",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|207|0",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|223|1"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "75d9297374968614"
     },
     {
       "uniqueGapIdentity": "source-gap:6b70a48e615f9ac5",
@@ -668,23 +608,6 @@
       "sourceRecordHash": "addbe3d2b7809837"
     },
     {
-      "uniqueGapIdentity": "source-gap:dedbdcc697a5aa15",
-      "sourceRecordIdentities": [
-        "effect:10100313|0|elements|4|-5729186281790677610|element:-5729186281790677610|148|0",
-        "semantic-gap:3e48734ad9f7bc0a038a"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-any-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100313:0:-5729186281790677610:6060088285417807340:148",
-        "effect:10100313|0|elements|4|-5729186281790677610|element:-5729186281790677610|148|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "d49cc8fa4f7916c5"
-    },
-    {
       "uniqueGapIdentity": "source-gap:e4cd3b08e0c116fc",
       "sourceRecordIdentities": [
         "effect:10100312|0|elements|4|466374251647106866|element:466374251647106866|unresolved-frame|0",
@@ -720,22 +643,21 @@
     }
   ],
   "summary": {
-    "uniqueGapCount": 40,
-    "blockingCount": 28,
-    "nonBlockingCount": 12,
+    "uniqueGapCount": 36,
+    "blockingCount": 27,
+    "nonBlockingCount": 9,
     "statusCounts": {
-      "not-applicable": 12,
+      "not-applicable": 9,
       "runtime-evidence-required": 10,
-      "static-evidence-gap": 17,
+      "static-evidence-gap": 16,
       "unknown-formula": 1
     },
     "reasonCounts": {
-      "effect-target-any-unresolved": 1,
       "effect-target-unresolved|effect-trigger-frame-missing": 7,
       "effect-target-unresolved|effect-trigger-frame-missing|property-formula-not-literal-function-5": 1,
       "effect-trigger-frame-missing": 1,
       "hidden-ultimate-firework-explosion-discarded-current-client|legacy-or-unreachable-current-client": 1,
-      "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 5,
+      "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 2,
       "nested-effect-wrapper-semantics-unresolved": 5,
       "pack-lifecycle-runtime-unimplemented": 5,
       "runtime-dependent": 10,
@@ -743,5 +665,5 @@
       "unresolved": 3
     }
   },
-  "inventoryHash": "4c7a325afe2ebf4a"
+  "inventoryHash": "6efe653779bd15b0"
 }

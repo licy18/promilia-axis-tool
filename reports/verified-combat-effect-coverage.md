@@ -9,9 +9,9 @@
 - 去重语义效果：3368
 - 最终玩法效果：1755
 - 结构包装/条件：1613
-- 语义可计算：574
+- 语义可计算：688
 - 语义明确零：7
-- 语义未解析：1174
+- 语义未解析：1060
 
 ## 语义放置
 
@@ -53,10 +53,10 @@
 
 ## 原始边审计
 
-- 效果绑定：3680
-- 可计算：1201
+- 效果绑定：3685
+- 可计算：1320
 - 明确零：7
-- 未解析：2472
+- 未解析：2358
 
 ## 元素类型
 
@@ -75,7 +75,7 @@
 - effect-target-static-evidence-gap: 431
 - effect-trigger-frame-static-evidence-gap: 376
 - heal-formula-not-literal-function-5: 34
-- nested-damage-runtime-family-unimplemented: 463
+- nested-damage-runtime-family-unimplemented: 307
 - property-change-type-not-battle-property: 1
 - property-duration-zero-unresolved: 5
 - property-formula-not-literal-function-5: 119
@@ -93,6 +93,6 @@
 - tuning-mark-relation-elementDataList-unresolved: 2
 - tuning-mark-relation-notDelElementDataList-unresolved: 13
 - tuning-mark-relation-triggerEffectList-unresolved: 1
-- wrapper-condition-semantics-unresolved: 785
+- wrapper-condition-semantics-unresolved: 605
 
 > 只有真实触发帧、唯一目标且公式输入可安全解释的维度进入运行时；其余逐项来源见同名 JSON。

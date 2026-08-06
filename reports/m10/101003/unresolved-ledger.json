@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-unresolved-ledger",
   "ownerId": 101003,
-  "profileHash": "73e0b7c6beb555e3658b2812f3d4efe4c6fa733071a81e544bdc454344660079",
+  "profileHash": "733839064568b323a9c12fcd49d383b31f159367e5febba0a86d1a3dc02070d6",
   "summary": {
-    "semanticRecordCount": 39,
-    "rawRecordCount": 51,
+    "semanticRecordCount": 36,
+    "rawRecordCount": 45,
     "semanticStatusCounts": {
       "not-applicable": 2,
       "runtime-evidence-required": 10,
-      "static-evidence-gap": 27
+      "static-evidence-gap": 24
     },
     "rawStatusCounts": {
       "not-applicable": 2,
       "runtime-evidence-required": 10,
-      "static-evidence-gap": 39
+      "static-evidence-gap": 33
     },
     "impactClassificationCounts": {
       "gameplay-impacting": 27,
       "not-applicable": 2,
-      "wrapper-or-duplicate": 10
+      "wrapper-or-duplicate": 7
     },
     "gameplayImpactingCount": 27,
-    "wrapperOrDuplicateCount": 10,
+    "wrapperOrDuplicateCount": 7,
     "transitionCandidateSupersededCount": 0,
     "unreachableOrNotApplicableCount": 2
   },
@@ -391,54 +391,6 @@
       "metadata": null,
       "rawRecordIdentities": [
         "effect:10100361|0|elements|0|865127997397410363|element:865127997397410363|0|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:763d9314e894bc9fa7ef",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100312:0:3879285143630828198:2749505792865494576:63",
-      "sourceIdentities": [
-        "battle-effect:10100312:0:3879285143630828198:1011852803228526128:70",
-        "battle-effect:10100312:0:3879285143630828198:2749505792865494576:63"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|63|1",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0"
-      ],
-      "rawRecordCount": 2
-    },
-    {
-      "recordIdentity": "semantic-gap:7793d9e91e5dd5af3954",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100322:0:3879285143630828198:-5797025868792535592:57",
-      "sourceIdentities": [
-        "battle-effect:10100322:0:3879285143630828198:-5797025868792535592:57"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10100322|0|elements|6|-1498771669867596146|element:3879285143630828198|57|0"
       ],
       "rawRecordCount": 1
     },
@@ -847,33 +799,6 @@
       "rawRecordCount": 2
     },
     {
-      "recordIdentity": "semantic-gap:cb051328fbe13dc50b07",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100313:0:3879285143630828198:6998348329063063020:193",
-      "sourceIdentities": [
-        "battle-effect:10100313:0:3879285143630828198:-6215383830795215380:207",
-        "battle-effect:10100313:0:3879285143630828198:2700200137312345580:223",
-        "battle-effect:10100313:0:3879285143630828198:6998348329063063020:193"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|193|2",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|207|0",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|223|1"
-      ],
-      "rawRecordCount": 3
-    },
-    {
       "recordIdentity": "semantic-gap:d2f9ccf1e33046b0156e",
       "ownerId": 101003,
       "sourceKind": "effect",
@@ -1128,36 +1053,6 @@
       "metadata": null
     },
     {
-      "recordIdentity": "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|63|1",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100312:0:3879285143630828198:2749505792865494576:63",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100312:0:3879285143630828198:1011852803228526128:70",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
       "recordIdentity": "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|63|1",
       "ownerId": 101003,
       "sourceKind": "effect",
@@ -1195,51 +1090,6 @@
         "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10100312:0:466374251647106866:unresolved:unresolved",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|193|2",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100313:0:3879285143630828198:6998348329063063020:193",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|207|0",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100313:0:3879285143630828198:-6215383830795215380:207",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|223|1",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100313:0:3879285143630828198:2700200137312345580:223",
       "referenceKind": null,
       "sourceEvidenceStatus": null,
       "scenarioRuntimeStatus": null,
@@ -1372,21 +1222,6 @@
         "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10100322:0:-15343624725538709:unresolved:unresolved",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10100322|0|elements|6|-1498771669867596146|element:3879285143630828198|57|0",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100322:0:3879285143630828198:-5797025868792535592:57",
       "referenceKind": null,
       "sourceEvidenceStatus": null,
       "scenarioRuntimeStatus": null,

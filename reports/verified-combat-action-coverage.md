@@ -70,7 +70,7 @@
 - `actor|103002|10300201|0|10300203` 红宝石 / normal-attack / 灵感的火花: trigger-frame-missing, projectile-impact-frame-runtime-dependent, normal-attack-input-segment-duration-unresolved
 - `actor|107001|10700101|0|10700103` 西芙莉雅 / normal-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, normal-attack-input-segment-duration-unresolved
 - `actor|107001|10700101|4|10700110` 西芙莉雅 / charged-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|107001|10700101|6|10700115` 西芙莉雅 / dodge-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-relation-notDelElementDataList-unresolved, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved
+- `actor|107001|10700101|6|10700115` 西芙莉雅 / dodge-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-relation-notDelElementDataList-unresolved, nested-effect-wrapper-semantics-unresolved
 - `actor|107001|10700121|0|10700121` 西芙莉雅 / star-carry / 余音之痕: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|107001|10700121|4|10700127` 西芙莉雅 / perfect-parry / 余音之痕: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|107002|10700201|2|10700215` 米砂 / dodge-attack / 轻语: trigger-frame-missing, projectile-impact-frame-runtime-dependent
@@ -79,7 +79,7 @@
 - `actor|107003|10700321|2|10700327` 阿比 / perfect-parry / 阿比咆哮: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|108001|10800101|1|10800110` 忒拉拉 / charged-attack / 狼行焰影: selected-control-variant-has-no-three-value-elements
 - `actor|108001|10800121|2|10800127` 忒拉拉 / perfect-parry / 奔野之狼: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
-- `actor|108002|10800201|1|10800210` 璐璐卡 / charged-attack / 涟漪之舞: trigger-frame-missing, projectile-impact-frame-runtime-dependent, tuning-mark-max-mismatch, effect-trigger-frame-missing, nested-damage-trigger-lifecycle-not-expanded, effect-target-unresolved, nested-effect-wrapper-semantics-unresolved, property-formula-not-literal-function-5
+- `actor|108002|10800201|1|10800210` 璐璐卡 / charged-attack / 涟漪之舞: trigger-frame-missing, projectile-impact-frame-runtime-dependent, tuning-mark-max-mismatch, effect-trigger-frame-missing, effect-target-unresolved, property-formula-not-literal-function-5
 - `actor|108002|10800201|4|10800215` 璐璐卡 / dodge-attack / 涟漪之舞: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|108002|10800222|0|10800222` 璐璐卡 / star-carry / 幽浪之声: selected-control-variant-has-no-runnable-hit
 - `actor|108002|10800222|2|10800227` 璐璐卡 / perfect-parry / 幽浪之声: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved

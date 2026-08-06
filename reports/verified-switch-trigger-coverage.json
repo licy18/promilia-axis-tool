@@ -3,7 +3,7 @@
   "kind": "azpr-verified-switch-trigger-coverage",
   "status": "verified-switch-trigger-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "d9af1f5cf37c227f979d8e592bec72d4f1db9f1525ce448d336160baae2e81e2",
+  "packageHash": "cbf1dac3723c6ff4b29b5669599999a3edb5938e87ed4c8a1cc6f0890de96b53",
   "sourceDenominator": {
     "kind": "current-client-public-actor-switch-skill-slots",
     "actorOwnerCount": 20,
@@ -44,7 +44,6 @@
       "mechanicsReasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
@@ -178,7 +177,6 @@
       "manualReleaseStatus": "switch-trigger-only",
       "mechanicsClassification": "applied",
       "mechanicsReasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -367,7 +365,6 @@
       "mechanicsReasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -400,9 +397,7 @@
       "manualReleaseStatus": "switch-trigger-only",
       "mechanicsClassification": "applied",
       "mechanicsReasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "characters.items[id=108005].skillSlots[slot=201,skillId=10800522]",
       "sourceIdentities": [
@@ -550,9 +545,7 @@
       "mechanicsReasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "characters.items[id=112002].skillSlots[slot=201,skillId=11200222]",
       "sourceIdentities": [

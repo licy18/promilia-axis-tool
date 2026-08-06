@@ -57,19 +57,6 @@
       "edgeIdentity": "coverage-edge:055ceadc6e02f99d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:18:e9a18a2a96f42aaf",
-      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:0",
-      "selector": {
-        "effectIdentity": "battle-element:101003207",
-        "kind": "effect"
-      },
-      "assertionHash": "f7a86134a4b8400d",
-      "traceProjectionHash": "47783e3e0c8c7a22",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:05fd2a516f128713"
-    },
-    {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-one",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:50",
@@ -108,6 +95,19 @@
       "traceProjectionHash": "a065494da80b0f3a",
       "status": "verified",
       "edgeIdentity": "coverage-edge:06d4d96a5a1eae93"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:30",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "d15daa492b5c72ce",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:073d0c516b2aec69"
     },
     {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-7",
@@ -191,6 +191,19 @@
       "edgeIdentity": "coverage-edge:08bba76fac01f4d2"
     },
     {
+      "requirementIdentity": "contract:effect:effect:18:a69d6436ba66d06c",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:0",
+      "selector": {
+        "effectIdentity": "battle-element:101003207",
+        "kind": "effect"
+      },
+      "assertionHash": "a3ea51d5ece670fd",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:09e0c0a326941e97"
+    },
+    {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-controlled-attack-passive",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:34",
@@ -228,19 +241,6 @@
       "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
       "edgeIdentity": "coverage-edge:0aa1ae744ebaee15"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:15",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "8b15470951e24729",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:0b45966745df5d1f"
     },
     {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-5",
@@ -376,6 +376,19 @@
       "edgeIdentity": "coverage-edge:101b96148052f4e4"
     },
     {
+      "requirementIdentity": "contract:effect:effect:18:a69d6436ba66d06c",
+      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:0",
+      "selector": {
+        "effectIdentity": "battle-element:101003207",
+        "kind": "effect"
+      },
+      "assertionHash": "f7a86134a4b8400d",
+      "traceProjectionHash": "47783e3e0c8c7a22",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:104ff5e3d0f5328d"
+    },
+    {
       "requirementIdentity": "contract:action-effect-binding:han-perfect-dodge-team-tuning",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:52",
@@ -400,6 +413,19 @@
       "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
       "edgeIdentity": "coverage-edge:10c417110f0718a1"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:15",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "8b15470951e24729",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:110b4e588b6e145d"
     },
     {
       "requirementIdentity": "contract:action-form:actor|101003|10100322|0|10100322:default",
@@ -511,19 +537,6 @@
       "edgeIdentity": "coverage-edge:19978d52a12eed38"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:14",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "9d91bcd477c003de",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:19aa009273e05dd0"
-    },
-    {
       "requirementIdentity": "contract:action-effect-binding:han-perfect-dodge-team-tuning",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:2",
@@ -617,19 +630,6 @@
       "edgeIdentity": "coverage-edge:1d7ed40a317ecae9"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:2",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "3042bb93071b19a5",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:1d85aa6b0ace038b"
-    },
-    {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-one",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:14",
@@ -708,17 +708,17 @@
       "edgeIdentity": "coverage-edge:20c8859b92b02259"
     },
     {
-      "requirementIdentity": "contract:effect:effect:32:b06d74e7668d46b7",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:40",
+      "requirementIdentity": "contract:effect:effect:18:a69d6436ba66d06c",
+      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:10",
       "selector": {
-        "effectIdentity": "battle-element:101003142",
+        "effectIdentity": "battle-element:101003207",
         "kind": "effect"
       },
-      "assertionHash": "0331031c5e6ea901",
-      "traceProjectionHash": "f3d96ca8f42a3866",
+      "assertionHash": "ecbb14f1491bc1be",
+      "traceProjectionHash": "47783e3e0c8c7a22",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:229dfc3eef0cf62d"
+      "edgeIdentity": "coverage-edge:211eb230730cb660"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-perfect-dodge-team-tuning",
@@ -814,19 +814,6 @@
       "edgeIdentity": "coverage-edge:26fdd1c9c40b6da7"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:2",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "f632b32edbe5e165",
-      "traceProjectionHash": "47783e3e0c8c7a22",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:272a2acbcdf9a186"
-    },
-    {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-7",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-state:golden-state:m10-b2:101003:120s-three-actor-golden:5",
@@ -838,19 +825,6 @@
       "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
       "edgeIdentity": "coverage-edge:27580d1d7c9aca42"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:18:e9a18a2a96f42aaf",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:0",
-      "selector": {
-        "effectIdentity": "battle-element:101003207",
-        "kind": "effect"
-      },
-      "assertionHash": "a3ea51d5ece670fd",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:277a646f5c19464d"
     },
     {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-7",
@@ -957,6 +931,19 @@
       "edgeIdentity": "coverage-edge:2c28426b5f0901eb"
     },
     {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m11-d-101003-visual-acceptance",
+      "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:16",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "ecf614b728748580",
+      "traceProjectionHash": "a065494da80b0f3a",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:2ccb278e2e362def"
+    },
+    {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-one",
       "scenarioIdentity": "m11-d-101003-visual-acceptance",
       "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:25",
@@ -996,17 +983,17 @@
       "edgeIdentity": "coverage-edge:3056075831754b5d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:32:b06d74e7668d46b7",
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:45",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:14",
       "selector": {
-        "effectIdentity": "battle-element:101003142",
+        "effectIdentity": "battle-element:101003205",
         "kind": "effect"
       },
-      "assertionHash": "0889587550b8d880",
+      "assertionHash": "9d91bcd477c003de",
       "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:305b87c820416b61"
+      "edgeIdentity": "coverage-edge:30c9f57645bff24e"
     },
     {
       "requirementIdentity": "contract:target-state-profile:enemy:firework",
@@ -1113,19 +1100,6 @@
       "edgeIdentity": "coverage-edge:339383924a59e849"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:50",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "d55aa27307b1a9f3",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:339a020aff7ae906"
-    },
-    {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-3",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-state:golden-state:m10-b2:101003:120s-three-actor-golden:1",
@@ -1178,6 +1152,19 @@
       "edgeIdentity": "coverage-edge:36d8b452433e4e67"
     },
     {
+      "requirementIdentity": "contract:effect:effect:18:a69d6436ba66d06c",
+      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:13",
+      "selector": {
+        "effectIdentity": "battle-element:101003207",
+        "kind": "effect"
+      },
+      "assertionHash": "777d0b04b85563fe",
+      "traceProjectionHash": "47783e3e0c8c7a22",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:36f5e437879cadeb"
+    },
+    {
       "requirementIdentity": "contract:action-effect-binding:han-ultimate-team-tuning-two-stacks",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:49",
@@ -1202,19 +1189,6 @@
       "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
       "edgeIdentity": "coverage-edge:37c06c0e83a1a52d"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:52",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "cde0ecc01b7361b9",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:37fe72ff47add5d5"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-ultimate-team-tuning-two-stacks",
@@ -1269,6 +1243,19 @@
       "traceProjectionHash": "a065494da80b0f3a",
       "status": "verified",
       "edgeIdentity": "coverage-edge:39e209d5e627f9a9"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:2",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "3042bb93071b19a5",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3a81d9809a270369"
     },
     {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-two",
@@ -1326,6 +1313,19 @@
       "edgeIdentity": "coverage-edge:3bae0ed80b7fbd90"
     },
     {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:33",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "fdcd4ecb2bf96de1",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3bdd942484dbfa84"
+    },
+    {
       "requirementIdentity": "protocol:101003:save-import-replay",
       "scenarioIdentity": "m11-d-101003-visual-acceptance",
       "assertionIdentity": "workbench-import-export-round-trip",
@@ -1381,19 +1381,6 @@
       "edgeIdentity": "coverage-edge:3efee7a5001b76f7"
     },
     {
-      "requirementIdentity": "contract:effect:effect:34:29e8e9e04d37a169",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:41",
-      "selector": {
-        "effectIdentity": "battle-element:101003145",
-        "kind": "effect"
-      },
-      "assertionHash": "41cb7c19d69583f8",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:41647ae32bd7d93e"
-    },
-    {
       "requirementIdentity": "contract:action-form:actor|101003|10100322|1|10100325:default",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-action-form:golden-action-form:m10-b2:101003:120s-three-actor-golden:han-limit-counter",
@@ -1447,6 +1434,19 @@
       "traceProjectionHash": "a065494da80b0f3a",
       "status": "verified",
       "edgeIdentity": "coverage-edge:43407a6945f1008e"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:1",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "e1f53cdde3952a9e",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:43818698db32f0a1"
     },
     {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-one",
@@ -1540,19 +1540,6 @@
       "edgeIdentity": "coverage-edge:46ffc0feface19b1"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:15",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "104811f4fb1f484e",
-      "traceProjectionHash": "47783e3e0c8c7a22",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:47833179fa5a10dd"
-    },
-    {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-one",
       "scenarioIdentity": "m11-d-101003-visual-acceptance",
       "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:15",
@@ -1605,19 +1592,6 @@
       "edgeIdentity": "coverage-edge:48f65b2e7b0e2004"
     },
     {
-      "requirementIdentity": "contract:effect:effect:18:e9a18a2a96f42aaf",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:10",
-      "selector": {
-        "effectIdentity": "battle-element:101003207",
-        "kind": "effect"
-      },
-      "assertionHash": "3abfb65446483114",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:490f50b4ebbf5e1f"
-    },
-    {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-one",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:1",
@@ -1631,19 +1605,6 @@
       "edgeIdentity": "coverage-edge:4aeef1460570be34"
     },
     {
-      "requirementIdentity": "contract:effect:effect:18:e9a18a2a96f42aaf",
-      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:10",
-      "selector": {
-        "effectIdentity": "battle-element:101003207",
-        "kind": "effect"
-      },
-      "assertionHash": "ecbb14f1491bc1be",
-      "traceProjectionHash": "47783e3e0c8c7a22",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:4c12d14c1e8e781a"
-    },
-    {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-controlled-attack-passive",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:51",
@@ -1655,6 +1616,19 @@
       "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
       "edgeIdentity": "coverage-edge:4c2d0412ddcadb79"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m11-d-101003-visual-acceptance",
+      "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:26",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "76f30e6c6e50e45b",
+      "traceProjectionHash": "a065494da80b0f3a",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:4da4d7730ae847f2"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-perfect-dodge-team-tuning",
@@ -1707,6 +1681,19 @@
       "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
       "edgeIdentity": "coverage-edge:51fc1780c8555508"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:36",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "ed60c6026045e71a",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:5313d2248a7db716"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-ultimate-team-tuning-two-stacks",
@@ -1774,6 +1761,19 @@
       "edgeIdentity": "coverage-edge:5686bc6467a2186b"
     },
     {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:1",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "ee78faf47483915e",
+      "traceProjectionHash": "47783e3e0c8c7a22",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:5823f95c31930fe7"
+    },
+    {
       "requirementIdentity": "contract:action-form:han-normal-five-inputs:segment:1",
       "scenarioIdentity": "m11-d-101003-visual-acceptance",
       "assertionIdentity": "trace-action-form:machine-action-form:m11-d-101003-visual-acceptance:101003-critical-non-critical",
@@ -1787,32 +1787,6 @@
       "traceProjectionHash": "a065494da80b0f3a",
       "status": "verified",
       "edgeIdentity": "coverage-edge:598c82360dc3b435"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m11-d-101003-visual-acceptance",
-      "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:15",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "cfb4263f491cf47f",
-      "traceProjectionHash": "a065494da80b0f3a",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:59bfa0d0a7df5df0"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:33",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "fdcd4ecb2bf96de1",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:5a5b9f56c606246e"
     },
     {
       "requirementIdentity": "contract:action-form:han-normal-five-inputs:segment:5",
@@ -1947,6 +1921,19 @@
       "edgeIdentity": "coverage-edge:61652a4ce76a3e76"
     },
     {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:15",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "104811f4fb1f484e",
+      "traceProjectionHash": "47783e3e0c8c7a22",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:62e43d1106ed4c73"
+    },
+    {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-3",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-state:golden-state:m10-b2:101003:120s-three-actor-golden:5",
@@ -2077,6 +2064,32 @@
       "edgeIdentity": "coverage-edge:686a50f13c0e6144"
     },
     {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:3",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "be96f63cf8fd8c7c",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:68e8e870b1ea2a5e"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:49",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "65a93c80b4430421",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:699569de25adf9f0"
+    },
+    {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-one",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:49",
@@ -2090,19 +2103,6 @@
       "edgeIdentity": "coverage-edge:69c718ccd184db8d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:18:e9a18a2a96f42aaf",
-      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:13",
-      "selector": {
-        "effectIdentity": "battle-element:101003207",
-        "kind": "effect"
-      },
-      "assertionHash": "777d0b04b85563fe",
-      "traceProjectionHash": "47783e3e0c8c7a22",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:69d763e0bcf51739"
-    },
-    {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-two",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:36",
@@ -2114,6 +2114,19 @@
       "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
       "edgeIdentity": "coverage-edge:69f60014da9b3e51"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:16",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "8085fc25640f70c3",
+      "traceProjectionHash": "47783e3e0c8c7a22",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:6b100243be10b691"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-perfect-dodge-team-tuning",
@@ -2261,6 +2274,19 @@
       "edgeIdentity": "coverage-edge:6ee1f0f22eb4bf6a"
     },
     {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m11-d-101003-visual-acceptance",
+      "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:15",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "cfb4263f491cf47f",
+      "traceProjectionHash": "a065494da80b0f3a",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:6f92f68d7c7f8982"
+    },
+    {
       "requirementIdentity": "contract:action-effect-binding:han-perfect-dodge-team-tuning",
       "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:16",
@@ -2342,19 +2368,6 @@
       "edgeIdentity": "coverage-edge:72f24b913fd63c45"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m11-d-101003-visual-acceptance",
-      "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:16",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "ecf614b728748580",
-      "traceProjectionHash": "a065494da80b0f3a",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:7303938528d7157d"
-    },
-    {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-one",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:52",
@@ -2368,30 +2381,17 @@
       "edgeIdentity": "coverage-edge:734b86728c0cea5a"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:1",
+      "requirementIdentity": "contract:effect:effect:32:155b53eece5f98fc",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:40",
       "selector": {
-        "effectIdentity": "battle-element:101003205",
+        "effectIdentity": "battle-element:101003142",
         "kind": "effect"
       },
-      "assertionHash": "ee78faf47483915e",
-      "traceProjectionHash": "47783e3e0c8c7a22",
+      "assertionHash": "0331031c5e6ea901",
+      "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:73b954a9f49346b1"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:3",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "b92b7c0fd5bdb23c",
-      "traceProjectionHash": "47783e3e0c8c7a22",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:77adb9fae1022b65"
+      "edgeIdentity": "coverage-edge:73e872b34f6c3179"
     },
     {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-1",
@@ -2539,17 +2539,17 @@
       "edgeIdentity": "coverage-edge:8082b42cfcc4d93f"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:3",
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m11-d-101003-visual-acceptance",
+      "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:25",
       "selector": {
         "effectIdentity": "battle-element:101003205",
         "kind": "effect"
       },
-      "assertionHash": "be96f63cf8fd8c7c",
-      "traceProjectionHash": "f3d96ca8f42a3866",
+      "assertionHash": "6463710dcc19215a",
+      "traceProjectionHash": "a065494da80b0f3a",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:80eeecb1140a8420"
+      "edgeIdentity": "coverage-edge:81308e5e94974ef3"
     },
     {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-6",
@@ -2630,6 +2630,19 @@
       "edgeIdentity": "coverage-edge:86b2573b94b5cbe9"
     },
     {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m11-d-101003-visual-acceptance",
+      "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:17",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "640859e04fad9f79",
+      "traceProjectionHash": "a065494da80b0f3a",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:8715d1fbd0dcdb8d"
+    },
+    {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-3",
       "scenarioIdentity": "m11-d-101003-visual-acceptance",
       "assertionIdentity": "trace-state:machine-state:m11-d-101003-visual-acceptance:2",
@@ -2698,6 +2711,19 @@
       "edgeIdentity": "coverage-edge:8be8a66e75dd690c"
     },
     {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:52",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "cde0ecc01b7361b9",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:8c1d5b69404fb4eb"
+    },
+    {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-two",
       "scenarioIdentity": "m11-d-101003-visual-acceptance",
       "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:23",
@@ -2722,19 +2748,6 @@
       "traceProjectionHash": "a065494da80b0f3a",
       "status": "verified",
       "edgeIdentity": "coverage-edge:8cd88897e9a0a973"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:16",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "8085fc25640f70c3",
-      "traceProjectionHash": "47783e3e0c8c7a22",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:8cf1927192f8244b"
     },
     {
       "requirementIdentity": "contract:action-form:han-normal-five-inputs:segment:4",
@@ -2776,6 +2789,19 @@
       "traceProjectionHash": "a065494da80b0f3a",
       "status": "verified",
       "edgeIdentity": "coverage-edge:8f2bf095f17d50dc"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:32:155b53eece5f98fc",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:45",
+      "selector": {
+        "effectIdentity": "battle-element:101003142",
+        "kind": "effect"
+      },
+      "assertionHash": "0889587550b8d880",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:8f59330eafdf1ad5"
     },
     {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-6",
@@ -2910,19 +2936,6 @@
       "edgeIdentity": "coverage-edge:929f8b3f18068c4d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m11-d-101003-visual-acceptance",
-      "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:23",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "6fac1c4c794ccc0c",
-      "traceProjectionHash": "a065494da80b0f3a",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:92ff39a398011ab0"
-    },
-    {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-one",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:3",
@@ -2988,19 +3001,6 @@
       "edgeIdentity": "coverage-edge:97443fbc452635a2"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:14",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "d43373fa7171a719",
-      "traceProjectionHash": "47783e3e0c8c7a22",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:9765052fb8ead97e"
-    },
-    {
       "requirementIdentity": "protocol:101003:hit-landed-and-miss",
       "scenarioIdentity": "m11-d-101003-visual-acceptance",
       "assertionIdentity": "critical:missSuppressesHit",
@@ -3029,17 +3029,17 @@
       "edgeIdentity": "coverage-edge:99fe1cc9c67ceaf5"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:28",
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m11-d-101003-visual-acceptance",
+      "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:23",
       "selector": {
         "effectIdentity": "battle-element:101003205",
         "kind": "effect"
       },
-      "assertionHash": "591ee6735ace33e3",
-      "traceProjectionHash": "f3d96ca8f42a3866",
+      "assertionHash": "6fac1c4c794ccc0c",
+      "traceProjectionHash": "a065494da80b0f3a",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:9aa4be0adf7d7ead"
+      "edgeIdentity": "coverage-edge:9a6d95b209fdf542"
     },
     {
       "requirementIdentity": "protocol:101003:critical-expected-no-random-side-effect",
@@ -3147,17 +3147,17 @@
       "edgeIdentity": "coverage-edge:9d6d4a818da2b5ef"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:1",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:28",
       "selector": {
         "effectIdentity": "battle-element:101003205",
         "kind": "effect"
       },
-      "assertionHash": "e1f53cdde3952a9e",
+      "assertionHash": "591ee6735ace33e3",
       "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:9d96e7cf844a0193"
+      "edgeIdentity": "coverage-edge:9ddeae24c3cbb2d3"
     },
     {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-1",
@@ -3186,6 +3186,19 @@
       "edgeIdentity": "coverage-edge:a051f878df9e4436"
     },
     {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:31",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "9f0f0d21676eeee5",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a2189181211cdfd6"
+    },
+    {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-one",
       "scenarioIdentity": "m11-d-101003-visual-acceptance",
       "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:26",
@@ -3197,6 +3210,19 @@
       "traceProjectionHash": "a065494da80b0f3a",
       "status": "verified",
       "edgeIdentity": "coverage-edge:a2e78313449956b9"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:34:286d8b8f2c30f0c2",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:41",
+      "selector": {
+        "effectIdentity": "battle-element:101003145",
+        "kind": "effect"
+      },
+      "assertionHash": "41cb7c19d69583f8",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a3149865361e0401"
     },
     {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-3",
@@ -3343,17 +3369,17 @@
       "edgeIdentity": "coverage-edge:a9b0d0183a9b92b7"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:13",
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:2",
       "selector": {
         "effectIdentity": "battle-element:101003205",
         "kind": "effect"
       },
-      "assertionHash": "6a8486365f468b3f",
-      "traceProjectionHash": "f3d96ca8f42a3866",
+      "assertionHash": "f632b32edbe5e165",
+      "traceProjectionHash": "47783e3e0c8c7a22",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:aaf529cc9303bf22"
+      "edgeIdentity": "coverage-edge:a9f99a941243f654"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-ultimate-team-tuning-two-stacks",
@@ -3367,6 +3393,19 @@
       "traceProjectionHash": "47783e3e0c8c7a22",
       "status": "verified",
       "edgeIdentity": "coverage-edge:abae3f36f0d9b80d"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:3",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "b92b7c0fd5bdb23c",
+      "traceProjectionHash": "47783e3e0c8c7a22",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ac7671d116cba3ab"
     },
     {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-two",
@@ -3406,6 +3445,19 @@
       "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
       "edgeIdentity": "coverage-edge:ae261c4e3a6168cc"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:14",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "d43373fa7171a719",
+      "traceProjectionHash": "47783e3e0c8c7a22",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ae590d5073056d7c"
     },
     {
       "requirementIdentity": "contract:action-form:han-normal-five-inputs:segment:1",
@@ -3529,6 +3581,19 @@
       "edgeIdentity": "coverage-edge:b7cf1b1988206272"
     },
     {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:50",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "d55aa27307b1a9f3",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:b807f298a4e052ac"
+    },
+    {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-6",
       "scenarioIdentity": "m11-d-101003-visual-acceptance",
       "assertionIdentity": "trace-state:machine-state:m11-d-101003-visual-acceptance:6",
@@ -3596,19 +3661,6 @@
       "edgeIdentity": "coverage-edge:b9d4eec9ddc89f10"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:49",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "65a93c80b4430421",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:baef7861f37bddda"
-    },
-    {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-5",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-state:golden-state:m10-b2:101003:120s-three-actor-golden:1",
@@ -3622,19 +3674,6 @@
       "edgeIdentity": "coverage-edge:bbb4d6593c51cca7"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:36",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "ed60c6026045e71a",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:bc3e8eb86e34a368"
-    },
-    {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-2",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-state:golden-state:m10-b2:101003:120s-three-actor-golden:7",
@@ -3646,6 +3685,19 @@
       "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
       "edgeIdentity": "coverage-edge:bcdeebced60224d4"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:34:286d8b8f2c30f0c2",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:46",
+      "selector": {
+        "effectIdentity": "battle-element:101003145",
+        "kind": "effect"
+      },
+      "assertionHash": "38b48e2d3cdbcf03",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:bdebabf1ef686ca5"
     },
     {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-controlled-attack-passive",
@@ -3802,19 +3854,6 @@
       "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
       "edgeIdentity": "coverage-edge:c659e3973cfd053d"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m11-d-101003-visual-acceptance",
-      "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:26",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "76f30e6c6e50e45b",
-      "traceProjectionHash": "a065494da80b0f3a",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:c665e4bf0b55cca0"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-perfect-dodge-team-tuning",
@@ -4174,19 +4213,6 @@
       "edgeIdentity": "coverage-edge:d3416be7c1d2fa81"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m11-d-101003-visual-acceptance",
-      "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:25",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "6463710dcc19215a",
-      "traceProjectionHash": "a065494da80b0f3a",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:d3dc7e8270605961"
-    },
-    {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-4",
       "scenarioIdentity": "m11-d-101003-visual-acceptance",
       "assertionIdentity": "trace-state:machine-state:m11-d-101003-visual-acceptance:5",
@@ -4402,6 +4428,19 @@
       "edgeIdentity": "coverage-edge:db4871bbfdbfd4c7"
     },
     {
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:37",
+      "selector": {
+        "effectIdentity": "battle-element:101003205",
+        "kind": "effect"
+      },
+      "assertionHash": "434f9534fb97831d",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:db714385dd7cc604"
+    },
+    {
       "requirementIdentity": "contract:action-effect-binding:han-ultimate-team-tuning-two-stacks",
       "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
       "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:2",
@@ -4491,6 +4530,19 @@
       "traceProjectionHash": "a065494da80b0f3a",
       "status": "verified",
       "edgeIdentity": "coverage-edge:e0ae8596b9fbabb5"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:18:a69d6436ba66d06c",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:10",
+      "selector": {
+        "effectIdentity": "battle-element:101003207",
+        "kind": "effect"
+      },
+      "assertionHash": "3abfb65446483114",
+      "traceProjectionHash": "f3d96ca8f42a3866",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:e45ddb99654735a9"
     },
     {
       "requirementIdentity": "contract:target-state-profile:enemy:firework",
@@ -4612,19 +4664,6 @@
       "traceProjectionHash": "a065494da80b0f3a",
       "status": "verified",
       "edgeIdentity": "coverage-edge:e841ee7766b7e0d7"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:30",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "d15daa492b5c72ce",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:ea40dd3bdbd1ec8b"
     },
     {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-team-tuning-stage-one",
@@ -4789,32 +4828,6 @@
       "edgeIdentity": "coverage-edge:f62c211819902518"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:31",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "9f0f0d21676eeee5",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:f6404657e70b9b28"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:34:29e8e9e04d37a169",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:46",
-      "selector": {
-        "effectIdentity": "battle-element:101003145",
-        "kind": "effect"
-      },
-      "assertionHash": "38b48e2d3cdbcf03",
-      "traceProjectionHash": "f3d96ca8f42a3866",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:f698b25f0997457a"
-    },
-    {
       "requirementIdentity": "contract:target-state-transaction:han-star-skill-firework-hit-3",
       "scenarioIdentity": "m11-d-101003-visual-acceptance",
       "assertionIdentity": "trace-state:machine-state:m11-d-101003-visual-acceptance:6",
@@ -4826,19 +4839,6 @@
       "traceProjectionHash": "a065494da80b0f3a",
       "status": "verified",
       "edgeIdentity": "coverage-edge:f6cb5112c7e3603f"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
-      "scenarioIdentity": "m11-d-101003-visual-acceptance",
-      "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:17",
-      "selector": {
-        "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
-      },
-      "assertionHash": "640859e04fad9f79",
-      "traceProjectionHash": "a065494da80b0f3a",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:f75e99047b9383a3"
     },
     {
       "requirementIdentity": "contract:target-state-profile:enemy:firework",
@@ -4880,17 +4880,17 @@
       "edgeIdentity": "coverage-edge:f9e3b4e9916e1a97"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:5fc6f766d68ee1db",
+      "requirementIdentity": "contract:effect:effect:20:d918d364fcb3d434",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:37",
+      "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:13",
       "selector": {
         "effectIdentity": "battle-element:101003205",
         "kind": "effect"
       },
-      "assertionHash": "434f9534fb97831d",
+      "assertionHash": "6a8486365f468b3f",
       "traceProjectionHash": "f3d96ca8f42a3866",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:f9ef4eb81ea6efee"
+      "edgeIdentity": "coverage-edge:fa4c32ce88991028"
     },
     {
       "requirementIdentity": "contract:runtime-effect-binding:han-firework-explosion-controlled-attack-passive-stage-two",
@@ -4973,5 +4973,5 @@
       "m11-d-101003-visual-acceptance": 145
     }
   },
-  "coverageHash": "83d48d5b3f77054d"
+  "coverageHash": "2c1886494a68b367"
 }

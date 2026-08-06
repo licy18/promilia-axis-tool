@@ -6,7 +6,7 @@
   "ownerName": "涂山小玉",
   "recipeIdentity": "actor:101010:character-combat-recipe:v1",
   "recipeHash": "e98bf716a662b1f5f68f21819b48a0dd4f5bbcb27517ef98493bced93a49b04b",
-  "compilerInputHash": "2451ce0b869b0ed24042aaa880e790b3d7e5db348e8dcfd403c176bf0d7584dc",
+  "compilerInputHash": "750028f998e6172c93fbbbbf39f338b0fe0003ab236cd618bc53a6fa15e4920d",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": false,
   "reachableControlSkillIds": [
@@ -6272,10 +6272,10 @@
               "10101005|0|elements|3|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0"
             ],
             "hitCount": 8,
-            "effectCount": 1,
+            "effectCount": 2,
             "effectDimensionSummary": {
               "damage": {
-                "unresolved": 1,
+                "applied": 1,
                 "verified-zero": 3
               },
               "toughness": {
@@ -6303,7 +6303,6 @@
             "classification": "applied",
             "runtimeReady": true,
             "reasons": [
-              "nested-damage-trigger-lifecycle-not-expanded",
               "nested-effect-wrapper-semantics-unresolved",
               "effect-trigger-frame-missing",
               "effect-target-unresolved"
@@ -9620,7 +9619,7 @@
         "linked": true,
         "runtimeReady": true,
         "runtimeHitCount": 12,
-        "runtimeEffectCount": 7,
+        "runtimeEffectCount": 9,
         "runtimeResourceTransactionCount": 3,
         "selectedResourceTransactionIdentities": [
           "actor:101010:element:101010115|10101013|0|-4364670297239232442|clear||264",
@@ -9745,7 +9744,8 @@
         },
         "effectDimensionSummary": {
           "damage": {
-            "unresolved": 15,
+            "applied": 2,
+            "unresolved": 13,
             "verified-zero": 41
           },
           "toughness": {
@@ -14490,7 +14490,7 @@
             "elementCount": 16,
             "runnableElementCount": 2,
             "effectNodeCount": 30,
-            "runnableEffectCount": 1,
+            "runnableEffectCount": 2,
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/skill_control_10101010__-4083445640248946767.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
           }
         ],
@@ -22537,8 +22537,8 @@
             "sourceIdentity": "battle-effect:10101010:2:-8148787786042882084:-842786548353666364:0",
             "dimensions": {
               "damage": {
-                "status": "unresolved",
-                "sourceField": "damageType"
+                "status": "applied",
+                "sourceField": "additionalHitElementDataList"
               },
               "toughness": {
                 "status": "verified-zero",
@@ -22565,14 +22565,11 @@
                 "sourceField": null
               }
             },
-            "classification": "unresolved",
-            "reasons": [
-              "nested-damage-trigger-lifecycle-not-expanded",
-              "nested-effect-wrapper-semantics-unresolved"
-            ],
-            "status": "verified-action-effect-binding-unresolved",
-            "confidence": "unresolved",
-            "applied": false
+            "classification": "applied",
+            "reasons": [],
+            "status": "verified-action-effect-binding-applied",
+            "confidence": "high",
+            "applied": true
           },
           {
             "effectIdentity": "10101010|2|elements|7|-1458914462506140012|element:-4529113272733101309|0|0",
@@ -23029,7 +23026,7 @@
             "dimensions": {
               "damage": {
                 "status": "unresolved",
-                "sourceField": "damageType"
+                "sourceField": "additionalHitElementDataList"
               },
               "toughness": {
                 "status": "verified-zero",
@@ -23058,10 +23055,8 @@
             },
             "classification": "unresolved",
             "reasons": [
-              "nested-damage-trigger-lifecycle-not-expanded",
               "effect-trigger-frame-missing",
-              "effect-target-unresolved",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-target-unresolved"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -24510,9 +24505,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 3,
+            "appliedNodeCount": 4,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 6,
+            "unresolvedNodeCount": 5,
             "nodeIdentities": [
               "10101010|element:-1458914462506140012",
               "10101010|element:-3332207699858072492",
@@ -24629,9 +24624,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 1,
+            "unresolvedNodeCount": 0,
             "nodeIdentities": [
               "10101010|element:1474042154774785480",
               "10101010|element:-8148787786042882084",
@@ -27128,7 +27123,7 @@
             "elementCount": 30,
             "runnableElementCount": 3,
             "effectNodeCount": 65,
-            "runnableEffectCount": 7,
+            "runnableEffectCount": 9,
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
           }
         ],
@@ -33158,8 +33153,8 @@
             "sourceIdentity": "battle-effect:10101013:0:-8148787786042882084:-6673499874988910762:264",
             "dimensions": {
               "damage": {
-                "status": "unresolved",
-                "sourceField": "damageType"
+                "status": "applied",
+                "sourceField": "additionalHitElementDataList"
               },
               "toughness": {
                 "status": "verified-zero",
@@ -33186,14 +33181,11 @@
                 "sourceField": null
               }
             },
-            "classification": "unresolved",
-            "reasons": [
-              "nested-damage-trigger-lifecycle-not-expanded",
-              "nested-effect-wrapper-semantics-unresolved"
-            ],
-            "status": "verified-action-effect-binding-unresolved",
-            "confidence": "unresolved",
-            "applied": false
+            "classification": "applied",
+            "reasons": [],
+            "status": "verified-action-effect-binding-applied",
+            "confidence": "high",
+            "applied": true
           },
           {
             "effectIdentity": "10101013|0|elements|18|-4364670297239232442|element:-4529113272733101309|264|0",
@@ -33922,8 +33914,8 @@
             "sourceIdentity": "battle-effect:10101013:0:-8148787786042882084:-1058249236301801642:272",
             "dimensions": {
               "damage": {
-                "status": "unresolved",
-                "sourceField": "damageType"
+                "status": "applied",
+                "sourceField": "additionalHitElementDataList"
               },
               "toughness": {
                 "status": "verified-zero",
@@ -33950,14 +33942,11 @@
                 "sourceField": null
               }
             },
-            "classification": "unresolved",
-            "reasons": [
-              "nested-damage-trigger-lifecycle-not-expanded",
-              "nested-effect-wrapper-semantics-unresolved"
-            ],
-            "status": "verified-action-effect-binding-unresolved",
-            "confidence": "unresolved",
-            "applied": false
+            "classification": "applied",
+            "reasons": [],
+            "status": "verified-action-effect-binding-applied",
+            "confidence": "high",
+            "applied": true
           },
           {
             "effectIdentity": "10101013|0|elements|21|-1458914462506140012|element:-4529113272733101309|272|0",
@@ -34414,7 +34403,7 @@
             "dimensions": {
               "damage": {
                 "status": "unresolved",
-                "sourceField": "damageType"
+                "sourceField": "additionalHitElementDataList"
               },
               "toughness": {
                 "status": "verified-zero",
@@ -34443,10 +34432,8 @@
             },
             "classification": "unresolved",
             "reasons": [
-              "nested-damage-trigger-lifecycle-not-expanded",
               "effect-trigger-frame-missing",
-              "effect-target-unresolved",
-              "nested-effect-wrapper-semantics-unresolved"
+              "effect-target-unresolved"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -35582,9 +35569,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 3,
+            "appliedNodeCount": 4,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 8,
+            "unresolvedNodeCount": 7,
             "nodeIdentities": [
               "10101013|element:-4364670297239232442",
               "10101013|element:4329849906773849220",
@@ -35695,9 +35682,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 3,
+            "appliedNodeCount": 4,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 6,
+            "unresolvedNodeCount": 5,
             "nodeIdentities": [
               "10101013|element:-1458914462506140012",
               "10101013|element:-3332207699858072492",
@@ -35814,9 +35801,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 1,
+            "unresolvedNodeCount": 0,
             "nodeIdentities": [
               "10101013|element:1474042154774785480",
               "10101013|element:-8148787786042882084",
@@ -46059,7 +46046,7 @@
             "elementCount": 5,
             "runnableElementCount": 1,
             "effectNodeCount": 7,
-            "runnableEffectCount": 1,
+            "runnableEffectCount": 2,
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
           },
           {
@@ -47171,8 +47158,8 @@
             "sourceIdentity": "battle-effect:10101005:0:-8148787786042882084:-119715824990577950:31",
             "dimensions": {
               "damage": {
-                "status": "unresolved",
-                "sourceField": "damageType"
+                "status": "applied",
+                "sourceField": "additionalHitElementDataList"
               },
               "toughness": {
                 "status": "verified-zero",
@@ -47199,14 +47186,11 @@
                 "sourceField": null
               }
             },
-            "classification": "unresolved",
-            "reasons": [
-              "nested-damage-trigger-lifecycle-not-expanded",
-              "nested-effect-wrapper-semantics-unresolved"
-            ],
-            "status": "verified-action-effect-binding-unresolved",
-            "confidence": "unresolved",
-            "applied": false
+            "classification": "applied",
+            "reasons": [],
+            "status": "verified-action-effect-binding-applied",
+            "confidence": "high",
+            "applied": true
           },
           {
             "effectIdentity": "10101005|0|elements|2|1474042154774785480|element:-4529113272733101309|31|0",
@@ -47535,9 +47519,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 1,
+            "unresolvedNodeCount": 0,
             "nodeIdentities": [
               "10101005|element:1474042154774785480",
               "10101005|element:-8148787786042882084",
@@ -77046,8 +77030,8 @@
           "sourceIdentity": "battle-effect:10101005:0:-8148787786042882084:-119715824990577950:31",
           "dimensions": {
             "damage": {
-              "status": "unresolved",
-              "sourceField": "damageType"
+              "status": "applied",
+              "sourceField": "additionalHitElementDataList"
             },
             "toughness": {
               "status": "verified-zero",
@@ -77074,14 +77058,11 @@
               "sourceField": null
             }
           },
-          "classification": "unresolved",
-          "reasons": [
-            "nested-damage-trigger-lifecycle-not-expanded",
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
-          "status": "verified-action-effect-binding-unresolved",
-          "confidence": "unresolved",
-          "applied": false
+          "classification": "applied",
+          "reasons": [],
+          "status": "verified-action-effect-binding-applied",
+          "confidence": "high",
+          "applied": true
         },
         {
           "effectIdentity": "10101005|0|elements|2|1474042154774785480|element:1474042154774785480|31|0",
@@ -84426,8 +84407,8 @@
           "sourceIdentity": "battle-effect:10101010:2:-8148787786042882084:-842786548353666364:0",
           "dimensions": {
             "damage": {
-              "status": "unresolved",
-              "sourceField": "damageType"
+              "status": "applied",
+              "sourceField": "additionalHitElementDataList"
             },
             "toughness": {
               "status": "verified-zero",
@@ -84454,14 +84435,11 @@
               "sourceField": null
             }
           },
-          "classification": "unresolved",
-          "reasons": [
-            "nested-damage-trigger-lifecycle-not-expanded",
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
-          "status": "verified-action-effect-binding-unresolved",
-          "confidence": "unresolved",
-          "applied": false
+          "classification": "applied",
+          "reasons": [],
+          "status": "verified-action-effect-binding-applied",
+          "confidence": "high",
+          "applied": true
         },
         {
           "effectIdentity": "10101010|2|elements|12|1474042154774785480|element:-8148787786042882084|unresolved-frame|0",
@@ -84539,7 +84517,7 @@
           "dimensions": {
             "damage": {
               "status": "unresolved",
-              "sourceField": "damageType"
+              "sourceField": "additionalHitElementDataList"
             },
             "toughness": {
               "status": "verified-zero",
@@ -84568,10 +84546,8 @@
           },
           "classification": "unresolved",
           "reasons": [
-            "nested-damage-trigger-lifecycle-not-expanded",
             "effect-trigger-frame-missing",
-            "effect-target-unresolved",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-target-unresolved"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -90306,8 +90282,8 @@
           "sourceIdentity": "battle-effect:10101013:0:-8148787786042882084:-1058249236301801642:272",
           "dimensions": {
             "damage": {
-              "status": "unresolved",
-              "sourceField": "damageType"
+              "status": "applied",
+              "sourceField": "additionalHitElementDataList"
             },
             "toughness": {
               "status": "verified-zero",
@@ -90334,14 +90310,11 @@
               "sourceField": null
             }
           },
-          "classification": "unresolved",
-          "reasons": [
-            "nested-damage-trigger-lifecycle-not-expanded",
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
-          "status": "verified-action-effect-binding-unresolved",
-          "confidence": "unresolved",
-          "applied": false
+          "classification": "applied",
+          "reasons": [],
+          "status": "verified-action-effect-binding-applied",
+          "confidence": "high",
+          "applied": true
         },
         {
           "effectIdentity": "10101013|0|elements|18|-4364670297239232442|element:-8148787786042882084|264|0",
@@ -90441,8 +90414,8 @@
           "sourceIdentity": "battle-effect:10101013:0:-8148787786042882084:-6673499874988910762:264",
           "dimensions": {
             "damage": {
-              "status": "unresolved",
-              "sourceField": "damageType"
+              "status": "applied",
+              "sourceField": "additionalHitElementDataList"
             },
             "toughness": {
               "status": "verified-zero",
@@ -90469,14 +90442,11 @@
               "sourceField": null
             }
           },
-          "classification": "unresolved",
-          "reasons": [
-            "nested-damage-trigger-lifecycle-not-expanded",
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
-          "status": "verified-action-effect-binding-unresolved",
-          "confidence": "unresolved",
-          "applied": false
+          "classification": "applied",
+          "reasons": [],
+          "status": "verified-action-effect-binding-applied",
+          "confidence": "high",
+          "applied": true
         },
         {
           "effectIdentity": "10101013|0|elements|26|1474042154774785480|element:-8148787786042882084|unresolved-frame|0",
@@ -90554,7 +90524,7 @@
           "dimensions": {
             "damage": {
               "status": "unresolved",
-              "sourceField": "damageType"
+              "sourceField": "additionalHitElementDataList"
             },
             "toughness": {
               "status": "verified-zero",
@@ -90583,10 +90553,8 @@
           },
           "classification": "unresolved",
           "reasons": [
-            "nested-damage-trigger-lifecycle-not-expanded",
             "effect-trigger-frame-missing",
-            "effect-target-unresolved",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-target-unresolved"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -110583,11 +110551,11 @@
           "tuningMark": null,
           "tuningOverlimit": null,
           "judgment": null,
-          "classification": "unresolved",
+          "classification": "applied",
           "dimensions": {
             "damage": {
-              "status": "unresolved",
-              "sourceField": "damageType"
+              "status": "applied",
+              "sourceField": "additionalHitElementDataList"
             },
             "toughness": {
               "status": "verified-zero",
@@ -110614,10 +110582,7 @@
               "sourceField": null
             }
           },
-          "reasons": [
-            "nested-damage-runtime-family-unimplemented",
-            "wrapper-condition-semantics-unresolved"
-          ],
+          "reasons": [],
           "rawEffectIdentities": [
             "10101005|0|elements|2|1474042154774785480|element:-8148787786042882084|31|0"
           ],
@@ -120031,11 +119996,11 @@
           "tuningMark": null,
           "tuningOverlimit": null,
           "judgment": null,
-          "classification": "unresolved",
+          "classification": "applied",
           "dimensions": {
             "damage": {
-              "status": "unresolved",
-              "sourceField": "damageType"
+              "status": "applied",
+              "sourceField": "additionalHitElementDataList"
             },
             "toughness": {
               "status": "verified-zero",
@@ -120062,10 +120027,7 @@
               "sourceField": null
             }
           },
-          "reasons": [
-            "nested-damage-runtime-family-unimplemented",
-            "wrapper-condition-semantics-unresolved"
-          ],
+          "reasons": [],
           "rawEffectIdentities": [
             "10101013|0|elements|21|-1458914462506140012|element:-8148787786042882084|272|0"
           ],
@@ -120213,11 +120175,11 @@
           "tuningMark": null,
           "tuningOverlimit": null,
           "judgment": null,
-          "classification": "unresolved",
+          "classification": "applied",
           "dimensions": {
             "damage": {
-              "status": "unresolved",
-              "sourceField": "damageType"
+              "status": "applied",
+              "sourceField": "additionalHitElementDataList"
             },
             "toughness": {
               "status": "verified-zero",
@@ -120244,10 +120206,7 @@
               "sourceField": null
             }
           },
-          "reasons": [
-            "nested-damage-runtime-family-unimplemented",
-            "wrapper-condition-semantics-unresolved"
-          ],
+          "reasons": [],
           "rawEffectIdentities": [
             "10101013|0|elements|18|-4364670297239232442|element:-8148787786042882084|264|0"
           ],
@@ -120387,8 +120346,8 @@
           "classification": "unresolved",
           "dimensions": {
             "damage": {
-              "status": "unresolved",
-              "sourceField": "damageType"
+              "status": "applied",
+              "sourceField": "additionalHitElementDataList"
             },
             "toughness": {
               "status": "verified-zero",
@@ -120416,8 +120375,6 @@
             }
           },
           "reasons": [
-            "nested-damage-runtime-family-unimplemented",
-            "wrapper-condition-semantics-unresolved",
             "effect-trigger-frame-static-evidence-gap",
             "effect-target-static-evidence-gap"
           ],
@@ -130902,7 +130859,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=101010].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=229]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-119715824990577950__-119715824990577950.json#startFrame|toOwnElementDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1058249236301801642__-1058249236301801642.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[21]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6673499874988910762__-6673499874988910762.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[26]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[27]|battle-element-assets.jsonl#path_id=-4529113272733101309"
     }
   },
-  "contractHash": "55ab28ab9823b4731014711664baf21319a80c45f0b959aa6dafe189de4b0d35",
+  "contractHash": "fb239f37c6fc952602a467aa3584ca6ff85fd107d9d313c1ed292fcf8a352648",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 7,

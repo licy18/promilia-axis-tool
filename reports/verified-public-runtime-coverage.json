@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "d9af1f5cf37c227f979d8e592bec72d4f1db9f1525ce448d336160baae2e81e2",
+  "packageHash": "cbf1dac3723c6ff4b29b5669599999a3edb5938e87ed4c8a1cc6f0890de96b53",
   "fixedProductDenominator": {
     "publicActionCount": 563,
     "actorOwnerCount": 20,
@@ -74,43 +74,44 @@
     },
     "effectDimensions": {
       "damage": {
-        "unresolved": 495,
-        "verified-zero": 3185
+        "applied": 114,
+        "unresolved": 381,
+        "verified-zero": 3190
       },
       "toughness": {
-        "verified-zero": 3680
+        "verified-zero": 3685
       },
       "sp": {
         "applied": 25,
         "unresolved": 87,
-        "verified-zero": 3568
+        "verified-zero": 3573
       },
       "hp": {
         "applied": 7,
         "unresolved": 41,
-        "verified-zero": 3632
+        "verified-zero": 3637
       },
       "shield": {
         "unresolved": 9,
-        "verified-zero": 3671
+        "verified-zero": 3676
       },
       "dynamicProperty": {
-        "applied": 531,
+        "applied": 533,
         "unresolved": 563,
-        "verified-zero": 2586
+        "verified-zero": 2589
       },
       "mark": {
         "applied": 142,
         "unresolved": 427,
-        "verified-zero": 3111
+        "verified-zero": 3116
       }
     },
     "semanticEffects": {
       "total": 3368,
       "gameplay": 1755,
-      "applied": 574,
+      "applied": 688,
       "verifiedZero": 7,
-      "unresolved": 1174
+      "unresolved": 1060
     },
     "timing": {
       "appliedActionCount": 552,
@@ -653,9 +654,9 @@
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 3
       },
       "settlement": {
         "required": true,
@@ -765,9 +766,9 @@
       },
       "semanticEffects": {
         "total": 14,
-        "applied": 5,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 6
       },
       "settlement": {
         "required": true,
@@ -812,7 +813,6 @@
         ]
       },
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -1109,9 +1109,9 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 4
       },
       "settlement": {
         "required": true,
@@ -1589,9 +1589,9 @@
       },
       "semanticEffects": {
         "total": 35,
-        "applied": 6,
+        "applied": 8,
         "verifiedZero": 1,
-        "unresolved": 28
+        "unresolved": 26
       },
       "settlement": {
         "required": true,
@@ -1729,9 +1729,9 @@
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [],
@@ -1885,17 +1885,17 @@
       },
       "semanticEffects": {
         "total": 16,
-        "applied": 3,
+        "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 13
+        "unresolved": 10
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "pack-lifecycle-semantics-evidence-gap"
+        "pack-lifecycle-semantics-evidence-gap",
+        "nested-damage-trigger-lifecycle-evidence-gap"
       ],
       "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=4]"
     },
@@ -2515,9 +2515,9 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": {
         "required": true,
@@ -2564,7 +2564,6 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
@@ -2860,9 +2859,9 @@
       },
       "semanticEffects": {
         "total": 34,
-        "applied": 3,
+        "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 31
+        "unresolved": 28
       },
       "settlement": null,
       "reasons": [
@@ -2947,9 +2946,9 @@
       },
       "semanticEffects": {
         "total": 16,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 15
+        "unresolved": 14
       },
       "settlement": null,
       "reasons": [
@@ -3107,19 +3106,19 @@
       },
       "semanticEffects": {
         "total": 14,
-        "applied": 3,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 11
+        "unresolved": 10
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
+        "nested-damage-trigger-lifecycle-evidence-gap",
         "pack-lifecycle-semantics-evidence-gap",
         "property-formula-not-literal-function-5",
         "sp-formula-not-literal-function-5"
@@ -3190,9 +3189,9 @@
       },
       "semanticEffects": {
         "total": 12,
-        "applied": 0,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 12
+        "unresolved": 10
       },
       "settlement": null,
       "reasons": [
@@ -3202,9 +3201,8 @@
         "trigger-frame-missing",
         "heal-formula-not-literal-function-5",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -3352,15 +3350,13 @@
       },
       "semanticEffects": {
         "total": 17,
-        "applied": 9,
+        "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 8
+        "unresolved": 6
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=107003].skillSlots[group=ground,slot=3]"
@@ -3592,9 +3588,9 @@
       },
       "semanticEffects": {
         "total": 16,
-        "applied": 4,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 12
+        "unresolved": 11
       },
       "settlement": null,
       "reasons": [
@@ -3602,11 +3598,11 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
+        "nested-damage-trigger-lifecycle-evidence-gap",
         "pack-lifecycle-semantics-evidence-gap",
         "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
@@ -3909,9 +3905,9 @@
       },
       "semanticEffects": {
         "total": 13,
-        "applied": 3,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 9
       },
       "settlement": null,
       "reasons": [
@@ -4145,7 +4141,6 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -4278,15 +4273,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "characters.items[id=108005].skillSlots[group=ground,slot=3]"
     },
@@ -4354,9 +4347,9 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 0,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
@@ -4364,8 +4357,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "shield-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=108005].skillSlots[group=ground,slot=4]"
@@ -4437,9 +4428,9 @@
       },
       "semanticEffects": {
         "total": 9,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 8
+        "unresolved": 7
       },
       "settlement": null,
       "reasons": [],
@@ -4667,9 +4658,9 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 4
       },
       "settlement": null,
       "reasons": [
@@ -4821,19 +4812,18 @@
       },
       "semanticEffects": {
         "total": 8,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
-        "tuning-mark-relation-triggerEffectList-unresolved"
+        "tuning-mark-relation-triggerEffectList-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "characters.items[id=109002].skillSlots[group=ground,slot=4]"
     },
@@ -5207,13 +5197,12 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 4
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -5460,9 +5449,9 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
@@ -5472,8 +5461,6 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=112002].skillSlots[group=ground,slot=3]"
@@ -5777,9 +5764,9 @@
       },
       "semanticEffects": {
         "total": 58,
-        "applied": 5,
+        "applied": 15,
         "verifiedZero": 0,
-        "unresolved": 53
+        "unresolved": 43
       },
       "settlement": null,
       "reasons": [
@@ -5787,7 +5774,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -6007,9 +5993,9 @@
       },
       "semanticEffects": {
         "total": 58,
-        "applied": 5,
+        "applied": 15,
         "verifiedZero": 0,
-        "unresolved": 53
+        "unresolved": 43
       },
       "settlement": null,
       "reasons": [
@@ -6017,7 +6003,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -6157,15 +6142,13 @@
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "characters.items[id=199003].skillSlots[group=ground,slot=3]"
     },
@@ -8748,13 +8731,12 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap"
       ],
@@ -12376,13 +12358,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500057].actions[skillId=50005701].skillId"
@@ -12782,13 +12763,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500064].actions[skillId=50006401].skillId"
@@ -12985,13 +12965,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500065].actions[skillId=50006501].skillId"
@@ -14006,14 +13985,13 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500081].actions[skillId=50008102].skillId"
@@ -14236,14 +14214,13 @@
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 4,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500082].actions[skillId=50008201].skillId"
@@ -14452,13 +14429,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500083].actions[skillId=50008303].skillId"
@@ -14655,13 +14631,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500084].actions[skillId=50008403].skillId"
@@ -14856,14 +14831,13 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500085].actions[skillId=50008503].skillId"
@@ -15668,15 +15642,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500097].actions[skillId=50009701].skillId"
@@ -15879,15 +15851,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500098].actions[skillId=50009801].skillId"
@@ -19087,15 +19057,13 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500133].actions[skillId=50013302].skillId"
     },
@@ -19288,15 +19256,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "shield-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500134].actions[skillId=50013402].skillId"
@@ -19491,14 +19457,13 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500138].actions[skillId=50013801].skillId"
@@ -19696,14 +19661,13 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 1,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500139].actions[skillId=50013901].skillId"
@@ -19901,14 +19865,13 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 1,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500140].actions[skillId=50014001].skillId"
@@ -22500,13 +22463,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500179].actions[skillId=50017901].skillId"
@@ -22708,13 +22670,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500180].actions[skillId=50018001].skillId"
@@ -22916,13 +22877,12 @@
       },
       "semanticEffects": {
         "total": 10,
-        "applied": 8,
+        "applied": 9,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500181].actions[skillId=50018101].skillId"
@@ -23107,17 +23067,17 @@
           "verified-zero": 1
         },
         "healing": {
-          "verified-zero": 5
+          "verified-zero": 10
         },
         "shield": {
-          "verified-zero": 5
+          "verified-zero": 10
         },
         "dynamicProperty": {
-          "applied": 2,
-          "verified-zero": 3
+          "applied": 4,
+          "verified-zero": 6
         },
         "tuningMark": {
-          "verified-zero": 5
+          "verified-zero": 10
         }
       },
       "semanticEffects": {
@@ -23748,16 +23708,14 @@
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "shield-formula-not-literal-function-5",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500206].actions[skillId=50020601].skillId"
     },
@@ -23955,9 +23913,9 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
@@ -23966,9 +23924,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500209].actions[skillId=50020901].skillId"
@@ -24771,13 +24728,12 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap"
       ],
@@ -24980,13 +24936,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500244].actions[skillId=50024401].skillId"
@@ -25188,13 +25143,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500245].actions[skillId=50024501].skillId"
@@ -25394,13 +25348,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500246].actions[skillId=50024601].skillId"
@@ -25599,9 +25552,9 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
@@ -25610,9 +25563,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500258].actions[skillId=50025801].skillId"
@@ -25809,9 +25761,9 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
@@ -25820,9 +25772,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500259].actions[skillId=50025901].skillId"
@@ -26013,9 +25964,9 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
@@ -26024,9 +25975,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500260].actions[skillId=50026001].skillId"
@@ -26221,15 +26171,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500261].actions[skillId=50026102].skillId"
@@ -26432,15 +26380,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500262].actions[skillId=50026202].skillId"
@@ -26643,15 +26589,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500263].actions[skillId=50026302].skillId"
@@ -26852,13 +26796,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500296].actions[skillId=50029601].skillId"
@@ -27054,14 +26997,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500304].actions[skillId=50030401].skillId"
@@ -27259,14 +27201,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500305].actions[skillId=50030501].skillId"
@@ -27464,14 +27405,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500306].actions[skillId=50030601].skillId"
@@ -27667,16 +27607,14 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 0,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500313].actions[skillId=50031302].skillId"
     },
@@ -28482,13 +28420,12 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 4,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500354].actions[skillId=50035401].skillId"
@@ -28690,13 +28627,12 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 9,
+        "applied": 10,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500355].actions[skillId=50035501].skillId"
@@ -29502,13 +29438,12 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "sp-recover-type-not-direct-sp"
       ],
@@ -29706,14 +29641,13 @@
       },
       "semanticEffects": {
         "total": 12,
-        "applied": 8,
+        "applied": 9,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "sp-recover-type-not-direct-sp",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500369].actions[skillId=50036901].skillId"
@@ -29910,14 +29844,13 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 7,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "sp-recover-type-not-direct-sp",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500370].actions[skillId=50037001].skillId"
@@ -30117,9 +30050,9 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 4
       },
       "settlement": null,
       "reasons": [
@@ -30128,8 +30061,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "heal-formula-not-literal-function-5"
       ],
@@ -30326,16 +30257,14 @@
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500467].actions[skillId=50046701].skillId"
     },
@@ -30530,16 +30459,14 @@
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500468].actions[skillId=50046801].skillId"
     },
@@ -31673,9 +31600,9 @@
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 3
       },
       "settlement": {
         "required": true,
@@ -31880,9 +31807,9 @@
       },
       "semanticEffects": {
         "total": 14,
-        "applied": 5,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 6
       },
       "settlement": {
         "required": true,
@@ -31927,7 +31854,6 @@
         ]
       },
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -31998,9 +31924,9 @@
       },
       "semanticEffects": {
         "total": 8,
-        "applied": 3,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 4
       },
       "settlement": {
         "required": true,
@@ -32045,7 +31971,6 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
@@ -33023,9 +32948,9 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 4
       },
       "settlement": {
         "required": true,
@@ -34048,9 +33973,9 @@
       },
       "semanticEffects": {
         "total": 35,
-        "applied": 6,
+        "applied": 8,
         "verifiedZero": 1,
-        "unresolved": 28
+        "unresolved": 26
       },
       "settlement": {
         "required": true,
@@ -34509,9 +34434,9 @@
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [],
@@ -34929,17 +34854,17 @@
       },
       "semanticEffects": {
         "total": 16,
-        "applied": 3,
+        "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 13
+        "unresolved": 10
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "pack-lifecycle-semantics-evidence-gap"
+        "pack-lifecycle-semantics-evidence-gap",
+        "nested-damage-trigger-lifecycle-evidence-gap"
       ],
       "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=4]"
     },
@@ -35895,9 +35820,9 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": {
         "required": true,
@@ -35944,7 +35869,6 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
@@ -36257,9 +36181,9 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 4
       },
       "settlement": {
         "required": true,
@@ -36302,7 +36226,6 @@
         ]
       },
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -36729,7 +36652,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "characters.items[id=107001].skillSlots[group=ground,slot=204]"
@@ -36874,9 +36796,9 @@
       },
       "semanticEffects": {
         "total": 34,
-        "applied": 3,
+        "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 31
+        "unresolved": 28
       },
       "settlement": null,
       "reasons": [
@@ -37027,9 +36949,9 @@
       },
       "semanticEffects": {
         "total": 16,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 15
+        "unresolved": 14
       },
       "settlement": null,
       "reasons": [
@@ -37187,7 +37109,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "characters.items[id=107001].skillSlots[group=ground,slot=207]"
@@ -37619,19 +37540,19 @@
       },
       "semanticEffects": {
         "total": 14,
-        "applied": 3,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 11
+        "unresolved": 10
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
+        "nested-damage-trigger-lifecycle-evidence-gap",
         "pack-lifecycle-semantics-evidence-gap",
         "property-formula-not-literal-function-5",
         "sp-formula-not-literal-function-5"
@@ -37766,9 +37687,9 @@
       },
       "semanticEffects": {
         "total": 12,
-        "applied": 0,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 12
+        "unresolved": 10
       },
       "settlement": null,
       "reasons": [
@@ -37778,9 +37699,8 @@
         "trigger-frame-missing",
         "heal-formula-not-literal-function-5",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -38330,15 +38250,13 @@
       },
       "semanticEffects": {
         "total": 17,
-        "applied": 9,
+        "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 8
+        "unresolved": 6
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=107003].skillSlots[group=ground,slot=3]"
@@ -39020,9 +38938,9 @@
       },
       "semanticEffects": {
         "total": 16,
-        "applied": 4,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 12
+        "unresolved": 11
       },
       "settlement": null,
       "reasons": [
@@ -39030,11 +38948,11 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
+        "nested-damage-trigger-lifecycle-evidence-gap",
         "pack-lifecycle-semantics-evidence-gap",
         "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
@@ -39533,9 +39451,7 @@
         "projectile-impact-frame-runtime-dependent",
         "tuning-mark-max-mismatch",
         "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=108002].skillSlots[group=ground,slot=2]"
@@ -39885,9 +39801,9 @@
       },
       "semanticEffects": {
         "total": 13,
-        "applied": 3,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 9
       },
       "settlement": null,
       "reasons": [
@@ -40576,7 +40492,6 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -40648,15 +40563,14 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 4
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -41132,15 +41046,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "characters.items[id=108005].skillSlots[group=ground,slot=3]"
     },
@@ -41272,9 +41184,9 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 0,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
@@ -41282,8 +41194,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "shield-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=108005].skillSlots[group=ground,slot=4]"
@@ -41353,15 +41263,13 @@
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "characters.items[id=108005].skillSlots[skillId=10800522]"
     },
@@ -41562,9 +41470,9 @@
       },
       "semanticEffects": {
         "total": 9,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 8
+        "unresolved": 7
       },
       "settlement": null,
       "reasons": [],
@@ -42267,9 +42175,9 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 4
       },
       "settlement": null,
       "reasons": [
@@ -42696,19 +42604,18 @@
       },
       "semanticEffects": {
         "total": 8,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
-        "tuning-mark-relation-triggerEffectList-unresolved"
+        "tuning-mark-relation-triggerEffectList-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "characters.items[id=109002].skillSlots[group=ground,slot=4]"
     },
@@ -43947,13 +43854,12 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 4
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -44664,9 +44570,9 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
@@ -44676,8 +44582,6 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=112002].skillSlots[group=ground,slot=3]"
@@ -44899,17 +44803,15 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "characters.items[id=112002].skillSlots[skillId=11200222]"
     },
@@ -45515,9 +45417,9 @@
       },
       "semanticEffects": {
         "total": 58,
-        "applied": 5,
+        "applied": 15,
         "verifiedZero": 0,
-        "unresolved": 53
+        "unresolved": 43
       },
       "settlement": null,
       "reasons": [
@@ -45525,7 +45427,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -46139,9 +46040,9 @@
       },
       "semanticEffects": {
         "total": 58,
-        "applied": 5,
+        "applied": 15,
         "verifiedZero": 0,
-        "unresolved": 53
+        "unresolved": 43
       },
       "settlement": null,
       "reasons": [
@@ -46149,7 +46050,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -46617,15 +46517,13 @@
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "characters.items[id=199003].skillSlots[group=ground,slot=3]"
     },
@@ -49464,13 +49362,12 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap"
       ],
@@ -53092,13 +52989,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500057].actions[skillId=50005701].skillId"
@@ -53498,13 +53394,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500064].actions[skillId=50006401].skillId"
@@ -53701,13 +53596,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500065].actions[skillId=50006501].skillId"
@@ -54722,14 +54616,13 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500081].actions[skillId=50008102].skillId"
@@ -54952,14 +54845,13 @@
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 4,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500082].actions[skillId=50008201].skillId"
@@ -55168,13 +55060,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500083].actions[skillId=50008303].skillId"
@@ -55371,13 +55262,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500084].actions[skillId=50008403].skillId"
@@ -55572,14 +55462,13 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500085].actions[skillId=50008503].skillId"
@@ -56384,15 +56273,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500097].actions[skillId=50009701].skillId"
@@ -56595,15 +56482,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500098].actions[skillId=50009801].skillId"
@@ -59803,15 +59688,13 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500133].actions[skillId=50013302].skillId"
     },
@@ -60004,15 +59887,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "shield-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500134].actions[skillId=50013402].skillId"
@@ -60207,14 +60088,13 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500138].actions[skillId=50013801].skillId"
@@ -60412,14 +60292,13 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 1,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500139].actions[skillId=50013901].skillId"
@@ -60617,14 +60496,13 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 1,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500140].actions[skillId=50014001].skillId"
@@ -63216,13 +63094,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500179].actions[skillId=50017901].skillId"
@@ -63424,13 +63301,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500180].actions[skillId=50018001].skillId"
@@ -63632,13 +63508,12 @@
       },
       "semanticEffects": {
         "total": 10,
-        "applied": 8,
+        "applied": 9,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500181].actions[skillId=50018101].skillId"
@@ -63823,17 +63698,17 @@
           "verified-zero": 1
         },
         "healing": {
-          "verified-zero": 5
+          "verified-zero": 10
         },
         "shield": {
-          "verified-zero": 5
+          "verified-zero": 10
         },
         "dynamicProperty": {
-          "applied": 2,
-          "verified-zero": 3
+          "applied": 4,
+          "verified-zero": 6
         },
         "tuningMark": {
-          "verified-zero": 5
+          "verified-zero": 10
         }
       },
       "semanticEffects": {
@@ -64464,16 +64339,14 @@
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "shield-formula-not-literal-function-5",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500206].actions[skillId=50020601].skillId"
     },
@@ -64671,9 +64544,9 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
@@ -64682,9 +64555,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500209].actions[skillId=50020901].skillId"
@@ -65487,13 +65359,12 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap"
       ],
@@ -65696,13 +65567,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500244].actions[skillId=50024401].skillId"
@@ -65904,13 +65774,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500245].actions[skillId=50024501].skillId"
@@ -66110,13 +65979,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500246].actions[skillId=50024601].skillId"
@@ -66315,9 +66183,9 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
@@ -66326,9 +66194,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500258].actions[skillId=50025801].skillId"
@@ -66525,9 +66392,9 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
@@ -66536,9 +66403,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500259].actions[skillId=50025901].skillId"
@@ -66729,9 +66595,9 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
@@ -66740,9 +66606,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500260].actions[skillId=50026001].skillId"
@@ -66937,15 +66802,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500261].actions[skillId=50026102].skillId"
@@ -67148,15 +67011,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500262].actions[skillId=50026202].skillId"
@@ -67359,15 +67220,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500263].actions[skillId=50026302].skillId"
@@ -67568,13 +67427,12 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500296].actions[skillId=50029601].skillId"
@@ -67770,14 +67628,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500304].actions[skillId=50030401].skillId"
@@ -67975,14 +67832,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500305].actions[skillId=50030501].skillId"
@@ -68180,14 +68036,13 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500306].actions[skillId=50030601].skillId"
@@ -68383,16 +68238,14 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 0,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500313].actions[skillId=50031302].skillId"
     },
@@ -69198,13 +69051,12 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 4,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500354].actions[skillId=50035401].skillId"
@@ -69406,13 +69258,12 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 9,
+        "applied": 10,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500355].actions[skillId=50035501].skillId"
@@ -70218,13 +70069,12 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 2,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "sp-recover-type-not-direct-sp"
       ],
@@ -70422,14 +70272,13 @@
       },
       "semanticEffects": {
         "total": 12,
-        "applied": 8,
+        "applied": 9,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "sp-recover-type-not-direct-sp",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500369].actions[skillId=50036901].skillId"
@@ -70626,14 +70475,13 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 7,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
         "sp-recover-type-not-direct-sp",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500370].actions[skillId=50037001].skillId"
@@ -70833,9 +70681,9 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 4
       },
       "settlement": null,
       "reasons": [
@@ -70844,8 +70692,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "heal-formula-not-literal-function-5"
       ],
@@ -71042,16 +70888,14 @@
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500467].actions[skillId=50046701].skillId"
     },
@@ -71246,16 +71090,14 @@
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500468].actions[skillId=50046801].skillId"
     },
@@ -72066,7 +71908,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "characters.items[id=107001].skillSlots[group=ground,slot=204]"
@@ -72652,9 +72493,7 @@
         "projectile-impact-frame-runtime-dependent",
         "tuning-mark-max-mismatch",
         "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=108002].skillSlots[group=ground,slot=2]"

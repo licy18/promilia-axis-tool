@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "d9af1f5cf37c227f979d8e592bec72d4f1db9f1525ce448d336160baae2e81e2",
+  "packageHash": "cbf1dac3723c6ff4b29b5669599999a3edb5938e87ed4c8a1cc6f0890de96b53",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -7025,7 +7025,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceEvidenceStatus": "static-evidence-gap",
@@ -7267,9 +7266,7 @@
         "projectile-impact-frame-runtime-dependent",
         "tuning-mark-max-mismatch",
         "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceEvidenceStatus": "static-evidence-gap",
@@ -59268,7 +59265,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -59289,7 +59285,6 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
@@ -59823,11 +59818,11 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
+        "pack-lifecycle-runtime-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10200113].level.labels[0]"
     },
@@ -59936,7 +59931,6 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
@@ -59986,7 +59980,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -60069,7 +60062,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10700101].level.labels[6]"
@@ -60190,7 +60182,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10700121].level.labels[2]"
@@ -60287,11 +60278,11 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
         "pack-lifecycle-runtime-unimplemented",
         "property-formula-not-literal-function-5",
         "sp-formula-not-literal-function-5"
@@ -60328,9 +60319,8 @@
         "trigger-frame-missing",
         "heal-formula-not-literal-function-5",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
+        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -60513,8 +60503,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10700312].level.labels[0]"
@@ -60682,11 +60670,11 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
         "pack-lifecycle-runtime-unimplemented",
         "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
@@ -60810,9 +60798,7 @@
         "projectile-impact-frame-runtime-dependent",
         "tuning-mark-max-mismatch",
         "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800201].level.labels[1]"
@@ -61108,7 +61094,6 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -61127,7 +61112,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -61234,9 +61218,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800512].level.labels[0]"
     },
@@ -61268,8 +61250,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "shield-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800513].level.labels[0]"
@@ -61285,9 +61265,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800522].level.labels[0]"
     },
@@ -61624,10 +61602,9 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
-        "tuning-mark-relation-triggerEffectList-unresolved"
+        "tuning-mark-relation-triggerEffectList-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10900213].level.labels[0]"
     },
@@ -61954,7 +61931,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -62142,8 +62118,6 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=11200212].level.labels[0]"
@@ -62200,9 +62174,7 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=11200222].level.labels[0]"
     },
@@ -62352,7 +62324,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -62506,7 +62477,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -62659,9 +62629,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900312].level.labels[0]"
     },
@@ -63282,7 +63250,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented"
       ],
@@ -64050,7 +64017,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500057].actions[skillId=50005701]"
@@ -64135,7 +64101,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500064].actions[skillId=50006401]"
@@ -64179,7 +64144,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500065].actions[skillId=50006501]"
@@ -64396,7 +64360,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500081].actions[skillId=50008102]"
@@ -64445,7 +64408,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500082].actions[skillId=50008201]"
@@ -64489,7 +64451,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500083].actions[skillId=50008303]"
@@ -64533,7 +64494,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500084].actions[skillId=50008403]"
@@ -64576,7 +64536,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500085].actions[skillId=50008503]"
@@ -64748,8 +64707,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500097].actions[skillId=50009701]"
@@ -64792,8 +64749,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500098].actions[skillId=50009801]"
@@ -65459,9 +65414,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500133].actions[skillId=50013302]"
     },
@@ -65505,8 +65458,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "shield-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500134].actions[skillId=50013402]"
@@ -65549,7 +65500,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500138].actions[skillId=50013801]"
@@ -65594,7 +65544,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500139].actions[skillId=50013901]"
@@ -65639,7 +65588,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500140].actions[skillId=50014001]"
@@ -66196,7 +66144,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500179].actions[skillId=50017901]"
@@ -66240,7 +66187,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500180].actions[skillId=50018001]"
@@ -66284,7 +66230,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500181].actions[skillId=50018101]"
@@ -66469,9 +66414,7 @@
       "classification": "applied",
       "reasons": [
         "shield-formula-not-literal-function-5",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500206].actions[skillId=50020601]"
     },
@@ -66517,9 +66460,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500209].actions[skillId=50020901]"
@@ -66686,7 +66628,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented"
       ],
@@ -66731,7 +66672,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500244].actions[skillId=50024401]"
@@ -66775,7 +66715,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500245].actions[skillId=50024501]"
@@ -66817,7 +66756,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500246].actions[skillId=50024601]"
@@ -66864,9 +66802,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500258].actions[skillId=50025801]"
@@ -66915,9 +66852,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500259].actions[skillId=50025901]"
@@ -66964,9 +66900,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500260].actions[skillId=50026001]"
@@ -67009,8 +66944,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500261].actions[skillId=50026102]"
@@ -67061,8 +66994,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500262].actions[skillId=50026202]"
@@ -67113,8 +67044,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500263].actions[skillId=50026302]"
@@ -67158,7 +67087,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500296].actions[skillId=50029601]"
@@ -67201,7 +67129,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500304].actions[skillId=50030401]"
@@ -67246,7 +67173,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500305].actions[skillId=50030501]"
@@ -67291,7 +67217,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500306].actions[skillId=50030601]"
@@ -67336,9 +67261,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500313].actions[skillId=50031302]"
     },
@@ -67513,7 +67436,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500354].actions[skillId=50035401]"
@@ -67557,7 +67479,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500355].actions[skillId=50035501]"
@@ -67730,7 +67651,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "sp-recover-type-not-direct-sp"
       ],
@@ -67776,7 +67696,6 @@
       "classification": "applied",
       "reasons": [
         "sp-recover-type-not-direct-sp",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500369].actions[skillId=50036901]"
@@ -67821,7 +67740,6 @@
       "classification": "applied",
       "reasons": [
         "sp-recover-type-not-direct-sp",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500370].actions[skillId=50037001]"
@@ -67870,8 +67788,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "heal-formula-not-literal-function-5"
       ],
@@ -67917,9 +67833,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500467].actions[skillId=50046701]"
     },
@@ -67963,9 +67877,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500468].actions[skillId=50046801]"
     },
@@ -68192,7 +68104,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -68213,7 +68124,6 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
@@ -68815,11 +68725,11 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
+        "pack-lifecycle-runtime-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/skill_control_10200113__-6869786966838262589.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -68991,7 +68901,6 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
@@ -69041,7 +68950,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -69241,7 +69149,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700115.asset/MonoBehaviour/skill_control_10700115__-2636414007353345261.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -69386,7 +69293,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700125.asset/MonoBehaviour/skill_control_10700125__-1842072263179732239.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -69496,11 +69402,11 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
         "pack-lifecycle-runtime-unimplemented",
         "property-formula-not-literal-function-5",
         "sp-formula-not-literal-function-5"
@@ -69563,9 +69469,8 @@
         "trigger-frame-missing",
         "heal-formula-not-literal-function-5",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
+        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -69753,8 +69658,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700312.asset/MonoBehaviour/skill_control_10700312__8723772820491993609.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -70011,11 +69914,11 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
         "pack-lifecycle-runtime-unimplemented",
         "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
@@ -70139,9 +70042,7 @@
         "projectile-impact-frame-runtime-dependent",
         "tuning-mark-max-mismatch",
         "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800210.asset/MonoBehaviour/skill_control_10800210__912862769671102937.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -70442,7 +70343,6 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -70461,7 +70361,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -70594,9 +70493,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800512.asset/MonoBehaviour/skill_control_10800512__739684842055435993.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -70628,8 +70525,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "shield-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800513.asset/MonoBehaviour/skill_control_10800513__-4908726060438506804.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -70645,9 +70540,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800522.asset/MonoBehaviour/skill_control_10800522__8256323534925806707.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -70952,10 +70845,9 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
-        "tuning-mark-relation-triggerEffectList-unresolved"
+        "tuning-mark-relation-triggerEffectList-unresolved",
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900213.asset/MonoBehaviour/skill_control_10900213__8734496154904828250.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -71339,7 +71231,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
@@ -71577,8 +71468,6 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200212.asset/MonoBehaviour/skill_control_11200212__6460986827502278992.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -71635,9 +71524,7 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200222.asset/MonoBehaviour/skill_control_11200222__-5519277350238354650.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -71785,7 +71672,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -71937,7 +71823,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -72071,9 +71956,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900312.asset/MonoBehaviour/skill_control_19900312__7991412169588548834.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -73050,7 +72933,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented"
       ],
@@ -74196,7 +74078,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50005701.asset/MonoBehaviour/skill_control_50005701__-4933527449152448087.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -74412,7 +74293,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50006401.asset/MonoBehaviour/skill_control_50006401__738121211599156869.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -74536,7 +74416,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50006501.asset/MonoBehaviour/skill_control_50006501__316635851584084150.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -75025,7 +74904,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50008102.asset/MonoBehaviour/skill_control_50008102__5398625274791553183.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -75139,7 +75017,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50008201.asset/MonoBehaviour/skill_control_50008201__8882885578029570723.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -75248,7 +75125,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50008303.asset/MonoBehaviour/skill_control_50008303__-6835721978259976680.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -75277,7 +75153,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50008403.asset/MonoBehaviour/skill_control_50008403__-1694868341176099360.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -75386,7 +75261,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50008503.asset/MonoBehaviour/skill_control_50008503__-1176176484269238537.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -75748,8 +75622,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50009701.asset/MonoBehaviour/skill_control_50009701__-7485566101577163151.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -75858,8 +75730,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50009801.asset/MonoBehaviour/skill_control_50009801__7133819668473652351.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -76431,9 +76301,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50013302.asset/MonoBehaviour/skill_control_50013302__-1050523471820297932.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -76462,8 +76330,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "shield-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50013402.asset/MonoBehaviour/skill_control_50013402__-210834648262606047.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -76493,7 +76359,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50013801.asset/MonoBehaviour/skill_control_50013801__6734455472376781322.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -76523,7 +76388,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50013901.asset/MonoBehaviour/skill_control_50013901__2746101871219549426.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -76634,7 +76498,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50014001.asset/MonoBehaviour/skill_control_50014001__7134991668923127489.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -77154,7 +77017,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50017901.asset/MonoBehaviour/skill_control_50017901__-3503015084019721167.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -77183,7 +77045,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50018001.asset/MonoBehaviour/skill_control_50018001__-824564614254109104.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -77212,7 +77073,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50018101.asset/MonoBehaviour/skill_control_50018101__8319091377490994122.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -77580,9 +77440,7 @@
       "classification": "applied",
       "reasons": [
         "shield-formula-not-literal-function-5",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50020601.asset/MonoBehaviour/skill_control_50020601__-384054997869545852.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -77693,9 +77551,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50020901.asset/MonoBehaviour/skill_control_50020901__398945926042373673.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -77979,7 +77836,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented"
       ],
@@ -78009,7 +77865,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50024401.asset/MonoBehaviour/skill_control_50024401__-146841199163681917.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78038,7 +77893,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50024501.asset/MonoBehaviour/skill_control_50024501__2950540511511091388.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78146,7 +78000,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50024601.asset/MonoBehaviour/skill_control_50024601__-648836523212401254.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78180,9 +78033,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50025801.asset/MonoBehaviour/skill_control_50025801__-945357660765311053.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78216,9 +78068,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50025901.asset/MonoBehaviour/skill_control_50025901__4962096237101202729.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78252,9 +78103,8 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-runtime-unimplemented",
+        "nested-effect-wrapper-semantics-unresolved",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50026001.asset/MonoBehaviour/skill_control_50026001__-7986441313229177473.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78284,8 +78134,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50026102.asset/MonoBehaviour/skill_control_50026102__-4734681274108909707.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78315,8 +78163,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50026202.asset/MonoBehaviour/skill_control_50026202__-6038710098277821751.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78346,8 +78192,6 @@
       "classification": "applied",
       "reasons": [
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50026302.asset/MonoBehaviour/skill_control_50026302__6313297114064948057.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78456,7 +78300,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50029601.asset/MonoBehaviour/skill_control_50029601__7997874386735048488.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78486,7 +78329,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50030401.asset/MonoBehaviour/skill_control_50030401__3687116324091629704.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78529,7 +78371,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50030501.asset/MonoBehaviour/skill_control_50030501__-1049113707655304699.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78559,7 +78400,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50030601.asset/MonoBehaviour/skill_control_50030601__1513569702707447185.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78670,9 +78510,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50031302.asset/MonoBehaviour/skill_control_50031302__-5346167755510152456.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -78867,7 +78705,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50035401.asset/MonoBehaviour/skill_control_50035401__-342999712119013490.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -78909,7 +78746,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50035501.asset/MonoBehaviour/skill_control_50035501__4201925263007651803.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -79128,7 +78964,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "sp-recover-type-not-direct-sp"
       ],
@@ -79159,7 +78994,6 @@
       "classification": "applied",
       "reasons": [
         "sp-recover-type-not-direct-sp",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036901.asset/MonoBehaviour/skill_control_50036901__2760583003281205729.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -79189,7 +79023,6 @@
       "classification": "applied",
       "reasons": [
         "sp-recover-type-not-direct-sp",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50037001.asset/MonoBehaviour/skill_control_50037001__-1722236950524606955.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -79223,8 +79056,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "heal-formula-not-literal-function-5"
       ],
@@ -79255,9 +79086,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50046701.asset/MonoBehaviour/skill_control_50046701__3383498511271564554.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -79286,9 +79115,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "tuning-mark-max-mismatch",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-max-mismatch"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50046801.asset/MonoBehaviour/skill_control_50046801__-2125656245241632765.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -109476,10 +109303,10 @@
             "10101005|0|elements|3|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0"
           ],
           "hitCount": 8,
-          "effectCount": 1,
+          "effectCount": 2,
           "effectDimensionSummary": {
             "damage": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 3
             },
             "toughness": {
@@ -109507,7 +109334,6 @@
           "classification": "applied",
           "runtimeReady": true,
           "reasons": [
-            "nested-damage-trigger-lifecycle-not-expanded",
             "nested-effect-wrapper-semantics-unresolved",
             "effect-trigger-frame-missing",
             "effect-target-unresolved"
@@ -112772,10 +112598,11 @@
             "10200105|0|elements|5|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0"
           ],
           "hitCount": 5,
-          "effectCount": 2,
+          "effectCount": 3,
           "effectDimensionSummary": {
             "damage": {
-              "unresolved": 2,
+              "applied": 1,
+              "unresolved": 1,
               "verified-zero": 7
             },
             "toughness": {
@@ -112806,7 +112633,6 @@
           "runtimeReady": true,
           "reasons": [
             "sp-formula-not-literal-function-5",
-            "nested-damage-trigger-lifecycle-not-expanded",
             "nested-effect-wrapper-semantics-unresolved",
             "effect-trigger-frame-missing",
             "effect-target-unresolved"
@@ -127359,7 +127185,6 @@
             "effect-trigger-frame-missing",
             "effect-target-unresolved",
             "tuning-mark-relation-notDelElementDataList-unresolved",
-            "nested-damage-trigger-lifecycle-not-expanded",
             "nested-effect-wrapper-semantics-unresolved"
           ],
           "sourceIdentity": "workbench-seed.gameData.skills[id=10700101]|NewTable/skillsub_logic.rows[skillId=10700101].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/skill_control_10700101__636759246568854573.json"
@@ -152441,10 +152266,11 @@
             "10900105|0|elements|10|-7783775984244194322|element:-7783775984244194322|unresolved-frame|0"
           ],
           "hitCount": 10,
-          "effectCount": 2,
+          "effectCount": 3,
           "effectDimensionSummary": {
             "damage": {
-              "unresolved": 2,
+              "applied": 1,
+              "unresolved": 1,
               "verified-zero": 9
             },
             "toughness": {
@@ -152473,7 +152299,6 @@
           "classification": "applied",
           "runtimeReady": true,
           "reasons": [
-            "nested-damage-trigger-lifecycle-not-expanded",
             "nested-effect-wrapper-semantics-unresolved",
             "effect-trigger-frame-missing",
             "effect-target-unresolved"
@@ -156721,10 +156546,10 @@
             "10900205|0|elements|7|3472400132896615341|element:3472400132896615341|unresolved-frame|0"
           ],
           "hitCount": 9,
-          "effectCount": 2,
+          "effectCount": 3,
           "effectDimensionSummary": {
             "damage": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 6
             },
             "toughness": {
@@ -156754,8 +156579,6 @@
           "runtimeReady": true,
           "reasons": [
             "tuning-mark-max-mismatch",
-            "nested-damage-trigger-lifecycle-not-expanded",
-            "nested-effect-wrapper-semantics-unresolved",
             "property-formula-not-literal-function-5",
             "effect-trigger-frame-missing",
             "effect-target-unresolved"

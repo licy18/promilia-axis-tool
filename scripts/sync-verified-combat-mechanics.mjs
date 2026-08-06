@@ -5606,6 +5606,7 @@ function createControlEffectGraph({
           formulas,
           overridesBySkillAndElement,
           depth,
+          incomingRelation: relation,
           tuningMechanicsCatalog,
         }),
         sourceTraversalIndex: nodes.length,
@@ -5780,6 +5781,7 @@ function createBattleEffectGraphNode({
   formulas,
   overridesBySkillAndElement,
   depth,
+  incomingRelation = null,
   tuningMechanicsCatalog,
 }) {
   const tree = record.typetree ?? {};
@@ -5822,6 +5824,7 @@ function createBattleEffectGraphNode({
       ])
     ),
     depth,
+    incomingRelation,
     tuningMechanicsCatalog,
   });
   const rawSourceName = tree.elementName ?? tree.m_Name ?? record.name ?? null;
@@ -5840,6 +5843,7 @@ function createBattleEffectGraphNode({
     displayLabel: sourceName.displayLabel,
     kind,
     depth,
+    incomingRelation,
     activationConditions: classification.activationConditions ?? [],
     propertyConditionStatus: classification.propertyConditionStatus ?? null,
     sourceIdentity: `battle-element-assets.jsonl#path_id=${record.pathId}`,
@@ -6039,6 +6043,7 @@ function classifyBattleEffectNode({
   baseFunctionId,
   valueByLevel,
   depth,
+  incomingRelation = null,
   tuningMechanicsCatalog,
 }) {
   const propertyConditionResult = parsePropertyChangeActivationConditions(tree);
@@ -6126,7 +6131,13 @@ function classifyBattleEffectNode({
       'formulaParams.formulaParamValues[0]'
     );
   } else if (kind === 'damage') {
-    if (depth > 0) {
+    if (depth > 0 && incomingRelation === 'additionalHitElementDataList') {
+      dimensions.damage = createDimensionClassification(
+        'applied',
+        [],
+        'additionalHitElementDataList'
+      );
+    } else if (depth > 0) {
       reasons.push('nested-damage-trigger-lifecycle-not-expanded');
       dimensions.damage = createDimensionClassification(
         'unresolved',
@@ -6433,6 +6444,7 @@ function createControlRuntimeEffectBinding({
           'injectElementDataList',
           'notDelElementDataList',
           'elementDataList',
+          'additionalHitElementDataList',
         ].includes(edge.relation)
     )
   ) {

@@ -2,7 +2,7 @@
 
 - Owner: `101003`
 - Profile: `actor:101003:character-combat-profile:v1`
-- Hash: `73e0b7c6beb555e3658b2812f3d4efe4c6fa733071a81e544bdc454344660079`
+- Hash: `733839064568b323a9c12fcd49d383b31f159367e5febba0a86d1a3dc02070d6`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -37,7 +37,7 @@
 | cooldowns | applied | 29 | 0 | 29 |
 | personalResources | not-applicable | 0 | 0 | 0 |
 | teamResourcesAndMarks | applied | 1 | 0 | 1 |
-| buffsAndDebuffs | static-evidence-gap | 17 | 30 | 47 |
+| buffsAndDebuffs | static-evidence-gap | 23 | 24 | 47 |
 | passives | applied | 1 | 0 | 1 |
 | dynamicProperties | static-evidence-gap | 8 | 12 | 20 |
 | healingAndShields | not-applicable | 0 | 0 | 0 |
@@ -49,6 +49,6 @@
 ## 未闭环
 
 - runtime-evidence-required: 10
-- static-evidence-gap: 27
+- static-evidence-gap: 24
 
 > JSON 是权威产物；本摘要不作为运行时输入，也不从描述推断数值。

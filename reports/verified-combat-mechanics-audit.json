@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "d9af1f5cf37c227f979d8e592bec72d4f1db9f1525ce448d336160baae2e81e2",
+  "packageHash": "cbf1dac3723c6ff4b29b5669599999a3edb5938e87ed4c8a1cc6f0890de96b53",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
@@ -1278,9 +1278,9 @@
     "appliedHitBindingCount": 2737,
     "uniqueControlBindingCount": 543,
     "uniqueControlHitBindingCount": 4579,
-    "appliedEffectBindingCount": 1202,
+    "appliedEffectBindingCount": 1321,
     "verifiedZeroEffectBindingCount": 7,
-    "unresolvedEffectBindingCount": 2472,
+    "unresolvedEffectBindingCount": 2358,
     "unresolvedActionBindingCount": 34,
     "enemyProfileCount": 208,
     "appliedEnemyProfileCount": 204,
@@ -1364,7 +1364,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "applied": false
@@ -1505,9 +1504,7 @@
         "projectile-impact-frame-runtime-dependent",
         "tuning-mark-max-mismatch",
         "effect-trigger-frame-missing",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "applied": false
