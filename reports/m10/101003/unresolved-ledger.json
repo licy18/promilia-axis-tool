@@ -2,27 +2,27 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-unresolved-ledger",
   "ownerId": 101003,
-  "profileHash": "733839064568b323a9c12fcd49d383b31f159367e5febba0a86d1a3dc02070d6",
+  "profileHash": "f8d5614f0a5410504fe6b1a970145fa77e5f7f98dd050e1f84e2287ed688f264",
   "summary": {
-    "semanticRecordCount": 36,
-    "rawRecordCount": 45,
+    "semanticRecordCount": 32,
+    "rawRecordCount": 38,
     "semanticStatusCounts": {
       "not-applicable": 2,
       "runtime-evidence-required": 10,
-      "static-evidence-gap": 24
+      "static-evidence-gap": 20
     },
     "rawStatusCounts": {
       "not-applicable": 2,
       "runtime-evidence-required": 10,
-      "static-evidence-gap": 33
+      "static-evidence-gap": 26
     },
     "impactClassificationCounts": {
       "gameplay-impacting": 27,
       "not-applicable": 2,
-      "wrapper-or-duplicate": 7
+      "wrapper-or-duplicate": 3
     },
     "gameplayImpactingCount": 27,
-    "wrapperOrDuplicateCount": 7,
+    "wrapperOrDuplicateCount": 3,
     "transitionCandidateSupersededCount": 0,
     "unreachableOrNotApplicableCount": 2
   },
@@ -255,28 +255,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:3b316072bf450d5a5b78",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100327:0:-1732209689403186369:2119769922617281174:0",
-      "sourceIdentities": [
-        "battle-effect:10100327:0:-1732209689403186369:2119769922617281174:0"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10100327|0|elements|0|4545086782333247478|element:-1732209689403186369|0|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:405e30de00cda61e8099",
       "ownerId": 101003,
       "sourceKind": "effect",
@@ -413,28 +391,6 @@
       "metadata": null,
       "rawRecordIdentities": [
         "effect:10100324|0|elements|0|5083798378052880732|element:5083798378052880732|1|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:93f466b1797bd55f3b02",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100322:0:466374251647106866:-5797025868792535592:57",
-      "sourceIdentities": [
-        "battle-effect:10100322:0:466374251647106866:-5797025868792535592:57"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10100322|0|elements|6|-1498771669867596146|element:466374251647106866|57|0"
       ],
       "rawRecordCount": 1
     },
@@ -749,56 +705,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:c7b3b241db00afac7fa5",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100313:0:466374251647106866:6998348329063063020:193",
-      "sourceIdentities": [
-        "battle-effect:10100313:0:466374251647106866:-6215383830795215380:207",
-        "battle-effect:10100313:0:466374251647106866:2700200137312345580:223",
-        "battle-effect:10100313:0:466374251647106866:6998348329063063020:193"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|193|2",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|207|0",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|223|1"
-      ],
-      "rawRecordCount": 3
-    },
-    {
-      "recordIdentity": "semantic-gap:ca92da4d7158a5369d99",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100312:0:466374251647106866:2749505792865494576:63",
-      "sourceIdentities": [
-        "battle-effect:10100312:0:466374251647106866:1011852803228526128:70",
-        "battle-effect:10100312:0:466374251647106866:2749505792865494576:63"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|63|1",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|70|0"
-      ],
-      "rawRecordCount": 2
-    },
-    {
       "recordIdentity": "semantic-gap:d2f9ccf1e33046b0156e",
       "ownerId": 101003,
       "sourceKind": "effect",
@@ -1053,34 +959,6 @@
       "metadata": null
     },
     {
-      "recordIdentity": "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|63|1",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100312:0:466374251647106866:2749505792865494576:63",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|70|0",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100312:0:466374251647106866:1011852803228526128:70",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
       "recordIdentity": "effect:10100312|0|elements|4|466374251647106866|element:466374251647106866|unresolved-frame|0",
       "ownerId": 101003,
       "sourceKind": "effect",
@@ -1090,48 +968,6 @@
         "effect-trigger-frame-missing"
       ],
       "sourceIdentity": "battle-effect:10100312:0:466374251647106866:unresolved:unresolved",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|193|2",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100313:0:466374251647106866:6998348329063063020:193",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|207|0",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100313:0:466374251647106866:-6215383830795215380:207",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|223|1",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100313:0:466374251647106866:2700200137312345580:223",
       "referenceKind": null,
       "sourceEvidenceStatus": null,
       "scenarioRuntimeStatus": null,
@@ -1228,20 +1064,6 @@
       "metadata": null
     },
     {
-      "recordIdentity": "effect:10100322|0|elements|6|-1498771669867596146|element:466374251647106866|57|0",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100322:0:466374251647106866:-5797025868792535592:57",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
       "recordIdentity": "effect:10100322|0|elements|7|466374251647106866|element:466374251647106866|unresolved-frame|0",
       "ownerId": 101003,
       "sourceKind": "effect",
@@ -1265,20 +1087,6 @@
         "pack-lifecycle-runtime-unimplemented"
       ],
       "sourceIdentity": "battle-effect:10100324:0:5083798378052880732:3789488601228152227:1",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10100327|0|elements|0|4545086782333247478|element:-1732209689403186369|0|0",
-      "ownerId": 101003,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10100327:0:-1732209689403186369:2119769922617281174:0",
       "referenceKind": null,
       "sourceEvidenceStatus": null,
       "scenarioRuntimeStatus": null,

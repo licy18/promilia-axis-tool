@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "cbf1dac3723c6ff4b29b5669599999a3edb5938e87ed4c8a1cc6f0890de96b53",
+  "packageHash": "c0dbd2363c1ceb89864a15848c329f8e3337524a4b3f848d57f2d37602768bbe",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
@@ -1274,23 +1274,23 @@
     "classifiedActionCount": 563,
     "foundControlCount": 620,
     "indexedElementPathCount": 2232,
-    "appliedActionBindingCount": 587,
+    "appliedActionBindingCount": 606,
     "appliedHitBindingCount": 2737,
-    "uniqueControlBindingCount": 543,
-    "uniqueControlHitBindingCount": 4579,
-    "appliedEffectBindingCount": 1321,
+    "uniqueControlBindingCount": 562,
+    "uniqueControlHitBindingCount": 4583,
+    "appliedEffectBindingCount": 1509,
     "verifiedZeroEffectBindingCount": 7,
-    "unresolvedEffectBindingCount": 2358,
-    "unresolvedActionBindingCount": 34,
+    "unresolvedEffectBindingCount": 2262,
+    "unresolvedActionBindingCount": 18,
     "enemyProfileCount": 208,
     "appliedEnemyProfileCount": 204,
     "appliedHitDamageTypeCounts": {
-      "1": 1549,
+      "1": 1552,
       "2": 293,
       "3": 2246,
       "4": 480,
       "5": 7,
-      "8": 4
+      "8": 5
     }
   },
   "requiredAcceptanceBindings": {
@@ -1317,40 +1317,6 @@
   },
   "unresolvedBindings": [
     {
-      "identity": "actor|101007|10100721|2|10100727",
-      "ownerKind": "actor",
-      "ownerId": 101007,
-      "sourceSkillId": 10100721,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10100727,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|102001|10200122|2|10200127",
-      "ownerKind": "actor",
-      "ownerId": 102001,
-      "sourceSkillId": 10200122,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10200127,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|107001|10700101|6|10700115",
       "ownerKind": "actor",
       "ownerId": 107001,
@@ -1363,8 +1329,7 @@
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "tuning-mark-relation-notDelElementDataList-unresolved",
-        "nested-effect-wrapper-semantics-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved"
       ],
       "applied": false
     },
@@ -1379,23 +1344,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|107001|10700121|4|10700127",
-      "ownerKind": "actor",
-      "ownerId": 107001,
-      "sourceSkillId": 10700121,
-      "actionVariantIndex": 4,
-      "controlSkillId": 10700127,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
       ],
       "applied": false
     },
@@ -1445,23 +1393,6 @@
       "applied": false
     },
     {
-      "identity": "actor|107003|10700321|2|10700327",
-      "ownerKind": "actor",
-      "ownerId": 107003,
-      "sourceSkillId": 10700321,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10700327,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|108001|10800101|1|10800110",
       "ownerKind": "actor",
       "ownerId": 108001,
@@ -1471,23 +1402,6 @@
       "status": "unresolved",
       "reasons": [
         "selected-control-variant-has-no-three-value-elements"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|108001|10800121|2|10800127",
-      "ownerKind": "actor",
-      "ownerId": 108001,
-      "sourceSkillId": 10800121,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10800127,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
       ],
       "applied": false
     },
@@ -1523,23 +1437,6 @@
       "applied": false
     },
     {
-      "identity": "actor|108002|10800222|2|10800227",
-      "ownerKind": "actor",
-      "ownerId": 108002,
-      "sourceSkillId": 10800222,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10800227,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|108003|10800301|1|10800310",
       "ownerKind": "actor",
       "ownerId": 108003,
@@ -1563,108 +1460,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|108003|10800322|2|10800327",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "sourceSkillId": 10800322,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10800327,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|108005|10800522|2|10800527",
-      "ownerKind": "actor",
-      "ownerId": 108005,
-      "sourceSkillId": 10800522,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10800527,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|109001|10900121|3|10900127",
-      "ownerKind": "actor",
-      "ownerId": 109001,
-      "sourceSkillId": 10900121,
-      "actionVariantIndex": 3,
-      "controlSkillId": 10900127,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|109002|10900221|2|10900227",
-      "ownerKind": "actor",
-      "ownerId": 109002,
-      "sourceSkillId": 10900221,
-      "actionVariantIndex": 2,
-      "controlSkillId": 10900227,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|111001|11100121|2|11100127",
-      "ownerKind": "actor",
-      "ownerId": 111001,
-      "sourceSkillId": 11100121,
-      "actionVariantIndex": 2,
-      "controlSkillId": 11100127,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|112001|11200121|2|11200127",
-      "ownerKind": "actor",
-      "ownerId": 112001,
-      "sourceSkillId": 11200121,
-      "actionVariantIndex": 2,
-      "controlSkillId": 11200127,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
       ],
       "applied": false
     },
@@ -1733,57 +1528,6 @@
       "applied": false
     },
     {
-      "identity": "actor|112002|11200222|2|11200227",
-      "ownerKind": "actor",
-      "ownerId": 112002,
-      "sourceSkillId": 11200222,
-      "actionVariantIndex": 2,
-      "controlSkillId": 11200227,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|199001|19900122|2|19900127",
-      "ownerKind": "actor",
-      "ownerId": 199001,
-      "sourceSkillId": 19900122,
-      "actionVariantIndex": 2,
-      "controlSkillId": 19900127,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|199002|19900222|2|19900227",
-      "ownerKind": "actor",
-      "ownerId": 199002,
-      "sourceSkillId": 19900222,
-      "actionVariantIndex": 2,
-      "controlSkillId": 19900227,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
-      "applied": false
-    },
-    {
       "identity": "actor|199003|19900301|1|19900310",
       "ownerKind": "actor",
       "ownerId": 199003,
@@ -1793,23 +1537,6 @@
       "status": "unresolved",
       "reasons": [
         "selected-control-variant-has-no-runnable-hit"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|199003|19900321|2|19900327",
-      "ownerKind": "actor",
-      "ownerId": 199003,
-      "sourceSkillId": 19900321,
-      "actionVariantIndex": 2,
-      "controlSkillId": 19900327,
-      "status": "unresolved",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
       ],
       "applied": false
     },

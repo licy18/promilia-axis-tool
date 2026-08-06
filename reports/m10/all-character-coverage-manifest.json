@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "6d5ef4c524df0c570cce537144474e140e8dcfc7167555e78645b3783600c057",
+  "sourcePackageHash": "58ea266b03d436ee0a659f8f695b3b846375881f433fd1968cc02c0bb92c7e78",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "f488e8318e173535627200c19bcf71b6ae6eec72d5548509da263e9b4b01d1d4"
+      "profileHash": "8f2b562764471843f62cc316b6b4493a726df7924a4f93c595690298821584a8"
     },
     {
       "ownerId": 103002,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "d44346e6521b3df7c3a280e9e13d12e9653e9174e714b13ea68833b580c01b15"
+      "profileHash": "2b7ea28830eee7ad5806a99cc9e540c338802d1b8f0e63d636c9d11818ad5a33"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "733839064568b323a9c12fcd49d383b31f159367e5febba0a86d1a3dc02070d6"
+      "profileHash": "f8d5614f0a5410504fe6b1a970145fa77e5f7f98dd050e1f84e2287ed688f264"
     },
     {
       "ownerId": 101007,
@@ -197,8 +197,7 @@
       "reviewBatch": "M10-C1",
       "mechanicFocus": [
         "派生形态",
-        "切人/星携技",
-        "静态缺口"
+        "切人/星携技"
       ],
       "estimatedWorkUnits": 1,
       "progressState": "evidence-indexed",
@@ -223,9 +222,9 @@
       "switchTriggerPhases": [
         "on-enter"
       ],
-      "runtimeReadyActionCount": 9,
-      "runtimeReadyRatio": 0.9,
-      "staticEvidenceGapCount": 1,
+      "runtimeReadyActionCount": 10,
+      "runtimeReadyRatio": 1,
+      "staticEvidenceGapCount": 0,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "derived-action",
@@ -240,8 +239,7 @@
       "recommendedOrder": 5,
       "reviewBatch": "M10-C1",
       "mechanicFocus": [
-        "切人/星携技",
-        "静态缺口"
+        "切人/星携技"
       ],
       "estimatedWorkUnits": 1,
       "progressState": "evidence-indexed",
@@ -266,9 +264,9 @@
       "switchTriggerPhases": [
         "on-exit"
       ],
-      "runtimeReadyActionCount": 8,
-      "runtimeReadyRatio": 0.8889,
-      "staticEvidenceGapCount": 1,
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 1,
+      "staticEvidenceGapCount": 0,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -310,9 +308,9 @@
       "switchTriggerPhases": [
         "on-enter"
       ],
-      "runtimeReadyActionCount": 7,
-      "runtimeReadyRatio": 0.7,
-      "staticEvidenceGapCount": 3,
+      "runtimeReadyActionCount": 8,
+      "runtimeReadyRatio": 0.8,
+      "staticEvidenceGapCount": 2,
       "runtimeEvidenceRequiredCount": 2,
       "mechanismTypes": [
         "derived-action",
@@ -369,8 +367,7 @@
       "recommendedOrder": 8,
       "reviewBatch": "M10-C1",
       "mechanicFocus": [
-        "切人/星携技",
-        "静态缺口"
+        "切人/星携技"
       ],
       "estimatedWorkUnits": 1,
       "progressState": "evidence-indexed",
@@ -395,9 +392,9 @@
       "switchTriggerPhases": [
         "on-enter"
       ],
-      "runtimeReadyActionCount": 9,
-      "runtimeReadyRatio": 0.9,
-      "staticEvidenceGapCount": 1,
+      "runtimeReadyActionCount": 10,
+      "runtimeReadyRatio": 1,
+      "staticEvidenceGapCount": 0,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -437,9 +434,9 @@
       "switchTriggerPhases": [
         "on-enter"
       ],
-      "runtimeReadyActionCount": 8,
-      "runtimeReadyRatio": 0.8,
-      "staticEvidenceGapCount": 2,
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 0.9,
+      "staticEvidenceGapCount": 1,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -480,9 +477,9 @@
       "switchTriggerPhases": [
         "on-exit"
       ],
-      "runtimeReadyActionCount": 7,
-      "runtimeReadyRatio": 0.7,
-      "staticEvidenceGapCount": 3,
+      "runtimeReadyActionCount": 8,
+      "runtimeReadyRatio": 0.8,
+      "staticEvidenceGapCount": 2,
       "runtimeEvidenceRequiredCount": 1,
       "mechanismTypes": [
         "switch-trigger"
@@ -522,9 +519,9 @@
       "switchTriggerPhases": [
         "on-exit"
       ],
-      "runtimeReadyActionCount": 7,
-      "runtimeReadyRatio": 0.7,
-      "staticEvidenceGapCount": 3,
+      "runtimeReadyActionCount": 8,
+      "runtimeReadyRatio": 0.8,
+      "staticEvidenceGapCount": 2,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -538,8 +535,7 @@
       "recommendedOrder": 12,
       "reviewBatch": "M10-C2",
       "mechanicFocus": [
-        "切人/星携技",
-        "静态缺口"
+        "切人/星携技"
       ],
       "estimatedWorkUnits": 1,
       "progressState": "evidence-indexed",
@@ -564,9 +560,9 @@
       "switchTriggerPhases": [
         "on-exit"
       ],
-      "runtimeReadyActionCount": 9,
-      "runtimeReadyRatio": 0.9,
-      "staticEvidenceGapCount": 1,
+      "runtimeReadyActionCount": 10,
+      "runtimeReadyRatio": 1,
+      "staticEvidenceGapCount": 0,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -580,8 +576,7 @@
       "recommendedOrder": 13,
       "reviewBatch": "M10-C2",
       "mechanicFocus": [
-        "切人/星携技",
-        "静态缺口"
+        "切人/星携技"
       ],
       "estimatedWorkUnits": 1,
       "progressState": "evidence-indexed",
@@ -606,9 +601,9 @@
       "switchTriggerPhases": [
         "on-enter"
       ],
-      "runtimeReadyActionCount": 9,
-      "runtimeReadyRatio": 0.9,
-      "staticEvidenceGapCount": 1,
+      "runtimeReadyActionCount": 10,
+      "runtimeReadyRatio": 1,
+      "staticEvidenceGapCount": 0,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -622,8 +617,7 @@
       "recommendedOrder": 14,
       "reviewBatch": "M10-C2",
       "mechanicFocus": [
-        "切人/星携技",
-        "静态缺口"
+        "切人/星携技"
       ],
       "estimatedWorkUnits": 1,
       "progressState": "evidence-indexed",
@@ -648,9 +642,9 @@
       "switchTriggerPhases": [
         "on-enter"
       ],
-      "runtimeReadyActionCount": 9,
-      "runtimeReadyRatio": 0.9,
-      "staticEvidenceGapCount": 1,
+      "runtimeReadyActionCount": 10,
+      "runtimeReadyRatio": 1,
+      "staticEvidenceGapCount": 0,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -665,8 +659,7 @@
       "reviewBatch": "M10-C2",
       "mechanicFocus": [
         "派生形态",
-        "切人/星携技",
-        "静态缺口"
+        "切人/星携技"
       ],
       "estimatedWorkUnits": 1,
       "progressState": "evidence-indexed",
@@ -691,9 +684,9 @@
       "switchTriggerPhases": [
         "on-enter"
       ],
-      "runtimeReadyActionCount": 9,
-      "runtimeReadyRatio": 0.9,
-      "staticEvidenceGapCount": 1,
+      "runtimeReadyActionCount": 10,
+      "runtimeReadyRatio": 1,
+      "staticEvidenceGapCount": 0,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "derived-action",
@@ -708,8 +701,7 @@
       "recommendedOrder": 16,
       "reviewBatch": "M10-C3",
       "mechanicFocus": [
-        "切人/星携技",
-        "静态缺口"
+        "切人/星携技"
       ],
       "estimatedWorkUnits": 1,
       "progressState": "evidence-indexed",
@@ -734,9 +726,9 @@
       "switchTriggerPhases": [
         "on-enter"
       ],
-      "runtimeReadyActionCount": 9,
-      "runtimeReadyRatio": 0.9,
-      "staticEvidenceGapCount": 1,
+      "runtimeReadyActionCount": 10,
+      "runtimeReadyRatio": 1,
+      "staticEvidenceGapCount": 0,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -776,9 +768,9 @@
       "switchTriggerPhases": [
         "on-exit"
       ],
-      "runtimeReadyActionCount": 5,
-      "runtimeReadyRatio": 0.5,
-      "staticEvidenceGapCount": 5,
+      "runtimeReadyActionCount": 6,
+      "runtimeReadyRatio": 0.6,
+      "staticEvidenceGapCount": 4,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -792,8 +784,7 @@
       "recommendedOrder": 18,
       "reviewBatch": "M10-C3",
       "mechanicFocus": [
-        "切人/星携技",
-        "静态缺口"
+        "切人/星携技"
       ],
       "estimatedWorkUnits": 1,
       "progressState": "evidence-indexed",
@@ -818,9 +809,9 @@
       "switchTriggerPhases": [
         "on-exit"
       ],
-      "runtimeReadyActionCount": 8,
-      "runtimeReadyRatio": 0.8889,
-      "staticEvidenceGapCount": 1,
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 1,
+      "staticEvidenceGapCount": 0,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -834,8 +825,7 @@
       "recommendedOrder": 19,
       "reviewBatch": "M10-C3",
       "mechanicFocus": [
-        "切人/星携技",
-        "静态缺口"
+        "切人/星携技"
       ],
       "estimatedWorkUnits": 1,
       "progressState": "evidence-indexed",
@@ -860,9 +850,9 @@
       "switchTriggerPhases": [
         "on-exit"
       ],
-      "runtimeReadyActionCount": 8,
-      "runtimeReadyRatio": 0.8889,
-      "staticEvidenceGapCount": 1,
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 1,
+      "staticEvidenceGapCount": 0,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -902,9 +892,9 @@
       "switchTriggerPhases": [
         "on-enter"
       ],
-      "runtimeReadyActionCount": 8,
-      "runtimeReadyRatio": 0.8,
-      "staticEvidenceGapCount": 2,
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 0.9,
+      "staticEvidenceGapCount": 1,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -920,7 +910,7 @@
       "runtime-applied": 3
     },
     "totalPublicActionCount": 197,
-    "totalRuntimeReadyActionCount": 166,
+    "totalRuntimeReadyActionCount": 182,
     "unnamedSecondaryPassiveCount": 20,
     "zeroDistanceSimulationCompleteCount": 1,
     "realClientEvidenceCompleteCount": 0

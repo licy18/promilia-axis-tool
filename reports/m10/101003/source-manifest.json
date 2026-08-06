@@ -4,7 +4,7 @@
   "ownerId": 101003,
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "6d5ef4c524df0c570cce537144474e140e8dcfc7167555e78645b3783600c057"
+    "packageHash": "58ea266b03d436ee0a659f8f695b3b846375881f433fd1968cc02c0bb92c7e78"
   },
   "recipeIdentity": "scripts/character-combat/profile-recipes/101003.json",
   "recipeHash": "ae56f58b9dacec98ab6f84419fce6645a8dc2d9961943a7a87a1ce2767980ecb",
@@ -3771,6 +3771,20 @@
       "status": "evidence-indexed"
     },
     {
+      "identity": "battle-element-assets.jsonl#path_id=-1732209689403186369",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-1732209689403186369",
+      "identityHash": "e83712c91f280cfd6afb3261d6bdaeb6807451fc743538154f71e956d7477b7a",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "battle-element-assets.jsonl#path_id=-2035055823451510697",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-2035055823451510697",
+      "identityHash": "e209473fd91b88d01607db01d7db7c7d1ea0db3071dfd87da1f8743af39b14c5",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
       "identity": "battle-element-assets.jsonl#path_id=-3716196104709416648",
       "sourceIdentity": "battle-element-assets.jsonl#path_id=-3716196104709416648",
       "identityHash": "284a3899570001628e76b1c484b62fae3565f64ad207eaff4450242b7f64f718",
@@ -3837,6 +3851,13 @@
       "identity": "battle-element-assets.jsonl#path_id=4373635720509741260",
       "sourceIdentity": "battle-element-assets.jsonl#path_id=4373635720509741260",
       "identityHash": "70d8078981f9ee130e80c1d7bee6c5237dc50cb12e03f5f80423e5306274f7ef",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "battle-element-assets.jsonl#path_id=4545086782333247478",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=4545086782333247478",
+      "identityHash": "69db7427537bb0a260d7fb53f0c9ae5f4f5878a86d157dca62e37fa34a742275",
       "sourceKind": "battle-element",
       "status": "evidence-indexed"
     },
@@ -4094,14 +4115,14 @@
     }
   ],
   "summary": {
-    "identityCount": 539,
+    "identityCount": 542,
     "sourceKindCounts": {
-      "battle-element": 34,
+      "battle-element": 37,
       "client-code": 6,
       "new-table": 60,
       "other": 62,
       "skill-control": 377
     }
   },
-  "profileHash": "733839064568b323a9c12fcd49d383b31f159367e5febba0a86d1a3dc02070d6"
+  "profileHash": "f8d5614f0a5410504fe6b1a970145fa77e5f7f98dd050e1f84e2287ed688f264"
 }

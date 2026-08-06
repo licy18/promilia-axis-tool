@@ -159,6 +159,53 @@ describe('verified Battle effect generation', () => {
       reason:
         'verified-effect-property-condition-element-id-not-matched',
     });
+    const stackElementLayers = new Map([
+      ['actor:actor-101010', new Map([[750, 3]])],
+    ]);
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [
+          { conditionType: 6, layerElementId: 750, minLayerCount: 1 },
+        ],
+        action,
+        resolution,
+        targetKind: 'actor',
+        targetId: 'actor-101010',
+        stackElementLayers,
+      })
+    ).toEqual({ matched: true, reason: null });
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [
+          { conditionType: 6, layerElementId: 750, minLayerCount: 5 },
+        ],
+        action,
+        resolution,
+        targetKind: 'actor',
+        targetId: 'actor-101010',
+        stackElementLayers,
+      })
+    ).toMatchObject({
+      matched: false,
+      reason:
+        'verified-effect-property-condition-element-layer-not-matched',
+    });
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [
+          { conditionType: 6, layerElementId: 750, minLayerCount: 1 },
+        ],
+        action,
+        resolution,
+        targetKind: 'actor',
+        targetId: 'actor-101010',
+        stackElementLayers: new Map(),
+      })
+    ).toMatchObject({
+      matched: false,
+      reason:
+        'verified-effect-property-condition-element-layer-not-matched',
+    });
     expect(
       evaluateVerifiedBattleEffectConditions({ conditions: [], action, resolution })
     ).toEqual({ matched: true, reason: null });

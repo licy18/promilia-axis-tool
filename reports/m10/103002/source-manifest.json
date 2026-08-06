@@ -4,7 +4,7 @@
   "ownerId": 103002,
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "6d5ef4c524df0c570cce537144474e140e8dcfc7167555e78645b3783600c057"
+    "packageHash": "58ea266b03d436ee0a659f8f695b3b846375881f433fd1968cc02c0bb92c7e78"
   },
   "recipeIdentity": "scripts/character-combat/profile-recipes/103002.json",
   "recipeHash": "bdc268949392c6537e27d13c8a6cd9a7aaf88ca1f6cf7b75749136706a12e1a9",
@@ -13543,6 +13543,13 @@
       "status": "evidence-indexed"
     },
     {
+      "identity": "battle-element-assets.jsonl#path_id=-127131817645696752",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-127131817645696752",
+      "identityHash": "0f938f0dac25c79646c574a7bf6b42f8fd83a5511d14b9fc2f0539730ed43c0f",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
       "identity": "battle-element-assets.jsonl#path_id=-1498771669867596146",
       "sourceIdentity": "battle-element-assets.jsonl#path_id=-1498771669867596146",
       "identityHash": "b80241d1c3667482b69c6cfc4b7221ded3158da8681d739e777ddc1dee8cc57e",
@@ -13553,6 +13560,13 @@
       "identity": "battle-element-assets.jsonl#path_id=-1715488869977622004",
       "sourceIdentity": "battle-element-assets.jsonl#path_id=-1715488869977622004",
       "identityHash": "5d519eb9ecff6a992e90320181dc1216e59d8e769f4aa3a3c3e0efef163c6364",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "battle-element-assets.jsonl#path_id=-2035055823451510697",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-2035055823451510697",
+      "identityHash": "e209473fd91b88d01607db01d7db7c7d1ea0db3071dfd87da1f8743af39b14c5",
       "sourceKind": "battle-element",
       "status": "evidence-indexed"
     },
@@ -13665,6 +13679,13 @@
       "identity": "battle-element-assets.jsonl#path_id=-637110086033006477",
       "sourceIdentity": "battle-element-assets.jsonl#path_id=-637110086033006477",
       "identityHash": "2a2e4434409891c5b08212e197be70edebc1d9ccbad48ad51aa19f9b0b4763bb",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "battle-element-assets.jsonl#path_id=-6766905428157734921",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-6766905428157734921",
+      "identityHash": "7a16b8e5d777fd7798674056b3c87f437cd80ea87e62106eb5d59cb088bfed0b",
       "sourceKind": "battle-element",
       "status": "evidence-indexed"
     },
@@ -14405,9 +14426,9 @@
     }
   ],
   "summary": {
-    "identityCount": 2012,
+    "identityCount": 2015,
     "sourceKindCounts": {
-      "battle-element": 63,
+      "battle-element": 66,
       "client-code": 3,
       "new-table": 64,
       "other": 258,
@@ -14415,5 +14436,5 @@
       "skill-control": 1597
     }
   },
-  "profileHash": "d44346e6521b3df7c3a280e9e13d12e9653e9174e714b13ea68833b580c01b15"
+  "profileHash": "2b7ea28830eee7ad5806a99cc9e540c338802d1b8f0e63d636c9d11818ad5a33"
 }

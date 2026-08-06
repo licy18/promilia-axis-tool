@@ -2,20 +2,20 @@
 
 - 包：`azpr-tc-2026-07-18`
 - 固定产品分母：563 个公开动作 / 20 名角色 / 122 只奇波
-- 场景可运行：529
-- 来源静态可应用：419
-- 来源运行时依赖：110
+- 场景可运行：545
+- 来源静态可应用：436
+- 来源运行时依赖：109
 - 零距离场景补全：148
-- 来源静态证据缺口：34
+- 来源静态证据缺口：18
 - 明确零：0
-- 未解析：34（未分类 0）
+- 未解析：18（未分类 0）
 - 角色核心动作：59/60 可运行
 - 奇波 active / break / signature：363/366 可运行
 
 ## 未解析边界
 
 - runtime-and-evidence-gap: 9
-- static-evidence-gap: 25
+- static-evidence-gap: 9
 
 ## 非零命中回能元素
 
@@ -32,7 +32,7 @@
 | actor | dodge-attack | 20 | 16 | 0 | 0 | 4 |
 | actor | limit-counter | 20 | 19 | 0 | 0 | 1 |
 | actor | normal-attack | 20 | 19 | 0 | 0 | 1 |
-| actor | perfect-parry | 20 | 3 | 0 | 17 | 0 |
+| actor | perfect-parry | 20 | 19 | 0 | 1 | 0 |
 | actor | plunging-attack | 20 | 20 | 0 | 0 | 0 |
 | actor | star-carry | 17 | 14 | 0 | 2 | 1 |
 | actor | star-combo | 20 | 20 | 0 | 0 | 0 |

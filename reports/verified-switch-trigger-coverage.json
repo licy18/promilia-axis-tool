@@ -3,7 +3,7 @@
   "kind": "azpr-verified-switch-trigger-coverage",
   "status": "verified-switch-trigger-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "cbf1dac3723c6ff4b29b5669599999a3edb5938e87ed4c8a1cc6f0890de96b53",
+  "packageHash": "c0dbd2363c1ceb89864a15848c329f8e3337524a4b3f848d57f2d37602768bbe",
   "sourceDenominator": {
     "kind": "current-client-public-actor-switch-skill-slots",
     "actorOwnerCount": 20,
@@ -44,7 +44,6 @@
       "mechanicsReasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "nested-effect-wrapper-semantics-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "characters.items[id=101003].skillSlots[slot=201,skillId=10100322]",
@@ -177,7 +176,6 @@
       "manualReleaseStatus": "switch-trigger-only",
       "mechanicsClassification": "applied",
       "mechanicsReasons": [
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -365,7 +363,6 @@
       "mechanicsReasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],

@@ -50,6 +50,7 @@ export function evaluateVerifiedBattleEffectConditions({
   targetId = null,
   elementTagLayers = null,
   elementIdsHeld = null,
+  stackElementLayers = null,
 }) {
   if (!Array.isArray(conditions) || conditions.length === 0) {
     return { matched: true, reason: null };
@@ -148,6 +149,34 @@ export function evaluateVerifiedBattleEffectConditions({
       }
       continue;
     }
+    if (conditionType === 6) {
+      if (targetKind == null || targetId == null) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-element-layer-target-unresolved',
+        };
+      }
+      const layerElementId = Number(condition.layerElementId);
+      const minLayerCount = Math.max(1, Number(condition.minLayerCount) || 1);
+      if (!Number.isInteger(layerElementId) || layerElementId === 0) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-element-layer-unresolved',
+        };
+      }
+      const key = `${targetKind}:${targetId}`;
+      const layers = stackElementLayers?.get(key)?.get(layerElementId) ?? 0;
+      if (layers < minLayerCount) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-element-layer-not-matched',
+        };
+      }
+      continue;
+    }
     return {
       matched: false,
       reason: 'verified-effect-property-condition-runtime-evidence-required',
@@ -174,6 +203,7 @@ export function createVerifiedBattleEffectGeneration({
   const unresolved = [];
   const elementTagLayers = new Map();
   const elementIdsHeld = new Map();
+  const stackElementLayers = new Map();
 
   for (const action of scenario.actions ?? []) {
     if (executionByActionId.get(action.id)?.execute === false) continue;
@@ -236,6 +266,7 @@ export function createVerifiedBattleEffectGeneration({
           targetId: target.id,
           elementTagLayers,
           elementIdsHeld,
+          stackElementLayers,
         });
         if (!conditionResult.matched) {
           continue;

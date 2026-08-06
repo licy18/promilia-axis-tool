@@ -156,23 +156,6 @@
       "sourceRecordHash": "e468d6472efccc82"
     },
     {
-      "uniqueGapIdentity": "source-gap:071e5238c6fc31e7",
-      "sourceRecordIdentities": [
-        "effect:10300244|0|elements|0|2099292417798859923|element:8702816433770841171|29|0",
-        "semantic-gap:0d6924874c942860bd81"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300244:0:8702816433770841171:-2078962768819859382:29",
-        "effect:10300244|0|elements|0|2099292417798859923|element:8702816433770841171|29|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "b170e179cd6a9022"
-    },
-    {
       "uniqueGapIdentity": "source-gap:0732f5f158c75697",
       "sourceRecordIdentities": [
         "actor:103002|control:10300212|sub:0->actor:103002|control:10300202|sub:2->1026355341380234262->0",
@@ -258,23 +241,6 @@
       "sourceRecordHash": "26be8afed987bd10"
     },
     {
-      "uniqueGapIdentity": "source-gap:08e28f6a5a8ec1b4",
-      "sourceRecordIdentities": [
-        "effect:10300212|0|elements|28|-1498771669867596146|element:466374251647106866|0|0",
-        "semantic-gap:3c79ecd7a1c9907fab77"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300212:0:466374251647106866:-6096481972427987931:0",
-        "effect:10300212|0|elements|28|-1498771669867596146|element:466374251647106866|0|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "d664103d8c158660"
-    },
-    {
       "uniqueGapIdentity": "source-gap:09b9ef522465194a",
       "sourceRecordIdentities": [
         "effect:10300244|0|elements|0|2099292417798859923|element:2099292417798859923|29|0",
@@ -290,23 +256,6 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "05ac8023c2dd4c45"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:0a7a548ee6970464",
-      "sourceRecordIdentities": [
-        "effect:10300244|1|elements|6|2099292417798859923|element:8702816433770841171|29|0",
-        "semantic-gap:a1c81f440dc82fa9eb3a"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300244:1:8702816433770841171:7664034929019633734:29",
-        "effect:10300244|1|elements|6|2099292417798859923|element:8702816433770841171|29|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "abe6c8e6c0ce8392"
     },
     {
       "uniqueGapIdentity": "source-gap:0b0ae9b347aa8486",
@@ -1176,6 +1125,23 @@
       "sourceRecordHash": "c6856190dcc7ecaa"
     },
     {
+      "uniqueGapIdentity": "source-gap:2a0afeb5d9b02deb",
+      "sourceRecordIdentities": [
+        "effect:10300201|3|elements|15|4460567758519354701|element:8702816433770841171|26|0",
+        "semantic-gap:2393829986ea42dc92b5"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300201:3:8702816433770841171:8674841978468049964:26",
+        "effect:10300201|3|elements|15|4460567758519354701|element:8702816433770841171|26|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "06ebe2e34d6795eb"
+    },
+    {
       "uniqueGapIdentity": "source-gap:2a687254fe8af9b4",
       "sourceRecordIdentities": [
         "actor:103002|control:10300214|sub:1->actor:103002|control:10300214|sub:1->227912710992117941->missing",
@@ -1621,6 +1587,23 @@
       "sourceRecordHash": "652dca9bbcff24fb"
     },
     {
+      "uniqueGapIdentity": "source-gap:3f1ab83931348af6",
+      "sourceRecordIdentities": [
+        "effect:10300202|3|elements|15|4460567758519354701|element:8702816433770841171|26|0",
+        "semantic-gap:ea6c1744f46d7cae4b73"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300202:3:8702816433770841171:-4996826262836372537:26",
+        "effect:10300202|3|elements|15|4460567758519354701|element:8702816433770841171|26|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "99eac64c76c5260f"
+    },
+    {
       "uniqueGapIdentity": "source-gap:3f3c0c8fdb99ed74",
       "sourceRecordIdentities": [
         "actor:103002|control:10300203|sub:2->actor:103002|control:10300203|sub:2->-1147594312107360133->0",
@@ -1878,23 +1861,6 @@
       "sourceRecordHash": "3e0c241d7c96243c"
     },
     {
-      "uniqueGapIdentity": "source-gap:4805db02bd72b90e",
-      "sourceRecordIdentities": [
-        "effect:10300201|3|elements|15|4460567758519354701|element:8702816433770841171|26|0",
-        "semantic-gap:0855661102c75754ea75"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:3:8702816433770841171:8674841978468049964:26",
-        "effect:10300201|3|elements|15|4460567758519354701|element:8702816433770841171|26|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "4e32dd52ad15a7b3"
-    },
-    {
       "uniqueGapIdentity": "source-gap:48a6751bc75be47a",
       "sourceRecordIdentities": [
         "effect:10300202|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
@@ -2063,6 +2029,23 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "ab15634b4ce1384a"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:4f44ed1f74b6d453",
+      "sourceRecordIdentities": [
+        "effect:10300244|1|elements|6|2099292417798859923|element:8702816433770841171|29|0",
+        "semantic-gap:8e43a859d6eb2275af45"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300244:1:8702816433770841171:7664034929019633734:29",
+        "effect:10300244|1|elements|6|2099292417798859923|element:8702816433770841171|29|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "3eb9440aba02829e"
     },
     {
       "uniqueGapIdentity": "source-gap:4f6824acf227c318",
@@ -2541,23 +2524,6 @@
       "sourceRecordHash": "6ee299ab2951d3f6"
     },
     {
-      "uniqueGapIdentity": "source-gap:5c7b4dc756a5fccf",
-      "sourceRecordIdentities": [
-        "effect:10300221|0|elements|6|-3809486317990090417|element:-1715488869977622004|54|0",
-        "semantic-gap:e47afae46c2e093159fd"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300221:0:-1715488869977622004:-8618896082664585117:54",
-        "effect:10300221|0|elements|6|-3809486317990090417|element:-1715488869977622004|54|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "dfb1f2b9929476c4"
-    },
-    {
       "uniqueGapIdentity": "source-gap:5c9015f2670e14f5",
       "sourceRecordIdentities": [
         "actor:103002|control:10300214|sub:1->actor:103002|control:10300214|sub:1->227912710992117941->9",
@@ -2847,23 +2813,6 @@
       "sourceRecordHash": "09d3085e5fee5e32"
     },
     {
-      "uniqueGapIdentity": "source-gap:67787af077ce481e",
-      "sourceRecordIdentities": [
-        "effect:10300204|2|elements|13|4460567758519354701|element:8702816433770841171|29|0",
-        "semantic-gap:212ae8a4f91204563f0a"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:2:8702816433770841171:-6305840928975797075:29",
-        "effect:10300204|2|elements|13|4460567758519354701|element:8702816433770841171|29|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "81093b7fa5202aec"
-    },
-    {
       "uniqueGapIdentity": "source-gap:67ca4d1a8d04724a",
       "sourceRecordIdentities": [
         "actor:103002|control:10300202|sub:1->actor:103002|control:10300202|sub:1->439423875707784691->missing",
@@ -3151,23 +3100,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "8980b3f7474e3fcb"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:70dff55fe93f8bc4",
-      "sourceRecordIdentities": [
-        "effect:10300203|3|elements|15|4460567758519354701|element:8702816433770841171|26|0",
-        "semantic-gap:3995cb8e4ff941aadaee"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:3:8702816433770841171:-5774689639772653403:26",
-        "effect:10300203|3|elements|15|4460567758519354701|element:8702816433770841171|26|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "2a776363f7eaaeba"
     },
     {
       "uniqueGapIdentity": "source-gap:70f1745e81013bbd",
@@ -3712,26 +3644,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "83e13125cdcc1ac9"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:84ea5266cddb4a80",
-      "sourceRecordIdentities": [
-        "effect:10300213|0|elements|36|-6187686510236149564|element:8702816433770841171|284|1",
-        "effect:10300213|0|elements|36|-6187686510236149564|element:8702816433770841171|300|0",
-        "semantic-gap:9b31c01a15918c924ccf"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300213:0:8702816433770841171:-1358196052883222818:300",
-        "battle-effect:10300213:0:8702816433770841171:2083420758843707102:284",
-        "effect:10300213|0|elements|36|-6187686510236149564|element:8702816433770841171|284|1",
-        "effect:10300213|0|elements|36|-6187686510236149564|element:8702816433770841171|300|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "0d5604a6fdade456"
     },
     {
       "uniqueGapIdentity": "source-gap:8573b694bf2cb891",
@@ -4638,6 +4550,23 @@
       "sourceRecordHash": "2466289d4198050d"
     },
     {
+      "uniqueGapIdentity": "source-gap:a5014945d59073c6",
+      "sourceRecordIdentities": [
+        "effect:10300244|0|elements|0|2099292417798859923|element:8702816433770841171|29|0",
+        "semantic-gap:8ca96973806d8e57acd5"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300244:0:8702816433770841171:-2078962768819859382:29",
+        "effect:10300244|0|elements|0|2099292417798859923|element:8702816433770841171|29|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "bd5a858bdaf714a1"
+    },
+    {
       "uniqueGapIdentity": "source-gap:a5d10fee24424334",
       "sourceRecordIdentities": [
         "actor:103002:element:103002047|10300210|2|3663436943335475859|gain||missing",
@@ -4704,6 +4633,23 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "f9d22d2dbad106d5"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a8c871aa300e59d9",
+      "sourceRecordIdentities": [
+        "effect:10300204|2|elements|13|4460567758519354701|element:8702816433770841171|29|0",
+        "semantic-gap:189dd1cfee448e773b8f"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300204:2:8702816433770841171:-6305840928975797075:29",
+        "effect:10300204|2|elements|13|4460567758519354701|element:8702816433770841171|29|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "12ea958372960445"
     },
     {
       "uniqueGapIdentity": "source-gap:a8d5152e5d4fc9ef",
@@ -4928,23 +4874,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "2c3017189748b673"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:b17ae9b8137f3c75",
-      "sourceRecordIdentities": [
-        "effect:10300202|3|elements|15|4460567758519354701|element:8702816433770841171|26|0",
-        "semantic-gap:6cd8f6f4fe5ae92b61bc"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:3:8702816433770841171:-4996826262836372537:26",
-        "effect:10300202|3|elements|15|4460567758519354701|element:8702816433770841171|26|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "445e51ec6aab6080"
     },
     {
       "uniqueGapIdentity": "source-gap:b19a69a775744fd0",
@@ -5271,6 +5200,26 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "cd6e825ffcc63443"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:bbb45b6f1bcfeeb5",
+      "sourceRecordIdentities": [
+        "effect:10300213|0|elements|36|-6187686510236149564|element:8702816433770841171|284|1",
+        "effect:10300213|0|elements|36|-6187686510236149564|element:8702816433770841171|300|0",
+        "semantic-gap:fccf1358f1eb4ac05f8f"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300213:0:8702816433770841171:-1358196052883222818:300",
+        "battle-effect:10300213:0:8702816433770841171:2083420758843707102:284",
+        "effect:10300213|0|elements|36|-6187686510236149564|element:8702816433770841171|284|1",
+        "effect:10300213|0|elements|36|-6187686510236149564|element:8702816433770841171|300|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "060b3cefeb0d7f34"
     },
     {
       "uniqueGapIdentity": "source-gap:bbbb3af6faed4fe3",
@@ -5885,23 +5834,6 @@
       "sourceRecordHash": "2d399911c10e95e5"
     },
     {
-      "uniqueGapIdentity": "source-gap:cf673dfdc058d02f",
-      "sourceRecordIdentities": [
-        "effect:10300221|0|elements|6|-3809486317990090417|element:-7783775984244194322|54|0",
-        "semantic-gap:4dfebdf746712f11b88a"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300221:0:-7783775984244194322:-8618896082664585117:54",
-        "effect:10300221|0|elements|6|-3809486317990090417|element:-7783775984244194322|54|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "ebf1ba1606e00890"
-    },
-    {
       "uniqueGapIdentity": "source-gap:cf7a39fb2e6bf272",
       "sourceRecordIdentities": [
         "actor:103002|control:10300210|sub:0->actor:103002|control:10300202|sub:2->-3687969335963551299->0",
@@ -6019,23 +5951,6 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "61007300c1e0d652"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:d43d881d93650807",
-      "sourceRecordIdentities": [
-        "effect:10300227|0|elements|0|-6766905428157734921|element:-127131817645696752|0|0",
-        "semantic-gap:1d964b26e028bc85a04e"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300227:0:-127131817645696752:166774690136961000:0",
-        "effect:10300227|0|elements|0|-6766905428157734921|element:-127131817645696752|0|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "2fac6c0f93318625"
     },
     {
       "uniqueGapIdentity": "source-gap:d4aaa0381f8a214f",
@@ -6427,6 +6342,23 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "0dc85aba4b6fac2c"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:dfbc65e80761ce13",
+      "sourceRecordIdentities": [
+        "effect:10300203|3|elements|15|4460567758519354701|element:8702816433770841171|26|0",
+        "semantic-gap:b65a5cc0cd1f82200dfb"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300203:3:8702816433770841171:-5774689639772653403:26",
+        "effect:10300203|3|elements|15|4460567758519354701|element:8702816433770841171|26|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "9322d07994010c81"
     },
     {
       "uniqueGapIdentity": "source-gap:e05c75b628672aa1",
@@ -7489,11 +7421,11 @@
     }
   ],
   "summary": {
-    "uniqueGapCount": 439,
+    "uniqueGapCount": 435,
     "blockingCount": 137,
-    "nonBlockingCount": 302,
+    "nonBlockingCount": 298,
     "statusCounts": {
-      "not-applicable": 302,
+      "not-applicable": 298,
       "runtime-evidence-required": 4,
       "static-evidence-gap": 133
     },
@@ -7505,8 +7437,8 @@
       "effect-trigger-frame-missing": 1,
       "judgment-condition-runtime-unimplemented": 8,
       "legacy-or-unreachable-current-client": 1,
-      "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 16,
-      "nested-effect-wrapper-semantics-unresolved": 4,
+      "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 9,
+      "nested-effect-wrapper-semantics-unresolved": 7,
       "nested-effect-wrapper-semantics-unresolved|pack-lifecycle-runtime-unimplemented": 7,
       "pack-lifecycle-runtime-unimplemented": 5,
       "reexported-subskill-container-unreachable-from-current-skill-list": 1,
@@ -7519,5 +7451,5 @@
       "unresolved": 59
     }
   },
-  "inventoryHash": "f47b5724149bfaae"
+  "inventoryHash": "39f51005878f5130"
 }

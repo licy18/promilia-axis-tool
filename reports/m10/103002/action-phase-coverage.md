@@ -37,10 +37,10 @@
 | charged-attack | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing |
 | dodge-attack | 是 | applied-with-residual-gaps | verified-action-effective-occupancy-window-unresolved |
 | plunging-attack | 是 | applied |  |
-| star-skill | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；nested-effect-wrapper-semantics-unresolved；verified-action-effective-occupancy-window-unresolved |
+| star-skill | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；verified-action-effective-occupancy-window-unresolved |
 | star-combo | 是 | applied |  |
 | ultimate | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；judgment-condition-runtime-unimplemented；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；pack-lifecycle-runtime-unimplemented |
-| star-carry | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；nested-effect-wrapper-semantics-unresolved |
+| star-carry | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing |
 | limit-counter | 是 | applied |  |
 | perfect-parry | 是 | applied |  |
 

@@ -4,7 +4,7 @@
   "ownerId": 101010,
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "6d5ef4c524df0c570cce537144474e140e8dcfc7167555e78645b3783600c057"
+    "packageHash": "58ea266b03d436ee0a659f8f695b3b846375881f433fd1968cc02c0bb92c7e78"
   },
   "recipeIdentity": "scripts/character-combat/profile-recipes/101010.json",
   "recipeHash": "64217c2ceada4ac0e124e900c0fb910ee1018a7eb8e70f1143fda3236af73db8",
@@ -8503,6 +8503,13 @@
       "status": "evidence-indexed"
     },
     {
+      "identity": "battle-element-assets.jsonl#path_id=-2035055823451510697",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-2035055823451510697",
+      "identityHash": "e209473fd91b88d01607db01d7db7c7d1ea0db3071dfd87da1f8743af39b14c5",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
       "identity": "battle-element-assets.jsonl#path_id=-2323960829737228709",
       "sourceIdentity": "battle-element-assets.jsonl#path_id=-2323960829737228709",
       "identityHash": "23ca16ef0ebad8bd505bb1094aab54c7433f6e4783bc8751c769cca96b27bff2",
@@ -8534,6 +8541,13 @@
       "identity": "battle-element-assets.jsonl#path_id=-3332207699858072492",
       "sourceIdentity": "battle-element-assets.jsonl#path_id=-3332207699858072492",
       "identityHash": "3bc9e52eff289a418068c62ef3163a5778414f03bf6e67e2ffc42940b344ecd2",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "battle-element-assets.jsonl#path_id=-3932294994803982599",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=-3932294994803982599",
+      "identityHash": "65ad27bbfbda30b7a63d462203cd60a40506f33eb3bff8ba2c6639b3afce5e34",
       "sourceKind": "battle-element",
       "status": "evidence-indexed"
     },
@@ -8611,6 +8625,13 @@
       "identity": "battle-element-assets.jsonl#path_id=3408929118427374243|SpElement.Execute.source",
       "sourceIdentity": "battle-element-assets.jsonl#path_id=3408929118427374243|SpElement.Execute.source",
       "identityHash": "8b94ae7d2dc7b7ba099c71f221304585d0929e6811d45059bcaeda7854cc1a7e",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "battle-element-assets.jsonl#path_id=4277244978079165007",
+      "sourceIdentity": "battle-element-assets.jsonl#path_id=4277244978079165007",
+      "identityHash": "ddbadf2dd1041cef503cdce2418ce9f9e81e8ffd2fbd82a33e86cb9f2cdbd6ea",
       "sourceKind": "battle-element",
       "status": "evidence-indexed"
     },
@@ -9029,9 +9050,9 @@
     }
   ],
   "summary": {
-    "identityCount": 1244,
+    "identityCount": 1247,
     "sourceKindCounts": {
-      "battle-element": 33,
+      "battle-element": 36,
       "client-code": 4,
       "new-table": 55,
       "other": 212,
@@ -9039,5 +9060,5 @@
       "skill-control": 920
     }
   },
-  "profileHash": "f488e8318e173535627200c19bcf71b6ae6eec72d5548509da263e9b4b01d1d4"
+  "profileHash": "8f2b562764471843f62cc316b6b4493a726df7924a4f93c595690298821584a8"
 }

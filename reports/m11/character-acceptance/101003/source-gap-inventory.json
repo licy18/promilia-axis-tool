@@ -191,49 +191,6 @@
       "sourceRecordHash": "59b79bdf261337d4"
     },
     {
-      "uniqueGapIdentity": "source-gap:3a38d7af4105b65d",
-      "sourceRecordIdentities": [
-        "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|193|2",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|207|0",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|223|1",
-        "semantic-gap:c7b3b241db00afac7fa5"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100313:0:466374251647106866:-6215383830795215380:207",
-        "battle-effect:10100313:0:466374251647106866:2700200137312345580:223",
-        "battle-effect:10100313:0:466374251647106866:6998348329063063020:193",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|193|2",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|207|0",
-        "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|223|1"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "d7460a5ba463ccbf"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:3b4ff618ba360e30",
-      "sourceRecordIdentities": [
-        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|63|1",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|70|0",
-        "semantic-gap:ca92da4d7158a5369d99"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100312:0:466374251647106866:1011852803228526128:70",
-        "battle-effect:10100312:0:466374251647106866:2749505792865494576:63",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|63|1",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|70|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "b290505c101d9fef"
-    },
-    {
       "uniqueGapIdentity": "source-gap:42a996d2a117387e",
       "sourceRecordIdentities": [
         "hit:10100325|0|projectile|101003191|101003002|0|0|control:10100325|sub:0|behavior:4712639018698954633|config:0|bullet:101003002:0:0|element:101003191:0",
@@ -402,40 +359,6 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "3df714eca6591f40"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:8845d3a3fe20eb59",
-      "sourceRecordIdentities": [
-        "effect:10100327|0|elements|0|4545086782333247478|element:-1732209689403186369|0|0",
-        "semantic-gap:3b316072bf450d5a5b78"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100327:0:-1732209689403186369:2119769922617281174:0",
-        "effect:10100327|0|elements|0|4545086782333247478|element:-1732209689403186369|0|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "318242cb58a60a1b"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:88bd526796314928",
-      "sourceRecordIdentities": [
-        "effect:10100322|0|elements|6|-1498771669867596146|element:466374251647106866|57|0",
-        "semantic-gap:93f466b1797bd55f3b02"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100322:0:466374251647106866:-5797025868792535592:57",
-        "effect:10100322|0|elements|6|-1498771669867596146|element:466374251647106866|57|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "23190621905d0a12"
     },
     {
       "uniqueGapIdentity": "source-gap:8a2cd7bf5ba8645d",
@@ -643,11 +566,11 @@
     }
   ],
   "summary": {
-    "uniqueGapCount": 36,
+    "uniqueGapCount": 32,
     "blockingCount": 27,
-    "nonBlockingCount": 9,
+    "nonBlockingCount": 5,
     "statusCounts": {
-      "not-applicable": 9,
+      "not-applicable": 5,
       "runtime-evidence-required": 10,
       "static-evidence-gap": 16,
       "unknown-formula": 1
@@ -658,12 +581,12 @@
       "effect-trigger-frame-missing": 1,
       "hidden-ultimate-firework-explosion-discarded-current-client|legacy-or-unreachable-current-client": 1,
       "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 2,
-      "nested-effect-wrapper-semantics-unresolved": 5,
+      "nested-effect-wrapper-semantics-unresolved": 1,
       "pack-lifecycle-runtime-unimplemented": 5,
       "runtime-dependent": 10,
       "unnamed-secondary-passive-not-implemented-current-client": 1,
       "unresolved": 3
     }
   },
-  "inventoryHash": "6efe653779bd15b0"
+  "inventoryHash": "641f8b189cf7bb63"
 }

@@ -309,7 +309,6 @@
       "residualReasons": [
         "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
       "status": "applied-with-residual-gaps"
@@ -323,7 +322,6 @@
       "residualReasons": [
         "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
       "status": "applied-with-residual-gaps"
@@ -345,10 +343,10 @@
       "actionKind": "perfect-parry",
       "sourceSkillId": 10100322,
       "runtimeReady": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "residualReasons": [],
       "status": "applied"
     }
   ],
-  "profileHash": "733839064568b323a9c12fcd49d383b31f159367e5febba0a86d1a3dc02070d6"
+  "profileHash": "f8d5614f0a5410504fe6b1a970145fa77e5f7f98dd050e1f84e2287ed688f264"
 }

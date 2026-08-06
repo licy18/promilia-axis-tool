@@ -3,15 +3,15 @@
 - 包：`azpr-tc-2026-07-18`
 - 公开动作分母：563
 - 已关联：563
-- 场景可运行：529
-- 来源静态可应用：419
-- 来源运行时依赖：110
+- 场景可运行：545
+- 来源静态可应用：436
+- 来源运行时依赖：109
 - 零距离场景补全：148
-- 来源静态证据缺口：34
+- 来源静态证据缺口：18
 - 明确零：0
-- 未解析：34
+- 未解析：18
 - 真实命中节点：2502
-- 公开动作变体：593（未解析 64）
+- 公开动作变体：593（未解析 48）
 - 非零回能元素：667（未关联 464）
 - 零距离投射物命中：2418（仍缺发射帧 73、仍缺公式 49、仍缺目标 0）
 - 普攻输入链：20 条 / 95 个输入段（可运行 80，未解析 15）
@@ -50,7 +50,7 @@
 | actor | dodge-attack | 20 | 20 | 16 | 0 | 4 | 50 |
 | actor | limit-counter | 20 | 20 | 19 | 0 | 1 | 81 |
 | actor | normal-attack | 20 | 20 | 19 | 0 | 1 | 93 |
-| actor | perfect-parry | 20 | 20 | 3 | 0 | 17 | 10 |
+| actor | perfect-parry | 20 | 20 | 19 | 0 | 1 | 10 |
 | actor | plunging-attack | 20 | 20 | 20 | 0 | 0 | 22 |
 | actor | star-carry | 17 | 17 | 14 | 0 | 3 | 74 |
 | actor | star-combo | 20 | 20 | 20 | 0 | 0 | 20 |
@@ -64,42 +64,26 @@
 
 - `actor|101003|10100301|0|10100303` 寒悠悠 / normal-attack / 鸢回影: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|101003|10100322|1|10100325` 寒悠悠 / limit-counter / 缚风烟: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|101007|10100721|2|10100727` 芃芃 / perfect-parry / 来打我啊！: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|101010|10101001|0|10101003` 涂山小玉 / normal-attack / 画扇春: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|102001|10200122|2|10200127` 莉莉 / perfect-parry / 骑士加护: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|103002|10300201|0|10300203` 红宝石 / normal-attack / 灵感的火花: trigger-frame-missing, projectile-impact-frame-runtime-dependent, normal-attack-input-segment-duration-unresolved
 - `actor|107001|10700101|0|10700103` 西芙莉雅 / normal-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, normal-attack-input-segment-duration-unresolved
 - `actor|107001|10700101|4|10700110` 西芙莉雅 / charged-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|107001|10700101|6|10700115` 西芙莉雅 / dodge-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-relation-notDelElementDataList-unresolved, nested-effect-wrapper-semantics-unresolved
+- `actor|107001|10700101|6|10700115` 西芙莉雅 / dodge-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-relation-notDelElementDataList-unresolved
 - `actor|107001|10700121|0|10700121` 西芙莉雅 / star-carry / 余音之痕: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|107001|10700121|4|10700127` 西芙莉雅 / perfect-parry / 余音之痕: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|107002|10700201|2|10700215` 米砂 / dodge-attack / 轻语: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|107002|10700222|0|10700222` 米砂 / star-carry / 林隙留影: base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, heal-formula-not-literal-function-5
 - `actor|107002|10700222|2|10700227` 米砂 / perfect-parry / 林隙留影: pack-lifecycle-runtime-unimplemented, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved
-- `actor|107003|10700321|2|10700327` 阿比 / perfect-parry / 阿比咆哮: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|108001|10800101|1|10800110` 忒拉拉 / charged-attack / 狼行焰影: selected-control-variant-has-no-three-value-elements
-- `actor|108001|10800121|2|10800127` 忒拉拉 / perfect-parry / 奔野之狼: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|108002|10800201|1|10800210` 璐璐卡 / charged-attack / 涟漪之舞: trigger-frame-missing, projectile-impact-frame-runtime-dependent, tuning-mark-max-mismatch, effect-trigger-frame-missing, effect-target-unresolved, property-formula-not-literal-function-5
 - `actor|108002|10800201|4|10800215` 璐璐卡 / dodge-attack / 涟漪之舞: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|108002|10800222|0|10800222` 璐璐卡 / star-carry / 幽浪之声: selected-control-variant-has-no-runnable-hit
-- `actor|108002|10800222|2|10800227` 璐璐卡 / perfect-parry / 幽浪之声: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|108003|10800301|1|10800310` 米蒂 / charged-attack / 破空箭: selected-control-variant-has-no-runnable-hit
 - `actor|108003|10800301|6|10800315` 米蒂 / dodge-attack / 破空箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|108003|10800322|2|10800327` 米蒂 / perfect-parry / 唤雷箭: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
-- `actor|108005|10800522|2|10800527` 卡塔露 / perfect-parry / 不屈者: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
-- `actor|109001|10900121|3|10900127` 末音 / perfect-parry / 凝飓风之旋: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
-- `actor|109002|10900221|2|10900227` 夏儿 / perfect-parry / 踏波: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
-- `actor|111001|11100121|2|11100127` 法兰塔 / perfect-parry / 追猎之翼: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
-- `actor|112001|11200121|2|11200127` 姬瑟贝露 / perfect-parry / 女仆的心得: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|112002|11200201|0|11200203` 艾妮丝 / normal-attack / 慈爱的惩戒: trigger-frame-missing, base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, effect-combine-semantics-unresolved, heal-formula-not-literal-function-5, normal-attack-input-segment-duration-unresolved
 - `actor|112002|11200201|1|11200210` 艾妮丝 / charged-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200201|3|11200215` 艾妮丝 / dodge-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200222|1|11200225` 艾妮丝 / limit-counter / 后勤保障: trigger-frame-missing, projectile-impact-frame-runtime-dependent
-- `actor|112002|11200222|2|11200227` 艾妮丝 / perfect-parry / 后勤保障: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
-- `actor|199001|19900122|2|19900127` 女主角 / perfect-parry / 星辉之环: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
-- `actor|199002|19900222|2|19900227` 男主角 / perfect-parry / 星辉之环: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|199003|19900301|1|19900310` 诺诺 / charged-attack / 咻咻嘿咻: selected-control-variant-has-no-runnable-hit
-- `actor|199003|19900321|2|19900327` 诺诺 / perfect-parry / 嘭咚锤: pack-lifecycle-runtime-unimplemented, nested-effect-wrapper-semantics-unresolved, nested-damage-trigger-lifecycle-not-expanded, effect-trigger-frame-missing, effect-target-unresolved
 - `kibo|500002|502015|0|502015` 水灵仔 / active / 水弹连射: trigger-frame-missing
 - `kibo|500002|50000203|0|50000203` 水灵仔 / break / 水灵仔-合击: trigger-frame-missing
 - `kibo|500003|502019|0|502019` 水灵偶 / active / 漂浮水泡: trigger-frame-missing
@@ -135,7 +119,6 @@
 - `kibo|500053|506008|0|506008` 钻山蜥 / active / 岩固之盾: shield-formula-not-literal-function-5
 - `kibo|500057|507001|0|507001` 猪古力 / active / 雷球: trigger-frame-missing
 - `kibo|500064|504001|0|504001` 柔风鹰 / active / 风刃: trigger-frame-missing
-- `kibo|500066|502004|0|502004` 兔耳鳐 / active / 毒液弹: trigger-frame-missing, base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, pack-lifecycle-runtime-unimplemented, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved
 - `kibo|500067|502006|0|502006` 飞鳐 / active / 水弹散射: trigger-frame-missing
 - `kibo|500068|502003|0|502003` 星鳐 / active / 爆裂水球: trigger-frame-missing
 - `kibo|500072|503004|0|503004` 乌尔 / active / 冰矛连射: trigger-frame-missing

@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "6d5ef4c524df0c570cce537144474e140e8dcfc7167555e78645b3783600c057",
+  "sourcePackageHash": "58ea266b03d436ee0a659f8f695b3b846375881f433fd1968cc02c0bb92c7e78",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "23d681c8641931a1",
-    "traceHash": "df31a1740522e70d",
-    "dataHash": "73d1395b1fb093f0",
+    "inputHash": "90192bc1ebb0ed35",
+    "traceHash": "7400a0a2eff6d300",
+    "dataHash": "d617f5994d123c44",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -3135,6 +3135,33 @@
         }
       ],
       "selectedEffectSummaryByElementId": {
+        "540070": {
+          "effectId": "battle-element:540070",
+          "effectNames": [
+            "break效率提升1"
+          ],
+          "targetKinds": [
+            "actor"
+          ],
+          "targetIds": [
+            "actor-101003"
+          ],
+          "appliedEventCount": 1,
+          "transferredEventCount": 0,
+          "expiredEventCount": 1,
+          "firstAppliedFrame": 3300,
+          "firstExpiredFrame": 4260,
+          "maxStacks": 1,
+          "attributeIds": [
+            222
+          ],
+          "formulaFamilies": [
+            "literal-a-with-common-ratio"
+          ],
+          "formulaValues": [
+            794
+          ]
+        },
         "101003142": {
           "effectId": "battle-element:101003142",
           "effectNames": [
@@ -9051,6 +9078,39 @@
           ]
         },
         {
+          "eventId": "actor/actor-101003/battle-element:6476968579193987947/verified-calculator|EFFECT_APPLIED|55000|1",
+          "actionId": "han-kibo-signature",
+          "frame": 3300,
+          "effectId": "battle-element:540070",
+          "runtimeEffectId": "battle-element:6476968579193987947",
+          "sourceElementId": 540070,
+          "effectName": "break效率提升1",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-101003",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:6476968579193987947|han-kibo-signature|55000",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": 71000,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 222,
+              "bucket": "dynamicExtra",
+              "valueRaw": 794,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 794
+            }
+          ]
+        },
+        {
           "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_APPLIED|55450.001|1",
           "actionId": "han-kibo-signature",
           "frame": 3327,
@@ -9480,6 +9540,39 @@
           ]
         },
         {
+          "eventId": "actor/actor-101003/battle-element:6476968579193987947/verified-calculator|EFFECT_EXPIRED|71000|1",
+          "actionId": "han-kibo-signature",
+          "frame": 4260,
+          "effectId": "battle-element:540070",
+          "runtimeEffectId": "battle-element:6476968579193987947",
+          "sourceElementId": 540070,
+          "effectName": "break效率提升1",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "expire",
+          "previousTargetId": "actor-101003",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-101003",
+          "effectAdderActorId": "actor-101003",
+          "effectInstanceId": "battle-element:6476968579193987947|han-kibo-signature|55000",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 222,
+              "bucket": "dynamicExtra",
+              "valueRaw": 794,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 794
+            }
+          ]
+        },
+        {
           "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_EXPIRED|77366.668|5",
           "actionId": "han-kibo-signature",
           "frame": 4642,
@@ -9646,7 +9739,7 @@
         }
       ]
     },
-    "summaryHash": "69d7c6c48099766121656ba8e52a26b9e1244e1ed33f80fef4b7d0f965fe4c36"
+    "summaryHash": "1540b7df01fbf8d82964e333e91fedef129479a3c6d6466ddd29faa9fdcf1744"
   },
   "expected": {
     "exact": {
@@ -10336,6 +10429,6 @@
       }
     ]
   },
-  "replayHash": "c0ea863d0c558be4998e4f0cb1399aa6998d92539d74ec3127f0d408f221a649",
-  "profileHash": "733839064568b323a9c12fcd49d383b31f159367e5febba0a86d1a3dc02070d6"
+  "replayHash": "a55e51cf1114f97b012cce0fee723351118518f2019024a608cb788eb687b635",
+  "profileHash": "f8d5614f0a5410504fe6b1a970145fa77e5f7f98dd050e1f84e2287ed688f264"
 }

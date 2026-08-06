@@ -2,34 +2,34 @@
 
 - 包：`azpr-tc-2026-07-18`
 - 公开动作：563
-- 控制：543
-- 直接元素根：4014
-- 原始引用边：1655
+- 控制：562
+- 直接元素根：4106
+- 原始引用边：1757
 - 效果图节点：3695
-- 去重语义效果：3368
-- 最终玩法效果：1755
-- 结构包装/条件：1613
-- 语义可计算：688
+- 去重语义效果：3460
+- 最终玩法效果：1824
+- 结构包装/条件：1636
+- 语义可计算：857
 - 语义明确零：7
-- 语义未解析：1060
+- 语义未解析：960
 
 ## 语义放置
 
 - runtime-dependent: 105
-- static-evidence-gap: 421
-- static-resolved: 1229
+- static-evidence-gap: 443
+- static-resolved: 1276
 
 ## 公式族
 
 - basis-point-property-a-with-common-ratio: 2
 - literal-a-direct: 15
-- literal-a-with-common-ratio: 682
+- literal-a-with-common-ratio: 727
 - source-atk-ratio-heal: 7
 - source-tuning-ratio-with-common-ratio: 1
 - unsupported-0-0: 10
 - unsupported-1-0: 64
-- unsupported-1-2: 170
-- unsupported-1-3: 322
+- unsupported-1-2: 192
+- unsupported-1-3: 324
 - unsupported-1-4: 23
 - unsupported-1-101: 2
 - unsupported-1-104: 15
@@ -53,10 +53,10 @@
 
 ## 原始边审计
 
-- 效果绑定：3685
-- 可计算：1320
+- 效果绑定：3777
+- 可计算：1508
 - 明确零：7
-- 未解析：2358
+- 未解析：2262
 
 ## 元素类型
 
@@ -72,10 +72,10 @@
 
 ## 未解析原因
 
-- effect-target-static-evidence-gap: 431
-- effect-trigger-frame-static-evidence-gap: 376
+- effect-target-static-evidence-gap: 453
+- effect-trigger-frame-static-evidence-gap: 398
 - heal-formula-not-literal-function-5: 34
-- nested-damage-runtime-family-unimplemented: 307
+- nested-damage-runtime-family-unimplemented: 277
 - property-change-type-not-battle-property: 1
 - property-duration-zero-unresolved: 5
 - property-formula-not-literal-function-5: 119
@@ -93,6 +93,6 @@
 - tuning-mark-relation-elementDataList-unresolved: 2
 - tuning-mark-relation-notDelElementDataList-unresolved: 13
 - tuning-mark-relation-triggerEffectList-unresolved: 1
-- wrapper-condition-semantics-unresolved: 605
+- wrapper-condition-semantics-unresolved: 344
 
 > 只有真实触发帧、唯一目标且公式输入可安全解释的维度进入运行时；其余逐项来源见同名 JSON。

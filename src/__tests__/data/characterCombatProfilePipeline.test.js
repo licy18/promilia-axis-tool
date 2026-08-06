@@ -1280,17 +1280,17 @@ describe('M10 character combat profile pipeline', () => {
       )
     ).toBe(true);
     expect(unresolvedLedger.summary).toMatchObject({
-      semanticRecordCount: 222,
-      rawRecordCount: 314,
+      semanticRecordCount: 216,
+      rawRecordCount: 309,
       impactClassificationCounts: {
         'gameplay-impacting': 124,
         'not-applicable': 37,
         unreachable: 22,
-        'wrapper-or-duplicate': 39,
+        'wrapper-or-duplicate': 33,
       },
     });
-    expect(unresolvedLedger.records).toHaveLength(222);
-    expect(unresolvedLedger.rawRecords).toHaveLength(314);
+    expect(unresolvedLedger.records).toHaveLength(216);
+    expect(unresolvedLedger.rawRecords).toHaveLength(309);
     expect(
       unresolvedLedger.records.every(
         record =>
@@ -1342,8 +1342,8 @@ describe('M10 character combat profile pipeline', () => {
         item => Number(item.ownerId) === 101010
       )
     ).toEqual(ownerContract.contracts.passives);
-    expect(ownerContract.contracts.effects.semantic).toHaveLength(121);
-    expect(ownerContract.contracts.statDependencies.dynamic).toHaveLength(7);
+    expect(ownerContract.contracts.effects.semantic).toHaveLength(125);
+    expect(ownerContract.contracts.statDependencies.dynamic).toHaveLength(9);
 
     installVerifiedCombatMechanicsPackage(mechanicsPackage);
     const metadata = getVerifiedCharacterCombatProfileMetadata(101010);

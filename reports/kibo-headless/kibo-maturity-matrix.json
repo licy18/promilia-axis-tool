@@ -817,7 +817,6 @@
             "toughness:pre-shield-damage-inputs-incomplete",
             "pack-lifecycle-semantics-evidence-gap",
             "heal-formula-not-literal-function-5",
-            "nested-effect-wrapper-semantics-unresolved",
             "shield-formula-not-literal-function-5"
           ],
           "timing": {
@@ -3022,7 +3021,6 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "nested-effect-wrapper-semantics-unresolved",
             "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
@@ -3057,7 +3055,7 @@
               "verified-zero": 14
             },
             "dynamicProperty": {
-              "unresolved": 6,
+              "applied": 6,
               "verified-zero": 8
             },
             "tuningMark": {
@@ -3068,9 +3066,9 @@
           },
           "semanticEffects": {
             "total": 5,
-            "applied": 2,
+            "applied": 5,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500025].actions[skillId=50002504].skillId"
@@ -3206,8 +3204,8 @@
       "effects": {
         "statuses": {
           "verified-zero": 46,
-          "unresolved": 8,
-          "applied": 2
+          "applied": 8,
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -3274,8 +3272,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "trigger-frame-missing",
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -3309,8 +3306,7 @@
               "verified-zero": 16
             },
             "dynamicProperty": {
-              "applied": 12,
-              "unresolved": 1,
+              "applied": 13,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -3320,9 +3316,9 @@
           },
           "semanticEffects": {
             "total": 13,
-            "applied": 12,
+            "applied": 13,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500026].actions[skillId=50002616].skillId"
@@ -3462,8 +3458,8 @@
       "effects": {
         "statuses": {
           "verified-zero": 49,
-          "applied": 12,
-          "unresolved": 3
+          "applied": 13,
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -6965,8 +6961,7 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -7000,7 +6995,7 @@
               "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "applied": 2,
               "verified-zero": 2
             },
             "tuningMark": {
@@ -7010,9 +7005,9 @@
           },
           "semanticEffects": {
             "total": 2,
-            "applied": 0,
+            "applied": 2,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500052].actions[skillId=50005202].skillId"
@@ -7136,7 +7131,8 @@
       "effects": {
         "statuses": {
           "verified-zero": 13,
-          "unresolved": 3
+          "applied": 2,
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -7199,8 +7195,7 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -7234,7 +7229,7 @@
               "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "applied": 2,
               "verified-zero": 2
             },
             "tuningMark": {
@@ -7244,9 +7239,9 @@
           },
           "semanticEffects": {
             "total": 2,
-            "applied": 0,
+            "applied": 2,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500053].actions[skillId=50005302].skillId"
@@ -7370,7 +7365,8 @@
       "effects": {
         "statuses": {
           "verified-zero": 13,
-          "unresolved": 3
+          "applied": 2,
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -7429,14 +7425,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50005701,
           "controlSkillId": 50005701,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 160,
@@ -7469,7 +7463,7 @@
               "verified-zero": 5
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "applied": 2,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -7479,9 +7473,9 @@
           },
           "semanticEffects": {
             "total": 4,
-            "applied": 2,
+            "applied": 4,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500057].actions[skillId=50005701].skillId"
@@ -7617,20 +7611,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 17,
-          "unresolved": 2,
-          "applied": 1
+          "applied": 3
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500058,
@@ -7919,14 +7910,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50006401,
           "controlSkillId": 50006401,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 95,
@@ -7959,7 +7948,7 @@
               "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -7969,9 +7958,9 @@
           },
           "semanticEffects": {
             "total": 3,
-            "applied": 2,
+            "applied": 3,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500064].actions[skillId=50006401].skillId"
@@ -8107,20 +8096,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 14,
-          "unresolved": 1,
-          "applied": 1
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500065,
@@ -8165,14 +8151,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50006501,
           "controlSkillId": 50006501,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 115,
@@ -8205,7 +8189,7 @@
               "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -8215,9 +8199,9 @@
           },
           "semanticEffects": {
             "total": 3,
-            "applied": 2,
+            "applied": 3,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500065].actions[skillId=50006501].skillId"
@@ -8343,20 +8327,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 14,
-          "unresolved": 1,
-          "applied": 1
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500066,
@@ -8469,7 +8450,7 @@
           "closureClass": "scenario-assumed",
           "runtimeStatus": "runnable",
           "runnable": true,
-          "sourceEvidenceStatus": "runtime-dependent",
+          "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
             "trigger-frame-missing",
@@ -9391,24 +9372,21 @@
           "actionKind": "signature",
           "sourceSkillId": 50008102,
           "controlSkillId": 50008102,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
-            "trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "trigger-frame-missing"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [
               "trigger-frame-missing"
             ],
-            "unresolvedReasons": [
-              "nested-effect-wrapper-semantics-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -9442,8 +9420,7 @@
               "verified-zero": 7
             },
             "dynamicProperty": {
-              "applied": 2,
-              "unresolved": 2,
+              "applied": 4,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -9453,9 +9430,9 @@
           },
           "semanticEffects": {
             "total": 5,
-            "applied": 2,
+            "applied": 4,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500081].actions[skillId=50008102].skillId"
@@ -9616,14 +9593,14 @@
       "effects": {
         "statuses": {
           "verified-zero": 36,
-          "applied": 5,
-          "unresolved": 3
+          "applied": 7,
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 1,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 2,
+        "scenarioAssumed": 0,
         "unresolved": 1
       },
       "machineOptimizationReady": false,
@@ -9677,24 +9654,21 @@
           "actionKind": "signature",
           "sourceSkillId": 50008201,
           "controlSkillId": 50008201,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
-            "trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "trigger-frame-missing"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [
               "trigger-frame-missing"
             ],
-            "unresolvedReasons": [
-              "nested-effect-wrapper-semantics-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -9728,8 +9702,7 @@
               "verified-zero": 8
             },
             "dynamicProperty": {
-              "applied": 3,
-              "unresolved": 2,
+              "applied": 5,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -9739,9 +9712,9 @@
           },
           "semanticEffects": {
             "total": 7,
-            "applied": 5,
+            "applied": 7,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500082].actions[skillId=50008201].skillId"
@@ -9889,20 +9862,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 41,
-          "applied": 9,
-          "unresolved": 2
+          "applied": 11
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500083,
@@ -9949,14 +9919,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50008303,
           "controlSkillId": 50008303,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 117,
@@ -9989,7 +9957,7 @@
               "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -9999,9 +9967,9 @@
           },
           "semanticEffects": {
             "total": 3,
-            "applied": 2,
+            "applied": 3,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500083].actions[skillId=50008303].skillId"
@@ -10137,20 +10105,18 @@
       "effects": {
         "statuses": {
           "verified-zero": 14,
-          "unresolved": 1,
-          "applied": 1
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "machineOptimizationReady": false,
       "remainingGaps": [
-        "pve-passive-runtime-incomplete",
-        "public-action-closure-incomplete"
+        "pve-passive-runtime-incomplete"
       ]
     },
     {
@@ -10198,14 +10164,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50008403,
           "controlSkillId": 50008403,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 114,
@@ -10238,7 +10202,7 @@
               "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -10248,9 +10212,9 @@
           },
           "semanticEffects": {
             "total": 3,
-            "applied": 2,
+            "applied": 3,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500084].actions[skillId=50008403].skillId"
@@ -10376,20 +10340,18 @@
       "effects": {
         "statuses": {
           "verified-zero": 14,
-          "unresolved": 1,
-          "applied": 1
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "machineOptimizationReady": false,
       "remainingGaps": [
-        "pve-passive-runtime-incomplete",
-        "public-action-closure-incomplete"
+        "pve-passive-runtime-incomplete"
       ]
     },
     {
@@ -10437,24 +10399,21 @@
           "actionKind": "signature",
           "sourceSkillId": 50008503,
           "controlSkillId": 50008503,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
-            "trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "trigger-frame-missing"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [
               "trigger-frame-missing"
             ],
-            "unresolvedReasons": [
-              "nested-effect-wrapper-semantics-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -10488,7 +10447,7 @@
               "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -10498,9 +10457,9 @@
           },
           "semanticEffects": {
             "total": 3,
-            "applied": 2,
+            "applied": 3,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500085].actions[skillId=50008503].skillId"
@@ -10626,20 +10585,18 @@
       "effects": {
         "statuses": {
           "verified-zero": 14,
-          "unresolved": 1,
-          "applied": 1
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
       "machineOptimizationReady": false,
       "remainingGaps": [
-        "pve-passive-runtime-incomplete",
-        "public-action-closure-incomplete"
+        "pve-passive-runtime-incomplete"
       ]
     },
     {
@@ -11916,8 +11873,7 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -11951,8 +11907,7 @@
               "verified-zero": 9
             },
             "dynamicProperty": {
-              "applied": 5,
-              "unresolved": 1,
+              "applied": 6,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -11962,9 +11917,9 @@
           },
           "semanticEffects": {
             "total": 6,
-            "applied": 5,
+            "applied": 6,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500110].actions[skillId=50011001].skillId"
@@ -12104,8 +12059,8 @@
       "effects": {
         "statuses": {
           "verified-zero": 28,
-          "applied": 5,
-          "unresolved": 3
+          "applied": 6,
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -16014,24 +15969,21 @@
           "actionKind": "signature",
           "sourceSkillId": 50013801,
           "controlSkillId": 50013801,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
-            "trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "trigger-frame-missing"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [
               "trigger-frame-missing"
             ],
-            "unresolvedReasons": [
-              "nested-effect-wrapper-semantics-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -16065,7 +16017,7 @@
               "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -16075,9 +16027,9 @@
           },
           "semanticEffects": {
             "total": 3,
-            "applied": 2,
+            "applied": 3,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500138].actions[skillId=50013801].skillId"
@@ -16213,20 +16165,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 14,
-          "unresolved": 1,
-          "applied": 1
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500139,
@@ -16273,24 +16222,21 @@
           "actionKind": "signature",
           "sourceSkillId": 50013901,
           "controlSkillId": 50013901,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
-            "trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "trigger-frame-missing"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [
               "trigger-frame-missing"
             ],
-            "unresolvedReasons": [
-              "nested-effect-wrapper-semantics-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -16324,8 +16270,7 @@
               "verified-zero": 7
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 1,
+              "applied": 2,
               "verified-zero": 5
             },
             "tuningMark": {
@@ -16335,9 +16280,9 @@
           },
           "semanticEffects": {
             "total": 5,
-            "applied": 3,
+            "applied": 4,
             "verifiedZero": 1,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500139].actions[skillId=50013901].skillId"
@@ -16473,20 +16418,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 25,
-          "applied": 2,
-          "unresolved": 1
+          "applied": 3
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500140,
@@ -16533,24 +16475,21 @@
           "actionKind": "signature",
           "sourceSkillId": 50014001,
           "controlSkillId": 50014001,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
-            "trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "trigger-frame-missing"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [
               "trigger-frame-missing"
             ],
-            "unresolvedReasons": [
-              "nested-effect-wrapper-semantics-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -16584,8 +16523,7 @@
               "verified-zero": 7
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 1,
+              "applied": 2,
               "verified-zero": 5
             },
             "tuningMark": {
@@ -16595,9 +16533,9 @@
           },
           "semanticEffects": {
             "total": 5,
-            "applied": 3,
+            "applied": 4,
             "verifiedZero": 1,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500140].actions[skillId=50014001].skillId"
@@ -16733,20 +16671,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 25,
-          "applied": 2,
-          "unresolved": 1
+          "applied": 3
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500147,
@@ -18307,8 +18242,7 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -18550,8 +18484,7 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -18789,8 +18722,7 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -19730,14 +19662,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50017901,
           "controlSkillId": 50017901,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 115,
@@ -19770,7 +19700,7 @@
               "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -19780,9 +19710,9 @@
           },
           "semanticEffects": {
             "total": 3,
-            "applied": 2,
+            "applied": 3,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500179].actions[skillId=50017901].skillId"
@@ -19922,20 +19852,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 14,
-          "unresolved": 1,
-          "applied": 1
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500180,
@@ -19980,14 +19907,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50018001,
           "controlSkillId": 50018001,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 150,
@@ -20020,8 +19945,7 @@
               "verified-zero": 5
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 1,
+              "applied": 2,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -20031,9 +19955,9 @@
           },
           "semanticEffects": {
             "total": 4,
-            "applied": 3,
+            "applied": 4,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500180].actions[skillId=50018001].skillId"
@@ -20173,20 +20097,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 17,
-          "applied": 2,
-          "unresolved": 1
+          "applied": 3
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500181,
@@ -20231,14 +20152,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50018101,
           "controlSkillId": 50018101,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 190,
@@ -20271,8 +20190,7 @@
               "verified-zero": 11
             },
             "dynamicProperty": {
-              "applied": 7,
-              "unresolved": 1,
+              "applied": 8,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -20282,9 +20200,9 @@
           },
           "semanticEffects": {
             "total": 10,
-            "applied": 9,
+            "applied": 10,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500181].actions[skillId=50018101].skillId"
@@ -20424,20 +20342,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 35,
-          "applied": 8,
-          "unresolved": 1
+          "applied": 9
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500185,
@@ -20746,8 +20661,7 @@
             "trigger-frame-missing",
             "pack-lifecycle-semantics-evidence-gap",
             "effect-trigger-frame-missing",
-            "effect-target-unresolved",
-            "nested-effect-wrapper-semantics-unresolved"
+            "effect-target-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -21009,8 +20923,7 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -21044,7 +20957,7 @@
               "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 2
             },
             "tuningMark": {
@@ -21054,9 +20967,9 @@
           },
           "semanticEffects": {
             "total": 1,
-            "applied": 0,
+            "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500187].actions[skillId=50018702].skillId"
@@ -21196,7 +21109,8 @@
       "effects": {
         "statuses": {
           "verified-zero": 10,
-          "unresolved": 2
+          "applied": 1,
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -21507,7 +21421,6 @@
             "toughness:pre-shield-damage-inputs-incomplete",
             "tuning-mark-max-mismatch",
             "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
             "heal-formula-not-literal-function-5"
           ],
           "zeroDistancePolicy": {
@@ -21522,7 +21435,6 @@
               "toughness:pre-shield-damage-inputs-incomplete",
               "tuning-mark-max-mismatch",
               "pack-lifecycle-semantics-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved",
               "heal-formula-not-literal-function-5"
             ]
           },
@@ -22497,7 +22409,6 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "nested-effect-wrapper-semantics-unresolved",
             "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
@@ -22532,7 +22443,7 @@
               "verified-zero": 7
             },
             "dynamicProperty": {
-              "unresolved": 3,
+              "applied": 3,
               "verified-zero": 4
             },
             "tuningMark": {
@@ -22543,9 +22454,9 @@
           },
           "semanticEffects": {
             "total": 5,
-            "applied": 2,
+            "applied": 5,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500231].actions[skillId=50023101].skillId"
@@ -22685,8 +22596,8 @@
       "effects": {
         "statuses": {
           "verified-zero": 23,
-          "unresolved": 4,
-          "applied": 1
+          "applied": 4,
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -22743,14 +22654,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50024401,
           "controlSkillId": 50024401,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 90,
@@ -22783,8 +22692,7 @@
               "verified-zero": 5
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 1,
+              "applied": 2,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -22794,9 +22702,9 @@
           },
           "semanticEffects": {
             "total": 4,
-            "applied": 3,
+            "applied": 4,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500244].actions[skillId=50024401].skillId"
@@ -22936,20 +22844,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 17,
-          "applied": 2,
-          "unresolved": 1
+          "applied": 3
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500245,
@@ -22994,14 +22899,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50024501,
           "controlSkillId": 50024501,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 140,
@@ -23034,8 +22937,7 @@
               "verified-zero": 5
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 1,
+              "applied": 2,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -23045,9 +22947,9 @@
           },
           "semanticEffects": {
             "total": 4,
-            "applied": 3,
+            "applied": 4,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500245].actions[skillId=50024501].skillId"
@@ -23177,20 +23079,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 17,
-          "applied": 2,
-          "unresolved": 1
+          "applied": 3
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500246,
@@ -23235,14 +23134,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50024601,
           "controlSkillId": 50024601,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 178,
@@ -23275,8 +23172,7 @@
               "verified-zero": 5
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 1,
+              "applied": 2,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -23286,9 +23182,9 @@
           },
           "semanticEffects": {
             "total": 4,
-            "applied": 3,
+            "applied": 4,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500246].actions[skillId=50024601].skillId"
@@ -23418,20 +23314,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 17,
-          "applied": 2,
-          "unresolved": 1
+          "applied": 3
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500258,
@@ -23488,7 +23381,6 @@
             "toughness:pre-shield-damage-inputs-incomplete",
             "tuning-mark-max-mismatch",
             "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
             "heal-formula-not-literal-function-5"
           ],
           "zeroDistancePolicy": {
@@ -23503,7 +23395,6 @@
               "toughness:pre-shield-damage-inputs-incomplete",
               "tuning-mark-max-mismatch",
               "pack-lifecycle-semantics-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved",
               "heal-formula-not-literal-function-5"
             ]
           },
@@ -23756,7 +23647,6 @@
             "toughness:pre-shield-damage-inputs-incomplete",
             "tuning-mark-max-mismatch",
             "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
             "heal-formula-not-literal-function-5"
           ],
           "zeroDistancePolicy": {
@@ -23771,7 +23661,6 @@
               "toughness:pre-shield-damage-inputs-incomplete",
               "tuning-mark-max-mismatch",
               "pack-lifecycle-semantics-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved",
               "heal-formula-not-literal-function-5"
             ]
           },
@@ -24010,7 +23899,6 @@
             "toughness:pre-shield-damage-inputs-incomplete",
             "tuning-mark-max-mismatch",
             "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
             "heal-formula-not-literal-function-5"
           ],
           "zeroDistancePolicy": {
@@ -24025,7 +23913,6 @@
               "toughness:pre-shield-damage-inputs-incomplete",
               "tuning-mark-max-mismatch",
               "pack-lifecycle-semantics-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved",
               "heal-formula-not-literal-function-5"
             ]
           },
@@ -25026,14 +24913,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50029601,
           "controlSkillId": 50029601,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 115,
@@ -25066,7 +24951,7 @@
               "verified-zero": 5
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "applied": 2,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -25076,9 +24961,9 @@
           },
           "semanticEffects": {
             "total": 4,
-            "applied": 2,
+            "applied": 4,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500296].actions[skillId=50029601].skillId"
@@ -25204,20 +25089,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 17,
-          "unresolved": 2,
-          "applied": 1
+          "applied": 3
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500304,
@@ -25264,24 +25146,21 @@
           "actionKind": "signature",
           "sourceSkillId": 50030401,
           "controlSkillId": 50030401,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
-            "trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "trigger-frame-missing"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [
               "trigger-frame-missing"
             ],
-            "unresolvedReasons": [
-              "nested-effect-wrapper-semantics-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -25315,8 +25194,7 @@
               "verified-zero": 5
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 1,
+              "applied": 2,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -25326,9 +25204,9 @@
           },
           "semanticEffects": {
             "total": 4,
-            "applied": 2,
+            "applied": 3,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500304].actions[skillId=50030401].skillId"
@@ -25464,20 +25342,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 17,
-          "applied": 2,
-          "unresolved": 1
+          "applied": 3
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500305,
@@ -25524,24 +25399,21 @@
           "actionKind": "signature",
           "sourceSkillId": 50030501,
           "controlSkillId": 50030501,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
-            "trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "trigger-frame-missing"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [
               "trigger-frame-missing"
             ],
-            "unresolvedReasons": [
-              "nested-effect-wrapper-semantics-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -25575,8 +25447,7 @@
               "verified-zero": 6
             },
             "dynamicProperty": {
-              "applied": 2,
-              "unresolved": 1,
+              "applied": 3,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -25586,9 +25457,9 @@
           },
           "semanticEffects": {
             "total": 4,
-            "applied": 2,
+            "applied": 3,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500305].actions[skillId=50030501].skillId"
@@ -25724,20 +25595,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 20,
-          "applied": 3,
-          "unresolved": 1
+          "applied": 4
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500306,
@@ -25784,24 +25652,21 @@
           "actionKind": "signature",
           "sourceSkillId": 50030601,
           "controlSkillId": 50030601,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
-            "trigger-frame-missing",
-            "nested-effect-wrapper-semantics-unresolved"
+            "trigger-frame-missing"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [
               "trigger-frame-missing"
             ],
-            "unresolvedReasons": [
-              "nested-effect-wrapper-semantics-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -25835,8 +25700,7 @@
               "verified-zero": 6
             },
             "dynamicProperty": {
-              "applied": 2,
-              "unresolved": 1,
+              "applied": 3,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -25846,9 +25710,9 @@
           },
           "semanticEffects": {
             "total": 4,
-            "applied": 2,
+            "applied": 3,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500306].actions[skillId=50030601].skillId"
@@ -25984,20 +25848,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 20,
-          "applied": 3,
-          "unresolved": 1
+          "applied": 4
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500313,
@@ -26308,8 +26169,7 @@
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
             "trigger-frame-missing",
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -26318,8 +26178,7 @@
               "trigger-frame-missing"
             ],
             "unresolvedReasons": [
-              "pack-lifecycle-semantics-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved"
+              "pack-lifecycle-semantics-evidence-gap"
             ]
           },
           "timing": {
@@ -26354,7 +26213,7 @@
               "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 2
             },
             "tuningMark": {
@@ -26364,9 +26223,9 @@
           },
           "semanticEffects": {
             "total": 1,
-            "applied": 0,
+            "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500322].actions[skillId=50032201].skillId"
@@ -26502,7 +26361,8 @@
       "effects": {
         "statuses": {
           "verified-zero": 10,
-          "unresolved": 2
+          "applied": 1,
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -26566,16 +26426,14 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
             "coversAllReasons": false,
             "coveredReasons": [],
             "unresolvedReasons": [
-              "pack-lifecycle-semantics-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved"
+              "pack-lifecycle-semantics-evidence-gap"
             ]
           },
           "timing": {
@@ -26610,7 +26468,7 @@
               "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 2
             },
             "tuningMark": {
@@ -26620,9 +26478,9 @@
           },
           "semanticEffects": {
             "total": 1,
-            "applied": 0,
+            "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500323].actions[skillId=50032301].skillId"
@@ -26748,7 +26606,8 @@
       "effects": {
         "statuses": {
           "verified-zero": 10,
-          "unresolved": 2
+          "applied": 1,
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -26813,8 +26672,7 @@
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
             "trigger-frame-missing",
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -26823,8 +26681,7 @@
               "trigger-frame-missing"
             ],
             "unresolvedReasons": [
-              "pack-lifecycle-semantics-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved"
+              "pack-lifecycle-semantics-evidence-gap"
             ]
           },
           "timing": {
@@ -26859,7 +26716,7 @@
               "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 2
             },
             "tuningMark": {
@@ -26869,9 +26726,9 @@
           },
           "semanticEffects": {
             "total": 1,
-            "applied": 0,
+            "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500324].actions[skillId=50032401].skillId"
@@ -27007,7 +26864,8 @@
       "effects": {
         "statuses": {
           "verified-zero": 10,
-          "unresolved": 2
+          "applied": 1,
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -27064,14 +26922,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50035401,
           "controlSkillId": 50035401,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 296,
@@ -27104,8 +26960,7 @@
               "verified-zero": 7
             },
             "dynamicProperty": {
-              "applied": 3,
-              "unresolved": 1,
+              "applied": 4,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -27115,9 +26970,9 @@
           },
           "semanticEffects": {
             "total": 6,
-            "applied": 5,
+            "applied": 6,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500354].actions[skillId=50035401].skillId"
@@ -27257,20 +27112,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 23,
-          "applied": 4,
-          "unresolved": 1
+          "applied": 5
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500355,
@@ -27315,14 +27167,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50035501,
           "controlSkillId": 50035501,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 289,
@@ -27355,8 +27205,7 @@
               "verified-zero": 12
             },
             "dynamicProperty": {
-              "applied": 8,
-              "unresolved": 1,
+              "applied": 9,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -27366,9 +27215,9 @@
           },
           "semanticEffects": {
             "total": 11,
-            "applied": 10,
+            "applied": 11,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500355].actions[skillId=50035501].skillId"
@@ -27508,20 +27357,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 38,
-          "applied": 9,
-          "unresolved": 1
+          "applied": 10
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500357,
@@ -28059,9 +27905,7 @@
             "trigger-frame-missing",
             "hp:damage-formula-inputs-incomplete",
             "toughness:pre-shield-damage-inputs-incomplete",
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -28104,9 +27948,9 @@
           },
           "semanticEffects": {
             "total": 1,
-            "applied": 0,
+            "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500360].actions[skillId=50036001].skillId"
@@ -28307,7 +28151,6 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "nested-effect-wrapper-semantics-unresolved",
             "sp-recover-type-not-direct-sp"
           ],
           "timing": {
@@ -28338,7 +28181,7 @@
               "verified-zero": 6
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 5
             },
             "tuningMark": {
@@ -28348,9 +28191,9 @@
           },
           "semanticEffects": {
             "total": 5,
-            "applied": 3,
+            "applied": 4,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500368].actions[skillId=50036801].skillId"
@@ -28490,10 +28333,9 @@
       "effects": {
         "statuses": {
           "verified-zero": 22,
-          "unresolved": 1,
-          "applied": 1
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
         "evidenceClosed": 2,
@@ -28556,8 +28398,7 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "sp-recover-type-not-direct-sp",
-            "nested-effect-wrapper-semantics-unresolved"
+            "sp-recover-type-not-direct-sp"
           ],
           "timing": {
             "status": "applied",
@@ -28587,7 +28428,7 @@
               "verified-zero": 13
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 12
             },
             "tuningMark": {
@@ -28597,9 +28438,9 @@
           },
           "semanticEffects": {
             "total": 12,
-            "applied": 9,
+            "applied": 10,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500369].actions[skillId=50036901].skillId"
@@ -28739,10 +28580,9 @@
       "effects": {
         "statuses": {
           "verified-zero": 50,
-          "unresolved": 1,
-          "applied": 1
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
         "evidenceClosed": 2,
@@ -28805,8 +28645,7 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "sp-recover-type-not-direct-sp",
-            "nested-effect-wrapper-semantics-unresolved"
+            "sp-recover-type-not-direct-sp"
           ],
           "timing": {
             "status": "applied",
@@ -28836,7 +28675,7 @@
               "verified-zero": 12
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 11
             },
             "tuningMark": {
@@ -28846,9 +28685,9 @@
           },
           "semanticEffects": {
             "total": 11,
-            "applied": 8,
+            "applied": 9,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500370].actions[skillId=50037001].skillId"
@@ -28988,10 +28827,9 @@
       "effects": {
         "statuses": {
           "verified-zero": 46,
-          "unresolved": 1,
-          "applied": 1
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
         "evidenceClosed": 2,
@@ -29794,8 +29632,7 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -29829,7 +29666,7 @@
               "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 2
             },
             "tuningMark": {
@@ -29839,9 +29676,9 @@
           },
           "semanticEffects": {
             "total": 1,
-            "applied": 0,
+            "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500469].actions[skillId=50046903].skillId"
@@ -29967,7 +29804,8 @@
       "effects": {
         "statuses": {
           "verified-zero": 10,
-          "unresolved": 2
+          "applied": 1,
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -30032,8 +29870,7 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -30067,7 +29904,7 @@
               "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 2
             },
             "tuningMark": {
@@ -30077,9 +29914,9 @@
           },
           "semanticEffects": {
             "total": 1,
-            "applied": 0,
+            "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500470].actions[skillId=50047001].skillId"
@@ -30205,7 +30042,8 @@
       "effects": {
         "statuses": {
           "verified-zero": 10,
-          "unresolved": 2
+          "applied": 1,
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -30222,7 +30060,7 @@
   ],
   "summary": {
     "kiboCount": 122,
-    "machineOptimizationReadyCount": 53,
+    "machineOptimizationReadyCount": 72,
     "machineOptimizationReadyKiboIds": [
       500001,
       500005,
@@ -30246,10 +30084,14 @@
       500047,
       500048,
       500051,
+      500057,
       500058,
+      500064,
+      500065,
       500067,
       500068,
       500072,
+      500082,
       500114,
       500115,
       500116,
@@ -30264,6 +30106,9 @@
       500130,
       500131,
       500132,
+      500138,
+      500139,
+      500140,
       500147,
       500148,
       500149,
@@ -30273,15 +30118,27 @@
       500173,
       500174,
       500175,
+      500179,
+      500180,
+      500181,
       500216,
       500220,
+      500244,
+      500245,
+      500246,
+      500296,
+      500304,
+      500305,
+      500306,
+      500354,
+      500355,
       500357,
       500358
     ],
     "actionClosure": {
-      "evidenceClosed": 292,
-      "scenarioAssumed": 22,
-      "unresolved": 52
+      "evidenceClosed": 315,
+      "scenarioAssumed": 13,
+      "unresolved": 38
     },
     "pvePassiveMechanics": {
       "evidenceClosed": 40,

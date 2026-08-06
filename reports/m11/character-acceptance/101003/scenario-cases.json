@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/ultimate-controlled-buff-switch-golden.json",
-        "reportHash": "f0c077ae6ac6b2da",
+        "reportHash": "4247ad5faa671e8a",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "8c0f62abc431c5b9",
-          "data": "9cc85fe3b58fa21e",
-          "trace": "388ec76ee46d7716",
+          "input": "4e443915d82cce5d",
+          "data": "0c1ce65a5c609cb2",
+          "trace": "66b2387dbe3535e2",
           "evaluation": null
         }
       },
@@ -808,7 +808,7 @@
           "assertionHash": "a105b0c3214ea211"
         }
       ],
-      "scenarioCaseHash": "08d1b440504a8e83"
+      "scenarioCaseHash": "25825b31897f5a1c"
     },
     {
       "schemaVersion": 1,
@@ -816,7 +816,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/golden-trace.json",
-        "reportHash": "638b82819f13a527",
+        "reportHash": "ee8bac8a182fe58a",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -824,9 +824,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "23d681c8641931a1",
-          "data": "73d1395b1fb093f0",
-          "trace": "df31a1740522e70d",
+          "input": "90192bc1ebb0ed35",
+          "data": "d617f5994d123c44",
+          "trace": "7400a0a2eff6d300",
           "evaluation": null
         }
       },
@@ -1208,7 +1208,7 @@
           },
           {
             "actionId": "han-kibo-signature",
-            "effectIdentity": "kibo-passive:520090:520090002",
+            "effectIdentity": "battle-element:540070",
             "operation": "apply",
             "targetId": "actor-101003",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:42"
@@ -1228,24 +1228,24 @@
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:44"
           },
           {
+            "actionId": "han-kibo-signature",
+            "effectIdentity": "kibo-passive:520090:520090002",
+            "operation": "apply",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:45"
+          },
+          {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
             "effectIdentity": "battle-element:101003142",
             "operation": "expire",
             "targetId": "enemy-300032",
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:45"
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:46"
           },
           {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
             "effectIdentity": "battle-element:101003145",
             "operation": "expire",
             "targetId": "enemy-300032",
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:46"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "kibo-passive:520090:520090002",
-            "operation": "apply",
-            "targetId": "actor-101003",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:47"
           },
           {
@@ -1256,9 +1256,9 @@
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:48"
           },
           {
-            "actionId": "han-charged-stage-two",
-            "effectIdentity": "battle-element:101003205",
-            "operation": "expire",
+            "actionId": "han-kibo-signature",
+            "effectIdentity": "kibo-passive:520090:520090002",
+            "operation": "apply",
             "targetId": "actor-101003",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:49"
           },
@@ -1273,28 +1273,28 @@
             "actionId": "han-charged-stage-two",
             "effectIdentity": "battle-element:101003205",
             "operation": "expire",
-            "targetId": "actor-101010",
+            "targetId": "actor-101003",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:50"
           },
           {
             "actionId": "han-charged-stage-two",
-            "effectIdentity": "battle-element:480124006",
+            "effectIdentity": "battle-element:101003205",
             "operation": "expire",
             "targetId": "actor-101010",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:51"
           },
           {
             "actionId": "han-charged-stage-two",
-            "effectIdentity": "battle-element:101003205",
+            "effectIdentity": "battle-element:480124006",
             "operation": "expire",
-            "targetId": "actor-103002",
+            "targetId": "actor-101010",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:52"
           },
           {
-            "actionId": "han-ultimate",
-            "effectIdentity": "tuning-mark:150:persistent",
-            "operation": "apply",
-            "targetId": "actor-101003",
+            "actionId": "han-charged-stage-two",
+            "effectIdentity": "battle-element:101003205",
+            "operation": "expire",
+            "targetId": "actor-103002",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:53"
           },
           {
@@ -1305,35 +1305,35 @@
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:54"
           },
           {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "kibo-passive:520090:520090002",
-            "operation": "expire",
+            "actionId": "han-ultimate",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "operation": "apply",
             "targetId": "actor-101003",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:55"
           },
           {
-            "actionId": "han-ultimate",
-            "effectIdentity": "tuning-mark:150:persistent",
-            "operation": "apply",
+            "actionId": "han-kibo-signature",
+            "effectIdentity": "battle-element:540070",
+            "operation": "expire",
             "targetId": "actor-101003",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:56"
           },
           {
-            "actionId": "han-ultimate",
-            "effectIdentity": "tuning-mark:150:persistent",
-            "operation": "apply",
+            "actionId": "han-kibo-signature",
+            "effectIdentity": "kibo-passive:520090:520090002",
+            "operation": "expire",
             "targetId": "actor-101003",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:57"
           },
           {
-            "actionId": "han-star-skill",
+            "actionId": "han-ultimate",
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:58"
           },
           {
-            "actionId": "han-star-skill",
+            "actionId": "han-ultimate",
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
@@ -1345,6 +1345,20 @@
             "operation": "apply",
             "targetId": "actor-101003",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:6"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "operation": "apply",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:60"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "operation": "apply",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:61"
           },
           {
             "actionId": "han-ultimate",
@@ -1453,7 +1467,7 @@
           "resource-exact-and-insufficient": false
         }
       },
-      "traceProjectionHash": "f3d96ca8f42a3866",
+      "traceProjectionHash": "5256e2fd32ddb822",
       "assertions": [
         {
           "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
@@ -1879,17 +1893,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:53",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:57",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:59",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "9d7cbecb64382f9e"
+          "assertionHash": "19d53593417b2f5e"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:12",
@@ -1908,17 +1922,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:53",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:57",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:59",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "7467311176f361b9"
+          "assertionHash": "752d70b538ce7779"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:13",
@@ -2021,11 +2035,11 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:18",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:20",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:21",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:59"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:60",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:61"
           ],
           "reasons": [],
-          "assertionHash": "bf54232e13b76b04"
+          "assertionHash": "65711693a22438b6"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:18",
@@ -2044,11 +2058,11 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:18",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:20",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:21",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:59"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:60",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:61"
           ],
           "reasons": [],
-          "assertionHash": "71cacc90a0973557"
+          "assertionHash": "41d1d7cc158ecb9d"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:19",
@@ -2111,11 +2125,11 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:18",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:20",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:21",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:59"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:60",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:61"
           ],
           "reasons": [],
-          "assertionHash": "123c63308b05ea1a"
+          "assertionHash": "be8be98bd84d8514"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:21",
@@ -2134,11 +2148,11 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:18",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:20",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:21",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:59"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:60",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:61"
           ],
           "reasons": [],
-          "assertionHash": "2772161b80adcf07"
+          "assertionHash": "b4dfc2e29ef16129"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:22",
@@ -2545,17 +2559,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:53",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:57",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:59",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "4e48d6b0659db1c0"
+          "assertionHash": "5de5bcb3f405b500"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:40",
@@ -2597,7 +2611,7 @@
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:42",
           "selector": {
             "actionId": "han-kibo-signature",
-            "effectIdentity": "kibo-passive:520090:520090002",
+            "effectIdentity": "battle-element:540070",
             "kind": "effect",
             "operation": "apply"
           },
@@ -2606,14 +2620,10 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:42",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:43",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:44",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:47",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:48"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:42"
           ],
           "reasons": [],
-          "assertionHash": "0a59194618250cf8"
+          "assertionHash": "2d4cf108ec6b6fca"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:43",
@@ -2628,14 +2638,14 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:42",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:43",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:44",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:47",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:48"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:45",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:48",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:49"
           ],
           "reasons": [],
-          "assertionHash": "6157f45a6dcde13b"
+          "assertionHash": "d38020ba0e6ab5ee"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:44",
@@ -2650,53 +2660,17 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:42",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:43",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:44",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:47",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:48"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:45",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:48",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:49"
           ],
           "reasons": [],
-          "assertionHash": "ea2aabed6cfeb7aa"
+          "assertionHash": "1d492945e08555a7"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:45",
-          "selector": {
-            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
-            "effectIdentity": "battle-element:101003142",
-            "kind": "effect",
-            "operation": "expire"
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:45"
-          ],
-          "reasons": [],
-          "assertionHash": "0889587550b8d880"
-        },
-        {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:46",
-          "selector": {
-            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
-            "effectIdentity": "battle-element:101003145",
-            "kind": "effect",
-            "operation": "expire"
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:46"
-          ],
-          "reasons": [],
-          "assertionHash": "38b48e2d3cdbcf03"
-        },
-        {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:47",
           "selector": {
             "actionId": "han-kibo-signature",
             "effectIdentity": "kibo-passive:520090:520090002",
@@ -2708,14 +2682,50 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:42",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:43",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:44",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:47",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:48"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:45",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:48",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:49"
           ],
           "reasons": [],
-          "assertionHash": "070b58ef071fdfbf"
+          "assertionHash": "c42bd1a935a48934"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:46",
+          "selector": {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "effectIdentity": "battle-element:101003142",
+            "kind": "effect",
+            "operation": "expire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:46"
+          ],
+          "reasons": [],
+          "assertionHash": "713b169a1bc1a4ea"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:47",
+          "selector": {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "effectIdentity": "battle-element:101003145",
+            "kind": "effect",
+            "operation": "expire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:47"
+          ],
+          "reasons": [],
+          "assertionHash": "a6b4ce5845236961"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:48",
@@ -2730,34 +2740,36 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:42",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:43",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:44",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:47",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:48"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:45",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:48",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:49"
           ],
           "reasons": [],
-          "assertionHash": "105f50089b16269e"
+          "assertionHash": "68bddbd9ac88934b"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:49",
           "selector": {
-            "actionId": "han-charged-stage-two",
-            "effectIdentity": "battle-element:101003205",
+            "actionId": "han-kibo-signature",
+            "effectIdentity": "kibo-passive:520090:520090002",
             "kind": "effect",
-            "operation": "expire"
+            "operation": "apply"
           },
           "expectation": {
             "minimumCount": 1
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:49",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:50",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:52"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:43",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:44",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:45",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:48",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:49"
           ],
           "reasons": [],
-          "assertionHash": "65a93c80b4430421"
+          "assertionHash": "359a36dd55a7dd48"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:5",
@@ -2776,17 +2788,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:53",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:57",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:59",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "c3e215bdd41bb41d"
+          "assertionHash": "bd7a3366117fa45d"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:50",
@@ -2801,33 +2813,15 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:49",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:50",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:52"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:51",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:53"
           ],
           "reasons": [],
-          "assertionHash": "d55aa27307b1a9f3"
+          "assertionHash": "399c97709523a837"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:51",
-          "selector": {
-            "actionId": "han-charged-stage-two",
-            "effectIdentity": "battle-element:480124006",
-            "kind": "effect",
-            "operation": "expire"
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:51"
-          ],
-          "reasons": [],
-          "assertionHash": "dff8d1b4ff328324"
-        },
-        {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:52",
           "selector": {
             "actionId": "han-charged-stage-two",
             "effectIdentity": "battle-element:101003205",
@@ -2839,41 +2833,50 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:49",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:50",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:52"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:51",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:53"
           ],
           "reasons": [],
-          "assertionHash": "cde0ecc01b7361b9"
+          "assertionHash": "6a431975b683debe"
         },
         {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:53",
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:52",
           "selector": {
-            "actionId": "han-ultimate",
-            "effectIdentity": "tuning-mark:150:persistent",
+            "actionId": "han-charged-stage-two",
+            "effectIdentity": "battle-element:480124006",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "expire"
           },
           "expectation": {
             "minimumCount": 1
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:11",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:53",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:57",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:52"
           ],
           "reasons": [],
-          "assertionHash": "0d0d50b807eb3bf0"
+          "assertionHash": "873478ea10d153ca"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:53",
+          "selector": {
+            "actionId": "han-charged-stage-two",
+            "effectIdentity": "battle-element:101003205",
+            "kind": "effect",
+            "operation": "expire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:50",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:51",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:53"
+          ],
+          "reasons": [],
+          "assertionHash": "170de981265858bc"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:54",
@@ -2892,20 +2895,67 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:53",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:57",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:59",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "cc65497cd026d2fb"
+          "assertionHash": "2573979ef25100bb"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:55",
+          "selector": {
+            "actionId": "han-ultimate",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:11",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:59",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
+          ],
+          "reasons": [],
+          "assertionHash": "6794156e3994d1c6"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:56",
+          "selector": {
+            "actionId": "han-kibo-signature",
+            "effectIdentity": "battle-element:540070",
+            "kind": "effect",
+            "operation": "expire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:56"
+          ],
+          "reasons": [],
+          "assertionHash": "d6799f92283b658d"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:57",
           "selector": {
             "actionId": "han-kibo-signature",
             "effectIdentity": "kibo-passive:520090:520090002",
@@ -2917,73 +2967,15 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:55"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:57"
           ],
           "reasons": [],
-          "assertionHash": "0bc028811034aef1"
-        },
-        {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-          "selector": {
-            "actionId": "han-ultimate",
-            "effectIdentity": "tuning-mark:150:persistent",
-            "kind": "effect",
-            "operation": "apply"
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:11",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:53",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:57",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
-          ],
-          "reasons": [],
-          "assertionHash": "518fcb06a896a921"
-        },
-        {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:57",
-          "selector": {
-            "actionId": "han-ultimate",
-            "effectIdentity": "tuning-mark:150:persistent",
-            "kind": "effect",
-            "operation": "apply"
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:11",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:53",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:57",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
-          ],
-          "reasons": [],
-          "assertionHash": "7b2f668ccbbb2df4"
+          "assertionHash": "f35c3a24efd1f885"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:58",
           "selector": {
-            "actionId": "han-star-skill",
+            "actionId": "han-ultimate",
             "effectIdentity": "tuning-mark:150:persistent",
             "kind": "effect",
             "operation": "apply"
@@ -2993,20 +2985,26 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:17",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:18",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:20",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:21",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:11",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:59"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:59",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "bb90dc25149fab5b"
+          "assertionHash": "f81eb752c798627f"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:59",
           "selector": {
-            "actionId": "han-star-skill",
+            "actionId": "han-ultimate",
             "effectIdentity": "tuning-mark:150:persistent",
             "kind": "effect",
             "operation": "apply"
@@ -3016,15 +3014,21 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:17",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:18",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:20",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:21",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:11",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:59"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:59",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "525ca2ab98b1c94e"
+          "assertionHash": "675f168f24d1699a"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:6",
@@ -3043,17 +3047,63 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:53",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:57",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:59",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "18886a1f453e69c2"
+          "assertionHash": "8853424ad502bb02"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:60",
+          "selector": {
+            "actionId": "han-star-skill",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:17",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:18",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:20",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:21",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:60",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:61"
+          ],
+          "reasons": [],
+          "assertionHash": "a39e137f33e877f0"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:61",
+          "selector": {
+            "actionId": "han-star-skill",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:17",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:18",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:20",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:21",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:60",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:61"
+          ],
+          "reasons": [],
+          "assertionHash": "05a860a2ddc7b1c5"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:7",
@@ -3072,17 +3122,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:53",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:57",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:59",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "2869a684299b7ba7"
+          "assertionHash": "48f20075de71fde7"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:8",
@@ -3101,17 +3151,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:53",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:57",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:59",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "bf83362cc13269ac"
+          "assertionHash": "daad718a0ca327ec"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:9",
@@ -3130,17 +3180,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:53",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:57",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:59",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "173d940f3883b459"
+          "assertionHash": "f3493e9bc8836899"
         },
         {
           "assertionIdentity": "trace-state:golden-state:m10-b2:101003:120s-three-actor-golden:0",
@@ -3347,7 +3397,7 @@
           "assertionHash": "9b24a5aeab528c8e"
         }
       ],
-      "scenarioCaseHash": "2553842e0d5c34b1"
+      "scenarioCaseHash": "6962bcf72d875a4c"
     },
     {
       "schemaVersion": 1,
@@ -3355,7 +3405,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/101003-visual.json",
-        "inputHash": "c9b12c81cb42d402",
+        "inputHash": "391d74e0b9e76116",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/101003-visual.json"
       },
       "execution": {
@@ -3364,9 +3414,9 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "c9b12c81cb42d402",
-          "data": "24fa4985505f32e3",
-          "trace": "3d89cdf2a421e8ee",
+          "input": "391d74e0b9e76116",
+          "data": "9ede898f4bfb9607",
+          "trace": "f836fd0a57ef7da2",
           "evaluation": "920e7363ae12290d"
         }
       },
@@ -5789,18 +5839,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "99355d742a4f7cdd"
+      "scenarioCaseHash": "2b267dd644884e32"
     }
   ],
   "summary": {
     "scenarioCount": 3,
     "executionPassedCount": 3,
-    "assertionCount": 203,
-    "assertionPassedCount": 197,
+    "assertionCount": 205,
+    "assertionPassedCount": 199,
     "runnerKindCounts": {
       "canonical-character-golden": 2,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "57e9589227a20edd"
+  "scenarioSetHash": "f4662938c43704a4"
 }

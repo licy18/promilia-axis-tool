@@ -5587,7 +5587,7 @@ function createControlEffectGraph({
       ).length,
     };
 
-    function visit(record, parentIdentity, relation, depth) {
+    function visit(record, parentIdentity, relation, depth, layerActivation = null) {
       const nodeIdentity = `element:${record.pathId}`;
       if (parentIdentity) {
         edges.push({
@@ -5607,6 +5607,7 @@ function createControlEffectGraph({
           overridesBySkillAndElement,
           depth,
           incomingRelation: relation,
+          layerActivation,
           tuningMechanicsCatalog,
         }),
         sourceTraversalIndex: nodes.length,
@@ -5631,11 +5632,19 @@ function createControlEffectGraph({
           });
           continue;
         }
+        const layerActivation =
+          childReference.relation === 'layerInfoList'
+            ? resolveLayerActivationForChild(
+                record.typetree,
+                childResolution.record
+              )
+            : null;
         visit(
           childResolution.record,
           nodeIdentity,
           childReference.relation,
-          depth + 1
+          depth + 1,
+          layerActivation
         );
       }
     }
@@ -5775,6 +5784,30 @@ function collectNestedPathIds(value) {
   }
 }
 
+function resolveLayerActivationForChild(parentTree = {}, childRecord = {}) {
+  const layerElementId = integerOrNull(parentTree.elementConfigId);
+  if (layerElementId == null) return null;
+  const entries = Array.isArray(parentTree.layerInfoList)
+    ? parentTree.layerInfoList
+    : [];
+  let minLayerCount = null;
+  for (const entry of entries) {
+    const layerCnt = integerOrNull(entry.layerCnt);
+    if (layerCnt == null || layerCnt <= 0) continue;
+    const references = collectNestedPathIds(entry.elementDataList);
+    if (references.includes(String(childRecord.pathId))) {
+      minLayerCount =
+        minLayerCount == null ? layerCnt : Math.min(minLayerCount, layerCnt);
+    }
+  }
+  if (minLayerCount == null) return null;
+  return {
+    conditionType: 6,
+    layerElementId,
+    minLayerCount,
+  };
+}
+
 function createBattleEffectGraphNode({
   record,
   controlSkillId,
@@ -5782,6 +5815,7 @@ function createBattleEffectGraphNode({
   overridesBySkillAndElement,
   depth,
   incomingRelation = null,
+  layerActivation = null,
   tuningMechanicsCatalog,
 }) {
   const tree = record.typetree ?? {};
@@ -5844,7 +5878,13 @@ function createBattleEffectGraphNode({
     kind,
     depth,
     incomingRelation,
-    activationConditions: classification.activationConditions ?? [],
+    activationConditions: dedupeBy(
+      [
+        ...(classification.activationConditions ?? []),
+        ...(layerActivation ? [layerActivation] : []),
+      ],
+      condition => JSON.stringify(condition)
+    ),
     propertyConditionStatus: classification.propertyConditionStatus ?? null,
     sourceIdentity: `battle-element-assets.jsonl#path_id=${record.pathId}`,
     sourceScriptPathId: String(tree.m_Script?.m_PathID ?? '') || null,
@@ -6131,11 +6171,16 @@ function classifyBattleEffectNode({
       'formulaParams.formulaParamValues[0]'
     );
   } else if (kind === 'damage') {
-    if (depth > 0 && incomingRelation === 'additionalHitElementDataList') {
+    if (
+      depth > 0 &&
+      ['additionalHitElementDataList', 'triggerEffectList'].includes(
+        incomingRelation
+      )
+    ) {
       dimensions.damage = createDimensionClassification(
         'applied',
         [],
-        'additionalHitElementDataList'
+        incomingRelation
       );
     } else if (depth > 0) {
       reasons.push('nested-damage-trigger-lifecycle-not-expanded');
@@ -6445,6 +6490,8 @@ function createControlRuntimeEffectBinding({
           'notDelElementDataList',
           'elementDataList',
           'additionalHitElementDataList',
+          'triggerEffectList',
+          'layerInfoList',
         ].includes(edge.relation)
     )
   ) {

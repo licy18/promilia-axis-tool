@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 101003,
-  "sourcePackageHash": "6d5ef4c524df0c570cce537144474e140e8dcfc7167555e78645b3783600c057",
+  "sourcePackageHash": "58ea266b03d436ee0a659f8f695b3b846375881f433fd1968cc02c0bb92c7e78",
   "actionRows": [
     {
       "actionIdentity": "actor|101003|10100301|0|10100303",
@@ -627,7 +627,6 @@
       "reasons": [
         "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ]
     },
@@ -702,7 +701,6 @@
       "reasons": [
         "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "nested-effect-wrapper-semantics-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ]
     },
@@ -851,7 +849,7 @@
     "controlCount": 29,
     "hitCount": 73,
     "rawEffectCount": 53,
-    "semanticEffectCount": 40,
+    "semanticEffectCount": 44,
     "resourceProfileCount": 0,
     "resourceTransactionCount": 0,
     "thresholdTransitionCount": 0,
@@ -867,5 +865,5 @@
       "static-evidence-gap": 7
     }
   },
-  "profileHash": "733839064568b323a9c12fcd49d383b31f159367e5febba0a86d1a3dc02070d6"
+  "profileHash": "f8d5614f0a5410504fe6b1a970145fa77e5f7f98dd050e1f84e2287ed688f264"
 }
