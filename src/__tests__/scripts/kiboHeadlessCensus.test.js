@@ -62,8 +62,8 @@ describe('kibo headless census', () => {
         unresolved: 0,
       },
       publicActionClosure: {
-        evidenceClosed: 360,
-        scenarioAssumed: 6,
+        evidenceClosed: 361,
+        scenarioAssumed: 5,
         unresolved: 0,
       },
     });

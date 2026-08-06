@@ -1927,14 +1927,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:12:1c6c1bc06e15b941",
+      "requirementIdentity": "contract:effect:effect:12:1c3f83841558e08d",
       "dimension": "effect",
-      "subjectIdentity": "effect:12:1c6c1bc06e15b941",
+      "subjectIdentity": "effect:12:1c3f83841558e08d",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "98513839aaed9072",
+      "sourceRecordHash": "a161b0802b21feda",
       "coverageSelector": {
         "effectIdentity": "battle-element:151",
         "kind": "effect"
@@ -1951,14 +1951,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:13:f21b1ad061067f56",
+      "requirementIdentity": "contract:effect:effect:13:db6f0aedfe2e148a",
       "dimension": "effect",
-      "subjectIdentity": "effect:13:f21b1ad061067f56",
+      "subjectIdentity": "effect:13:db6f0aedfe2e148a",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "5bb9e677f80ec682",
+      "sourceRecordHash": "2be5789216ba8f92",
       "coverageSelector": {
         "effectIdentity": "battle-element:151",
         "kind": "effect"
@@ -1975,14 +1975,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:14:7238e1d2a50e1641",
+      "requirementIdentity": "contract:effect:effect:14:6a8f046830f83439",
       "dimension": "effect",
-      "subjectIdentity": "effect:14:7238e1d2a50e1641",
+      "subjectIdentity": "effect:14:6a8f046830f83439",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "4528eb80f87d7a35",
+      "sourceRecordHash": "654bec29ce9b554d",
       "coverageSelector": {
         "effectIdentity": "battle-element:151",
         "kind": "effect"
@@ -2071,24 +2071,24 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:18:7d169d3bba9795ad",
+      "requirementIdentity": "contract:effect:effect:18:b2a2a90a4e17bb45",
       "dimension": "effect",
-      "subjectIdentity": "effect:18:7d169d3bba9795ad",
+      "subjectIdentity": "effect:18:b2a2a90a4e17bb45",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "c402dcca01cea54b",
+      "sourceRecordHash": "5090603077e6a6cb",
       "coverageSelector": {
         "effectIdentity": "battle-element:101003207",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1416fb3a3b8f41bc",
-        "coverage-edge:a72128b1d71cb3c6",
-        "coverage-edge:c13554210edff1c8",
-        "coverage-edge:dd4e0b31a684b511",
-        "coverage-edge:efd835722a640cb6"
+        "coverage-edge:09d6c7645af840a6",
+        "coverage-edge:2d5cea2814520f28",
+        "coverage-edge:71e3e30f3f4e8cac",
+        "coverage-edge:de6aee118dd62c9d",
+        "coverage-edge:ec75336a8c453056"
       ],
       "evidenceScenarioIds": [
         "m10-b2-r1:101003:ultimate-controlled-buff-switch",
@@ -2102,14 +2102,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:19:12b1447af5e42842",
+      "requirementIdentity": "contract:effect:effect:19:5a53aae279785f18",
       "dimension": "effect",
-      "subjectIdentity": "effect:19:12b1447af5e42842",
+      "subjectIdentity": "effect:19:5a53aae279785f18",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "b07e5b3b02b3bb64",
+      "sourceRecordHash": "e074f37fc3bf3870",
       "coverageSelector": {
         "effectIdentity": "battle-element:101003207",
         "kind": "effect"
@@ -2151,46 +2151,46 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:ff37b5e10a42372b",
+      "requirementIdentity": "contract:effect:effect:20:554fbddc8ac1f5a1",
       "dimension": "effect",
-      "subjectIdentity": "effect:20:ff37b5e10a42372b",
+      "subjectIdentity": "effect:20:554fbddc8ac1f5a1",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "fe61bb8b133f5dd4",
+      "sourceRecordHash": "6bb4ce792375f482",
       "coverageSelector": {
         "effectIdentity": "battle-element:101003205",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:09a0c77a61b9f6a6",
-        "coverage-edge:0b3d857e4b0c8409",
-        "coverage-edge:0c0d621fb3126680",
-        "coverage-edge:19d77e0207a819d4",
-        "coverage-edge:25262a0985b141f6",
-        "coverage-edge:3795253df5be7c43",
-        "coverage-edge:3a5d2efc06ee4ccd",
-        "coverage-edge:41b4771f76dafa66",
-        "coverage-edge:637b9f8ea2b4e1e5",
-        "coverage-edge:6c79b2be5a719b00",
-        "coverage-edge:7bb4434853bc8e60",
-        "coverage-edge:7faa18933b75e3ac",
-        "coverage-edge:82daa45235865f13",
-        "coverage-edge:834006708f571403",
-        "coverage-edge:8c519586c228563b",
-        "coverage-edge:96c06cbdd1b0f8e5",
-        "coverage-edge:9e70e551984e6dd9",
-        "coverage-edge:a25564d35d7fe9bb",
-        "coverage-edge:a75781a3d29760b6",
-        "coverage-edge:b061331cf905ed5e",
-        "coverage-edge:b89b8f46fc7fa9fd",
-        "coverage-edge:c223102f91147476",
-        "coverage-edge:d0d05f690934ba2f",
-        "coverage-edge:d9baab7f74fc70f7",
-        "coverage-edge:dfd7d933669af1a6",
-        "coverage-edge:ec91e59ddacbe1ee",
-        "coverage-edge:ed5fb2b714647a34"
+        "coverage-edge:0a407f33b785c1e1",
+        "coverage-edge:0d35dd29666e2b69",
+        "coverage-edge:14247176ff77895f",
+        "coverage-edge:1669e51ba422f03a",
+        "coverage-edge:287db17a6544847a",
+        "coverage-edge:343528e2f6600ce6",
+        "coverage-edge:3483d75e77ba6f41",
+        "coverage-edge:34ee1361be75bf44",
+        "coverage-edge:5118bdb301f511ff",
+        "coverage-edge:594114e10c3b022b",
+        "coverage-edge:59e3e0edf6e0b36c",
+        "coverage-edge:5bc27ea994409b7a",
+        "coverage-edge:75fcd420d14e9e1e",
+        "coverage-edge:85a582da18183d5b",
+        "coverage-edge:976f1bdb8812ef32",
+        "coverage-edge:ac7e2159b96901e0",
+        "coverage-edge:afd5a55a2ea10dc2",
+        "coverage-edge:b2328297f8e442c0",
+        "coverage-edge:b8f26d0101d88306",
+        "coverage-edge:bde12b9523eb6d49",
+        "coverage-edge:c5193017d7ef8839",
+        "coverage-edge:ca2d5a2bcf4cdb9b",
+        "coverage-edge:e120e23919a7995b",
+        "coverage-edge:f0ac6d145a95dd7f",
+        "coverage-edge:f66aea966776e95a",
+        "coverage-edge:fe6c27a4f2d3d231",
+        "coverage-edge:fee7f790d19e2d71"
       ],
       "evidenceScenarioIds": [
         "m10-b2-r1:101003:ultimate-controlled-buff-switch",
@@ -2205,14 +2205,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:21:60b0fd61ac44a368",
+      "requirementIdentity": "contract:effect:effect:21:aba3ffd298a6b494",
       "dimension": "effect",
-      "subjectIdentity": "effect:21:60b0fd61ac44a368",
+      "subjectIdentity": "effect:21:aba3ffd298a6b494",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "859e72e71a6c7a66",
+      "sourceRecordHash": "b5b226d3f067ad9a",
       "coverageSelector": {
         "effectIdentity": "battle-element:101003205",
         "kind": "effect"
@@ -2349,14 +2349,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:27:81c3424c6f9059f8",
+      "requirementIdentity": "contract:effect:effect:27:694735e541171642",
       "dimension": "effect",
-      "subjectIdentity": "effect:27:81c3424c6f9059f8",
+      "subjectIdentity": "effect:27:694735e541171642",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "842a7cc2cc2f9601",
+      "sourceRecordHash": "5e1267bbb75ffa3d",
       "coverageSelector": {
         "effectIdentity": "battle-element:151",
         "kind": "effect"
@@ -2373,14 +2373,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:28:e84725f5b77f9985",
+      "requirementIdentity": "contract:effect:effect:28:f03ee03800c28d5b",
       "dimension": "effect",
-      "subjectIdentity": "effect:28:e84725f5b77f9985",
+      "subjectIdentity": "effect:28:f03ee03800c28d5b",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "d08b7cb36c64cedf",
+      "sourceRecordHash": "0b425d6eb084c47b",
       "coverageSelector": {
         "effectIdentity": "battle-element:151",
         "kind": "effect"
@@ -2397,14 +2397,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:29:0e313bbb76847e57",
+      "requirementIdentity": "contract:effect:effect:29:8f844116de3d8aed",
       "dimension": "effect",
-      "subjectIdentity": "effect:29:0e313bbb76847e57",
+      "subjectIdentity": "effect:29:8f844116de3d8aed",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "d006b04e484a642b",
+      "sourceRecordHash": "46d2a12bb27cd237",
       "coverageSelector": {
         "effectIdentity": "battle-element:151",
         "kind": "effect"
@@ -2445,14 +2445,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:30:e8ab0768b2ba29c9",
+      "requirementIdentity": "contract:effect:effect:30:6be3618d326f00bb",
       "dimension": "effect",
-      "subjectIdentity": "effect:30:e8ab0768b2ba29c9",
+      "subjectIdentity": "effect:30:6be3618d326f00bb",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "cd54b912fbf3f613",
+      "sourceRecordHash": "5cc050fd7fbc342b",
       "coverageSelector": {
         "effectIdentity": "battle-element:151",
         "kind": "effect"
@@ -2493,21 +2493,21 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:32:b490a3dc739ea47b",
+      "requirementIdentity": "contract:effect:effect:32:15c7641aa28dabc5",
       "dimension": "effect",
-      "subjectIdentity": "effect:32:b490a3dc739ea47b",
+      "subjectIdentity": "effect:32:15c7641aa28dabc5",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "6a1cdb8bd896d5a8",
+      "sourceRecordHash": "c2a1a892f290b4b4",
       "coverageSelector": {
         "effectIdentity": "battle-element:101003142",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:12ab61f529b53679",
-        "coverage-edge:d5b65b287ca7a345"
+        "coverage-edge:c384bae87385409f",
+        "coverage-edge:eecfb2e9a67e6773"
       ],
       "evidenceScenarioIds": [
         "m10-b2:101003:120s-three-actor-golden"
@@ -2520,14 +2520,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:33:2931db0cde1019a3",
+      "requirementIdentity": "contract:effect:effect:33:380f7930ce3211f1",
       "dimension": "effect",
-      "subjectIdentity": "effect:33:2931db0cde1019a3",
+      "subjectIdentity": "effect:33:380f7930ce3211f1",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "dcd8c9bae0dbfd3b",
+      "sourceRecordHash": "d6352d5574f5d4bb",
       "coverageSelector": {
         "effectIdentity": "battle-element:101003142",
         "kind": "effect"
@@ -2544,21 +2544,21 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:34:f5bf28f87e06ae45",
+      "requirementIdentity": "contract:effect:effect:34:6ce4fab5a98d8a9f",
       "dimension": "effect",
-      "subjectIdentity": "effect:34:f5bf28f87e06ae45",
+      "subjectIdentity": "effect:34:6ce4fab5a98d8a9f",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "a848b0a8c676d163",
+      "sourceRecordHash": "27f5e7f163eb16fb",
       "coverageSelector": {
         "effectIdentity": "battle-element:101003145",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3f4c91d2dd56c4a9",
-        "coverage-edge:7d4204ff7554a6d2"
+        "coverage-edge:866a1c218c443d80",
+        "coverage-edge:d89692d2d4abec4b"
       ],
       "evidenceScenarioIds": [
         "m10-b2:101003:120s-three-actor-golden"
@@ -2571,14 +2571,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:35:8e0f214e2ab79b25",
+      "requirementIdentity": "contract:effect:effect:35:5827265c38edf149",
       "dimension": "effect",
-      "subjectIdentity": "effect:35:8e0f214e2ab79b25",
+      "subjectIdentity": "effect:35:5827265c38edf149",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "6a4815b679fd4c37",
+      "sourceRecordHash": "0dab079f110c36bf",
       "coverageSelector": {
         "effectIdentity": "battle-element:101003145",
         "kind": "effect"
@@ -2643,14 +2643,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:38:0a14e13be31c135f",
+      "requirementIdentity": "contract:effect:effect:38:fcae638c64768b5b",
       "dimension": "effect",
-      "subjectIdentity": "effect:38:0a14e13be31c135f",
+      "subjectIdentity": "effect:38:fcae638c64768b5b",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "c9abed549ad05b66",
+      "sourceRecordHash": "7d8f0474492ff316",
       "coverageSelector": {
         "effectIdentity": "battle-element:151",
         "kind": "effect"
@@ -2667,14 +2667,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:39:850d57f6034e5eb1",
+      "requirementIdentity": "contract:effect:effect:39:97852a0cca02520d",
       "dimension": "effect",
-      "subjectIdentity": "effect:39:850d57f6034e5eb1",
+      "subjectIdentity": "effect:39:97852a0cca02520d",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "30f342e5dcc5e522",
+      "sourceRecordHash": "8eb7c3e1189f3386",
       "coverageSelector": {
         "effectIdentity": "battle-element:151",
         "kind": "effect"
@@ -2715,14 +2715,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:40:41d952f644bae30f",
+      "requirementIdentity": "contract:effect:effect:40:c55640d7f8b7d979",
       "dimension": "effect",
-      "subjectIdentity": "effect:40:41d952f644bae30f",
+      "subjectIdentity": "effect:40:c55640d7f8b7d979",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "bda70240d5929b61",
+      "sourceRecordHash": "14e97e8c91337201",
       "coverageSelector": {
         "effectIdentity": "battle-element:101003001",
         "kind": "effect"
@@ -2739,14 +2739,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:41:0e8439695868e6a8",
+      "requirementIdentity": "contract:effect:effect:41:aab107839c8b996e",
       "dimension": "effect",
-      "subjectIdentity": "effect:41:0e8439695868e6a8",
+      "subjectIdentity": "effect:41:aab107839c8b996e",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "46c8b5a8450ec190",
+      "sourceRecordHash": "9b49dbbbb94b274a",
       "coverageSelector": {
         "effectIdentity": "battle-element:101003001",
         "kind": "effect"
@@ -5886,5 +5886,5 @@
       "window-boundary": 1
     }
   },
-  "matrixHash": "674c534a5de0701b"
+  "matrixHash": "9ede382415cebbfb"
 }

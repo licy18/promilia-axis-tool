@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "3965abec7c994f17b536916d07485043fd9a22f32a067e735ae0a57e6d9297a5",
+  "packageHash": "807f0104fd079e996936bda5d1a6c9c04fe49152c3668ed6a31d56224f75c990",
   "fixedProductDenominator": {
     "publicActionCount": 563,
     "actorOwnerCount": 20,
@@ -97,8 +97,8 @@
         "verified-zero": 3771
       },
       "dynamicProperty": {
-        "applied": 705,
-        "unresolved": 434,
+        "applied": 706,
+        "unresolved": 433,
         "verified-zero": 2647
       },
       "mark": {
@@ -110,9 +110,9 @@
     "semanticEffects": {
       "total": 3479,
       "gameplay": 1842,
-      "applied": 961,
+      "applied": 962,
       "verifiedZero": 7,
-      "unresolved": 874
+      "unresolved": 873
     },
     "timing": {
       "appliedActionCount": 552,
@@ -23735,8 +23735,7 @@
           "verified-zero": 3
         },
         "dynamicProperty": {
-          "applied": 1,
-          "unresolved": 1,
+          "applied": 2,
           "verified-zero": 1
         },
         "tuningMark": {
@@ -23745,14 +23744,12 @@
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "property-change-type-not-battle-property"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500213].actions[skillId=50021301].skillId"
     },
     {
@@ -63991,8 +63988,7 @@
           "verified-zero": 3
         },
         "dynamicProperty": {
-          "applied": 1,
-          "unresolved": 1,
+          "applied": 2,
           "verified-zero": 1
         },
         "tuningMark": {
@@ -64001,14 +63997,12 @@
       },
       "semanticEffects": {
         "total": 2,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "property-change-type-not-battle-property"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500213].actions[skillId=50021301].skillId"
     },
     {

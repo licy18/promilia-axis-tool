@@ -9,9 +9,9 @@
 - 去重语义效果：3479
 - 最终玩法效果：1842
 - 结构包装/条件：1637
-- 语义可计算：961
+- 语义可计算：962
 - 语义明确零：7
-- 语义未解析：874
+- 语义未解析：873
 
 ## 语义放置
 
@@ -55,9 +55,9 @@
 ## 原始边审计
 
 - 效果绑定：3786
-- 可计算：1749
+- 可计算：1750
 - 明确零：9
-- 未解析：2028
+- 未解析：2027
 
 ## 元素类型
 
@@ -76,7 +76,6 @@
 - effect-target-static-evidence-gap: 419
 - effect-trigger-frame-static-evidence-gap: 403
 - nested-damage-runtime-family-unimplemented: 278
-- property-change-type-not-battle-property: 1
 - property-duration-zero-unresolved: 5
 - property-formula-not-literal-function-5: 93
 - runtime-target-from-projectile-collision: 67

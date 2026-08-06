@@ -6018,6 +6018,13 @@ function createBattleEffectGraphNode({
       kind === 'property-change'
         ? {
             changeType: integerOrNull(tree.changeType),
+            specialPropertyType: integerOrNull(tree.specialPropertyType),
+            specialPropertyTypeName:
+              integerOrNull(tree.specialPropertyType) === 1
+                ? 'ALL_PROPERTY_SHOOTDMGUP'
+                : integerOrNull(tree.specialPropertyType) === 2
+                  ? 'ALL_PROPERTY_DEFENSE'
+                  : null,
             attributeId: integerOrNull(tree.attributeID),
             calculateType: integerOrNull(tree.calculateType),
             defaultPropertyTags: (tree.defaultPropertyTags ?? []).map(Number),
@@ -6227,7 +6234,11 @@ function classifyBattleEffectNode({
     if (!literalReady && !elementLayerPropertyReady) {
       reasons.push('property-formula-not-literal-function-5');
     }
-    if (integerOrNull(tree.changeType) !== 0) {
+    const propertyChangeType = integerOrNull(tree.changeType);
+    const specialPropertyType = integerOrNull(tree.specialPropertyType);
+    const isAllPropertyBattleModifier =
+      propertyChangeType === 2 && [1, 2].includes(specialPropertyType);
+    if (propertyChangeType !== 0 && !isAllPropertyBattleModifier) {
       reasons.push('property-change-type-not-battle-property');
     }
     if (![0, 1, 2].includes(integerOrNull(tree.calculateType))) {
