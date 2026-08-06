@@ -21069,32 +21069,17 @@
           "actionKind": "active",
           "sourceSkillId": 502001,
           "controlSkillId": 502001,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "runtime-dependent",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
-          "reasons": [
-            "base-function-unverified",
-            "common-function-unverified",
-            "projectile-impact-frame-runtime-dependent",
-            "level-ratio-missing",
-            "hp:damage-formula-inputs-incomplete",
-            "toughness:pre-shield-damage-inputs-incomplete"
-          ],
+          "reasons": [],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
-            "coveredReasons": [
-              "projectile-impact-frame-runtime-dependent"
-            ],
-            "unresolvedReasons": [
-              "base-function-unverified",
-              "common-function-unverified",
-              "level-ratio-missing",
-              "hp:damage-formula-inputs-incomplete",
-              "toughness:pre-shield-damage-inputs-incomplete"
-            ]
+            "coversAllReasons": true,
+            "coveredReasons": [],
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -21106,12 +21091,12 @@
           },
           "dimensions": {
             "enemyHp": {
-              "applied": 1,
-              "unresolved": 2
+              "applied": 2,
+              "unresolved": 1
             },
             "enemyToughness": {
-              "applied": 1,
-              "unresolved": 2
+              "applied": 2,
+              "unresolved": 1
             },
             "actorSp": {
               "unresolved": 1,
@@ -21205,8 +21190,8 @@
       },
       "hit": {
         "statuses": {
-          "applied": 8,
-          "unresolved": 20
+          "applied": 10,
+          "unresolved": 18
         },
         "closureClass": "unresolved"
       },
@@ -21218,14 +21203,12 @@
         "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500187,
@@ -24612,32 +24595,17 @@
           "actionKind": "active",
           "sourceSkillId": 502001,
           "controlSkillId": 502001,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "runtime-dependent",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
-          "reasons": [
-            "base-function-unverified",
-            "common-function-unverified",
-            "projectile-impact-frame-runtime-dependent",
-            "level-ratio-missing",
-            "hp:damage-formula-inputs-incomplete",
-            "toughness:pre-shield-damage-inputs-incomplete"
-          ],
+          "reasons": [],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
-            "coveredReasons": [
-              "projectile-impact-frame-runtime-dependent"
-            ],
-            "unresolvedReasons": [
-              "base-function-unverified",
-              "common-function-unverified",
-              "level-ratio-missing",
-              "hp:damage-formula-inputs-incomplete",
-              "toughness:pre-shield-damage-inputs-incomplete"
-            ]
+            "coversAllReasons": true,
+            "coveredReasons": [],
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -24649,12 +24617,12 @@
           },
           "dimensions": {
             "enemyHp": {
-              "applied": 1,
-              "unresolved": 2
+              "applied": 2,
+              "unresolved": 1
             },
             "enemyToughness": {
-              "applied": 1,
-              "unresolved": 2
+              "applied": 2,
+              "unresolved": 1
             },
             "actorSp": {
               "unresolved": 1,
@@ -24744,8 +24712,8 @@
       },
       "hit": {
         "statuses": {
-          "applied": 10,
-          "unresolved": 12
+          "applied": 12,
+          "unresolved": 10
         },
         "closureClass": "unresolved"
       },
@@ -24757,14 +24725,12 @@
         "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500262,
@@ -24878,32 +24844,17 @@
           "actionKind": "active",
           "sourceSkillId": 502001,
           "controlSkillId": 502001,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "runtime-dependent",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
-          "reasons": [
-            "base-function-unverified",
-            "common-function-unverified",
-            "projectile-impact-frame-runtime-dependent",
-            "level-ratio-missing",
-            "hp:damage-formula-inputs-incomplete",
-            "toughness:pre-shield-damage-inputs-incomplete"
-          ],
+          "reasons": [],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
-            "coveredReasons": [
-              "projectile-impact-frame-runtime-dependent"
-            ],
-            "unresolvedReasons": [
-              "base-function-unverified",
-              "common-function-unverified",
-              "level-ratio-missing",
-              "hp:damage-formula-inputs-incomplete",
-              "toughness:pre-shield-damage-inputs-incomplete"
-            ]
+            "coversAllReasons": true,
+            "coveredReasons": [],
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -24915,12 +24866,12 @@
           },
           "dimensions": {
             "enemyHp": {
-              "applied": 1,
-              "unresolved": 2
+              "applied": 2,
+              "unresolved": 1
             },
             "enemyToughness": {
-              "applied": 1,
-              "unresolved": 2
+              "applied": 2,
+              "unresolved": 1
             },
             "actorSp": {
               "unresolved": 1,
@@ -25010,8 +24961,8 @@
       },
       "hit": {
         "statuses": {
-          "applied": 12,
-          "unresolved": 14
+          "applied": 14,
+          "unresolved": 12
         },
         "closureClass": "unresolved"
       },
@@ -25023,14 +24974,12 @@
         "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500263,
@@ -30528,7 +30477,7 @@
   ],
   "summary": {
     "kiboCount": 122,
-    "machineOptimizationReadyCount": 117,
+    "machineOptimizationReadyCount": 120,
     "machineOptimizationReadyKiboIds": [
       500001,
       500002,
@@ -30612,6 +30561,7 @@
       500180,
       500181,
       500185,
+      500186,
       500187,
       500206,
       500209,
@@ -30625,6 +30575,8 @@
       500258,
       500259,
       500260,
+      500261,
+      500262,
       500263,
       500296,
       500304,
@@ -30649,8 +30601,8 @@
       500470
     ],
     "actionClosure": {
-      "evidenceClosed": 361,
-      "scenarioAssumed": 5,
+      "evidenceClosed": 364,
+      "scenarioAssumed": 2,
       "unresolved": 0
     },
     "pvePassiveMechanics": {

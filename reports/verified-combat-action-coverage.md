@@ -10,10 +10,10 @@
 - 来源静态证据缺口：13
 - 明确零：0
 - 未解析：13
-- 真实命中节点：2513
+- 真实命中节点：2522
 - 公开动作变体：593（未解析 43）
 - 非零回能元素：667（未关联 464）
-- 零距离投射物命中：2419（仍缺发射帧 73、仍缺公式 10、仍缺目标 0）
+- 零距离投射物命中：2437（仍缺发射帧 70、仍缺公式 7、仍缺目标 0）
 - 普攻输入链：20 条 / 95 个输入段（可运行 80，未解析 15）
 - 普攻输入时序：已确认 78，未确认 17
 
@@ -56,7 +56,7 @@
 | actor | star-combo | 20 | 20 | 20 | 0 | 0 | 20 |
 | actor | star-skill | 20 | 20 | 20 | 0 | 0 | 140 |
 | actor | ultimate | 20 | 20 | 20 | 0 | 0 | 139 |
-| kibo | active | 122 | 122 | 122 | 0 | 0 | 998 |
+| kibo | active | 122 | 122 | 122 | 0 | 0 | 1007 |
 | kibo | break | 122 | 122 | 122 | 0 | 0 | 124 |
 | kibo | signature | 122 | 122 | 122 | 0 | 0 | 687 |
 
@@ -82,9 +82,6 @@
 - `actor|112002|11200201|3|11200215` 艾妮丝 / dodge-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200222|1|11200225` 艾妮丝 / limit-counter / 后勤保障: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|199003|19900301|1|19900310` 诺诺 / charged-attack / 咻咻嘿咻: selected-control-variant-has-no-runnable-hit
-- `kibo|500186|502001|0|502001` 布鲁达 / active / 水弹: base-function-unverified, common-function-unverified, projectile-impact-frame-runtime-dependent, level-ratio-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete
-- `kibo|500261|502001|0|502001` 河狸仔 / active / 水弹: base-function-unverified, common-function-unverified, projectile-impact-frame-runtime-dependent, level-ratio-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete
-- `kibo|500262|502001|0|502001` 波河狸 / active / 水弹: base-function-unverified, common-function-unverified, projectile-impact-frame-runtime-dependent, level-ratio-missing, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete
 
 ## 未关联非零回能元素
 

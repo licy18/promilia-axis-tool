@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "807f0104fd079e996936bda5d1a6c9c04fe49152c3668ed6a31d56224f75c990",
+  "packageHash": "ea800e86d8886a21d89be5b61faeadbcfc6efa54f90d1c190d5c53604ff71299",
   "fixedProductDenominator": {
     "publicActionCount": 563,
     "actorOwnerCount": 20,
@@ -52,14 +52,14 @@
     },
     "actionDimensions": {
       "hp": {
-        "nonzero": 803,
+        "nonzero": 806,
         "verified-zero": 0,
-        "unresolved": 1973
+        "unresolved": 1970
       },
       "toughness": {
-        "nonzero": 777,
+        "nonzero": 780,
         "verified-zero": 26,
-        "unresolved": 1973
+        "unresolved": 1970
       },
       "actorSp": {
         "nonzero": 267,
@@ -22979,12 +22979,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "actorSp": {
           "unresolved": 1,
@@ -23006,14 +23006,7 @@
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500186].actions[skillId=502001].skillId"
     },
     {
@@ -25790,12 +25783,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "actorSp": {
           "unresolved": 1,
@@ -25817,14 +25810,7 @@
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500261].actions[skillId=502001].skillId"
     },
     {
@@ -25995,12 +25981,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "actorSp": {
           "unresolved": 1,
@@ -26022,14 +26008,7 @@
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500262].actions[skillId=502001].skillId"
     },
     {
@@ -63232,12 +63211,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "actorSp": {
           "unresolved": 1,
@@ -63259,14 +63238,7 @@
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500186].actions[skillId=502001].skillId"
     },
     {
@@ -66043,12 +66015,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "actorSp": {
           "unresolved": 1,
@@ -66070,14 +66042,7 @@
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500261].actions[skillId=502001].skillId"
     },
     {
@@ -66248,12 +66213,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "actorSp": {
           "unresolved": 1,
@@ -66275,14 +66240,7 @@
         "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500262].actions[skillId=502001].skillId"
     },
     {

@@ -277,6 +277,28 @@ const unityObjectFileIndexCache = new Map();
 let externalGameplayObjectFileIndexCache = null;
 let petExternalGameplayObjectFileIndexCache = null;
 const SUPPORTED_BASE_FUNCTION_IDS = new Set([2, 101, 116, 119]);
+
+function resolveElementFormulaInputs(tree) {
+  const formulaParams = tree?.formulaParams;
+  const hasFormulaParams =
+    formulaParams != null &&
+    !(
+      Number(formulaParams.function_1) === 0 &&
+      Number(formulaParams.function_2) === 0 &&
+      (formulaParams.formulaParamValues?.length ?? 0) === 0
+    );
+  return {
+    commonFunctionId: hasFormulaParams
+      ? integerOrNull(formulaParams.function_1)
+      : integerOrNull(tree?.baseIntParams?.[0]),
+    baseFunctionId: hasFormulaParams
+      ? integerOrNull(formulaParams.function_2)
+      : integerOrNull(tree?.baseIntParams?.[1]),
+    values: hasFormulaParams
+      ? formulaParams.formulaParamValues ?? []
+      : tree?.functionParams ?? [],
+  };
+}
 const BATTLE_MECHANIC_SCRIPT_PATH_IDS = Object.freeze({
   layerControl: '-7197581663443823049',
   immuneElement: '-6202966891751637497',
@@ -5372,14 +5394,10 @@ function createControlBinding({
         sourceIdentity: `${relativeExternalPath(control.filePath)}#${ref.sourceIdentity}|zero-distance-skill-execution`,
       });
     }
-    const baseValues =
-      tree?.formulaParams?.formulaParamValues ?? tree?.functionParams ?? [];
-    const baseFunctionId = Number(
-      tree?.formulaParams?.function_2 ?? tree?.baseIntParams?.[1]
-    );
-    const commonFunctionId = Number(
-      tree?.formulaParams?.function_1 ?? tree?.baseIntParams?.[0]
-    );
+    const resolvedFormula = resolveElementFormulaInputs(tree);
+    const baseValues = resolvedFormula.values;
+    const baseFunctionId = Number(resolvedFormula.baseFunctionId);
+    const commonFunctionId = Number(resolvedFormula.commonFunctionId);
     const levelOverrides =
       overridesBySkillAndElement.get(`${control.skillId}:${elementId}`) ?? [];
     const ratiosByLevel = Object.fromEntries(
@@ -5922,14 +5940,10 @@ function createBattleEffectGraphNode({
   const tree = record.typetree ?? {};
   const elementId = integerOrNull(tree.elementConfigId);
   const kind = resolveBattleElementKind(tree);
-  const baseValues =
-    tree.formulaParams?.formulaParamValues ?? tree.functionParams ?? [];
-  const baseFunctionId = integerOrNull(
-    tree.formulaParams?.function_2 ?? tree.baseIntParams?.[1]
-  );
-  const commonFunctionId = integerOrNull(
-    tree.formulaParams?.function_1 ?? tree.baseIntParams?.[0]
-  );
+  const resolvedFormula = resolveElementFormulaInputs(tree);
+  const baseValues = resolvedFormula.values;
+  const baseFunctionId = resolvedFormula.baseFunctionId;
+  const commonFunctionId = resolvedFormula.commonFunctionId;
   const tuningProfile = resolveTuningProfileForBattleElement(
     tuningMechanicsCatalog,
     { kind, elementId }
@@ -7383,8 +7397,7 @@ function createTuningMechanicsCatalog({
         const attributeId = integerOrNull(tree.attributeID);
         const calculateType = integerOrNull(tree.calculateType);
         const valueRaw = finiteNumberOrNull(
-          tree.formulaParams?.formulaParamValues?.[0] ??
-            tree.functionParams?.[0]
+          resolveElementFormulaInputs(tree).values?.[0]
         );
         if (
           attributeId == null ||

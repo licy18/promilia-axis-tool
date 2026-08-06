@@ -33333,32 +33333,17 @@
       "actionKind": "active",
       "sourceSkillId": 502001,
       "controlSkillId": 502001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
+      "reasons": [],
       "zeroDistancePolicy": {
         "approved": "user-approved-sync-rebaseline-2026-08-05",
-        "coversAllReasons": false,
-        "coveredReasons": [
-          "projectile-impact-frame-runtime-dependent"
-        ],
-        "unresolvedReasons": [
-          "base-function-unverified",
-          "common-function-unverified",
-          "level-ratio-missing",
-          "hp:damage-formula-inputs-incomplete",
-          "toughness:pre-shield-damage-inputs-incomplete"
-        ]
+        "coversAllReasons": true,
+        "coveredReasons": [],
+        "unresolvedReasons": []
       },
       "timing": {
         "status": "applied",
@@ -33370,12 +33355,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "actorSp": {
           "unresolved": 1,
@@ -35942,32 +35927,17 @@
       "actionKind": "active",
       "sourceSkillId": 502001,
       "controlSkillId": 502001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
+      "reasons": [],
       "zeroDistancePolicy": {
         "approved": "user-approved-sync-rebaseline-2026-08-05",
-        "coversAllReasons": false,
-        "coveredReasons": [
-          "projectile-impact-frame-runtime-dependent"
-        ],
-        "unresolvedReasons": [
-          "base-function-unverified",
-          "common-function-unverified",
-          "level-ratio-missing",
-          "hp:damage-formula-inputs-incomplete",
-          "toughness:pre-shield-damage-inputs-incomplete"
-        ]
+        "coversAllReasons": true,
+        "coveredReasons": [],
+        "unresolvedReasons": []
       },
       "timing": {
         "status": "applied",
@@ -35979,12 +35949,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "actorSp": {
           "unresolved": 1,
@@ -36140,32 +36110,17 @@
       "actionKind": "active",
       "sourceSkillId": 502001,
       "controlSkillId": 502001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
+      "reasons": [],
       "zeroDistancePolicy": {
         "approved": "user-approved-sync-rebaseline-2026-08-05",
-        "coversAllReasons": false,
-        "coveredReasons": [
-          "projectile-impact-frame-runtime-dependent"
-        ],
-        "unresolvedReasons": [
-          "base-function-unverified",
-          "common-function-unverified",
-          "level-ratio-missing",
-          "hp:damage-formula-inputs-incomplete",
-          "toughness:pre-shield-damage-inputs-incomplete"
-        ]
+        "coversAllReasons": true,
+        "coveredReasons": [],
+        "unresolvedReasons": []
       },
       "timing": {
         "status": "applied",
@@ -36177,12 +36132,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 2
+          "applied": 2,
+          "unresolved": 1
         },
         "actorSp": {
           "unresolved": 1,
@@ -40289,8 +40244,8 @@
       "unresolved": 0
     },
     "publicActionClosure": {
-      "evidenceClosed": 361,
-      "scenarioAssumed": 5,
+      "evidenceClosed": 364,
+      "scenarioAssumed": 2,
       "unresolved": 0
     },
     "fixedSkillScopeClasses": {

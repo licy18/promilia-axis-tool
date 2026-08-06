@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "807f0104fd079e996936bda5d1a6c9c04fe49152c3668ed6a31d56224f75c990",
+  "packageHash": "ea800e86d8886a21d89be5b61faeadbcfc6efa54f90d1c190d5c53604ff71299",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -27,17 +27,17 @@
     "scenarioResolvedActionCount": 504,
     "verifiedZeroActionCount": 0,
     "unresolvedActionCount": 13,
-    "hitNodeCount": 2513,
+    "hitNodeCount": 2522,
     "dimensions": {
       "hp": {
-        "nonzero": 803,
+        "nonzero": 806,
         "verified-zero": 0,
-        "unresolved": 1973
+        "unresolved": 1970
       },
       "toughness": {
-        "nonzero": 777,
+        "nonzero": 780,
         "verified-zero": 26,
-        "unresolved": 1973
+        "unresolved": 1970
       },
       "actorSp": {
         "nonzero": 267,
@@ -55,10 +55,10 @@
     "nonzeroRecoveryElementCount": 667,
     "unresolvedNonzeroRecoveryElementCount": 464,
     "scenarioResolvedNonzeroRecoveryElementCount": 212,
-    "scenarioResolvedProjectileHitCount": 2419,
+    "scenarioResolvedProjectileHitCount": 2437,
     "disabledScenarioHitCount": 0,
-    "unresolvedProjectileLaunchCount": 73,
-    "unresolvedProjectileFormulaCount": 10,
+    "unresolvedProjectileLaunchCount": 70,
+    "unresolvedProjectileFormulaCount": 7,
     "unresolvedProjectileTargetCount": 0,
     "unresolvedReferenceCount": 2238,
     "publicVariantCount": 593,
@@ -454,17 +454,17 @@
       "scenarioResolvedActionCount": 117,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 998,
+      "hitNodeCount": 1007,
       "dimensions": {
         "hp": {
-          "nonzero": 131,
+          "nonzero": 134,
           "verified-zero": 0,
-          "unresolved": 126
+          "unresolved": 123
         },
         "toughness": {
-          "nonzero": 131,
+          "nonzero": 134,
           "verified-zero": 0,
-          "unresolved": 126
+          "unresolved": 123
         },
         "actorSp": {
           "nonzero": 0,
@@ -5175,17 +5175,17 @@
       "scenarioResolvedActionCount": 3,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 13,
+      "hitNodeCount": 16,
       "dimensions": {
         "hp": {
-          "nonzero": 4,
+          "nonzero": 5,
           "verified-zero": 0,
-          "unresolved": 10
+          "unresolved": 9
         },
         "toughness": {
-          "nonzero": 4,
+          "nonzero": 5,
           "verified-zero": 0,
-          "unresolved": 10
+          "unresolved": 9
         },
         "actorSp": {
           "nonzero": 0,
@@ -5777,17 +5777,17 @@
       "scenarioResolvedActionCount": 3,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 10,
+      "hitNodeCount": 13,
       "dimensions": {
         "hp": {
-          "nonzero": 5,
+          "nonzero": 6,
           "verified-zero": 0,
-          "unresolved": 6
+          "unresolved": 5
         },
         "toughness": {
-          "nonzero": 5,
+          "nonzero": 6,
           "verified-zero": 0,
-          "unresolved": 6
+          "unresolved": 5
         },
         "actorSp": {
           "nonzero": 0,
@@ -5820,17 +5820,17 @@
       "scenarioResolvedActionCount": 3,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 11,
+      "hitNodeCount": 14,
       "dimensions": {
         "hp": {
-          "nonzero": 6,
+          "nonzero": 7,
           "verified-zero": 0,
-          "unresolved": 7
+          "unresolved": 6
         },
         "toughness": {
-          "nonzero": 6,
+          "nonzero": 7,
           "verified-zero": 0,
-          "unresolved": 7
+          "unresolved": 6
         },
         "actorSp": {
           "nonzero": 0,
@@ -7320,87 +7320,6 @@
       ],
       "sourceEvidenceStatus": "static-evidence-gap",
       "scenarioRuntimeStatus": "scenario-runtime-unresolved"
-    },
-    {
-      "identity": "kibo|500186|502001|0|502001",
-      "ownerKind": "kibo",
-      "ownerId": 500186,
-      "ownerName": "布鲁达",
-      "actionKind": "active",
-      "sourceSkillId": 502001,
-      "sourceSkillName": "水弹",
-      "controlSkillId": 502001,
-      "publicVariants": [
-        {
-          "index": 0,
-          "label": "水弹",
-          "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500186].actions[skillId=502001]"
-        }
-      ],
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
-      "sourceEvidenceStatus": "runtime-dependent",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
-    },
-    {
-      "identity": "kibo|500261|502001|0|502001",
-      "ownerKind": "kibo",
-      "ownerId": 500261,
-      "ownerName": "河狸仔",
-      "actionKind": "active",
-      "sourceSkillId": 502001,
-      "sourceSkillName": "水弹",
-      "controlSkillId": 502001,
-      "publicVariants": [
-        {
-          "index": 0,
-          "label": "水弹",
-          "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500261].actions[skillId=502001]"
-        }
-      ],
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
-      "sourceEvidenceStatus": "runtime-dependent",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
-    },
-    {
-      "identity": "kibo|500262|502001|0|502001",
-      "ownerKind": "kibo",
-      "ownerId": 500262,
-      "ownerName": "波河狸",
-      "actionKind": "active",
-      "sourceSkillId": 502001,
-      "sourceSkillName": "水弹",
-      "controlSkillId": 502001,
-      "publicVariants": [
-        {
-          "index": 0,
-          "label": "水弹",
-          "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500262].actions[skillId=502001]"
-        }
-      ],
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
-      "sourceEvidenceStatus": "runtime-dependent",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance"
     }
   ],
   "unresolvedReferences": [
@@ -43047,9 +42966,7 @@
       "threeValueRelevant": false,
       "scenarioClassification": "unresolved",
       "reasons": [
-        "common-function-unverified",
         "damage-type-missing",
-        "level-ratio-missing",
         "hp:damage-type-missing",
         "toughness:weak-break-damage-rate-missing",
         "actorSp:recoverSP-field-missing",
@@ -43292,9 +43209,7 @@
       "threeValueRelevant": false,
       "scenarioClassification": "unresolved",
       "reasons": [
-        "common-function-unverified",
         "damage-type-missing",
-        "level-ratio-missing",
         "hp:damage-type-missing",
         "toughness:weak-break-damage-rate-missing",
         "actorSp:recoverSP-field-missing",
@@ -45597,14 +45512,9 @@
       "elementId": 510002017,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/skill_control_502001__-7884478572300192035.json#generatedProjectileElements[subSkillIndex=0,elementId=510002017]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/MonoBehaviour_8450906465536885314__8450906465536885314.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50200111.asset/MonoBehaviour/ast_bullet_50200111__2346836337019950878.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50200111.asset/MonoBehaviour/ast_bullet_50200111__2346836337019950878.json#bulletLogicObjects[2].actionObjects[0].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_51000202.asset/MonoBehaviour/ast_bullet_51000202__5092098797681438176.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId|battle-element-assets.jsonl#elementConfigId=510002017"
     },
@@ -48647,14 +48557,9 @@
       "elementId": 510002017,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/skill_control_502001__-7884478572300192035.json#generatedProjectileElements[subSkillIndex=0,elementId=510002017]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/MonoBehaviour_8450906465536885314__8450906465536885314.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50200111.asset/MonoBehaviour/ast_bullet_50200111__2346836337019950878.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50200111.asset/MonoBehaviour/ast_bullet_50200111__2346836337019950878.json#bulletLogicObjects[2].actionObjects[0].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_51000202.asset/MonoBehaviour/ast_bullet_51000202__5092098797681438176.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId|battle-element-assets.jsonl#elementConfigId=510002017"
     },
@@ -48815,14 +48720,9 @@
       "elementId": 510002017,
       "referenceKind": "bulletElements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/skill_control_502001__-7884478572300192035.json#generatedProjectileElements[subSkillIndex=0,elementId=510002017]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/MonoBehaviour_8450906465536885314__8450906465536885314.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50200111.asset/MonoBehaviour/ast_bullet_50200111__2346836337019950878.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_50200111.asset/MonoBehaviour/ast_bullet_50200111__2346836337019950878.json#bulletLogicObjects[2].actionObjects[0].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_51000202.asset/MonoBehaviour/ast_bullet_51000202__5092098797681438176.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId|battle-element-assets.jsonl#elementConfigId=510002017"
     },
@@ -60937,14 +60837,7 @@
       "publicVariantLabel": "水弹",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500186].actions[skillId=502001]"
     },
     {
@@ -61490,14 +61383,7 @@
       "publicVariantLabel": "水弹",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500261].actions[skillId=502001]"
     },
     {
@@ -61536,14 +61422,7 @@
       "publicVariantLabel": "水弹",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500262].actions[skillId=502001]"
     },
     {
@@ -71292,14 +71171,7 @@
         "kibo|500262|502001|0|502001"
       ],
       "classification": "applied",
-      "reasons": [
-        "base-function-unverified",
-        "common-function-unverified",
-        "projectile-impact-frame-runtime-dependent",
-        "level-ratio-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/skill_control_502001__-7884478572300192035.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {

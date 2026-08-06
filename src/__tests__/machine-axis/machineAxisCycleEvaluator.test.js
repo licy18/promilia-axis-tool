@@ -1119,11 +1119,11 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.metrics.loopHpDamage).toBe(22.59375);
     expect(report.metrics.cycleDps).toBe(4.51875);
     expect(report.hashes).toMatchObject({
-      input: 'c44ef286a236fa09',
-      data: 'c0c07d89572f0afd',
-      trace: 'ed68ea5ff7097ced',
+      input: 'ec65e3d55d572287',
+      data: '589634d5c7f8967d',
+      trace: 'd32051bdf5a390b8',
       evaluation: '13fc3bf3db5aeb9d',
-      cycle: '1f2e8b1ecc99eff6',
+      cycle: 'baf199554094ed4d',
     });
     expect(report.sampleStatistics.loopHpDamage.variance).toBeGreaterThan(0);
     for (const dimension of ['byActor', 'byAction', 'byHit']) {
@@ -1245,8 +1245,8 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
 
     expect(report.valid).toBe(true);
     expect(report.metrics).toMatchObject({
-      loopHpDamage: 39.08999634,
-      combatHitCount: 3,
+      loopHpDamage: 93.17999268,
+      combatHitCount: 6,
     });
     expect(passive).toMatchObject({
       skillId: 520082,

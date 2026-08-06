@@ -1550,7 +1550,7 @@ describe('verified kibo passive generation', () => {
     );
 
     expect(resolution.ready).toBe(true);
-    expect(resolution.hits.filter(hit => hit.damage)).toHaveLength(3);
+    expect(resolution.hits.filter(hit => hit.damage)).toHaveLength(6);
     expect(
       actionExecutionPlan.actions.map(entry => ({
         actionId: entry.actionId,
@@ -1576,13 +1576,13 @@ describe('verified kibo passive generation', () => {
         }),
       ],
     });
-    expect(damageCommands).toHaveLength(3);
+    expect(damageCommands).toHaveLength(6);
     expect(generation.runtimeStates).toContainEqual(
       expect.objectContaining({
         actorId: action.actorId,
         kiboId: 500261,
         skillId: 520082,
-        triggerCount: 3,
+        triggerCount: 6,
         configuredTriggerCounter: 9999999,
         triggerLifetime: 'unlimited',
         maxTriggerCount: null,
@@ -1619,18 +1619,21 @@ describe('verified kibo passive generation', () => {
         calculatorOnly: true,
       }).map(effect => effect.effectId)
     ).toContain('kibo-passive:520082:520082003');
-    expect(compositeDamageEvents).toHaveLength(3);
-    expect(staticOnlyDamageEvents).toHaveLength(3);
+    expect(compositeDamageEvents).toHaveLength(6);
+    expect(staticOnlyDamageEvents).toHaveLength(6);
     expect(compositeDamageEvents[0].payload.rawDamage).toBe(
       staticOnlyDamageEvents[0].payload.rawDamage
     );
+    // The first shot's second element lands on the same frame as the debuff
+    // application (debuff settles after it), so only events from the second
+    // shot onward observe the damage-taken increase.
     expect(
       compositeDamageEvents
-        .slice(1)
+        .slice(2)
         .every(
           (event, index) =>
             event.payload.rawDamage >
-            staticOnlyDamageEvents[index + 1].payload.rawDamage
+            staticOnlyDamageEvents[index + 2].payload.rawDamage
         )
     ).toBe(true);
     const refreshedEffectTimeMs = damageCommands.at(-1).timeMs;
