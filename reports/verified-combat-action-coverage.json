@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "25b15a274c408a4153b22a10ff8b1a34b412d189c7d3bc85023654965feafa68",
+  "packageHash": "6c2b15f5b5ae876ffbad9f357f8bcf0aa06ceb8677ae300ba839b40152ba7409",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -63752,9 +63752,7 @@
       "publicVariantLabel": "幻蝶磷粉",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "property-condition-element-state-runtime-evidence-required"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500045].actions[skillId=50004501]"
     },
     {
@@ -66473,7 +66471,6 @@
       "classification": "applied",
       "reasons": [
         "shield-formula-not-literal-function-5",
-        "property-condition-element-state-runtime-evidence-required",
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
@@ -73880,9 +73877,7 @@
         "kibo|500045|50004501|0|50004501"
       ],
       "classification": "applied",
-      "reasons": [
-        "property-condition-element-state-runtime-evidence-required"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50004501.asset/MonoBehaviour/skill_control_50004501__341958157002710912.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -77589,7 +77584,6 @@
       "classification": "applied",
       "reasons": [
         "shield-formula-not-literal-function-5",
-        "property-condition-element-state-runtime-evidence-required",
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"

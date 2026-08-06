@@ -81,7 +81,83 @@ describe('verified Battle effect generation', () => {
       })
     ).toMatchObject({
       matched: false,
-      reason: 'verified-effect-property-condition-runtime-evidence-required',
+      reason:
+        'verified-effect-property-condition-element-tag-target-unresolved',
+    });
+    const elementTagLayers = new Map([['actor:actor-101010', new Map([[54, 2]])]]);
+    const elementIdsHeld = new Map([['actor:actor-101010', new Set([500206002])]]);
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [
+          {
+            conditionType: 3,
+            elementTag: 54,
+            subConditionType: 0,
+            maxChangeCount: 1,
+          },
+        ],
+        action,
+        resolution,
+        targetKind: 'actor',
+        targetId: 'actor-101010',
+        elementTagLayers,
+        elementIdsHeld,
+      })
+    ).toEqual({ matched: true, reason: null });
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [
+          {
+            conditionType: 3,
+            elementTag: 54,
+            subConditionType: 0,
+            maxChangeCount: 3,
+          },
+        ],
+        action,
+        resolution,
+        targetKind: 'actor',
+        targetId: 'actor-101010',
+        elementTagLayers,
+        elementIdsHeld,
+      })
+    ).toMatchObject({
+      matched: false,
+      reason:
+        'verified-effect-property-condition-element-tag-not-matched',
+    });
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [
+          {
+            conditionType: 4,
+            elementId: 500206002,
+            subConditionType: 0,
+            maxChangeCount: 1,
+          },
+        ],
+        action,
+        resolution,
+        targetKind: 'actor',
+        targetId: 'actor-101010',
+        elementTagLayers,
+        elementIdsHeld,
+      })
+    ).toEqual({ matched: true, reason: null });
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [{ conditionType: 4, elementId: 500206002 }],
+        action,
+        resolution,
+        targetKind: 'actor',
+        targetId: 'actor-999999',
+        elementTagLayers,
+        elementIdsHeld,
+      })
+    ).toMatchObject({
+      matched: false,
+      reason:
+        'verified-effect-property-condition-element-id-not-matched',
     });
     expect(
       evaluateVerifiedBattleEffectConditions({ conditions: [], action, resolution })

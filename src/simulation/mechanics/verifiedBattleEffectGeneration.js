@@ -18,10 +18,38 @@ import {
 export const VERIFIED_BATTLE_EFFECT_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedBattleEffectGeneration';
 
+function registerTargetElementTags({
+  target,
+  effect,
+  elementTagLayers,
+  elementIdsHeld,
+}) {
+  const tags = effect.lifecycle?.tags ?? [];
+  const elementId = Number(effect.elementId);
+  if (tags.length === 0 && !Number.isInteger(elementId)) return;
+  const key = `${target.kind}:${target.id}`;
+  if (tags.length > 0) {
+    const layers = elementTagLayers.get(key) ?? new Map();
+    for (const tag of tags) {
+      layers.set(Number(tag), (layers.get(Number(tag)) ?? 0) + 1);
+    }
+    elementTagLayers.set(key, layers);
+  }
+  if (Number.isInteger(elementId)) {
+    const held = elementIdsHeld.get(key) ?? new Set();
+    held.add(elementId);
+    elementIdsHeld.set(key, held);
+  }
+}
+
 export function evaluateVerifiedBattleEffectConditions({
   conditions = [],
   action,
   resolution,
+  targetKind = null,
+  targetId = null,
+  elementTagLayers = null,
+  elementIdsHeld = null,
 }) {
   if (!Array.isArray(conditions) || conditions.length === 0) {
     return { matched: true, reason: null };
@@ -60,6 +88,66 @@ export function evaluateVerifiedBattleEffectConditions({
       }
       continue;
     }
+    if (conditionType === 3) {
+      if (targetKind == null || targetId == null) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-element-tag-target-unresolved',
+        };
+      }
+      const elementTag = Number(condition.elementTag);
+      if (!Number.isInteger(elementTag) || elementTag === 0) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-element-tag-unresolved',
+        };
+      }
+      if (Number(condition.subConditionType) !== 0) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-element-count-runtime-evidence-required',
+        };
+      }
+      const key = `${targetKind}:${targetId}`;
+      const layers = elementTagLayers?.get(key)?.get(elementTag) ?? 0;
+      if (layers < Math.max(1, Number(condition.maxChangeCount) || 1)) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-element-tag-not-matched',
+        };
+      }
+      continue;
+    }
+    if (conditionType === 4) {
+      if (targetKind == null || targetId == null) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-element-id-target-unresolved',
+        };
+      }
+      const elementId = Number(condition.elementId);
+      if (!Number.isInteger(elementId) || elementId === 0) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-element-id-unresolved',
+        };
+      }
+      const key = `${targetKind}:${targetId}`;
+      if (!elementIdsHeld?.get(key)?.has(elementId)) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-element-id-not-matched',
+        };
+      }
+      continue;
+    }
     return {
       matched: false,
       reason: 'verified-effect-property-condition-runtime-evidence-required',
@@ -84,6 +172,8 @@ export function createVerifiedBattleEffectGeneration({
   const directHpEvents = [];
   const shieldEvents = [];
   const unresolved = [];
+  const elementTagLayers = new Map();
+  const elementIdsHeld = new Map();
 
   for (const action of scenario.actions ?? []) {
     if (executionByActionId.get(action.id)?.execute === false) continue;
@@ -116,17 +206,6 @@ export function createVerifiedBattleEffectGeneration({
         unresolved.push(createUnresolvedEffect(action, effect));
         continue;
       }
-      const conditionResult = evaluateVerifiedBattleEffectConditions({
-        conditions: effect.activationConditions,
-        action,
-        resolution,
-      });
-      if (!conditionResult.matched) {
-        unresolved.push(
-          createUnresolvedEffect(action, effect, [conditionResult.reason])
-        );
-        continue;
-      }
       const targets = resolveEffectTargets({
         action,
         effect,
@@ -149,6 +228,18 @@ export function createVerifiedBattleEffectGeneration({
         continue;
       }
       for (const [targetSequenceIndex, target] of targets.entries()) {
+        const conditionResult = evaluateVerifiedBattleEffectConditions({
+          conditions: effect.activationConditions,
+          action,
+          resolution,
+          targetKind: target.kind,
+          targetId: target.id,
+          elementTagLayers,
+          elementIdsHeld,
+        });
+        if (!conditionResult.matched) {
+          continue;
+        }
         if (effect.propertyChange) {
           effectCommands.push(
             createPropertyEffectCommand({
@@ -162,6 +253,12 @@ export function createVerifiedBattleEffectGeneration({
               targetSequenceIndex,
             })
           );
+          registerTargetElementTags({
+            target,
+            effect,
+            elementTagLayers,
+            elementIdsHeld,
+          });
           continue;
         }
         if (effect.directSp) {
@@ -178,6 +275,12 @@ export function createVerifiedBattleEffectGeneration({
               targetSequenceIndex,
             })
           );
+          registerTargetElementTags({
+            target,
+            effect,
+            elementTagLayers,
+            elementIdsHeld,
+          });
           continue;
         }
         if (effect.heal) {
@@ -194,6 +297,12 @@ export function createVerifiedBattleEffectGeneration({
               targetSequenceIndex,
             })
           );
+          registerTargetElementTags({
+            target,
+            effect,
+            elementTagLayers,
+            elementIdsHeld,
+          });
           continue;
         }
         if (effect.shield) {

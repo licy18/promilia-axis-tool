@@ -6207,7 +6207,7 @@ function parsePropertyChangeActivationConditions(tree = {}) {
   for (const condition of rawConditions) {
     const conditionType = integerOrNull(condition.conditionType);
     if (conditionType == null || conditionType === 0) continue;
-    if ([1, 2, 5].includes(conditionType)) {
+    if ([1, 2, 3, 4, 5].includes(conditionType)) {
       conditions.push({
         conditionType,
         conditionTypeName:
@@ -6215,21 +6215,26 @@ function parsePropertyChangeActivationConditions(tree = {}) {
             ? 'EntityElementType'
             : conditionType === 2
               ? 'CurSkillId'
+              : conditionType === 3
+                ? 'HasElementTag'
+                : conditionType === 4
+                  ? 'HasElementId'
               : 'CurSkillTag',
         entityElementalType: integerOrNull(condition.entityElementalType) ?? 0,
         skillId: integerOrNull(condition.skillId) ?? 0,
         skillTag: integerOrNull(condition.skillTag) ?? 0,
+        elementTag: integerOrNull(condition.elementTag) ?? 0,
+        elementId: integerOrNull(condition.elementId) ?? 0,
+        subConditionType:
+          integerOrNull(condition.subConditionType_Element) ?? 0,
         targetType: integerOrNull(condition.targetType) ?? 0,
+        maxChangeCount: integerOrNull(condition.maxChangeCount) ?? 0,
       });
     } else {
       unsupported.push({
         conditionType,
         conditionTypeName:
-          conditionType === 3
-            ? 'HasElementTag'
-            : conditionType === 4
-              ? 'HasElementId'
-              : `Unknown-${conditionType}`,
+          `Unknown-${conditionType}`,
         elementTag: integerOrNull(condition.elementTag) ?? 0,
         elementId: integerOrNull(condition.elementId) ?? 0,
         subConditionType:

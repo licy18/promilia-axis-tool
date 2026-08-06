@@ -21666,14 +21666,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50004501,
       "controlSkillId": 50004501,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "property-condition-element-state-runtime-evidence-required"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 115,
@@ -21702,8 +21700,7 @@
           "verified-zero": 7
         },
         "dynamicProperty": {
-          "applied": 2,
-          "unresolved": 2,
+          "applied": 4,
           "verified-zero": 3
         },
         "tuningMark": {
@@ -21712,9 +21709,9 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "provenance": [
         "workbench-kibo-action-catalog.items[kiboId=500045].actions[skillId=50004501].skillId"
@@ -32981,7 +32978,6 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "shield-formula-not-literal-function-5",
-        "property-condition-element-state-runtime-evidence-required",
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
@@ -33019,7 +33015,7 @@
           "verified-zero": 8
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "applied": 2,
           "verified-zero": 8
         },
         "tuningMark": {
@@ -33029,9 +33025,9 @@
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 0,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 5
       },
       "provenance": [
         "workbench-kibo-action-catalog.items[kiboId=500206].actions[skillId=50020601].skillId"
@@ -39548,9 +39544,9 @@
       "unresolved": 0
     },
     "publicActionClosure": {
-      "evidenceClosed": 291,
+      "evidenceClosed": 292,
       "scenarioAssumed": 22,
-      "unresolved": 53
+      "unresolved": 52
     },
     "fixedSkillScopeClasses": {
       "non-combat-capability": 45,

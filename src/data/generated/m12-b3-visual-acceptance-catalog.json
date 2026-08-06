@@ -40,9 +40,9 @@
   "summary": {
     "total": 254,
     "published": 254,
-    "accepted": 229,
-    "optimizationReady": 229,
-    "blockingLedgerCount": 25,
+    "accepted": 230,
+    "optimizationReady": 230,
+    "blockingLedgerCount": 24,
     "byObjectKind": {
       "soul-essence": {
         "total": 62,
@@ -56,8 +56,8 @@
       },
       "kibo": {
         "total": 43,
-        "accepted": 19,
-        "optimizationReady": 19
+        "accepted": 20,
+        "optimizationReady": 20
       },
       "set-skill": {
         "total": 12,
@@ -5020,18 +5020,16 @@
       "objectKind": "kibo",
       "objectId": "500045",
       "displayName": "幻蝶",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "b58443b4a8a215d2",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "4ceb0822e4bfd3bc",
       "evidence": {
         "iconSha256": "2de00973d8eacf1a509398e84de0c95fbf34827daefb99366273f5da4514c1e1",
         "binding": {
@@ -5045,7 +5043,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -5057,7 +5055,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -7009,5 +7007,5 @@
       }
     }
   ],
-  "catalogHash": "6cd7dc9e556d9818"
+  "catalogHash": "061bdef331d91c1a"
 }

@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "f379aa4dd7dd4e2d",
+  "rosterHash": "30cf794d532e4c4e",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "eaf9ac3865619634",
-        "f379aa4dd7dd4e2d"
+        "0a5ddcfe8ff2ca59",
+        "30cf794d532e4c4e"
       ]
     },
     {
@@ -643,43 +643,6 @@
       ],
       "details": {},
       "gapHash": "5d48d43921ef3d12"
-    },
-    {
-      "gapIdentity": "kibo:500045:kibo-visual-acceptance-evidence-blocked",
-      "objectKind": "kibo",
-      "objectId": "500045",
-      "code": "kibo-visual-acceptance-evidence-blocked",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo visual acceptance manifest is published but headless maturity or runtime evidence remains blocked.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500045]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500045]"
-      ],
-      "details": {
-        "manifestHash": "b58443b4a8a215d2",
-        "manifestBlockers": [
-          "acceptance-required-matrix-incomplete",
-          "acceptance-blocking-ledger-not-empty",
-          "acceptance-product-visual-signoff-pending"
-        ]
-      },
-      "gapHash": "029f0bed367f12a5"
-    },
-    {
-      "gapIdentity": "kibo:500045:kibo-headless-maturity-not-ready",
-      "objectKind": "kibo",
-      "objectId": "500045",
-      "code": "kibo-headless-maturity-not-ready",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Kibo headless maturity has not reached machine optimization ready.",
-      "sourceIdentities": [
-        "generated/kibos.json#items[id=500045]",
-        "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500045]"
-      ],
-      "details": {},
-      "gapHash": "a20c29dbb5e4201a"
     },
     {
       "gapIdentity": "kibo:500057:kibo-visual-acceptance-evidence-blocked",
@@ -1554,28 +1517,28 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 84,
+    "blockingUniqueGapCount": 82,
     "byCategory": {
       "evidence-insufficient": 14,
-      "not-implemented": 70
+      "not-implemented": 68
     },
     "byCode": {
       "acceptance-product-visual-signoff-pending": 1,
       "actor-static-profile-missing": 1,
       "character-acceptance-not-published": 9,
       "character-not-optimization-ready": 11,
-      "kibo-headless-maturity-not-ready": 24,
+      "kibo-headless-maturity-not-ready": 23,
       "kibo-passive-static-evidence-gap": 1,
-      "kibo-visual-acceptance-evidence-blocked": 24,
+      "kibo-visual-acceptance-evidence-blocked": 23,
       "level-breakthrough-skill-unlock-source-mismatch": 1,
       "set-skill-dynamic-unapplied": 1,
       "strict-character-cultivation-runtime-partial": 11
     },
     "byObjectKind": {
       "character": 33,
-      "kibo": 49,
+      "kibo": 47,
       "set-skill": 2
     }
   },
-  "ledgerHash": "401e46c576ac3b46"
+  "ledgerHash": "219d6a3547548000"
 }

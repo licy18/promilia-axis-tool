@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "f379aa4dd7dd4e2d",
-  "manifestsHash": "13fc6a1093a1eb04",
-  "gapLedgerHash": "401e46c576ac3b46",
-  "bindingMatrixHash": "db103b19464d01e0",
-  "sourceSnapshotHash": "eaf9ac3865619634",
+  "rosterHash": "30cf794d532e4c4e",
+  "manifestsHash": "b3bc78c6c7f0025a",
+  "gapLedgerHash": "219d6a3547548000",
+  "bindingMatrixHash": "bc5c78f3623511fc",
+  "sourceSnapshotHash": "0a5ddcfe8ff2ca59",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -1438,11 +1438,8 @@
       "displayName": "幻蝶",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "kibo-visual-acceptance-evidence-blocked",
-        "kibo-headless-maturity-not-ready"
-      ],
-      "manifestHash": "723c5f118999be69"
+      "blockerCodes": [],
+      "manifestHash": "3ed612f64a026fab"
     },
     {
       "objectKind": "kibo",
@@ -2748,7 +2745,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "f379aa4dd7dd4e2d",
+    "rosterHash": "30cf794d532e4c4e",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24656,7 +24653,7 @@
       "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "db103b19464d01e0"
+    "bindingMatrixHash": "bc5c78f3623511fc"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44170,7 +44167,7 @@
       "set-skill": 11
     },
     "optimizationReadyTotal": 210,
-    "gameplayBlockingGapCount": 84,
+    "gameplayBlockingGapCount": 82,
     "bindingQualifiedEdgeCount": 11,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44253,5 +44250,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "b1214760d03af428"
+  "catalogHash": "8f0c1ad13d386fb5"
 }
