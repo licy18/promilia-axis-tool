@@ -27,7 +27,7 @@
 | plunging-attack | 是 | applied |  |
 | star-skill | 是 | applied |  |
 | star-combo | 是 | applied |  |
-| ultimate | 是 | applied-with-residual-gaps | effect-target-any-unresolved；effect-target-unresolved；effect-trigger-frame-missing；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；property-formula-not-literal-function-5 |
+| ultimate | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；property-formula-not-literal-function-5 |
 | star-carry | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；verified-action-effective-occupancy-window-unresolved |
 | limit-counter | 是 | applied-with-residual-gaps | projectile-impact-frame-runtime-dependent；trigger-frame-missing |
 | perfect-parry | 是 | applied |  |

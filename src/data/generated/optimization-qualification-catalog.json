@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "e6ffc66cc7cf3330",
-  "manifestsHash": "a1c61519ed7fec7a",
-  "gapLedgerHash": "97593f83e3275dce",
-  "bindingMatrixHash": "6a3b314ce462915a",
-  "sourceSnapshotHash": "38f0fac71776250a",
+  "rosterHash": "e8256b6f5fd0369f",
+  "manifestsHash": "a016e588b18ce0f0",
+  "gapLedgerHash": "90b733220b48d6ad",
+  "bindingMatrixHash": "405f189cc9123d10",
+  "sourceSnapshotHash": "15bf4301ec830077",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -27,7 +27,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "af718c78c18cfb5d"
+      "manifestHash": "68f9326605aa6bf6"
     },
     {
       "objectKind": "character",
@@ -52,7 +52,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "6c5614480dc6aaed"
+      "manifestHash": "fb789c07c6a7a207"
     },
     {
       "objectKind": "character",
@@ -1420,11 +1420,8 @@
       "displayName": "小浮蝶",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "kibo-visual-acceptance-evidence-blocked",
-        "kibo-headless-maturity-not-ready"
-      ],
-      "manifestHash": "045fbd57b98da609"
+      "blockerCodes": [],
+      "manifestHash": "07668c4397df671f"
     },
     {
       "objectKind": "kibo",
@@ -1432,11 +1429,8 @@
       "displayName": "浮蝶",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "kibo-visual-acceptance-evidence-blocked",
-        "kibo-headless-maturity-not-ready"
-      ],
-      "manifestHash": "235d6de65a8bc064"
+      "blockerCodes": [],
+      "manifestHash": "f30d8dd19240c4d3"
     },
     {
       "objectKind": "kibo",
@@ -1662,7 +1656,7 @@
         "kibo-headless-maturity-not-ready",
         "kibo-passive-static-evidence-gap"
       ],
-      "manifestHash": "66d8fc23e8221fff"
+      "manifestHash": "0a4bcaf2e760f89f"
     },
     {
       "objectKind": "kibo",
@@ -2754,7 +2748,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "e6ffc66cc7cf3330",
+    "rosterHash": "e8256b6f5fd0369f",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24662,7 +24656,7 @@
       "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "6a3b314ce462915a"
+    "bindingMatrixHash": "405f189cc9123d10"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44176,7 +44170,7 @@
       "set-skill": 11
     },
     "optimizationReadyTotal": 210,
-    "gameplayBlockingGapCount": 88,
+    "gameplayBlockingGapCount": 84,
     "bindingQualifiedEdgeCount": 11,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44259,5 +44253,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "12e66b32cc1959ae"
+  "catalogHash": "8766c5bfd648aaaf"
 }

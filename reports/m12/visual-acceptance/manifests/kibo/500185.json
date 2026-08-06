@@ -34,7 +34,7 @@
       "actions": {
         "signature": {
           "runtimeStatus": "runnable",
-          "closureClass": "scenario-assumed"
+          "closureClass": "evidence-closed"
         },
         "active": {
           "runtimeStatus": "runnable",
@@ -187,16 +187,9 @@
         "reason": "headless maturity gap: pve-passive-runtime-incomplete",
         "blocking": true,
         "sourceIdentity": "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500185]"
-      },
-      {
-        "uniqueGapIdentity": "public-action-closure-incomplete",
-        "status": "blocking",
-        "reason": "headless maturity gap: public-action-closure-incomplete",
-        "blocking": true,
-        "sourceIdentity": "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500185]"
       }
     ],
-    "blockingCount": 2
+    "blockingCount": 1
   },
   "maturity": {
     "currentState": "runtime-integrated",
@@ -219,5 +212,5 @@
       "acceptance-product-visual-signoff-pending"
     ]
   },
-  "manifestHash": "4d2e7ea143381a4e"
+  "manifestHash": "f3cf199942c9c7c3"
 }

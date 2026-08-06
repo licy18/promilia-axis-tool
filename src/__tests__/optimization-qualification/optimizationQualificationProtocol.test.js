@@ -261,9 +261,9 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 88,
+      blockingUniqueGapCount: 84,
       byCategory: {
-        'not-implemented': 74,
+        'not-implemented': 70,
         'evidence-insufficient': 14,
       },
     });
@@ -299,12 +299,12 @@ describe('M12-B3 optimization qualification generation', () => {
       artifacts.gaps.records.filter(
         record => record.code === 'kibo-visual-acceptance-evidence-blocked'
       )
-    ).toHaveLength(26);
+    ).toHaveLength(24);
     expect(
       artifacts.gaps.records.filter(
         record => record.code === 'kibo-headless-maturity-not-ready'
       )
-    ).toHaveLength(26);
+    ).toHaveLength(24);
     expect(artifacts.summary.m12cLocked).toBe(true);
     expect(
       artifacts.gaps.records.filter(

@@ -302,8 +302,7 @@
             "base-function-unverified",
             "hp:damage-formula-inputs-incomplete",
             "toughness:pre-shield-damage-inputs-incomplete",
-            "heal-formula-not-literal-function-5",
-            "effect-target-any-unresolved"
+            "heal-formula-not-literal-function-5"
           ],
           "timing": {
             "status": "applied",
@@ -336,8 +335,7 @@
               "verified-zero": 5
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 1,
+              "applied": 2,
               "verified-zero": 3
             },
             "tuningMark": {
@@ -493,9 +491,9 @@
       },
       "effects": {
         "statuses": {
-          "unresolved": 3,
+          "unresolved": 2,
           "verified-zero": 16,
-          "applied": 1
+          "applied": 2
         },
         "closureClass": "unresolved"
       },
@@ -561,7 +559,6 @@
             "base-function-unverified",
             "hp:damage-formula-inputs-incomplete",
             "toughness:pre-shield-damage-inputs-incomplete",
-            "effect-target-any-unresolved",
             "heal-formula-not-literal-function-5",
             "shield-formula-not-literal-function-5"
           ],
@@ -597,8 +594,7 @@
               "verified-zero": 5
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 1,
+              "applied": 2,
               "verified-zero": 5
             },
             "tuningMark": {
@@ -750,9 +746,9 @@
       },
       "effects": {
         "statuses": {
-          "unresolved": 5,
+          "unresolved": 4,
           "verified-zero": 22,
-          "applied": 1
+          "applied": 2
         },
         "closureClass": "unresolved"
       },
@@ -819,12 +815,9 @@
             "trigger-frame-missing",
             "hp:damage-formula-inputs-incomplete",
             "toughness:pre-shield-damage-inputs-incomplete",
-            "effect-target-any-unresolved",
             "pack-lifecycle-semantics-evidence-gap",
             "heal-formula-not-literal-function-5",
             "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved",
             "shield-formula-not-literal-function-5"
           ],
           "timing": {
@@ -851,28 +844,27 @@
               "verified-zero": 2
             },
             "healing": {
-              "unresolved": 5,
+              "unresolved": 4,
               "verified-zero": 7
             },
             "shield": {
               "unresolved": 2,
-              "verified-zero": 10
+              "verified-zero": 9
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 1,
-              "verified-zero": 10
+              "applied": 2,
+              "verified-zero": 9
             },
             "tuningMark": {
               "unresolved": 2,
-              "verified-zero": 10
+              "verified-zero": 9
             }
           },
           "semanticEffects": {
-            "total": 9,
+            "total": 8,
             "applied": 2,
             "verifiedZero": 0,
-            "unresolved": 7
+            "unresolved": 6
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500004].actions[skillId=50000404].skillId"
@@ -1017,9 +1009,9 @@
       },
       "effects": {
         "statuses": {
-          "unresolved": 10,
-          "verified-zero": 37,
-          "applied": 1
+          "unresolved": 8,
+          "verified-zero": 34,
+          "applied": 2
         },
         "closureClass": "unresolved"
       },
@@ -1566,14 +1558,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50000702,
           "controlSkillId": 50000702,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "effect-target-any-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 100,
@@ -1606,8 +1596,7 @@
               "verified-zero": 3
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 1,
+              "applied": 2,
               "verified-zero": 1
             },
             "tuningMark": {
@@ -1758,20 +1747,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 10,
-          "applied": 1,
-          "unresolved": 1
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500020,
@@ -3038,10 +3024,7 @@
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved",
-            "pack-lifecycle-semantics-evidence-gap",
-            "effect-target-any-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -3069,26 +3052,26 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 17
+              "verified-zero": 14
             },
             "shield": {
-              "verified-zero": 17
+              "verified-zero": 14
             },
             "dynamicProperty": {
-              "unresolved": 9,
+              "unresolved": 6,
               "verified-zero": 8
             },
             "tuningMark": {
               "applied": 2,
               "unresolved": 2,
-              "verified-zero": 13
+              "verified-zero": 10
             }
           },
           "semanticEffects": {
-            "total": 8,
+            "total": 5,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 7
+            "unresolved": 4
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500025].actions[skillId=50002504].skillId"
@@ -3223,8 +3206,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 55,
-          "unresolved": 11,
+          "verified-zero": 46,
+          "unresolved": 8,
           "applied": 2
         },
         "closureClass": "unresolved"
@@ -3293,9 +3276,7 @@
           "reasons": [
             "trigger-frame-missing",
             "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -3323,26 +3304,26 @@
               "verified-zero": 3
             },
             "healing": {
-              "verified-zero": 17
+              "verified-zero": 16
             },
             "shield": {
-              "verified-zero": 17
+              "verified-zero": 16
             },
             "dynamicProperty": {
               "applied": 12,
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "unresolved": 2,
-              "verified-zero": 15
+              "verified-zero": 14
             }
           },
           "semanticEffects": {
-            "total": 14,
+            "total": 13,
             "applied": 12,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500026].actions[skillId=50002616].skillId"
@@ -3481,9 +3462,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 52,
+          "verified-zero": 49,
           "applied": 12,
-          "unresolved": 4
+          "unresolved": 3
         },
         "closureClass": "unresolved"
       },
@@ -4293,24 +4274,21 @@
           "actionKind": "signature",
           "sourceSkillId": 50003901,
           "controlSkillId": 50003901,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
-            "trigger-frame-missing",
-            "effect-target-any-unresolved"
+            "trigger-frame-missing"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [
               "trigger-frame-missing"
             ],
-            "unresolvedReasons": [
-              "effect-target-any-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -4344,8 +4322,7 @@
               "verified-zero": 3
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 1,
+              "applied": 2,
               "verified-zero": 1
             },
             "tuningMark": {
@@ -4492,20 +4469,17 @@
       "effects": {
         "statuses": {
           "verified-zero": 10,
-          "applied": 1,
-          "unresolved": 1
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500040,
@@ -5270,16 +5244,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50004302,
           "controlSkillId": 50004302,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "effect-target-any-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 70,
@@ -5302,25 +5272,24 @@
               "unresolved": 6
             },
             "healing": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 2,
+              "applied": 2,
               "verified-zero": 3
             },
             "tuningMark": {
-              "verified-zero": 6
+              "verified-zero": 5
             }
           },
           "semanticEffects": {
-            "total": 3,
+            "total": 2,
             "applied": 2,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500043].actions[skillId=50004302].skillId"
@@ -5459,21 +5428,18 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 21,
-          "applied": 1,
-          "unresolved": 2
+          "verified-zero": 18,
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500044,
@@ -5520,16 +5486,12 @@
           "actionKind": "signature",
           "sourceSkillId": 50004401,
           "controlSkillId": 50004401,
-          "closureClass": "unresolved",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
-          "reasons": [
-            "effect-target-any-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
-          ],
+          "reasons": [],
           "timing": {
             "status": "applied",
             "durationFrames": 80,
@@ -5552,25 +5514,24 @@
               "unresolved": 6
             },
             "healing": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 2,
+              "applied": 2,
               "verified-zero": 3
             },
             "tuningMark": {
-              "verified-zero": 6
+              "verified-zero": 5
             }
           },
           "semanticEffects": {
-            "total": 3,
+            "total": 2,
             "applied": 2,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500044].actions[skillId=50004401].skillId"
@@ -5709,21 +5670,18 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 21,
-          "applied": 1,
-          "unresolved": 2
+          "verified-zero": 18,
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
+        "evidenceClosed": 3,
         "scenarioAssumed": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500045,
@@ -5776,9 +5734,6 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "effect-target-any-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved",
             "property-conditions-not-expanded"
           ],
           "timing": {
@@ -5803,25 +5758,25 @@
               "unresolved": 7
             },
             "healing": {
-              "verified-zero": 8
+              "verified-zero": 7
             },
             "shield": {
-              "verified-zero": 8
+              "verified-zero": 7
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 4,
+              "applied": 2,
+              "unresolved": 2,
               "verified-zero": 3
             },
             "tuningMark": {
-              "verified-zero": 8
+              "verified-zero": 7
             }
           },
           "semanticEffects": {
-            "total": 5,
+            "total": 4,
             "applied": 2,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500045].actions[skillId=50004501].skillId"
@@ -5960,9 +5915,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 27,
-          "applied": 1,
-          "unresolved": 4
+          "verified-zero": 24,
+          "applied": 2,
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -7018,10 +6973,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "pack-lifecycle-semantics-evidence-gap",
-            "effect-target-any-unresolved",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -7049,25 +7001,25 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 6
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 6
+              "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 4,
+              "unresolved": 2,
               "verified-zero": 2
             },
             "tuningMark": {
               "unresolved": 1,
-              "verified-zero": 5
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 2,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 4
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500052].actions[skillId=50005202].skillId"
@@ -7190,8 +7142,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 19,
-          "unresolved": 5
+          "verified-zero": 13,
+          "unresolved": 3
         },
         "closureClass": "unresolved"
       },
@@ -7255,10 +7207,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "pack-lifecycle-semantics-evidence-gap",
-            "effect-target-any-unresolved",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -7286,25 +7235,25 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 6
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 6
+              "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 4,
+              "unresolved": 2,
               "verified-zero": 2
             },
             "tuningMark": {
               "unresolved": 1,
-              "verified-zero": 5
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 2,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 4
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500053].actions[skillId=50005302].skillId"
@@ -7427,8 +7376,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 19,
-          "unresolved": 5
+          "verified-zero": 13,
+          "unresolved": 3
         },
         "closureClass": "unresolved"
       },
@@ -7494,9 +7443,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -7524,25 +7471,25 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 7
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 7
+              "verified-zero": 5
             },
             "dynamicProperty": {
-              "unresolved": 4,
+              "unresolved": 2,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 6
+              "verified-zero": 4
             }
           },
           "semanticEffects": {
-            "total": 6,
+            "total": 4,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 5
+            "unresolved": 3
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500057].actions[skillId=50005701].skillId"
@@ -7677,8 +7624,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 23,
-          "unresolved": 4,
+          "verified-zero": 17,
+          "unresolved": 2,
           "applied": 1
         },
         "closureClass": "unresolved"
@@ -7987,9 +7934,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -8017,25 +7962,25 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 4
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 3,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500064].actions[skillId=50006401].skillId"
@@ -8170,8 +8115,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 17,
-          "unresolved": 2,
+          "verified-zero": 14,
+          "unresolved": 1,
           "applied": 1
         },
         "closureClass": "unresolved"
@@ -8236,9 +8181,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -8266,25 +8209,25 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 4
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 3,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500065].actions[skillId=50006501].skillId"
@@ -8409,8 +8352,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 17,
-          "unresolved": 2,
+          "verified-zero": 14,
+          "unresolved": 1,
           "applied": 1
         },
         "closureClass": "unresolved"
@@ -9466,9 +9409,7 @@
           "reasons": [
             "trigger-frame-missing",
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -9478,9 +9419,7 @@
             ],
             "unresolvedReasons": [
               "nested-damage-trigger-lifecycle-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "nested-effect-wrapper-semantics-unresolved"
             ]
           },
           "timing": {
@@ -9509,26 +9448,26 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 9
+              "verified-zero": 7
             },
             "shield": {
-              "verified-zero": 9
+              "verified-zero": 7
             },
             "dynamicProperty": {
               "applied": 2,
-              "unresolved": 4,
+              "unresolved": 2,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 8
+              "verified-zero": 6
             }
           },
           "semanticEffects": {
-            "total": 7,
+            "total": 5,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 6
+            "unresolved": 4
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500081].actions[skillId=50008102].skillId"
@@ -9541,26 +9480,21 @@
           "actionKind": "active",
           "sourceSkillId": 503007,
           "controlSkillId": 503007,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
-            "trigger-frame-missing",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "trigger-frame-missing"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [
               "trigger-frame-missing"
             ],
-            "unresolvedReasons": [
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -9588,18 +9522,17 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 5
+              "verified-zero": 3
             },
             "shield": {
-              "verified-zero": 5
+              "verified-zero": 3
             },
             "dynamicProperty": {
               "applied": 2,
-              "unresolved": 2,
               "verified-zero": 1
             },
             "tuningMark": {
-              "verified-zero": 5
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
@@ -9694,15 +9627,15 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 48,
+          "verified-zero": 36,
           "applied": 5,
-          "unresolved": 7
+          "unresolved": 3
         },
         "closureClass": "unresolved"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 0,
-        "scenarioAssumed": 2,
+        "evidenceClosed": 1,
+        "scenarioAssumed": 1,
         "unresolved": 1
       },
       "machineOptimizationReady": false,
@@ -9763,10 +9696,8 @@
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
             "trigger-frame-missing",
-            "effect-target-unresolved",
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -9775,10 +9706,8 @@
               "trigger-frame-missing"
             ],
             "unresolvedReasons": [
-              "effect-target-unresolved",
               "nested-damage-trigger-lifecycle-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved",
-              "effect-trigger-frame-missing"
+              "nested-effect-wrapper-semantics-unresolved"
             ]
           },
           "timing": {
@@ -9807,26 +9736,26 @@
               "verified-zero": 2
             },
             "healing": {
-              "verified-zero": 10
+              "verified-zero": 8
             },
             "shield": {
-              "verified-zero": 10
+              "verified-zero": 8
             },
             "dynamicProperty": {
-              "applied": 2,
-              "unresolved": 5,
+              "applied": 3,
+              "unresolved": 2,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 9
+              "verified-zero": 7
             }
           },
           "semanticEffects": {
-            "total": 9,
+            "total": 7,
             "applied": 4,
             "verifiedZero": 0,
-            "unresolved": 5
+            "unresolved": 3
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500082].actions[skillId=50008201].skillId"
@@ -9973,9 +9902,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 47,
-          "applied": 8,
-          "unresolved": 5
+          "verified-zero": 41,
+          "applied": 9,
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -10041,9 +9970,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -10071,25 +9998,25 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 4
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 3,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500083].actions[skillId=50008303].skillId"
@@ -10224,8 +10151,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 17,
-          "unresolved": 2,
+          "verified-zero": 14,
+          "unresolved": 1,
           "applied": 1
         },
         "closureClass": "unresolved"
@@ -10293,9 +10220,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -10323,25 +10248,25 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 4
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 3,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500084].actions[skillId=50008403].skillId"
@@ -10466,8 +10391,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 17,
-          "unresolved": 2,
+          "verified-zero": 14,
+          "unresolved": 1,
           "applied": 1
         },
         "closureClass": "unresolved"
@@ -10536,9 +10461,7 @@
           "reasons": [
             "trigger-frame-missing",
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -10548,9 +10471,7 @@
             ],
             "unresolvedReasons": [
               "nested-damage-trigger-lifecycle-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "nested-effect-wrapper-semantics-unresolved"
             ]
           },
           "timing": {
@@ -10579,25 +10500,25 @@
               "verified-zero": 2
             },
             "healing": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 4
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 3,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500085].actions[skillId=50008503].skillId"
@@ -10722,8 +10643,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 17,
-          "unresolved": 2,
+          "verified-zero": 14,
+          "unresolved": 1,
           "applied": 1
         },
         "closureClass": "unresolved"
@@ -10794,9 +10715,7 @@
             "toughness:pre-shield-damage-inputs-incomplete",
             "pack-lifecycle-semantics-evidence-gap",
             "heal-formula-not-literal-function-5",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -10822,25 +10741,25 @@
               "verified-zero": 2
             },
             "healing": {
-              "unresolved": 4,
+              "unresolved": 2,
               "verified-zero": 2
             },
             "shield": {
-              "verified-zero": 6
+              "verified-zero": 4
             },
             "dynamicProperty": {
-              "verified-zero": 6
+              "verified-zero": 4
             },
             "tuningMark": {
               "unresolved": 1,
-              "verified-zero": 5
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 2,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 4
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500093].actions[skillId=50009305].skillId"
@@ -10969,8 +10888,8 @@
       },
       "effects": {
         "statuses": {
-          "unresolved": 5,
-          "verified-zero": 19
+          "unresolved": 3,
+          "verified-zero": 13
         },
         "closureClass": "unresolved"
       },
@@ -12020,9 +11939,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "pack-lifecycle-semantics-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -12050,26 +11967,26 @@
               "verified-zero": 2
             },
             "healing": {
-              "verified-zero": 10
+              "verified-zero": 9
             },
             "shield": {
-              "verified-zero": 10
+              "verified-zero": 9
             },
             "dynamicProperty": {
               "applied": 5,
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "unresolved": 2,
-              "verified-zero": 8
+              "verified-zero": 7
             }
           },
           "semanticEffects": {
-            "total": 7,
+            "total": 6,
             "applied": 5,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500110].actions[skillId=50011001].skillId"
@@ -12208,9 +12125,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 31,
+          "verified-zero": 28,
           "applied": 5,
-          "unresolved": 4
+          "unresolved": 3
         },
         "closureClass": "unresolved"
       },
@@ -16131,9 +16048,7 @@
           "reasons": [
             "trigger-frame-missing",
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -16143,9 +16058,7 @@
             ],
             "unresolvedReasons": [
               "nested-damage-trigger-lifecycle-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "nested-effect-wrapper-semantics-unresolved"
             ]
           },
           "timing": {
@@ -16174,25 +16087,25 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 4
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 3,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500138].actions[skillId=50013801].skillId"
@@ -16327,8 +16240,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 17,
-          "unresolved": 2,
+          "verified-zero": 14,
+          "unresolved": 1,
           "applied": 1
         },
         "closureClass": "unresolved"
@@ -16395,9 +16308,6 @@
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
             "trigger-frame-missing",
-            "effect-target-any-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved",
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved"
           ],
@@ -16408,9 +16318,6 @@
               "trigger-frame-missing"
             ],
             "unresolvedReasons": [
-              "effect-target-any-unresolved",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved",
               "nested-damage-trigger-lifecycle-evidence-gap",
               "nested-effect-wrapper-semantics-unresolved"
             ]
@@ -16441,25 +16348,26 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 9
+              "verified-zero": 7
             },
             "shield": {
-              "verified-zero": 9
+              "verified-zero": 7
             },
             "dynamicProperty": {
-              "unresolved": 4,
+              "applied": 1,
+              "unresolved": 1,
               "verified-zero": 5
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 8
+              "verified-zero": 6
             }
           },
           "semanticEffects": {
-            "total": 7,
+            "total": 5,
             "applied": 2,
             "verifiedZero": 1,
-            "unresolved": 4
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500139].actions[skillId=50013901].skillId"
@@ -16594,9 +16502,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 31,
-          "unresolved": 4,
-          "applied": 1
+          "verified-zero": 25,
+          "applied": 2,
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -16662,9 +16570,6 @@
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
             "trigger-frame-missing",
-            "effect-target-any-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved",
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved"
           ],
@@ -16675,9 +16580,6 @@
               "trigger-frame-missing"
             ],
             "unresolvedReasons": [
-              "effect-target-any-unresolved",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved",
               "nested-damage-trigger-lifecycle-evidence-gap",
               "nested-effect-wrapper-semantics-unresolved"
             ]
@@ -16708,25 +16610,26 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 9
+              "verified-zero": 7
             },
             "shield": {
-              "verified-zero": 9
+              "verified-zero": 7
             },
             "dynamicProperty": {
-              "unresolved": 4,
+              "applied": 1,
+              "unresolved": 1,
               "verified-zero": 5
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 8
+              "verified-zero": 6
             }
           },
           "semanticEffects": {
-            "total": 7,
+            "total": 5,
             "applied": 2,
             "verifiedZero": 1,
-            "unresolved": 4
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500140].actions[skillId=50014001].skillId"
@@ -16861,9 +16764,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 31,
-          "unresolved": 4,
-          "applied": 1
+          "verified-zero": 25,
+          "applied": 2,
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -18437,9 +18340,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "nested-effect-wrapper-semantics-unresolved",
-            "pack-lifecycle-semantics-evidence-gap",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -18463,19 +18364,19 @@
               "unresolved": 7
             },
             "healing": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "dynamicProperty": {
               "applied": 1,
               "unresolved": 1,
-              "verified-zero": 6
+              "verified-zero": 3
             },
             "tuningMark": {
-              "unresolved": 2,
-              "verified-zero": 6
+              "unresolved": 1,
+              "verified-zero": 4
             }
           },
           "semanticEffects": {
@@ -18617,9 +18518,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 28,
+          "verified-zero": 17,
           "applied": 1,
-          "unresolved": 3
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -18683,9 +18584,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "nested-effect-wrapper-semantics-unresolved",
-            "pack-lifecycle-semantics-evidence-gap",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -18709,19 +18608,19 @@
               "unresolved": 7
             },
             "healing": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "dynamicProperty": {
               "applied": 1,
               "unresolved": 1,
-              "verified-zero": 6
+              "verified-zero": 3
             },
             "tuningMark": {
-              "unresolved": 2,
-              "verified-zero": 6
+              "unresolved": 1,
+              "verified-zero": 4
             }
           },
           "semanticEffects": {
@@ -18859,9 +18758,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 28,
+          "verified-zero": 17,
           "applied": 1,
-          "unresolved": 3
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -18925,9 +18824,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "nested-effect-wrapper-semantics-unresolved",
-            "pack-lifecycle-semantics-evidence-gap",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -18951,19 +18848,19 @@
               "unresolved": 8
             },
             "healing": {
-              "verified-zero": 10
+              "verified-zero": 7
             },
             "shield": {
-              "verified-zero": 10
+              "verified-zero": 7
             },
             "dynamicProperty": {
               "applied": 2,
               "unresolved": 2,
-              "verified-zero": 6
+              "verified-zero": 3
             },
             "tuningMark": {
-              "unresolved": 2,
-              "verified-zero": 8
+              "unresolved": 1,
+              "verified-zero": 6
             }
           },
           "semanticEffects": {
@@ -19105,9 +19002,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 34,
+          "verified-zero": 23,
           "applied": 2,
-          "unresolved": 4
+          "unresolved": 3
         },
         "closureClass": "unresolved"
       },
@@ -19876,9 +19773,7 @@
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved",
-            "property-conditions-not-expanded",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "property-conditions-not-expanded"
           ],
           "timing": {
             "status": "applied",
@@ -19906,25 +19801,25 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 5
+              "verified-zero": 4
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 4
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 3,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500179].actions[skillId=50017901].skillId"
@@ -20063,8 +19958,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 17,
-          "unresolved": 2,
+          "verified-zero": 14,
+          "unresolved": 1,
           "applied": 1
         },
         "closureClass": "unresolved"
@@ -20130,9 +20025,7 @@
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved",
-            "property-conditions-not-expanded",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "property-conditions-not-expanded"
           ],
           "timing": {
             "status": "applied",
@@ -20160,26 +20053,26 @@
               "verified-zero": 2
             },
             "healing": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "dynamicProperty": {
               "applied": 1,
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 5
+              "verified-zero": 4
             }
           },
           "semanticEffects": {
-            "total": 5,
+            "total": 4,
             "applied": 2,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500180].actions[skillId=50018001].skillId"
@@ -20318,9 +20211,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 20,
+          "verified-zero": 17,
           "applied": 2,
-          "unresolved": 2
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -20385,9 +20278,7 @@
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved",
-            "property-conditions-not-expanded",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "property-conditions-not-expanded"
           ],
           "timing": {
             "status": "applied",
@@ -20415,26 +20306,26 @@
               "verified-zero": 4
             },
             "healing": {
-              "verified-zero": 12
+              "verified-zero": 11
             },
             "shield": {
-              "verified-zero": 12
+              "verified-zero": 11
             },
             "dynamicProperty": {
               "applied": 7,
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 11
+              "verified-zero": 10
             }
           },
           "semanticEffects": {
-            "total": 11,
+            "total": 10,
             "applied": 8,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500181].actions[skillId=50018101].skillId"
@@ -20573,9 +20464,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 38,
+          "verified-zero": 35,
           "applied": 8,
-          "unresolved": 2
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -20635,28 +20526,21 @@
           "actionKind": "signature",
           "sourceSkillId": 50018502,
           "controlSkillId": 50018502,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
-            "trigger-frame-missing",
-            "effect-target-any-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "trigger-frame-missing"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
+            "coversAllReasons": true,
             "coveredReasons": [
               "trigger-frame-missing"
             ],
-            "unresolvedReasons": [
-              "effect-target-any-unresolved",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
-            ]
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -20684,25 +20568,24 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "dynamicProperty": {
-              "applied": 1,
-              "unresolved": 2,
+              "applied": 2,
               "verified-zero": 3
             },
             "tuningMark": {
-              "verified-zero": 6
+              "verified-zero": 5
             }
           },
           "semanticEffects": {
-            "total": 3,
+            "total": 2,
             "applied": 2,
             "verifiedZero": 0,
-            "unresolved": 1
+            "unresolved": 0
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500185].actions[skillId=50018502].skillId"
@@ -20837,21 +20720,19 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 21,
-          "applied": 1,
-          "unresolved": 2
+          "verified-zero": 18,
+          "applied": 2
         },
-        "closureClass": "unresolved"
+        "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
       "machineOptimizationReady": false,
       "remainingGaps": [
-        "pve-passive-runtime-incomplete",
-        "public-action-closure-incomplete"
+        "pve-passive-runtime-incomplete"
       ]
     },
     {
@@ -20935,18 +20816,18 @@
               "verified-zero": 2
             },
             "healing": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "shield": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 2
             },
             "tuningMark": {
               "unresolved": 1,
-              "verified-zero": 3
+              "verified-zero": 2
             }
           },
           "semanticEffects": {
@@ -21105,8 +20986,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 13,
-          "unresolved": 3
+          "verified-zero": 10,
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -21170,10 +21051,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "pack-lifecycle-semantics-evidence-gap",
-            "effect-target-any-unresolved",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -21201,25 +21079,25 @@
               "verified-zero": 3
             },
             "healing": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "shield": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 2
             },
             "tuningMark": {
               "unresolved": 1,
-              "verified-zero": 3
+              "verified-zero": 2
             }
           },
           "semanticEffects": {
-            "total": 2,
+            "total": 1,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500187].actions[skillId=50018702].skillId"
@@ -21358,8 +21236,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 13,
-          "unresolved": 3
+          "verified-zero": 10,
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -21422,11 +21300,8 @@
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
-            "effect-target-any-unresolved",
             "shield-formula-not-literal-function-5",
             "property-conditions-not-expanded",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved",
             "tuning-mark-max-mismatch",
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved"
@@ -21457,26 +21332,26 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 12
+              "verified-zero": 10
             },
             "shield": {
-              "unresolved": 3,
-              "verified-zero": 9
+              "unresolved": 2,
+              "verified-zero": 8
             },
             "dynamicProperty": {
-              "unresolved": 3,
-              "verified-zero": 9
+              "unresolved": 2,
+              "verified-zero": 8
             },
             "tuningMark": {
               "unresolved": 1,
-              "verified-zero": 11
+              "verified-zero": 9
             }
           },
           "semanticEffects": {
-            "total": 9,
+            "total": 7,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 9
+            "unresolved": 7
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500206].actions[skillId=50020601].skillId"
@@ -21605,8 +21480,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 41,
-          "unresolved": 7
+          "verified-zero": 35,
+          "unresolved": 5
         },
         "closureClass": "unresolved"
       },
@@ -21677,9 +21552,7 @@
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved",
             "pack-lifecycle-semantics-evidence-gap",
-            "heal-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "heal-formula-not-literal-function-5"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -21695,9 +21568,7 @@
               "nested-damage-trigger-lifecycle-evidence-gap",
               "nested-effect-wrapper-semantics-unresolved",
               "pack-lifecycle-semantics-evidence-gap",
-              "heal-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "heal-formula-not-literal-function-5"
             ]
           },
           "timing": {
@@ -21726,25 +21597,25 @@
               "verified-zero": 2
             },
             "healing": {
-              "unresolved": 3,
-              "verified-zero": 5
+              "unresolved": 1,
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "dynamicProperty": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "tuningMark": {
-              "unresolved": 3,
-              "verified-zero": 5
+              "unresolved": 2,
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 3,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 4
+            "unresolved": 3
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500209].actions[skillId=50020901].skillId"
@@ -21865,8 +21736,8 @@
       },
       "effects": {
         "statuses": {
-          "unresolved": 6,
-          "verified-zero": 26
+          "unresolved": 3,
+          "verified-zero": 17
         },
         "closureClass": "unresolved"
       },
@@ -22673,10 +22544,7 @@
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved",
-            "pack-lifecycle-semantics-evidence-gap",
-            "effect-target-any-unresolved"
+            "pack-lifecycle-semantics-evidence-gap"
           ],
           "timing": {
             "status": "applied",
@@ -22704,26 +22572,26 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 10
+              "verified-zero": 7
             },
             "shield": {
-              "verified-zero": 10
+              "verified-zero": 7
             },
             "dynamicProperty": {
-              "unresolved": 6,
+              "unresolved": 3,
               "verified-zero": 4
             },
             "tuningMark": {
               "applied": 1,
               "unresolved": 1,
-              "verified-zero": 8
+              "verified-zero": 5
             }
           },
           "semanticEffects": {
-            "total": 8,
+            "total": 5,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 7
+            "unresolved": 4
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500231].actions[skillId=50023101].skillId"
@@ -22862,8 +22730,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 32,
-          "unresolved": 7,
+          "verified-zero": 23,
+          "unresolved": 4,
           "applied": 1
         },
         "closureClass": "unresolved"
@@ -22928,9 +22796,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -22958,26 +22824,26 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "dynamicProperty": {
               "applied": 1,
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 5
+              "verified-zero": 4
             }
           },
           "semanticEffects": {
-            "total": 5,
+            "total": 4,
             "applied": 2,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500244].actions[skillId=50024401].skillId"
@@ -23116,9 +22982,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 20,
+          "verified-zero": 17,
           "applied": 2,
-          "unresolved": 2
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -23182,9 +23048,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -23212,26 +23076,26 @@
               "verified-zero": 2
             },
             "healing": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "dynamicProperty": {
               "applied": 1,
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 5
+              "verified-zero": 4
             }
           },
           "semanticEffects": {
-            "total": 5,
+            "total": 4,
             "applied": 2,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500245].actions[skillId=50024501].skillId"
@@ -23360,9 +23224,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 20,
+          "verified-zero": 17,
           "applied": 2,
-          "unresolved": 2
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -23426,9 +23290,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -23456,26 +23318,26 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "dynamicProperty": {
               "applied": 1,
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 5
+              "verified-zero": 4
             }
           },
           "semanticEffects": {
-            "total": 5,
+            "total": 4,
             "applied": 2,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500246].actions[skillId=50024601].skillId"
@@ -23604,9 +23466,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 20,
+          "verified-zero": 17,
           "applied": 2,
-          "unresolved": 2
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -23677,9 +23539,7 @@
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved",
             "pack-lifecycle-semantics-evidence-gap",
-            "heal-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "heal-formula-not-literal-function-5"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -23695,9 +23555,7 @@
               "nested-damage-trigger-lifecycle-evidence-gap",
               "nested-effect-wrapper-semantics-unresolved",
               "pack-lifecycle-semantics-evidence-gap",
-              "heal-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "heal-formula-not-literal-function-5"
             ]
           },
           "timing": {
@@ -23726,25 +23584,25 @@
               "verified-zero": 2
             },
             "healing": {
-              "unresolved": 3,
-              "verified-zero": 5
+              "unresolved": 1,
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "dynamicProperty": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "tuningMark": {
-              "unresolved": 3,
-              "verified-zero": 5
+              "unresolved": 2,
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 3,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 4
+            "unresolved": 3
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500258].actions[skillId=50025801].skillId"
@@ -23879,8 +23737,8 @@
       },
       "effects": {
         "statuses": {
-          "unresolved": 6,
-          "verified-zero": 26
+          "unresolved": 3,
+          "verified-zero": 17
         },
         "closureClass": "unresolved"
       },
@@ -23951,9 +23809,7 @@
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved",
             "pack-lifecycle-semantics-evidence-gap",
-            "heal-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "heal-formula-not-literal-function-5"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -23969,9 +23825,7 @@
               "nested-damage-trigger-lifecycle-evidence-gap",
               "nested-effect-wrapper-semantics-unresolved",
               "pack-lifecycle-semantics-evidence-gap",
-              "heal-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "heal-formula-not-literal-function-5"
             ]
           },
           "timing": {
@@ -24000,25 +23854,25 @@
               "verified-zero": 2
             },
             "healing": {
-              "unresolved": 3,
-              "verified-zero": 5
+              "unresolved": 1,
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "dynamicProperty": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "tuningMark": {
-              "unresolved": 3,
-              "verified-zero": 5
+              "unresolved": 2,
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 3,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 4
+            "unresolved": 3
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500259].actions[skillId=50025901].skillId"
@@ -24139,8 +23993,8 @@
       },
       "effects": {
         "statuses": {
-          "unresolved": 6,
-          "verified-zero": 26
+          "unresolved": 3,
+          "verified-zero": 17
         },
         "closureClass": "unresolved"
       },
@@ -24211,9 +24065,7 @@
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved",
             "pack-lifecycle-semantics-evidence-gap",
-            "heal-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "heal-formula-not-literal-function-5"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -24229,9 +24081,7 @@
               "nested-damage-trigger-lifecycle-evidence-gap",
               "nested-effect-wrapper-semantics-unresolved",
               "pack-lifecycle-semantics-evidence-gap",
-              "heal-formula-not-literal-function-5",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "heal-formula-not-literal-function-5"
             ]
           },
           "timing": {
@@ -24260,25 +24110,25 @@
               "verified-zero": 2
             },
             "healing": {
-              "unresolved": 3,
-              "verified-zero": 5
+              "unresolved": 1,
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "dynamicProperty": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "tuningMark": {
-              "unresolved": 3,
-              "verified-zero": 5
+              "unresolved": 2,
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 4,
+            "total": 3,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 4
+            "unresolved": 3
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500260].actions[skillId=50026001].skillId"
@@ -24403,8 +24253,8 @@
       },
       "effects": {
         "statuses": {
-          "unresolved": 6,
-          "verified-zero": 26
+          "unresolved": 3,
+          "verified-zero": 17
         },
         "closureClass": "unresolved"
       },
@@ -25244,9 +25094,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -25274,25 +25122,25 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 7
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 7
+              "verified-zero": 5
             },
             "dynamicProperty": {
-              "unresolved": 4,
+              "unresolved": 2,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 6
+              "verified-zero": 4
             }
           },
           "semanticEffects": {
-            "total": 6,
+            "total": 4,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 5
+            "unresolved": 3
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500296].actions[skillId=50029601].skillId"
@@ -25417,8 +25265,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 23,
-          "unresolved": 4,
+          "verified-zero": 17,
+          "unresolved": 2,
           "applied": 1
         },
         "closureClass": "unresolved"
@@ -25486,9 +25334,7 @@
           "reasons": [
             "trigger-frame-missing",
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -25498,9 +25344,7 @@
             ],
             "unresolvedReasons": [
               "nested-damage-trigger-lifecycle-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "nested-effect-wrapper-semantics-unresolved"
             ]
           },
           "timing": {
@@ -25529,26 +25373,26 @@
               "verified-zero": 2
             },
             "healing": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "dynamicProperty": {
               "applied": 1,
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 5
+              "verified-zero": 4
             }
           },
           "semanticEffects": {
-            "total": 5,
+            "total": 4,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 4
+            "unresolved": 3
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500304].actions[skillId=50030401].skillId"
@@ -25683,9 +25527,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 20,
+          "verified-zero": 17,
           "applied": 2,
-          "unresolved": 2
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -25752,9 +25596,7 @@
           "reasons": [
             "trigger-frame-missing",
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -25764,9 +25606,7 @@
             ],
             "unresolvedReasons": [
               "nested-damage-trigger-lifecycle-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "nested-effect-wrapper-semantics-unresolved"
             ]
           },
           "timing": {
@@ -25795,26 +25635,26 @@
               "verified-zero": 2
             },
             "healing": {
-              "verified-zero": 7
+              "verified-zero": 6
             },
             "shield": {
-              "verified-zero": 7
+              "verified-zero": 6
             },
             "dynamicProperty": {
               "applied": 2,
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 6
+              "verified-zero": 5
             }
           },
           "semanticEffects": {
-            "total": 5,
+            "total": 4,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 4
+            "unresolved": 3
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500305].actions[skillId=50030501].skillId"
@@ -25949,9 +25789,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 23,
+          "verified-zero": 20,
           "applied": 3,
-          "unresolved": 2
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -26018,9 +25858,7 @@
           "reasons": [
             "trigger-frame-missing",
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -26030,9 +25868,7 @@
             ],
             "unresolvedReasons": [
               "nested-damage-trigger-lifecycle-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "nested-effect-wrapper-semantics-unresolved"
             ]
           },
           "timing": {
@@ -26061,26 +25897,26 @@
               "verified-zero": 2
             },
             "healing": {
-              "verified-zero": 7
+              "verified-zero": 6
             },
             "shield": {
-              "verified-zero": 7
+              "verified-zero": 6
             },
             "dynamicProperty": {
               "applied": 2,
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 6
+              "verified-zero": 5
             }
           },
           "semanticEffects": {
-            "total": 5,
+            "total": 4,
             "applied": 1,
             "verifiedZero": 0,
-            "unresolved": 4
+            "unresolved": 3
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500306].actions[skillId=50030601].skillId"
@@ -26215,9 +26051,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 23,
+          "verified-zero": 20,
           "applied": 3,
-          "unresolved": 2
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -26545,10 +26381,7 @@
           "reasons": [
             "trigger-frame-missing",
             "pack-lifecycle-semantics-evidence-gap",
-            "effect-target-any-unresolved",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -26558,10 +26391,7 @@
             ],
             "unresolvedReasons": [
               "pack-lifecycle-semantics-evidence-gap",
-              "effect-target-any-unresolved",
-              "nested-effect-wrapper-semantics-unresolved",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "nested-effect-wrapper-semantics-unresolved"
             ]
           },
           "timing": {
@@ -26590,25 +26420,25 @@
               "verified-zero": 3
             },
             "healing": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "shield": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 2
             },
             "tuningMark": {
               "unresolved": 1,
-              "verified-zero": 3
+              "verified-zero": 2
             }
           },
           "semanticEffects": {
-            "total": 2,
+            "total": 1,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500322].actions[skillId=50032201].skillId"
@@ -26743,8 +26573,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 13,
-          "unresolved": 3
+          "verified-zero": 10,
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -26809,11 +26639,8 @@
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "reasons": [
             "pack-lifecycle-semantics-evidence-gap",
-            "effect-target-any-unresolved",
             "property-conditions-not-expanded",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -26821,11 +26648,8 @@
             "coveredReasons": [],
             "unresolvedReasons": [
               "pack-lifecycle-semantics-evidence-gap",
-              "effect-target-any-unresolved",
               "property-conditions-not-expanded",
-              "nested-effect-wrapper-semantics-unresolved",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "nested-effect-wrapper-semantics-unresolved"
             ]
           },
           "timing": {
@@ -26854,25 +26678,25 @@
               "verified-zero": 4
             },
             "healing": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "shield": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 2
             },
             "tuningMark": {
               "unresolved": 1,
-              "verified-zero": 3
+              "verified-zero": 2
             }
           },
           "semanticEffects": {
-            "total": 2,
+            "total": 1,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500323].actions[skillId=50032301].skillId"
@@ -26997,8 +26821,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 13,
-          "unresolved": 3
+          "verified-zero": 10,
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -27064,11 +26888,8 @@
           "reasons": [
             "trigger-frame-missing",
             "pack-lifecycle-semantics-evidence-gap",
-            "effect-target-any-unresolved",
             "property-conditions-not-expanded",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
@@ -27078,11 +26899,8 @@
             ],
             "unresolvedReasons": [
               "pack-lifecycle-semantics-evidence-gap",
-              "effect-target-any-unresolved",
               "property-conditions-not-expanded",
-              "nested-effect-wrapper-semantics-unresolved",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "nested-effect-wrapper-semantics-unresolved"
             ]
           },
           "timing": {
@@ -27111,25 +26929,25 @@
               "verified-zero": 2
             },
             "healing": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "shield": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 2
             },
             "tuningMark": {
               "unresolved": 1,
-              "verified-zero": 3
+              "verified-zero": 2
             }
           },
           "semanticEffects": {
-            "total": 2,
+            "total": 1,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500324].actions[skillId=50032401].skillId"
@@ -27264,8 +27082,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 13,
-          "unresolved": 3
+          "verified-zero": 10,
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -27330,9 +27148,7 @@
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved",
-            "property-conditions-not-expanded",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "property-conditions-not-expanded"
           ],
           "timing": {
             "status": "applied",
@@ -27360,26 +27176,26 @@
               "verified-zero": 1
             },
             "healing": {
-              "verified-zero": 8
+              "verified-zero": 7
             },
             "shield": {
-              "verified-zero": 8
+              "verified-zero": 7
             },
             "dynamicProperty": {
               "applied": 3,
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 7
+              "verified-zero": 6
             }
           },
           "semanticEffects": {
-            "total": 7,
+            "total": 6,
             "applied": 4,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500354].actions[skillId=50035401].skillId"
@@ -27518,9 +27334,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 26,
+          "verified-zero": 23,
           "applied": 4,
-          "unresolved": 2
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -27585,9 +27401,7 @@
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved",
-            "property-conditions-not-expanded",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "property-conditions-not-expanded"
           ],
           "timing": {
             "status": "applied",
@@ -27615,26 +27429,26 @@
               "verified-zero": 2
             },
             "healing": {
-              "verified-zero": 13
+              "verified-zero": 12
             },
             "shield": {
-              "verified-zero": 13
+              "verified-zero": 12
             },
             "dynamicProperty": {
               "applied": 8,
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 3
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 12
+              "verified-zero": 11
             }
           },
           "semanticEffects": {
-            "total": 12,
+            "total": 11,
             "applied": 9,
             "verifiedZero": 0,
-            "unresolved": 3
+            "unresolved": 2
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500355].actions[skillId=50035501].skillId"
@@ -27773,9 +27587,9 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 41,
+          "verified-zero": 38,
           "applied": 9,
-          "unresolved": 2
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -28327,9 +28141,7 @@
             "toughness:pre-shield-damage-inputs-incomplete",
             "pack-lifecycle-semantics-evidence-gap",
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -28357,24 +28169,24 @@
               "verified-zero": 3
             },
             "healing": {
-              "verified-zero": 6
+              "verified-zero": 4
             },
             "shield": {
-              "verified-zero": 6
+              "verified-zero": 4
             },
             "dynamicProperty": {
-              "verified-zero": 6
+              "verified-zero": 4
             },
             "tuningMark": {
-              "unresolved": 2,
-              "verified-zero": 4
+              "unresolved": 1,
+              "verified-zero": 3
             }
           },
           "semanticEffects": {
-            "total": 2,
+            "total": 1,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500360].actions[skillId=50036001].skillId"
@@ -28509,8 +28321,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 22,
-          "unresolved": 2
+          "verified-zero": 15,
+          "unresolved": 1
         },
         "closureClass": "unresolved"
       },
@@ -28577,8 +28389,6 @@
           "reasons": [
             "nested-damage-trigger-lifecycle-evidence-gap",
             "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved",
             "sp-recover-type-not-direct-sp"
           ],
           "timing": {
@@ -28603,25 +28413,25 @@
               "unresolved": 8
             },
             "healing": {
-              "verified-zero": 7
+              "verified-zero": 6
             },
             "shield": {
-              "verified-zero": 7
+              "verified-zero": 6
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 5
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 6
+              "verified-zero": 5
             }
           },
           "semanticEffects": {
-            "total": 6,
+            "total": 5,
             "applied": 2,
             "verifiedZero": 0,
-            "unresolved": 4
+            "unresolved": 3
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500368].actions[skillId=50036801].skillId"
@@ -28760,8 +28570,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 25,
-          "unresolved": 2,
+          "verified-zero": 22,
+          "unresolved": 1,
           "applied": 1
         },
         "closureClass": "unresolved"
@@ -28829,9 +28639,7 @@
           "reasons": [
             "sp-recover-type-not-direct-sp",
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -28855,25 +28663,25 @@
               "unresolved": 10
             },
             "healing": {
-              "verified-zero": 14
+              "verified-zero": 13
             },
             "shield": {
-              "verified-zero": 14
+              "verified-zero": 13
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 12
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 13
+              "verified-zero": 12
             }
           },
           "semanticEffects": {
-            "total": 13,
+            "total": 12,
             "applied": 8,
             "verifiedZero": 0,
-            "unresolved": 5
+            "unresolved": 4
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500369].actions[skillId=50036901].skillId"
@@ -29012,8 +28820,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 53,
-          "unresolved": 2,
+          "verified-zero": 50,
+          "unresolved": 1,
           "applied": 1
         },
         "closureClass": "unresolved"
@@ -29081,9 +28889,7 @@
           "reasons": [
             "sp-recover-type-not-direct-sp",
             "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -29107,25 +28913,25 @@
               "unresolved": 10
             },
             "healing": {
-              "verified-zero": 13
+              "verified-zero": 12
             },
             "shield": {
-              "verified-zero": 13
+              "verified-zero": 12
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 11
             },
             "tuningMark": {
               "applied": 1,
-              "verified-zero": 12
+              "verified-zero": 11
             }
           },
           "semanticEffects": {
-            "total": 12,
+            "total": 11,
             "applied": 7,
             "verifiedZero": 0,
-            "unresolved": 5
+            "unresolved": 4
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500370].actions[skillId=50037001].skillId"
@@ -29264,8 +29070,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 49,
-          "unresolved": 2,
+          "verified-zero": 46,
+          "unresolved": 1,
           "applied": 1
         },
         "closureClass": "unresolved"
@@ -30080,10 +29886,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "pack-lifecycle-semantics-evidence-gap",
-            "effect-target-any-unresolved",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -30111,25 +29914,25 @@
               "verified-zero": 3
             },
             "healing": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "shield": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 2
             },
             "tuningMark": {
               "unresolved": 1,
-              "verified-zero": 3
+              "verified-zero": 2
             }
           },
           "semanticEffects": {
-            "total": 2,
+            "total": 1,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500469].actions[skillId=50046903].skillId"
@@ -30254,8 +30057,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 13,
-          "unresolved": 3
+          "verified-zero": 10,
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -30321,10 +30124,7 @@
           "scenarioRuntimeStatus": "source-verified",
           "reasons": [
             "pack-lifecycle-semantics-evidence-gap",
-            "effect-target-any-unresolved",
-            "nested-effect-wrapper-semantics-unresolved",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "nested-effect-wrapper-semantics-unresolved"
           ],
           "timing": {
             "status": "applied",
@@ -30352,25 +30152,25 @@
               "verified-zero": 4
             },
             "healing": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "shield": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "dynamicProperty": {
-              "unresolved": 2,
+              "unresolved": 1,
               "verified-zero": 2
             },
             "tuningMark": {
               "unresolved": 1,
-              "verified-zero": 3
+              "verified-zero": 2
             }
           },
           "semanticEffects": {
-            "total": 2,
+            "total": 1,
             "applied": 0,
             "verifiedZero": 0,
-            "unresolved": 2
+            "unresolved": 1
           },
           "provenance": [
             "workbench-kibo-action-catalog.items[kiboId=500470].actions[skillId=50047001].skillId"
@@ -30495,8 +30295,8 @@
       },
       "effects": {
         "statuses": {
-          "verified-zero": 13,
-          "unresolved": 3
+          "verified-zero": 10,
+          "unresolved": 2
         },
         "closureClass": "unresolved"
       },
@@ -30513,11 +30313,12 @@
   ],
   "summary": {
     "kiboCount": 122,
-    "machineOptimizationReadyCount": 48,
+    "machineOptimizationReadyCount": 52,
     "machineOptimizationReadyKiboIds": [
       500001,
       500005,
       500006,
+      500007,
       500020,
       500021,
       500022,
@@ -30525,9 +30326,12 @@
       500024,
       500037,
       500038,
+      500039,
       500040,
       500041,
       500042,
+      500043,
+      500044,
       500046,
       500047,
       500048,
@@ -30565,9 +30369,9 @@
       500358
     ],
     "actionClosure": {
-      "evidenceClosed": 285,
-      "scenarioAssumed": 25,
-      "unresolved": 56
+      "evidenceClosed": 291,
+      "scenarioAssumed": 22,
+      "unresolved": 53
     },
     "pvePassiveMechanics": {
       "evidenceClosed": 40,

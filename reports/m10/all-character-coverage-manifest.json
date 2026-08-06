@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "72599f77938728c71c47746a0257944160c8009f8b8db0b98dee6380ef0540ff",
+  "sourcePackageHash": "0c082f45f200aa5cbd3955bcf77fd60e7501ee70efb1c5757b586c2c823f75e6",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "d949d0d4e9520f7b55fb4e4db7e9723f245956f493c608faf6d932247a423320"
+      "profileHash": "c1b7381e8fa90a7db374d85cef7c73748f81c6315dc45d3eca8630cb32231b08"
     },
     {
       "ownerId": 103002,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "232aae091d975e2bee07f41d2d19eb074a4b9aedf5d13bbb56f495f3f7cce5e9"
+      "profileHash": "f7987725dc0f1725a7d787250ce7c4d42b5daaa9ae8e5721437b60a095094026"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "57dc55b39f5d3b292907790f8f081db7be0dcade642c87d2a8c803a68ff38c68"
+      "profileHash": "62fcedcabeca10b3a89b4db115191638137c8ee3ec1663e92670baf7bde1b3a2"
     },
     {
       "ownerId": 101007,
@@ -751,7 +751,6 @@
       "reviewBatch": "M10-C3",
       "mechanicFocus": [
         "切人/星携技",
-        "运行证据",
         "静态缺口"
       ],
       "estimatedWorkUnits": 1,
@@ -780,7 +779,7 @@
       "runtimeReadyActionCount": 5,
       "runtimeReadyRatio": 0.5,
       "staticEvidenceGapCount": 5,
-      "runtimeEvidenceRequiredCount": 1,
+      "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
       ],

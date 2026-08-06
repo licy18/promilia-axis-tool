@@ -42,9 +42,9 @@ describe('verified combat mechanics package', () => {
         classifiedActionCount: 563,
         appliedActionBindingCount: 587,
         appliedHitBindingCount: 2737,
-        appliedEffectBindingCount: 1164,
+        appliedEffectBindingCount: 1187,
         verifiedZeroEffectBindingCount: 2,
-        unresolvedEffectBindingCount: 2610,
+        unresolvedEffectBindingCount: 2492,
         actionVariantSupportControlBindingCount: 69,
         specialResourceProfileCount: 2,
         specialResourceOperationCount: 46,
@@ -69,8 +69,8 @@ describe('verified combat mechanics package', () => {
         unresolvedAttackInputSegmentCount: 15,
         appliedAttackInputTimingCount: 78,
         unresolvedAttackInputTimingCount: 17,
-        semanticEffectCount: 3443,
-        semanticGameplayEffectCount: 1819,
+        semanticEffectCount: 3368,
+        semanticGameplayEffectCount: 1755,
         semanticAppliedEffectCount: 563,
         characterCombatProfileCount: 3,
         characterCombatUiVerifiedProfileCount: 0,
@@ -182,28 +182,28 @@ describe('verified combat mechanics package', () => {
         .some(modifier => modifier.attributeId === 0)
     ).toBe(false);
     expect(effectCoverage.summary).toMatchObject({
-      semanticEffectCount: 3443,
-      semanticGameplayEffectCount: 1819,
-      semanticStructuralCount: 1624,
+      semanticEffectCount: 3368,
+      semanticGameplayEffectCount: 1755,
+      semanticStructuralCount: 1613,
       semanticAppliedCount: 563,
       semanticVerifiedZeroCount: 2,
-      semanticUnresolvedCount: 1254,
+      semanticUnresolvedCount: 1190,
       semanticPlacementCounts: {
         'runtime-dependent': 105,
-        'static-evidence-gap': 485,
+        'static-evidence-gap': 421,
         'static-resolved': 1229,
       },
-      effectBindingCount: 3775,
-      appliedEffectBindingCount: 1163,
+      effectBindingCount: 3680,
+      appliedEffectBindingCount: 1186,
       verifiedZeroEffectBindingCount: 2,
-      unresolvedEffectBindingCount: 2610,
+      unresolvedEffectBindingCount: 2492,
       bindingKindCounts: {
-        damage: 555,
-        inject: 1407,
+        damage: 543,
+        inject: 1401,
         judgment: 114,
-        pack: 226,
-        'property-change': 1179,
-        shield: 10,
+        pack: 218,
+        'property-change': 1111,
+        shield: 9,
         sp: 112,
         stack: 172,
       },
@@ -214,9 +214,9 @@ describe('verified combat mechanics package', () => {
         hp: expect.any(Object),
         shield: expect.any(Object),
         dynamicProperty: expect.objectContaining({
-          applied: 506,
-          unresolved: 666,
-          'verified-zero': 2603,
+          applied: 520,
+          unresolved: 584,
+          'verified-zero': 2576,
         }),
         mark: expect.any(Object),
       }),
@@ -297,7 +297,7 @@ describe('verified combat mechanics package', () => {
         unresolvedEdgeCount: 286,
       },
     });
-    expect(effectCoverage.sourceDenominator.rawReferenceEdgeCount).toBe(1663);
+    expect(effectCoverage.sourceDenominator.rawReferenceEdgeCount).toBe(1655);
     expect(variantResourceCoverage.summary).toMatchObject({
       profileCount: 2,
       appliedProfileCount: 2,
@@ -1546,7 +1546,7 @@ describe('verified combat mechanics package', () => {
     });
 
     expect(mechanicsPackage.semanticEffectCatalog.summary).toMatchObject({
-      fullSemanticEffectCount: 3443,
+      fullSemanticEffectCount: 3368,
       runtimeEffectCount: 431,
       compiledPassiveEffectCount: 41,
       runtimeFormulaCount: 123,

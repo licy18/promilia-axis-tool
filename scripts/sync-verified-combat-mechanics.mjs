@@ -4633,20 +4633,29 @@ function resolveBehaviorElementTarget(value, pathId) {
 }
 
 function createBehaviorTarget(code, sourceField) {
+  const directInjectKinds = {
+    0: 'source-owner',
+    1: 'controlling-actor',
+    2: 'controlling-kibo',
+    3: 'team-actors',
+    4: 'team-kibos',
+    5: 'ally-kibo',
+    6: 'enemy-kibo',
+    7: 'owner-actor',
+    8: 'owner-kibo',
+  };
+  const targetTypeKinds = {
+    1: 'enemy',
+    2: 'ally',
+    3: 'any',
+    4: 'source-owner',
+  };
   return {
     code,
     kind:
-      code === 1
-        ? 'enemy'
-        : code === 4
-          ? 'source-owner'
-          : code === 2
-            ? 'ally'
-            : code === 3
-              ? 'any-unresolved'
-              : sourceField === 'directInjectTargetType' && code === 0
-                ? 'source-owner'
-              : 'unresolved',
+      sourceField === 'directInjectTargetType'
+        ? directInjectKinds[code] ?? 'unresolved'
+        : targetTypeKinds[code] ?? 'unresolved',
     sourceField,
   };
 }
@@ -5637,7 +5646,7 @@ function createControlEffectGraph({
   ) {
     return roots;
   }
-  return Array.from(
+  const uniqueRoots = Array.from(
     roots
       .reduce((byElement, root) => {
         const key = `${root.mapIndex}|${
@@ -5657,6 +5666,38 @@ function createControlEffectGraph({
       }, new Map())
       .values()
   );
+  // A resourceMap can list an element that is only reachable as an injected
+  // child of another behavior-triggered root. That child already inherits the
+  // parent trigger inside its own root graph, so a separate child-covered root
+  // with no applied nodes would only publish an unresolved duplicate effect.
+  const coveredAsChild = new Set();
+  for (const root of uniqueRoots) {
+    for (const node of root.nodes) {
+      if (node.depth > 0 && Number.isInteger(node.elementId)) {
+        coveredAsChild.add(`${root.mapIndex}|${node.elementId}`);
+      }
+    }
+  }
+  return uniqueRoots.filter(root => {
+    if (!coveredAsChild.has(`${root.mapIndex}|${root.rootElementId}`)) {
+      return true;
+    }
+    const staticTriggers = selectBehaviorTriggersForSubSkill(
+      control.behaviorTriggers,
+      root.rootPathId,
+      root.mapIndex,
+      control.runtimePolicy?.behaviorTriggerScope
+    );
+    const scenarioTriggers =
+      control.runtimePolicy?.runtimeEffectsUseScenarioTriggers === true
+        ? (control.bulletLaunches ?? []).filter(
+            launch =>
+              launch.subSkillIndex === root.mapIndex &&
+              launch.elementId === root.rootElementId
+          )
+        : [];
+    return staticTriggers.length > 0 || scenarioTriggers.length > 0;
+  });
 }
 
 function resolveIndexedElementReference({
@@ -6148,7 +6189,54 @@ function createControlRuntimeEffects({ effectGraph, control, elements = [] }) {
   const kiboZeroDistancePolicy = String(
     control.runtimePolicy?.sourceIdentity ?? ''
   ).startsWith('m12-b3-kibo-zero-distance-profile');
+  const triggerPresence = new Map(
+    effectGraph.map(root => [
+      root.graphIdentity,
+      {
+        static: selectBehaviorTriggersForSubSkill(
+          control.behaviorTriggers,
+          root.rootPathId,
+          root.mapIndex,
+          control.runtimePolicy?.behaviorTriggerScope
+        ),
+        scenario:
+          control.runtimePolicy?.runtimeEffectsUseScenarioTriggers === true
+            ? (elements.find(
+                element =>
+                  element.mapIndex === root.mapIndex &&
+                  element.referenceKind === root.referenceKind &&
+                  element.elementIndex === root.elementIndex
+              )?.scenarioTriggers ?? [])
+            : [],
+      },
+    ])
+  );
+  const childCoveredElementIds = new Set();
+  for (const root of effectGraph) {
+    const presence = triggerPresence.get(root.graphIdentity);
+    if (
+      !presence ||
+      (presence.static.length === 0 && presence.scenario.length === 0)
+    ) {
+      continue;
+    }
+    for (const node of root.nodes) {
+      if (node.depth > 0 && Number.isInteger(node.elementId)) {
+        childCoveredElementIds.add(`${root.mapIndex}|${node.elementId}`);
+      }
+    }
+  }
   const bindings = effectGraph.flatMap(root => {
+    const presence = triggerPresence.get(root.graphIdentity);
+    if (
+      kiboZeroDistancePolicy &&
+      presence &&
+      presence.static.length === 0 &&
+      presence.scenario.length === 0 &&
+      childCoveredElementIds.has(`${root.mapIndex}|${root.rootElementId}`)
+    ) {
+      return [];
+    }
     const runtimeNodes = root.nodes.filter(node => {
       if (
         [
@@ -6168,21 +6256,8 @@ function createControlRuntimeEffects({ effectGraph, control, elements = [] }) {
         [5, 11].includes(Number(node.damage?.damageType)) || node.depth > 0
       );
     });
-    const staticTriggers = selectBehaviorTriggersForSubSkill(
-      control.behaviorTriggers,
-      root.rootPathId,
-      root.mapIndex,
-      control.runtimePolicy?.behaviorTriggerScope
-    );
-    const scenarioTriggers =
-      control.runtimePolicy?.runtimeEffectsUseScenarioTriggers === true
-        ? (elements.find(
-            element =>
-              element.mapIndex === root.mapIndex &&
-              element.referenceKind === root.referenceKind &&
-              element.elementIndex === root.elementIndex
-          )?.scenarioTriggers ?? [])
-        : [];
+    const staticTriggers = presence?.static ?? [];
+    const scenarioTriggers = presence?.scenario ?? [];
     const triggers =
       staticTriggers.length > 0 ? staticTriggers : scenarioTriggers;
     const effectiveTriggers = triggers.length > 0 ? triggers : [null];
@@ -6269,9 +6344,19 @@ function createControlRuntimeEffectBinding({
     reasons.push('effect-trigger-frame-missing');
   }
   if (
-    !['source-owner', 'enemy', 'team-tuning-pool', 'ally'].includes(
-      target.kind
-    )
+    ![
+      'source-owner',
+      'enemy',
+      'team-tuning-pool',
+      'ally',
+      'team-actors',
+      'team-kibos',
+      'owner-actor',
+      'owner-kibo',
+      'controlling-actor',
+      'controlling-kibo',
+      'player',
+    ].includes(target.kind)
   ) {
     reasons.push(
       target.kind ? `effect-target-${target.kind}` : 'effect-target-unresolved'

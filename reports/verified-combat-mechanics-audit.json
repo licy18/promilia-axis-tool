@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "24b8f198bbdac6ee2f8b6045fea5cbf3f31c8fb985f8e06a5b498a89cf5e209a",
+  "packageHash": "f865d4246996251b78fe7ca169d4959fd4a060319fed1771a5916bb53d0168e9",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
@@ -1278,9 +1278,9 @@
     "appliedHitBindingCount": 2737,
     "uniqueControlBindingCount": 543,
     "uniqueControlHitBindingCount": 4579,
-    "appliedEffectBindingCount": 1164,
+    "appliedEffectBindingCount": 1187,
     "verifiedZeroEffectBindingCount": 2,
-    "unresolvedEffectBindingCount": 2610,
+    "unresolvedEffectBindingCount": 2492,
     "unresolvedActionBindingCount": 34,
     "enemyProfileCount": 208,
     "appliedEnemyProfileCount": 204,
@@ -1426,8 +1426,7 @@
         "base-function-unverified",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "heal-formula-not-literal-function-5",
-        "effect-target-any-unresolved"
+        "heal-formula-not-literal-function-5"
       ],
       "applied": false
     },

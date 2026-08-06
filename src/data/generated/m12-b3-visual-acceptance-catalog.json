@@ -40,9 +40,9 @@
   "summary": {
     "total": 254,
     "published": 254,
-    "accepted": 227,
-    "optimizationReady": 227,
-    "blockingLedgerCount": 28,
+    "accepted": 229,
+    "optimizationReady": 229,
+    "blockingLedgerCount": 25,
     "byObjectKind": {
       "soul-essence": {
         "total": 62,
@@ -56,8 +56,8 @@
       },
       "kibo": {
         "total": 43,
-        "accepted": 17,
-        "optimizationReady": 17
+        "accepted": 19,
+        "optimizationReady": 19
       },
       "set-skill": {
         "total": 12,
@@ -4934,18 +4934,16 @@
       "objectKind": "kibo",
       "objectId": "500043",
       "displayName": "小浮蝶",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "41e73d3a4370c1dd",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "48372da6fd63b4e4",
       "evidence": {
         "iconSha256": "4b8324549bd1e2d587932643948e207ddf4c807e3068806bf448704545c3dfb0",
         "binding": {
@@ -4959,7 +4957,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -4971,7 +4969,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -4979,18 +4977,16 @@
       "objectKind": "kibo",
       "objectId": "500044",
       "displayName": "浮蝶",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "bef78f30e03776d8",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "483713416c9049e6",
       "evidence": {
         "iconSha256": "69a60f93447196bc9c9d8fbac29a77e99f2656bdc760e6a66532630f86446170",
         "binding": {
@@ -5004,7 +5000,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -5016,7 +5012,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -5936,7 +5932,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "4d2e7ea143381a4e",
+      "manifestHash": "f3cf199942c9c7c3",
       "evidence": {
         "iconSha256": "a3b23f7b579ee6e5c1531dbdd437fc268c2024ba4248731da787f504e33f03d7",
         "binding": {
@@ -5950,7 +5946,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -7013,5 +7009,5 @@
       }
     }
   ],
-  "catalogHash": "8a03c4c56bd9e6d5"
+  "catalogHash": "6cd7dc9e556d9818"
 }
