@@ -1807,6 +1807,16 @@ sub2b 按 sub2a 记录的方案实现：`triggerEffectList` 与 `layerInfoList` 
 
 下一阶段任务：**E17 阶段五 sub2c：pack-lifecycle 与剩余直连族**。剩余 38 行目标 signature 的主要阻断已转为 `pack-lifecycle-semantics-evidence-gap`（如 500025018 调谐提升 pack、500360302 流血触发器）、`sp-recover-type-not-direct-sp`（500368/500369/500370 recoverType=3 冷却缩减，需新增 cooldown-reduction 契约族）、`tuning-mark-max-mismatch`、`property-formula-not-literal-function-5`（水共鸣攻防减少）与 `base-function-unverified`（500360 等伤害公式输入）。建议顺序：先 pack-lifecycle（sustainElement/notDel 生命周期，可复用 C15 的周期根机制），再 recoverType=3 冷却缩减契约，再公式族。每完成一个子阶段即更新本手册并单独提交。
 
+### M12-B3-E17 阶段五 sub2c 已完成：pack-lifecycle 包装闭合 + recoverType=3 冷却缩减契约（2026-08-06）
+
+sub2c 分两族落地：① **pack-lifecycle**：`kind==='pack'` 且有已解析子引用（sustainElement/elementDataList/injectElementDataList/triggerEffectList）时按包装根闭合（与 inject 同语义），无子引用的 pack（如纯特效循环 500164006）保持 `pack-lifecycle-runtime-unimplemented` 诚实未解析；② **recoverType=3 冷却缩减**：500368/500369/500370 的 `专属1-直接减少%冷却时间`（负值 valueByLevel）不再报 `sp-recover-type-not-direct-sp`，编译为 `cooldownReduction` 契约（`directSp` 仅保留 recoverType=0，避免运行时误作 SP 回能），runtime catalog 不含 cooldownReduction 因此 golden SP 稳定。
+
+结果：目标 signature 开放 38→23（pack 12 + cooldown 3 = 15 行闭合）；`publicActionClosure 315/13/38 -> 330/11/25`，`machineOptimizationReadyCount 72->85`；视觉验收 accepted/optimizationReady `238->250`（kibo 28->40）；资格缺口 `66->42`（kibo maturity-not-ready 15->3、kibo visual-blocked 15->3）；`appliedEffectBindingCount 1509->1648`、`unresolvedEffectBindingCount 2262->2125`、`semanticAppliedEffectCount 857->859`、battle appliedNodeCount `765->885` / unresolvedNodeCount `2069->1949`。包 hash `d215cd47acf1f384a17276a9a89a806a2dceacfad63201e424831eef35ef8750`（文件 SHA-256 `a307d3dad3742322df07d0a4d7a90187c44f866dcafddafcb66378cbaa499b6d`）；Machine Axis 标准哈希 `86b2461a6edb588c / 0a5dfb5ebed29089 / 67ebc8ab034ea2c2 / 0b410dc9255d2654`；cycle `c69b0fb8 / ba1d68d3 / 6c287110 / 13fc3bf3 / b945c90c`；资格哈希 sourceSnapshot `fd1e0c09ddd36383` / roster `2af3cc7079e12421` / manifests `7c8d802de216d14a` / ledger `77deb8458534ada3` / bindingMatrix `47857e778be98007` / catalog `cc3acf62861a8c80`。
+
+验证：sync 三角色 authoritative golden 全过（冷却缩减与 pack 均不入运行时结算）；15 个聚焦文件全过；全套 Vitest 1423/1428（5 个已知 process-heavy 并行超时文件单独全过：characterCombatProfilePipeline/setThreeSourceIdentityEvidence/machineAxisService/workbenchMachineAxisAdapter 等）；9 项确定性审计、production build 与 `git diff --check` 全 clean。
+
+下一阶段任务：**E17 阶段五 sub2d：公式族与 tuning-mark 上限核对**。剩余 23 行目标 signature 的阻断集中在 `base-function-unverified`（8）、`hp/toughness:damage-formula-inputs-incomplete`（8）、`heal-formula-not-literal-function-5`（7）、`shield-formula-not-literal-function-5`（4）、`property-formula-not-literal-function-5`（6，水共鸣攻防减少）、`tuning-mark-max-mismatch`（11）与 `trigger-frame-missing`（9，scenario-assumed 行混带其他原因）；另有 pack 2、nested-wrapper 1、property-change-type 1。建议先核对 tuning-mark-max-mismatch（11 行，与 C10 调谐层数/combineNumber 上限证据同源），再补 `base-function-unverified` 的伤害公式输入（500360 等），最后处理 heal/shield/property 非字面公式族。每完成一个子阶段即更新本手册并单独提交。
+
 ### M10-A 小玉闭环缺口修复已通过独立机制验收（2026-07-28）
 
 普通 A3 与普通 A4 现分别按 `18F` 和 `10/14/18/22F` 的真实投射物链结算，A4 四次 hit 与爆发 A2 十二段保持独立。入场星携技保持 `95F` 占轴但允许 `55F/109F` 命中在块外继续结算，逐 hit 选择统一写回父切人事件；完美招架反击由 `successful-parry` 场景前置驱动 `10101049/sub1` 的两次命中。缘结阈值事务会同时清空资源、进入爆发并获得 2 层风印记；极限反击本体不再因仅开放派生窗口而误触发玉未央。

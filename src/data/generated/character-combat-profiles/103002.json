@@ -40,7 +40,7 @@
         "zeroDistanceRuntimeCapturesResolved": true,
         "authoritativeGoldenPassed": true
       },
-      "sourceEvidenceGapCount": 137,
+      "sourceEvidenceGapCount": 132,
       "sourceEvidenceGapsRemainAuditable": true,
       "realClientEvidenceCaptureCount": 4
     },
@@ -53,14 +53,14 @@
         "sourceGameplayGapCountIsZero": false
       },
       "runtimeCaptureCount": 4,
-      "staticEvidenceGapCount": 133
+      "staticEvidenceGapCount": 128
     }
   },
   "maturityGates": {
     "requiredCoverageComplete": false,
     "publicActionsComplete": true,
     "actionFormsComplete": true,
-    "gameplayGapCount": 137,
+    "gameplayGapCount": 132,
     "runtimeApplied": true,
     "uiVerified": false
   },
@@ -74,7 +74,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "58ea266b03d436ee0a659f8f695b3b846375881f433fd1968cc02c0bb92c7e78",
+    "packageHash": "8db7b884429dd2dadd2bf4c8cfabf3d9420bca00cea769b354494bddf164a67b",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -26981,8 +26981,7 @@
           "effect-target-unresolved",
           "judgment-condition-runtime-unimplemented",
           "nested-damage-trigger-lifecycle-not-expanded",
-          "nested-effect-wrapper-semantics-unresolved",
-          "pack-lifecycle-runtime-unimplemented"
+          "nested-effect-wrapper-semantics-unresolved"
         ],
         "dimensionSummary": {
           "hp": {
@@ -27026,8 +27025,8 @@
           },
           "mark": {
             "applied": 2,
-            "unresolved": 6,
-            "verified-zero": 17
+            "unresolved": 4,
+            "verified-zero": 19
           }
         },
         "mechanicsClassification": "applied",
@@ -29371,8 +29370,7 @@
             "verified-zero": 2
           },
           "mark": {
-            "unresolved": 1,
-            "verified-zero": 3
+            "verified-zero": 4
           }
         },
         "mechanicsClassification": "applied",
@@ -34064,6 +34062,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -34182,6 +34181,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -34282,6 +34282,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -34385,6 +34386,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -34499,6 +34501,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -34640,6 +34643,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -34759,6 +34763,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -34871,6 +34876,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -34989,6 +34995,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -35107,6 +35114,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -35207,6 +35215,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -35310,6 +35319,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -35424,6 +35434,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -35565,6 +35576,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -35684,6 +35696,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -35796,6 +35809,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -35914,6 +35928,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -36032,6 +36047,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -36132,6 +36148,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -36235,6 +36252,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -36349,6 +36367,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -36490,6 +36509,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -36609,6 +36629,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -36721,6 +36742,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -36832,6 +36854,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -36950,6 +36973,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -37102,6 +37126,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -37139,13 +37164,16 @@
                 "sourceField": null
               },
               "mark": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "wrapper": {
                 "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "pack-lifecycle-runtime-unimplemented",
               "nested-effect-wrapper-semantics-unresolved"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -37236,6 +37264,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -37365,6 +37394,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -39161,9 +39191,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10300201|element:4460567758519354701",
               "10300201|element:2917355649561243897",
@@ -40174,6 +40204,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -40292,6 +40323,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -40392,6 +40424,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -40495,6 +40528,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -40609,6 +40643,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -40750,6 +40785,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -40869,6 +40905,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -40981,6 +41018,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -41099,6 +41137,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -41217,6 +41256,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -41317,6 +41357,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -41420,6 +41461,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -41534,6 +41576,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -41675,6 +41718,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -41794,6 +41838,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -41906,6 +41951,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -42024,6 +42070,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -42142,6 +42189,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -42242,6 +42290,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -42345,6 +42394,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -42459,6 +42509,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -42600,6 +42651,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -42719,6 +42771,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -42831,6 +42884,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -42942,6 +42996,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -43060,6 +43115,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -43212,6 +43268,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -43249,13 +43306,16 @@
                 "sourceField": null
               },
               "mark": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "wrapper": {
                 "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "pack-lifecycle-runtime-unimplemented",
               "nested-effect-wrapper-semantics-unresolved"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -43346,6 +43406,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -43475,6 +43536,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -44739,9 +44801,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10300202|element:4460567758519354701",
               "10300202|element:2917355649561243897",
@@ -46015,6 +46077,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -46133,6 +46196,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -46233,6 +46297,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -46336,6 +46401,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -46450,6 +46516,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -46591,6 +46658,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -46710,6 +46778,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -46822,6 +46891,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -46940,6 +47010,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -47058,6 +47129,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -47158,6 +47230,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -47261,6 +47334,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -47375,6 +47449,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -47516,6 +47591,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -47635,6 +47711,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -47747,6 +47824,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -47865,6 +47943,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -47983,6 +48062,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -48083,6 +48163,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -48186,6 +48267,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -48300,6 +48382,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -48441,6 +48524,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -48560,6 +48644,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -48672,6 +48757,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -48783,6 +48869,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -48901,6 +48988,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -49053,6 +49141,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -49090,13 +49179,16 @@
                 "sourceField": null
               },
               "mark": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "wrapper": {
                 "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "pack-lifecycle-runtime-unimplemented",
               "nested-effect-wrapper-semantics-unresolved"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -49187,6 +49279,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -49316,6 +49409,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -50580,9 +50674,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10300203|element:4460567758519354701",
               "10300203|element:2917355649561243897",
@@ -52147,6 +52241,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -52265,6 +52360,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -52365,6 +52461,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -52468,6 +52565,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -52580,6 +52678,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -52691,6 +52790,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -52832,6 +52932,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -52951,6 +53052,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -53072,6 +53174,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -53190,6 +53293,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -53290,6 +53394,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -53393,6 +53498,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -53507,6 +53613,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -53648,6 +53755,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -53767,6 +53875,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -53879,6 +53988,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -53997,6 +54107,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -54115,6 +54226,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -54215,6 +54327,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -54318,6 +54431,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -54437,6 +54551,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -54535,6 +54650,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -54649,6 +54765,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -54790,6 +54907,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -54909,6 +55027,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -55023,6 +55142,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -55141,6 +55261,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -55293,6 +55414,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -55330,13 +55452,16 @@
                 "sourceField": null
               },
               "mark": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "wrapper": {
                 "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "pack-lifecycle-runtime-unimplemented",
               "nested-effect-wrapper-semantics-unresolved"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -55427,6 +55552,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -55556,6 +55682,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -55677,6 +55804,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -55795,6 +55923,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -55895,6 +56024,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -55998,6 +56128,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -56112,6 +56243,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -56253,6 +56385,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -56372,6 +56505,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -57571,9 +57705,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10300204|element:4460567758519354701",
               "10300204|element:2917355649561243897",
@@ -58986,6 +59120,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -59104,6 +59239,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -59204,6 +59340,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -59307,6 +59444,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -60060,6 +60198,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -60182,6 +60321,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -60300,6 +60440,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -60400,6 +60541,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -60503,6 +60645,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -60617,6 +60760,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -60739,6 +60883,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -60857,6 +61002,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -60957,6 +61103,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -61060,6 +61207,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -62168,6 +62316,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -62877,6 +63026,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -62999,6 +63149,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -63117,6 +63268,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -63217,6 +63369,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -63320,6 +63473,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -63433,6 +63587,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": {
@@ -63674,6 +63829,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -63817,6 +63973,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -63936,6 +64093,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -66611,6 +66769,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -66733,6 +66892,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -66878,6 +67038,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -66979,6 +67140,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -67112,6 +67274,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -67234,6 +67397,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -67348,6 +67512,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -67470,6 +67635,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -67588,6 +67754,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -67688,6 +67855,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -67791,6 +67959,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -67905,6 +68074,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -68018,6 +68188,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -68141,6 +68312,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -68265,6 +68437,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -68379,6 +68552,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -68492,6 +68666,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -68610,6 +68785,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -68754,6 +68930,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -68906,6 +69083,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -68943,13 +69121,16 @@
                 "sourceField": null
               },
               "mark": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "wrapper": {
                 "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "pack-lifecycle-runtime-unimplemented",
               "nested-effect-wrapper-semantics-unresolved"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -69033,6 +69214,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -69070,13 +69252,16 @@
                 "sourceField": null
               },
               "mark": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "wrapper": {
                 "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "pack-lifecycle-runtime-unimplemented",
               "nested-effect-wrapper-semantics-unresolved"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -69167,6 +69352,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -69300,6 +69486,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -69429,6 +69616,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -69559,6 +69747,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -70510,9 +70699,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10300213|element:-6187686510236149564",
               "10300213|element:2917355649561243897",
@@ -70723,7 +70912,7 @@
             "elementCount": 1,
             "runnableElementCount": 0,
             "effectNodeCount": 1,
-            "runnableEffectCount": 0,
+            "runnableEffectCount": 1,
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300214.asset/MonoBehaviour/skill_control_10300214__4377033499104819467.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
           },
           {
@@ -70748,7 +70937,7 @@
             "elementCount": 3,
             "runnableElementCount": 0,
             "effectNodeCount": 4,
-            "runnableEffectCount": 0,
+            "runnableEffectCount": 1,
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300214.asset/MonoBehaviour/skill_control_10300214__4377033499104819467.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
           }
         ],
@@ -70818,6 +71007,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -70855,17 +71045,19 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "wrapper": {
+                "status": "applied",
+                "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
-            "classification": "unresolved",
-            "reasons": [
-              "pack-lifecycle-runtime-unimplemented"
-            ],
-            "status": "verified-action-effect-binding-unresolved",
-            "confidence": "unresolved",
-            "applied": false
+            "classification": "applied",
+            "reasons": [],
+            "status": "verified-action-effect-binding-applied",
+            "confidence": "high",
+            "applied": true
           },
           {
             "effectIdentity": "10300214|1|elements|0|-4717659629921631149|element:-4717659629921631149|1|0",
@@ -70931,6 +71123,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -70968,17 +71161,19 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "wrapper": {
+                "status": "applied",
+                "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
-            "classification": "unresolved",
-            "reasons": [
-              "pack-lifecycle-runtime-unimplemented"
-            ],
-            "status": "verified-action-effect-binding-unresolved",
-            "confidence": "unresolved",
-            "applied": false
+            "classification": "applied",
+            "reasons": [],
+            "status": "verified-action-effect-binding-applied",
+            "confidence": "high",
+            "applied": true
           }
         ],
         "effectGraph": [
@@ -71000,9 +71195,9 @@
                 "status": "battle-element-source-missing"
               }
             ],
-            "appliedNodeCount": 0,
+            "appliedNodeCount": 1,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 1,
+            "unresolvedNodeCount": 0,
             "nodeIdentities": [
               "10300214|element:-4717659629921631149"
             ]
@@ -71025,9 +71220,9 @@
                 "status": "battle-element-source-missing"
               }
             ],
-            "appliedNodeCount": 0,
+            "appliedNodeCount": 1,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 1,
+            "unresolvedNodeCount": 0,
             "nodeIdentities": [
               "10300214|element:-4717659629921631149"
             ]
@@ -71077,9 +71272,9 @@
             ]
           }
         ],
-        "status": "verified-skill-control-mechanics-binding-unresolved",
-        "confidence": "unresolved",
-        "applied": false
+        "status": "verified-skill-control-mechanics-binding-applied",
+        "confidence": "high",
+        "applied": true
       },
       {
         "controlSkillId": 10300215,
@@ -71910,6 +72105,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": {
@@ -72167,6 +72363,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -72312,6 +72509,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -72457,6 +72655,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -72578,6 +72777,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -72702,6 +72902,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -72990,7 +73191,7 @@
             "elementCount": 1,
             "runnableElementCount": 0,
             "effectNodeCount": 1,
-            "runnableEffectCount": 0,
+            "runnableEffectCount": 1,
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300224.asset/MonoBehaviour/skill_control_10300224__-111725490797607019.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
           },
           {
@@ -73007,7 +73208,7 @@
             "elementCount": 1,
             "runnableElementCount": 0,
             "effectNodeCount": 1,
-            "runnableEffectCount": 0,
+            "runnableEffectCount": 1,
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300224.asset/MonoBehaviour/skill_control_10300224__-111725490797607019.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
           }
         ],
@@ -73077,6 +73278,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -73114,17 +73316,19 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "wrapper": {
+                "status": "applied",
+                "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
-            "classification": "unresolved",
-            "reasons": [
-              "pack-lifecycle-runtime-unimplemented"
-            ],
-            "status": "verified-action-effect-binding-unresolved",
-            "confidence": "unresolved",
-            "applied": false
+            "classification": "applied",
+            "reasons": [],
+            "status": "verified-action-effect-binding-applied",
+            "confidence": "high",
+            "applied": true
           },
           {
             "effectIdentity": "10300224|1|elements|0|-47010674928584074|element:-47010674928584074|1|0",
@@ -73190,6 +73394,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -73227,17 +73432,19 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "wrapper": {
+                "status": "applied",
+                "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
-            "classification": "unresolved",
-            "reasons": [
-              "pack-lifecycle-runtime-unimplemented"
-            ],
-            "status": "verified-action-effect-binding-unresolved",
-            "confidence": "unresolved",
-            "applied": false
+            "classification": "applied",
+            "reasons": [],
+            "status": "verified-action-effect-binding-applied",
+            "confidence": "high",
+            "applied": true
           }
         ],
         "effectGraph": [
@@ -73259,9 +73466,9 @@
                 "status": "battle-element-source-missing"
               }
             ],
-            "appliedNodeCount": 0,
+            "appliedNodeCount": 1,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 1,
+            "unresolvedNodeCount": 0,
             "nodeIdentities": [
               "10300224|element:-47010674928584074"
             ]
@@ -73284,17 +73491,17 @@
                 "status": "battle-element-source-missing"
               }
             ],
-            "appliedNodeCount": 0,
+            "appliedNodeCount": 1,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 1,
+            "unresolvedNodeCount": 0,
             "nodeIdentities": [
               "10300224|element:-47010674928584074"
             ]
           }
         ],
-        "status": "verified-skill-control-mechanics-binding-unresolved",
-        "confidence": "unresolved",
-        "applied": false
+        "status": "verified-skill-control-mechanics-binding-applied",
+        "confidence": "high",
+        "applied": true
       },
       {
         "controlSkillId": 10300225,
@@ -73833,6 +74040,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -73944,6 +74152,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -74055,6 +74264,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -74545,7 +74755,7 @@
             "elementCount": 4,
             "runnableElementCount": 0,
             "effectNodeCount": 8,
-            "runnableEffectCount": 1,
+            "runnableEffectCount": 2,
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
           }
         ],
@@ -74615,6 +74825,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -74652,17 +74863,19 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "wrapper": {
+                "status": "applied",
+                "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
-            "classification": "unresolved",
-            "reasons": [
-              "pack-lifecycle-runtime-unimplemented"
-            ],
-            "status": "verified-action-effect-binding-unresolved",
-            "confidence": "unresolved",
-            "applied": false
+            "classification": "applied",
+            "reasons": [],
+            "status": "verified-action-effect-binding-applied",
+            "confidence": "high",
+            "applied": true
           },
           {
             "effectIdentity": "10300227|0|elements|0|-6766905428157734921|element:-127131817645696752|0|0",
@@ -74756,6 +74969,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -74876,6 +75090,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -75000,6 +75215,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -75094,9 +75310,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 1,
+            "appliedNodeCount": 2,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 4,
+            "unresolvedNodeCount": 3,
             "nodeIdentities": [
               "10300227|element:-6766905428157734921",
               "10300227|element:-127131817645696752",
@@ -75287,6 +75503,7 @@
                 "12": 5000
               }
             },
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -75410,6 +75627,7 @@
                 "12": 5000
               }
             },
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -76047,6 +76265,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -76165,6 +76384,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -76265,6 +76485,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -76368,6 +76589,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -76480,6 +76702,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -77618,6 +77841,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -77736,6 +77960,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -77888,6 +78113,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -77925,13 +78151,16 @@
                 "sourceField": null
               },
               "mark": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "wrapper": {
                 "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "pack-lifecycle-runtime-unimplemented",
               "nested-effect-wrapper-semantics-unresolved"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -78022,6 +78251,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -78151,6 +78381,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -78270,6 +78501,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -78368,6 +78600,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -78482,6 +78715,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -78623,6 +78857,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -78742,6 +78977,7 @@
               }
             },
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -78856,6 +79092,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -78974,6 +79211,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -79126,6 +79364,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -79163,13 +79402,16 @@
                 "sourceField": null
               },
               "mark": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "wrapper": {
                 "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "pack-lifecycle-runtime-unimplemented",
               "nested-effect-wrapper-semantics-unresolved"
             ],
             "status": "verified-action-effect-binding-unresolved",
@@ -79260,6 +79502,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -79389,6 +79632,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -79477,9 +79721,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10300244|element:2099292417798859923",
               "10300244|element:2917355649561243897",
@@ -79824,9 +80068,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10300244|element:2099292417798859923",
               "10300244|element:2917355649561243897",
@@ -80562,6 +80806,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -80673,6 +80918,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -80966,6 +81212,7 @@
             },
             "propertyChange": null,
             "directSp": null,
+            "cooldownReduction": null,
             "heal": null,
             "shield": false,
             "tuningMark": null,
@@ -109708,6 +109955,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -109821,6 +110069,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -109939,6 +110188,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -110039,6 +110289,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -110179,6 +110430,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -110298,6 +110550,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -110419,6 +110672,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -110519,6 +110773,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -110633,6 +110888,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -110746,6 +111002,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -110864,6 +111121,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -110964,6 +111222,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -111104,6 +111363,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -111223,6 +111483,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -111344,6 +111605,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -111444,6 +111706,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -111574,6 +111837,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -111688,6 +111952,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -111801,6 +112066,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -111917,6 +112183,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -112063,6 +112330,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -112163,6 +112431,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -112303,6 +112572,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -112422,6 +112692,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -112536,6 +112807,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -112656,6 +112928,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -112756,6 +113029,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -112890,6 +113164,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -113016,6 +113291,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -113053,13 +113329,16 @@
               "sourceField": null
             },
             "mark": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
               "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "pack-lifecycle-runtime-unimplemented",
             "nested-effect-wrapper-semantics-unresolved"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -113130,6 +113409,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -113243,6 +113523,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -113361,6 +113642,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -113461,6 +113743,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -113601,6 +113884,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -113720,6 +114004,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -113841,6 +114126,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -113941,6 +114227,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -114055,6 +114342,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -114168,6 +114456,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -114286,6 +114575,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -114386,6 +114676,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -114526,6 +114817,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -114645,6 +114937,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -114766,6 +115059,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -114866,6 +115160,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -114996,6 +115291,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -115110,6 +115406,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -115223,6 +115520,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -115339,6 +115637,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -115485,6 +115784,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -115585,6 +115885,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -115725,6 +116026,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -115844,6 +116146,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -115958,6 +116261,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -116078,6 +116382,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -116178,6 +116483,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -116312,6 +116618,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -116438,6 +116745,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -116475,13 +116783,16 @@
               "sourceField": null
             },
             "mark": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
               "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "pack-lifecycle-runtime-unimplemented",
             "nested-effect-wrapper-semantics-unresolved"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -116552,6 +116863,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -116665,6 +116977,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -116783,6 +117096,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -116883,6 +117197,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -117023,6 +117338,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -117142,6 +117458,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -117263,6 +117580,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -117363,6 +117681,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -117477,6 +117796,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -117590,6 +117910,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -117708,6 +118029,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -117808,6 +118130,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -117948,6 +118271,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -118067,6 +118391,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -118188,6 +118513,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -118288,6 +118614,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -118418,6 +118745,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -118532,6 +118860,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -118645,6 +118974,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -118761,6 +119091,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -118907,6 +119238,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -119007,6 +119339,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -119147,6 +119480,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -119266,6 +119600,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -119380,6 +119715,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -119500,6 +119836,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -119600,6 +119937,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -119734,6 +120072,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -119860,6 +120199,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -119897,13 +120237,16 @@
               "sourceField": null
             },
             "mark": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
               "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "pack-lifecycle-runtime-unimplemented",
             "nested-effect-wrapper-semantics-unresolved"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -119974,6 +120317,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -120087,6 +120431,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -120205,6 +120550,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -120305,6 +120651,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -120445,6 +120792,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -120564,6 +120912,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -120685,6 +121034,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -120785,6 +121135,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -120899,6 +121250,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -121012,6 +121364,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -121130,6 +121483,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -121230,6 +121584,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -121370,6 +121725,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -121489,6 +121845,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -121610,6 +121967,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -121710,6 +122068,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -121840,6 +122199,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -121954,6 +122314,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -122074,6 +122435,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -122172,6 +122534,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -122291,6 +122654,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -122437,6 +122801,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -122537,6 +122902,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -122677,6 +123043,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -122796,6 +123163,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -122910,6 +123278,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -123030,6 +123399,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -123130,6 +123500,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -123264,6 +123635,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -123390,6 +123762,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -123427,13 +123800,16 @@
               "sourceField": null
             },
             "mark": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
               "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "pack-lifecycle-runtime-unimplemented",
             "nested-effect-wrapper-semantics-unresolved"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -123504,6 +123880,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -123626,6 +124003,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -123726,6 +124104,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -123866,6 +124245,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -123985,6 +124365,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -124106,6 +124487,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -124206,6 +124588,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -124327,6 +124710,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -124427,6 +124811,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -124548,6 +124933,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -124648,6 +125034,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -124762,6 +125149,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -124884,6 +125272,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -124984,6 +125373,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -125105,6 +125495,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -125205,6 +125596,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -125319,6 +125711,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -125441,6 +125834,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -125541,6 +125935,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -125662,6 +126057,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -125762,6 +126158,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -125876,6 +126273,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -125986,6 +126384,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": {
@@ -126225,6 +126624,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -126325,6 +126725,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -126448,6 +126849,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -126591,6 +126993,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -126710,6 +127113,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -126831,6 +127235,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -126931,6 +127336,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -127045,6 +127451,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -127176,6 +127583,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -127306,6 +127714,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -127430,6 +127839,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -127554,6 +127964,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -127675,6 +128086,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -127779,6 +128191,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -127897,6 +128310,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -128010,6 +128424,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -128123,6 +128538,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -128236,6 +128652,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -128354,6 +128771,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -128498,6 +128916,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -128644,6 +129063,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -128744,6 +129164,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -128888,6 +129309,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -129015,6 +129437,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -129137,6 +129560,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -129251,6 +129675,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -129373,6 +129798,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -129473,6 +129899,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -129607,6 +130034,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -129740,6 +130168,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -129853,6 +130282,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -129981,6 +130411,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -130018,13 +130449,16 @@
               "sourceField": null
             },
             "mark": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
               "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "pack-lifecycle-runtime-unimplemented",
             "nested-effect-wrapper-semantics-unresolved"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -130108,6 +130542,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -130145,13 +130580,16 @@
               "sourceField": null
             },
             "mark": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
               "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "pack-lifecycle-runtime-unimplemented",
             "nested-effect-wrapper-semantics-unresolved"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -130222,6 +130660,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -130259,17 +130698,19 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
+              "status": "applied",
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
-          "classification": "unresolved",
-          "reasons": [
-            "pack-lifecycle-runtime-unimplemented"
-          ],
-          "status": "verified-action-effect-binding-unresolved",
-          "confidence": "unresolved",
-          "applied": false
+          "classification": "applied",
+          "reasons": [],
+          "status": "verified-action-effect-binding-applied",
+          "confidence": "high",
+          "applied": true
         },
         {
           "effectIdentity": "10300214|1|elements|0|-4717659629921631149|element:-4717659629921631149|1|0",
@@ -130335,6 +130776,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -130372,17 +130814,19 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
+              "status": "applied",
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
-          "classification": "unresolved",
-          "reasons": [
-            "pack-lifecycle-runtime-unimplemented"
-          ],
-          "status": "verified-action-effect-binding-unresolved",
-          "confidence": "unresolved",
-          "applied": false
+          "classification": "applied",
+          "reasons": [],
+          "status": "verified-action-effect-binding-applied",
+          "confidence": "high",
+          "applied": true
         },
         {
           "effectIdentity": "10300221|0|elements|6|-3809486317990090417|element:-1715488869977622004|54|0",
@@ -130482,6 +130926,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -130603,6 +131048,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -130716,6 +131162,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": {
@@ -130973,6 +131420,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -131118,6 +131566,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -131239,6 +131688,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -131353,6 +131803,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -131390,17 +131841,19 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
+              "status": "applied",
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
-          "classification": "unresolved",
-          "reasons": [
-            "pack-lifecycle-runtime-unimplemented"
-          ],
-          "status": "verified-action-effect-binding-unresolved",
-          "confidence": "unresolved",
-          "applied": false
+          "classification": "applied",
+          "reasons": [],
+          "status": "verified-action-effect-binding-applied",
+          "confidence": "high",
+          "applied": true
         },
         {
           "effectIdentity": "10300224|1|elements|0|-47010674928584074|element:-47010674928584074|1|0",
@@ -131466,6 +131919,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -131503,17 +131957,19 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
+              "status": "applied",
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
-          "classification": "unresolved",
-          "reasons": [
-            "pack-lifecycle-runtime-unimplemented"
-          ],
-          "status": "verified-action-effect-binding-unresolved",
-          "confidence": "unresolved",
-          "applied": false
+          "classification": "applied",
+          "reasons": [],
+          "status": "verified-action-effect-binding-applied",
+          "confidence": "high",
+          "applied": true
         },
         {
           "effectIdentity": "10300225|0|elements|0|3663436943335475859|element:3663436943335475859|15|0",
@@ -131579,6 +132035,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -131690,6 +132147,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -131801,6 +132259,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -131940,6 +132399,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -132061,6 +132521,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -132184,6 +132645,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -132298,6 +132760,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -132335,17 +132798,19 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
+              "status": "applied",
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
-          "classification": "unresolved",
-          "reasons": [
-            "pack-lifecycle-runtime-unimplemented"
-          ],
-          "status": "verified-action-effect-binding-unresolved",
-          "confidence": "unresolved",
-          "applied": false
+          "classification": "applied",
+          "reasons": [],
+          "status": "verified-action-effect-binding-applied",
+          "confidence": "high",
+          "applied": true
         },
         {
           "effectIdentity": "10300241|0|elements|4|-3617327089538337445|element:-3617327089538337445|unresolved-frame|0",
@@ -132421,6 +132886,7 @@
               "12": 5000
             }
           },
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -132544,6 +133010,7 @@
               "12": 5000
             }
           },
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -132664,6 +133131,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -132764,6 +133232,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -132885,6 +133354,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -132985,6 +133455,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -133097,6 +133568,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -133224,6 +133696,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -133338,6 +133811,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -133456,6 +133930,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -133615,6 +134090,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -133741,6 +134217,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -133778,13 +134255,16 @@
               "sourceField": null
             },
             "mark": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
               "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "pack-lifecycle-runtime-unimplemented",
             "nested-effect-wrapper-semantics-unresolved"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -133871,6 +134351,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -133985,6 +134466,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -134105,6 +134587,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -134203,6 +134686,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -134317,6 +134801,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -134435,6 +134920,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -134600,6 +135086,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -134719,6 +135206,7 @@
             }
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -134853,6 +135341,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -134979,6 +135468,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -135016,13 +135506,16 @@
               "sourceField": null
             },
             "mark": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
               "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "pack-lifecycle-runtime-unimplemented",
             "nested-effect-wrapper-semantics-unresolved"
           ],
           "status": "verified-action-effect-binding-unresolved",
@@ -135093,6 +135586,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -135204,6 +135698,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -135315,6 +135810,7 @@
           },
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "tuningMark": null,
@@ -135437,6 +135933,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -135596,6 +136093,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -135760,6 +136258,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -135918,6 +136417,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -136088,6 +136588,7 @@
             "bucket": "dynamicExtra"
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -136249,6 +136750,7 @@
             "bucket": "dynamicExtra"
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -136413,6 +136915,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -136571,6 +137074,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -136736,6 +137240,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -136894,6 +137399,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -137059,6 +137565,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -137217,6 +137724,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -137385,6 +137893,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -137553,6 +138062,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -137711,6 +138221,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -137876,6 +138387,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -138034,6 +138546,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -138192,6 +138705,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -138350,6 +138864,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -138529,6 +139044,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -138687,6 +139203,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -138854,6 +139371,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": {
@@ -139030,6 +139548,7 @@
             "bucket": "dynamicPercent"
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -139191,6 +139710,7 @@
             "bucket": "dynamicPercent"
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -139355,6 +139875,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -139513,6 +140034,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -139681,6 +140203,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -139858,6 +140381,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": {
@@ -140036,6 +140560,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": {
@@ -140208,6 +140733,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": {
@@ -140380,6 +140906,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": {
@@ -140549,6 +141076,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -140711,6 +141239,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -140873,6 +141402,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -141058,6 +141588,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -141243,6 +141774,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -141428,6 +141960,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -141617,6 +142150,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -141783,6 +142317,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -141952,6 +142487,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -142110,6 +142646,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -142286,6 +142823,7 @@
             "bucket": "dynamicExtra"
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -142454,6 +142992,7 @@
             "bucket": "dynamicExtra"
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -142624,6 +143163,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -142792,6 +143332,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -142950,6 +143491,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -143128,6 +143670,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": {
@@ -143309,6 +143852,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": {
@@ -143480,6 +144024,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -143654,6 +144199,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -143687,12 +144233,15 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
+              "status": "applied",
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
           "reasons": [
-            "pack-lifecycle-runtime-unimplemented",
             "wrapper-condition-semantics-unresolved",
             "semantic-wrapper-not-gameplay-effect"
           ],
@@ -143827,6 +144376,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -143860,12 +144410,15 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
+              "status": "applied",
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
           "reasons": [
-            "pack-lifecycle-runtime-unimplemented",
             "wrapper-condition-semantics-unresolved",
             "semantic-wrapper-not-gameplay-effect"
           ],
@@ -144007,6 +144560,7 @@
             "bucket": "dynamicExtra"
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -144170,6 +144724,7 @@
             "bucket": "dynamicExtra"
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -144328,6 +144883,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -144509,6 +145065,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": {
@@ -144687,6 +145244,7 @@
             "bucket": "dynamicExtra"
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -144850,6 +145408,7 @@
             "bucket": "dynamicExtra"
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -145007,6 +145566,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -145164,6 +145724,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -145335,6 +145896,7 @@
             "bucket": "dynamicExtra"
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -145498,6 +146060,7 @@
             "bucket": "dynamicExtra"
           },
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -145664,6 +146227,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": {
@@ -145825,6 +146389,7 @@
           "propertyConditionStatus": null,
           "propertyChange": null,
           "directSp": null,
+          "cooldownReduction": null,
           "heal": null,
           "shield": false,
           "damage": null,
@@ -145858,12 +146423,15 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "wrapper": {
+              "status": "applied",
+              "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
           "reasons": [
-            "pack-lifecycle-runtime-unimplemented",
             "semantic-wrapper-not-gameplay-effect"
           ],
           "rawEffectIdentities": [
@@ -146311,7 +146879,7 @@
       "recipeHash": "4bd83a1f4cb55c16143080c3680af707b7d2647fac6df2ef38f5ecf489bf93da",
       "compilerInputHash": "2169829c6a7575f10b21f8e95635564f8de3ddf5712b6c962309f9d5e2635dbb",
       "recipeContractHash": "096511dd196f6bf80c95b5c311b993faa384cfe0687064230ea8c25c49606d0b",
-      "ownerContractHash": "869cf2d963fd69e4d8005edcd6b8ebb030684a588aa8ecd53a807edf8d276183"
+      "ownerContractHash": "281e98406a30a68a1d6878e4a6e4b56b4618263971c419829f2f772704131e3f"
     },
     "operators": [
       "public-action-binding",
@@ -146332,7 +146900,7 @@
         "packagePath": "actionMappings",
         "operator": "public-action-binding",
         "recordCount": 10,
-        "recordsHash": "1022fd936a87333ca27f1815658fb50ef0d867ceebe58db2a7b118cf17f9fb31"
+        "recordsHash": "5e39e50c9cc9c1a9b2e72c35e08ca1d90d12a8be57fb67630b26500149cfe6e5"
       },
       {
         "packagePath": "actionVariantGraph.publicActionForms",
@@ -146401,7 +146969,7 @@
         "recordsHash": "24a5afcba0117b5350220c1f6ce50f4b616689a8866de1f147872c9c08a8c58a"
       }
     ],
-    "contractHash": "8156905194e6a69e3a0bbfdfa11b9e37ded77fc75d693f54a9ffdf6eea876c76"
+    "contractHash": "ed67e40efda3665540e8eda54c872f7f81b9b6759468172038fc645657bc57f1"
   },
   "coverage": [
     {
@@ -147838,28 +148406,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:1743944c3f01497ceb6e",
-      "ownerId": 103002,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10300224:1:-47010674928584074:-1682608665973739430:1",
-      "sourceIdentities": [
-        "battle-effect:10300224:1:-47010674928584074:-1682608665973739430:1"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10300224|1|elements|0|-47010674928584074|element:-47010674928584074|1|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:17f0963a5099e7ff21a2",
       "ownerId": 103002,
       "sourceKind": "effect",
@@ -148013,28 +148559,6 @@
       "metadata": null,
       "rawRecordIdentities": [
         "actor:103002|control:10300212|sub:0->actor:103002|control:10300204|sub:1->4917425300316975179->0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:1f42b1aa046543b613ba",
-      "ownerId": 103002,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10300227:0:-6766905428157734921:166774690136961000:0",
-      "sourceIdentities": [
-        "battle-effect:10300227:0:-6766905428157734921:166774690136961000:0"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10300227|0|elements|0|-6766905428157734921|element:-6766905428157734921|0|0"
       ],
       "rawRecordCount": 1
     },
@@ -148899,29 +149423,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:35ace78c73dfe57b3ade",
-      "ownerId": 103002,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10300203:3:8913920234485900029:-5774689639772653403:26",
-      "sourceIdentities": [
-        "battle-effect:10300203:3:8913920234485900029:-5774689639772653403:26"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10300203|3|elements|15|4460567758519354701|element:8913920234485900029|26|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:36132d2ae176aa6a55cc",
       "ownerId": 103002,
       "sourceKind": "variant-edge",
@@ -149120,29 +149621,6 @@
       "metadata": null,
       "rawRecordIdentities": [
         "actor:103002|control:10300202|sub:1->actor:103002|control:10300202|sub:1->439423875707784691->0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:38b5eba5c17c24cc08c3",
-      "ownerId": 103002,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10300244:1:8913920234485900029:7664034929019633734:29",
-      "sourceIdentities": [
-        "battle-effect:10300244:1:8913920234485900029:7664034929019633734:29"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10300244|1|elements|6|2099292417798859923|element:8913920234485900029|29|0"
       ],
       "rawRecordCount": 1
     },
@@ -149660,6 +150138,30 @@
         "actor:103002|control:10300212|sub:0->actor:103002|control:10300203|sub:3->-5180249669170195019->missing"
       ],
       "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:488908d97c3df4b876d8",
+      "ownerId": 103002,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "wrapper-or-duplicate",
+      "reasons": [
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300213:0:8913920234485900029:2083420758843707102:284",
+      "sourceIdentities": [
+        "battle-effect:10300213:0:8913920234485900029:-1358196052883222818:300",
+        "battle-effect:10300213:0:8913920234485900029:2083420758843707102:284"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10300213|0|elements|36|-6187686510236149564|element:8913920234485900029|284|1",
+        "effect:10300213|0|elements|36|-6187686510236149564|element:8913920234485900029|300|0"
+      ],
+      "rawRecordCount": 2
     },
     {
       "recordIdentity": "semantic-gap:48faf23347f5827dde3e",
@@ -150228,6 +150730,28 @@
       "rawRecordCount": 1
     },
     {
+      "recordIdentity": "semantic-gap:5baec8b4fc80900fd085",
+      "ownerId": 103002,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "wrapper-or-duplicate",
+      "reasons": [
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300244:1:8913920234485900029:7664034929019633734:29",
+      "sourceIdentities": [
+        "battle-effect:10300244:1:8913920234485900029:7664034929019633734:29"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10300244|1|elements|6|2099292417798859923|element:8913920234485900029|29|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
       "recordIdentity": "semantic-gap:5c642ad70c98f6a0abac",
       "ownerId": 103002,
       "sourceKind": "effect",
@@ -150696,6 +151220,28 @@
       "metadata": null,
       "rawRecordIdentities": [
         "actor:103002|control:10300213|sub:0->actor:103002|control:10300203|sub:1->3590147093618594626->0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:67d99404ea2627f4b113",
+      "ownerId": 103002,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "wrapper-or-duplicate",
+      "reasons": [
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300201:3:8913920234485900029:8674841978468049964:26",
+      "sourceIdentities": [
+        "battle-effect:10300201:3:8913920234485900029:8674841978468049964:26"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10300201|3|elements|15|4460567758519354701|element:8913920234485900029|26|0"
       ],
       "rawRecordCount": 1
     },
@@ -151362,31 +151908,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:7a7b21d89394e215d7a8",
-      "ownerId": 103002,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10300213:0:8913920234485900029:2083420758843707102:284",
-      "sourceIdentities": [
-        "battle-effect:10300213:0:8913920234485900029:-1358196052883222818:300",
-        "battle-effect:10300213:0:8913920234485900029:2083420758843707102:284"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10300213|0|elements|36|-6187686510236149564|element:8913920234485900029|284|1",
-        "effect:10300213|0|elements|36|-6187686510236149564|element:8913920234485900029|300|0"
-      ],
-      "rawRecordCount": 2
-    },
-    {
       "recordIdentity": "semantic-gap:7aa72253b005c26a1ccb",
       "ownerId": 103002,
       "sourceKind": "variant-edge",
@@ -151931,28 +152452,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:88a7ac2ad1b1a2222ea9",
-      "ownerId": 103002,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10300224:0:-47010674928584074:2006755113813591833:1",
-      "sourceIdentities": [
-        "battle-effect:10300224:0:-47010674928584074:2006755113813591833:1"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10300224|0|elements|0|-47010674928584074|element:-47010674928584074|1|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:88b649610897a4709d49",
       "ownerId": 103002,
       "sourceKind": "variant-edge",
@@ -152489,29 +152988,6 @@
       "metadata": null,
       "rawRecordIdentities": [
         "actor:103002|control:10300210|sub:0->actor:103002|control:10300202|sub:1->-8955405464144620475->0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:93f8b2a0df1689f9118a",
-      "ownerId": 103002,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10300204:2:8913920234485900029:-6305840928975797075:29",
-      "sourceIdentities": [
-        "battle-effect:10300204:2:8913920234485900029:-6305840928975797075:29"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10300204|2|elements|13|4460567758519354701|element:8913920234485900029|29|0"
       ],
       "rawRecordCount": 1
     },
@@ -153096,6 +153572,28 @@
       "metadata": null,
       "rawRecordIdentities": [
         "actor:103002|control:10300210|sub:0->actor:103002|control:10300201|sub:2->-7614050540243982357->0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:a2097593c1f5325070e5",
+      "ownerId": 103002,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "wrapper-or-duplicate",
+      "reasons": [
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300204:2:8913920234485900029:-6305840928975797075:29",
+      "sourceIdentities": [
+        "battle-effect:10300204:2:8913920234485900029:-6305840928975797075:29"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10300204|2|elements|13|4460567758519354701|element:8913920234485900029|29|0"
       ],
       "rawRecordCount": 1
     },
@@ -153827,29 +154325,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:aee43af97ba008335a82",
-      "ownerId": 103002,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10300244:0:8913920234485900029:-2078962768819859382:29",
-      "sourceIdentities": [
-        "battle-effect:10300244:0:8913920234485900029:-2078962768819859382:29"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10300244|0|elements|0|2099292417798859923|element:8913920234485900029|29|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:afda56d111d79f39ed2f",
       "ownerId": 103002,
       "sourceKind": "effect",
@@ -154100,25 +154575,24 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:b387cdd562191e6341b5",
+      "recordIdentity": "semantic-gap:b40c56fd23c7969827fa",
       "ownerId": 103002,
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "impactClassification": "wrapper-or-duplicate",
       "reasons": [
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
-      "sourceIdentity": "battle-effect:10300202:3:8913920234485900029:-4996826262836372537:26",
+      "sourceIdentity": "battle-effect:10300244:0:8913920234485900029:-2078962768819859382:29",
       "sourceIdentities": [
-        "battle-effect:10300202:3:8913920234485900029:-4996826262836372537:26"
+        "battle-effect:10300244:0:8913920234485900029:-2078962768819859382:29"
       ],
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10300202|3|elements|15|4460567758519354701|element:8913920234485900029|26|0"
+        "effect:10300244|0|elements|0|2099292417798859923|element:8913920234485900029|29|0"
       ],
       "rawRecordCount": 1
     },
@@ -154611,6 +155085,28 @@
       "rawRecordCount": 1
     },
     {
+      "recordIdentity": "semantic-gap:c21e7fa4ffdecb842e9b",
+      "ownerId": 103002,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "wrapper-or-duplicate",
+      "reasons": [
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300202:3:8913920234485900029:-4996826262836372537:26",
+      "sourceIdentities": [
+        "battle-effect:10300202:3:8913920234485900029:-4996826262836372537:26"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10300202|3|elements|15|4460567758519354701|element:8913920234485900029|26|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
       "recordIdentity": "semantic-gap:c3000150b603bbc6cb40",
       "ownerId": 103002,
       "sourceKind": "effect",
@@ -154901,28 +155397,6 @@
       "metadata": null,
       "rawRecordIdentities": [
         "actor:103002|control:10300201|sub:1->actor:103002|control:10300203|sub:2->-7459424710790343456->missing"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:c85af9a1284370e69ce2",
-      "ownerId": 103002,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10300214:0:-4717659629921631149:-3771542586303767115:1",
-      "sourceIdentities": [
-        "battle-effect:10300214:0:-4717659629921631149:-3771542586303767115:1"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10300214|0|elements|0|-4717659629921631149|element:-4717659629921631149|1|0"
       ],
       "rawRecordCount": 1
     },
@@ -156392,28 +156866,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:f7749ae00c2de79ca6b2",
-      "ownerId": 103002,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10300214:1:-4717659629921631149:-6846343528506435423:1",
-      "sourceIdentities": [
-        "battle-effect:10300214:1:-4717659629921631149:-6846343528506435423:1"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10300214|1|elements|0|-4717659629921631149|element:-4717659629921631149|1|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:f77b0ebc32c7cde1b5e9",
       "ownerId": 103002,
       "sourceKind": "variant-edge",
@@ -156456,29 +156908,6 @@
       "metadata": null,
       "rawRecordIdentities": [
         "actor:103002|control:10300212|sub:0->actor:103002|control:10300202|sub:3->-7626888920505296324->missing"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:f7df124a20c68050b3ad",
-      "ownerId": 103002,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10300201:3:8913920234485900029:8674841978468049964:26",
-      "sourceIdentities": [
-        "battle-effect:10300201:3:8913920234485900029:8674841978468049964:26"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10300201|3|elements|15|4460567758519354701|element:8913920234485900029|26|0"
       ],
       "rawRecordCount": 1
     },
@@ -156567,6 +156996,28 @@
       "metadata": null,
       "rawRecordIdentities": [
         "actor:103002:skill:10300262"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:fa24a353cc39d0ed0f33",
+      "ownerId": 103002,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "wrapper-or-duplicate",
+      "reasons": [
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10300203:3:8913920234485900029:-5774689639772653403:26",
+      "sourceIdentities": [
+        "battle-effect:10300203:3:8913920234485900029:-5774689639772653403:26"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10300203|3|elements|15|4460567758519354701|element:8913920234485900029|26|0"
       ],
       "rawRecordCount": 1
     },
@@ -156866,7 +157317,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "42d0b9283fda2bb14ecd1f121d9c43ec6ec8cb0c837473ad58fceca0c305d455"
+    "deterministicInputHash": "8c9de08af26f915d5bd68a9c992242a9aa6c58d25d933a282be48f9ccb3c134f"
   },
-  "profileHash": "2b7ea28830eee7ad5806a99cc9e540c338802d1b8f0e63d636c9d11818ad5a33"
+  "profileHash": "e115ee20582512ea01058a7b1bf62679e0afe3b7693215ac3a7fe42884203b2f"
 }

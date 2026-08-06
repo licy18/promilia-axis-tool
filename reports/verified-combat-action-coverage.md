@@ -3,15 +3,15 @@
 - 包：`azpr-tc-2026-07-18`
 - 公开动作分母：563
 - 已关联：563
-- 场景可运行：545
-- 来源静态可应用：436
+- 场景可运行：546
+- 来源静态可应用：437
 - 来源运行时依赖：109
 - 零距离场景补全：148
-- 来源静态证据缺口：18
+- 来源静态证据缺口：17
 - 明确零：0
-- 未解析：18
+- 未解析：17
 - 真实命中节点：2502
-- 公开动作变体：593（未解析 48）
+- 公开动作变体：593（未解析 47）
 - 非零回能元素：667（未关联 464）
 - 零距离投射物命中：2418（仍缺发射帧 73、仍缺公式 49、仍缺目标 0）
 - 普攻输入链：20 条 / 95 个输入段（可运行 80，未解析 15）
@@ -50,7 +50,7 @@
 | actor | dodge-attack | 20 | 20 | 16 | 0 | 4 | 50 |
 | actor | limit-counter | 20 | 20 | 19 | 0 | 1 | 81 |
 | actor | normal-attack | 20 | 20 | 19 | 0 | 1 | 93 |
-| actor | perfect-parry | 20 | 20 | 19 | 0 | 1 | 10 |
+| actor | perfect-parry | 20 | 20 | 20 | 0 | 0 | 10 |
 | actor | plunging-attack | 20 | 20 | 20 | 0 | 0 | 22 |
 | actor | star-carry | 17 | 17 | 14 | 0 | 3 | 74 |
 | actor | star-combo | 20 | 20 | 20 | 0 | 0 | 20 |
@@ -72,7 +72,6 @@
 - `actor|107001|10700121|0|10700121` 西芙莉雅 / star-carry / 余音之痕: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|107002|10700201|2|10700215` 米砂 / dodge-attack / 轻语: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|107002|10700222|0|10700222` 米砂 / star-carry / 林隙留影: base-function-unverified, hp:damage-formula-inputs-incomplete, toughness:pre-shield-damage-inputs-incomplete, heal-formula-not-literal-function-5
-- `actor|107002|10700222|2|10700227` 米砂 / perfect-parry / 林隙留影: pack-lifecycle-runtime-unimplemented, nested-damage-trigger-lifecycle-not-expanded, nested-effect-wrapper-semantics-unresolved
 - `actor|108001|10800101|1|10800110` 忒拉拉 / charged-attack / 狼行焰影: selected-control-variant-has-no-three-value-elements
 - `actor|108002|10800201|1|10800210` 璐璐卡 / charged-attack / 涟漪之舞: trigger-frame-missing, projectile-impact-frame-runtime-dependent, tuning-mark-max-mismatch, effect-trigger-frame-missing, effect-target-unresolved, property-formula-not-literal-function-5
 - `actor|108002|10800201|4|10800215` 璐璐卡 / dodge-attack / 涟漪之舞: trigger-frame-missing, projectile-impact-frame-runtime-dependent

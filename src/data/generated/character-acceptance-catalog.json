@@ -3,7 +3,7 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "cbaf132304a0487d",
+  "manifestIndexHash": "cc3d7f2e512c0aec",
   "entries": [
     {
       "ownerId": 101003,
@@ -19,13 +19,13 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 180,
+      "blockingLedgerCount": 175,
       "matrixRequiredCount": 247,
       "matrixPassedCount": 62,
-      "manifestHash": "2a8030f307e714f1",
-      "qualificationSubjectHash": "aebfe26e2f2acac6",
-      "sourceOfTruthHash": "54c6a0621e93b8c9",
-      "profileHash": "f8d5614f0a5410504fe6b1a970145fa77e5f7f98dd050e1f84e2287ed688f264",
+      "manifestHash": "065b8dbf169441fe",
+      "qualificationSubjectHash": "ea879331d8409c41",
+      "sourceOfTruthHash": "1d7547754ef6fe1a",
+      "profileHash": "94d9a0af06a0419084c95e4a75a70f4fc021ada2369725c04550d7451504221e",
       "visualScenarioIds": [
         "m11-d-101003-visual-acceptance"
       ]
@@ -44,13 +44,13 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 334,
+      "blockingLedgerCount": 329,
       "matrixRequiredCount": 411,
       "matrixPassedCount": 56,
-      "manifestHash": "e7b17e611db8a8ad",
-      "qualificationSubjectHash": "5c54adf1d9d5c826",
-      "sourceOfTruthHash": "fd3a302738ce6f91",
-      "profileHash": "8f2b562764471843f62cc316b6b4493a726df7924a4f93c595690298821584a8",
+      "manifestHash": "7a8eee75dc7d3cb2",
+      "qualificationSubjectHash": "0f558f54750c1f7d",
+      "sourceOfTruthHash": "e293e85c91f4a178",
+      "profileHash": "0a824ae59cdee45b58ae46f80af95cc26ad6d3b0332efff7bd9113b79112316a",
       "visualScenarioIds": [
         "m11-d-101010-visual-acceptance"
       ]
@@ -69,13 +69,13 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 506,
+      "blockingLedgerCount": 501,
       "matrixRequiredCount": 713,
       "matrixPassedCount": 36,
-      "manifestHash": "e87c90065aa19325",
-      "qualificationSubjectHash": "2ec46ef8d59137a5",
-      "sourceOfTruthHash": "ef3ae7c057621ffd",
-      "profileHash": "2b7ea28830eee7ad5806a99cc9e540c338802d1b8f0e63d636c9d11818ad5a33",
+      "manifestHash": "16e3415359826f33",
+      "qualificationSubjectHash": "d52b6e2b3d73fdbd",
+      "sourceOfTruthHash": "7721a056004e8267",
+      "profileHash": "e115ee20582512ea01058a7b1bf62679e0afe3b7693215ac3a7fe42884203b2f",
       "visualScenarioIds": [
         "m11-d-103002-visual-acceptance"
       ]
@@ -88,5 +88,5 @@
     },
     "optimizationReadyCount": 0
   },
-  "catalogHash": "d501ab032fcc94f2"
+  "catalogHash": "670615576103f578"
 }

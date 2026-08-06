@@ -6138,7 +6138,8 @@ function classifyBattleEffectNode({
       'formulaParams.formulaParamValues[0]'
     );
   } else if (kind === 'sp') {
-    if (integerOrNull(tree.recoverType) !== 0) {
+    const recoverType = integerOrNull(tree.recoverType);
+    if (recoverType !== 0 && recoverType !== 3) {
       reasons.push('sp-recover-type-not-direct-sp');
     }
     if (!literalReady) reasons.push('sp-formula-not-literal-function-5');
@@ -6204,7 +6205,25 @@ function classifyBattleEffectNode({
       [],
       'elementConfigId|notDelElementDataList'
     );
-  } else if (['pack', 'stack', 'judgment'].includes(kind)) {
+  } else if (kind === 'pack') {
+    const childReferenceCount = collectBattleElementChildReferences(
+      tree
+    ).length;
+    if (childReferenceCount > 0) {
+      dimensions.wrapper = createDimensionClassification(
+        'applied',
+        [],
+        'elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList'
+      );
+    } else {
+      reasons.push('pack-lifecycle-runtime-unimplemented');
+      dimensions.mark = createDimensionClassification(
+        'unresolved',
+        reasons,
+        'elementConfigId'
+      );
+    }
+  } else if (['stack', 'judgment'].includes(kind)) {
     reasons.push(
       kind === 'judgment'
         ? 'judgment-condition-runtime-unimplemented'
@@ -6599,10 +6618,20 @@ function createControlRuntimeEffectBinding({
               : 'unresolved',
       valueByLevel,
     },
-    directSp: node.directSp && {
-      ...node.directSp,
-      valueByLevel,
-    },
+    directSp:
+      node.directSp?.recoverType === 0
+        ? {
+            ...node.directSp,
+            valueByLevel,
+          }
+        : null,
+    cooldownReduction:
+      node.directSp?.recoverType === 3
+        ? {
+            recoverType: 3,
+            valueByLevel,
+          }
+        : null,
     heal:
       node.kind === 'damage' && node.damage?.damageType === 5
         ? { valueByLevel }
@@ -9170,9 +9199,19 @@ function createSemanticEffectCandidate({
               ? 'dynamicPercent'
               : 'unresolved',
     },
-    directSp: node.directSp && {
-      ...node.directSp,
-    },
+    directSp:
+      node.directSp?.recoverType === 0
+        ? {
+            ...node.directSp,
+          }
+        : null,
+    cooldownReduction:
+      node.directSp?.recoverType === 3
+        ? {
+            recoverType: 3,
+            valueByLevel: node.formula?.valueByLevel ?? null,
+          }
+        : null,
     heal: node.kind === 'damage' && node.damage?.damageType === 5 ? {} : null,
     shield: (node.kind === 'shield' || node.damage?.damageType === 11) && {
       ...node.shield,

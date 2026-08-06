@@ -71,23 +71,6 @@
       "sourceRecordHash": "03d22eaff7fc2bb6"
     },
     {
-      "uniqueGapIdentity": "source-gap:03479cc67aa6bdd0",
-      "sourceRecordIdentities": [
-        "effect:10300224|0|elements|0|-47010674928584074|element:-47010674928584074|1|0",
-        "semantic-gap:88a7ac2ad1b1a2222ea9"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300224:0:-47010674928584074:2006755113813591833:1",
-        "effect:10300224|0|elements|0|-47010674928584074|element:-47010674928584074|1|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "07150a5a99c0284e"
-    },
-    {
       "uniqueGapIdentity": "source-gap:042666a73cc1a860",
       "sourceRecordIdentities": [
         "effect:10300244|1|elements|3|-8301357918827043072|element:-8301357918827043072|unresolved-frame|0",
@@ -222,6 +205,23 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "760471031c2f3e56"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:08b886ddef89ae09",
+      "sourceRecordIdentities": [
+        "effect:10300204|2|elements|13|4460567758519354701|element:8913920234485900029|29|0",
+        "semantic-gap:a2097593c1f5325070e5"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300204:2:8913920234485900029:-6305840928975797075:29",
+        "effect:10300204|2|elements|13|4460567758519354701|element:8913920234485900029|29|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "8da19c24533e53af"
     },
     {
       "uniqueGapIdentity": "source-gap:08d235920f0b3c85",
@@ -513,6 +513,23 @@
       "sourceRecordHash": "fc537f35fa3d8691"
     },
     {
+      "uniqueGapIdentity": "source-gap:13054a79bd83da57",
+      "sourceRecordIdentities": [
+        "effect:10300201|3|elements|15|4460567758519354701|element:8913920234485900029|26|0",
+        "semantic-gap:67d99404ea2627f4b113"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300201:3:8913920234485900029:8674841978468049964:26",
+        "effect:10300201|3|elements|15|4460567758519354701|element:8913920234485900029|26|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "a56ec0ef1bd597be"
+    },
+    {
       "uniqueGapIdentity": "source-gap:1348f569fcf6baaa",
       "sourceRecordIdentities": [
         "actor:103002|control:10300210|sub:0->actor:103002|control:10300202|sub:1->-8955405464144620475->missing",
@@ -630,6 +647,40 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "a0c75726b3816957"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:17af24946503c4ea",
+      "sourceRecordIdentities": [
+        "effect:10300202|3|elements|15|4460567758519354701|element:8913920234485900029|26|0",
+        "semantic-gap:c21e7fa4ffdecb842e9b"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300202:3:8913920234485900029:-4996826262836372537:26",
+        "effect:10300202|3|elements|15|4460567758519354701|element:8913920234485900029|26|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "d9f11c55c3399db5"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:18630baacace7a72",
+      "sourceRecordIdentities": [
+        "effect:10300244|0|elements|0|2099292417798859923|element:8913920234485900029|29|0",
+        "semantic-gap:b40c56fd23c7969827fa"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300244:0:8913920234485900029:-2078962768819859382:29",
+        "effect:10300244|0|elements|0|2099292417798859923|element:8913920234485900029|29|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "565a6724aa667911"
     },
     {
       "uniqueGapIdentity": "source-gap:186fca2676f87802",
@@ -921,6 +972,23 @@
       "sourceRecordHash": "36c2aa52a601584c"
     },
     {
+      "uniqueGapIdentity": "source-gap:2277caf6980f7c4b",
+      "sourceRecordIdentities": [
+        "effect:10300203|3|elements|15|4460567758519354701|element:8913920234485900029|26|0",
+        "semantic-gap:fa24a353cc39d0ed0f33"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300203:3:8913920234485900029:-5774689639772653403:26",
+        "effect:10300203|3|elements|15|4460567758519354701|element:8913920234485900029|26|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "ddeabd550d759e22"
+    },
+    {
       "uniqueGapIdentity": "source-gap:235e3ec15e6a8c26",
       "sourceRecordIdentities": [
         "actor:103002|control:10300213|sub:0->actor:103002|control:10300201|sub:3->6179147025350945402->missing",
@@ -1176,26 +1244,6 @@
       "sourceRecordHash": "e7ef65ed21cdf428"
     },
     {
-      "uniqueGapIdentity": "source-gap:2b505c277a372d8e",
-      "sourceRecordIdentities": [
-        "effect:10300213|0|elements|36|-6187686510236149564|element:8913920234485900029|284|1",
-        "effect:10300213|0|elements|36|-6187686510236149564|element:8913920234485900029|300|0",
-        "semantic-gap:7a7b21d89394e215d7a8"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300213:0:8913920234485900029:-1358196052883222818:300",
-        "battle-effect:10300213:0:8913920234485900029:2083420758843707102:284",
-        "effect:10300213|0|elements|36|-6187686510236149564|element:8913920234485900029|284|1",
-        "effect:10300213|0|elements|36|-6187686510236149564|element:8913920234485900029|300|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "b799abb02b605342"
-    },
-    {
       "uniqueGapIdentity": "source-gap:2b966785a3a0717d",
       "sourceRecordIdentities": [
         "effect:10300204|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
@@ -1298,23 +1346,6 @@
       "sourceRecordHash": "7c34a44ac6325374"
     },
     {
-      "uniqueGapIdentity": "source-gap:2ed1b5d1dcea42c2",
-      "sourceRecordIdentities": [
-        "effect:10300244|1|elements|6|2099292417798859923|element:8913920234485900029|29|0",
-        "semantic-gap:38b5eba5c17c24cc08c3"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300244:1:8913920234485900029:7664034929019633734:29",
-        "effect:10300244|1|elements|6|2099292417798859923|element:8913920234485900029|29|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "e98be8d1e1223c81"
-    },
-    {
       "uniqueGapIdentity": "source-gap:2ef0ab0e4fda32a2",
       "sourceRecordIdentities": [
         "actor:103002|control:10300243|sub:0->actor:103002|control:10300225|sub:5->6684567101818559416->missing",
@@ -1364,23 +1395,6 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "c7f41d4cc7a6b2cd"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:315b6de395a3b3a7",
-      "sourceRecordIdentities": [
-        "effect:10300214|0|elements|0|-4717659629921631149|element:-4717659629921631149|1|0",
-        "semantic-gap:c85af9a1284370e69ce2"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300214:0:-4717659629921631149:-3771542586303767115:1",
-        "effect:10300214|0|elements|0|-4717659629921631149|element:-4717659629921631149|1|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "7c50f6bbbef89f51"
     },
     {
       "uniqueGapIdentity": "source-gap:318aeef8a565022e",
@@ -1893,23 +1907,6 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "ce9092ad017b881a"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:49c47ac28cdf9d33",
-      "sourceRecordIdentities": [
-        "effect:10300227|0|elements|0|-6766905428157734921|element:-6766905428157734921|0|0",
-        "semantic-gap:1f42b1aa046543b613ba"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300227:0:-6766905428157734921:166774690136961000:0",
-        "effect:10300227|0|elements|0|-6766905428157734921|element:-6766905428157734921|0|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "8d3c16b628af4974"
     },
     {
       "uniqueGapIdentity": "source-gap:4aae3fafd5ea54ad",
@@ -2828,23 +2825,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "26c382b4e35286c4"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:682231a33e32eec5",
-      "sourceRecordIdentities": [
-        "effect:10300244|0|elements|0|2099292417798859923|element:8913920234485900029|29|0",
-        "semantic-gap:aee43af97ba008335a82"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300244:0:8913920234485900029:-2078962768819859382:29",
-        "effect:10300244|0|elements|0|2099292417798859923|element:8913920234485900029|29|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "861d614940a37151"
     },
     {
       "uniqueGapIdentity": "source-gap:685f6bff65059151",
@@ -4006,23 +3986,6 @@
       "sourceRecordHash": "bd7a213d9d25a859"
     },
     {
-      "uniqueGapIdentity": "source-gap:9380557d17ea554e",
-      "sourceRecordIdentities": [
-        "effect:10300203|3|elements|15|4460567758519354701|element:8913920234485900029|26|0",
-        "semantic-gap:35ace78c73dfe57b3ade"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:3:8913920234485900029:-5774689639772653403:26",
-        "effect:10300203|3|elements|15|4460567758519354701|element:8913920234485900029|26|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "058b764a10108065"
-    },
-    {
       "uniqueGapIdentity": "source-gap:940c121b077622f9",
       "sourceRecordIdentities": [
         "effect:10300201|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
@@ -4703,23 +4666,6 @@
       "sourceRecordHash": "5d0b1ee3df106c02"
     },
     {
-      "uniqueGapIdentity": "source-gap:a949203e527b8104",
-      "sourceRecordIdentities": [
-        "effect:10300201|3|elements|15|4460567758519354701|element:8913920234485900029|26|0",
-        "semantic-gap:f7df124a20c68050b3ad"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:3:8913920234485900029:8674841978468049964:26",
-        "effect:10300201|3|elements|15|4460567758519354701|element:8913920234485900029|26|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "b572035c8678e3ef"
-    },
-    {
       "uniqueGapIdentity": "source-gap:a9765782dade1104",
       "sourceRecordIdentities": [
         "actor:103002|control:10300201|sub:1->actor:103002|control:10300204|sub:1->6039875630093297246->0",
@@ -4840,6 +4786,26 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "0fca46d5fda32a60"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:afc8b441d2fdb0ed",
+      "sourceRecordIdentities": [
+        "effect:10300213|0|elements|36|-6187686510236149564|element:8913920234485900029|284|1",
+        "effect:10300213|0|elements|36|-6187686510236149564|element:8913920234485900029|300|0",
+        "semantic-gap:488908d97c3df4b876d8"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300213:0:8913920234485900029:-1358196052883222818:300",
+        "battle-effect:10300213:0:8913920234485900029:2083420758843707102:284",
+        "effect:10300213|0|elements|36|-6187686510236149564|element:8913920234485900029|284|1",
+        "effect:10300213|0|elements|36|-6187686510236149564|element:8913920234485900029|300|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "4753be7931460ab6"
     },
     {
       "uniqueGapIdentity": "source-gap:b12f388a79144447",
@@ -5027,23 +4993,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "3e4b9d8502d897d2"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:b5d417aa3cc6d324",
-      "sourceRecordIdentities": [
-        "effect:10300204|2|elements|13|4460567758519354701|element:8913920234485900029|29|0",
-        "semantic-gap:93f8b2a0df1689f9118a"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:2:8913920234485900029:-6305840928975797075:29",
-        "effect:10300204|2|elements|13|4460567758519354701|element:8913920234485900029|29|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "56b47ff7f4dc47b5"
     },
     {
       "uniqueGapIdentity": "source-gap:b61d968cd61e5511",
@@ -5749,6 +5698,23 @@
       "sourceRecordHash": "7d3d7d492b5156c5"
     },
     {
+      "uniqueGapIdentity": "source-gap:ca558956e1d726e3",
+      "sourceRecordIdentities": [
+        "effect:10300244|1|elements|6|2099292417798859923|element:8913920234485900029|29|0",
+        "semantic-gap:5baec8b4fc80900fd085"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300244:1:8913920234485900029:7664034929019633734:29",
+        "effect:10300244|1|elements|6|2099292417798859923|element:8913920234485900029|29|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "e6518a31c3d03a95"
+    },
+    {
       "uniqueGapIdentity": "source-gap:cacd73b0a7bb8276",
       "sourceRecordIdentities": [
         "actor:103002|control:10300213|sub:0->actor:103002|control:10300202|sub:2->1026355341380234262->missing",
@@ -5798,23 +5764,6 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "1450c32c2ca9a981"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:cd94f4e5b810dfa5",
-      "sourceRecordIdentities": [
-        "effect:10300224|1|elements|0|-47010674928584074|element:-47010674928584074|1|0",
-        "semantic-gap:1743944c3f01497ceb6e"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300224:1:-47010674928584074:-1682608665973739430:1",
-        "effect:10300224|1|elements|0|-47010674928584074|element:-47010674928584074|1|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "88a8938844b4e03c"
     },
     {
       "uniqueGapIdentity": "source-gap:cf0be86aa7c60fc7",
@@ -6720,23 +6669,6 @@
       "sourceRecordHash": "a40c62cb27510f54"
     },
     {
-      "uniqueGapIdentity": "source-gap:ea6672677869934b",
-      "sourceRecordIdentities": [
-        "effect:10300202|3|elements|15|4460567758519354701|element:8913920234485900029|26|0",
-        "semantic-gap:b387cdd562191e6341b5"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-effect-wrapper-semantics-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:3:8913920234485900029:-4996826262836372537:26",
-        "effect:10300202|3|elements|15|4460567758519354701|element:8913920234485900029|26|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "cb445ade504bc593"
-    },
-    {
       "uniqueGapIdentity": "source-gap:eb7e5652b6c04d9c",
       "sourceRecordIdentities": [
         "actor:103002|control:10300201|sub:1->actor:103002|control:10300202|sub:2->1026355341380234262->missing",
@@ -7386,23 +7318,6 @@
       "sourceRecordHash": "65940e8327865af4"
     },
     {
-      "uniqueGapIdentity": "source-gap:fecbd61485e53735",
-      "sourceRecordIdentities": [
-        "effect:10300214|1|elements|0|-4717659629921631149|element:-4717659629921631149|1|0",
-        "semantic-gap:f7749ae00c2de79ca6b2"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300214:1:-4717659629921631149:-6846343528506435423:1",
-        "effect:10300214|1|elements|0|-4717659629921631149|element:-4717659629921631149|1|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "15f3ef7e4858488b"
-    },
-    {
       "uniqueGapIdentity": "source-gap:ff49aeeab62bf002",
       "sourceRecordIdentities": [
         "actor:103002|control:10300204|sub:2->actor:103002|control:10300204|sub:2->7659847041177413638->0",
@@ -7421,13 +7336,13 @@
     }
   ],
   "summary": {
-    "uniqueGapCount": 435,
-    "blockingCount": 137,
+    "uniqueGapCount": 430,
+    "blockingCount": 132,
     "nonBlockingCount": 298,
     "statusCounts": {
       "not-applicable": 298,
       "runtime-evidence-required": 4,
-      "static-evidence-gap": 133
+      "static-evidence-gap": 128
     },
     "reasonCounts": {
       "duplicate-variant-window-normalized:ruby-ultimate-end-quick-enhanced-entry": 1,
@@ -7438,9 +7353,7 @@
       "judgment-condition-runtime-unimplemented": 8,
       "legacy-or-unreachable-current-client": 1,
       "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 9,
-      "nested-effect-wrapper-semantics-unresolved": 7,
-      "nested-effect-wrapper-semantics-unresolved|pack-lifecycle-runtime-unimplemented": 7,
-      "pack-lifecycle-runtime-unimplemented": 5,
+      "nested-effect-wrapper-semantics-unresolved": 14,
       "reexported-subskill-container-unreachable-from-current-skill-list": 1,
       "resource-root-wrapper-reference-not-a-runtime-transaction": 19,
       "runtime-dependent": 4,
@@ -7451,5 +7364,5 @@
       "unresolved": 59
     }
   },
-  "inventoryHash": "39f51005878f5130"
+  "inventoryHash": "a6571b00b4484828"
 }

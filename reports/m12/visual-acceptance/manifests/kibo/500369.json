@@ -34,7 +34,7 @@
       "actions": {
         "signature": {
           "runtimeStatus": "runnable",
-          "closureClass": "unresolved"
+          "closureClass": "evidence-closed"
         },
         "active": {
           "runtimeStatus": "runnable",
@@ -46,7 +46,7 @@
         }
       },
       "staticAttributeAudit": "evidence-closed",
-      "machineOptimizationReady": false
+      "machineOptimizationReady": true
     },
     "automatedVisualEvidence": [
       {
@@ -93,11 +93,11 @@
       }
     ],
     "productVisualAcceptance": {
-      "status": "pending",
-      "decisionSource": null,
-      "acceptanceMode": null,
-      "bindingStatus": "pending",
-      "acceptanceIdentity": null
+      "status": "accepted",
+      "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
+      "acceptanceMode": "automated-icon-and-display-evidence",
+      "bindingStatus": "verified",
+      "acceptanceIdentity": "f5cf4d12eef0f76a"
     }
   },
   "matrix": {
@@ -168,49 +168,35 @@
       {
         "requirementIdentity": "kibo-headless-maturity-ready",
         "dimension": "runtime",
-        "status": "blocked",
+        "status": "passed",
         "sourceIdentities": [
           "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500369]"
         ],
-        "passed": false
+        "passed": true
       }
     ],
     "requiredCount": 8,
-    "passedCount": 7,
-    "complete": false
+    "passedCount": 8,
+    "complete": true
   },
   "ledger": {
-    "records": [
-      {
-        "uniqueGapIdentity": "public-action-closure-incomplete",
-        "status": "blocking",
-        "reason": "headless maturity gap: public-action-closure-incomplete",
-        "blocking": true,
-        "sourceIdentity": "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500369]"
-      }
-    ],
-    "blockingCount": 1
+    "records": [],
+    "blockingCount": 0
   },
   "maturity": {
-    "currentState": "runtime-integrated",
+    "currentState": "optimization-ready",
     "earnedStates": [
       "extracted",
-      "runtime-integrated"
+      "runtime-integrated",
+      "visually-accepted",
+      "optimization-ready"
     ],
-    "optimizationReady": false,
-    "blockers": [
-      "acceptance-required-matrix-incomplete",
-      "acceptance-blocking-ledger-not-empty",
-      "acceptance-product-visual-signoff-pending"
-    ]
+    "optimizationReady": true,
+    "blockers": []
   },
   "validation": {
-    "status": "m12-b3-visual-acceptance-manifest-blocked",
-    "issues": [
-      "acceptance-required-matrix-incomplete",
-      "acceptance-blocking-ledger-not-empty",
-      "acceptance-product-visual-signoff-pending"
-    ]
+    "status": "m12-b3-visual-acceptance-manifest-valid",
+    "issues": []
   },
-  "manifestHash": "7772d0fbee97ab6b"
+  "manifestHash": "a47b5448db4c64f3"
 }

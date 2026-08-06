@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "c0dbd2363c1ceb89864a15848c329f8e3337524a4b3f848d57f2d37602768bbe",
+  "packageHash": "d215cd47acf1f384a17276a9a89a806a2dceacfad63201e424831eef35ef8750",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -20,13 +20,13 @@
     "directoryActionCount": 563,
     "classifiedActionCount": 563,
     "linkedActionCount": 563,
-    "runnableActionCount": 545,
-    "sourceAppliedActionCount": 436,
+    "runnableActionCount": 546,
+    "sourceAppliedActionCount": 437,
     "sourceRuntimeDependentActionCount": 109,
-    "sourceStaticEvidenceGapActionCount": 18,
+    "sourceStaticEvidenceGapActionCount": 17,
     "scenarioResolvedActionCount": 148,
     "verifiedZeroActionCount": 0,
-    "unresolvedActionCount": 18,
+    "unresolvedActionCount": 17,
     "hitNodeCount": 2502,
     "dimensions": {
       "hp": {
@@ -51,7 +51,7 @@
       }
     },
     "controlVariantCount": 965,
-    "unresolvedControlVariantCount": 478,
+    "unresolvedControlVariantCount": 477,
     "nonzeroRecoveryElementCount": 667,
     "unresolvedNonzeroRecoveryElementCount": 464,
     "scenarioResolvedNonzeroRecoveryElementCount": 212,
@@ -62,7 +62,7 @@
     "unresolvedProjectileTargetCount": 0,
     "unresolvedReferenceCount": 2250,
     "publicVariantCount": 593,
-    "unresolvedPublicVariantCount": 48,
+    "unresolvedPublicVariantCount": 47,
     "attackInputChainCount": 20,
     "attackInputSegmentCount": 95,
     "appliedAttackInputSegmentCount": 80,
@@ -225,13 +225,13 @@
       "directoryActionCount": 20,
       "classifiedActionCount": 20,
       "linkedActionCount": 20,
-      "runnableActionCount": 19,
-      "sourceAppliedActionCount": 19,
+      "runnableActionCount": 20,
+      "sourceAppliedActionCount": 20,
       "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 1,
+      "sourceStaticEvidenceGapActionCount": 0,
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 1,
+      "unresolvedActionCount": 0,
       "hitNodeCount": 10,
       "dimensions": {
         "hp": {
@@ -858,13 +858,13 @@
       "directoryActionCount": 10,
       "classifiedActionCount": 10,
       "linkedActionCount": 10,
-      "runnableActionCount": 7,
-      "sourceAppliedActionCount": 7,
+      "runnableActionCount": 8,
+      "sourceAppliedActionCount": 8,
       "sourceRuntimeDependentActionCount": 0,
-      "sourceStaticEvidenceGapActionCount": 3,
+      "sourceStaticEvidenceGapActionCount": 2,
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
-      "unresolvedActionCount": 3,
+      "unresolvedActionCount": 2,
       "hitNodeCount": 35,
       "dimensions": {
         "hp": {
@@ -7049,30 +7049,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "heal-formula-not-literal-function-5"
-      ],
-      "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved"
-    },
-    {
-      "identity": "actor|107002|10700222|2|10700227",
-      "ownerKind": "actor",
-      "ownerId": 107002,
-      "ownerName": "米砂",
-      "actionKind": "perfect-parry",
-      "sourceSkillId": 10700222,
-      "sourceSkillName": "林隙留影",
-      "controlSkillId": 10700227,
-      "publicVariants": [
-        {
-          "index": 2,
-          "label": "集中闪避",
-          "sourceIdentity": "workbench-seed.gameData.skills[id=10700222].level.labels[2]"
-        }
-      ],
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceEvidenceStatus": "static-evidence-gap",
       "scenarioRuntimeStatus": "scenario-runtime-unresolved"
@@ -59033,7 +59009,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -59086,8 +59061,7 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10101001].level.labels[2]"
     },
@@ -59220,7 +59194,6 @@
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented",
         "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
@@ -59339,7 +59312,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -59373,7 +59345,6 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -59403,7 +59374,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -59516,8 +59486,7 @@
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10300213].level.labels[0]"
     },
@@ -59746,7 +59715,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -59832,7 +59800,6 @@
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "pack-lifecycle-runtime-unimplemented",
         "property-formula-not-literal-function-5",
         "sp-formula-not-literal-function-5"
       ],
@@ -59868,7 +59835,6 @@
         "trigger-frame-missing",
         "heal-formula-not-literal-function-5",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -59914,9 +59880,8 @@
       "publicVariantIndex": 2,
       "publicVariantLabel": "集中闪避",
       "selected": true,
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -60084,8 +60049,7 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "property-formula-not-literal-function-5",
-        "pack-lifecycle-runtime-unimplemented"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10700313].level.labels[0]"
     },
@@ -60126,7 +60090,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -60223,7 +60186,6 @@
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented",
         "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
@@ -60262,8 +60224,7 @@
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800113].level.labels[0]"
     },
@@ -60308,7 +60269,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -60502,7 +60462,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -60608,7 +60567,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -60687,7 +60645,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -60719,7 +60676,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -60837,7 +60793,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -60945,15 +60900,13 @@
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented",
         "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "sp-recover-type-not-direct-sp"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10900113].level.labels[0]"
     },
@@ -60994,7 +60947,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -61027,9 +60979,7 @@
       "publicVariantLabel": "重击",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10900201].level.labels[1]"
     },
     {
@@ -61146,7 +61096,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "tuning-mark-relation-triggerEffectList-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10900213].level.labels[0]"
@@ -61188,7 +61137,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -61259,7 +61207,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -61290,7 +61237,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "pack-lifecycle-runtime-unimplemented",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -61313,8 +61259,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "pack-lifecycle-runtime-unimplemented"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=11100121].level.labels[0]"
     },
@@ -61342,7 +61287,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -61503,7 +61447,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
@@ -61550,7 +61493,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -61691,7 +61633,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "heal-formula-not-literal-function-5",
         "effect-target-unresolved",
@@ -61746,7 +61687,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -61868,7 +61808,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5",
         "property-formula-not-literal-function-5"
       ],
@@ -61898,7 +61837,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -62020,7 +61958,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5",
         "property-formula-not-literal-function-5"
       ],
@@ -62050,7 +61987,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -62250,7 +62186,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -62411,7 +62346,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5",
         "shield-formula-not-literal-function-5"
       ],
@@ -62787,9 +62721,7 @@
       "publicVariantLabel": "拉加冲锋",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500025].actions[skillId=50002504]"
     },
     {
@@ -63464,9 +63396,7 @@
       "publicVariantLabel": "穿甲突击",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500052].actions[skillId=50005202]"
     },
     {
@@ -63507,9 +63437,7 @@
       "publicVariantLabel": "钻山猛击",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500053].actions[skillId=50005302]"
     },
     {
@@ -63734,7 +63662,6 @@
         "base-function-unverified",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -64102,7 +64029,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -65407,9 +65333,7 @@
       "publicVariantLabel": "雷灵旋律",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500164].actions[skillId=50016402]"
     },
     {
@@ -65450,9 +65374,7 @@
       "publicVariantLabel": "雷鸣协奏",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500165].actions[skillId=50016502]"
     },
     {
@@ -65493,9 +65415,7 @@
       "publicVariantLabel": "雷音乐章",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500166].actions[skillId=50016602]"
     },
     {
@@ -65825,7 +65745,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -65875,9 +65794,7 @@
       "publicVariantLabel": "羽舞旋击",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500187].actions[skillId=50018702]"
     },
     {
@@ -65966,7 +65883,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500209].actions[skillId=50020901]"
@@ -66132,9 +66048,7 @@
       "publicVariantLabel": "霸主奔袭",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500231].actions[skillId=50023101]"
     },
     {
@@ -66300,7 +66214,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500258].actions[skillId=50025801]"
@@ -66349,7 +66262,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500259].actions[skillId=50025901]"
@@ -66396,7 +66308,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500260].actions[skillId=50026001]"
@@ -66794,8 +66705,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "trigger-frame-missing",
-        "pack-lifecycle-runtime-unimplemented"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500322].actions[skillId=50032201]"
     },
@@ -66837,9 +66747,7 @@
       "publicVariantLabel": "龙卷风暴",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500323].actions[skillId=50032301]"
     },
     {
@@ -66879,8 +66787,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "trigger-frame-missing",
-        "pack-lifecycle-runtime-unimplemented"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500324].actions[skillId=50032401]"
     },
@@ -67088,8 +66995,7 @@
         "base-function-unverified",
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "pack-lifecycle-runtime-unimplemented"
+        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500360].actions[skillId=50036001]"
     },
@@ -67131,9 +67037,7 @@
       "publicVariantLabel": "符之乐声",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "sp-recover-type-not-direct-sp"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500368].actions[skillId=50036801]"
     },
     {
@@ -67174,9 +67078,7 @@
       "publicVariantLabel": "呱乐演奏",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "sp-recover-type-not-direct-sp"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500369].actions[skillId=50036901]"
     },
     {
@@ -67217,9 +67119,7 @@
       "publicVariantLabel": "风暴音域",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "sp-recover-type-not-direct-sp"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500370].actions[skillId=50037001]"
     },
     {
@@ -67395,9 +67295,7 @@
       "publicVariantLabel": "旋转镰刃",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500469].actions[skillId=50046903]"
     },
     {
@@ -67436,9 +67334,7 @@
       "publicVariantLabel": "镰舞风暴",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500470].actions[skillId=50047001]"
     },
     {
@@ -67843,7 +67739,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -67881,8 +67776,7 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/skill_control_10101010__-4083445640248946767.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -67996,7 +67890,6 @@
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented",
         "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
@@ -68154,7 +68047,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -68201,7 +68093,6 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -68244,7 +68135,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -68407,8 +68297,7 @@
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -68778,7 +68667,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -68877,7 +68765,6 @@
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "pack-lifecycle-runtime-unimplemented",
         "property-formula-not-literal-function-5",
         "sp-formula-not-literal-function-5"
       ],
@@ -68939,7 +68826,6 @@
         "trigger-frame-missing",
         "heal-formula-not-literal-function-5",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -68998,9 +68884,8 @@
       "actionIdentities": [
         "actor|107002|10700222|2|10700227"
       ],
-      "classification": "unresolved",
+      "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -69186,8 +69071,7 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "property-formula-not-literal-function-5",
-        "pack-lifecycle-runtime-unimplemented"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700313.asset/MonoBehaviour/skill_control_10700313__-8866097631418451983.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -69241,7 +69125,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -69388,7 +69271,6 @@
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented",
         "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
@@ -69427,8 +69309,7 @@
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/skill_control_10800113__5611257496587501138.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -69473,7 +69354,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -69689,7 +69569,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -69778,7 +69657,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -69857,7 +69735,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -69889,7 +69766,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -70033,7 +69909,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -70141,15 +70016,13 @@
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented",
         "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "sp-recover-type-not-direct-sp"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour/skill_control_10900113__2137438021568488942.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -70190,7 +70063,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -70223,9 +70095,7 @@
         "actor|109002|10900201|1|10900210"
       ],
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900210.asset/MonoBehaviour/skill_control_10900210__-5175652107489978322.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -70310,7 +70180,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "tuning-mark-relation-triggerEffectList-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900213.asset/MonoBehaviour/skill_control_10900213__8734496154904828250.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -70365,7 +70234,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -70462,7 +70330,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -70506,7 +70373,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "pack-lifecycle-runtime-unimplemented",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -70542,8 +70408,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "pack-lifecycle-runtime-unimplemented"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100121.asset/MonoBehaviour/skill_control_11100121__3985153129346967444.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -70571,7 +70436,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -70724,7 +70588,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
@@ -70810,7 +70673,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -70962,7 +70824,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "heal-formula-not-literal-function-5",
         "effect-target-unresolved",
@@ -71017,7 +70878,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -71137,7 +70997,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5",
         "property-formula-not-literal-function-5"
       ],
@@ -71167,7 +71026,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -71287,7 +71145,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5",
         "property-formula-not-literal-function-5"
       ],
@@ -71317,7 +71174,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -71511,7 +71367,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
@@ -71750,7 +71605,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5",
         "shield-formula-not-literal-function-5"
       ],
@@ -72391,9 +72245,7 @@
         "kibo|500025|50002504|0|50002504"
       ],
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50002504.asset/MonoBehaviour/skill_control_50002504__8264317425325936143.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -73395,9 +73247,7 @@
         "kibo|500052|50005202|0|50005202"
       ],
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50005202.asset/MonoBehaviour/skill_control_50005202__7747357208519277833.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -73504,9 +73354,7 @@
         "kibo|500053|50005302|0|50005302"
       ],
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50005302.asset/MonoBehaviour/skill_control_50005302__8490533999232064546.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -73993,7 +73841,6 @@
         "base-function-unverified",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "pack-lifecycle-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -74735,7 +74582,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -76229,9 +76075,7 @@
         "kibo|500164|50016402|0|50016402"
       ],
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50016402.asset/MonoBehaviour/skill_control_50016402__-855550484600869992.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -76273,9 +76117,7 @@
         "kibo|500165|50016502|0|50016502"
       ],
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50016502.asset/MonoBehaviour/skill_control_50016502__-1766172661972371093.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -76317,9 +76159,7 @@
         "kibo|500166|50016602|0|50016602"
       ],
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50016602.asset/MonoBehaviour/skill_control_50016602__-2031459983976866375.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -76639,7 +76479,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "pack-lifecycle-runtime-unimplemented",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -76756,9 +76595,7 @@
         "kibo|500187|50018702|0|50018702"
       ],
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50018702.asset/MonoBehaviour/skill_control_50018702__-282201745008373913.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -76978,7 +76815,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50020901.asset/MonoBehaviour/skill_control_50020901__398945926042373673.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -77261,9 +77097,7 @@
         "kibo|500231|50023101|0|50023101"
       ],
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50023101.asset/MonoBehaviour/skill_control_50023101__-2543483427136898819.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -77452,7 +77286,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50025801.asset/MonoBehaviour/skill_control_50025801__-945357660765311053.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -77486,7 +77319,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50025901.asset/MonoBehaviour/skill_control_50025901__4962096237101202729.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -77520,7 +77352,6 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "tuning-mark-max-mismatch",
-        "pack-lifecycle-runtime-unimplemented",
         "heal-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50026001.asset/MonoBehaviour/skill_control_50026001__-7986441313229177473.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -77949,8 +77780,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "trigger-frame-missing",
-        "pack-lifecycle-runtime-unimplemented"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50032201.asset/MonoBehaviour/skill_control_50032201__-6311662544439088974.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -77977,9 +77807,7 @@
         "kibo|500323|50032301|0|50032301"
       ],
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50032301.asset/MonoBehaviour/skill_control_50032301__-8207032306903354466.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -78084,8 +77912,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "trigger-frame-missing",
-        "pack-lifecycle-runtime-unimplemented"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50032401.asset/MonoBehaviour/skill_control_50032401__7793109488933258579.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -78311,8 +78138,7 @@
         "base-function-unverified",
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "pack-lifecycle-runtime-unimplemented"
+        "toughness:pre-shield-damage-inputs-incomplete"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036001.asset/MonoBehaviour/skill_control_50036001__1742972783783325707.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -78365,9 +78191,7 @@
         "kibo|500368|50036801|0|50036801"
       ],
       "classification": "applied",
-      "reasons": [
-        "sp-recover-type-not-direct-sp"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036801.asset/MonoBehaviour/skill_control_50036801__5424427542220890375.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -78393,9 +78217,7 @@
         "kibo|500369|50036901|0|50036901"
       ],
       "classification": "applied",
-      "reasons": [
-        "sp-recover-type-not-direct-sp"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036901.asset/MonoBehaviour/skill_control_50036901__2760583003281205729.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -78421,9 +78243,7 @@
         "kibo|500370|50037001|0|50037001"
       ],
       "classification": "applied",
-      "reasons": [
-        "sp-recover-type-not-direct-sp"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50037001.asset/MonoBehaviour/skill_control_50037001__-1722236950524606955.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -78541,9 +78361,7 @@
         "kibo|500469|50046903|0|50046903"
       ],
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50046903.asset/MonoBehaviour/skill_control_50046903__-1204258754729110429.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -78648,9 +78466,7 @@
         "kibo|500470|50047001|0|50047001"
       ],
       "classification": "applied",
-      "reasons": [
-        "pack-lifecycle-runtime-unimplemented"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50047001.asset/MonoBehaviour/skill_control_50047001__3082542517716219743.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -96645,7 +96461,7 @@
           "controlSkillId": 10100701,
           "selectedSubSkillIndex": 0,
           "schedulable": true,
-          "sourceEvidenceStatus": "runtime-dependent",
+          "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "variantConditionDiscovery": {
             "identity": "actor:101007|control:10100701|variant-condition-discovery",
@@ -97796,7 +97612,7 @@
             "10100701|0|bulletElements|1|element-101007169|element:-3304376552996238491|unresolved-frame|0"
           ],
           "hitCount": 1,
-          "effectCount": 0,
+          "effectCount": 1,
           "effectDimensionSummary": {
             "damage": {
               "verified-zero": 3
@@ -97817,8 +97633,7 @@
               "verified-zero": 3
             },
             "mark": {
-              "unresolved": 1,
-              "verified-zero": 2
+              "verified-zero": 3
             }
           },
           "mechanicsClassification": "applied",
@@ -97827,7 +97642,6 @@
           "reasons": [
             "trigger-frame-missing",
             "projectile-impact-frame-runtime-dependent",
-            "pack-lifecycle-runtime-unimplemented",
             "effect-trigger-frame-missing",
             "effect-target-unresolved",
             "selected-control-player-variant-duration-unresolved",
@@ -137214,7 +137028,7 @@
             "10700305|0|elements|98|-6782021254926881992|element:6700000335208321442|unresolved-frame|0"
           ],
           "hitCount": 4,
-          "effectCount": 48,
+          "effectCount": 66,
           "effectDimensionSummary": {
             "damage": {
               "applied": 16,
@@ -137225,7 +137039,8 @@
               "verified-zero": 289
             },
             "sp": {
-              "unresolved": 4,
+              "applied": 1,
+              "unresolved": 3,
               "verified-zero": 285
             },
             "hp": {
@@ -137240,8 +137055,8 @@
               "verified-zero": 152
             },
             "mark": {
-              "unresolved": 72,
-              "verified-zero": 217
+              "unresolved": 18,
+              "verified-zero": 271
             }
           },
           "mechanicsClassification": "applied",
@@ -137253,13 +137068,11 @@
             "hp:damage-formula-inputs-incomplete",
             "toughness:pre-shield-damage-inputs-incomplete",
             "stack-lifecycle-runtime-unimplemented",
-            "pack-lifecycle-runtime-unimplemented",
             "nested-damage-trigger-lifecycle-not-expanded",
             "nested-effect-wrapper-semantics-unresolved",
             "property-formula-not-literal-function-5",
             "effect-trigger-frame-missing",
-            "effect-target-unresolved",
-            "sp-recover-type-not-direct-sp"
+            "effect-target-unresolved"
           ],
           "sourceIdentity": "characters.items[id=107003].skillSlots[group=backup,skillId=10700305]|NewTable/skillsub_logic.rows[skillId=10700305].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700305.asset/MonoBehaviour/skill_control_10700305__-7487668593202213511.json"
         }

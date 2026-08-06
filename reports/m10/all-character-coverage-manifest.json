@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "58ea266b03d436ee0a659f8f695b3b846375881f433fd1968cc02c0bb92c7e78",
+  "sourcePackageHash": "8db7b884429dd2dadd2bf4c8cfabf3d9420bca00cea769b354494bddf164a67b",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "8f2b562764471843f62cc316b6b4493a726df7924a4f93c595690298821584a8"
+      "profileHash": "0a824ae59cdee45b58ae46f80af95cc26ad6d3b0332efff7bd9113b79112316a"
     },
     {
       "ownerId": 103002,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "2b7ea28830eee7ad5806a99cc9e540c338802d1b8f0e63d636c9d11818ad5a33"
+      "profileHash": "e115ee20582512ea01058a7b1bf62679e0afe3b7693215ac3a7fe42884203b2f"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "f8d5614f0a5410504fe6b1a970145fa77e5f7f98dd050e1f84e2287ed688f264"
+      "profileHash": "94d9a0af06a0419084c95e4a75a70f4fc021ada2369725c04550d7451504221e"
     },
     {
       "ownerId": 101007,
@@ -351,9 +351,9 @@
       "switchTriggerPhases": [
         "on-exit"
       ],
-      "runtimeReadyActionCount": 7,
-      "runtimeReadyRatio": 0.7,
-      "staticEvidenceGapCount": 3,
+      "runtimeReadyActionCount": 8,
+      "runtimeReadyRatio": 0.8,
+      "staticEvidenceGapCount": 2,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -910,7 +910,7 @@
       "runtime-applied": 3
     },
     "totalPublicActionCount": 197,
-    "totalRuntimeReadyActionCount": 182,
+    "totalRuntimeReadyActionCount": 183,
     "unnamedSecondaryPassiveCount": 20,
     "zeroDistanceSimulationCompleteCount": 1,
     "realClientEvidenceCompleteCount": 0

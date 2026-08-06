@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 103002,
-  "sourcePackageHash": "58ea266b03d436ee0a659f8f695b3b846375881f433fd1968cc02c0bb92c7e78",
+  "sourcePackageHash": "8db7b884429dd2dadd2bf4c8cfabf3d9420bca00cea769b354494bddf164a67b",
   "actionRows": [
     {
       "actionIdentity": "actor|103002|10300201|0|10300203",
@@ -915,8 +915,7 @@
         "effect-trigger-frame-missing",
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "pack-lifecycle-runtime-unimplemented"
+        "nested-effect-wrapper-semantics-unresolved"
       ]
     },
     {
@@ -1148,5 +1147,5 @@
       "static-evidence-gap": 7
     }
   },
-  "profileHash": "2b7ea28830eee7ad5806a99cc9e540c338802d1b8f0e63d636c9d11818ad5a33"
+  "profileHash": "e115ee20582512ea01058a7b1bf62679e0afe3b7693215ac3a7fe42884203b2f"
 }
