@@ -34,14 +34,14 @@
 | 动作 | 就绪 | 状态 | 剩余缺口 |
 | --- | --- | --- | --- |
 | normal-attack | 是 | applied-with-residual-gaps | normal-attack-input-segment-duration-unresolved；projectile-impact-frame-runtime-dependent；trigger-frame-missing |
-| charged-attack | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；inject-wrapper-classified-through-child-edges |
+| charged-attack | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing |
 | dodge-attack | 是 | applied-with-residual-gaps | verified-action-effective-occupancy-window-unresolved |
-| plunging-attack | 是 | applied-with-residual-gaps | effect-target-unresolved；inject-wrapper-classified-through-child-edges |
-| star-skill | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；inject-wrapper-classified-through-child-edges；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；property-formula-not-literal-function-5；verified-action-effective-occupancy-window-unresolved |
+| plunging-attack | 是 | applied |  |
+| star-skill | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；property-formula-not-literal-function-5；verified-action-effective-occupancy-window-unresolved |
 | star-combo | 是 | applied |  |
-| ultimate | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；inject-wrapper-classified-through-child-edges；judgment-condition-runtime-unimplemented；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；pack-lifecycle-runtime-unimplemented |
+| ultimate | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；judgment-condition-runtime-unimplemented；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；pack-lifecycle-runtime-unimplemented |
 | star-carry | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved |
-| limit-counter | 是 | applied-with-residual-gaps | effect-target-unresolved；inject-wrapper-classified-through-child-edges |
+| limit-counter | 是 | applied |  |
 | perfect-parry | 是 | applied |  |
 
 > 本报告由 owner contract 生成；描述只用于发现与命名，运行状态以 control、资源事务、派生窗口和效果绑定为准。

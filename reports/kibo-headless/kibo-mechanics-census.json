@@ -17543,17 +17543,24 @@
       "actionKind": "signature",
       "sourceSkillId": 50000102,
       "controlSkillId": 50000102,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 85,
@@ -17721,9 +17728,7 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "heal-formula-not-literal-function-5",
-        "effect-target-any-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "effect-target-any-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -17781,7 +17786,7 @@
       "actionKind": "active",
       "sourceSkillId": 502015,
       "controlSkillId": 502015,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -17790,6 +17795,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -17837,7 +17851,7 @@
       "actionKind": "break",
       "sourceSkillId": 50000203,
       "controlSkillId": 50000203,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -17846,6 +17860,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 93,
@@ -17900,9 +17923,7 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "effect-target-any-unresolved",
         "heal-formula-not-literal-function-5",
-        "shield-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "shield-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -17961,7 +17982,7 @@
       "actionKind": "active",
       "sourceSkillId": 502019,
       "controlSkillId": 502019,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -17970,6 +17991,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 73,
@@ -18013,7 +18043,7 @@
       "actionKind": "break",
       "sourceSkillId": 50000303,
       "controlSkillId": 50000303,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -18022,6 +18052,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 98,
@@ -18081,8 +18120,7 @@
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "shield-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges"
+        "shield-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -18142,7 +18180,7 @@
       "actionKind": "active",
       "sourceSkillId": 502016,
       "controlSkillId": 502016,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -18151,6 +18189,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 55,
@@ -18198,7 +18245,7 @@
       "actionKind": "break",
       "sourceSkillId": 50000417,
       "controlSkillId": 50000417,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -18207,6 +18254,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 98,
@@ -18250,15 +18306,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50000502,
       "controlSkillId": 50000502,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 100,
@@ -18314,7 +18367,7 @@
       "actionKind": "active",
       "sourceSkillId": 501014,
       "controlSkillId": 501014,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -18323,6 +18376,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -18429,9 +18491,7 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -18489,7 +18549,7 @@
       "actionKind": "active",
       "sourceSkillId": 501017,
       "controlSkillId": 501017,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -18498,6 +18558,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 60,
@@ -18605,9 +18674,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "property-formula-not-literal-function-5",
-        "effect-target-any-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "effect-target-any-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -18665,7 +18732,7 @@
       "actionKind": "active",
       "sourceSkillId": 501016,
       "controlSkillId": 501016,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -18674,6 +18741,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 150,
@@ -18780,9 +18856,7 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -18840,7 +18914,7 @@
       "actionKind": "active",
       "sourceSkillId": 503001,
       "controlSkillId": 503001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -18849,6 +18923,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 125,
@@ -18896,7 +18979,7 @@
       "actionKind": "break",
       "sourceSkillId": 50002004,
       "controlSkillId": 50002004,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -18905,6 +18988,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -18954,9 +19046,7 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -19014,7 +19104,7 @@
       "actionKind": "active",
       "sourceSkillId": 503006,
       "controlSkillId": 503006,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -19023,6 +19113,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -19129,9 +19228,7 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -19189,7 +19286,7 @@
       "actionKind": "active",
       "sourceSkillId": 503004,
       "controlSkillId": 503004,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -19198,6 +19295,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 175,
@@ -19290,15 +19396,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50002304,
       "controlSkillId": 50002304,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 176,
@@ -19354,7 +19457,7 @@
       "actionKind": "active",
       "sourceSkillId": 505013,
       "controlSkillId": 505013,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -19363,6 +19466,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -19459,15 +19571,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50002404,
       "controlSkillId": 50002404,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 178,
@@ -19523,7 +19632,7 @@
       "actionKind": "active",
       "sourceSkillId": 505006,
       "controlSkillId": 505006,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -19532,6 +19641,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 195,
@@ -19640,8 +19758,7 @@
         "effect-target-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -19701,7 +19818,7 @@
       "actionKind": "active",
       "sourceSkillId": 507003,
       "controlSkillId": 507003,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -19710,6 +19827,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -19815,10 +19941,9 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "pack-lifecycle-semantics-evidence-gap",
-        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -19878,7 +20003,7 @@
       "actionKind": "active",
       "sourceSkillId": 505006,
       "controlSkillId": 505006,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -19887,6 +20012,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 195,
@@ -19997,9 +20131,7 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
         "heal-formula-not-literal-function-5",
-        "effect-target-ally-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "effect-target-ally-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -20055,7 +20187,7 @@
       "actionKind": "active",
       "sourceSkillId": 505004,
       "controlSkillId": 505004,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -20064,6 +20196,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 175,
@@ -20111,7 +20252,7 @@
       "actionKind": "break",
       "sourceSkillId": 50003501,
       "controlSkillId": 50003501,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -20120,6 +20261,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 119,
@@ -20167,15 +20317,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50003701,
       "controlSkillId": 50003701,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 80,
@@ -20231,7 +20378,7 @@
       "actionKind": "active",
       "sourceSkillId": 501001,
       "controlSkillId": 501001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -20240,6 +20387,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 125,
@@ -20336,17 +20492,24 @@
       "actionKind": "signature",
       "sourceSkillId": 50003801,
       "controlSkillId": 50003801,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 114,
@@ -20379,7 +20542,7 @@
           "verified-zero": 2
         },
         "dynamicProperty": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 1
         },
         "tuningMark": {
@@ -20403,7 +20566,7 @@
       "actionKind": "active",
       "sourceSkillId": 501003,
       "controlSkillId": 501003,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -20412,6 +20575,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 140,
@@ -20520,10 +20692,19 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "effect-target-any-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "effect-target-any-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "effect-target-any-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 114,
@@ -20581,7 +20762,7 @@
       "actionKind": "active",
       "sourceSkillId": 501003,
       "controlSkillId": 501003,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -20590,6 +20771,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 140,
@@ -20686,15 +20876,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50004002,
       "controlSkillId": 50004002,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 118,
@@ -20750,7 +20937,7 @@
       "actionKind": "active",
       "sourceSkillId": 506001,
       "controlSkillId": 506001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -20759,6 +20946,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -20859,15 +21055,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50004102,
       "controlSkillId": 50004102,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 174,
@@ -20924,7 +21117,7 @@
       "actionKind": "active",
       "sourceSkillId": 506001,
       "controlSkillId": 506001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -20933,6 +21126,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -21033,15 +21235,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50004202,
       "controlSkillId": 50004202,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 233,
@@ -21206,7 +21405,6 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
         "effect-target-any-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
@@ -21264,7 +21462,7 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -21273,6 +21471,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -21379,7 +21586,6 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
         "effect-target-any-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
@@ -21437,7 +21643,7 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -21446,6 +21652,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -21552,7 +21767,6 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
         "effect-target-any-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
@@ -21611,7 +21825,7 @@
       "actionKind": "active",
       "sourceSkillId": 504020,
       "controlSkillId": 504020,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -21620,6 +21834,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 60,
@@ -21728,11 +21951,23 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
         "heal-formula-not-literal-function-5",
-        "effect-trigger-frame-missing"
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "heal-formula-not-literal-function-5",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 104,
@@ -21789,7 +22024,7 @@
       "actionKind": "active",
       "sourceSkillId": 505013,
       "controlSkillId": 505013,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -21798,6 +22033,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -21906,11 +22150,23 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
         "heal-formula-not-literal-function-5",
-        "effect-trigger-frame-missing"
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "heal-formula-not-literal-function-5",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 136,
@@ -21967,7 +22223,7 @@
       "actionKind": "active",
       "sourceSkillId": 505014,
       "controlSkillId": 505014,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -21976,6 +22232,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 90,
@@ -22084,11 +22349,23 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
         "heal-formula-not-literal-function-5",
-        "effect-trigger-frame-missing"
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "heal-formula-not-literal-function-5",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 97,
@@ -22145,7 +22422,7 @@
       "actionKind": "active",
       "sourceSkillId": 505018,
       "controlSkillId": 505018,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -22154,6 +22431,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 95,
@@ -22246,15 +22532,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50005102,
       "controlSkillId": 50005102,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 80,
@@ -22310,7 +22593,7 @@
       "actionKind": "active",
       "sourceSkillId": 506001,
       "controlSkillId": 506001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -22319,6 +22602,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -22426,8 +22718,7 @@
         "property-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -22492,8 +22783,7 @@
       "sourceEvidenceStatus": "static-evidence-gap",
       "scenarioRuntimeStatus": "scenario-runtime-unresolved",
       "reasons": [
-        "shield-formula-not-literal-function-5",
-        "effect-target-unresolved"
+        "shield-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -22599,8 +22889,7 @@
         "property-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -22665,8 +22954,7 @@
       "sourceEvidenceStatus": "static-evidence-gap",
       "scenarioRuntimeStatus": "scenario-runtime-unresolved",
       "reasons": [
-        "shield-formula-not-literal-function-5",
-        "effect-target-unresolved"
+        "shield-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -22769,8 +23057,7 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -22829,7 +23116,7 @@
       "actionKind": "active",
       "sourceSkillId": 507001,
       "controlSkillId": 507001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -22838,6 +23125,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 125,
@@ -22934,17 +23230,24 @@
       "actionKind": "signature",
       "sourceSkillId": 50005801,
       "controlSkillId": 50005801,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -22977,7 +23280,7 @@
           "verified-zero": 2
         },
         "dynamicProperty": {
-          "unresolved": 1,
+          "applied": 1,
           "verified-zero": 1
         },
         "tuningMark": {
@@ -23116,8 +23419,7 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -23176,7 +23478,7 @@
       "actionKind": "active",
       "sourceSkillId": 504001,
       "controlSkillId": 504001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -23185,6 +23487,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -23290,8 +23601,7 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -23459,7 +23769,6 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -23535,6 +23844,24 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "base-function-unverified",
+          "hp:damage-formula-inputs-incomplete",
+          "toughness:pre-shield-damage-inputs-incomplete",
+          "pack-lifecycle-semantics-evidence-gap",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved",
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -23644,15 +23971,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50006701,
       "controlSkillId": 50006701,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 134,
@@ -23708,7 +24032,7 @@
       "actionKind": "active",
       "sourceSkillId": 502006,
       "controlSkillId": 502006,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -23717,6 +24041,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -23817,15 +24150,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50006801,
       "controlSkillId": 50006801,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 152,
@@ -23881,7 +24211,7 @@
       "actionKind": "active",
       "sourceSkillId": 502003,
       "controlSkillId": 502003,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -23890,6 +24220,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 140,
@@ -23990,15 +24329,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50007201,
       "controlSkillId": 50007201,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 175,
@@ -24054,7 +24390,7 @@
       "actionKind": "active",
       "sourceSkillId": 503004,
       "controlSkillId": 503004,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -24063,6 +24399,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 175,
@@ -24166,9 +24511,22 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 215,
@@ -24234,11 +24592,23 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "property-formula-not-literal-function-5"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved",
+          "property-formula-not-literal-function-5"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -24373,9 +24743,23 @@
         "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-trigger-frame-missing"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "property-formula-not-literal-function-5",
+          "effect-target-unresolved",
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved",
+          "effect-trigger-frame-missing"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 110,
@@ -24408,7 +24792,8 @@
           "verified-zero": 10
         },
         "dynamicProperty": {
-          "unresolved": 7,
+          "applied": 1,
+          "unresolved": 6,
           "verified-zero": 3
         },
         "tuningMark": {
@@ -24444,6 +24829,18 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 190,
@@ -24562,8 +24959,7 @@
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -24622,7 +25018,7 @@
       "actionKind": "active",
       "sourceSkillId": 501001,
       "controlSkillId": 501001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -24631,6 +25027,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 125,
@@ -24737,8 +25142,7 @@
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -24911,9 +25315,23 @@
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved",
+          "property-formula-not-literal-function-5",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 144,
@@ -25088,8 +25506,7 @@
         "heal-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -25252,15 +25669,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50009501,
       "controlSkillId": 50009501,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 153,
@@ -25317,7 +25731,7 @@
       "actionKind": "active",
       "sourceSkillId": 509001,
       "controlSkillId": 509001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -25326,6 +25740,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -25422,15 +25845,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50009601,
       "controlSkillId": 50009601,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 282,
@@ -25487,7 +25907,7 @@
       "actionKind": "active",
       "sourceSkillId": 509002,
       "controlSkillId": 509002,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -25496,6 +25916,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 150,
@@ -25605,9 +26034,7 @@
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -25780,9 +26207,7 @@
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -25955,10 +26380,9 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "pack-lifecycle-semantics-evidence-gap",
-        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -26018,7 +26442,7 @@
       "actionKind": "active",
       "sourceSkillId": 505001,
       "controlSkillId": 505001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -26027,6 +26451,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -26127,15 +26560,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50011402,
       "controlSkillId": 50011402,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 100,
@@ -26191,7 +26621,7 @@
       "actionKind": "active",
       "sourceSkillId": 503009,
       "controlSkillId": 503009,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -26200,6 +26630,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -26296,15 +26735,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50011502,
       "controlSkillId": 50011502,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 100,
@@ -26361,7 +26797,7 @@
       "actionKind": "active",
       "sourceSkillId": 503010,
       "controlSkillId": 503010,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -26370,6 +26806,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -26466,15 +26911,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50011602,
       "controlSkillId": 50011602,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 100,
@@ -26531,7 +26973,7 @@
       "actionKind": "active",
       "sourceSkillId": 503018,
       "controlSkillId": 503018,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -26540,6 +26982,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 60,
@@ -26632,15 +27083,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50012002,
       "controlSkillId": 50012002,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 145,
@@ -26696,7 +27144,7 @@
       "actionKind": "active",
       "sourceSkillId": 504001,
       "controlSkillId": 504001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -26705,6 +27153,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -26807,9 +27264,7 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "effect-target-ally-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "effect-target-ally-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -26863,7 +27318,7 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -26872,6 +27327,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -26974,9 +27438,8 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing"
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -27030,7 +27493,7 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -27039,6 +27502,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -27141,9 +27613,8 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing"
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -27197,7 +27668,7 @@
       "actionKind": "active",
       "sourceSkillId": 504014,
       "controlSkillId": 504014,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -27206,6 +27677,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 55,
@@ -27302,17 +27782,24 @@
       "actionKind": "signature",
       "sourceSkillId": 50012602,
       "controlSkillId": 50012602,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 70,
@@ -27368,7 +27855,7 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -27377,6 +27864,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -27477,17 +27973,24 @@
       "actionKind": "signature",
       "sourceSkillId": 50012702,
       "controlSkillId": 50012702,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 75,
@@ -27543,7 +28046,7 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -27552,6 +28055,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -27652,17 +28164,24 @@
       "actionKind": "signature",
       "sourceSkillId": 50012802,
       "controlSkillId": 50012802,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 80,
@@ -27718,7 +28237,7 @@
       "actionKind": "active",
       "sourceSkillId": 504014,
       "controlSkillId": 504014,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -27727,6 +28246,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 55,
@@ -27827,15 +28355,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50012901,
       "controlSkillId": 50012901,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 79,
@@ -27891,7 +28416,7 @@
       "actionKind": "active",
       "sourceSkillId": 507001,
       "controlSkillId": 507001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -27900,6 +28425,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 125,
@@ -28006,9 +28540,7 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -28066,7 +28598,7 @@
       "actionKind": "active",
       "sourceSkillId": 507003,
       "controlSkillId": 507003,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -28075,6 +28607,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -28181,9 +28722,7 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -28241,7 +28780,7 @@
       "actionKind": "active",
       "sourceSkillId": 507003,
       "controlSkillId": 507003,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -28250,6 +28789,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -28350,15 +28898,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50013202,
       "controlSkillId": 50013202,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 80,
@@ -28525,9 +29070,8 @@
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing"
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -28582,7 +29126,7 @@
       "actionKind": "active",
       "sourceSkillId": 506001,
       "controlSkillId": 506001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -28591,6 +29135,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -28696,9 +29249,8 @@
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
         "effect-trigger-frame-missing",
+        "effect-target-unresolved",
         "shield-formula-not-literal-function-5"
       ],
       "timing": {
@@ -28869,9 +29421,23 @@
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved",
+          "property-formula-not-literal-function-5",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -28929,7 +29495,7 @@
       "actionKind": "active",
       "sourceSkillId": 501001,
       "controlSkillId": 501001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -28938,6 +29504,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 125,
@@ -29042,7 +29617,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
         "effect-target-any-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -29050,6 +29624,22 @@
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "effect-target-any-unresolved",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved",
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved",
+          "property-formula-not-literal-function-5"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -29107,7 +29697,7 @@
       "actionKind": "active",
       "sourceSkillId": 506005,
       "controlSkillId": 506005,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -29116,6 +29706,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 140,
@@ -29220,7 +29819,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
         "effect-target-any-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
@@ -29228,6 +29826,22 @@
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "effect-target-any-unresolved",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved",
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved",
+          "property-formula-not-literal-function-5"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 115,
@@ -29285,7 +29899,7 @@
       "actionKind": "active",
       "sourceSkillId": 506005,
       "controlSkillId": 506005,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -29294,6 +29908,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 140,
@@ -29390,15 +30013,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50014701,
       "controlSkillId": 50014701,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 135,
@@ -29454,7 +30074,7 @@
       "actionKind": "active",
       "sourceSkillId": 505013,
       "controlSkillId": 505013,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -29463,6 +30083,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -29510,7 +30139,7 @@
       "actionKind": "break",
       "sourceSkillId": 50014704,
       "controlSkillId": 50014704,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -29519,6 +30148,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 101,
@@ -29562,15 +30200,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50014801,
       "controlSkillId": 50014801,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 145,
@@ -29626,7 +30261,7 @@
       "actionKind": "active",
       "sourceSkillId": 505014,
       "controlSkillId": 505014,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -29635,6 +30270,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 90,
@@ -29682,7 +30326,7 @@
       "actionKind": "break",
       "sourceSkillId": 50014804,
       "controlSkillId": 50014804,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -29691,6 +30335,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 101,
@@ -29734,15 +30387,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50014901,
       "controlSkillId": 50014901,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 150,
@@ -29798,7 +30448,7 @@
       "actionKind": "active",
       "sourceSkillId": 505017,
       "controlSkillId": 505017,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -29807,6 +30457,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 60,
@@ -29854,7 +30513,7 @@
       "actionKind": "break",
       "sourceSkillId": 50014904,
       "controlSkillId": 50014904,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -29863,6 +30522,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 101,
@@ -29906,15 +30574,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50015602,
       "controlSkillId": 50015602,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 210,
@@ -29970,7 +30635,7 @@
       "actionKind": "active",
       "sourceSkillId": 501001,
       "controlSkillId": 501001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -29979,6 +30644,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 125,
@@ -30026,7 +30700,7 @@
       "actionKind": "break",
       "sourceSkillId": 50015604,
       "controlSkillId": 50015604,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -30035,6 +30709,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 88,
@@ -30090,10 +30773,19 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "property-formula-not-literal-function-5",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "property-formula-not-literal-function-5"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "property-formula-not-literal-function-5"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 227,
@@ -30150,7 +30842,7 @@
       "actionKind": "active",
       "sourceSkillId": 501005,
       "controlSkillId": 501005,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -30159,6 +30851,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 210,
@@ -30206,7 +30907,7 @@
       "actionKind": "break",
       "sourceSkillId": 50015704,
       "controlSkillId": 50015704,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -30215,6 +30916,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 88,
@@ -30270,10 +30980,19 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "property-formula-not-literal-function-5",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "property-formula-not-literal-function-5"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "property-formula-not-literal-function-5"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 240,
@@ -30330,7 +31049,7 @@
       "actionKind": "active",
       "sourceSkillId": 501005,
       "controlSkillId": 501005,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -30339,6 +31058,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 210,
@@ -30443,11 +31171,10 @@
       "reasons": [
         "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
-        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-trigger-frame-missing"
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -30502,7 +31229,7 @@
       "actionKind": "active",
       "sourceSkillId": 507012,
       "controlSkillId": 507012,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -30511,6 +31238,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -30615,11 +31351,10 @@
       "reasons": [
         "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
-        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-trigger-frame-missing"
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -30674,7 +31409,7 @@
       "actionKind": "active",
       "sourceSkillId": 507020,
       "controlSkillId": 507020,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -30683,6 +31418,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 60,
@@ -30783,11 +31527,10 @@
       "reasons": [
         "property-formula-not-literal-function-5",
         "effect-target-ally-unresolved",
-        "effect-target-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-trigger-frame-missing"
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -30842,7 +31585,7 @@
       "actionKind": "active",
       "sourceSkillId": 507019,
       "controlSkillId": 507019,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -30851,6 +31594,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 60,
@@ -30947,15 +31699,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50017302,
       "controlSkillId": 50017302,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 205,
@@ -31011,7 +31760,7 @@
       "actionKind": "active",
       "sourceSkillId": 507012,
       "controlSkillId": 507012,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -31020,6 +31769,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -31122,9 +31880,7 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -31182,7 +31938,7 @@
       "actionKind": "active",
       "sourceSkillId": 507020,
       "controlSkillId": 507020,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -31191,6 +31947,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 60,
@@ -31289,9 +32054,7 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -31461,8 +32224,7 @@
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -31521,7 +32283,7 @@
       "actionKind": "active",
       "sourceSkillId": 509001,
       "controlSkillId": 509001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -31530,6 +32292,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -31640,8 +32411,7 @@
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -31701,7 +32471,7 @@
       "actionKind": "active",
       "sourceSkillId": 509002,
       "controlSkillId": 509002,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -31710,6 +32480,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 155,
@@ -31820,8 +32599,7 @@
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -31881,7 +32659,7 @@
       "actionKind": "active",
       "sourceSkillId": 509002,
       "controlSkillId": 509002,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -31890,6 +32668,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 155,
@@ -31998,12 +32785,25 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
         "effect-target-any-unresolved",
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "effect-target-any-unresolved",
+          "property-formula-not-literal-function-5",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 168,
@@ -32060,7 +32860,7 @@
       "actionKind": "active",
       "sourceSkillId": 504009,
       "controlSkillId": 504009,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -32069,6 +32869,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -32176,8 +32985,7 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "property-formula-not-literal-function-5",
-        "nested-effect-wrapper-semantics-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -32250,6 +33058,21 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "base-function-unverified",
+          "common-function-unverified",
+          "level-ratio-missing",
+          "hp:damage-formula-inputs-incomplete",
+          "toughness:pre-shield-damage-inputs-incomplete"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 125,
@@ -32361,8 +33184,7 @@
         "property-formula-not-literal-function-5",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -32421,7 +33243,7 @@
       "actionKind": "active",
       "sourceSkillId": 502007,
       "controlSkillId": 502007,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -32430,6 +33252,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -32536,7 +33367,6 @@
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
-        "inject-wrapper-classified-through-child-edges",
         "effect-target-any-unresolved",
         "shield-formula-not-literal-function-5",
         "property-conditions-not-expanded",
@@ -32727,9 +33557,28 @@
         "pack-lifecycle-semantics-evidence-gap",
         "heal-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "base-function-unverified",
+          "hp:damage-formula-inputs-incomplete",
+          "toughness:pre-shield-damage-inputs-incomplete",
+          "tuning-mark-max-mismatch",
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved",
+          "pack-lifecycle-semantics-evidence-gap",
+          "heal-formula-not-literal-function-5",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 95,
@@ -32892,9 +33741,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "property-formula-not-literal-function-5",
-        "property-change-type-not-battle-property",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "property-change-type-not-battle-property"
       ],
       "timing": {
         "status": "applied",
@@ -32952,7 +33799,7 @@
       "actionKind": "active",
       "sourceSkillId": 509001,
       "controlSkillId": 509001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -32961,6 +33808,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -33061,15 +33917,12 @@
       "actionKind": "signature",
       "sourceSkillId": 50021601,
       "controlSkillId": 50021601,
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "source-verified",
-      "reasons": [
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "timing": {
         "status": "applied",
         "durationFrames": 78,
@@ -33239,10 +34092,21 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing"
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 227,
@@ -33299,7 +34163,7 @@
       "actionKind": "active",
       "sourceSkillId": 509010,
       "controlSkillId": 509010,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -33308,6 +34172,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 60,
@@ -33420,8 +34293,7 @@
         "effect-target-unresolved",
         "pack-lifecycle-semantics-evidence-gap",
         "effect-target-any-unresolved",
-        "property-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -33481,7 +34353,7 @@
       "actionKind": "active",
       "sourceSkillId": 507003,
       "controlSkillId": 507003,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -33490,6 +34362,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -33597,11 +34478,10 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "property-formula-not-literal-function-5",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -33660,7 +34540,7 @@
       "actionKind": "active",
       "sourceSkillId": 501001,
       "controlSkillId": 501001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -33669,6 +34549,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 125,
@@ -33776,11 +34665,10 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "property-formula-not-literal-function-5",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -33952,11 +34840,10 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "property-formula-not-literal-function-5",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -34138,9 +35025,28 @@
         "pack-lifecycle-semantics-evidence-gap",
         "heal-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "base-function-unverified",
+          "hp:damage-formula-inputs-incomplete",
+          "toughness:pre-shield-damage-inputs-incomplete",
+          "tuning-mark-max-mismatch",
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved",
+          "pack-lifecycle-semantics-evidence-gap",
+          "heal-formula-not-literal-function-5",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 106,
@@ -34198,7 +35104,7 @@
       "actionKind": "active",
       "sourceSkillId": 505001,
       "controlSkillId": 505001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -34207,6 +35113,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -34320,9 +35235,28 @@
         "pack-lifecycle-semantics-evidence-gap",
         "heal-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "base-function-unverified",
+          "hp:damage-formula-inputs-incomplete",
+          "toughness:pre-shield-damage-inputs-incomplete",
+          "tuning-mark-max-mismatch",
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved",
+          "pack-lifecycle-semantics-evidence-gap",
+          "heal-formula-not-literal-function-5",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 108,
@@ -34495,9 +35429,28 @@
         "pack-lifecycle-semantics-evidence-gap",
         "heal-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "base-function-unverified",
+          "hp:damage-formula-inputs-incomplete",
+          "toughness:pre-shield-damage-inputs-incomplete",
+          "tuning-mark-max-mismatch",
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved",
+          "pack-lifecycle-semantics-evidence-gap",
+          "heal-formula-not-literal-function-5",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 170,
@@ -34666,9 +35619,7 @@
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -34741,6 +35692,21 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "base-function-unverified",
+          "common-function-unverified",
+          "level-ratio-missing",
+          "hp:damage-formula-inputs-incomplete",
+          "toughness:pre-shield-damage-inputs-incomplete"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 125,
@@ -34846,9 +35812,7 @@
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -34921,6 +35885,21 @@
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "base-function-unverified",
+          "common-function-unverified",
+          "level-ratio-missing",
+          "hp:damage-formula-inputs-incomplete",
+          "toughness:pre-shield-damage-inputs-incomplete"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 125,
@@ -35026,9 +36005,7 @@
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -35087,7 +36064,7 @@
       "actionKind": "active",
       "sourceSkillId": 502005,
       "controlSkillId": 502005,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -35096,6 +36073,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -35205,8 +36191,7 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -35378,9 +36363,22 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 260,
@@ -35438,7 +36436,7 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -35447,6 +36445,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -35554,9 +36561,22 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 527,
@@ -35614,7 +36634,7 @@
       "actionKind": "active",
       "sourceSkillId": 504020,
       "controlSkillId": 504020,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -35623,6 +36643,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 60,
@@ -35730,9 +36759,22 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 640,
@@ -35790,7 +36832,7 @@
       "actionKind": "active",
       "sourceSkillId": 504006,
       "controlSkillId": 504006,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -35799,6 +36841,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -35905,10 +36956,21 @@
         "projectile-impact-frame-runtime-dependent",
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "tuning-mark-max-mismatch",
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 241,
@@ -35965,7 +37027,7 @@
       "actionKind": "active",
       "sourceSkillId": 501016,
       "controlSkillId": 501016,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -35974,6 +37036,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 150,
@@ -36082,9 +37153,23 @@
         "effect-target-any-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "pack-lifecycle-semantics-evidence-gap",
+          "effect-target-any-unresolved",
+          "nested-effect-wrapper-semantics-unresolved",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 218,
@@ -36142,7 +37227,7 @@
       "actionKind": "active",
       "sourceSkillId": 504001,
       "controlSkillId": 504001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -36151,6 +37236,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -36259,9 +37353,23 @@
         "property-conditions-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "pack-lifecycle-semantics-evidence-gap",
+          "effect-target-any-unresolved",
+          "property-conditions-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 282,
@@ -36434,9 +37542,24 @@
         "property-conditions-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "pack-lifecycle-semantics-evidence-gap",
+          "effect-target-any-unresolved",
+          "property-conditions-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "effect-trigger-frame-missing",
+          "effect-target-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 359,
@@ -36494,7 +37617,7 @@
       "actionKind": "active",
       "sourceSkillId": 504006,
       "controlSkillId": 504006,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -36503,6 +37626,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -36609,8 +37741,7 @@
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -36670,7 +37801,7 @@
       "actionKind": "active",
       "sourceSkillId": 509001,
       "controlSkillId": 509001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -36679,6 +37810,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -36789,8 +37929,7 @@
         "nested-effect-wrapper-semantics-unresolved",
         "property-conditions-not-expanded",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -36850,7 +37989,7 @@
       "actionKind": "active",
       "sourceSkillId": 509002,
       "controlSkillId": 509002,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -36859,6 +37998,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 150,
@@ -36966,9 +38114,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "effect-target-ally-unresolved",
-        "heal-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "heal-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -37027,7 +38173,7 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -37036,6 +38182,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -37139,9 +38294,7 @@
       "scenarioRuntimeStatus": "source-verified",
       "reasons": [
         "effect-target-ally-unresolved",
-        "heal-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "heal-formula-not-literal-function-5"
       ],
       "timing": {
         "status": "applied",
@@ -37310,7 +38463,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "inject-wrapper-classified-through-child-edges",
         "pack-lifecycle-semantics-evidence-gap",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
@@ -37373,7 +38525,7 @@
       "actionKind": "active",
       "sourceSkillId": 509002,
       "controlSkillId": 509002,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -37382,6 +38534,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 150,
@@ -37489,8 +38650,7 @@
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "sp-recover-type-not-direct-sp",
-        "inject-wrapper-classified-through-child-edges"
+        "sp-recover-type-not-direct-sp"
       ],
       "timing": {
         "status": "applied",
@@ -37545,7 +38705,7 @@
       "actionKind": "active",
       "sourceSkillId": 504012,
       "controlSkillId": 504012,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -37554,6 +38714,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 50,
@@ -37665,8 +38834,7 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -37721,7 +38889,7 @@
       "actionKind": "active",
       "sourceSkillId": 507003,
       "controlSkillId": 507003,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -37730,6 +38898,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -37841,8 +39018,7 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -37897,7 +39073,7 @@
       "actionKind": "active",
       "sourceSkillId": 507003,
       "controlSkillId": 507003,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -37906,6 +39082,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -38021,10 +39206,9 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved",
         "heal-formula-not-literal-function-5",
-        "effect-trigger-frame-missing"
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -38082,7 +39266,7 @@
       "actionKind": "active",
       "sourceSkillId": 502007,
       "controlSkillId": 502007,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -38091,6 +39275,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -38197,9 +39390,7 @@
         "projectile-impact-frame-runtime-dependent",
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -38257,7 +39448,7 @@
       "actionKind": "active",
       "sourceSkillId": 506001,
       "controlSkillId": 506001,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "runtime-dependent",
@@ -38266,6 +39457,15 @@
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": true,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": []
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 105,
@@ -38372,10 +39572,21 @@
         "projectile-impact-frame-runtime-dependent",
         "tuning-mark-max-mismatch",
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "inject-wrapper-classified-through-child-edges",
-        "effect-target-unresolved"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
+      "zeroDistancePolicy": {
+        "approved": "user-approved-sync-rebaseline-2026-08-05",
+        "coversAllReasons": false,
+        "coveredReasons": [
+          "trigger-frame-missing",
+          "projectile-impact-frame-runtime-dependent"
+        ],
+        "unresolvedReasons": [
+          "tuning-mark-max-mismatch",
+          "nested-damage-trigger-lifecycle-evidence-gap",
+          "nested-effect-wrapper-semantics-unresolved"
+        ]
+      },
       "timing": {
         "status": "applied",
         "durationFrames": 100,
@@ -38544,8 +39755,7 @@
         "effect-target-any-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -38716,8 +39926,7 @@
         "effect-target-any-unresolved",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-target-unresolved"
       ],
       "timing": {
         "status": "applied",
@@ -38889,9 +40098,9 @@
       "unresolved": 0
     },
     "publicActionClosure": {
-      "evidenceClosed": 132,
-      "scenarioAssumed": 137,
-      "unresolved": 97
+      "evidenceClosed": 262,
+      "scenarioAssumed": 32,
+      "unresolved": 72
     },
     "fixedSkillScopeClasses": {
       "non-combat-capability": 45,

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "c51cdd52a80b92e852b08776018d0afad28ae076227870daec5c832342341f69",
+  "sourcePackageHash": "ad112575877d54a61642aadcab93de44311dc91725a07909c46b4e8cc55de490",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "4071ed4e85c8f0bee29bb6f57d81bb991922852bd3eac264fadcbdd552520f8a"
+      "profileHash": "c5c0015b8e8792b8b6ae9bf99ce10b4141fa1d9c158063a5ff9f6b5317aa0b5a"
     },
     {
       "ownerId": 103002,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "0d552ad9e1811739c882a13622ccfca4486f8126457c9ba0e7ee906bab15e063"
+      "profileHash": "8dccdf3c03c557896a5e49453b1ad6e708541e7e174af35067b46409fa9d90c5"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "35fc6de2aeea9dbc18a9aa48ce789be39a3b0fc6a4b2b8d62b9e6382a39a11a7"
+      "profileHash": "c0893290045454f7b5a9e3513d69f21a109a9f9a153a8b8347722ec7fec8de17"
     },
     {
       "ownerId": 101007,
@@ -480,9 +480,9 @@
       "switchTriggerPhases": [
         "on-exit"
       ],
-      "runtimeReadyActionCount": 6,
-      "runtimeReadyRatio": 0.6,
-      "staticEvidenceGapCount": 4,
+      "runtimeReadyActionCount": 7,
+      "runtimeReadyRatio": 0.7,
+      "staticEvidenceGapCount": 3,
       "runtimeEvidenceRequiredCount": 1,
       "mechanismTypes": [
         "switch-trigger"
@@ -564,9 +564,9 @@
       "switchTriggerPhases": [
         "on-exit"
       ],
-      "runtimeReadyActionCount": 8,
-      "runtimeReadyRatio": 0.8,
-      "staticEvidenceGapCount": 2,
+      "runtimeReadyActionCount": 9,
+      "runtimeReadyRatio": 0.9,
+      "staticEvidenceGapCount": 1,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
         "switch-trigger"
@@ -921,7 +921,7 @@
       "runtime-applied": 3
     },
     "totalPublicActionCount": 197,
-    "totalRuntimeReadyActionCount": 163,
+    "totalRuntimeReadyActionCount": 165,
     "unnamedSecondaryPassiveCount": 20,
     "zeroDistanceSimulationCompleteCount": 1,
     "realClientEvidenceCompleteCount": 0

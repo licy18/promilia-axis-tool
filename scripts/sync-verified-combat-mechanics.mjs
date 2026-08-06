@@ -4643,6 +4643,8 @@ function createBehaviorTarget(code, sourceField) {
             ? 'ally-unresolved'
             : code === 3
               ? 'any-unresolved'
+              : sourceField === 'directInjectTargetType' && code === 0
+                ? 'source-owner'
               : 'unresolved',
     sourceField,
   };
@@ -6053,7 +6055,18 @@ function classifyBattleEffectNode({
       'elementConfigId'
     );
   } else if (kind === 'inject') {
-    reasons.push('inject-wrapper-classified-through-child-edges');
+    const childReferenceCount = collectBattleElementChildReferences(
+      tree
+    ).length;
+    if (childReferenceCount > 0) {
+      dimensions.wrapper = createDimensionClassification(
+        'applied',
+        [],
+        'elementConfigId|injectElementDataList|elementDataList'
+      );
+    } else {
+      reasons.push('inject-wrapper-classified-through-child-edges');
+    }
   } else {
     reasons.push('battle-element-kind-not-calculator-supported');
   }
@@ -6158,6 +6171,11 @@ function createControlRuntimeEffectBinding({
           'stack-lifecycle-runtime-unimplemented',
           'inject-wrapper-classified-through-child-edges',
         ].includes(reason)
+    ).filter(
+      reason =>
+        node.kind !== 'inject' ||
+        node.classification === 'applied' ||
+        reason !== 'inject-wrapper-classified-through-child-edges'
     ),
     ...(tuningBinding?.reasons ?? []),
   ];

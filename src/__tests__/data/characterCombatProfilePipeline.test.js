@@ -1280,17 +1280,17 @@ describe('M10 character combat profile pipeline', () => {
       )
     ).toBe(true);
     expect(unresolvedLedger.summary).toMatchObject({
-      semanticRecordCount: 239,
-      rawRecordCount: 354,
+      semanticRecordCount: 228,
+      rawRecordCount: 318,
       impactClassificationCounts: {
-        'gameplay-impacting': 106,
+        'gameplay-impacting': 120,
         'not-applicable': 37,
         unreachable: 22,
-        'wrapper-or-duplicate': 74,
+        'wrapper-or-duplicate': 49,
       },
     });
-    expect(unresolvedLedger.records).toHaveLength(239);
-    expect(unresolvedLedger.rawRecords).toHaveLength(354);
+    expect(unresolvedLedger.records).toHaveLength(228);
+    expect(unresolvedLedger.rawRecords).toHaveLength(318);
     expect(
       unresolvedLedger.records.every(
         record =>

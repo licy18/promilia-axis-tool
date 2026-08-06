@@ -2,27 +2,27 @@
 
 - 包：`azpr-tc-2026-07-18`
 - 公开动作：563
-- 控制：538
-- 直接元素根：4757
-- 原始引用边：1661
+- 控制：540
+- 直接元素根：4776
+- 原始引用边：1682
 - 效果图节点：3695
-- 去重语义效果：3469
-- 最终玩法效果：1841
-- 结构包装/条件：1628
-- 语义可计算：409
+- 去重语义效果：3484
+- 最终玩法效果：1848
+- 结构包装/条件：1636
+- 语义可计算：411
 - 语义明确零：2
-- 语义未解析：1430
+- 语义未解析：1435
 
 ## 语义放置
 
 - runtime-dependent: 139
-- static-evidence-gap: 480
-- static-resolved: 1222
+- static-evidence-gap: 483
+- static-resolved: 1226
 
 ## 公式族
 
 - basis-point-property-a-with-common-ratio: 2
-- literal-a-with-common-ratio: 716
+- literal-a-with-common-ratio: 721
 - source-tuning-ratio-with-common-ratio: 1
 - unsupported-0-0: 10
 - unsupported-1-0: 64
@@ -42,20 +42,20 @@
 - unsupported-1-2008: 1
 - unsupported-1-107202: 8
 - unsupported-1-107203: 8
-- unsupported-22-12: 1
+- unsupported-22-12: 2
 - unsupported-104-12: 3
 - unsupported-108-12: 6
 - unsupported-1007-3: 6
 - unsupported-1007-5: 4
 - unsupported-102100-3: 1
-- verified-tuning-state-formula: 303
+- verified-tuning-state-formula: 304
 
 ## 原始边审计
 
-- 效果绑定：3739
-- 可计算：372
+- 效果绑定：3759
+- 可计算：897
 - 明确零：2
-- 未解析：3365
+- 未解析：2860
 
 ## 元素类型
 
@@ -71,27 +71,27 @@
 
 ## 未解析原因
 
-- effect-target-static-evidence-gap: 490
-- effect-trigger-frame-static-evidence-gap: 437
+- effect-target-static-evidence-gap: 493
+- effect-trigger-frame-static-evidence-gap: 439
 - heal-formula-not-literal-function-5: 52
-- nested-damage-runtime-family-unimplemented: 473
+- nested-damage-runtime-family-unimplemented: 474
 - property-change-type-not-battle-property: 1
 - property-conditions-not-expanded: 33
 - property-formula-not-literal-function-5: 428
 - runtime-target-from-projectile-collision: 125
 - runtime-target-selection-ally: 19
 - runtime-trigger-projectile-collision-frame: 125
-- shield-formula-not-literal-function-5: 10
+- shield-formula-not-literal-function-5: 11
 - sp-formula-not-literal-function-5: 95
 - sp-recover-type-not-direct-sp: 12
 - tuning-consume-current-packet-not-in-candidate-map: 9
 - tuning-consume-judgment-missing: 9
 - tuning-consume-mark-identity-ambiguous: 9
 - tuning-consume-success-branch-unresolved: 9
-- tuning-mark-max-mismatch: 46
+- tuning-mark-max-mismatch: 47
 - tuning-mark-relation-elementDataList-unresolved: 2
 - tuning-mark-relation-notDelElementDataList-unresolved: 13
 - tuning-mark-relation-triggerEffectList-unresolved: 1
-- wrapper-condition-semantics-unresolved: 810
+- wrapper-condition-semantics-unresolved: 812
 
 > 只有真实触发帧、唯一目标且公式输入可安全解释的维度进入运行时；其余逐项来源见同名 JSON。

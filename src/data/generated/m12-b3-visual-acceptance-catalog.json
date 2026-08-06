@@ -40,9 +40,9 @@
   "summary": {
     "total": 254,
     "published": 254,
-    "accepted": 210,
-    "optimizationReady": 210,
-    "blockingLedgerCount": 45,
+    "accepted": 217,
+    "optimizationReady": 217,
+    "blockingLedgerCount": 38,
     "byObjectKind": {
       "soul-essence": {
         "total": 62,
@@ -56,8 +56,8 @@
       },
       "kibo": {
         "total": 43,
-        "accepted": 0,
-        "optimizationReady": 0
+        "accepted": 7,
+        "optimizationReady": 7
       },
       "set-skill": {
         "total": 12,
@@ -4847,18 +4847,16 @@
       "objectKind": "kibo",
       "objectId": "500001",
       "displayName": "迅狼",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "761953c8a45beb2b",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "02f7073ec746c6ea",
       "evidence": {
         "iconSha256": "169176555bea2fadee74e3cdad350d2e51a487e760c3427e41878c981ef7cb87",
         "binding": {
@@ -4871,7 +4869,7 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
@@ -4883,7 +4881,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -4902,7 +4900,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "db3146a04b9f3717",
+      "manifestHash": "9ebb22b1f7f8d092",
       "evidence": {
         "iconSha256": "1419a65625c36ffc9f63ff048c5160882d877f5dfb854180d99ae8ca517f5c49",
         "binding": {
@@ -4920,7 +4918,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -4947,7 +4945,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "f34116b60be016ba",
+      "manifestHash": "41e73d3a4370c1dd",
       "evidence": {
         "iconSha256": "4b8324549bd1e2d587932643948e207ddf4c807e3068806bf448704545c3dfb0",
         "binding": {
@@ -4965,7 +4963,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -4992,7 +4990,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "73e29b45544a204d",
+      "manifestHash": "bef78f30e03776d8",
       "evidence": {
         "iconSha256": "69a60f93447196bc9c9d8fbac29a77e99f2656bdc760e6a66532630f86446170",
         "binding": {
@@ -5010,7 +5008,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5037,7 +5035,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "a2a75eaeb9dc6ec1",
+      "manifestHash": "b58443b4a8a215d2",
       "evidence": {
         "iconSha256": "2de00973d8eacf1a509398e84de0c95fbf34827daefb99366273f5da4514c1e1",
         "binding": {
@@ -5055,7 +5053,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5082,7 +5080,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "27ed995b40173ad8",
+      "manifestHash": "38bf4a9d4e4f757b",
       "evidence": {
         "iconSha256": "b750b8a030672facf82ef5061c4f36828055b3bbfbcd1c40f765622369a56db4",
         "binding": {
@@ -5100,7 +5098,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5127,7 +5125,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "515100ee6c0a90f5",
+      "manifestHash": "92e95e17707cb0cc",
       "evidence": {
         "iconSha256": "d7b523df7c044a4f904505a480048fb61dff710fdc731b13c03fd00763f37df2",
         "binding": {
@@ -5144,7 +5142,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5249,18 +5247,16 @@
       "objectKind": "kibo",
       "objectId": "500120",
       "displayName": "哈加",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "25f8869d6bc9a0b2",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "b97bc67765351e88",
       "evidence": {
         "iconSha256": "0550b6592df61e44142fef07080f45bd1eb47a9e133edba9a997018d19a61e90",
         "binding": {
@@ -5273,11 +5269,11 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5285,7 +5281,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -5304,7 +5300,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "911ced1592719994",
+      "manifestHash": "0e416b5ef9ed1ca3",
       "evidence": {
         "iconSha256": "dc3f695d8f626c53b4d649ae43f4dd3ae08158ad4164cd99ece8288fda5b0df9",
         "binding": {
@@ -5321,7 +5317,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5348,7 +5344,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "1e491a8ad9d5cdf2",
+      "manifestHash": "dae1f6f29a30c135",
       "evidence": {
         "iconSha256": "1b9585841b8cc067d2aab0f447bcb1a32931c0e333290e205addcbf09cf5631b",
         "binding": {
@@ -5365,7 +5361,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5392,7 +5388,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "49330b9a01601fc4",
+      "manifestHash": "32da259a1986a4b3",
       "evidence": {
         "iconSha256": "f32d637161254284be6855c1997fd768bcbb660fb3798a4d5c62f8a2f68b039a",
         "binding": {
@@ -5409,7 +5405,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5425,18 +5421,16 @@
       "objectKind": "kibo",
       "objectId": "500126",
       "displayName": "风灵仔",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "da47023b47ff8edb",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "34bef71036cff4ee",
       "evidence": {
         "iconSha256": "3456b384d4436e7a714b97d347af2b4fc4e36898302380d71582496ccbd7f22c",
         "binding": {
@@ -5449,11 +5443,11 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5461,7 +5455,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -5469,18 +5463,16 @@
       "objectKind": "kibo",
       "objectId": "500127",
       "displayName": "风灵偶",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "468595241eb2c278",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "2b211823c01964e2",
       "evidence": {
         "iconSha256": "987ab4c74fa78882e79cb9c281ade479b5f72aca582715b5bae4e59a3deee2bb",
         "binding": {
@@ -5493,11 +5485,11 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5505,7 +5497,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -5513,18 +5505,16 @@
       "objectKind": "kibo",
       "objectId": "500128",
       "displayName": "岚灵偶",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "421ad06268f4442f",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "fe5521c25955ae9b",
       "evidence": {
         "iconSha256": "317f4fccf7e33b3f261b1510eb73ffb3a6bce19882bb17acc53f57ac5ca05ecd",
         "binding": {
@@ -5537,11 +5527,11 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5549,7 +5539,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -5557,18 +5547,16 @@
       "objectKind": "kibo",
       "objectId": "500129",
       "displayName": "呼姆猴",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "5f73fa7523dab31a",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "1ac774b926bab82f",
       "evidence": {
         "iconSha256": "3ec9d7eef8f033e935f42150454ca504a877989454e0d6355daf9c80ce8f2c1f",
         "binding": {
@@ -5581,11 +5569,11 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5593,7 +5581,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -5612,7 +5600,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "86df2f5d97c84144",
+      "manifestHash": "635a773998ee5927",
       "evidence": {
         "iconSha256": "49ae17a72be2459ff0181aadff276505986c918ae312bb2b37f126829bb11988",
         "binding": {
@@ -5629,7 +5617,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5656,7 +5644,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "06cbfbe1587028ff",
+      "manifestHash": "ce9a353adc5aa874",
       "evidence": {
         "iconSha256": "34cb1971db44b76d49fc044ee264680ce0abbcd7f2f8bbfff0a3c2206477ce9d",
         "binding": {
@@ -5673,7 +5661,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5700,7 +5688,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "6ca6930ded345252",
+      "manifestHash": "4369f9f0be9d0a1d",
       "evidence": {
         "iconSha256": "a87f928537c669631f9d030c47601ce6022845338d969f5827e0270ec02ca5cb",
         "binding": {
@@ -5717,7 +5705,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5744,7 +5732,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "d47e05fc9a782e40",
+      "manifestHash": "9d496e636e685067",
       "evidence": {
         "iconSha256": "6c62f796e1038e1278791164aaa68a0c9e527fdeda63e2b9bf0a0409425fcbcd",
         "binding": {
@@ -5761,7 +5749,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5788,7 +5776,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "4b353b4bdde239a2",
+      "manifestHash": "a743665e143b2c17",
       "evidence": {
         "iconSha256": "61c0a08039714b01b7b0eae31273a4f7851598b6e563631325586c23e023fc77",
         "binding": {
@@ -5805,7 +5793,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5821,18 +5809,16 @@
       "objectKind": "kibo",
       "objectId": "500173",
       "displayName": "雷灵仔",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "d88d36f81ddc1e36",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "43ddeb8ae4f37525",
       "evidence": {
         "iconSha256": "5f03cccb010157da9860011c1ec468a11100c51f68fb3bbdf6d174e92ad3beee",
         "binding": {
@@ -5845,11 +5831,11 @@
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
-              "closureClass": "unresolved"
+              "closureClass": "evidence-closed"
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5857,7 +5843,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -5876,7 +5862,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "90788fb23fb41b06",
+      "manifestHash": "36f4804cd4f01e19",
       "evidence": {
         "iconSha256": "ea326714135af4c741dd0110f9eea146b48b89cec462e308b5cbdf4c135577a9",
         "binding": {
@@ -5893,7 +5879,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5964,7 +5950,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "1b8f2c6e53cb6c15",
+      "manifestHash": "4d2e7ea143381a4e",
       "evidence": {
         "iconSha256": "a3b23f7b579ee6e5c1531dbdd437fc268c2024ba4248731da787f504e33f03d7",
         "binding": {
@@ -5982,7 +5968,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6009,7 +5995,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "5df8093e3c837ab1",
+      "manifestHash": "b6f6caec13b80cc0",
       "evidence": {
         "iconSha256": "423bf2eb6b479eb1ba9f6fcfb41d5bf6c8c4590fbb1cce753b1ac4a18a0c4778",
         "binding": {
@@ -6027,7 +6013,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6054,7 +6040,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "a46f88bf15bdfefa",
+      "manifestHash": "c4c4a6d8bf743753",
       "evidence": {
         "iconSha256": "bfa0e8c791a7e8ae5a34b95e18f229f73aa5a65bbe55e945ecf19e32ccb18c58",
         "binding": {
@@ -6072,7 +6058,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6144,7 +6130,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "037ee52df00b891f",
+      "manifestHash": "2e5e1544face8e96",
       "evidence": {
         "iconSha256": "d34c5603fadd8500d6882454e59b2d0f7002053e89b57184aa3c6f92db343a88",
         "binding": {
@@ -6162,7 +6148,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6189,7 +6175,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "1e711d81e4a27822",
+      "manifestHash": "e4b002c9bb5ca207",
       "evidence": {
         "iconSha256": "b8111777dfa56d5ee366c19b8fc62b3f7a2f05197afd685bc4ccefa76b210de0",
         "binding": {
@@ -6207,7 +6193,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6234,7 +6220,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "8d1721e7514739b4",
+      "manifestHash": "48c519fe137faecb",
       "evidence": {
         "iconSha256": "c6b2f1e7f0f97f234a62c27b15dcb62c8d943e3dfd7e1f4deedf7ae2f9759a48",
         "binding": {
@@ -6252,7 +6238,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6279,7 +6265,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "e1bca3a447f32461",
+      "manifestHash": "57501845aa2d981c",
       "evidence": {
         "iconSha256": "83a132b2994ab9c66170232bca4a4b3907bb6fc69bc5158d577e46ae7ac77b5c",
         "binding": {
@@ -6296,7 +6282,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6367,7 +6353,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "65c27704888c6576",
+      "manifestHash": "facd074a4c270c25",
       "evidence": {
         "iconSha256": "f497ed9646db5b465eedd977633abfc9e38b099b139af46c66a7d2c3bea59969",
         "binding": {
@@ -6384,7 +6370,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6411,7 +6397,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "b0317c507c6f12e4",
+      "manifestHash": "2bc423c4c4a85ec7",
       "evidence": {
         "iconSha256": "84e8024701c256d037a33e6be99bbb89138a1a624ef35448115c144d271a06b0",
         "binding": {
@@ -6429,7 +6415,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6501,7 +6487,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "c1d6e4d194b0a6e7",
+      "manifestHash": "49a522acd4ea4422",
       "evidence": {
         "iconSha256": "2669a2abb9eca97a0601a843f517ab2f94e626d48e751ec2f69d50fb481bc136",
         "binding": {
@@ -6519,7 +6505,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6546,7 +6532,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "6b007c6af0b950fd",
+      "manifestHash": "064e3e069f2faa68",
       "evidence": {
         "iconSha256": "a0a5ae0d6d698cfd1c6fc063c23834685d87d13fd5b9163184982af1dbd3208e",
         "binding": {
@@ -6564,7 +6550,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6591,7 +6577,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "713a52a02004dac0",
+      "manifestHash": "7772d0fbee97ab6b",
       "evidence": {
         "iconSha256": "d26ddd9ef35935372e0983f7f50be9736d529ee6204b16a6107b7c3a5d9bbdec",
         "binding": {
@@ -6609,7 +6595,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6636,7 +6622,7 @@
         "acceptance-blocking-ledger-not-empty",
         "acceptance-product-visual-signoff-pending"
       ],
-      "manifestHash": "e0ba4bd2c23586f2",
+      "manifestHash": "6b0a1ab9e8cb4dc1",
       "evidence": {
         "iconSha256": "9d0ed3ee1fe3e54b588065a9d929f3e8f03919823e3d1dd9887759cc14b631e5",
         "binding": {
@@ -6654,7 +6640,7 @@
             },
             "active": {
               "runtimeStatus": "runnable",
-              "closureClass": "scenario-assumed"
+              "closureClass": "evidence-closed"
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -7047,5 +7033,5 @@
       }
     }
   ],
-  "catalogHash": "8ed7671cd65aacad"
+  "catalogHash": "6b6baf1c91de9bb9"
 }

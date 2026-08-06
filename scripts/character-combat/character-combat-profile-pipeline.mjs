@@ -2543,7 +2543,9 @@ function createUnresolvedLedger({
       append({
         identity: `effect:${effect.effectIdentity}`,
         sourceKind: 'effect',
-        reasons: effect.reasons ?? [effect.classification],
+        reasons: effect.reasons?.length
+          ? effect.reasons
+          : [effect.classification],
         sourceIdentity: effect.sourceIdentity,
       });
     }

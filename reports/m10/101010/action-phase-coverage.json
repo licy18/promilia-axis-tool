@@ -383,7 +383,6 @@
       "residualReasons": [
         "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges",
         "pack-lifecycle-runtime-unimplemented",
         "projectile-impact-frame-runtime-dependent",
         "property-conditions-not-expanded",
@@ -407,11 +406,8 @@
       "sourceSkillId": 10101001,
       "runtimeReady": true,
       "classification": "applied",
-      "residualReasons": [
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
-      ],
-      "status": "applied-with-residual-gaps"
+      "residualReasons": [],
+      "status": "applied"
     },
     {
       "publicActionIdentity": null,
@@ -457,7 +453,6 @@
         "effect-target-unresolved",
         "effect-trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
-        "inject-wrapper-classified-through-child-edges",
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
@@ -493,8 +488,7 @@
       "classification": "applied",
       "residualReasons": [
         "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges"
+        "effect-trigger-frame-missing"
       ],
       "status": "applied-with-residual-gaps"
     },
@@ -508,5 +502,5 @@
       "status": "applied"
     }
   ],
-  "profileHash": "4071ed4e85c8f0bee29bb6f57d81bb991922852bd3eac264fadcbdd552520f8a"
+  "profileHash": "c5c0015b8e8792b8b6ae9bf99ce10b4141fa1d9c158063a5ff9f6b5317aa0b5a"
 }

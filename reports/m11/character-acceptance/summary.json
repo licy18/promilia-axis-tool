@@ -34,10 +34,10 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 164,
-      "sourceGapCount": 24,
+      "blockingLedgerCount": 168,
+      "sourceGapCount": 28,
       "acceptanceGapCount": 140,
-      "nonBlockingSourceCount": 18,
+      "nonBlockingSourceCount": 12,
       "matrix": {
         "requirementCount": 243,
         "requiredCount": 243,
@@ -75,13 +75,13 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "b3cfcc2414546460",
-      "sourceOfTruthHash": "9268647bb062181c",
+      "manifestHash": "55304ecab7538a7c",
+      "sourceOfTruthHash": "78f8f52681c79c0b",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "679e483ab7f5dfb0",
-        "data": "fcd5a5ce5188f071",
-        "trace": "e91e73f2e51a2578",
+        "input": "76d80a78879152e0",
+        "data": "55af5facfee62ae9",
+        "trace": "0b3087fce6fa8ce0",
         "evaluation": "920e7363ae12290d"
       }
     },
@@ -95,10 +95,10 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 309,
-      "sourceGapCount": 106,
+      "blockingLedgerCount": 323,
+      "sourceGapCount": 120,
       "acceptanceGapCount": 203,
-      "nonBlockingSourceCount": 133,
+      "nonBlockingSourceCount": 108,
       "matrix": {
         "requirementCount": 407,
         "requiredCount": 407,
@@ -135,13 +135,13 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "87fd8950a84a5cbe",
-      "sourceOfTruthHash": "24f96d9a0b9f81d9",
+      "manifestHash": "3c7b33a20881af8d",
+      "sourceOfTruthHash": "bf69977272df1457",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "6a7de2163dcec772",
-        "data": "571cb6e4c9601c44",
-        "trace": "2c0eccdad86d764d",
+        "input": "db76fb0503a3aba6",
+        "data": "1665c39a6cf7e268",
+        "trace": "f74c6598d5411cd1",
         "evaluation": "adc4612197816c14"
       }
     },
@@ -155,10 +155,10 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 414,
-      "sourceGapCount": 51,
+      "blockingLedgerCount": 468,
+      "sourceGapCount": 105,
       "acceptanceGapCount": 363,
-      "nonBlockingSourceCount": 424,
+      "nonBlockingSourceCount": 336,
       "matrix": {
         "requirementCount": 709,
         "requiredCount": 709,
@@ -196,19 +196,19 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "c73662a5da3854c2",
-      "sourceOfTruthHash": "95a676d5d9109601",
+      "manifestHash": "d2aebf4e1eefde6d",
+      "sourceOfTruthHash": "94dc872150c2a1e3",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "445ddcaef81e83ed",
-        "data": "c99fda144c41aecc",
-        "trace": "a0d7baa02132588d",
+        "input": "32d38d1c16012215",
+        "data": "cce1e01339044cf0",
+        "trace": "e0fbd4095ecfb1c5",
         "evaluation": "b06186eaa569be69"
       }
     }
   ],
-  "catalogHash": "a3d7ba03c17967e7",
-  "manifestIndexHash": "2722c2815c13d64a",
+  "catalogHash": "97d081cb8e065191",
+  "manifestIndexHash": "4ae2c4e4f9a0b39e",
   "summary": {
     "ownerCount": 3,
     "runtimeIntegratedCount": 3,
@@ -216,10 +216,10 @@
     "optimizationReadyCount": 0,
     "machineScenarioPassCount": 3,
     "workbenchRoundTripPassCount": 3,
-    "sourceGapCount": 181,
+    "sourceGapCount": 253,
     "acceptanceGapCount": 706,
-    "nonBlockingSourceCount": 575,
-    "functionalBlockers": 887,
+    "nonBlockingSourceCount": 456,
+    "functionalBlockers": 959,
     "performanceAndBundleRisksBlocking": false
   }
 }

@@ -279,11 +279,8 @@
       "sourceSkillId": 10100301,
       "runtimeReady": true,
       "classification": "applied",
-      "residualReasons": [
-        "effect-target-unresolved",
-        "inject-wrapper-classified-through-child-edges"
-      ],
-      "status": "applied-with-residual-gaps"
+      "residualReasons": [],
+      "status": "applied"
     },
     {
       "publicActionIdentity": null,
@@ -313,7 +310,6 @@
         "effect-target-any-unresolved",
         "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
@@ -329,7 +325,6 @@
       "residualReasons": [
         "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "inject-wrapper-classified-through-child-edges",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
@@ -359,5 +354,5 @@
       "status": "applied"
     }
   ],
-  "profileHash": "35fc6de2aeea9dbc18a9aa48ce789be39a3b0fc6a4b2b8d62b9e6382a39a11a7"
+  "profileHash": "c0893290045454f7b5a9e3513d69f21a109a9f9a153a8b8347722ec7fec8de17"
 }

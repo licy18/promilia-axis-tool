@@ -4669,6 +4669,10 @@ function createPropertySkillOccurrences({
 
 function createPublicActionClosureRow(action) {
   const reasons = uniqueValues(action.reasons ?? []);
+  const ZERO_DISTANCE_POLICY_COVERED_REASONS = new Set([
+    'trigger-frame-missing',
+    'projectile-impact-frame-runtime-dependent',
+  ]);
   const strictEvidenceClosed =
     action.runnable === true &&
     reasons.length === 0 &&
@@ -4676,6 +4680,10 @@ function createPublicActionClosureRow(action) {
   const scenarioAssumed =
     action.runnable === true &&
     action.scenarioRuntimeStatus === 'scenario-assumed-zero-distance';
+  const policyCovered =
+    scenarioAssumed &&
+    reasons.length > 0 &&
+    reasons.every(reason => ZERO_DISTANCE_POLICY_COVERED_REASONS.has(reason));
   return {
     identity: action.identity,
     kiboId: Number(action.ownerId),
@@ -4685,6 +4693,8 @@ function createPublicActionClosureRow(action) {
     controlSkillId: Number(action.controlSkillId),
     closureClass: strictEvidenceClosed
       ? 'evidence-closed'
+      : policyCovered
+        ? 'evidence-closed'
       : scenarioAssumed
         ? 'scenario-assumed'
         : 'unresolved',
@@ -4693,6 +4703,20 @@ function createPublicActionClosureRow(action) {
     sourceEvidenceStatus: action.sourceEvidenceStatus,
     scenarioRuntimeStatus: action.scenarioRuntimeStatus,
     reasons,
+    ...(action.scenarioRuntimeStatus === 'scenario-assumed-zero-distance'
+      ? {
+          zeroDistancePolicy: {
+            approved: 'user-approved-sync-rebaseline-2026-08-05',
+            coversAllReasons: policyCovered,
+            coveredReasons: reasons.filter(reason =>
+              ZERO_DISTANCE_POLICY_COVERED_REASONS.has(reason)
+            ),
+            unresolvedReasons: reasons.filter(
+              reason => !ZERO_DISTANCE_POLICY_COVERED_REASONS.has(reason)
+            ),
+          },
+        }
+      : {}),
     timing: action.timing,
     dimensions: action.dimensions,
     semanticEffects: action.semanticEffects,

@@ -3,11 +3,11 @@
   "kind": "character-acceptance-derived-ledger",
   "sourceGaps": [
     {
-      "recordIdentity": "source-gap:01d0150cc295fe18",
-      "uniqueGapIdentity": "source-gap:01d0150cc295fe18",
+      "recordIdentity": "source-gap:0560a3c1b3f6f7bf",
+      "uniqueGapIdentity": "source-gap:0560a3c1b3f6f7bf",
       "category": "upstream-source-gap",
       "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|pack-lifecycle-runtime-unimplemented",
+      "reason": "pack-lifecycle-runtime-unimplemented",
       "sourceKind": "effect",
       "sourceIdentities": [
         "battle-effect:10100331:0:-1934759882830174294:4382819133165257932:0",
@@ -15,7 +15,7 @@
       ],
       "sourceRecordIdentities": [
         "effect:10100331|0|elements|0|-1934759882830174294|element:-1934759882830174294|0|0",
-        "semantic-gap:43a4ca9b692f54f75baf"
+        "semantic-gap:f87ee945203ff55c423b"
       ],
       "blocking": true
     },
@@ -71,6 +71,41 @@
       "blocking": true
     },
     {
+      "recordIdentity": "source-gap:2714556d59e8cbd3",
+      "uniqueGapIdentity": "source-gap:2714556d59e8cbd3",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100312:0:-3716196104709416648:-1123755805311539664:61",
+        "battle-effect:10100312:0:-3716196104709416648:-1349437852626754000:99",
+        "battle-effect:10100312:0:-3716196104709416648:-8545081533461404112:109",
+        "battle-effect:10100312:0:-3716196104709416648:1941002140595807792:73",
+        "battle-effect:10100312:0:-3716196104709416648:378286786379146800:68",
+        "battle-effect:10100312:0:-3716196104709416648:7593113159482566192:104",
+        "battle-effect:10100312:0:-3716196104709416648:935768788960962096:94",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|104|5",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|109|2",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|61|0",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|68|4",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|73|3",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|94|6",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|99|1"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|104|5",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|109|2",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|61|0",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|68|4",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|73|3",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|94|6",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|99|1",
+        "semantic-gap:bd3a8d649e9e8f325716"
+      ],
+      "blocking": true
+    },
+    {
       "recordIdentity": "source-gap:287952456068c7d2",
       "uniqueGapIdentity": "source-gap:287952456068c7d2",
       "category": "upstream-source-gap",
@@ -101,40 +136,6 @@
       "sourceRecordIdentities": [
         "hit:10100303|0|projectile|101003037|101003014|0|0|control:10100303|sub:0|behavior:-5575632006342183792|config:0|bullet:101003014:0:0|element:101003037:0",
         "semantic-gap:069b3edc039c6e5b25bc"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:32cfac749740f1fe",
-      "uniqueGapIdentity": "source-gap:32cfac749740f1fe",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100327:0:4545086782333247478:2119769922617281174:0",
-        "effect:10100327|0|elements|0|4545086782333247478|element:4545086782333247478|0|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100327|0|elements|0|4545086782333247478|element:4545086782333247478|0|0",
-        "semantic-gap:3c52a9480b3590050699"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:356b104ee48a8142",
-      "uniqueGapIdentity": "source-gap:356b104ee48a8142",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100360:0:-6820191037001031513:6450702672474073568:0",
-        "effect:10100360|0|elements|0|-6820191037001031513|element:-6820191037001031513|0|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100360|0|elements|0|-6820191037001031513|element:-6820191037001031513|0|0",
-        "semantic-gap:d60f7c66b523d2713b08"
       ],
       "blocking": true
     },
@@ -224,23 +225,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:519b143329c638a1",
-      "uniqueGapIdentity": "source-gap:519b143329c638a1",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100324:0:5083798378052880732:3789488601228152227:1",
-        "effect:10100324|0|elements|0|5083798378052880732|element:5083798378052880732|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100324|0|elements|0|5083798378052880732|element:5083798378052880732|1|0",
-        "semantic-gap:b20be2271c59b3f5e090"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:5826a3e88b61604b",
       "uniqueGapIdentity": "source-gap:5826a3e88b61604b",
       "category": "upstream-source-gap",
@@ -275,6 +259,57 @@
       "blocking": true
     },
     {
+      "recordIdentity": "source-gap:5f8810b83e932309",
+      "uniqueGapIdentity": "source-gap:5f8810b83e932309",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100361:0:865127997397410363:-3230275784093162653:0",
+        "effect:10100361|0|elements|0|865127997397410363|element:865127997397410363|0|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100361|0|elements|0|865127997397410363|element:865127997397410363|0|0",
+        "semantic-gap:70ea3b50168fe05f7b6d"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:869b84d0baa96603",
+      "uniqueGapIdentity": "source-gap:869b84d0baa96603",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "pack-lifecycle-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100327:0:4545086782333247478:2119769922617281174:0",
+        "effect:10100327|0|elements|0|4545086782333247478|element:4545086782333247478|0|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100327|0|elements|0|4545086782333247478|element:4545086782333247478|0|0",
+        "semantic-gap:df4e8fa4ba3ef7cf35b9"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:8a2cd7bf5ba8645d",
+      "uniqueGapIdentity": "source-gap:8a2cd7bf5ba8645d",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "pack-lifecycle-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100314:0:-484773396539683776:1157313033125924799:1",
+        "effect:10100314|0|elements|0|-484773396539683776|element:-484773396539683776|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100314|0|elements|0|-484773396539683776|element:-484773396539683776|1|0",
+        "semantic-gap:413f8a628960edc36f26"
+      ],
+      "blocking": true
+    },
+    {
       "recordIdentity": "source-gap:90015662cabe3aec",
       "uniqueGapIdentity": "source-gap:90015662cabe3aec",
       "category": "upstream-source-gap",
@@ -288,23 +323,6 @@
       "sourceRecordIdentities": [
         "effect:10100313|0|elements|7|-4841411980842434486|element:-4841411980842434486|unresolved-frame|0",
         "semantic-gap:3957abcf63ca3d547683"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:90eb82c0958b3148",
-      "uniqueGapIdentity": "source-gap:90eb82c0958b3148",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100314:0:-484773396539683776:1157313033125924799:1",
-        "effect:10100314|0|elements|0|-484773396539683776|element:-484773396539683776|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100314|0|elements|0|-484773396539683776|element:-484773396539683776|1|0",
-        "semantic-gap:2106089b02095094df76"
       ],
       "blocking": true
     },
@@ -356,6 +374,74 @@
       "sourceRecordIdentities": [
         "hit:10100325|0|projectile|101003191|101003002|0|0|control:10100325|sub:0|behavior:7675042512476526473|config:0|bullet:101003002:0:0|element:101003191:0",
         "semantic-gap:a12c2f6c09b2851888b9"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:d69b3ba86d3c9ba1",
+      "uniqueGapIdentity": "source-gap:d69b3ba86d3c9ba1",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100311:0:2682046077355382670:-1349214709461132511:33",
+        "effect:10100311|0|elements|3|2682046077355382670|element:2682046077355382670|33|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100311|0|elements|3|2682046077355382670|element:2682046077355382670|33|0",
+        "semantic-gap:de237979b62a6a2e17c4"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:dc565b77813b0374",
+      "uniqueGapIdentity": "source-gap:dc565b77813b0374",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "pack-lifecycle-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100324:0:5083798378052880732:3789488601228152227:1",
+        "effect:10100324|0|elements|0|5083798378052880732|element:5083798378052880732|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100324|0|elements|0|5083798378052880732|element:5083798378052880732|1|0",
+        "semantic-gap:7e6b0ecda1e389ac2796"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:dda176f9150c8771",
+      "uniqueGapIdentity": "source-gap:dda176f9150c8771",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "pack-lifecycle-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100360:0:-6820191037001031513:6450702672474073568:0",
+        "effect:10100360|0|elements|0|-6820191037001031513|element:-6820191037001031513|0|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100360|0|elements|0|-6820191037001031513|element:-6820191037001031513|0|0",
+        "semantic-gap:a68b82acbf6ad1755072"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:dedbdcc697a5aa15",
+      "uniqueGapIdentity": "source-gap:dedbdcc697a5aa15",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-any-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100313:0:-5729186281790677610:6060088285417807340:148",
+        "effect:10100313|0|elements|4|-5729186281790677610|element:-5729186281790677610|148|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100313|0|elements|4|-5729186281790677610|element:-5729186281790677610|148|0",
+        "semantic-gap:3e48734ad9f7bc0a038a"
       ],
       "blocking": true
     },
@@ -3789,11 +3875,11 @@
       "uniqueGapIdentity": "acceptance-gap:fd77e7881f1f80c6"
     },
     {
-      "recordIdentity": "source-gap:01d0150cc295fe18",
-      "uniqueGapIdentity": "source-gap:01d0150cc295fe18",
+      "recordIdentity": "source-gap:0560a3c1b3f6f7bf",
+      "uniqueGapIdentity": "source-gap:0560a3c1b3f6f7bf",
       "category": "upstream-source-gap",
       "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|pack-lifecycle-runtime-unimplemented",
+      "reason": "pack-lifecycle-runtime-unimplemented",
       "sourceKind": "effect",
       "sourceIdentities": [
         "battle-effect:10100331:0:-1934759882830174294:4382819133165257932:0",
@@ -3801,7 +3887,7 @@
       ],
       "sourceRecordIdentities": [
         "effect:10100331|0|elements|0|-1934759882830174294|element:-1934759882830174294|0|0",
-        "semantic-gap:43a4ca9b692f54f75baf"
+        "semantic-gap:f87ee945203ff55c423b"
       ],
       "blocking": true
     },
@@ -3857,6 +3943,41 @@
       "blocking": true
     },
     {
+      "recordIdentity": "source-gap:2714556d59e8cbd3",
+      "uniqueGapIdentity": "source-gap:2714556d59e8cbd3",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100312:0:-3716196104709416648:-1123755805311539664:61",
+        "battle-effect:10100312:0:-3716196104709416648:-1349437852626754000:99",
+        "battle-effect:10100312:0:-3716196104709416648:-8545081533461404112:109",
+        "battle-effect:10100312:0:-3716196104709416648:1941002140595807792:73",
+        "battle-effect:10100312:0:-3716196104709416648:378286786379146800:68",
+        "battle-effect:10100312:0:-3716196104709416648:7593113159482566192:104",
+        "battle-effect:10100312:0:-3716196104709416648:935768788960962096:94",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|104|5",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|109|2",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|61|0",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|68|4",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|73|3",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|94|6",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|99|1"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|104|5",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|109|2",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|61|0",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|68|4",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|73|3",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|94|6",
+        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|99|1",
+        "semantic-gap:bd3a8d649e9e8f325716"
+      ],
+      "blocking": true
+    },
+    {
       "recordIdentity": "source-gap:287952456068c7d2",
       "uniqueGapIdentity": "source-gap:287952456068c7d2",
       "category": "upstream-source-gap",
@@ -3887,40 +4008,6 @@
       "sourceRecordIdentities": [
         "hit:10100303|0|projectile|101003037|101003014|0|0|control:10100303|sub:0|behavior:-5575632006342183792|config:0|bullet:101003014:0:0|element:101003037:0",
         "semantic-gap:069b3edc039c6e5b25bc"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:32cfac749740f1fe",
-      "uniqueGapIdentity": "source-gap:32cfac749740f1fe",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100327:0:4545086782333247478:2119769922617281174:0",
-        "effect:10100327|0|elements|0|4545086782333247478|element:4545086782333247478|0|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100327|0|elements|0|4545086782333247478|element:4545086782333247478|0|0",
-        "semantic-gap:3c52a9480b3590050699"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:356b104ee48a8142",
-      "uniqueGapIdentity": "source-gap:356b104ee48a8142",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100360:0:-6820191037001031513:6450702672474073568:0",
-        "effect:10100360|0|elements|0|-6820191037001031513|element:-6820191037001031513|0|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100360|0|elements|0|-6820191037001031513|element:-6820191037001031513|0|0",
-        "semantic-gap:d60f7c66b523d2713b08"
       ],
       "blocking": true
     },
@@ -4010,23 +4097,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:519b143329c638a1",
-      "uniqueGapIdentity": "source-gap:519b143329c638a1",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100324:0:5083798378052880732:3789488601228152227:1",
-        "effect:10100324|0|elements|0|5083798378052880732|element:5083798378052880732|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100324|0|elements|0|5083798378052880732|element:5083798378052880732|1|0",
-        "semantic-gap:b20be2271c59b3f5e090"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:5826a3e88b61604b",
       "uniqueGapIdentity": "source-gap:5826a3e88b61604b",
       "category": "upstream-source-gap",
@@ -4061,6 +4131,57 @@
       "blocking": true
     },
     {
+      "recordIdentity": "source-gap:5f8810b83e932309",
+      "uniqueGapIdentity": "source-gap:5f8810b83e932309",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100361:0:865127997397410363:-3230275784093162653:0",
+        "effect:10100361|0|elements|0|865127997397410363|element:865127997397410363|0|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100361|0|elements|0|865127997397410363|element:865127997397410363|0|0",
+        "semantic-gap:70ea3b50168fe05f7b6d"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:869b84d0baa96603",
+      "uniqueGapIdentity": "source-gap:869b84d0baa96603",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "pack-lifecycle-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100327:0:4545086782333247478:2119769922617281174:0",
+        "effect:10100327|0|elements|0|4545086782333247478|element:4545086782333247478|0|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100327|0|elements|0|4545086782333247478|element:4545086782333247478|0|0",
+        "semantic-gap:df4e8fa4ba3ef7cf35b9"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:8a2cd7bf5ba8645d",
+      "uniqueGapIdentity": "source-gap:8a2cd7bf5ba8645d",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "pack-lifecycle-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100314:0:-484773396539683776:1157313033125924799:1",
+        "effect:10100314|0|elements|0|-484773396539683776|element:-484773396539683776|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100314|0|elements|0|-484773396539683776|element:-484773396539683776|1|0",
+        "semantic-gap:413f8a628960edc36f26"
+      ],
+      "blocking": true
+    },
+    {
       "recordIdentity": "source-gap:90015662cabe3aec",
       "uniqueGapIdentity": "source-gap:90015662cabe3aec",
       "category": "upstream-source-gap",
@@ -4074,23 +4195,6 @@
       "sourceRecordIdentities": [
         "effect:10100313|0|elements|7|-4841411980842434486|element:-4841411980842434486|unresolved-frame|0",
         "semantic-gap:3957abcf63ca3d547683"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:90eb82c0958b3148",
-      "uniqueGapIdentity": "source-gap:90eb82c0958b3148",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|pack-lifecycle-runtime-unimplemented",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100314:0:-484773396539683776:1157313033125924799:1",
-        "effect:10100314|0|elements|0|-484773396539683776|element:-484773396539683776|1|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100314|0|elements|0|-484773396539683776|element:-484773396539683776|1|0",
-        "semantic-gap:2106089b02095094df76"
       ],
       "blocking": true
     },
@@ -4142,6 +4246,74 @@
       "sourceRecordIdentities": [
         "hit:10100325|0|projectile|101003191|101003002|0|0|control:10100325|sub:0|behavior:7675042512476526473|config:0|bullet:101003002:0:0|element:101003191:0",
         "semantic-gap:a12c2f6c09b2851888b9"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:d69b3ba86d3c9ba1",
+      "uniqueGapIdentity": "source-gap:d69b3ba86d3c9ba1",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100311:0:2682046077355382670:-1349214709461132511:33",
+        "effect:10100311|0|elements|3|2682046077355382670|element:2682046077355382670|33|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100311|0|elements|3|2682046077355382670|element:2682046077355382670|33|0",
+        "semantic-gap:de237979b62a6a2e17c4"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:dc565b77813b0374",
+      "uniqueGapIdentity": "source-gap:dc565b77813b0374",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "pack-lifecycle-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100324:0:5083798378052880732:3789488601228152227:1",
+        "effect:10100324|0|elements|0|5083798378052880732|element:5083798378052880732|1|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100324|0|elements|0|5083798378052880732|element:5083798378052880732|1|0",
+        "semantic-gap:7e6b0ecda1e389ac2796"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:dda176f9150c8771",
+      "uniqueGapIdentity": "source-gap:dda176f9150c8771",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "pack-lifecycle-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100360:0:-6820191037001031513:6450702672474073568:0",
+        "effect:10100360|0|elements|0|-6820191037001031513|element:-6820191037001031513|0|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100360|0|elements|0|-6820191037001031513|element:-6820191037001031513|0|0",
+        "semantic-gap:a68b82acbf6ad1755072"
+      ],
+      "blocking": true
+    },
+    {
+      "recordIdentity": "source-gap:dedbdcc697a5aa15",
+      "uniqueGapIdentity": "source-gap:dedbdcc697a5aa15",
+      "category": "upstream-source-gap",
+      "status": "static-evidence-gap",
+      "reason": "effect-target-any-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100313:0:-5729186281790677610:6060088285417807340:148",
+        "effect:10100313|0|elements|4|-5729186281790677610|element:-5729186281790677610|148|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100313|0|elements|4|-5729186281790677610|element:-5729186281790677610|148|0",
+        "semantic-gap:3e48734ad9f7bc0a038a"
       ],
       "blocking": true
     },
@@ -4216,19 +4388,22 @@
       "blocking": false
     },
     {
-      "recordIdentity": "source-gap:086f683f59155c1a",
-      "uniqueGapIdentity": "source-gap:086f683f59155c1a",
+      "recordIdentity": "source-gap:0ccaf6540b177a5d",
+      "uniqueGapIdentity": "source-gap:0ccaf6540b177a5d",
       "category": "non-gameplay-source-record",
       "status": "not-applicable",
-      "reason": "effect-target-any-unresolved|inject-wrapper-classified-through-child-edges",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10100313:0:-5729186281790677610:6060088285417807340:148",
-        "effect:10100313|0|elements|4|-5729186281790677610|element:-5729186281790677610|148|0"
+        "battle-effect:10100312:0:3879285143630828198:1011852803228526128:70",
+        "battle-effect:10100312:0:3879285143630828198:2749505792865494576:63",
+        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|63|1",
+        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0"
       ],
       "sourceRecordIdentities": [
-        "effect:10100313|0|elements|4|-5729186281790677610|element:-5729186281790677610|148|0",
-        "semantic-gap:3ee57c340f4842656cf3"
+        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|63|1",
+        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0",
+        "semantic-gap:763d9314e894bc9fa7ef"
       ],
       "blocking": false
     },
@@ -4267,62 +4442,28 @@
       "blocking": false
     },
     {
-      "recordIdentity": "source-gap:322984673a4bdc78",
-      "uniqueGapIdentity": "source-gap:322984673a4bdc78",
+      "recordIdentity": "source-gap:1d906f49e01832f4",
+      "uniqueGapIdentity": "source-gap:1d906f49e01832f4",
       "category": "non-gameplay-source-record",
       "status": "not-applicable",
-      "reason": "inject-wrapper-classified-through-child-edges",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10100313:0:-87352517346442030:-3895435746724307476:148",
-        "effect:10100313|0|elements|6|-87352517346442030|element:-87352517346442030|148|0"
+        "battle-effect:10100331:0:4965501713353270024:4382819133165257932:0",
+        "effect:10100331|0|elements|0|-1934759882830174294|element:4965501713353270024|0|0"
       ],
       "sourceRecordIdentities": [
-        "effect:10100313|0|elements|6|-87352517346442030|element:-87352517346442030|148|0",
-        "semantic-gap:68c1fbe1fde08902e95f"
+        "effect:10100331|0|elements|0|-1934759882830174294|element:4965501713353270024|0|0",
+        "semantic-gap:405e30de00cda61e8099"
       ],
       "blocking": false
     },
     {
-      "recordIdentity": "source-gap:3318f89294210d36",
-      "uniqueGapIdentity": "source-gap:3318f89294210d36",
+      "recordIdentity": "source-gap:3678b5b217fd1d96",
+      "uniqueGapIdentity": "source-gap:3678b5b217fd1d96",
       "category": "non-gameplay-source-record",
       "status": "not-applicable",
-      "reason": "effect-target-unresolved|inject-wrapper-classified-through-child-edges",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100311:0:2682046077355382670:-1349214709461132511:33",
-        "effect:10100311|0|elements|3|2682046077355382670|element:2682046077355382670|33|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100311|0|elements|3|2682046077355382670|element:2682046077355382670|33|0",
-        "semantic-gap:fcfbad6cf5e2e8a69f52"
-      ],
-      "blocking": false
-    },
-    {
-      "recordIdentity": "source-gap:407a12f8d60697e3",
-      "uniqueGapIdentity": "source-gap:407a12f8d60697e3",
-      "category": "non-gameplay-source-record",
-      "status": "not-applicable",
-      "reason": "inject-wrapper-classified-through-child-edges",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100322:0:4373635720509741260:-5797025868792535592:57",
-        "effect:10100322|0|elements|2|4373635720509741260|element:4373635720509741260|57|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100322|0|elements|2|4373635720509741260|element:4373635720509741260|57|0",
-        "semantic-gap:6b8a3bc459b0dfb2bec0"
-      ],
-      "blocking": false
-    },
-    {
-      "recordIdentity": "source-gap:42fae6c3de5fb923",
-      "uniqueGapIdentity": "source-gap:42fae6c3de5fb923",
-      "category": "non-gameplay-source-record",
-      "status": "not-applicable",
-      "reason": "effect-target-unresolved|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
         "battle-effect:10100327:0:-2035055823451510697:2119769922617281174:0",
@@ -4330,7 +4471,27 @@
       ],
       "sourceRecordIdentities": [
         "effect:10100327|0|elements|0|4545086782333247478|element:-2035055823451510697|0|0",
-        "semantic-gap:f2c8da06b2ae44c67c0b"
+        "semantic-gap:623ff290c4cb42c5a9a7"
+      ],
+      "blocking": false
+    },
+    {
+      "recordIdentity": "source-gap:4d7fe9867ffed3a3",
+      "uniqueGapIdentity": "source-gap:4d7fe9867ffed3a3",
+      "category": "non-gameplay-source-record",
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100312:0:466374251647106866:1011852803228526128:70",
+        "battle-effect:10100312:0:466374251647106866:2749505792865494576:63",
+        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|63|1",
+        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|70|0"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|63|1",
+        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|70|0",
+        "semantic-gap:b4e8691191db6e7d8723"
       ],
       "blocking": false
     },
@@ -4354,23 +4515,6 @@
         "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|207|0",
         "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|223|1",
         "semantic-gap:40459b87dc4b262c7b13"
-      ],
-      "blocking": false
-    },
-    {
-      "recordIdentity": "source-gap:52471fd9ecd95b6e",
-      "uniqueGapIdentity": "source-gap:52471fd9ecd95b6e",
-      "category": "non-gameplay-source-record",
-      "status": "not-applicable",
-      "reason": "effect-target-unresolved|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100327:0:-1732209689403186369:2119769922617281174:0",
-        "effect:10100327|0|elements|0|4545086782333247478|element:-1732209689403186369|0|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100327|0|elements|0|4545086782333247478|element:-1732209689403186369|0|0",
-        "semantic-gap:2509104b653f76eb9bea"
       ],
       "blocking": false
     },
@@ -4432,140 +4576,50 @@
       "blocking": false
     },
     {
-      "recordIdentity": "source-gap:7753d9eb7aa6cd04",
-      "uniqueGapIdentity": "source-gap:7753d9eb7aa6cd04",
+      "recordIdentity": "source-gap:8845d3a3fe20eb59",
+      "uniqueGapIdentity": "source-gap:8845d3a3fe20eb59",
       "category": "non-gameplay-source-record",
       "status": "not-applicable",
-      "reason": "effect-target-unresolved|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10100312:0:3879285143630828198:1011852803228526128:70",
-        "battle-effect:10100312:0:3879285143630828198:2749505792865494576:63",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|63|1",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0"
+        "battle-effect:10100327:0:-1732209689403186369:2119769922617281174:0",
+        "effect:10100327|0|elements|0|4545086782333247478|element:-1732209689403186369|0|0"
       ],
       "sourceRecordIdentities": [
-        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|63|1",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0",
-        "semantic-gap:c5bf74f9cbd9587fb5ea"
-      ],
-      "blocking": false
-    },
-    {
-      "recordIdentity": "source-gap:7ee10ebf1446fbf3",
-      "uniqueGapIdentity": "source-gap:7ee10ebf1446fbf3",
-      "category": "non-gameplay-source-record",
-      "status": "not-applicable",
-      "reason": "effect-target-unresolved|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100331:0:4965501713353270024:4382819133165257932:0",
-        "effect:10100331|0|elements|0|-1934759882830174294|element:4965501713353270024|0|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100331|0|elements|0|-1934759882830174294|element:4965501713353270024|0|0",
-        "semantic-gap:fe176ad2080747f4a43f"
-      ],
-      "blocking": false
-    },
-    {
-      "recordIdentity": "source-gap:979e740db06f1530",
-      "uniqueGapIdentity": "source-gap:979e740db06f1530",
-      "category": "non-gameplay-source-record",
-      "status": "not-applicable",
-      "reason": "effect-target-unresolved|inject-wrapper-classified-through-child-edges",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100361:0:865127997397410363:-3230275784093162653:0",
-        "effect:10100361|0|elements|0|865127997397410363|element:865127997397410363|0|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100361|0|elements|0|865127997397410363|element:865127997397410363|0|0",
-        "semantic-gap:d59e84972fc2fa2a4909"
-      ],
-      "blocking": false
-    },
-    {
-      "recordIdentity": "source-gap:cb1e3e7a407f49e3",
-      "uniqueGapIdentity": "source-gap:cb1e3e7a407f49e3",
-      "category": "non-gameplay-source-record",
-      "status": "not-applicable",
-      "reason": "inject-wrapper-classified-through-child-edges",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100312:0:-3716196104709416648:-1123755805311539664:61",
-        "battle-effect:10100312:0:-3716196104709416648:-1349437852626754000:99",
-        "battle-effect:10100312:0:-3716196104709416648:-8545081533461404112:109",
-        "battle-effect:10100312:0:-3716196104709416648:1941002140595807792:73",
-        "battle-effect:10100312:0:-3716196104709416648:378286786379146800:68",
-        "battle-effect:10100312:0:-3716196104709416648:7593113159482566192:104",
-        "battle-effect:10100312:0:-3716196104709416648:935768788960962096:94",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|104|5",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|109|2",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|61|0",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|68|4",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|73|3",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|94|6",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|99|1"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|104|5",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|109|2",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|61|0",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|68|4",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|73|3",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|94|6",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|99|1",
-        "semantic-gap:36c0807b386b601ae546"
-      ],
-      "blocking": false
-    },
-    {
-      "recordIdentity": "source-gap:ce3893765d660900",
-      "uniqueGapIdentity": "source-gap:ce3893765d660900",
-      "category": "non-gameplay-source-record",
-      "status": "not-applicable",
-      "reason": "effect-target-unresolved|nested-effect-wrapper-semantics-unresolved|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100312:0:466374251647106866:1011852803228526128:70",
-        "battle-effect:10100312:0:466374251647106866:2749505792865494576:63",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|63|1",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|70|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|63|1",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|70|0",
-        "semantic-gap:0782ed6847c366ac7914"
+        "effect:10100327|0|elements|0|4545086782333247478|element:-1732209689403186369|0|0",
+        "semantic-gap:3b316072bf450d5a5b78"
       ],
       "blocking": false
     }
   ],
   "summary": {
-    "uniqueBlockingCount": 164,
-    "sourceGapCount": 24,
+    "uniqueBlockingCount": 168,
+    "sourceGapCount": 28,
     "acceptanceGapCount": 140,
-    "nonBlockingCount": 18,
+    "nonBlockingCount": 12,
     "statusCounts": {
       "runtime-evidence-required": 10,
-      "static-evidence-gap": 147,
+      "static-evidence-gap": 151,
       "unknown-formula": 7
     },
     "reasonCounts": {
       "acceptance-scenario-coverage-missing": 77,
       "acceptance-selector-unavailable": 63,
+      "effect-target-any-unresolved": 1,
       "effect-target-unresolved|effect-trigger-frame-missing": 2,
       "effect-target-unresolved|effect-trigger-frame-missing|property-formula-not-literal-function-5": 6,
-      "effect-target-unresolved|pack-lifecycle-runtime-unimplemented": 5,
       "effect-trigger-frame-missing|sp-formula-not-literal-function-5": 1,
-      "runtime-dependent": 10
+      "pack-lifecycle-runtime-unimplemented": 5,
+      "runtime-dependent": 10,
+      "unresolved": 3
     },
     "categoryCounts": {
       "acceptance-scenario-gap": 140,
-      "upstream-source-gap": 24
+      "upstream-source-gap": 28
     }
   },
-  "ledgerHash": "dc255717a3436495",
+  "ledgerHash": "46211bea1f53195f",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:source-gap:06354409d6de1c16",
@@ -4579,15 +4633,17 @@
       "sourceRecordHash": "3efdb39fda651fa3"
     },
     {
-      "recordIdentity": "not-applicable:source-gap:086f683f59155c1a",
+      "recordIdentity": "not-applicable:source-gap:0ccaf6540b177a5d",
       "status": "not-applicable",
-      "reason": "effect-target-any-unresolved|inject-wrapper-classified-through-child-edges",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10100313:0:-5729186281790677610:6060088285417807340:148",
-        "effect:10100313|0|elements|4|-5729186281790677610|element:-5729186281790677610|148|0"
+        "battle-effect:10100312:0:3879285143630828198:1011852803228526128:70",
+        "battle-effect:10100312:0:3879285143630828198:2749505792865494576:63",
+        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|63|1",
+        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0"
       ],
-      "sourceRecordHash": "40506df56068847a"
+      "sourceRecordHash": "3e900201b02a9fb6"
     },
     {
       "recordIdentity": "not-applicable:source-gap:12c7fec24e8aeb43",
@@ -4612,48 +4668,39 @@
       "sourceRecordHash": "f250f7f35aaeff6a"
     },
     {
-      "recordIdentity": "not-applicable:source-gap:322984673a4bdc78",
+      "recordIdentity": "not-applicable:source-gap:1d906f49e01832f4",
       "status": "not-applicable",
-      "reason": "inject-wrapper-classified-through-child-edges",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10100313:0:-87352517346442030:-3895435746724307476:148",
-        "effect:10100313|0|elements|6|-87352517346442030|element:-87352517346442030|148|0"
+        "battle-effect:10100331:0:4965501713353270024:4382819133165257932:0",
+        "effect:10100331|0|elements|0|-1934759882830174294|element:4965501713353270024|0|0"
       ],
-      "sourceRecordHash": "80e1f6af949c8383"
+      "sourceRecordHash": "ddcad2585df4b2f8"
     },
     {
-      "recordIdentity": "not-applicable:source-gap:3318f89294210d36",
+      "recordIdentity": "not-applicable:source-gap:3678b5b217fd1d96",
       "status": "not-applicable",
-      "reason": "effect-target-unresolved|inject-wrapper-classified-through-child-edges",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100311:0:2682046077355382670:-1349214709461132511:33",
-        "effect:10100311|0|elements|3|2682046077355382670|element:2682046077355382670|33|0"
-      ],
-      "sourceRecordHash": "4b99e58ce3249011"
-    },
-    {
-      "recordIdentity": "not-applicable:source-gap:407a12f8d60697e3",
-      "status": "not-applicable",
-      "reason": "inject-wrapper-classified-through-child-edges",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100322:0:4373635720509741260:-5797025868792535592:57",
-        "effect:10100322|0|elements|2|4373635720509741260|element:4373635720509741260|57|0"
-      ],
-      "sourceRecordHash": "d365d1ef9188ea21"
-    },
-    {
-      "recordIdentity": "not-applicable:source-gap:42fae6c3de5fb923",
-      "status": "not-applicable",
-      "reason": "effect-target-unresolved|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
         "battle-effect:10100327:0:-2035055823451510697:2119769922617281174:0",
         "effect:10100327|0|elements|0|4545086782333247478|element:-2035055823451510697|0|0"
       ],
-      "sourceRecordHash": "d650c3edb517cfd3"
+      "sourceRecordHash": "59b79bdf261337d4"
+    },
+    {
+      "recordIdentity": "not-applicable:source-gap:4d7fe9867ffed3a3",
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10100312:0:466374251647106866:1011852803228526128:70",
+        "battle-effect:10100312:0:466374251647106866:2749505792865494576:63",
+        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|63|1",
+        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|70|0"
+      ],
+      "sourceRecordHash": "8b7bcc05032778cf"
     },
     {
       "recordIdentity": "not-applicable:source-gap:4edea077d3e30b1a",
@@ -4669,17 +4716,6 @@
         "effect:10100313|0|elements|1|-1498771669867596146|element:466374251647106866|223|1"
       ],
       "sourceRecordHash": "53878eaa5b0bc416"
-    },
-    {
-      "recordIdentity": "not-applicable:source-gap:52471fd9ecd95b6e",
-      "status": "not-applicable",
-      "reason": "effect-target-unresolved|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100327:0:-1732209689403186369:2119769922617281174:0",
-        "effect:10100327|0|elements|0|4545086782333247478|element:-1732209689403186369|0|0"
-      ],
-      "sourceRecordHash": "3b8ffc71fa3f984c"
     },
     {
       "recordIdentity": "not-applicable:source-gap:60f18f68f7824d94",
@@ -4719,75 +4755,15 @@
       "sourceRecordHash": "5a2637855fa9b57c"
     },
     {
-      "recordIdentity": "not-applicable:source-gap:7753d9eb7aa6cd04",
+      "recordIdentity": "not-applicable:source-gap:8845d3a3fe20eb59",
       "status": "not-applicable",
-      "reason": "effect-target-unresolved|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10100312:0:3879285143630828198:1011852803228526128:70",
-        "battle-effect:10100312:0:3879285143630828198:2749505792865494576:63",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|63|1",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0"
+        "battle-effect:10100327:0:-1732209689403186369:2119769922617281174:0",
+        "effect:10100327|0|elements|0|4545086782333247478|element:-1732209689403186369|0|0"
       ],
-      "sourceRecordHash": "440031c8b99cb97b"
-    },
-    {
-      "recordIdentity": "not-applicable:source-gap:7ee10ebf1446fbf3",
-      "status": "not-applicable",
-      "reason": "effect-target-unresolved|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100331:0:4965501713353270024:4382819133165257932:0",
-        "effect:10100331|0|elements|0|-1934759882830174294|element:4965501713353270024|0|0"
-      ],
-      "sourceRecordHash": "0128ecef315d38d8"
-    },
-    {
-      "recordIdentity": "not-applicable:source-gap:979e740db06f1530",
-      "status": "not-applicable",
-      "reason": "effect-target-unresolved|inject-wrapper-classified-through-child-edges",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100361:0:865127997397410363:-3230275784093162653:0",
-        "effect:10100361|0|elements|0|865127997397410363|element:865127997397410363|0|0"
-      ],
-      "sourceRecordHash": "0996f8b184f375a5"
-    },
-    {
-      "recordIdentity": "not-applicable:source-gap:cb1e3e7a407f49e3",
-      "status": "not-applicable",
-      "reason": "inject-wrapper-classified-through-child-edges",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100312:0:-3716196104709416648:-1123755805311539664:61",
-        "battle-effect:10100312:0:-3716196104709416648:-1349437852626754000:99",
-        "battle-effect:10100312:0:-3716196104709416648:-8545081533461404112:109",
-        "battle-effect:10100312:0:-3716196104709416648:1941002140595807792:73",
-        "battle-effect:10100312:0:-3716196104709416648:378286786379146800:68",
-        "battle-effect:10100312:0:-3716196104709416648:7593113159482566192:104",
-        "battle-effect:10100312:0:-3716196104709416648:935768788960962096:94",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|104|5",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|109|2",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|61|0",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|68|4",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|73|3",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|94|6",
-        "effect:10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|99|1"
-      ],
-      "sourceRecordHash": "1ce932746b64236e"
-    },
-    {
-      "recordIdentity": "not-applicable:source-gap:ce3893765d660900",
-      "status": "not-applicable",
-      "reason": "effect-target-unresolved|nested-effect-wrapper-semantics-unresolved|property-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10100312:0:466374251647106866:1011852803228526128:70",
-        "battle-effect:10100312:0:466374251647106866:2749505792865494576:63",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|63|1",
-        "effect:10100312|0|elements|3|-1498771669867596146|element:466374251647106866|70|0"
-      ],
-      "sourceRecordHash": "c604953e87e17262"
+      "sourceRecordHash": "318242cb58a60a1b"
     }
   ]
 }

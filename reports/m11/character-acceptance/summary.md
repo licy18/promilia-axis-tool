@@ -8,8 +8,8 @@
 
 | 角色 | 成熟度 | 矩阵通过/必需 | source gap | acceptance gap | optimization-ready |
 |---|---:|---:|---:|---:|---:|
-| 寒悠悠 (101003) | runtime-integrated | 62/243 | 24 | 140 | 否 |
-| 涂山小玉 (101010) | runtime-integrated | 56/407 | 106 | 203 | 否 |
-| 红宝石 (103002) | runtime-integrated | 36/709 | 51 | 363 | 否 |
+| 寒悠悠 (101003) | runtime-integrated | 62/243 | 28 | 140 | 否 |
+| 涂山小玉 (101010) | runtime-integrated | 56/407 | 120 | 203 | 否 |
+| 红宝石 (103002) | runtime-integrated | 36/709 | 105 | 363 | 否 |
 
 三份 Machine Axis 场景继续由唯一 canonical core 重放并通过 Workbench 导入/导出；产品可视签收仍为 pending，真实 source gap 与尚缺场景覆盖继续阻断优化资格。
