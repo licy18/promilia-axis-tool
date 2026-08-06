@@ -1156,6 +1156,20 @@ async function parseVerifiedPropertyEffectPassive({
     };
   }
 
+  const areaAuraMechanic = parseAreaAuraPropertyPassive({
+    controlRoot,
+    behaviors,
+    elementObjects,
+  });
+  if (areaAuraMechanic) {
+    return {
+      mechanic: areaAuraMechanic,
+      unresolvedReasons: [],
+      controlSourceFiles,
+      elementSourceFiles,
+    };
+  }
+
   const damageTriggerCandidates = elementObjects.filter(
     row =>
       Array.isArray(row.value?.triggerEffectList) &&
@@ -2809,6 +2823,166 @@ function isPlainPropertyElement(value) {
     (value.defaultConditions?.length ?? 0) === 0 &&
     (value.changePeopertyConditionArrayDatas?.length ?? 0) === 0
   );
+}
+
+function parseAreaAuraPropertyPassive({
+  controlRoot,
+  behaviors,
+  elementObjects,
+}) {
+  // Verified shape: the control behavior injects one area-detection element
+  // whose ElementAddListWithDelete applies a plain battle property to
+  // entities inside the area (e.g. 520059 华丽姿态: 15m radius, 500ms check,
+  // ATK -20%). The control resource map must contain exactly the area and
+  // the property elements. Any other elements with the same skill prefix but
+  // no control/behavior/reference edge (e.g. orphan SwitchEnter chains) are
+  // documented in `orphanElements` and are never claimed as active.
+  const uniqueBehaviors = [];
+  const seenBehaviorPathIds = new Set();
+  for (const row of behaviors) {
+    if (row.pathId != null && seenBehaviorPathIds.has(row.pathId)) continue;
+    if (row.pathId != null) seenBehaviorPathIds.add(row.pathId);
+    uniqueBehaviors.push(row);
+  }
+  if (uniqueBehaviors.length !== 1) return null;
+  const behavior = uniqueBehaviors[0];
+  if (Number(behavior.value?.directInjectTargetType) !== 0) return null;
+  const behaviorPathIds = extractArrayPathIds(behavior.raw, 'elementDataList');
+  if (behaviorPathIds.length !== 1) return null;
+
+  const area = elementObjects.find(row => row.pathId === behaviorPathIds[0]);
+  if (!area) return null;
+  const areaValue = area.value ?? {};
+  if (
+    !Number.isFinite(Number(areaValue.areaType)) ||
+    !Number.isFinite(Number(areaValue.Radius)) ||
+    Number(areaValue.Radius) <= 0 ||
+    !Number.isFinite(Number(areaValue.CheckInterval)) ||
+    Number(areaValue.CheckInterval) <= 0 ||
+    !Array.isArray(areaValue.ElementAddListWithDelete) ||
+    areaValue.ElementAddListWithDelete.length === 0
+  ) {
+    return null;
+  }
+
+  const auraPathIds = extractObjectPathIds(
+    area.raw,
+    'ElementParams'
+  );
+  const auraEntries = areaValue.ElementAddListWithDelete;
+  if (
+    auraPathIds.length !== auraEntries.length ||
+    auraPathIds.length !== uniqueValues(auraPathIds).length
+  ) {
+    return null;
+  }
+  const auraProperties = auraPathIds.map(pathId =>
+    elementObjects.find(row => row.pathId === pathId)
+  );
+  if (
+    auraProperties.length !== 1 ||
+    !isPlainPropertyElement(auraProperties[0]?.value)
+  ) {
+    return null;
+  }
+  const property = auraProperties[0];
+
+  const controlResourcePathIds = uniqueValues(
+    extractArrayPathIds(controlRoot.raw, 'elements')
+  );
+  const accounted = new Set([area.pathId, property.pathId]);
+  if (
+    controlResourcePathIds.length !== accounted.size ||
+    controlResourcePathIds.some(pathId => !accounted.has(pathId))
+  ) {
+    return null;
+  }
+
+  const orphanElements = elementObjects
+    .filter(row => !accounted.has(row.pathId))
+    .map(row => {
+      const hasTriggerEffectList = Array.isArray(row.value?.triggerEffectList);
+      return {
+        elementConfigId: Number(row.value?.elementConfigId),
+        pathId: row.pathId,
+        describe:
+          row.value?.describe ??
+          row.value?.elementName ??
+          row.value?.m_Name ??
+          null,
+        hasTriggerEffectList,
+        reason: hasTriggerEffectList
+          ? 'passive-switch-enter-trigger-chain-not-in-control-resource-map'
+          : 'not-in-control-resource-map',
+      };
+    });
+
+  const effectTime = Number(property.value.time);
+  const effectCombineType = Number(property.value.combineType);
+  const effect = {
+    targets: ['enemies-in-radius'],
+    durationMs: effectTime === -1 ? null : effectTime,
+    expiration: effectTime === -1 ? 'area-active' : 'duration',
+    stackMode: effectCombineType === 4 ? 'stack' : 'refresh',
+    stackDelta: 1,
+    maxStacks:
+      effectCombineType === 4
+        ? Math.max(1, Number(property.value.combineNumber) || 1)
+        : 1,
+    refreshRule:
+      effectCombineType === 4
+        ? 'stack-and-refresh-duration'
+        : 'refresh-duration',
+    sourceElementId: Number(property.value.elementConfigId),
+    sourcePathId: property.pathId,
+    modifiers: [
+      {
+        kind: 'battle-property',
+        attributeId: Number(property.value.attributeID),
+        bucket:
+          PROPERTY_BUCKET_BY_CALCULATE_TYPE[
+            Number(property.value.calculateType)
+          ],
+        valueRaw: Number(property.value.functionParams[0]),
+        sourceElementId: Number(property.value.elementConfigId),
+        sourcePathId: property.pathId,
+      },
+    ],
+  };
+  return {
+    mechanismFamily: 'equipped-kibo-area-aura-property-effect',
+    trigger: {
+      event: 'area-tick',
+      sourceScope: 'equipped-kibo-field',
+      target: 'enemies-in-radius',
+      areaType: Number(areaValue.areaType),
+      radius: Number(areaValue.Radius),
+      height: Number.isFinite(Number(areaValue.Height))
+        ? Number(areaValue.Height)
+        : null,
+      checkIntervalMs: Number(areaValue.CheckInterval),
+      durationMs: Number.isFinite(Number(areaValue.Duration))
+        ? Number(areaValue.Duration)
+        : null,
+      addWithDelete: true,
+      campType: Number(auraEntries[0]?.CampType),
+      sourceElementId: Number(area.value.elementConfigId),
+      sourcePathId: area.pathId,
+      triggerLifetime: 'unlimited',
+      triggerLimitScope: 'passive-area-lifetime',
+    },
+    effect,
+    orphanElements,
+    ownership: {
+      source: 'equipped-kibo',
+      effectAdder: 'area-detection-element',
+      effectTargets: ['enemies-in-radius'],
+      foregroundRequirement: 'none-in-source-assets',
+    },
+    scenarioAssumptions: [],
+    evidenceStatus: 'source-verified',
+    runtimeGaps: [],
+  };
 }
 
 function parseCompositeStaticAndDamagePropertyEffectPassive({

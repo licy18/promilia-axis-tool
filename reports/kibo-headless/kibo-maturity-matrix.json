@@ -20737,7 +20737,7 @@
           520059,
           520087
         ],
-        "pveRuntimeStatus": "runtime-unresolved",
+        "pveRuntimeStatus": "runtime-ready",
         "pvpSkillIds": [
           51020185
         ],
@@ -20965,10 +20965,8 @@
         "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "pve-passive-runtime-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500186,
@@ -30551,7 +30549,7 @@
   ],
   "summary": {
     "kiboCount": 122,
-    "machineOptimizationReadyCount": 109,
+    "machineOptimizationReadyCount": 110,
     "machineOptimizationReadyKiboIds": [
       500001,
       500002,
@@ -30629,6 +30627,7 @@
       500179,
       500180,
       500181,
+      500185,
       500187,
       500206,
       500209,
@@ -30669,9 +30668,9 @@
       "unresolved": 0
     },
     "pvePassiveMechanics": {
-      "evidenceClosed": 40,
+      "evidenceClosed": 41,
       "scenarioAssumed": 0,
-      "unresolved": 4
+      "unresolved": 3
     },
     "fixedSkillClassification": {
       "evidenceClosed": 172,

@@ -52,9 +52,9 @@ describe('kibo headless census', () => {
         unresolved: 0,
       },
       pvePassiveMechanics: {
-        evidenceClosed: 40,
+        evidenceClosed: 41,
         scenarioAssumed: 0,
-        unresolved: 4,
+        unresolved: 3,
       },
       pvpPassiveClassification: {
         evidenceClosed: 122,
@@ -68,7 +68,7 @@ describe('kibo headless census', () => {
       },
     });
     expect(outputs.mechanicsCatalog.summary.triggerLifetime).toEqual({
-      unlimited: 14,
+      unlimited: 15,
       finite: 1,
       'evidence-open': 0,
     });
@@ -109,11 +109,11 @@ describe('kibo headless census', () => {
       )
     ).toBe(true);
     expect(outputs.maturityMatrix.summary.machineOptimizationReadyCount).toBe(
-      109
+      110
     );
     expect(
       outputs.maturityMatrix.rows.filter(row => row.remainingGaps.length === 0)
-    ).toHaveLength(109);
+    ).toHaveLength(110);
 
     expect(outputs.census).toEqual(generatedCensus);
     expect(outputs.mechanicsCatalog).toEqual(generatedPassiveCatalog);

@@ -11784,10 +11784,10 @@
     {
       "skillId": 520059,
       "scopeClass": "pve-combat-talent-passive",
-      "closureClass": "unresolved",
+      "closureClass": "evidence-closed",
       "classificationStatus": "evidence-closed",
-      "runtimeStatus": "runtime-unresolved",
-      "confidence": "low",
+      "runtimeStatus": "runtime-ready",
+      "confidence": "high",
       "sourceName": "华丽姿态",
       "sourceDescription": "周边15米范围内敌人攻击力下降20%，该效果不可叠加。",
       "kiboIds": [
@@ -11803,10 +11803,98 @@
         "skillControlAsset": true,
         "elementAssetCount": 7
       },
-      "mechanic": null,
-      "unresolvedReasons": [
-        "passive-supported-damage-trigger-shape-not-unique"
-      ],
+      "mechanic": {
+        "mechanismFamily": "equipped-kibo-area-aura-property-effect",
+        "trigger": {
+          "event": "area-tick",
+          "sourceScope": "equipped-kibo-field",
+          "target": "enemies-in-radius",
+          "areaType": 2,
+          "radius": 15,
+          "height": 15,
+          "checkIntervalMs": 500,
+          "durationMs": -1,
+          "addWithDelete": true,
+          "campType": 1,
+          "sourceElementId": 520059000,
+          "sourcePathId": "-5444585694032450816",
+          "triggerLifetime": "unlimited",
+          "triggerLimitScope": "passive-area-lifetime"
+        },
+        "effect": {
+          "targets": [
+            "enemies-in-radius"
+          ],
+          "durationMs": null,
+          "expiration": "area-active",
+          "stackMode": "refresh",
+          "stackDelta": 1,
+          "maxStacks": 1,
+          "refreshRule": "refresh-duration",
+          "sourceElementId": 520059006,
+          "sourcePathId": "-2946109197241503422",
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 1,
+              "bucket": "dynamicPercent",
+              "valueRaw": -2000,
+              "sourceElementId": 520059006,
+              "sourcePathId": "-2946109197241503422"
+            }
+          ]
+        },
+        "orphanElements": [
+          {
+            "elementConfigId": 520059001,
+            "pathId": "7030444189024831988",
+            "describe": "上场触发",
+            "hasTriggerEffectList": true,
+            "reason": "passive-switch-enter-trigger-chain-not-in-control-resource-map"
+          },
+          {
+            "elementConfigId": 520059002,
+            "pathId": "-7436443270128458946",
+            "describe": "效果1+2",
+            "hasTriggerEffectList": false,
+            "reason": "not-in-control-resource-map"
+          },
+          {
+            "elementConfigId": 520059003,
+            "pathId": "2097669254885701962",
+            "describe": "物理防御上升27%",
+            "hasTriggerEffectList": false,
+            "reason": "not-in-control-resource-map"
+          },
+          {
+            "elementConfigId": 520059004,
+            "pathId": "2403552754877208010",
+            "describe": "魔法防御上升27%",
+            "hasTriggerEffectList": false,
+            "reason": "not-in-control-resource-map"
+          },
+          {
+            "elementConfigId": 520059005,
+            "pathId": "-3728613322054564646",
+            "describe": "嘲讽5s",
+            "hasTriggerEffectList": false,
+            "reason": "not-in-control-resource-map"
+          }
+        ],
+        "ownership": {
+          "source": "equipped-kibo",
+          "effectAdder": "area-detection-element",
+          "effectTargets": [
+            "enemies-in-radius"
+          ],
+          "foregroundRequirement": "none-in-source-assets"
+        },
+        "scenarioAssumptions": [],
+        "evidenceStatus": "source-verified",
+        "runtimeGaps": [],
+        "sourceTextDifferences": []
+      },
+      "unresolvedReasons": [],
       "provenance": [
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\pet.json#rows[id].fPropertyskillList",
         "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\skill.json",
@@ -39930,9 +40018,9 @@
       "unresolved": 0
     },
     "pvePassiveMechanics": {
-      "evidenceClosed": 40,
+      "evidenceClosed": 41,
       "scenarioAssumed": 0,
-      "unresolved": 4
+      "unresolved": 3
     },
     "pvpPassiveClassification": {
       "evidenceClosed": 122,

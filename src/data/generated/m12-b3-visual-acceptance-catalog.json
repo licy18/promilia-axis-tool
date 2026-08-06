@@ -40,9 +40,9 @@
   "summary": {
     "total": 254,
     "published": 254,
-    "accepted": 252,
-    "optimizationReady": 252,
-    "blockingLedgerCount": 2,
+    "accepted": 253,
+    "optimizationReady": 253,
+    "blockingLedgerCount": 1,
     "byObjectKind": {
       "soul-essence": {
         "total": 62,
@@ -56,8 +56,8 @@
       },
       "kibo": {
         "total": 43,
-        "accepted": 42,
-        "optimizationReady": 42
+        "accepted": 43,
+        "optimizationReady": 43
       },
       "set-skill": {
         "total": 12,
@@ -5903,18 +5903,16 @@
       "objectKind": "kibo",
       "objectId": "500185",
       "displayName": "森彩灵蝶",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "f3cf199942c9c7c3",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "c6ca377156c2ae05",
       "evidence": {
         "iconSha256": "a3b23f7b579ee6e5c1531dbdd437fc268c2024ba4248731da787f504e33f03d7",
         "binding": {
@@ -5940,7 +5938,7 @@
             }
           },
           "staticAttributeAudit": "evidence-closed",
-          "machineOptimizationReady": false
+          "machineOptimizationReady": true
         }
       }
     },
@@ -6963,5 +6961,5 @@
       }
     }
   ],
-  "catalogHash": "32064cb041b9e774"
+  "catalogHash": "75817c3c6e607ee0"
 }

@@ -1843,6 +1843,12 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 
 下一阶段任务：**E18 sub2 —— 剩余 1 行 + 1 只奇波的外部门禁**。50021301（菇噜噜 540074 全属性抗性下降，changeType=2 SpacialProperty）需产品决策：SpacialProperty 是否计入奇波战斗资格，或提供运行时捕获证明其不影响三值结算；500185（被动证据缺口，E16 已定位 520059 resourceMap 不完整及 520004/005/006/007 触发形状）需从原始客户端补提取完整 resourceMap 或登记精确阻断原因。两者通过后重跑 sync → 资格 → 视觉 → 全套守门，视觉 252/254 签收剩余 2 只并关闭 E18。每完成一个子阶段即更新本手册并单独提交。
 
+### M12-B3-E18 sub2 已完成：500185 区域光环被动证据闭合，奇波资格缺口清零（2026-08-06）
+
+新增 `parseAreaAuraPropertyPassive`（`generate-kibo-headless-census.mjs`）：验证行为注入单个区域检测元素（`areaType/Radius/CheckInterval/Duration` + `ElementAddListWithDelete`）且控制 resourceMap 恰为「区域 + 属性」两个元素的形状，输出机制族 `equipped-kibo-area-aura-property-effect`。520059 华丽姿态因此闭合：520059000 区域检测（半径 15m、500ms 检查、Duration -1）→ ElementAddListWithDelete（CampType=1）→ 520059006 攻击减少（ATK -20%，dynamicPercent，time -1）对范围内敌人持续施加；`orphanElements` 明确登记 SwitchEnter 孤儿链 520059001→002/005→003/004（`passive-switch-enter-trigger-chain-not-in-control-resource-map`，当前客户端技能文案只描述光环，该链无任何控制/行为/元素引用边，不声明为激活）。结果：**pvePassiveMechanics 40→41 evidence-closed / 4→3 unresolved；machineOptimizationReadyCount 109→110；500185 成熟度 machineOptimizationReady=true、remainingGaps=[]；视觉 accepted/optimizationReady 252→253/254（kibo 42→43/43）；资格缺口 38→35，kibo byObjectKind 3→0（奇波缺口清零，剩余 33 角色 + 2 套装）**。同步更新：kibo census/maturity/visual/qualification 输出、验收报告哈希（`0ef9bc82 / 92cc0ab6 / 656f4c56 / c4ec8312 / 40247c28 / d497f807`）、census/visual/qualification/运行时被动生成测试锁定。验证：全套 Vitest 1427/1428（仅已知 process-heavy `characterCombatProfilePipeline` 并行超时，单独全过）、11 项确定性审计 clean、production build 与 `git diff --check` 通过。
+
+下一阶段任务：**E18 sub3 —— 500213 SpacialProperty 证据收口（非资格 roster，属 census 目标行）**。二进制确认 `changeType=2` 实际是 `ESpecialPropertyType`（1=ALL_PROPERTY_SHOOTDMGUP 全属性伤害增幅 / 2=ALL_PROPERTY_DEFENSE 全属性受伤减免），540074（specialPropertyType=2，-0.91%，16s）是真实战斗修正而非空间属性；当前运行时未建模该族，需产品决策（是否纳入战斗资格）或实现 all-property damage modifier 机制。500213 不在 43 只资格 roster 内，不阻塞 M12-B3 资格/视觉；若产品同意按“战斗修正但暂不参与三值结算”登记，可在 census 把该行改为精确阻断 `all-property-damage-modifier-runtime-unimplemented` 或实现后闭合。每完成一个子阶段即更新本手册并单独提交。
+
 ### M10-A 小玉闭环缺口修复已通过独立机制验收（2026-07-28）
 
 普通 A3 与普通 A4 现分别按 `18F` 和 `10/14/18/22F` 的真实投射物链结算，A4 四次 hit 与爆发 A2 十二段保持独立。入场星携技保持 `95F` 占轴但允许 `55F/109F` 命中在块外继续结算，逐 hit 选择统一写回父切人事件；完美招架反击由 `successful-parry` 场景前置驱动 `10101049/sub1` 的两次命中。缘结阈值事务会同时清空资源、进入爆发并获得 2 层风印记；极限反击本体不再因仅开放派生窗口而误触发玉未央。
