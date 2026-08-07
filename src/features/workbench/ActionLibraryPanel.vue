@@ -171,6 +171,14 @@
       <span class="actor-role">{{ actor.role || '角色轨' }}</span>
     </div>
 
+    <p
+      v-if="kiboAutoCastCount"
+      class="kibo-auto-cast-note"
+      data-testid="workbench-kibo-auto-cast-note"
+    >
+      奇波普攻与主动技为自动释放（{{ kiboAutoCastCount }} 个），拖入特性技/合击技后由排轴器自动补齐时间轴。
+    </p>
+
     <div v-if="actionEntries.length" class="skill-entry-list">
       <div
         v-for="entry in actionEntries"
@@ -650,26 +658,38 @@ const defaultTimelineSkillEntry = computed(
     ) ?? null
 );
 const kiboTimelineEntries = computed(() =>
-  (activeKibo.value?.actions ?? []).map(action =>
-    annotateMechanicsCoverage(
-      createWorkbenchTimelineEntry({
-        type: ACTION_TYPES.KIBO_EVENT,
-        kiboId: activeKibo.value?.id,
-        skillId: action.skillId,
-        icon: action.icon,
-        eventType: action.kind,
-        label: action.name,
-        durationMs: null,
-        cooldownMs: action.cooldownMs,
-        timingSource: null,
-        timingStatus: 'unresolved',
-        timingReasons: ['verified-action-timing-not-loaded'],
-        needsTimingData: true,
-        note: '动作占轴等待 verified timing 合同。',
-      }),
-      ACTION_TYPES.KIBO_EVENT
+  (activeKibo.value?.actions ?? [])
+    .filter(
+      action =>
+        action.kind !== 'normal-attack' && action.kind !== 'active'
     )
-  )
+    .map(action =>
+      annotateMechanicsCoverage(
+        createWorkbenchTimelineEntry({
+          type: ACTION_TYPES.KIBO_EVENT,
+          kiboId: activeKibo.value?.id,
+          skillId: action.skillId,
+          icon: action.icon,
+          eventType: action.kind,
+          label: action.name,
+          durationMs: null,
+          cooldownMs: action.cooldownMs,
+          timingSource: null,
+          timingStatus: 'unresolved',
+          timingReasons: ['verified-action-timing-not-loaded'],
+          needsTimingData: true,
+          note: '动作占轴等待 verified timing 合同。',
+        }),
+        ACTION_TYPES.KIBO_EVENT
+      )
+    )
+);
+const kiboAutoCastCount = computed(
+  () =>
+    (activeKibo.value?.actions ?? []).filter(
+      action =>
+        action.kind === 'normal-attack' || action.kind === 'active'
+    ).length
 );
 const defaultKiboTimelineEntry = computed(
   () =>
@@ -1054,6 +1074,7 @@ function formatKiboActionMeta(entry) {
     signature: '特性技',
     active: '主动技',
     break: '合击技',
+    'normal-attack': '普攻',
   };
   return `${kindLabels[entry.eventType] ?? '奇波动作'} / ${formatActionTiming(entry)} / CD ${formatCatalogCooldown(entry.cooldownMs)}${formatMechanicsCoverage(entry)}`;
 }
@@ -1585,6 +1606,16 @@ h2 {
   margin-top: 3px;
   color: #70d6b7;
   font-size: 11px;
+}
+
+.kibo-auto-cast-note {
+  margin: 0;
+  padding: 8px 12px;
+  color: #8f9aa3;
+  font-size: 11px;
+  line-height: 1.5;
+  background: rgba(112, 214, 183, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .skill-entry-list {

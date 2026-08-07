@@ -12541,8 +12541,8 @@ describe('Workbench view', () => {
     await vi.waitFor(
       () => {
         expect(wrapper.get('main.workbench').attributes()).toMatchObject({
-          'data-canonical-trace-hash': '1aa2dcc5a44c990e',
-          'data-canonical-trace-action-count': '16',
+          'data-canonical-trace-hash': '0d2c57b109dab9ed',
+          'data-canonical-trace-action-count': '44',
           'data-machine-axis-import-active': 'true',
         });
       },
@@ -12551,10 +12551,10 @@ describe('Workbench view', () => {
     await settleWorkbenchAsyncPanels();
 
     expect(wrapper.get('[data-testid="machine-axis-summary"]').text()).toContain(
-      '机器输入 14'
+      '机器输入 42'
     );
     expect(wrapper.get('[data-testid="machine-axis-summary"]').text()).toContain(
-      '实际执行 16'
+      '实际执行 44'
     );
     expect(wrapper.get('[data-testid="machine-axis-status"]').text()).toContain(
       '已载入 M11-B 120 秒验收轴'
@@ -12589,7 +12589,7 @@ describe('Workbench view', () => {
     const inspector = wrapper.get(
       '[data-testid="workbench-canonical-trace-inspector"]'
     );
-    expect(inspector.attributes('data-trace-hash')).toBe('1aa2dcc5a44c990e');
+    expect(inspector.attributes('data-trace-hash')).toBe('0d2c57b109dab9ed');
     expect(inspector.text()).toContain('control 10100703 / sub 0');
     const hitRow = inspector.get('[data-testid="canonical-trace-hit-row"]');
     const landedSelect = hitRow.get(
@@ -12614,7 +12614,7 @@ describe('Workbench view', () => {
         ).toBe('miss');
         expect(
           wrapper.get('main.workbench').attributes('data-canonical-trace-hash')
-        ).not.toBe('1aa2dcc5a44c990e');
+        ).not.toBe('0d2c57b109dab9ed');
       },
       { timeout: 30_000 }
     );
@@ -12628,7 +12628,7 @@ describe('Workbench view', () => {
       () => {
         expect(
           wrapper.get('main.workbench').attributes('data-canonical-trace-hash')
-        ).toBe('1aa2dcc5a44c990e');
+        ).toBe('0d2c57b109dab9ed');
         expect(
           wrapper.get('[data-testid="canonical-trace-hit-landed"]').element.value
         ).toBe('hit');

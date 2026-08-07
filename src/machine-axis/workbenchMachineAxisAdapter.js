@@ -215,16 +215,18 @@ function createContractFromProject(project, { service, metadata } = {}) {
     ]);
   }
   const preservedSchedules = resolvePreservedMachineAxisSchedules(project, fps);
-  const actions = (project.actions ?? []).map((action, index) =>
-    createMachineActionFromProject({
-      action,
-      index,
-      fps,
-      preservedSchedules,
-      slotsByActorId,
-      slotsByCharacterId,
-    })
-  );
+  const actions = (project.actions ?? [])
+    .filter(action => action.autoCast !== true)
+    .map((action, index) =>
+      createMachineActionFromProject({
+        action,
+        index,
+        fps,
+        preservedSchedules,
+        slotsByActorId,
+        slotsByCharacterId,
+      })
+    );
   const enemy = project.enemy ?? {};
   return normalizeMachineAxisContract({
     schemaVersion: MACHINE_AXIS_SCHEMA_VERSION,

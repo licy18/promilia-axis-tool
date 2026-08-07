@@ -567,6 +567,8 @@ export function createKiboEventAction({
   sourceEvidenceStatus = null,
   scenarioRuntimeStatus = null,
   hitOverrides = null,
+  autoCast = false,
+  autoCastRule = null,
   note = '奇波事件标记',
   insertion = null,
   effectCommands = [],
@@ -595,6 +597,12 @@ export function createKiboEventAction({
     sourceEvidenceStatus: textOrNull(sourceEvidenceStatus),
     scenarioRuntimeStatus: textOrNull(scenarioRuntimeStatus),
     hitOverrides: normalizeActionHitOverrides(hitOverrides),
+    ...(autoCast
+      ? {
+          autoCast: true,
+          ...(autoCastRule ? { autoCastRule: { ...autoCastRule } } : {}),
+        }
+      : {}),
     ...(timingSource
       ? {
           timing: {

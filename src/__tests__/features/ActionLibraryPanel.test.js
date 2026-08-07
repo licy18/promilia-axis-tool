@@ -93,29 +93,21 @@ describe('ActionLibraryPanel', () => {
       }))
     ).toEqual([
       { skillId: 50000102, kind: 'signature' },
-      { skillId: 504004, kind: 'active' },
       { skillId: 50000112, kind: 'break' },
     ]);
     expect(entries.map(entry => entry.text())).toEqual([
       expect.stringContaining('迅风刃'),
-      expect.stringContaining('狂风冲击'),
       expect.stringContaining('迅狼-合击'),
     ]);
     expect(entries.map(entry => entry.find('img').attributes('src'))).toEqual([
       '/assets/actions/tex_icon_petskill_500001_02.png',
-      '/assets/actions/tex_icon_petskill_504004.png',
       '/assets/actions/tex_icon_skill_petbreakatk.png',
     ]);
-
-    await entries[1].trigger('click');
-    expect(wrapper.emitted('add-kibo-event-action')?.at(-1)?.[0]).toMatchObject(
-      {
-        type: 'kiboEvent',
-        skillId: 504004,
-        eventType: 'active',
-        durationMs: 2666.666667,
-      }
-    );
+    expect(
+      wrapper
+        .get('[data-testid="workbench-kibo-auto-cast-note"]')
+        .text()
+    ).toContain('自动释放');
   });
 
   it('keeps an unbound kibo entry out of the pointer drag flow', async () => {

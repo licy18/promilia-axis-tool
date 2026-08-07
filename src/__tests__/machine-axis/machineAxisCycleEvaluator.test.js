@@ -1228,7 +1228,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
         kiboId: 500206,
         skillId: 520008,
         internalCooldownMs: 15000,
-        triggerCount: 1,
+        triggerCount: 2,
         maxTriggerCount: null,
         remainingTriggerCount: null,
       })

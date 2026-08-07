@@ -399,18 +399,18 @@ describe('Machine Axis external audit boundaries', () => {
       );
 
       expect(evaluation.totals).toMatchObject({
-        combatHitCount: 34,
-        projectedHitCount: 34,
-        stateEventCount: 5,
-        inflictedToughnessDamage: 306,
-        recoveredToughness: 306,
+        combatHitCount: 64,
+        projectedHitCount: 64,
+        stateEventCount: 0,
+        inflictedToughnessDamage: 3532,
+        recoveredToughness: 0,
       });
       expect(ruby).toMatchObject({
         combatHitCount: 3,
         hitCount: 3,
-        stateEventCount: 5,
+        stateEventCount: 0,
         inflictedToughnessDamage: 6,
-        recoveredToughness: 306,
+        recoveredToughness: 0,
       });
       expect(
         evaluation.byAction.reduce(
@@ -474,11 +474,23 @@ describe('Machine Axis external audit boundaries', () => {
         ['xunlang-signature-slot-2', true],
       ]);
       expect(
-        cooldownStarts.map(event => event.payload.runtimeOwnerIdentity)
+        cooldownStarts
+          .map(event => event.payload.runtimeOwnerIdentity)
+          .slice(0, 2)
       ).toEqual([
         'actor-101007|kibo:500001',
         'actor-101010|kibo:500001',
       ]);
+      expect(
+        new Set(
+          cooldownStarts.map(event => event.payload.runtimeOwnerIdentity)
+        )
+      ).toEqual(
+        new Set([
+          'actor-101007|kibo:500001',
+          'actor-101010|kibo:500001',
+        ])
+      );
       expect(
         run.trace.resources.kibos.filter(
           event => event.kiboId === 500001 && event.change === -100
@@ -616,7 +628,7 @@ describe('Machine Axis external audit boundaries', () => {
       expect(
         projectSameFrameCombatSemantics(actorIdSortsFirst)
           .executionOwnerOrder
-      ).toEqual(['kibo', 'actor']);
+      ).toEqual(['kibo', 'actor', ...Array(28).fill('kibo')]);
       expect(
         actorIdSortsFirst.trace.executionPlan.actions.map(action => ({
           sourceSequenceIndex: action.sourceSequenceIndex,
@@ -625,9 +637,13 @@ describe('Machine Axis external audit boundaries', () => {
       ).toEqual([
         { sourceSequenceIndex: 0, sourceSequencePath: [0] },
         { sourceSequenceIndex: 1, sourceSequencePath: [1] },
+        ...Array.from({ length: 28 }, (_, index) => ({
+          sourceSequenceIndex: index + 2,
+          sourceSequencePath: [index + 2],
+        })),
       ]);
-      expect(actorIdSortsFirst.evaluation.totals.hpDamage).toBe(468);
-      expect(kiboIdSortsFirst.evaluation.totals.hpDamage).toBe(468);
+      expect(actorIdSortsFirst.evaluation.totals.hpDamage).toBe(2958);
+      expect(kiboIdSortsFirst.evaluation.totals.hpDamage).toBe(2958);
     }, 30_000);
 
     it('points unresolved condition warnings at canonical plan indices', () => {
@@ -646,7 +662,7 @@ describe('Machine Axis external audit boundaries', () => {
       );
       expect(
         warningsByActionId.get('ruby-enhanced-e1-intent')?.path
-      ).toBe('executionPlan.actions.15');
+      ).toBe('executionPlan.actions.18');
     }, 30_000);
   });
 });

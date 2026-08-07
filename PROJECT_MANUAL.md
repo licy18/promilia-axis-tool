@@ -1879,6 +1879,18 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 
 下一阶段任务：**E19 sub2：排轴器/计算核心自动补齐奇波普攻+主动技时间轴**。用户要求拖入大招/合击等奇波动作后，按知识库 `blue-origin-mechanics-review/pet-skill-release-mechanics.md` 的自动释放规则（无条件 tag=0 走 AI 行为树、事件类 tag=80/10|7、冷却/selfCD/GCD、大招合击占用互斥）自动生成普攻与主动技释放时间，用户与优化器都不再指定这两个动作；搜索候选将只保留 signature/break（已生效），当前 search 边界断言 20/21 为无自动补齐时的中间值，sub2 完成后将按自动补齐后的结果修订。每完成一个子阶段即更新本手册并单独提交。
 
+### M12-B3-E19 sub2 已完成：排轴器自动补齐奇波普攻+主动技时间轴（2026-08-07）
+
+新增 `src/machine-axis/kiboAutoCastScheduler.js`：`machineAxisService.prepare()` 在 normalize 之后、模板/排程之前，对**每只拖入了特性技/合击技的槽位奇波**自动生成普攻与主动技动作（未拖奇波动作的槽不生成，用户与优化器都不再指定这两个动作）：
+
+- 规则（来源 `blue-origin-mechanics-review/pet-skill-release-mechanics.md`）：主冷却 `coolDown`、同 `selfCDGroup` 互锁 `selfCD`、全局 `GCD`、技能占用；大招/合击占用窗口（PetUltimate/JointStrikeSkill，行为树停止）内不自动释放，且自动施放不得与用户动作重叠；`petSkillLogicTag=0` 无条件就绪即放，事件类（80/10|7/10/5#2）以 `autoCastRule.evidenceStatus='planner-simplified'` 显式登记（不冒充实机事件）；优先级 active 先于 normal。
+- 生成动作带 `autoCast: true` + `autoCastRule`，id 含 slotId（`kibo-<id>-<slotId>-auto-<kind>-<seq>`，同名奇波多角色不冲突）；draft/项目动作保留标记（`createWorkbenchActionDraft`/`normalizeWorkbenchActionDrafts`/`createKiboEventAction` 链路补全），**导出/持久化时剥离自动动作**（`workbenchMachineAxisAdapter.createContractFromProject` 过滤 `autoCast`），重新导入时确定性再生成，保证 round-trip hash 一致。
+- 搜索候选已只枚举 signature/break（sub1 生效）；`m11-b-three-actor-120s` fixture 现为 14 用户 + 28 自动 = 42 输入动作、44 执行（含 2 个切换），Machine Axis 标准哈希 `db654c65 / fffb2c53 / 2f10dd81 / 6e8efc26`，Workbench trace `0d2c57b1`；cycle 默认轴哈希 `4e03ec02 / 86ddc298 / aaa72349 / 81a497e0 / 41260534`（纯角色 cycle 指标不变：22.44996643 / 4.48999329）；search 边界最优仍为 20.5（最优轴不含奇波动作，不受自动补齐影响）；500206 被动循环因自动普攻触发次数 1→2，断言已按新行为更新。
+- UI：动作库 kibo 区只保留特性技/合击技可拖入，新增「奇波普攻与主动技为自动释放」提示与普攻标签；Workbench 摘要显示「机器输入 42 / 实际执行 44」。
+- 验证：全套 Vitest 1431 通过（仅已知 process-heavy `characterCombatProfilePipeline` 并行超时，单独全过）、11 项确定性审计 clean、production build 与 `git diff --check` 通过。
+
+下一阶段任务：**E19 sub3 收口**——如需要可补充自动动作在 Workbench 时间轴上的只读/徽标展示与持久化往返测试；随后继续 M12-C 之前的剩余非奇波阻断（set-skill:3:4 来源冲突产品决策、33 角色资格阻断为既有范围外）。每完成一个子阶段即更新本手册并单独提交。
+
 ### M12-B3-E18 sub3 已完成：500213 SpacialProperty 按战斗属性闭合，目标 signature 行清零（2026-08-07）
 
 二进制/数据证据链：dump.cs `ESpecialPropertyType`（1=ALL_PROPERTY_SHOOTDMGUP 全属性伤害增幅 / 2=ALL_PROPERTY_DEFENSE 全属性受伤减免）；changeType=2 全库仅 5 个元素（520012001/540074/53201902/53201903/53110406），均携带战斗 attributeID（26=PHYSICAL_SUFFERDMGDOWN、62=FIRE_DEFENSE）与 specialPropertyType；census 被动侧 520012 神圣之躯（changeType=2、attr26、+20%）早已按战斗属性解析为 `equipped-kibo-self-property-effect` 并进入运行时被动生成。据此修正 sync `classifyBattleEffectNode`：changeType=2 且 specialPropertyType ∈ {1,2} 不再推 `property-change-type-not-battle-property`，`propertyChange` 契约携带 `specialPropertyType`/`specialPropertyTypeName`（changeType=1 玩家属性仍保持非战斗门禁）。540074（全元素抗性下降 -0.91%/16s）因此从 unresolved 转 applied。结果：**50021301 菇噜噜 signature 行 evidence-closed，目标 signature 开放 1→0；publicActionClosure 360/6/0→361/5/0；appliedNodeCount 971→972 / unresolvedNodeCount 1865→1864；semanticAppliedEffectCount 961→962**；资格缺口保持 35（kibo 0）、视觉 253/254（kibo 43/43）不变。包 hash `1478862f…`（内部 packageHash `807f0104…`），Machine Axis 标准哈希 `5585c6fb / 3284ab09 / 08c9cc8c / 0b410dc9`，cycle `c44ef286 / c0c07d89 / ed68ea5f / 13fc3bf3 / 1f2e8b1e`，资格哈希 `d53c8c1b / 9cc0bdd8 / f4e8a71e / fe44f482 / 63a4de45 / cbbf175e`。同步更新：FROZEN_B3_SOURCE_HASHES.verifiedMechanics、7 个 fixture、m11 集成基线、cycle/资格/验收报告、迁移/回放/包/覆盖/Workbench/canonical/census/cycle 测试锁定。验证：全套 Vitest 1427/1428（仅已知 process-heavy `characterCombatProfilePipeline` 并行超时，单独全过）、11 项确定性审计 clean、production build 与 `git diff --check` 通过。**奇波侧缺口全部清零（资格 byObjectKind kibo=0、视觉 kibo 43/43、census 目标 signature 0、被动 520059 已闭合）；剩余为非奇波/非 roster 项：set-skill:3:4 视觉阻断（C14 来源冲突，需产品决策或新证据）与 3 条非 roster 被动（520004/520005/520006）**。每完成一个子阶段即更新本手册并单独提交。

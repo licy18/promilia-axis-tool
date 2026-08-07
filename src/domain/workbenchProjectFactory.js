@@ -206,6 +206,8 @@ export function createWorkbenchActionDraft({
   note = '',
   insertion = null,
   generationBatch = null,
+  autoCast = false,
+  autoCastRule = null,
   effectCommands = [],
   ...attackInputFields
 } = {}) {
@@ -317,6 +319,12 @@ export function createWorkbenchActionDraft({
         }
       : {}),
     note,
+    ...(autoCast
+      ? {
+          autoCast: true,
+          ...(autoCastRule ? { autoCastRule: cloneAutoCastRule(autoCastRule) } : {}),
+        }
+      : {}),
     insertion: normalizeWorkbenchInsertion(insertion),
     generationBatch: normalizeWorkbenchGenerationBatch(generationBatch),
     ...(sourceSequence ?? {}),
@@ -1031,6 +1039,8 @@ export function normalizeWorkbenchActionDrafts(
           note: draft.note,
           insertion: draft.insertion,
           generationBatch: draft.generationBatch,
+          autoCast: draft.autoCast === true,
+          autoCastRule: draft.autoCastRule,
           effectCommands: draft.effectCommands,
           ...normalizeAttackInputActionFields(draft),
         });
@@ -1224,9 +1234,11 @@ function createProjectActionFromDraft(
       controlSubSkillIndex: draft.controlSubSkillIndex,
       variantInputSelection: draft.variantInputSelection,
       actionScheduling: draft.actionScheduling,
-      sourceEvidenceStatus: draft.sourceEvidenceStatus,
-      scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
-      hitOverrides: draft.hitOverrides,
+          sourceEvidenceStatus: draft.sourceEvidenceStatus,
+          scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+          autoCast: draft.autoCast === true,
+          autoCastRule: draft.autoCastRule,
+          hitOverrides: draft.hitOverrides,
       note: draft.note || '奇波事件标记',
       insertion: draft.insertion,
       effectCommands,
@@ -1447,6 +1459,11 @@ function normalizeWorkbenchGenerationBatch(generationBatch) {
       ? String(generationBatch.createdAt)
       : null,
   };
+}
+
+function cloneAutoCastRule(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  return { ...value };
 }
 
 function createSkillLevelsForCharacter(skillDrafts, characterId) {

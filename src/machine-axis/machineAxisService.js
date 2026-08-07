@@ -35,6 +35,7 @@ import {
   selectTopN,
 } from './machineAxisSearchEngine';
 import { createMachineAxisSearchReport } from './machineAxisSearchReport';
+import { expandKiboAutoCastActions } from './kiboAutoCastScheduler';
 import {
   MACHINE_AXIS_TRANSPORT_METADATA_KEY,
   createMachineAxisDiagnostic,
@@ -436,7 +437,13 @@ export function createMachineAxisService({
   }
   function prepare(machineAxis) {
     const contractValidation = validateMachineAxisContract(machineAxis);
-    const contract = contractValidation.normalized;
+    const normalizedContract = contractValidation.normalized;
+    const contract = {
+      ...normalizedContract,
+      actions: expandKiboAutoCastActions(normalizedContract, {
+        kiboCatalogById,
+      }),
+    };
     const issues = [...contractValidation.issues];
     if (!contractValidation.valid) {
       return {
@@ -1393,6 +1400,8 @@ function createKiboActionTemplate({
       sourceEvidenceStatus: mapping.sourceEvidenceStatus,
       scenarioRuntimeStatus: mapping.scenarioRuntimeStatus,
       hitOverrides: toProjectHitOverrides(action.hitOverrides),
+      autoCast: action.autoCast === true,
+      ...(action.autoCastRule ? { autoCastRule: action.autoCastRule } : {}),
       note: action.note,
     },
     resolution: {
@@ -1410,6 +1419,8 @@ function createKiboActionTemplate({
       sourceEvidenceStatus: mapping.sourceEvidenceStatus,
       scenarioRuntimeStatus: mapping.scenarioRuntimeStatus,
       availableHitIdentities: collectMappingHitIdentities(mapping),
+      autoCast: action.autoCast === true,
+      ...(action.autoCastRule ? { autoCastRule: action.autoCastRule } : {}),
     },
   };
 }
