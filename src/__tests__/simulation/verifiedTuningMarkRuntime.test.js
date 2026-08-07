@@ -651,7 +651,7 @@ describe('verified tuning mark runtime', () => {
       profile => profile.key === 'wind'
     );
     const result = simulateVerifiedProject({
-      durationMs: 6_000,
+      durationMs: 9_000,
       initialSpByCharacterId: { 109001: 100 },
       initialRuntimeState: {
         tuningMarks: [
@@ -806,6 +806,64 @@ describe('verified tuning mark runtime', () => {
         event => event.kind === 'conditional-direct-sp'
       )
     ).toHaveLength(0);
+  });
+
+  it('resets one star-skill charge cooldown when the ultimate is cast', () => {
+    const result = simulateVerifiedProject({
+      durationMs: 6_000,
+      actions: [
+        createWorkbenchActionDraft({
+          id: 'moyin-star-1',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900112,
+          actionVariantIndex: 0,
+          startMs: 0,
+          durationMs: 1_000,
+        }),
+        createWorkbenchActionDraft({
+          id: 'moyin-star-2',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900112,
+          actionVariantIndex: 0,
+          startMs: 1_000,
+          durationMs: 1_000,
+        }),
+        createWorkbenchActionDraft({
+          id: 'moyin-ultimate',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900113,
+          actionVariantIndex: 0,
+          startMs: 2_000,
+          durationMs: 3_600,
+        }),
+        createWorkbenchActionDraft({
+          id: 'moyin-star-3',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900112,
+          actionVariantIndex: 0,
+          startMs: 6_000,
+          durationMs: 1_000,
+        }),
+      ],
+    });
+    const cooldownViolations = (
+      result.actionRuleDiagnostics?.diagnostics ?? []
+    ).filter(
+      diagnostic =>
+        diagnostic.code === 'skill-cooldown-active' &&
+        diagnostic.actionId === 'moyin-star-3'
+    );
+    expect(cooldownViolations).toHaveLength(0);
+    const readiness = result.actionRuleDiagnostics?.readinessTimeline
+      ?.actions ?? [];
+    const star3Readiness = readiness.find(
+      row => row.actionId === 'moyin-star-3'
+    );
+    expect(star3Readiness?.status).toBe('ready');
   });
 
   it('expires inherited layers on an empty action axis without synthetic damage', () => {

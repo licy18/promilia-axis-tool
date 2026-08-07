@@ -2003,6 +2003,14 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 
 下一阶段任务：大招减CD + 星鸣 2 充能 → E技能/入场/招架检测门控 → 璀璨普攻变体/残响曲线 → golden/验收场景覆盖全部机制。每完成一个子阶段即更新本手册并单独提交。
 
+### M12-B3-E20-2-109001 R5 已完成：大招减CD + 星鸣充能重置闭合（2026-08-08）
+
+- `actionRuleDiagnostics` 新增冷却缩减事件收集与应用：从动作 resolution effects 读取 `cooldownReduction`（109001171 value=-20 → 20000ms），把同角色星鸣技最远未就绪的充能提前（clamp ≥0）；星鸣技 cooldownCount=2 双充能独立就绪。
+- 新增单测：3 次星鸣 + 1 次星决后第三次星鸣立即可用（无 skill-cooldown-active，readiness=ready）。
+- 验证：全套 Vitest 1446/1448（仅 2 条已知 process-heavy 并行超时，单独通过）；11 项审计 clean；build 通过。
+
+下一阶段任务：E技能/入场/招架检测门控（3 雷印记、3 风残响、1 雷印记）→ 璀璨普攻变体/残响曲线 → golden/验收场景覆盖全部机制。每完成一个子阶段即更新本手册并单独提交。
+
 ### M12-B3-E18 sub3 已完成：500213 SpacialProperty 按战斗属性闭合，目标 signature 行清零（2026-08-07）
 
 二进制/数据证据链：dump.cs `ESpecialPropertyType`（1=ALL_PROPERTY_SHOOTDMGUP 全属性伤害增幅 / 2=ALL_PROPERTY_DEFENSE 全属性受伤减免）；changeType=2 全库仅 5 个元素（520012001/540074/53201902/53201903/53110406），均携带战斗 attributeID（26=PHYSICAL_SUFFERDMGDOWN、62=FIRE_DEFENSE）与 specialPropertyType；census 被动侧 520012 神圣之躯（changeType=2、attr26、+20%）早已按战斗属性解析为 `equipped-kibo-self-property-effect` 并进入运行时被动生成。据此修正 sync `classifyBattleEffectNode`：changeType=2 且 specialPropertyType ∈ {1,2} 不再推 `property-change-type-not-battle-property`，`propertyChange` 契约携带 `specialPropertyType`/`specialPropertyTypeName`（changeType=1 玩家属性仍保持非战斗门禁）。540074（全元素抗性下降 -0.91%/16s）因此从 unresolved 转 applied。结果：**50021301 菇噜噜 signature 行 evidence-closed，目标 signature 开放 1→0；publicActionClosure 360/6/0→361/5/0；appliedNodeCount 971→972 / unresolvedNodeCount 1865→1864；semanticAppliedEffectCount 961→962**；资格缺口保持 35（kibo 0）、视觉 253/254（kibo 43/43）不变。包 hash `1478862f…`（内部 packageHash `807f0104…`），Machine Axis 标准哈希 `5585c6fb / 3284ab09 / 08c9cc8c / 0b410dc9`，cycle `c44ef286 / c0c07d89 / ed68ea5f / 13fc3bf3 / 1f2e8b1e`，资格哈希 `d53c8c1b / 9cc0bdd8 / f4e8a71e / fe44f482 / 63a4de45 / cbbf175e`。同步更新：FROZEN_B3_SOURCE_HASHES.verifiedMechanics、7 个 fixture、m11 集成基线、cycle/资格/验收报告、迁移/回放/包/覆盖/Workbench/canonical/census/cycle 测试锁定。验证：全套 Vitest 1427/1428（仅已知 process-heavy `characterCombatProfilePipeline` 并行超时，单独全过）、11 项确定性审计 clean、production build 与 `git diff --check` 通过。**奇波侧缺口全部清零（资格 byObjectKind kibo=0、视觉 kibo 43/43、census 目标 signature 0、被动 520059 已闭合）；剩余为非奇波/非 roster 项：set-skill:3:4 视觉阻断（C14 来源冲突，需产品决策或新证据）与 3 条非 roster 被动（520004/520005/520006）**。每完成一个子阶段即更新本手册并单独提交。

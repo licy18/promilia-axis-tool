@@ -184,6 +184,24 @@
 3. M6/M8/M15/M23：璀璨普攻变体选择语义、残响注入与曲线。
 4. Golden/验收场景覆盖被动2/重击回能（消除 3 条 scenario-coverage 阻断）→ 全量测试/哈希/提交。
 
+## R5 进度（2026-08-08，大招减CD + 星鸣充能重置已闭合）
+
+### 已实现
+
+- **M12 大招重置星鸣充能冷却**：`actionRuleDiagnostics` 新增冷却缩减事件收集（`collectCooldownReductionEvents`，从动作 resolution effects 读取 `cooldownReduction`，单位=秒，109001171 value=-20 → 20000ms）+ 按 owner/星鸣技能 ID 应用（`applyCooldownChargeReductions`，把最远未就绪的充能提前，clamp ≥0）。星鸣技本身 cooldownCount=2 来自 `skillsub_logic`，两个充能独立就绪。
+- 未触碰其他 CD 元素（109001241/281/293/295 不在当前 profile 效果中，保持诚实未编译）。
+
+### 验证
+
+- 新增单测：3 次星鸣 + 1 次星决，第三次星鸣在星决后立即可用（`skill-cooldown-active` 0 条，readiness=ready）。
+- 全套 Vitest 1446/1448（仅 2 条已知 process-heavy 并行超时，单独通过）；11 项审计 clean；build 通过。
+
+### 下一阶段
+
+1. M10/M11/M16：E技能/入场检测门控（3 雷印记、3 风残响、1 雷印记 → 升级命中/暴击 buff）。
+2. M6/M8/M15/M23：璀璨普攻变体选择语义、残响注入与曲线。
+3. Golden/验收场景覆盖被动2/重击回能/大招重置（消除 scenario-coverage 阻断）→ 全量测试/哈希/提交。
+
 ## 关键事实
 
 - 109001 末音：element=4（雷），position 详见 characters.json；普攻=10900101 哈库茵剑舞、星鸣=10900112 涌雷动之跃、星决=10900113 绽华章之舞、星携=10900121 凝飓风之旋（203 入场型）、被动=10900161 哈库茵之耀 + 10900162 无名第二被动（按 10101062/10300262 先例 N/A）

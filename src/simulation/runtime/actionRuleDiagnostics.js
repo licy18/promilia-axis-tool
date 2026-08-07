@@ -2,7 +2,11 @@ import { ACTION_TYPES } from '../../domain/projectSchema';
 import { isFrameWithinVerifiedInputWindow } from '../../domain/verifiedActionContextScheduling';
 import { compareActionSourceSequence } from '../../domain/actionSourceSequence';
 import { VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID } from '../../domain/workbenchMechanicsProfileSelection';
-import { getVerifiedCombatActionMapping } from '../../data/verifiedCombatMechanicsPackage';
+import {
+  getInstalledVerifiedCombatMechanicsPackage,
+  getVerifiedCombatActionMapping,
+  resolveVerifiedCombatActionMechanics,
+} from '../../data/verifiedCombatMechanicsPackage';
 import { createActionCooldownEvaluation } from './actionCooldownEvaluation';
 import { isSwitchTriggeredDerivedAction } from '../generation/switchTriggeredActionGeneration';
 import { createVerifiedKiboCooldownModifierSession } from '../mechanics/verifiedKiboCooldownModifierSession';
@@ -721,6 +725,77 @@ function createSwitchFrameConflictDiagnostics(actions, fps = 60) {
   return diagnostics;
 }
 
+function collectCooldownReductionEvents(actions, scenario) {
+  const reductionsByOwner = new Map();
+  if (!scenario) return reductionsByOwner;
+  for (const action of actions ?? []) {
+    if (action.type !== ACTION_TYPES.SKILL || !action.actorId) continue;
+    const characterId = Number(action.actor?.characterId);
+    if (!Number.isInteger(characterId) || characterId <= 0) continue;
+    const resolution = resolveVerifiedCombatActionMechanics(action, {
+      combatScenario: scenario.combatScenario,
+    });
+    const effect = (resolution?.effects ?? []).find(
+      candidate => candidate.cooldownReduction
+    );
+    const raw = Number(effect?.cooldownReduction?.valueByLevel?.['1']);
+    if (!Number.isFinite(raw) || raw >= 0) continue;
+    const ownerKey = String(characterId);
+    const list = reductionsByOwner.get(ownerKey) ?? [];
+    list.push({
+      timeMs: Math.max(0, Number(action.startMs) || 0),
+      reductionMs: -raw * 1000,
+      sourceActionId: action.id,
+    });
+    reductionsByOwner.set(ownerKey, list);
+  }
+  return reductionsByOwner;
+}
+
+function collectStarSkillIdByOwner() {
+  const packageValue = getInstalledVerifiedCombatMechanicsPackage();
+  const byOwner = new Map();
+  for (const mapping of packageValue?.actionMappings ?? []) {
+    if (
+      mapping.ownerKind === 'actor' &&
+      mapping.actionKind === 'star-skill'
+    ) {
+      byOwner.set(String(mapping.ownerId), Number(mapping.controlSkillId));
+    }
+  }
+  return byOwner;
+}
+
+function applyCooldownChargeReductions({
+  state,
+  characterId,
+  skillId,
+  actionStartMs,
+  reductionsByOwner,
+  starSkillIdByOwner,
+}) {
+  const starSkillId = starSkillIdByOwner.get(String(characterId));
+  if (!starSkillId || Number(skillId) !== starSkillId) return;
+  const reductions = (reductionsByOwner.get(String(characterId)) ?? []).filter(
+    reduction => reduction.timeMs <= Number(actionStartMs)
+  );
+  if (reductions.length === 0) return;
+  const totalReductionMs = reductions.reduce(
+    (sum, reduction) => sum + reduction.reductionMs,
+    0
+  );
+  if (!(totalReductionMs > 0)) return;
+  const target = [...state.charges].sort(
+    (left, right) => right.readyAtMs - left.readyAtMs
+  )[0];
+  if (!target) return;
+  target.readyAtMs = Math.max(0, target.readyAtMs - totalReductionMs);
+  target.cooldownReductionMs = totalReductionMs;
+  target.cooldownReductionSourceActionIds = reductions.map(
+    reduction => reduction.sourceActionId
+  );
+}
+
 function createSkillCooldownEvaluation(
   actions,
   {
@@ -730,6 +805,11 @@ function createSkillCooldownEvaluation(
   } = {}
 ) {
   const cooldownStateBySkillOwner = new Map();
+  const cooldownReductionsByOwner = collectCooldownReductionEvents(
+    actions,
+    scenario
+  );
+  const starSkillIdByOwner = collectStarSkillIdByOwner();
   const diagnostics = [];
   const snapshotsByActionId = new Map();
   const cooldownWindows = [];
@@ -815,6 +895,15 @@ function createSkillCooldownEvaluation(
     const key = `${ownerKind}|${runtimeOwnerIdentity}|${cooldownIdentity}`;
     const state =
       cooldownStateBySkillOwner.get(key) ?? createSkillCooldownState(cooldown);
+    applyCooldownChargeReductions({
+      state,
+      characterId: Number(action.actor?.characterId),
+      skillId: Number(action.skillId),
+      actionStartMs: action.startMs,
+      reductionsByOwner: cooldownReductionsByOwner,
+      starSkillIdByOwner,
+    });
+    cooldownStateBySkillOwner.set(key, state);
     const chargesBefore = cloneCooldownCharges(state.charges);
     const availableCharges = state.charges
       .filter(charge => charge.readyAtMs <= action.startMs)
