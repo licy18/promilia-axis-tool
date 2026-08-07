@@ -3656,7 +3656,7 @@ function createKiboPassiveDerivedPeriodicUnresolvedEvent(descriptor) {
 function isNonDamageProjectionDescriptor(descriptor) {
   if (
     descriptor?.kind === 'tuning-combat' &&
-    ['periodic-heal', 'overlimit-direct-sp'].includes(
+    ['periodic-heal', 'overlimit-direct-sp', 'conditional-direct-sp'].includes(
       descriptor.tuningEvent?.kind
     )
   ) {
@@ -3846,6 +3846,40 @@ function applyTuningCombatDescriptor({
               expression: 'consumedMarks * spPerConsumedMark',
               consumedMarks: tuningEvent.markCount,
               spPerConsumedMark: tuningEvent.template?.valuePerMark,
+              noShare: true,
+              noEnhancement: true,
+            },
+          },
+        }),
+        state
+      );
+    }
+    return null;
+  }
+  if (tuningEvent.kind === 'conditional-direct-sp') {
+    const actorState = state.actorEnergy.get(tuningEvent.actorId);
+    if (!actorState) return null;
+    const requestedChange = Number(tuningEvent.template?.value);
+    const change = applyClampedResourceChange(actorState, requestedChange);
+    if (change !== 0) {
+      appendRuntimeEvent(
+        resourceEvents,
+        createActorResourceEvent({
+          timeMs: tuningEvent.timeMs,
+          action: tuningEvent.action,
+          actorId: tuningEvent.actorId,
+          actorName: actorState.actor?.name,
+          resourceState: actorState,
+          change,
+          reason: 'tuning-conditional-direct-sp',
+          confidence: 'verified',
+          hitKey: tuningEvent.eventIdentity,
+          source: {
+            sourceIdentity: tuningEvent.sourceIdentity,
+            formula: {
+              expression: 'presenceMark * spValue',
+              presenceMarks: tuningEvent.markCount,
+              spValue: Number(tuningEvent.template?.value),
               noShare: true,
               noEnhancement: true,
             },

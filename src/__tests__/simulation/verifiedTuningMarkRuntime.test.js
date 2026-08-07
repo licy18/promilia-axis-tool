@@ -748,6 +748,66 @@ describe('verified tuning mark runtime', () => {
     ).toBe(true);
   });
 
+  it('restores one SP per charged hit only while a thunder mark is present', () => {
+    const thunder = mechanicsPackage.tuningMechanicsCatalog.profiles.find(
+      profile => profile.key === 'thunder'
+    );
+    const withMark = simulateVerifiedProject({
+      durationMs: 3_000,
+      initialRuntimeState: {
+        tuningMarks: [createInheritedMark(thunder, 20_000)],
+      },
+      actions: [
+        createWorkbenchActionDraft({
+          id: 'moyin-charged',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900101,
+          actionVariantIndex: 1,
+          startMs: 0,
+          durationMs: 1_200,
+        }),
+      ],
+    });
+    const presenceEvents =
+      withMark.verifiedTuningMarkGeneration.combatEvents.filter(
+        event => event.kind === 'conditional-direct-sp'
+      );
+    expect(presenceEvents).toHaveLength(3);
+    expect(presenceEvents.map(event => event.timeMs)).toEqual([
+      83.333333,
+      333.333333,
+      1000,
+    ]);
+    const spEvents = withMark.verifiedCombatRuntime.resourceEvents.filter(
+      event => event.payload.reason === 'tuning-conditional-direct-sp'
+    );
+    expect(spEvents).toHaveLength(3);
+    expect(spEvents.reduce((sum, event) => sum + event.payload.change, 0)).toBe(
+      3
+    );
+
+    const withoutMark = simulateVerifiedProject({
+      durationMs: 3_000,
+      actions: [
+        createWorkbenchActionDraft({
+          id: 'moyin-charged',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900101,
+          actionVariantIndex: 1,
+          startMs: 0,
+          durationMs: 1_200,
+        }),
+      ],
+    });
+    expect(
+      withoutMark.verifiedTuningMarkGeneration.combatEvents.filter(
+        event => event.kind === 'conditional-direct-sp'
+      )
+    ).toHaveLength(0);
+  });
+
   it('expires inherited layers on an empty action axis without synthetic damage', () => {
     const fire = mechanicsPackage.tuningMechanicsCatalog.profiles.find(
       profile => profile.key === 'fire'

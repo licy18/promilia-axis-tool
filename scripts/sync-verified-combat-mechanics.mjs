@@ -387,9 +387,23 @@ export async function createVerifiedCombatMechanicsBuild({
   assertRequiredInputs();
   const seed = readJson(path.join(GENERATED_ROOT, 'workbench-seed.json'));
   const characterCatalog = readJson(CHARACTER_CATALOG_PATH);
+  const implementedPassiveSkillIds = new Set(
+    (discoveredRecipes ?? []).flatMap(recipe => [
+      ...(recipe.compiler?.passiveEffects ?? []).map(passive =>
+        Number(passive.skillId)
+      ),
+      ...(recipe.compiler?.runtimeEffectBindings ?? []).flatMap(binding => {
+        const match = String(binding.sourceIdentity ?? '').match(
+          /skill:(\d+)/
+        );
+        return match ? [Number(match[1])] : [];
+      }),
+    ])
+  );
   const productBoundaryReport = discoverUnnamedSecondaryPassiveBoundaries({
     characterCatalog,
     skills: seed.gameData?.skills ?? [],
+    implementedPassiveSkillIds,
   });
   if (
     productBoundaryReport.status !== 'unnamed-secondary-passive-boundary-ready'
@@ -5732,6 +5746,11 @@ function createControlEffectGraph({
       }
       if (visited.has(nodeIdentity) || depth > 12) return;
       visited.add(nodeIdentity);
+      const presenceSpChildValue = resolvePresenceJudgmentSpChildValue({
+        record,
+        allIndexedElements,
+        allIndexedElementsById,
+      });
       const node = {
         ...createBattleEffectGraphNode({
           record,
@@ -5741,6 +5760,7 @@ function createControlEffectGraph({
           depth,
           incomingRelation: relation,
           layerActivation,
+          presenceSpChildValue,
           tuningMechanicsCatalog,
         }),
         sourceTraversalIndex: nodes.length,
@@ -5958,6 +5978,40 @@ function resolveLayerActivationForChild(parentTree = {}, childRecord = {}) {
   };
 }
 
+function resolvePresenceJudgmentSpChildValue({
+  record,
+  allIndexedElements,
+  allIndexedElementsById,
+}) {
+  const tree = record.typetree ?? {};
+  if (
+    resolveBattleElementKind(tree) !== 'judgment' ||
+    Number(tree.consume) === 1 ||
+    !(tree.elementArr ?? []).some(value => Number.isInteger(Number(value)))
+  ) {
+    return null;
+  }
+  const references = collectBattleElementChildReferences(tree).filter(
+    reference => reference.relation === 'injectElementDataList_2'
+  );
+  for (const reference of references) {
+    const childResolution = resolveIndexedElementReference({
+      reference,
+      elementsByPathId: allIndexedElements,
+      elementsById: allIndexedElementsById,
+    });
+    const childTree = childResolution.record?.typetree ?? {};
+    if (
+      Object.hasOwn(childTree, 'recoverType') &&
+      Number(childTree.recoverType) === 0
+    ) {
+      const rawValue = Number(childTree.functionParams?.[0]);
+      return Number.isFinite(rawValue) ? rawValue / 10_000 : null;
+    }
+  }
+  return null;
+}
+
 function createBattleEffectGraphNode({
   record,
   controlSkillId,
@@ -5966,6 +6020,7 @@ function createBattleEffectGraphNode({
   depth,
   incomingRelation = null,
   layerActivation = null,
+  presenceSpChildValue = null,
   tuningMechanicsCatalog,
 }) {
   const tree = record.typetree ?? {};
@@ -6005,6 +6060,7 @@ function createBattleEffectGraphNode({
     ),
     depth,
     incomingRelation,
+    presenceSpChildValue,
     tuningMechanicsCatalog,
   });
   const rawSourceName = tree.elementName ?? tree.m_Name ?? record.name ?? null;
@@ -6163,6 +6219,21 @@ function createBattleEffectGraphNode({
             effectPathIds: collectNestedPathIds(tree.injectElementDataEffects),
           }
         : null,
+    directSpPresence:
+      kind === 'judgment' &&
+      presenceSpChildValue != null &&
+      Number.isFinite(presenceSpChildValue)
+        ? {
+            markId: Number(
+              (tree.elementArr ?? [])
+                .map(Number)
+                .find(value => Number.isInteger(value))
+            ),
+            minimumStacks: 1,
+            value: presenceSpChildValue,
+            sourceIdentity: `${tree.m_Name ?? tree.elementName ?? ''}#presence-judgment-sp-child`,
+          }
+        : null,
     dimensions: classification.dimensions,
     classification: classification.status,
     reasons: classification.reasons,
@@ -6247,6 +6318,7 @@ function classifyBattleEffectNode({
   valueByLevel,
   depth,
   incomingRelation = null,
+  presenceSpChildValue = null,
   tuningMechanicsCatalog,
 }) {
   const propertyConditionResult = parsePropertyChangeActivationConditions(tree);
@@ -6424,6 +6496,17 @@ function classifyBattleEffectNode({
         'applied',
         [],
         'elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum'
+      );
+    } else if (
+      kind === 'judgment' &&
+      presenceSpChildValue != null &&
+      Number.isFinite(presenceSpChildValue) &&
+      (tree.elementArr ?? []).some(value => Number.isInteger(Number(value)))
+    ) {
+      dimensions.mark = createDimensionClassification(
+        'applied',
+        [],
+        'elementConfigId|elementArr|judgmentType|injectElementDataList_2'
       );
     } else {
       reasons.push(
@@ -6875,6 +6958,13 @@ function createControlRuntimeEffectBinding({
       tuningBinding?.kind === 'acquire' ? tuningBinding.contract : null,
     tuningOverlimit:
       tuningBinding?.kind === 'consume' ? tuningBinding.contract : null,
+    directSpPresence:
+      node.directSpPresence && node.classification === 'applied'
+        ? {
+            ...node.directSpPresence,
+            applied: true,
+          }
+        : null,
     formula: {
       commonFunctionId: node.formula.commonFunctionId,
       baseFunctionId: node.formula.baseFunctionId,
@@ -9579,6 +9669,7 @@ function createSemanticEffectCandidate({
     damage: node.damage,
     tuningMark: node.tuningMark,
     tuningOverlimit: node.tuningOverlimit,
+    directSpPresence: node.directSpPresence ?? null,
     judgment: node.judgment,
     classification,
     dimensions: createPublishedEffectDimensions(node.dimensions),

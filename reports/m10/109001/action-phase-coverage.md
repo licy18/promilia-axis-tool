@@ -23,7 +23,7 @@
 | 动作 | 就绪 | 状态 | 剩余缺口 |
 | --- | --- | --- | --- |
 | normal-attack | 是 | applied |  |
-| charged-attack | 是 | applied-with-residual-gaps | effect-trigger-frame-missing；judgment-condition-runtime-unimplemented；nested-effect-wrapper-semantics-unresolved |
+| charged-attack | 是 | applied-with-residual-gaps | effect-trigger-frame-missing；nested-effect-wrapper-semantics-unresolved |
 | dodge-attack | 是 | applied |  |
 | plunging-attack | 是 | applied |  |
 | star-skill | 是 | applied |  |

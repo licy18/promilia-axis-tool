@@ -1994,6 +1994,15 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 
 下一阶段任务（按依赖顺序）：星决蓄能资源+被动2（璀璨下普攻3/5/重击+1）→ 重击检测回能 → 大招减CD+星鸣 2 充能 → E技能/入场检测条件门控 → 璀璨普攻变体/残响曲线 → golden 全覆盖。每完成一个子阶段即更新本手册并单独提交。
 
+### M12-B3-E20-2-109001 R4 已完成：被动2 + 重击回能（SP 门控）闭合（2026-08-08）
+
+- **被动2（10900162）**：新增 `action-frame-with-state` runtimeEffectBinding 触发类型；璀璨下普攻3/5/重击各 +1 SP（109001300），条件不满足时显式记录不触发。
+- **重击回能（M7）**：sync 编译器新增 `directSpPresence` 契约（判断门控 direct-SP，markId=250）；tuningGeneration 按印记层数在重击 5/20/60F 门控，combat runtime 结算 `tuning-conditional-direct-sp` +1 SP/击。
+- **10900162 状态**：由“无名第二被动 N/A”转为“已实现”（product-boundary 新增 implementedPassiveSkillIds）；验收清单以 3 条 scenario-coverage 阻断登记，待场景覆盖后放行。
+- 验证：新增 2 组单测；全套 Vitest 1445/1447（仅 2 条已知 process-heavy 并行超时，单独通过）；11 项审计 clean；build 通过；109001 保持 runtime-integrated（4/4）；包 hash `a47d98f5…`。
+
+下一阶段任务：大招减CD + 星鸣 2 充能 → E技能/入场/招架检测门控 → 璀璨普攻变体/残响曲线 → golden/验收场景覆盖全部机制。每完成一个子阶段即更新本手册并单独提交。
+
 ### M12-B3-E18 sub3 已完成：500213 SpacialProperty 按战斗属性闭合，目标 signature 行清零（2026-08-07）
 
 二进制/数据证据链：dump.cs `ESpecialPropertyType`（1=ALL_PROPERTY_SHOOTDMGUP 全属性伤害增幅 / 2=ALL_PROPERTY_DEFENSE 全属性受伤减免）；changeType=2 全库仅 5 个元素（520012001/540074/53201902/53201903/53110406），均携带战斗 attributeID（26=PHYSICAL_SUFFERDMGDOWN、62=FIRE_DEFENSE）与 specialPropertyType；census 被动侧 520012 神圣之躯（changeType=2、attr26、+20%）早已按战斗属性解析为 `equipped-kibo-self-property-effect` 并进入运行时被动生成。据此修正 sync `classifyBattleEffectNode`：changeType=2 且 specialPropertyType ∈ {1,2} 不再推 `property-change-type-not-battle-property`，`propertyChange` 契约携带 `specialPropertyType`/`specialPropertyTypeName`（changeType=1 玩家属性仍保持非战斗门禁）。540074（全元素抗性下降 -0.91%/16s）因此从 unresolved 转 applied。结果：**50021301 菇噜噜 signature 行 evidence-closed，目标 signature 开放 1→0；publicActionClosure 360/6/0→361/5/0；appliedNodeCount 971→972 / unresolvedNodeCount 1865→1864；semanticAppliedEffectCount 961→962**；资格缺口保持 35（kibo 0）、视觉 253/254（kibo 43/43）不变。包 hash `1478862f…`（内部 packageHash `807f0104…`），Machine Axis 标准哈希 `5585c6fb / 3284ab09 / 08c9cc8c / 0b410dc9`，cycle `c44ef286 / c0c07d89 / ed68ea5f / 13fc3bf3 / 1f2e8b1e`，资格哈希 `d53c8c1b / 9cc0bdd8 / f4e8a71e / fe44f482 / 63a4de45 / cbbf175e`。同步更新：FROZEN_B3_SOURCE_HASHES.verifiedMechanics、7 个 fixture、m11 集成基线、cycle/资格/验收报告、迁移/回放/包/覆盖/Workbench/canonical/census/cycle 测试锁定。验证：全套 Vitest 1427/1428（仅已知 process-heavy `characterCombatProfilePipeline` 并行超时，单独全过）、11 项确定性审计 clean、production build 与 `git diff --check` 通过。**奇波侧缺口全部清零（资格 byObjectKind kibo=0、视觉 kibo 43/43、census 目标 signature 0、被动 520059 已闭合）；剩余为非奇波/非 roster 项：set-skill:3:4 视觉阻断（C14 来源冲突，需产品决策或新证据）与 3 条非 roster 被动（520004/520005/520006）**。每完成一个子阶段即更新本手册并单独提交。

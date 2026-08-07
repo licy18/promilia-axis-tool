@@ -106,14 +106,19 @@ export function applyVerifiedTargetStateRuntime({
     }
     for (const [bindingSequenceIndex, binding] of runtimeBindings.entries()) {
       if (
-        binding.triggerKind !== 'action-frame' ||
+        !['action-frame', 'action-frame-with-state'].includes(
+          binding.triggerKind
+        ) ||
         Number(binding.controlSkillId) !== controlSkillId ||
         Number(binding.subSkillIndex) !== subSkillIndex
       ) {
         continue;
       }
       pending.push({
-        kind: 'runtime-effect',
+        kind:
+          binding.triggerKind === 'action-frame-with-state'
+            ? 'runtime-effect-with-state'
+            : 'runtime-effect',
         timeMs: actionFrameToMs(
           action,
           binding.triggerFrame,
@@ -195,6 +200,43 @@ export function applyVerifiedTargetStateRuntime({
           });
         }
       }
+      continue;
+    }
+    if (descriptor.kind === 'runtime-effect-with-state') {
+      const state = stateByIdentity.get(descriptor.binding.stateIdentity);
+      const activeStacks = state?.layers.length ?? 0;
+      const satisfied =
+        activeStacks >= Number(descriptor.binding.minimumStacks ?? 1);
+      if (!satisfied) {
+        events.push({
+          type: 'VERIFIED_RUNTIME_EFFECT_STATE_CONDITION_NOT_MET',
+          timeMs: descriptor.timeMs,
+          actionId: descriptor.action?.id ?? null,
+          actorId: descriptor.action?.actorId ?? null,
+          runtimeSequenceIndex: eventSequence++,
+          payload: {
+            bindingIdentity: descriptor.binding.bindingIdentity,
+            stateIdentity: descriptor.binding.stateIdentity,
+            stateName: descriptor.binding.stateName ?? null,
+            minimumStacks: Number(descriptor.binding.minimumStacks),
+            activeStacks,
+            applied: false,
+          },
+        });
+        continue;
+      }
+      emitRuntimeBinding({
+        binding: descriptor.binding,
+        action: descriptor.action,
+        resolution: descriptor.resolution,
+        timeMs: descriptor.timeMs,
+        scenario,
+        controlledActorTimeline,
+        mechanicsPackage,
+        effectCommands,
+        directSpEvents,
+        bindingSequenceIndex: descriptor.bindingSequenceIndex,
+      });
       continue;
     }
     emitRuntimeBinding({

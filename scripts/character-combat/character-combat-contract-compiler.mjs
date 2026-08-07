@@ -125,6 +125,7 @@ export function compileCharacterCombatRecipeContracts({
     definitions: compilerRecipe.runtimeEffectBindings ?? [],
     controlBySkillId,
     conditionalHitGroups,
+    targetStateProfiles,
     operators: normalizedOperators,
   });
   const thresholdTransitions = compileThresholdTransitions({
@@ -2967,10 +2968,14 @@ function compileRuntimeEffectBindings({
   definitions,
   controlBySkillId,
   conditionalHitGroups,
+  targetStateProfiles,
   operators,
 }) {
   const groupByIdentity = new Map(
     conditionalHitGroups.map(group => [group.groupIdentity, group])
+  );
+  const stateProfileByIdentity = new Map(
+    targetStateProfiles.map(profile => [profile.stateIdentity, profile])
   );
   return definitions.map(definition => {
     const triggerKind = definition.triggerKind;
@@ -2979,7 +2984,7 @@ function compileRuntimeEffectBindings({
         ? groupByIdentity.get(String(definition.conditionalGroupIdentity))
         : null;
     const control =
-      triggerKind === 'action-frame'
+      ['action-frame', 'action-frame-with-state'].includes(triggerKind)
         ? requireControl(
             controlBySkillId,
             definition.controlSkillId,
@@ -2989,6 +2994,14 @@ function compileRuntimeEffectBindings({
     const triggerFrame = Number(
       definition.triggerFrame ?? group?.decisionFrame
     );
+    const stateProfile =
+      triggerKind === 'action-frame-with-state'
+        ? stateProfileByIdentity.get(String(definition.stateIdentity))
+        : null;
+    const minimumStacks =
+      triggerKind === 'action-frame-with-state'
+        ? Number(definition.minimumStacks)
+        : null;
     const propertyAsset =
       definition.propertyElementId == null
         ? null
@@ -3020,11 +3033,15 @@ function compileRuntimeEffectBindings({
       definition.durationMs ?? durationAsset?.tree?.time
     );
     if (
-      !['conditional-hit-group-applied', 'action-frame'].includes(
-        triggerKind
-      ) ||
+      ![
+        'conditional-hit-group-applied',
+        'action-frame',
+        'action-frame-with-state',
+      ].includes(triggerKind) ||
       (triggerKind === 'conditional-hit-group-applied' && !group) ||
       (triggerKind === 'action-frame' && !control) ||
+      (triggerKind === 'action-frame-with-state' &&
+        (!control || !stateProfile || !(minimumStacks > 0))) ||
       !Number.isInteger(triggerFrame) ||
       triggerFrame < 0 ||
       (!modifier && !directSp) ||
@@ -3039,16 +3056,30 @@ function compileRuntimeEffectBindings({
       ownerId,
       triggerKind,
       conditionalGroupIdentity: group?.groupIdentity ?? null,
+      stateIdentity:
+        triggerKind === 'action-frame-with-state'
+          ? stateProfile.stateIdentity
+          : null,
+      stateName:
+        triggerKind === 'action-frame-with-state'
+          ? stateProfile.name
+          : null,
+      minimumStacks,
       controlSkillId:
         triggerKind === 'action-frame'
           ? Number(definition.controlSkillId)
-          : group.controlSkillId,
+          : triggerKind === 'action-frame-with-state'
+            ? Number(definition.controlSkillId)
+            : group.controlSkillId,
       subSkillIndex:
         triggerKind === 'action-frame'
           ? Number(definition.subSkillIndex)
-          : group.subSkillIndex,
+          : triggerKind === 'action-frame-with-state'
+            ? Number(definition.subSkillIndex)
+            : group.subSkillIndex,
       triggerFrame,
-      frameRate: Number(control?.frameRate ?? group?.frameRate) || 60,
+      frameRate:
+        Number(control?.frameRate ?? group?.frameRate) || 60,
       targetKind: definition.targetKind,
       effectId:
         definition.effectId ??

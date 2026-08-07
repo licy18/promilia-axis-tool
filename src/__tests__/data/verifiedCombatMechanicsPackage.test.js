@@ -42,13 +42,13 @@ describe('verified combat mechanics package', () => {
         classifiedActionCount: 645,
         appliedActionBindingCount: 693,
         appliedHitBindingCount: 3450,
-        appliedEffectBindingCount: 1811,
+        appliedEffectBindingCount: 1814,
         verifiedZeroEffectBindingCount: 12,
-        unresolvedEffectBindingCount: 1964,
-        actionVariantSupportControlBindingCount: 56,
+        unresolvedEffectBindingCount: 1961,
+        actionVariantSupportControlBindingCount: 57,
         specialResourceProfileCount: 2,
         specialResourceOperationCount: 46,
-        actionVariantNodeCount: 699,
+        actionVariantNodeCount: 700,
         actionVariantEdgeCount: 64,
         switchTriggerProfileCount: 20,
         appliedSwitchTriggerProfileCount: 17,
@@ -125,9 +125,9 @@ describe('verified combat mechanics package', () => {
         status: 'verified-battle-effect-node-catalog-ready',
         summary: {
           nodeCount: 3731,
-          appliedNodeCount: 1026,
+          appliedNodeCount: 1027,
           verifiedZeroNodeCount: 879,
-          unresolvedNodeCount: 1826,
+          unresolvedNodeCount: 1825,
         },
       },
       semanticEffectCatalog: {
@@ -205,9 +205,9 @@ describe('verified combat mechanics package', () => {
         'static-resolved': 1340,
       },
       effectBindingCount: 3786,
-      appliedEffectBindingCount: 1810,
+      appliedEffectBindingCount: 1813,
       verifiedZeroEffectBindingCount: 12,
-      unresolvedEffectBindingCount: 1964,
+      unresolvedEffectBindingCount: 1961,
       bindingKindCounts: {
         damage: 580,
         inject: 1398,
@@ -306,7 +306,7 @@ describe('verified combat mechanics package', () => {
       status: 'verified-action-variant-graph-ready',
       summary: {
         ownerCount: 142,
-        nodeCount: 699,
+        nodeCount: 700,
         edgeCount: 346,
         appliedEdgeCount: 64,
         unresolvedEdgeCount: 286,
@@ -673,7 +673,7 @@ describe('verified combat mechanics package', () => {
     ]);
     expect(mechanicsPackage.actionVariantGraph.summary).toMatchObject({
       ownerCount: 142,
-      nodeCount: 699,
+      nodeCount: 700,
       modeledOwnerCount: 4,
       conditionDiscoveryCount: 216,
       conditionDiscoveryStatusCounts: {

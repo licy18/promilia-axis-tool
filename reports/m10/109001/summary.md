@@ -2,17 +2,17 @@
 
 - Owner: `109001`
 - Profile: `actor:109001:character-combat-profile:v1`
-- Hash: `31b0dfe9c052a01fb45daa30b729970f595eaa4e6d8d677eac68f2124e4d6ed4`
+- Hash: `09c9983a318729b6f598a9119d42a1f7babe7046f4a475b1632ad27a729c79dd`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
 - 公开动作：10
 - 执行形态：10
-- 可达 control：23
+- 可达 control：24
 - 窗口：0
 - Hit：78
-- 来源 identity：575
-- 战斗图：151 nodes / 141 edges
+- 来源 identity：583
+- 战斗图：156 nodes / 145 edges
 - 描述覆盖：25
 - Runtime ready 动作：9/10
 - Runtime capture：0
@@ -34,10 +34,10 @@
 | toughnessDamage | static-evidence-gap | 15 | 37 | 52 |
 | actorSp | static-evidence-gap | 11 | 35 | 52 |
 | kiboSp | static-evidence-gap | 11 | 35 | 52 |
-| cooldowns | applied | 23 | 0 | 23 |
+| cooldowns | applied | 24 | 0 | 24 |
 | personalResources | not-applicable | 0 | 0 | 0 |
 | teamResourcesAndMarks | applied | 1 | 0 | 1 |
-| buffsAndDebuffs | static-evidence-gap | 11 | 26 | 37 |
+| buffsAndDebuffs | static-evidence-gap | 14 | 26 | 40 |
 | passives | applied | 1 | 0 | 1 |
 | dynamicProperties | static-evidence-gap | 5 | 3 | 8 |
 | healingAndShields | not-applicable | 0 | 0 | 0 |
@@ -48,6 +48,6 @@
 
 ## 未闭环
 
-- static-evidence-gap: 25
+- static-evidence-gap: 24
 
 > JSON 是权威产物；本摘要不作为运行时输入，也不从描述推断数值。

@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b3-e20-2:109001:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "50c2554bd569f1d59f55b889f9dfa22a57288b491e5177665f3daf704e59b34d",
+  "sourcePackageHash": "c65f69bee7e785caca4d8e9b8fcfc56f595d985db3bdecfdb70494a6ff72f056",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "ee6be576a97d0877",
-    "traceHash": "e3190ba2b8ab7fcf",
-    "dataHash": "d28cdc515c1c74e4",
+    "inputHash": "2d0ee3bbd8a3453c",
+    "traceHash": "f280652995bd89a3",
+    "dataHash": "5887cd36c3c5eec5",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -444,11 +444,24 @@
       "specialResourceTrace": [],
       "tuningMarkTrace": [],
       "tuningMarkAcquireByActionId": {},
-      "targetStateTrace": [],
+      "targetStateTrace": [
+        {
+          "eventId": null,
+          "actionId": "moyin-normal-a1",
+          "frame": 300,
+          "stateIdentity": "moyin-brilliant",
+          "stateName": "璀璨",
+          "operation": null,
+          "beforeValue": null,
+          "change": null,
+          "afterValue": null,
+          "maxValue": null
+        }
+      ],
       "conditionalHitGroups": [],
       "targetStateSummary": {
         "profileCount": 2,
-        "eventCount": 0,
+        "eventCount": 1,
         "appliedGroupCount": 0,
         "skippedGroupCount": 0,
         "effectCommandCount": 0,
@@ -814,7 +827,20 @@
       ],
       "specialResources": [],
       "tuningMarks": [],
-      "targetStates": [],
+      "targetStates": [
+        {
+          "eventId": null,
+          "actionId": "moyin-normal-a1",
+          "frame": 300,
+          "stateIdentity": "moyin-brilliant",
+          "stateName": "璀璨",
+          "operation": null,
+          "beforeValue": null,
+          "change": null,
+          "afterValue": null,
+          "maxValue": null
+        }
+      ],
       "conditionalHitGroups": [],
       "effects": [
         {
@@ -860,7 +886,7 @@
         }
       ]
     },
-    "summaryHash": "b35199f423cd1208e01750b2efcc43fcfb67d04f0b0e0b9b7fe8a42dc3eeeca1"
+    "summaryHash": "ec0bd9f64aa68589e74db5a6c574f2d3f1c8d026674723176e8eb62807ab223f"
   },
   "expected": {
     "exact": {
@@ -900,6 +926,6 @@
       }
     ]
   },
-  "replayHash": "120c211181f084fffae936940dd9f47c0159e5cc82f73a77859844a754deb3ec",
-  "profileHash": "31b0dfe9c052a01fb45daa30b729970f595eaa4e6d8d677eac68f2124e4d6ed4"
+  "replayHash": "554c2902d8e71f68764e20f8b7c485a540992ebbac1a5de97ebfbb63a21599ef",
+  "profileHash": "09c9983a318729b6f598a9119d42a1f7babe7046f4a475b1632ad27a729c79dd"
 }

@@ -2,27 +2,24 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-unresolved-ledger",
   "ownerId": 109001,
-  "profileHash": "31b0dfe9c052a01fb45daa30b729970f595eaa4e6d8d677eac68f2124e4d6ed4",
+  "profileHash": "09c9983a318729b6f598a9119d42a1f7babe7046f4a475b1632ad27a729c79dd",
   "summary": {
-    "semanticRecordCount": 26,
-    "rawRecordCount": 35,
+    "semanticRecordCount": 24,
+    "rawRecordCount": 31,
     "semanticStatusCounts": {
-      "not-applicable": 1,
-      "static-evidence-gap": 25
+      "static-evidence-gap": 24
     },
     "rawStatusCounts": {
-      "not-applicable": 1,
-      "static-evidence-gap": 34
+      "static-evidence-gap": 31
     },
     "impactClassificationCounts": {
-      "gameplay-impacting": 17,
-      "not-applicable": 1,
+      "gameplay-impacting": 16,
       "wrapper-or-duplicate": 8
     },
-    "gameplayImpactingCount": 17,
+    "gameplayImpactingCount": 16,
     "wrapperOrDuplicateCount": 8,
     "transitionCandidateSupersededCount": 0,
-    "unreachableOrNotApplicableCount": 1
+    "unreachableOrNotApplicableCount": 0
   },
   "records": [
     {
@@ -422,32 +419,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:a54707253218a186daa2",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10900110:0:8910682160033441487:-8332496925969938073:20",
-      "sourceIdentities": [
-        "battle-effect:10900110:0:8910682160033441487:-5619192640262567577:60",
-        "battle-effect:10900110:0:8910682160033441487:-6793160401530779289:5",
-        "battle-effect:10900110:0:8910682160033441487:-8332496925969938073:20"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10900110|0|elements|2|8910682160033441487|element:8910682160033441487|20|2",
-        "effect:10900110|0|elements|2|8910682160033441487|element:8910682160033441487|5|1",
-        "effect:10900110|0|elements|2|8910682160033441487|element:8910682160033441487|60|0"
-      ],
-      "rawRecordCount": 3
-    },
-    {
       "recordIdentity": "semantic-gap:a895b8f28303d7081a7f",
       "ownerId": 109001,
       "sourceKind": "effect",
@@ -587,28 +558,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:ee191fb82758a32ad985",
-      "ownerId": 109001,
-      "sourceKind": "passive-or-skill",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "unnamed-secondary-passive-not-implemented-current-client"
-      ],
-      "sourceIdentity": "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json",
-      "sourceIdentities": [
-        "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "actor:109001:skill:10900162"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:ef05dcd69253985a2519",
       "ownerId": 109001,
       "sourceKind": "effect",
@@ -633,20 +582,6 @@
     }
   ],
   "rawRecords": [
-    {
-      "recordIdentity": "actor:109001:skill:10900162",
-      "ownerId": 109001,
-      "sourceKind": "passive-or-skill",
-      "status": "not-applicable",
-      "reasons": [
-        "unnamed-secondary-passive-not-implemented-current-client"
-      ],
-      "sourceIdentity": "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
     {
       "recordIdentity": "effect:10900101|1|elements|3|8949110464361487189|element:8949110464361487189|0|0",
       "ownerId": 109001,
@@ -802,48 +737,6 @@
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "battle-effect:10900110:0:5554021792138642848:-5619192640262567577:60",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10900110|0|elements|2|8910682160033441487|element:8910682160033441487|20|2",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10900110:0:8910682160033441487:-8332496925969938073:20",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10900110|0|elements|2|8910682160033441487|element:8910682160033441487|5|1",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10900110:0:8910682160033441487:-6793160401530779289:5",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10900110|0|elements|2|8910682160033441487|element:8910682160033441487|60|0",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10900110:0:8910682160033441487:-5619192640262567577:60",
       "referenceKind": null,
       "sourceEvidenceStatus": null,
       "scenarioRuntimeStatus": null,

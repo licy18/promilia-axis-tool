@@ -75,13 +75,13 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "f7b15b82fae0c3c5",
-      "sourceOfTruthHash": "a9bbfb56f06c50a3",
+      "manifestHash": "0e4afbaad7f89077",
+      "sourceOfTruthHash": "e58eebfb0434eb8c",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "58c0bc7cd499d213",
-        "data": "158394e345b79bd0",
-        "trace": "caf6c4aeb962baca",
+        "input": "0da0d260523a4012",
+        "data": "e43f2cc562bdb25f",
+        "trace": "0a57b8b9a2e3caf5",
         "evaluation": "920e7363ae12290d"
       }
     },
@@ -135,13 +135,13 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "eaa56a9d9f8ff5a6",
-      "sourceOfTruthHash": "eb4fb8b9a8f09de3",
+      "manifestHash": "c0c53cc91cbcacc0",
+      "sourceOfTruthHash": "89915b303d3aea27",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "74fd0ae6c1aef658",
-        "data": "5edc061b6e7a03b8",
-        "trace": "29d58e889f6749d8",
+        "input": "452cb4344a342303",
+        "data": "fe4a2b0005ac5c37",
+        "trace": "35e7eff9e8bf3b25",
         "evaluation": "adc4612197816c14"
       }
     },
@@ -196,13 +196,13 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "d35b70bdd766f02c",
-      "sourceOfTruthHash": "4ef82242f07df3c5",
+      "manifestHash": "ebd2e7e326aeca63",
+      "sourceOfTruthHash": "4a837c807ace129b",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "53744be1518494c3",
-        "data": "a3ba77ea82b2342a",
-        "trace": "2c3fba711ce092c5",
+        "input": "c7b3df20a8f1d5b4",
+        "data": "22678e6114e229c5",
+        "trace": "b79cfe630e42ccc8",
         "evaluation": "b06186eaa569be69"
       }
     },
@@ -216,19 +216,19 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 196,
-      "sourceGapCount": 17,
+      "blockingLedgerCount": 195,
+      "sourceGapCount": 16,
       "acceptanceGapCount": 179,
-      "nonBlockingSourceCount": 9,
+      "nonBlockingSourceCount": 8,
       "matrix": {
-        "requirementCount": 225,
-        "requiredCount": 225,
-        "passedCount": 19,
+        "requirementCount": 228,
+        "requiredCount": 228,
+        "passedCount": 22,
         "blockedCount": 206,
         "notApplicableCount": 0,
         "statusCounts": {
           "blocked": 206,
-          "passed": 19
+          "passed": 22
         },
         "dimensionCounts": {
           "action-effect-binding": 1,
@@ -245,6 +245,7 @@
           "persistence-replay": 1,
           "public-action": 10,
           "resource-boundary": 1,
+          "runtime-effect-binding": 3,
           "scenario-negative": 1,
           "scenario-positive": 1,
           "stat-dependency": 1,
@@ -256,19 +257,19 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "34376c135965f1d1",
-      "sourceOfTruthHash": "99c969900e806d08",
+      "manifestHash": "97b875e1f5833748",
+      "sourceOfTruthHash": "26e2b01d68f15f77",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "b5b6d868d3a713b8",
-        "data": "6b38d644b034c443",
-        "trace": "6c4f7df38d253c91",
+        "input": "945a21728d9f94c5",
+        "data": "4659e290500e76a4",
+        "trace": "2cecb4b6c1d8fdb1",
         "evaluation": "fefe6ba59b4e3c64"
       }
     }
   ],
-  "catalogHash": "4e640e5d9050d8a7",
-  "manifestIndexHash": "8a019c3c19fbaece",
+  "catalogHash": "781395de86dd4186",
+  "manifestIndexHash": "1757da65275cc6b4",
   "summary": {
     "ownerCount": 4,
     "runtimeIntegratedCount": 4,
@@ -276,10 +277,10 @@
     "optimizationReadyCount": 0,
     "machineScenarioPassCount": 4,
     "workbenchRoundTripPassCount": 4,
-    "sourceGapCount": 289,
+    "sourceGapCount": 288,
     "acceptanceGapCount": 916,
-    "nonBlockingSourceCount": 398,
-    "functionalBlockers": 1205,
+    "nonBlockingSourceCount": 397,
+    "functionalBlockers": 1204,
     "performanceAndBundleRisksBlocking": false
   }
 }

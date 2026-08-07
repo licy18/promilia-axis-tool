@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "bb48cb5628cb7ffe",
-  "manifestsHash": "fc3c6984ee18047f",
-  "gapLedgerHash": "8d922c1c9293753f",
-  "bindingMatrixHash": "53cae90557bdf0a2",
-  "sourceSnapshotHash": "55e63eaaca346c1d",
+  "rosterHash": "008683c01308d7fe",
+  "manifestsHash": "de5946205dc0a8bc",
+  "gapLedgerHash": "54fd9a6ac542af13",
+  "bindingMatrixHash": "b62ea56b1efe47d3",
+  "sourceSnapshotHash": "c838fbd97fda99b5",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -26,7 +26,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "b6f8aae0e76db173"
+      "manifestHash": "af01ad1d3dd1189d"
     },
     {
       "objectKind": "character",
@@ -49,7 +49,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "0c19f57c46a55b27"
+      "manifestHash": "8db6af0c7a0b6736"
     },
     {
       "objectKind": "character",
@@ -108,7 +108,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "ed1fe42e2e40172b"
+      "manifestHash": "df65960621ff1984"
     },
     {
       "objectKind": "character",
@@ -2662,7 +2662,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "bb48cb5628cb7ffe",
+    "rosterHash": "008683c01308d7fe",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24570,7 +24570,7 @@
       "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "53cae90557bdf0a2"
+    "bindingMatrixHash": "b62ea56b1efe47d3"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -33678,8 +33678,8 @@
                 "declarationStatus": "source-indexed-table-declaration",
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
-                "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:109001:skill:10900162:product-boundary",
+                "reason": null,
+                "productBoundaryIdentity": "actor:109001:skill:10900162:implemented",
                 "productDecision": "unimplemented-dead-config"
               },
               "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
@@ -44433,5 +44433,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "6f78077f57895404"
+  "catalogHash": "8cc8fddea36d9805"
 }

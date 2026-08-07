@@ -1689,25 +1689,22 @@
       "mechanicKinds": [
         "action-form"
       ],
-      "status": "not-applicable",
+      "status": "applied",
       "coverageReferences": [
         "actor|109001|10900101|0|10900103|normal-attack:default",
         "actor|109001|10900101|1|10900110|charged-attack:default"
       ],
       "publicFormSettlements": [],
-      "reasons": [
-        "unnamed-secondary-passive-not-implemented-current-client"
-      ],
-      "sourceIdentity": "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
     }
   ],
   "summary": {
     "entryCount": 25,
     "statusCounts": {
-      "applied": 20,
-      "not-applicable": 1,
+      "applied": 21,
       "static-evidence-gap": 4
     }
   },
-  "profileHash": "31b0dfe9c052a01fb45daa30b729970f595eaa4e6d8d677eac68f2124e4d6ed4"
+  "profileHash": "09c9983a318729b6f598a9119d42a1f7babe7046f4a475b1632ad27a729c79dd"
 }

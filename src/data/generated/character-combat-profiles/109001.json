@@ -32,7 +32,7 @@
         "zeroDistanceRuntimeCapturesResolved": true,
         "authoritativeGoldenPassed": true
       },
-      "sourceEvidenceGapCount": 17,
+      "sourceEvidenceGapCount": 16,
       "sourceEvidenceGapsRemainAuditable": true,
       "realClientEvidenceCaptureCount": 0
     },
@@ -45,14 +45,14 @@
         "sourceGameplayGapCountIsZero": false
       },
       "runtimeCaptureCount": 0,
-      "staticEvidenceGapCount": 17
+      "staticEvidenceGapCount": 16
     }
   },
   "maturityGates": {
     "requiredCoverageComplete": false,
     "publicActionsComplete": false,
     "actionFormsComplete": true,
-    "gameplayGapCount": 17,
+    "gameplayGapCount": 16,
     "runtimeApplied": true,
     "uiVerified": false
   },
@@ -66,7 +66,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "50c2554bd569f1d59f55b889f9dfa22a57288b491e5177665f3daf704e59b34d",
+    "packageHash": "c65f69bee7e785caca4d8e9b8fcfc56f595d985db3bdecfdb70494a6ff72f056",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -84,7 +84,7 @@
   },
   "denominator": {
     "publicActionCount": 10,
-    "reachableControlCount": 23,
+    "reachableControlCount": 24,
     "executionFormCount": 10,
     "verifiedWindowCount": 0,
     "hitCount": 78,
@@ -4375,7 +4375,7 @@
         "linked": true,
         "runtimeReady": true,
         "runtimeHitCount": 3,
-        "runtimeEffectCount": 0,
+        "runtimeEffectCount": 3,
         "runtimeResourceTransactionCount": 0,
         "selectedResourceTransactionIdentities": [],
         "selectedElementCount": 9,
@@ -4401,7 +4401,6 @@
         "scenarioResolvedElementCount": 3,
         "complete": false,
         "reasons": [
-          "judgment-condition-runtime-unimplemented",
           "nested-effect-wrapper-semantics-unresolved",
           "effect-trigger-frame-missing"
         ],
@@ -4444,7 +4443,7 @@
             "verified-zero": 7
           },
           "mark": {
-            "unresolved": 3,
+            "applied": 3,
             "verified-zero": 4
           }
         },
@@ -9005,6 +9004,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -11061,6 +11061,7 @@
                 }
               ]
             },
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 102100,
               "baseFunctionId": 0,
@@ -11184,6 +11185,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 107205,
@@ -12205,6 +12207,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 102100,
               "baseFunctionId": 5,
@@ -12466,6 +12469,7 @@
               "stackDelta": 2
             },
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -12593,6 +12597,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 119,
@@ -12748,6 +12753,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -12903,6 +12909,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -13027,6 +13034,7 @@
               "stackDelta": 1
             },
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -13139,6 +13147,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 119,
@@ -13280,6 +13289,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -13421,6 +13431,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -13549,6 +13560,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -13677,6 +13689,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -14022,7 +14035,7 @@
             "elementCount": 9,
             "runnableElementCount": 3,
             "effectNodeCount": 10,
-            "runnableEffectCount": 0,
+            "runnableEffectCount": 3,
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900110.asset/MonoBehaviour/skill_control_10900110__-5663576871920802460.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
           }
         ],
@@ -14300,6 +14313,13 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": {
+              "markId": 250,
+              "minimumStacks": 1,
+              "value": 1,
+              "sourceIdentity": "ast_109001286#presence-judgment-sp-child",
+              "applied": true
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 3,
@@ -14333,17 +14353,15 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|judgmentType|injectElementDataList_2"
               }
             },
-            "classification": "unresolved",
-            "reasons": [
-              "judgment-condition-runtime-unimplemented"
-            ],
-            "status": "verified-action-effect-binding-unresolved",
-            "confidence": "unresolved",
-            "applied": false
+            "classification": "applied",
+            "reasons": [],
+            "status": "verified-action-effect-binding-applied",
+            "confidence": "high",
+            "applied": true
           },
           {
             "effectIdentity": "10900110|0|elements|2|8910682160033441487|element:8910682160033441487|5|1",
@@ -14415,6 +14433,13 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": {
+              "markId": 250,
+              "minimumStacks": 1,
+              "value": 1,
+              "sourceIdentity": "ast_109001286#presence-judgment-sp-child",
+              "applied": true
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 3,
@@ -14448,17 +14473,15 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|judgmentType|injectElementDataList_2"
               }
             },
-            "classification": "unresolved",
-            "reasons": [
-              "judgment-condition-runtime-unimplemented"
-            ],
-            "status": "verified-action-effect-binding-unresolved",
-            "confidence": "unresolved",
-            "applied": false
+            "classification": "applied",
+            "reasons": [],
+            "status": "verified-action-effect-binding-applied",
+            "confidence": "high",
+            "applied": true
           },
           {
             "effectIdentity": "10900110|0|elements|2|8910682160033441487|element:8910682160033441487|20|2",
@@ -14530,6 +14553,13 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": {
+              "markId": 250,
+              "minimumStacks": 1,
+              "value": 1,
+              "sourceIdentity": "ast_109001286#presence-judgment-sp-child",
+              "applied": true
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 3,
@@ -14563,17 +14593,15 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|judgmentType|injectElementDataList_2"
               }
             },
-            "classification": "unresolved",
-            "reasons": [
-              "judgment-condition-runtime-unimplemented"
-            ],
-            "status": "verified-action-effect-binding-unresolved",
-            "confidence": "unresolved",
-            "applied": false
+            "classification": "applied",
+            "reasons": [],
+            "status": "verified-action-effect-binding-applied",
+            "confidence": "high",
+            "applied": true
           },
           {
             "effectIdentity": "10900110|0|elements|2|8910682160033441487|element:5554021792138642848|60|0",
@@ -14673,6 +14701,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 3,
@@ -14816,6 +14845,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 3,
@@ -14959,6 +14989,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 3,
@@ -15084,6 +15115,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 3,
@@ -15185,9 +15217,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 1,
+            "appliedNodeCount": 2,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 1,
+            "unresolvedNodeCount": 0,
             "nodeIdentities": [
               "10900110|element:8910682160033441487",
               "10900110|element:5554021792138642848"
@@ -15493,6 +15525,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -16958,6 +16991,7 @@
                 }
               ]
             },
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -17081,6 +17115,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 107205,
@@ -17213,6 +17248,7 @@
               "priorityDirection": null,
               "priorityRuntimeEvidence": null
             },
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -17364,6 +17400,7 @@
               "priorityDirection": null,
               "priorityRuntimeEvidence": null
             },
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -17493,6 +17530,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 107205,
@@ -17620,6 +17658,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -17777,6 +17816,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 107207,
@@ -17898,6 +17938,7 @@
               "priorityDirection": null,
               "priorityRuntimeEvidence": null
             },
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -18016,6 +18057,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 107205,
@@ -18127,6 +18169,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -18268,6 +18311,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 107207,
@@ -18371,6 +18415,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -18506,6 +18551,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 107207,
@@ -18630,6 +18676,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 107207,
@@ -18762,6 +18809,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -19266,6 +19314,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -20109,6 +20158,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -20509,6 +20559,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -20945,6 +20996,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -21092,6 +21144,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -21214,6 +21267,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 2,
@@ -21339,6 +21393,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -22194,6 +22249,7 @@
                 }
               ]
             },
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -22317,6 +22373,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 107205,
@@ -22433,6 +22490,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -23215,6 +23273,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -23351,6 +23410,7 @@
                 }
               ]
             },
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 102100,
               "baseFunctionId": 0,
@@ -23474,6 +23534,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 107205,
@@ -23893,6 +23954,7 @@
             "shield": false,
             "tuningMark": null,
             "tuningOverlimit": null,
+            "directSpPresence": null,
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 5,
@@ -23960,6 +24022,60 @@
         "status": "verified-skill-control-mechanics-binding-applied",
         "confidence": "high",
         "applied": true
+      },
+      {
+        "controlSkillId": 10900162,
+        "runtimePolicy": {
+          "behaviorTriggerScope": "skill-player",
+          "sourceIdentity": "character-combat-recipe:109001#runtimePolicies.defaultControlPolicy.behaviorTriggerScope=skill-player|controlSkillId=10900162",
+          "ownerId": 109001,
+          "controlSkillId": 10900162
+        },
+        "frameRate": 60,
+        "frameCounts": [
+          {
+            "key": 0,
+            "frameCount": 6
+          }
+        ],
+        "sourcePath": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900162.asset/MonoBehaviour/skill_control_10900162__4751348978407621511.json",
+        "logic": {
+          "spCost": 0,
+          "cooldownMs": 0,
+          "cooldownCount": 0,
+          "skillTag": "0",
+          "petSkillLogicTag": "-1",
+          "inputTriggerType": 0,
+          "holdTriggerTimeMs": 0,
+          "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10900162]",
+          "status": "verified-skill-logic-ready",
+          "applied": true
+        },
+        "variants": [
+          {
+            "subSkillIndex": 0,
+            "playerSkillId": 1,
+            "frameCounts": [
+              {
+                "key": 0,
+                "frameCount": 6
+              }
+            ],
+            "directElementReferenceCount": 0,
+            "bulletElementReferenceCount": 0,
+            "elementCount": 0,
+            "runnableElementCount": 0,
+            "effectNodeCount": 0,
+            "runnableEffectCount": 0,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900162.asset/MonoBehaviour/skill_control_10900162__4751348978407621511.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+          }
+        ],
+        "hits": [],
+        "effects": [],
+        "effectGraph": [],
+        "status": "verified-skill-control-mechanics-binding-unresolved",
+        "confidence": "unresolved",
+        "applied": false
       }
     ],
     "timingInputEdges": [],
@@ -31894,7 +32010,104 @@
         "applied": true
       }
     ],
-    "runtimeEffectBindings": [],
+    "runtimeEffectBindings": [
+      {
+        "bindingIdentity": "moyin-passive2-a3-sp",
+        "ownerId": 109001,
+        "triggerKind": "action-frame-with-state",
+        "conditionalGroupIdentity": null,
+        "stateIdentity": "moyin-brilliant",
+        "stateName": "璀璨",
+        "minimumStacks": 1,
+        "controlSkillId": 10900103,
+        "subSkillIndex": 0,
+        "triggerFrame": 0,
+        "frameRate": 60,
+        "targetKind": "source-actor",
+        "effectId": "battle-element:109001300",
+        "effectName": "被动2 晶石回能量",
+        "durationMs": null,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1,
+        "modifiers": [],
+        "directSp": {
+          "elementId": 109001300,
+          "value": 1,
+          "enhanceable": false,
+          "shareType": 0,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300#A=10000/10000"
+        },
+        "inheritance": null,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
+        "status": "verified-runtime-effect-binding-ready",
+        "applied": true
+      },
+      {
+        "bindingIdentity": "moyin-passive2-a5-sp",
+        "ownerId": 109001,
+        "triggerKind": "action-frame-with-state",
+        "conditionalGroupIdentity": null,
+        "stateIdentity": "moyin-brilliant",
+        "stateName": "璀璨",
+        "minimumStacks": 1,
+        "controlSkillId": 10900105,
+        "subSkillIndex": 0,
+        "triggerFrame": 0,
+        "frameRate": 60,
+        "targetKind": "source-actor",
+        "effectId": "battle-element:109001300",
+        "effectName": "被动2 晶石回能量",
+        "durationMs": null,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1,
+        "modifiers": [],
+        "directSp": {
+          "elementId": 109001300,
+          "value": 1,
+          "enhanceable": false,
+          "shareType": 0,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300#A=10000/10000"
+        },
+        "inheritance": null,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
+        "status": "verified-runtime-effect-binding-ready",
+        "applied": true
+      },
+      {
+        "bindingIdentity": "moyin-passive2-charged-sp",
+        "ownerId": 109001,
+        "triggerKind": "action-frame-with-state",
+        "conditionalGroupIdentity": null,
+        "stateIdentity": "moyin-brilliant",
+        "stateName": "璀璨",
+        "minimumStacks": 1,
+        "controlSkillId": 10900110,
+        "subSkillIndex": 0,
+        "triggerFrame": 0,
+        "frameRate": 60,
+        "targetKind": "source-actor",
+        "effectId": "battle-element:109001300",
+        "effectName": "被动2 晶石回能量",
+        "durationMs": null,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1,
+        "modifiers": [],
+        "directSp": {
+          "elementId": 109001300,
+          "value": 1,
+          "enhanceable": false,
+          "shareType": 0,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300#A=10000/10000"
+        },
+        "inheritance": null,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
+        "status": "verified-runtime-effect-binding-ready",
+        "applied": true
+      }
+    ],
     "effects": {
       "raw": [
         {
@@ -31967,6 +32180,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -32090,6 +32304,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 107205,
@@ -32229,6 +32444,7 @@
               }
             ]
           },
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 102100,
             "baseFunctionId": 0,
@@ -32384,6 +32600,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -32522,6 +32739,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -32650,6 +32868,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -32910,6 +33129,7 @@
             "stackDelta": 2
           },
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -33034,6 +33254,7 @@
             "stackDelta": 1
           },
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -33163,6 +33384,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 119,
@@ -33273,6 +33495,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 119,
@@ -33431,6 +33654,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -33569,6 +33793,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -33697,6 +33922,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -33813,6 +34039,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 102100,
             "baseFunctionId": 5,
@@ -33958,6 +34185,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -34101,6 +34329,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -34244,6 +34473,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -34369,6 +34599,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -34484,6 +34715,13 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": {
+            "markId": 250,
+            "minimumStacks": 1,
+            "value": 1,
+            "sourceIdentity": "ast_109001286#presence-judgment-sp-child",
+            "applied": true
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -34517,17 +34755,15 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|judgmentType|injectElementDataList_2"
             }
           },
-          "classification": "unresolved",
-          "reasons": [
-            "judgment-condition-runtime-unimplemented"
-          ],
-          "status": "verified-action-effect-binding-unresolved",
-          "confidence": "unresolved",
-          "applied": false
+          "classification": "applied",
+          "reasons": [],
+          "status": "verified-action-effect-binding-applied",
+          "confidence": "high",
+          "applied": true
         },
         {
           "effectIdentity": "10900110|0|elements|2|8910682160033441487|element:8910682160033441487|5|1",
@@ -34599,6 +34835,13 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": {
+            "markId": 250,
+            "minimumStacks": 1,
+            "value": 1,
+            "sourceIdentity": "ast_109001286#presence-judgment-sp-child",
+            "applied": true
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -34632,17 +34875,15 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|judgmentType|injectElementDataList_2"
             }
           },
-          "classification": "unresolved",
-          "reasons": [
-            "judgment-condition-runtime-unimplemented"
-          ],
-          "status": "verified-action-effect-binding-unresolved",
-          "confidence": "unresolved",
-          "applied": false
+          "classification": "applied",
+          "reasons": [],
+          "status": "verified-action-effect-binding-applied",
+          "confidence": "high",
+          "applied": true
         },
         {
           "effectIdentity": "10900110|0|elements|2|8910682160033441487|element:8910682160033441487|20|2",
@@ -34714,6 +34955,13 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": {
+            "markId": 250,
+            "minimumStacks": 1,
+            "value": 1,
+            "sourceIdentity": "ast_109001286#presence-judgment-sp-child",
+            "applied": true
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 3,
@@ -34747,17 +34995,15 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|judgmentType|injectElementDataList_2"
             }
           },
-          "classification": "unresolved",
-          "reasons": [
-            "judgment-condition-runtime-unimplemented"
-          ],
-          "status": "verified-action-effect-binding-unresolved",
-          "confidence": "unresolved",
-          "applied": false
+          "classification": "applied",
+          "reasons": [],
+          "status": "verified-action-effect-binding-applied",
+          "confidence": "high",
+          "applied": true
         },
         {
           "effectIdentity": "10900111|0|elements|3|-5256189934391760552|element:-5256189934391760552|36|0",
@@ -34829,6 +35075,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -34953,6 +35200,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -35066,6 +35314,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -35173,6 +35422,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -35309,6 +35559,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -35460,6 +35711,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 107207,
@@ -35597,6 +35849,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 107207,
@@ -35728,6 +35981,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 107207,
@@ -35852,6 +36106,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 107207,
@@ -35978,6 +36233,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 107205,
@@ -36110,6 +36366,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 107205,
@@ -36225,6 +36482,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 107205,
@@ -36365,6 +36623,7 @@
               }
             ]
           },
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -36511,6 +36770,7 @@
             "priorityDirection": null,
             "priorityRuntimeEvidence": null
           },
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -36629,6 +36889,7 @@
             "priorityDirection": null,
             "priorityRuntimeEvidence": null
           },
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -36764,6 +37025,7 @@
             "priorityDirection": null,
             "priorityRuntimeEvidence": null
           },
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -36882,6 +37144,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -36999,6 +37262,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -37116,6 +37380,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -37238,6 +37503,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 2,
@@ -37381,6 +37647,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -37506,6 +37773,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -37622,6 +37890,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -37749,6 +38018,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 107205,
@@ -37888,6 +38158,7 @@
               }
             ]
           },
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -38001,6 +38272,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -38112,6 +38384,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -38235,6 +38508,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 107205,
@@ -38374,6 +38648,7 @@
               }
             ]
           },
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 102100,
             "baseFunctionId": 0,
@@ -38510,6 +38785,7 @@
           "shield": false,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 5,
@@ -38647,6 +38923,7 @@
           },
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -38809,6 +39086,7 @@
             "packetElementId": 299,
             "sourceIdentity": "battle-element-assets.jsonl#path_id=536980873299289094"
           },
+          "directSpPresence": null,
           "judgment": {
             "judgmentType": 0,
             "consume": true,
@@ -39015,6 +39293,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "applied",
           "dimensions": {
@@ -39194,6 +39473,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -39382,6 +39662,7 @@
             "applied": true
           },
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "applied",
           "dimensions": {
@@ -39559,6 +39840,7 @@
             "applied": true
           },
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -39732,6 +40014,7 @@
           },
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "applied",
           "dimensions": {
@@ -39900,6 +40183,7 @@
           },
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -40084,6 +40368,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "applied",
           "dimensions": {
@@ -40263,6 +40548,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -40432,6 +40718,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "structural",
           "dimensions": {
@@ -40606,6 +40893,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -40778,6 +41066,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -40950,6 +41239,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -41118,6 +41408,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -41274,6 +41565,12 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": {
+            "markId": 250,
+            "minimumStacks": 1,
+            "value": 1,
+            "sourceIdentity": "ast_109001286#presence-judgment-sp-child"
+          },
           "judgment": {
             "judgmentType": 1,
             "consume": false,
@@ -41326,12 +41623,11 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|judgmentType|injectElementDataList_2"
             }
           },
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
             "semantic-condition-not-standalone-gameplay-effect"
           ],
           "rawEffectIdentities": [
@@ -41457,6 +41753,12 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": {
+            "markId": 250,
+            "minimumStacks": 1,
+            "value": 1,
+            "sourceIdentity": "ast_109001286#presence-judgment-sp-child"
+          },
           "judgment": {
             "judgmentType": 1,
             "consume": false,
@@ -41509,12 +41811,11 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|judgmentType|injectElementDataList_2"
             }
           },
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
             "semantic-condition-not-standalone-gameplay-effect"
           ],
           "rawEffectIdentities": [
@@ -41640,6 +41941,12 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": {
+            "markId": 250,
+            "minimumStacks": 1,
+            "value": 1,
+            "sourceIdentity": "ast_109001286#presence-judgment-sp-child"
+          },
           "judgment": {
             "judgmentType": 1,
             "consume": false,
@@ -41692,12 +41999,11 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|judgmentType|injectElementDataList_2"
             }
           },
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
             "semantic-condition-not-standalone-gameplay-effect"
           ],
           "rawEffectIdentities": [
@@ -41825,6 +42131,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "structural",
           "dimensions": {
@@ -41994,6 +42301,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "structural",
           "dimensions": {
@@ -42163,6 +42471,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "structural",
           "dimensions": {
@@ -42345,6 +42654,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "applied",
           "dimensions": {
@@ -42524,6 +42834,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -42702,6 +43013,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -42882,6 +43194,7 @@
           },
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -43060,6 +43373,7 @@
           },
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -43233,6 +43547,7 @@
           },
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -43395,6 +43710,7 @@
             "packetElementId": 299,
             "sourceIdentity": "battle-element-assets.jsonl#path_id=536980873299289094"
           },
+          "directSpPresence": null,
           "judgment": {
             "judgmentType": 0,
             "consume": true,
@@ -43585,6 +43901,7 @@
             "packetElementId": 799,
             "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
+          "directSpPresence": null,
           "judgment": null,
           "classification": "applied",
           "dimensions": {
@@ -43745,6 +44062,7 @@
             "packetElementId": 799,
             "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -43909,6 +44227,7 @@
             "packetElementId": 799,
             "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
+          "directSpPresence": null,
           "judgment": {
             "judgmentType": 0,
             "consume": true,
@@ -44095,6 +44414,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "structural",
           "dimensions": {
@@ -44265,6 +44585,7 @@
           },
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "applied",
           "dimensions": {
@@ -44437,6 +44758,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "applied",
           "dimensions": {
@@ -44603,6 +44925,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "unresolved",
           "dimensions": {
@@ -44761,6 +45084,7 @@
           "damage": null,
           "tuningMark": null,
           "tuningOverlimit": null,
+          "directSpPresence": null,
           "judgment": null,
           "classification": "structural",
           "dimensions": {
@@ -45032,10 +45356,10 @@
     "sourceCompilation": {
       "compilerVersion": 3,
       "recipeIdentity": "actor:109001:character-combat-recipe:v1",
-      "recipeHash": "4d832ea44dd49b15a974f276e1758d2bebd9ed167b380d5d8cee872b441a66b5",
-      "compilerInputHash": "e02eba647c16dbfcf2e5e8d1db3e32e91e1807616ec21903346b5a92d341f820",
-      "recipeContractHash": "ba5a4aa4a0d3dd5cd84eed8eab68dadde8514042b7e4e40d1577cfcdf2c16af8",
-      "ownerContractHash": "2a425f52badeec37ed952bc27f1cf4b9baaf04bd1bcf52c14c3b0c9b39684935"
+      "recipeHash": "a83b4b4acced2f55a84c7c7b0f49e7b4662a24f00337363464d3b928bc0b6b76",
+      "compilerInputHash": "bf23dc4141242c77780af44aaedd2269752202a5756da723020d8963bbe9e05f",
+      "recipeContractHash": "0f7ae29786964e0364a6c2cb83b979a4bbe618ee3c5cdcafc6d00e105c7b265e",
+      "ownerContractHash": "40a0ecf98844b69e7fdb13281ab1ba8b62ea4c81865fcd9d8259735fcc304269"
     },
     "operators": [
       "public-action-binding",
@@ -45056,7 +45380,7 @@
         "packagePath": "actionMappings",
         "operator": "public-action-binding",
         "recordCount": 10,
-        "recordsHash": "af35ef058fc0f381616470ceb4c6c3469d571c61c7fb58c7b68b82dd461d5a33"
+        "recordsHash": "80dfc489ed261fa03d8e8eea2c3919a197c1faa979fc716fbb73154265dd6f4f"
       },
       {
         "packagePath": "actionVariantGraph.publicActionForms",
@@ -45125,7 +45449,7 @@
         "recordsHash": "7428051a5bd9503331d1c3d9364b3c838eac742cec215944543d9d948e456631"
       }
     ],
-    "contractHash": "f7db60398a8214482a42a5a079992d427bca9aee7bb92a43a37f3605ef476dbe"
+    "contractHash": "d85cec95295bfc65858141a2354129aa40f9421e2c1fd83a3be4dbbe5e25b1ab"
   },
   "coverage": [
     {
@@ -45461,8 +45785,8 @@
     {
       "dimension": "cooldowns",
       "status": "applied",
-      "recordCount": 23,
-      "appliedCount": 23,
+      "recordCount": 24,
+      "appliedCount": 24,
       "unresolvedCount": 0,
       "sourceIdentities": []
     },
@@ -45487,10 +45811,13 @@
     {
       "dimension": "buffsAndDebuffs",
       "status": "static-evidence-gap",
-      "recordCount": 37,
-      "appliedCount": 11,
+      "recordCount": 40,
+      "appliedCount": 14,
       "unresolvedCount": 26,
       "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900161.asset/MonoBehaviour/skill_control_10900161__2111014539659534776.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001316.asset/MonoBehaviour/ast_109001316__-2193895459641539428.json#elementConfigId=109001316|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001296.asset/MonoBehaviour/ast_109001296__586698730667078251.json#elementConfigId=109001296|hero-module:109001#skill:10900161#description=末音造成的超限伤害增加54%|Battle/Element/ast_109001316.asset#新被动overdrive伤害提升 attributeID=21 defaultPropertyTags[307]|Battle/Element/ast_109001296.asset#被动1加暴击"
       ]
     },
@@ -45972,32 +46299,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:a54707253218a186daa2",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10900110:0:8910682160033441487:-8332496925969938073:20",
-      "sourceIdentities": [
-        "battle-effect:10900110:0:8910682160033441487:-5619192640262567577:60",
-        "battle-effect:10900110:0:8910682160033441487:-6793160401530779289:5",
-        "battle-effect:10900110:0:8910682160033441487:-8332496925969938073:20"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10900110|0|elements|2|8910682160033441487|element:8910682160033441487|20|2",
-        "effect:10900110|0|elements|2|8910682160033441487|element:8910682160033441487|5|1",
-        "effect:10900110|0|elements|2|8910682160033441487|element:8910682160033441487|60|0"
-      ],
-      "rawRecordCount": 3
-    },
-    {
       "recordIdentity": "semantic-gap:a895b8f28303d7081a7f",
       "ownerId": 109001,
       "sourceKind": "effect",
@@ -46137,28 +46438,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:ee191fb82758a32ad985",
-      "ownerId": 109001,
-      "sourceKind": "passive-or-skill",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "unnamed-secondary-passive-not-implemented-current-client"
-      ],
-      "sourceIdentity": "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json",
-      "sourceIdentities": [
-        "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "actor:109001:skill:10900162"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:ef05dcd69253985a2519",
       "ownerId": 109001,
       "sourceKind": "effect",
@@ -46185,7 +46464,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "faf39448253193fb143c0ac43827dc406cd0e8a8bc660c5048aa509aa3ffacb3"
+    "deterministicInputHash": "437563b9b852232b97d0b34d8c55153c924a32e9ad9a3157d54b4a31ff6eab61"
   },
-  "profileHash": "31b0dfe9c052a01fb45daa30b729970f595eaa4e6d8d677eac68f2124e4d6ed4"
+  "profileHash": "09c9983a318729b6f598a9119d42a1f7babe7046f4a475b1632ad27a729c79dd"
 }

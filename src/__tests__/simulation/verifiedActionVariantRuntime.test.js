@@ -145,6 +145,48 @@ describe('verified action variant and special resource runtime', () => {
     );
   });
 
+  it('emits Moyin passive 2 SP recovery only while Brilliant state is active', () => {
+    const limitCounter = createActorAction({
+      id: 'moyin-limit-counter',
+      characterId: 109001,
+      skillId: 10900121,
+      actionVariantIndex: 2,
+      startMs: 0,
+    });
+    limitCounter.actionKind = 'limit-counter';
+    const charged = createActorAction({
+      id: 'moyin-charged',
+      characterId: 109001,
+      skillId: 10900101,
+      actionVariantIndex: 1,
+      startMs: 1_000,
+    });
+    charged.actionKind = 'charged-attack';
+    const withState = runVariantRuntime({
+      actors: [charged.actor],
+      actions: [limitCounter, charged],
+      durationMs: 4_000,
+    });
+    const passive2SpEvents = withState.directSpEvents.filter(event =>
+      String(event.eventIdentity).includes('moyin-passive2-')
+    );
+    expect(passive2SpEvents.map(event => event.actionId)).toEqual([
+      'moyin-charged',
+    ]);
+    expect(passive2SpEvents[0].value).toBe(1);
+
+    const withoutState = runVariantRuntime({
+      actors: [charged.actor],
+      actions: [charged],
+      durationMs: 3_000,
+    });
+    expect(
+      withoutState.directSpEvents.filter(event =>
+        String(event.eventIdentity).includes('moyin-passive2-')
+      )
+    ).toHaveLength(0);
+  });
+
   it('uses Ruby source frames and preserves the explicit attack phase', () => {
     const ultimate = createActorAction({
       id: 'ruby-ultimate',

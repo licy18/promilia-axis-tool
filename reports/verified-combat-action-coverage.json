@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "c87fb71b44b3a135b3c48ac7cac9e537a11746c8c0128c3e87b6d2bef9e36e3e",
+  "packageHash": "a47d98f5317a8df932fc9a998e508dc818b4c745c5d13f19b2440e7a9efa5db8",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -50,8 +50,8 @@
         "unresolved": 2036
       }
     },
-    "controlVariantCount": 1066,
-    "unresolvedControlVariantCount": 558,
+    "controlVariantCount": 1067,
+    "unresolvedControlVariantCount": 559,
     "nonzeroRecoveryElementCount": 667,
     "unresolvedNonzeroRecoveryElementCount": 464,
     "scenarioResolvedNonzeroRecoveryElementCount": 212,
@@ -59342,7 +59342,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing"
       ],
@@ -69039,7 +69038,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing"
       ],
@@ -80806,6 +80804,19 @@
         "public-action-variant-association-missing"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900161.asset/MonoBehaviour/skill_control_10900161__2111014539659534776.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 10900162,
+      "subSkillIndex": 0,
+      "playerSkillId": 1,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900162.asset/MonoBehaviour/skill_control_10900162__4751348978407621511.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
       "controlSkillId": 48005901,

@@ -187,6 +187,16 @@ export function createVerifiedTuningMarkGeneration({
           profile: profileByMarkId.get(Number(effect.tuningOverlimit.markId)),
         });
       }
+      if (effect.directSpPresence?.applied) {
+        enqueue({
+          kind: 'direct-sp-presence',
+          timeMs,
+          action,
+          resolution,
+          effect,
+          profile: profileByMarkId.get(Number(effect.directSpPresence.markId)),
+        });
+      }
     }
     for (const hit of resolution.hits ?? []) {
       const frameRate = positiveNumber(
@@ -250,6 +260,13 @@ export function createVerifiedTuningMarkGeneration({
         mechanicsPackage,
         scenario,
         enqueue,
+      });
+    } else if (descriptor.kind === 'direct-sp-presence') {
+      applyDirectSpPresence({
+        descriptor,
+        stateByMarkId,
+        combatEvents,
+        scenario,
       });
     } else if (descriptor.kind === 'periodic') {
       applyPeriodicEffect({
@@ -836,6 +853,47 @@ function applyHeldMarkTriggers({
       applied: true,
     });
   }
+}
+
+function applyDirectSpPresence({
+  descriptor,
+  stateByMarkId,
+  combatEvents,
+  scenario,
+}) {
+  const contract = descriptor.effect?.directSpPresence;
+  if (!contract?.applied) return;
+  const markId = Number(contract.markId);
+  const state = stateByMarkId.get(markId);
+  if (!state || state.layers.length < Number(contract.minimumStacks ?? 1)) {
+    return;
+  }
+  combatEvents.push({
+    schemaVersion: 1,
+    sourceKind: 'azpr-verified-tuning-combat-event',
+    status: 'verified-tuning-conditional-direct-sp-ready',
+    kind: 'conditional-direct-sp',
+    eventIdentity: [
+      'conditional-direct-sp',
+      descriptor.action?.id,
+      markId,
+      descriptor.timeMs,
+    ].join('|'),
+    timeMs: roundValue(descriptor.timeMs),
+    action: descriptor.action ?? null,
+    actionId: descriptor.action?.id ?? null,
+    actorId: descriptor.action?.actorId ?? null,
+    resolution: descriptor.resolution ?? null,
+    profile: state.profile,
+    markCount: state.layers.length,
+    template: {
+      value: Number(contract.value),
+      sourceIdentity: contract.sourceIdentity,
+    },
+    sourceIdentity: contract.sourceIdentity,
+    appliedToCalculators: true,
+    applied: true,
+  });
 }
 
 function applyPeriodicEffect({

@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/109001/golden-trace.json",
-        "reportHash": "b26405418f5dff21",
+        "reportHash": "d73f9e952c9f9b15",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 109001 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "ee6be576a97d0877",
-          "data": "d28cdc515c1c74e4",
-          "trace": "e3190ba2b8ab7fcf",
+          "input": "2d0ee3bbd8a3453c",
+          "data": "5887cd36c3c5eec5",
+          "trace": "f280652995bd89a3",
           "evaluation": null
         }
       },
@@ -52,7 +52,16 @@
           }
         ],
         "resources": [],
-        "states": [],
+        "states": [
+          {
+            "actionId": "moyin-normal-a1",
+            "stateIdentity": "moyin-brilliant",
+            "operation": null,
+            "beforeValue": null,
+            "afterValue": null,
+            "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-three-actor-golden:0"
+          }
+        ],
         "diagnostics": [],
         "criticalDecisions": [],
         "facts": {
@@ -63,7 +72,7 @@
           "resource-exact-and-insufficient": false
         }
       },
-      "traceProjectionHash": "5c4f4cbe20ab2b16",
+      "traceProjectionHash": "58a791eadacda5f1",
       "assertions": [
         {
           "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
@@ -205,9 +214,27 @@
           ],
           "reasons": [],
           "assertionHash": "7fdc43e63c842052"
+        },
+        {
+          "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-three-actor-golden:0",
+          "selector": {
+            "actionId": "moyin-normal-a1",
+            "kind": "state",
+            "operation": null,
+            "stateIdentity": "moyin-brilliant"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-state:m10-b3-e20-2:109001:120s-three-actor-golden:0"
+          ],
+          "reasons": [],
+          "assertionHash": "1237eb4a89a47e95"
         }
       ],
-      "scenarioCaseHash": "5346bafc5bd029a2"
+      "scenarioCaseHash": "4a766d62021ddb40"
     },
     {
       "schemaVersion": 1,
@@ -215,7 +242,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/109001-visual.json",
-        "inputHash": "b5b6d868d3a713b8",
+        "inputHash": "945a21728d9f94c5",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/109001-visual.json"
       },
       "execution": {
@@ -224,9 +251,9 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "b5b6d868d3a713b8",
-          "data": "6b38d644b034c443",
-          "trace": "6c4f7df38d253c91",
+          "input": "945a21728d9f94c5",
+          "data": "4659e290500e76a4",
+          "trace": "2cecb4b6c1d8fdb1",
           "evaluation": "fefe6ba59b4e3c64"
         }
       },
@@ -1090,18 +1117,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "b2843316acb3aa79"
+      "scenarioCaseHash": "37418c1f4df40d73"
     }
   ],
   "summary": {
     "scenarioCount": 2,
     "executionPassedCount": 2,
-    "assertionCount": 43,
-    "assertionPassedCount": 39,
+    "assertionCount": 44,
+    "assertionPassedCount": 40,
     "runnerKindCounts": {
       "canonical-character-golden": 1,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "ff6858795349e873"
+  "scenarioSetHash": "83083b72df7e9141"
 }

@@ -4,6 +4,7 @@ export const UNNAMED_SECONDARY_PASSIVE_REASON =
 export function discoverUnnamedSecondaryPassiveBoundaries({
   characterCatalog,
   skills,
+  implementedPassiveSkillIds = new Set(),
 }) {
   const characters = Array.isArray(characterCatalog)
     ? characterCatalog
@@ -49,6 +50,41 @@ export function discoverUnnamedSecondaryPassiveBoundaries({
             : !hasLocalizedSkillName(primary.skill)
               ? 'primary-character-passive-name-missing'
               : 'secondary-character-passive-has-localized-name',
+      });
+      continue;
+    }
+    if (implementedPassiveSkillIds.has(Number(secondary.skill.id))) {
+      entries.push({
+        boundaryIdentity: `actor:${ownerId}:skill:${secondary.skill.id}:implemented`,
+        ownerId,
+        ownerName: character.name ?? null,
+        passiveSlotIndex: secondary.passiveSlotIndex,
+        skillId: Number(secondary.skill.id),
+        name: secondary.skill.name ?? null,
+        displayName: secondary.skill.displayName ?? null,
+        description: {
+          raw: secondary.skill.description?.raw ?? null,
+          plain: secondary.skill.description?.plain ?? null,
+          special: secondary.skill.description?.special ?? null,
+        },
+        primaryPassive: {
+          skillId: Number(primary.skill.id),
+          name: primary.skill.name ?? primary.skill.displayName ?? null,
+        },
+        classification: 'implemented',
+        reason: null,
+        sourceIdentities: [
+          `characters.items[id=${ownerId}].skillSlots[group=passive,index=${secondary.passiveSlotIndex},skillId=${secondary.skill.id}]`,
+          secondary.skill.source?.heroModule ??
+            `workbench-seed.gameData.skills[id=${secondary.skill.id}]`,
+        ],
+        runtimeContractPolicy: {
+          passiveProfile: false,
+          listener: false,
+          effectBinding: true,
+          captureRequirement: false,
+          gameplayImpactingGap: false,
+        },
       });
       continue;
     }
@@ -130,13 +166,19 @@ export function applyCharacterCombatProductBoundaries({
     const ownerId = Number(recipe.ownerId);
     const boundaries = boundariesByOwnerId.get(ownerId) ?? [];
     if (boundaries.length === 0) return recipe;
+    const implementedBoundaries = boundaries.filter(
+      entry => entry.classification === 'implemented'
+    );
+    const notApplicableBoundaries = boundaries.filter(
+      entry => entry.classification !== 'implemented'
+    );
     const excludedSkillIds = new Set(
-      boundaries.map(entry => Number(entry.skillId))
+      notApplicableBoundaries.map(entry => Number(entry.skillId))
     );
     const compiler = recipe.compiler ?? {};
     const mechanicsDiscovery = recipe.mechanicsDiscovery ?? {};
     const runtimePolicies = recipe.runtimePolicies ?? {};
-    const boundaryRecords = boundaries.map(entry => ({
+    const boundaryRecords = notApplicableBoundaries.map(entry => ({
       skillId: entry.skillId,
       reason: entry.reason,
       sourceIdentity: entry.sourceIdentities.join('|'),
@@ -191,8 +233,12 @@ export function applyCharacterCombatProductBoundaries({
         ...(recipe.productBoundaries ?? []).filter(
           record => record.kind !== 'unnamed-secondary-passive'
         ),
-        ...boundaries.map(entry => ({
+        ...notApplicableBoundaries.map(entry => ({
           kind: 'unnamed-secondary-passive',
+          ...entry,
+        })),
+        ...implementedBoundaries.map(entry => ({
+          kind: 'implemented-secondary-passive',
           ...entry,
         })),
       ],
@@ -260,7 +306,7 @@ export function createCharacterCombatProductBoundaryMarkdown(report) {
     '| --- | --- | --- | --- |',
     ...report.entries.map(
       entry =>
-        `| ${entry.ownerName} (${entry.ownerId}) | ${entry.primaryPassive.name} (${entry.primaryPassive.skillId}) | ${entry.skillId} | not-applicable |`
+        `| ${entry.ownerName} (${entry.ownerId}) | ${entry.primaryPassive.name} (${entry.primaryPassive.skillId}) | ${entry.skillId} | ${entry.classification === 'implemented' ? 'implemented' : 'not-applicable'} |`
     ),
     '',
     '> 识别依据为角色专属被动槽顺序与本地化名称缺失。技能描述和来源仍保留供审计，但不生成监听、效果、capture 或玩法缺口。',

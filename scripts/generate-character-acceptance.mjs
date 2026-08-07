@@ -153,10 +153,12 @@ try {
           validation.issues.join(', ')
       );
     }
-    const passiveBoundary = validateUnnamedSecondaryPassiveBoundary(
-      manifest,
-      recipe.unnamedSecondaryPassiveSkillId
-    );
+    const passiveBoundary = recipe.unnamedSecondaryPassiveSkillId
+      ? validateUnnamedSecondaryPassiveBoundary(
+          manifest,
+          recipe.unnamedSecondaryPassiveSkillId
+        )
+      : { valid: true };
     if (!passiveBoundary.valid) {
       throw new Error(
         'Unnamed secondary passive boundary invalid for ' +

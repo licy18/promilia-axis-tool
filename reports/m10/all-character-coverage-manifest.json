@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "50c2554bd569f1d59f55b889f9dfa22a57288b491e5177665f3daf704e59b34d",
+  "sourcePackageHash": "c65f69bee7e785caca4d8e9b8fcfc56f595d985db3bdecfdb70494a6ff72f056",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "f14a26f2433f5f6f150e3d6707716c58bc017242e858c4f6cef9556b10a52168"
+      "profileHash": "a6da5b33ceea67536b7e59e1bf2f1b87c5ebbbdc56cc78746144b2ded7c534c3"
     },
     {
       "ownerId": 103002,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "834284223172ae13c92b6eb0090f4a9d6dab57847886f48f3b4485644dc53975"
+      "profileHash": "fafde3b6a748bcbadeec1673a839300be8a5c54cda78a2d5e55ea358b17a0446"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "3da77125cc44cc403ad5754204c3095414c1197f019b8f02e9b6d7a8d3b6878d"
+      "profileHash": "f471100253e1544f76abfe406594a6c3c427b615788ee8ca0fa287cf6eec8c76"
     },
     {
       "ownerId": 101007,
@@ -588,7 +588,7 @@
       "zeroDistanceSimulationComplete": false,
       "realClientEvidenceComplete": false,
       "publicActionCount": 10,
-      "reachableFormCount": 30,
+      "reachableFormCount": 31,
       "indexedControlCount": 14,
       "specialResourceCount": 0,
       "stateMachineCount": 0,
@@ -596,8 +596,8 @@
       "passiveCount": 1,
       "unnamedSecondaryPassive": {
         "skillId": 10900162,
-        "status": "not-applicable",
-        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+        "status": "implemented",
+        "reason": null
       },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
@@ -613,7 +613,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:109001:character-combat-profile:v1",
-      "profileHash": "31b0dfe9c052a01fb45daa30b729970f595eaa4e6d8d677eac68f2124e4d6ed4"
+      "profileHash": "09c9983a318729b6f598a9119d42a1f7babe7046f4a475b1632ad27a729c79dd"
     },
     {
       "ownerId": 109002,

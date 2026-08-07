@@ -163,6 +163,27 @@
 - 被动2 晶石回能 109001300（sp，functionParams[0]=10000）+ 判断 109001301（有璀璨 109001270）＝璀璨下普攻3/5/重击 +1 SP。
 - 两者当前阻断均为 `sp-formula-not-literal-function-5`（formula function 1007 包/判断门控，非字面 function 5）；实现方向＝sync 编译器把“判断门控的 direct-sp”按判断条件编译（复用 consume-judgment 模式），运行时在 250/109001270 条件满足时发 directSp +1。
 
+## R4 进度（2026-08-08，被动2 + 重击回能已闭合）
+
+### 已实现
+
+- **M21 被动2（10900162）**：新增 runtimeEffectBindings 触发类型 `action-frame-with-state`（compiler + target-state runtime）。璀璨（109001270）≥1 层时，普攻第三段（10900103@0F）、第五段（10900105@0F）、重击（10900110@0F）各发 +1 SP（109001300 直连 SP，raw 10000→1.0）。条件不满足时记录 `VERIFIED_RUNTIME_EFFECT_STATE_CONDITION_NOT_MET`，不伪造回能。
+- **M7 重击回能**：sync 编译器为“判断门控 direct-SP”新增 `directSpPresence` 契约（judgmentType=1、elementArr=[250]、consume=0、成功分支 sp 子元素 → markId=250/minStacks=1/value=1.0）；tuningGeneration 在效果帧（重击 5/20/60F）按 250 印记层数门控，满足时发 `conditional-direct-sp` combat event；combat runtime 按 `tuning-conditional-direct-sp` 结算 +1 SP（每击）。
+- **10900162 由无名第二被动转为已实现**：product-boundary 支持 `implementedPassiveSkillIds`（从 recipe passiveEffects/runtimeEffectBindings 推导）；10900162 不再归类 N/A，验收清单不再要求其保持 not-applicable；三个 passive2 绑定以 `acceptance-scenario-coverage-missing` 诚实登记（待场景覆盖后放行）。
+- **哈希/期望重基线**：新包 hash `a47d98f5…`（file sha `632180f3…`）；fixtures/baseline/cycle/loadout 验收报告、FROZEN、migration/replay/package/coverage/workbench/canonicalTrace 单测期望全部同步。
+
+### 验证
+
+- 新增 2 组单测：variant runtime 璀璨门控 SP（极限反击→璀璨→重击 +1，无璀璨 0）；tuning runtime 印记门控 SP（250 印记下 3 次重击命中各 +1，无印记 0）。
+- 全套 Vitest 1445/1447（仅 2 条已知 process-heavy 并行超时，单独通过）；11 项审计 clean；production build 通过；109001 保持 `runtime-integrated`（4/4）。
+
+### 下一阶段
+
+1. M12：大招减CD（109001171/241/281/293/295）+ 星鸣技 2 充能语义。
+2. M10/M11/M16：E技能/入场检测门控（3 雷印记、3 风残响、1 雷印记 → 升级命中/暴击 buff）。
+3. M6/M8/M15/M23：璀璨普攻变体选择语义、残响注入与曲线。
+4. Golden/验收场景覆盖被动2/重击回能（消除 3 条 scenario-coverage 阻断）→ 全量测试/哈希/提交。
+
 ## 关键事实
 
 - 109001 末音：element=4（雷），position 详见 characters.json；普攻=10900101 哈库茵剑舞、星鸣=10900112 涌雷动之跃、星决=10900113 绽华章之舞、星携=10900121 凝飓风之旋（203 入场型）、被动=10900161 哈库茵之耀 + 10900162 无名第二被动（按 10101062/10300262 先例 N/A）

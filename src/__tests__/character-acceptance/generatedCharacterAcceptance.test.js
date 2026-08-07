@@ -43,6 +43,7 @@ const owners = [
     passiveId: 10900162,
     manifest: moyinManifest,
     profile: moyinProfile,
+    implemented: true,
   },
 ];
 
@@ -263,7 +264,7 @@ describe('generated character acceptance manifests', () => {
 
   it.each(owners)(
     'keeps unnamed secondary passive $passiveId auditable but non-blocking',
-    ({ passiveId, manifest }) => {
+    ({ passiveId, manifest, implemented = false }) => {
       const passiveToken = String(passiveId);
       const records = manifest.notApplicableRecords.filter(
         record =>
@@ -277,8 +278,6 @@ describe('generated character acceptance manifests', () => {
           identity.includes(passiveToken)
         )
       );
-      expect(records).toHaveLength(1);
-      expect(leaked).toHaveLength(0);
       const sourceBoundary = manifest.sourceGapInventory.records.filter(
         record =>
           record.reason === UNNAMED_SECONDARY_PASSIVE_REASON &&
@@ -286,6 +285,19 @@ describe('generated character acceptance manifests', () => {
             identity.includes(passiveToken)
           )
       );
+      if (implemented) {
+        expect(records).toHaveLength(0);
+        expect(sourceBoundary).toHaveLength(0);
+        expect(leaked.length).toBeGreaterThan(0);
+        expect(
+          leaked.every(
+            record => record.reason === 'acceptance-scenario-coverage-missing'
+          )
+        ).toBe(true);
+        return;
+      }
+      expect(records).toHaveLength(1);
+      expect(leaked).toHaveLength(0);
       expect(sourceBoundary).toEqual([
         expect.objectContaining({
           status: 'not-applicable',

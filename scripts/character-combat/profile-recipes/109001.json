@@ -129,7 +129,7 @@
       }
     ],
     "actionHitBindings": [],
-    "conditionalHitGroups": [
+  "conditionalHitGroups": [
       {
         "groupIdentity": "moyin-a4-brilliant-thunder-overdrive",
         "controlSkillId": 10900104,
@@ -182,10 +182,51 @@
           }
         ],
         "semanticName": "二段追击·超限",
-        "sourceIdentity": "skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F"
-      }
-    ],
-    "specialResources": [],
+      "sourceIdentity": "skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F"
+    }
+  ],
+  "runtimeEffectBindings": [
+    {
+      "bindingIdentity": "moyin-passive2-a3-sp",
+      "triggerKind": "action-frame-with-state",
+      "controlSkillId": 10900103,
+      "subSkillIndex": 0,
+      "triggerFrame": 0,
+      "stateIdentity": "moyin-brilliant",
+      "minimumStacks": 1,
+      "targetKind": "source-actor",
+      "directSpElementId": 109001300,
+      "expectedDirectSpValue": 1,
+      "sourceIdentity": "hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
+    },
+    {
+      "bindingIdentity": "moyin-passive2-a5-sp",
+      "triggerKind": "action-frame-with-state",
+      "controlSkillId": 10900105,
+      "subSkillIndex": 0,
+      "triggerFrame": 0,
+      "stateIdentity": "moyin-brilliant",
+      "minimumStacks": 1,
+      "targetKind": "source-actor",
+      "directSpElementId": 109001300,
+      "expectedDirectSpValue": 1,
+      "sourceIdentity": "hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
+    },
+    {
+      "bindingIdentity": "moyin-passive2-charged-sp",
+      "triggerKind": "action-frame-with-state",
+      "controlSkillId": 10900110,
+      "subSkillIndex": 0,
+      "triggerFrame": 0,
+      "stateIdentity": "moyin-brilliant",
+      "minimumStacks": 1,
+      "targetKind": "source-actor",
+      "directSpElementId": 109001300,
+      "expectedDirectSpValue": 1,
+      "sourceIdentity": "hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
+    }
+  ],
+  "specialResources": [],
     "thresholdTransitions": [],
     "passiveEffects": [
       {

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 109001,
-  "sourcePackageHash": "50c2554bd569f1d59f55b889f9dfa22a57288b491e5177665f3daf704e59b34d",
+  "sourcePackageHash": "c65f69bee7e785caca4d8e9b8fcfc56f595d985db3bdecfdb70494a6ff72f056",
   "actionRows": [
     {
       "actionIdentity": "actor|109001|10900101|0|10900103|normal-attack",
@@ -150,7 +150,6 @@
       },
       "reasons": [
         "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved"
       ]
     },
@@ -716,7 +715,7 @@
     "actionCount": 10,
     "runtimeReadyActionCount": 9,
     "executionFormCount": 10,
-    "controlCount": 23,
+    "controlCount": 24,
     "hitCount": 78,
     "rawEffectCount": 51,
     "semanticEffectCount": 36,
@@ -726,7 +725,7 @@
     "targetStateProfileCount": 1,
     "targetStateTransactionCount": 2,
     "conditionalHitGroupCount": 2,
-    "runtimeEffectBindingCount": 0,
+    "runtimeEffectBindingCount": 3,
     "passiveCount": 1,
     "switchTriggerCount": 1,
     "coverageStatusCounts": {
@@ -735,5 +734,5 @@
       "static-evidence-gap": 6
     }
   },
-  "profileHash": "31b0dfe9c052a01fb45daa30b729970f595eaa4e6d8d677eac68f2124e4d6ed4"
+  "profileHash": "09c9983a318729b6f598a9119d42a1f7babe7046f4a475b1632ad27a729c79dd"
 }

@@ -4,10 +4,10 @@
   "ownerId": 109001,
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "50c2554bd569f1d59f55b889f9dfa22a57288b491e5177665f3daf704e59b34d"
+    "packageHash": "c65f69bee7e785caca4d8e9b8fcfc56f595d985db3bdecfdb70494a6ff72f056"
   },
   "recipeIdentity": "scripts/character-combat/profile-recipes/109001.json",
-  "recipeHash": "a5ec634d0752be925a9de04037467d992ed184a71f6a1d6a58a3d963dc2113eb",
+  "recipeHash": "8d649a67054b11ef5870f9255b3ba0b46aadf2b9e8b5d7360c61253789c441b2",
   "authoritativeSources": [
     {
       "id": "calculator",
@@ -338,6 +338,34 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
       "identityHash": "291fd1051973aa22e4b652729a8f2314f53cb5b10b2b5c4a8c42e25686204db7",
       "sourceKind": "skill-control",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300#A=10000/10000",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300#A=10000/10000",
+      "identityHash": "199a3f8a60469f810a684d2b6604bdfd43250ecc9f4a45c8494b2ec51f9b1093",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
+      "identityHash": "4e3456864ddb5803626329e569e6c9e08c462d4c23a310598e2e3b3934621fb1",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
+      "identityHash": "a4e6215fb78ba1145946b9fc6556862f53969da0ab9bf0cef4bdb98ebec59f7d",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
+      "identityHash": "fdfc0eecfb57b4996d245508e8d0ad0f0a97259aeedfff5660b7b34bcc427005",
+      "sourceKind": "battle-element",
       "status": "evidence-indexed"
     },
     {
@@ -3064,6 +3092,13 @@
       "status": "evidence-indexed"
     },
     {
+      "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900162.asset/MonoBehaviour/skill_control_10900162__4751348978407621511.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900162.asset/MonoBehaviour/skill_control_10900162__4751348978407621511.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "identityHash": "52136dfe882451c928adace6bce58b0a9d33f76463da5fe86ce27333bde8f8fe",
+      "sourceKind": "skill-control",
+      "status": "evidence-indexed"
+    },
+    {
       "identity": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/hero.json#rows[id=109001].skillList[slot=203]",
       "sourceIdentity": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/hero.json#rows[id=109001].skillList[slot=203]",
       "identityHash": "0ec9e03f821dcc95700e9b648c0a6043c2a016cedaa9f4f264bfa97537e9f98a",
@@ -3460,6 +3495,20 @@
       "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10900161]",
       "identityHash": "318ac5b1822b019acc6bb02b5e2a4198cde39b5c01bc8c5719d307304fbb95d8",
       "sourceKind": "new-table",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "NewTable/skillsub_logic.rows[skillId=10900162]",
+      "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10900162]",
+      "identityHash": "ba40d7c4c71c660245c99b3da79beb8821af2f89b95c35a860d679910fd8ac8a",
+      "sourceKind": "new-table",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "ast_109001286#presence-judgment-sp-child",
+      "sourceIdentity": "ast_109001286#presence-judgment-sp-child",
+      "identityHash": "21fb21efcdfffa727b6d75233b78e70a228b1e82dbcac2ffcab2f2a5455fe959",
+      "sourceKind": "other",
       "status": "evidence-indexed"
     },
     {
@@ -4128,6 +4177,13 @@
       "status": "evidence-indexed"
     },
     {
+      "identity": "character-combat-recipe:109001#runtimePolicies.defaultControlPolicy.behaviorTriggerScope=skill-player|controlSkillId=10900162",
+      "sourceIdentity": "character-combat-recipe:109001#runtimePolicies.defaultControlPolicy.behaviorTriggerScope=skill-player|controlSkillId=10900162",
+      "identityHash": "ed7aeb13c181b0c34c53440ca2231d5f9798760ea1e20dafc59927b3c4ca7b3a",
+      "sourceKind": "runtime-contract",
+      "status": "evidence-indexed"
+    },
+    {
       "identity": "characters.items[id=109001].skillSlots[group=aerial,slot=301]",
       "sourceIdentity": "characters.items[id=109001].skillSlots[group=aerial,slot=301]",
       "identityHash": "7f44ecdeb7db27d454643fea388d205483cbb42af469b2e4a4513a349bdec049",
@@ -4346,15 +4402,15 @@
     }
   ],
   "summary": {
-    "identityCount": 575,
+    "identityCount": 583,
     "sourceKindCounts": {
-      "battle-element": 33,
+      "battle-element": 37,
       "client-code": 4,
-      "new-table": 53,
-      "other": 67,
-      "runtime-contract": 23,
-      "skill-control": 395
+      "new-table": 54,
+      "other": 68,
+      "runtime-contract": 24,
+      "skill-control": 396
     }
   },
-  "profileHash": "31b0dfe9c052a01fb45daa30b729970f595eaa4e6d8d677eac68f2124e4d6ed4"
+  "profileHash": "09c9983a318729b6f598a9119d42a1f7babe7046f4a475b1632ad27a729c79dd"
 }
