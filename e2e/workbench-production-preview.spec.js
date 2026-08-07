@@ -9097,14 +9097,14 @@ test('[m11-d-character-acceptance-visual-import] imports each owner acceptance f
     {
       ownerId: 101010,
       fixturePath: 'fixtures/character-acceptance/101010-visual.json',
-      traceHash: '04a2619176b027ca',
+      traceHash: 'f26b0ba69e746e88',
       actionId: 'xiaoyu-burst-a1',
       expectedTraceText: 'control 10101001 / sub 1',
     },
     {
       ownerId: 103002,
       fixturePath: 'fixtures/character-acceptance/103002-visual.json',
-      traceHash: '6cc9d01e738ecf23',
+      traceHash: 'a5d56e08f4118365',
       actionId: 'ruby-chain-e1',
       expectedTraceText: 'control 10300201 / sub 1',
       resourceIdentity: 'actor:103002:element:103002047',
@@ -9113,9 +9113,16 @@ test('[m11-d-character-acceptance-visual-import] imports each owner acceptance f
     {
       ownerId: 101003,
       fixturePath: 'fixtures/character-acceptance/101003-visual.json',
-      traceHash: 'ab94789246358651',
+      traceHash: '5bf7f6d618883a6a',
       actionId: 'han-firework-charged',
       expectedTraceText: 'control 10100310 / sub 0',
+    },
+    {
+      ownerId: 109001,
+      fixturePath: 'fixtures/character-acceptance/109001-visual.json',
+      traceHash: '49c834fcc29beb21',
+      actionId: 'moyin-star-skill',
+      expectedTraceText: 'control 10900112 / sub 0',
     },
   ];
 

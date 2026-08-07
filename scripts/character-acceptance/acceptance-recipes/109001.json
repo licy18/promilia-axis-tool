@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrCharacterAcceptanceRecipe",
+  "productVisualAcceptance": {
+    "status": "pending",
+    "acceptanceCommit": null,
+    "recordIdentity": null,
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m11-d-109001-visual-acceptance",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "reports/m11-d-character-acceptance-109001-desktop.png",
+        "screenshotSha256": "d15f1e20c2d6adbee50a0af3f53e23626616328edf28eb9a17d296f40b62abfc"
+      }
+    ]
+  },
+  "ownerId": 109001,
+  "fixturePath": "fixtures/character-acceptance/109001-visual.json",
+  "goldenReports": [
+    "reports/m10/109001/golden-trace.json"
+  ],
+  "unnamedSecondaryPassiveSkillId": 10900162,
+  "probes": [
+    {
+      "kind": "variant-selection",
+      "actionId": "moyin-star-skill",
+      "controlSkillId": 10900112,
+      "subSkillIndex": 0,
+      "semanticName": "涌雷动之跃"
+    }
+  ]
+}

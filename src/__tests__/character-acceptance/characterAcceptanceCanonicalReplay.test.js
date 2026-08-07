@@ -1,6 +1,7 @@
 import xiaoyuFixture from '../../../fixtures/character-acceptance/101010-visual.json';
 import rubyFixture from '../../../fixtures/character-acceptance/103002-visual.json';
 import hanFixture from '../../../fixtures/character-acceptance/101003-visual.json';
+import moyinFixture from '../../../fixtures/character-acceptance/109001-visual.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createCanonicalTraceViewIndex } from '../../features/workbench/canonicalTraceViewIndex';
@@ -12,9 +13,9 @@ const cases = [
     ownerId: 101010,
     fixture: xiaoyuFixture,
     hashes: {
-      input: '6cb3b363ba9918d8',
-      data: 'e6a2d4a7fa538e00',
-      trace: '0dbffe9b9c30d49c',
+      input: 'cbb852010ea5d3fc',
+      data: '6df33d3a1ecb5794',
+      trace: 'f26b0ba69e746e88',
       evaluation: 'adc4612197816c14',
     },
   },
@@ -22,9 +23,9 @@ const cases = [
     ownerId: 103002,
     fixture: rubyFixture,
     hashes: {
-      input: 'dd44bcf0633870ef',
-      data: 'ba77a840ee432d0a',
-      trace: '108805f1938edd19',
+      input: '1c484495ecddb833',
+      data: '6c0ec6683088c3de',
+      trace: 'a5d56e08f4118365',
       evaluation: 'b06186eaa569be69',
     },
   },
@@ -32,10 +33,20 @@ const cases = [
     ownerId: 101003,
     fixture: hanFixture,
     hashes: {
-      input: '80d1d8c7d0a9776b',
-      data: '16779c53786b8398',
-      trace: 'd4c93333fe11c986',
+      input: '4b2d48eed402f5e7',
+      data: 'e582c49254bef6dc',
+      trace: '5bf7f6d618883a6a',
       evaluation: '920e7363ae12290d',
+    },
+  },
+  {
+    ownerId: 109001,
+    fixture: moyinFixture,
+    hashes: {
+      input: 'd46504f82f018f5c',
+      data: 'f58eb7708470192b',
+      trace: '49c834fcc29beb21',
+      evaluation: '80c3ff32175d7e8e',
     },
   },
 ];

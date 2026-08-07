@@ -1,0 +1,805 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-authoritative-golden-runtime",
+  "status": "authoritative-golden-runtime-verified",
+  "ownerId": 109001,
+  "scenarioIdentity": "m10-b3-e20-2:109001:120s-three-actor-golden",
+  "durationMs": 120000,
+  "frameRate": 60,
+  "sourcePackageHash": "c6b01d4f83bf4523f2e0ad39648362dc01b5b74b74ed598e043f4f9344895909",
+  "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
+  "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
+  "headlessCore": {
+    "schemaVersion": 1,
+    "inputHash": "5f3d003f3de9cea3",
+    "traceHash": "ab105f43717e0eb7",
+    "dataHash": "15afdc4d6315dcc8",
+    "criticalPolicy": "non-critical"
+  },
+  "actual": {
+    "project": {
+      "durationMs": 120000,
+      "actionCount": 2,
+      "teamCharacterIds": [
+        109001,
+        101010,
+        103002
+      ]
+    },
+    "actions": {
+      "executedActionIds": [
+        "moyin-normal-a1",
+        "moyin-star-skill"
+      ],
+      "blockedActionIds": [],
+      "selections": [
+        {
+          "actionId": "moyin-normal-a1",
+          "ownerId": 109001,
+          "semanticName": "A3",
+          "controlSkillId": 10900103,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 65,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "moyin-star-skill",
+          "ownerId": 109001,
+          "semanticName": "星鸣技",
+          "controlSkillId": 10900112,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 60,
+          "sourceKind": "workbench-explicit-input-variant"
+        }
+      ],
+      "selectionByActionId": {
+        "moyin-normal-a1": {
+          "ownerId": 109001,
+          "semanticName": "A3",
+          "controlSkillId": 10900103,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 65,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "moyin-star-skill": {
+          "ownerId": 109001,
+          "semanticName": "星鸣技",
+          "controlSkillId": 10900112,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 60,
+          "sourceKind": "workbench-explicit-input-variant"
+        }
+      }
+    },
+    "combat": {
+      "damageEventCount": 21,
+      "ownerDamageEventCount": 21,
+      "ownerHitEventCount": 13,
+      "ownerHitCountByActionId": {
+        "moyin-normal-a1": 9,
+        "moyin-star-skill": 4
+      },
+      "ownerHitSummaryByActionId": {
+        "moyin-normal-a1": {
+          "hitCount": 9,
+          "frames": [
+            312,
+            318,
+            324,
+            330,
+            336,
+            342,
+            348,
+            354,
+            360
+          ],
+          "totalHpDamage": 360,
+          "totalToughnessDamage": 252
+        },
+        "moyin-star-skill": {
+          "hitCount": 4,
+          "frames": [
+            3,
+            8,
+            13,
+            29
+          ],
+          "totalHpDamage": 376,
+          "totalToughnessDamage": 264
+        }
+      },
+      "ownerHitTotalHpDamage": 736,
+      "ownerHitTotalToughnessDamage": 516,
+      "selectedHpDamageByActionId": {
+        "moyin-normal-a1": 360,
+        "moyin-star-skill": 376
+      },
+      "totalHpDamage": 736,
+      "totalToughnessDamage": 0,
+      "ownerTotalHpDamage": 736,
+      "ownerTotalToughnessDamage": 0,
+      "enemy": {
+        "pointCount": 34,
+        "initialHp": 862800,
+        "finalHp": 862064,
+        "maxHp": 862800,
+        "initialToughness": 6667,
+        "finalToughness": 6667,
+        "maxToughness": 6667
+      }
+    },
+    "resources": {
+      "actorSp": [
+        {
+          "kind": "actor",
+          "actorId": "actor-101010",
+          "kiboId": null,
+          "initialValue": 0,
+          "currentValue": 13.057678,
+          "maxValue": 100,
+          "eventCount": 1204,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 1200,
+              "totalChange": 12.4872,
+              "firstTimeMs": 100,
+              "lastTimeMs": 120000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 50,
+              "actionId": "moyin-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0,
+              "change": 0.164993,
+              "afterValue": 0.164993
+            },
+            {
+              "timeMs": 483.333333,
+              "actionId": "moyin-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.20662,
+              "change": 0.164993,
+              "afterValue": 0.371613
+            },
+            {
+              "timeMs": 5200,
+              "actionId": "moyin-normal-a1",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.860718,
+              "change": 0.119949,
+              "afterValue": 0.980667
+            },
+            {
+              "timeMs": 5300,
+              "actionId": "moyin-normal-a1",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.991074,
+              "change": 0.119949,
+              "afterValue": 1.111023
+            }
+          ]
+        },
+        {
+          "kind": "actor",
+          "actorId": "actor-103002",
+          "kiboId": null,
+          "initialValue": 0,
+          "currentValue": 13.057678,
+          "maxValue": 100,
+          "eventCount": 1204,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 1200,
+              "totalChange": 12.4872,
+              "firstTimeMs": 100,
+              "lastTimeMs": 120000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 50,
+              "actionId": "moyin-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0,
+              "change": 0.164993,
+              "afterValue": 0.164993
+            },
+            {
+              "timeMs": 483.333333,
+              "actionId": "moyin-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.20662,
+              "change": 0.164993,
+              "afterValue": 0.371613
+            },
+            {
+              "timeMs": 5200,
+              "actionId": "moyin-normal-a1",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.860718,
+              "change": 0.119949,
+              "afterValue": 0.980667
+            },
+            {
+              "timeMs": 5300,
+              "actionId": "moyin-normal-a1",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.991074,
+              "change": 0.119949,
+              "afterValue": 1.111023
+            }
+          ]
+        },
+        {
+          "kind": "actor",
+          "actorId": "actor-109001",
+          "kiboId": null,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        }
+      ],
+      "kiboSp": [
+        {
+          "kind": "kibo",
+          "slotId": "team-slot-1",
+          "actorId": "actor-109001",
+          "kiboId": 500001,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        },
+        {
+          "kind": "kibo",
+          "slotId": "team-slot-2",
+          "actorId": "actor-101010",
+          "kiboId": 500003,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        },
+        {
+          "kind": "kibo",
+          "slotId": "team-slot-3",
+          "actorId": "actor-103002",
+          "kiboId": 500039,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        }
+      ],
+      "actorSpByActorId": {
+        "actor-101010": {
+          "kind": "actor",
+          "actorId": "actor-101010",
+          "kiboId": null,
+          "initialValue": 0,
+          "currentValue": 13.057678,
+          "maxValue": 100,
+          "eventCount": 1204,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 1200,
+              "totalChange": 12.4872,
+              "firstTimeMs": 100,
+              "lastTimeMs": 120000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 50,
+              "actionId": "moyin-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0,
+              "change": 0.164993,
+              "afterValue": 0.164993
+            },
+            {
+              "timeMs": 483.333333,
+              "actionId": "moyin-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.20662,
+              "change": 0.164993,
+              "afterValue": 0.371613
+            },
+            {
+              "timeMs": 5200,
+              "actionId": "moyin-normal-a1",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.860718,
+              "change": 0.119949,
+              "afterValue": 0.980667
+            },
+            {
+              "timeMs": 5300,
+              "actionId": "moyin-normal-a1",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.991074,
+              "change": 0.119949,
+              "afterValue": 1.111023
+            }
+          ]
+        },
+        "actor-103002": {
+          "kind": "actor",
+          "actorId": "actor-103002",
+          "kiboId": null,
+          "initialValue": 0,
+          "currentValue": 13.057678,
+          "maxValue": 100,
+          "eventCount": 1204,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-background",
+              "count": 1200,
+              "totalChange": 12.4872,
+              "firstTimeMs": 100,
+              "lastTimeMs": 120000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 50,
+              "actionId": "moyin-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0,
+              "change": 0.164993,
+              "afterValue": 0.164993
+            },
+            {
+              "timeMs": 483.333333,
+              "actionId": "moyin-star-skill",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.20662,
+              "change": 0.164993,
+              "afterValue": 0.371613
+            },
+            {
+              "timeMs": 5200,
+              "actionId": "moyin-normal-a1",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.860718,
+              "change": 0.119949,
+              "afterValue": 0.980667
+            },
+            {
+              "timeMs": 5300,
+              "actionId": "moyin-normal-a1",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 0.991074,
+              "change": 0.119949,
+              "afterValue": 1.111023
+            }
+          ]
+        },
+        "actor-109001": {
+          "kind": "actor",
+          "actorId": "actor-109001",
+          "kiboId": null,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        }
+      },
+      "kiboSpBySlotId": {
+        "team-slot-1": {
+          "kind": "kibo",
+          "slotId": "team-slot-1",
+          "actorId": "actor-109001",
+          "kiboId": 500001,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        },
+        "team-slot-2": {
+          "kind": "kibo",
+          "slotId": "team-slot-2",
+          "actorId": "actor-101010",
+          "kiboId": 500003,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        },
+        "team-slot-3": {
+          "kind": "kibo",
+          "slotId": "team-slot-3",
+          "actorId": "actor-103002",
+          "kiboId": 500039,
+          "initialValue": 100,
+          "currentValue": 100,
+          "maxValue": 100,
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
+        }
+      },
+      "ownerActorSpTransactionsByActionId": {},
+      "ownerKiboSpTransactionsByActionId": {},
+      "specialResourceTrace": [],
+      "tuningMarkTrace": [],
+      "tuningMarkAcquireByActionId": {},
+      "targetStateTrace": [],
+      "conditionalHitGroups": [],
+      "targetStateSummary": {
+        "profileCount": 1,
+        "eventCount": 0,
+        "appliedGroupCount": 0,
+        "skippedGroupCount": 0,
+        "effectCommandCount": 0,
+        "directSpEventCount": 0
+      },
+      "ownerDirectSp": {
+        "eventCount": 0,
+        "totalChange": 0
+      },
+      "thresholdClearCount": 0,
+      "transformCount": 0,
+      "refreshCount": 0
+    },
+    "effects": {
+      "passiveTrace": [],
+      "passiveApplyCountByActionId": {},
+      "passiveMaxStacks": 0,
+      "firstPassiveMaxStackFrame": null,
+      "burstTrace": [],
+      "selectedEffectSummaryByElementId": {},
+      "inheritanceTransferCountByEffectId": {},
+      "inheritanceTransfers": [],
+      "burstTransitions": []
+    },
+    "dynamicProperties": {
+      "ownerSources": [],
+      "byActionId": {
+        "moyin-normal-a1": [],
+        "moyin-star-skill": []
+      },
+      "effectIdsByActionId": {
+        "moyin-normal-a1": [],
+        "moyin-star-skill": []
+      },
+      "maxPercentRawByAttributeId": {},
+      "maxExtraRawByAttributeId": {}
+    },
+    "comparison": {
+      "compareActionKey": "",
+      "omittedActionKeys": [],
+      "clearLoadoutCharacterIds": [],
+      "primaryDamage": 0,
+      "baselineDamage": 0,
+      "damageDelta": 0,
+      "primaryDynamicPropertySources": [],
+      "baselineDynamicPropertySources": [],
+      "primaryEffectFormulaValuesById": {},
+      "baselineEffectFormulaValuesById": {},
+      "baselineReplayHash": "2008f40855e6b0286e79f17b0b7d84f17852c10ad44652a9b34cfdbb0d55fa97"
+    },
+    "trace": {
+      "damage": [
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-star-skill",
+          "frame": 3,
+          "hitIdentity": null,
+          "rawDamage": 94,
+          "hpDamage": 94,
+          "toughnessDamage": 66,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-star-skill",
+          "frame": 8,
+          "hitIdentity": null,
+          "rawDamage": 94,
+          "hpDamage": 94,
+          "toughnessDamage": 66,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-star-skill",
+          "frame": 13,
+          "hitIdentity": null,
+          "rawDamage": 94,
+          "hpDamage": 94,
+          "toughnessDamage": 66,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-star-skill",
+          "frame": 29,
+          "hitIdentity": null,
+          "rawDamage": 94,
+          "hpDamage": 94,
+          "toughnessDamage": 66,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-normal-a1",
+          "frame": 312,
+          "hitIdentity": null,
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 28,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-normal-a1",
+          "frame": 318,
+          "hitIdentity": null,
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 28,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-normal-a1",
+          "frame": 324,
+          "hitIdentity": null,
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 28,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-normal-a1",
+          "frame": 330,
+          "hitIdentity": null,
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 28,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-normal-a1",
+          "frame": 336,
+          "hitIdentity": null,
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 28,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-normal-a1",
+          "frame": 342,
+          "hitIdentity": null,
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 28,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-normal-a1",
+          "frame": 348,
+          "hitIdentity": null,
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 28,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-normal-a1",
+          "frame": 354,
+          "hitIdentity": null,
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 28,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-normal-a1",
+          "frame": 360,
+          "hitIdentity": null,
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 28,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-normal-a1",
+          "frame": 3960,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -66.657791,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-normal-a1",
+          "frame": 3966,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -66.657791,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-normal-a1",
+          "frame": 3972,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -66.657791,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-normal-a1",
+          "frame": 3978,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -66.657791,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-normal-a1",
+          "frame": 3984,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -66.657791,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-normal-a1",
+          "frame": 3990,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -66.657791,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-normal-a1",
+          "frame": 3996,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -66.657791,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-normal-a1",
+          "frame": 4002,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -49.395463,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        }
+      ],
+      "specialResources": [],
+      "tuningMarks": [],
+      "targetStates": [],
+      "conditionalHitGroups": [],
+      "effects": []
+    },
+    "summaryHash": "51ccd2876bda25bbd1e195d19ec7d4afc9a87d3823ed8a25cfff99db8ada9b93"
+  },
+  "expected": {
+    "exact": {
+      "project.durationMs": 120000,
+      "actions.executedActionIds.length": 2
+    },
+    "greaterThan": {
+      "combat.ownerHitTotalHpDamage": 0
+    }
+  },
+  "validation": {
+    "status": "authoritative-golden-runtime-expectation-passed",
+    "passed": true,
+    "assertionCount": 3,
+    "failedCount": 0,
+    "assertions": [
+      {
+        "jsonPath": "project.durationMs",
+        "operator": "exact",
+        "expected": 120000,
+        "actual": 120000,
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.executedActionIds.length",
+        "operator": "exact",
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      },
+      {
+        "jsonPath": "combat.ownerHitTotalHpDamage",
+        "operator": "greater-than",
+        "expected": 0,
+        "actual": 736,
+        "passed": true
+      }
+    ]
+  },
+  "replayHash": "908bbceba5d97c8e20244594bfec2ef9103d2fee0165f2ee7b53aa50e1b6ec3d",
+  "profileHash": "edd9f09962478168c4682a3c3408a2f7bd029d2f1d99c7264b304c9d61ee418a"
+}

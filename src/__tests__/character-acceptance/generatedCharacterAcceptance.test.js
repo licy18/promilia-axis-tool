@@ -1,9 +1,11 @@
 import xiaoyuManifest from '../../../reports/m11/character-acceptance/101010/manifest.json';
 import rubyManifest from '../../../reports/m11/character-acceptance/103002/manifest.json';
 import hanManifest from '../../../reports/m11/character-acceptance/101003/manifest.json';
+import moyinManifest from '../../../reports/m11/character-acceptance/109001/manifest.json';
 import xiaoyuProfile from '../../data/generated/character-combat-profiles/101010.json';
 import rubyProfile from '../../data/generated/character-combat-profiles/103002.json';
 import hanProfile from '../../data/generated/character-combat-profiles/101003.json';
+import moyinProfile from '../../data/generated/character-combat-profiles/109001.json';
 import generatedCatalog from '../../data/generated/character-acceptance-catalog.json';
 import generatedManifestIndex from '../../data/generated/character-acceptance-manifest-index.json';
 import { hashCanonicalValue } from '../../simulation/headless/canonicalSerialization';
@@ -36,23 +38,29 @@ const owners = [
     manifest: hanManifest,
     profile: hanProfile,
   },
+  {
+    ownerId: 109001,
+    passiveId: 10900162,
+    manifest: moyinManifest,
+    profile: moyinProfile,
+  },
 ];
 
 describe('generated character acceptance manifests', () => {
-  it('publishes exactly the three M11-D owners with a valid hashed catalog', () => {
+  it('publishes exactly the four M11-D owners with a valid hashed catalog', () => {
     expect(generatedCatalog.entries.map(entry => entry.ownerId)).toEqual([
-      101003, 101010, 103002,
+      101003, 101010, 103002, 109001,
     ]);
     expect(generatedCatalog.summary).toMatchObject({
-      ownerCount: 3,
-      maturityCounts: { 'runtime-integrated': 3 },
+      ownerCount: 4,
+      maturityCounts: { 'runtime-integrated': 4 },
       optimizationReadyCount: 0,
     });
     expect(generatedCatalog.manifestIndexHash).toBe(
       generatedManifestIndex.indexHash
     );
     expect(generatedManifestIndex.entries.map(entry => entry.ownerId)).toEqual([
-      101003, 101010, 103002,
+      101003, 101010, 103002, 109001,
     ]);
     for (const entry of generatedCatalog.entries) {
       const indexed = generatedManifestIndex.entries.find(

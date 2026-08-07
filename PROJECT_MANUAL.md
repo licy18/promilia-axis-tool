@@ -1893,7 +1893,7 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 
 1. **E20 角色管线打通（33 个角色缺口）**
    - E20-1 严格培养运行时基线：11 个优化对象全部接入严格培养合同（星赐 7 层 + 第 7 层节点全选 + talent_rank 1..6 层属性 + 固定 profile `22f28f1f4b5b0d90`，不再含 hero_rank）。E20-1a 已把星赐节点技能等级（`skillUpgrade`）接入 canonical 核心技能等级通道并进入 applied 账本；hero_rank 已由 E20-1c 按未实装（废案）收口，属性/技能可用性不再要求捕获。
-   - E20-2 发布 9 个缺失角色验收：102001 莉莉、107001 西芙莉雅、107002 米砂、108001 忒拉拉、108003 米蒂、109001 末音、111001 法兰塔、112001 姬瑟贝露、STARBORN，逐个走 `extracted -> runtime-integrated -> visually-accepted -> optimization-ready`，每角色独立提交与产品签收；112001 的 hero_rank 解锁技能来源冲突已随废案收口一并关闭。
+   - E20-2 发布 9 个缺失角色验收：102001 莉莉、107001 西芙莉雅、107002 米砂、108001 忒拉拉、108003 米蒂、109001 末音（已到 `runtime-integrated`，见下）、111001 法兰塔、112001 姬瑟贝露、STARBORN，逐个走 `extracted -> runtime-integrated -> visually-accepted -> optimization-ready`，每角色独立提交与产品签收；112001 的 hero_rank 解锁技能来源冲突已随废案收口一并关闭。
    - E20-3 STARBORN 统一对象：199001/199002 别名归一化、`actor-static-profile-missing` 清零、机制 hash 一致。
 2. **E21 套装技能收口（2 个缺口）**：`set-skill:3:4` 需产品决策选权威来源或从更新客户端包重提取 resourceMap 闭合；随后 12/12 runtime-applied + visual signoff。
 3. **E22 绑定矩阵与正式准入（依赖 E20/E21）**：角色-装配-奇波绑定矩阵全绿（装配→角色、角色→奇波继承、来源/目标、前后台/切人、同名奇波跨 owner 隔离、同帧顺序、保存重放、连续循环），11/11+43/43+62/62+137/137+12/12 全绿且 hash 一致，`m12cLocked` 解锁。
@@ -1949,6 +1949,26 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 - 资格缺口 35 → 23（not-implemented 22 + evidence-insufficient 1，仅剩 `set-skill:3:4`）；11 条 `strict-character-cultivation-runtime-partial` 清零，112001 `level-breakthrough-skill-unlock-source-mismatch` 关闭；`m12cLocked` 保持 true。
 - 全套 Vitest 1437 条（2 条已知 process-heavy 并行超时，单独全过）；optimization-qualification 16 文件 90 条全过；production-import / workbench-data / action-status / verified-combat / character-acceptance / applied-source-bindings / kibo-headless / bundle 审计全 clean；production build 通过。
 - 冻结哈希：`heroRankRuntimeEvidence` 重基线 `15b104602e833d29e35c8a452c0ee3b3b6b9fe6d0b8cc1dd55f32c37883c88c8`；fixed profile `22f28f1f4b5b0d90`；资格摘要 `sourceSnapshot 2918bf3db501b2de / roster 33fad35f82aa31ed / manifests a5b8e21e33950c05 / ledger e66027078cbdf482 / binding 39af1ce5d230bdc3 / catalog 60141ce9481ff6f8`。
+
+### M12-B3-E20-2-109001 已执行：末音进入验收管线（2026-08-07）
+
+首个 E20-2 角色：109001 末音。目标四段 `extracted -> runtime-integrated -> visually-accepted -> optimization-ready`，当前完成到 **runtime-integrated**（视觉签收 pending，优化就绪待后续时序/账本闭合）。
+
+实施内容：
+
+- 新增 `scripts/character-combat/profile-recipes/109001.json`：mechanicsDiscovery（普攻 10900101、重击 10900110、星鸣 10900112、星决 10900113、星携 10900121、极限反击 10900125、完美招架 10900127、被动 10900161/10900162）、reachable controls（29 个）、120s 三演员 golden（星鸣+普攻）、`timingPolicy=verified-input-reopen`；publicActionForms 保持空，由自动候选保留原有动作映射与时序（手写 form 曾错误覆盖星鸣技占位为 60f，已回退）。
+- 编译产物：`character-combat-profiles/109001.json`（valid / runtime-applied / partial）、owner contract、`reports/m10/109001/*`（10 个公开动作、23 个 reachable control、74 命中、36 语义效果、0 阻断账本、golden 通过）。
+- 验收：新增 `acceptance-recipes/109001.json` + `fixtures/character-acceptance/109001-visual.json`（星鸣技 + 6 个临界矩阵动作，用单命中闪A 10900115 做临界/期望/落空覆盖）；截图 `m11-d-character-acceptance-109001-desktop.png` 已生成；manifest 达到 `runtime-integrated`（canonical golden + headless 稳定 + workbench 往返通过），产品可视签收 `pending`。
+- 资格：109001 记录 `extracted -> runtime-integrated`；`character-acceptance-not-published` 9→8；资格缺口 23→22；`m12cLocked` 保持 true。
+- 包哈希重基线：新增 owner 后 verified 包 hash `79f8e8df…`（`FROZEN_B3_SOURCE_HASHES.verifiedMechanics=9b44e1f9…`）；四个验收 fixture、四个 machine-axis fixture、integrated baseline、cycle 验收报告、golden 迁移断言、Workbench/CLI/搜索测试中的 hash 全部同步新包。
+
+验证：全套 Vitest 1430 条（并行负载下 7 条超时/worker 崩溃，单独全部通过，含两个已知 process-heavy 用例）；optimization-qualification / character-acceptance / verified-combat / workbench-data / action-status / applied-source-bindings / kibo-headless / bundle 审计 clean；production build 通过。
+
+109001 剩余阻断（记录在案，不伪造放行）：
+
+- Workbench 动作时序：星鸣技当前为未验证占位（2000ms 兜底/60f 输入窗口），charged/dodge 等动作显示“真实动作帧等待 asset 或运行时捕获补充”——需后续按 103002 模式逐窗验证（`optimization-ready` 前必须闭合）。
+- 验收矩阵 210 项当前通过 4 项、source gap 294、blocking ledger 需清零后才到 `optimization-ready`。
+- 产品可视签收（截图人工复验）→ `visually-accepted`。
 
 ### M12-B3-E20-1a 已完成：星赐节点技能等级接入 canonical 核心（2026-08-07）
 

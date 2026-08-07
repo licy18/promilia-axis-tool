@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-profile-recipe",
+  "ownerId": 109001,
+  "targetPipelineMaturity": "profile-compiled",
+  "goldStandard": false,
+  "coveragePolicies": {
+    "semanticTransitionClosureSupersedesRawCandidateGaps": true
+  },
+  "simulationScopeRequirements": {
+    "zeroDistance": {
+      "projectileImpactPolicy": "scenario-assumed-zero-distance",
+      "requiredResourceIdentities": [],
+      "requiredActionEffectBindingIdentities": [],
+      "requiredPassiveIdentities": []
+    }
+  },
+  "mechanicsDiscovery": {
+    "ownerId": 109001,
+    "normalAttackSkillId": 10900101,
+    "reloadControlSkillId": 10900110,
+    "starSkillControlSkillId": 10900112,
+    "ultimateControlSkillId": 10900113,
+    "starCarryControlSkillId": 10900121,
+    "limitCounterControlSkillId": 10900125,
+    "perfectParryControlSkillId": 10900127,
+    "passiveSkillIds": [
+      10900161,
+      10900162
+    ]
+  },
+  "runtimePolicies": {
+    "defaultControlPolicy": {
+      "behaviorTriggerScope": "skill-player",
+      "sourceIdentity": "character-combat-recipe:109001#runtimePolicies.defaultControlPolicy.behaviorTriggerScope=skill-player"
+    }
+  },
+  "compiler": {
+    "timingPolicy": "verified-input-reopen",
+    "reachableControlSkillIds": [
+      10900101, 10900102, 10900103, 10900104, 10900105,
+      10900110, 10900111, 10900112, 10900113, 10900114,
+      10900115, 10900116, 10900117, 10900121, 10900124,
+      10900125, 10900126, 10900127,
+      10900141, 10900142, 10900143, 10900144, 10900145,
+      10900146, 10900147, 10900148, 10900149,
+      10900161, 10900162
+    ],
+    "contextInputEdges": [],
+    "publicActionDeclarations": [],
+    "publicActionForms": [],
+    "attackInputChains": [],
+    "variantWindowBindings": [],
+    "actionEffectBindings": [],
+    "actionHitBindings": [],
+    "specialResources": [],
+    "thresholdTransitions": [],
+    "passiveEffects": []
+  },
+  "unresolvedRecords": [],
+  "goldenScenario": {
+    "scenarioIdentity": "m10-b3-e20-2:109001:120s-three-actor-golden",
+    "durationFrames": 7200,
+    "frameRate": 60,
+    "teamCharacterIds": [
+      109001,
+      101010,
+      103002
+    ],
+    "initialControlledCharacterId": 109001,
+    "initialActorSp": {
+      "109001": 100,
+      "101010": 0,
+      "103002": 0
+    },
+    "kiboByCharacterId": {
+      "109001": 500001,
+      "101010": 500003,
+      "103002": 500039
+    },
+    "initialKiboSp": {
+      "109001": 100,
+      "101010": 100,
+      "103002": 100
+    },
+    "loadoutByCharacterId": {
+      "109001": {
+        "soulessenceId": 10001,
+        "soulessenceLevel": 80,
+        "soulessenceRank": 1
+      }
+    },
+    "actions": [
+      {
+        "actionKey": "moyin-star-skill",
+        "actorCharacterId": 109001,
+        "skillId": 10900112,
+        "actionKind": "star-skill",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 0
+      },
+      {
+        "actionKey": "moyin-normal-a1",
+        "actorCharacterId": 109001,
+        "skillId": 10900101,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 300
+      }
+    ],
+    "comparison": {},
+    "traceSelectors": {},
+    "expectedRuntime": {
+      "exact": {
+        "project.durationMs": 120000,
+        "actions.executedActionIds.length": 2
+      },
+      "greaterThan": {
+        "combat.ownerHitTotalHpDamage": 0
+      }
+    }
+  }
+}

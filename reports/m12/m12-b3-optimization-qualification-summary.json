@@ -9,16 +9,16 @@
     "equipment": 137,
     "setSkills": 12
   },
-  "sourceSnapshotHash": "2918bf3db501b2de",
-  "rosterHash": "33fad35f82aa31ed",
-  "manifestsHash": "a5b8e21e33950c05",
-  "ledgerHash": "e66027078cbdf482",
-  "bindingMatrixHash": "39af1ce5d230bdc3",
-  "catalogHash": "60141ce9481ff6f8",
+  "sourceSnapshotHash": "27e69d5b2745c771",
+  "rosterHash": "de81811b2effa3dc",
+  "manifestsHash": "3fca1f9d826ade55",
+  "ledgerHash": "cee89d65135781d5",
+  "bindingMatrixHash": "c74373507fa67bdf",
+  "catalogHash": "047260a6d8d59e90",
   "maturityCounts": {
-    "extracted": 24,
+    "extracted": 23,
     "optimization-ready": 210,
-    "runtime-integrated": 31
+    "runtime-integrated": 32
   },
   "optimizationReadyCounts": {
     "character": 0,
@@ -28,20 +28,20 @@
     "set-skill": 11
   },
   "gapCounts": {
-    "blockingUniqueGapCount": 23,
+    "blockingUniqueGapCount": 22,
     "byCategory": {
       "evidence-insufficient": 1,
-      "not-implemented": 22
+      "not-implemented": 21
     },
     "byCode": {
       "acceptance-product-visual-signoff-pending": 1,
       "actor-static-profile-missing": 1,
-      "character-acceptance-not-published": 9,
+      "character-acceptance-not-published": 8,
       "character-not-optimization-ready": 11,
       "set-skill-dynamic-unapplied": 1
     },
     "byObjectKind": {
-      "character": 21,
+      "character": 20,
       "set-skill": 2
     }
   },

@@ -8240,7 +8240,7 @@ describe('Workbench view', () => {
     ).toContain('星鸣技');
     expect(
       wrapper.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('4s9f');
+    ).toContain('2000ms');
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(
       window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
@@ -8252,7 +8252,7 @@ describe('Workbench view', () => {
       level: 1,
       actionVariantIndex: 0,
       damageSegmentIndex: 0,
-      durationMs: 4150,
+      durationMs: 1000,
     });
     expect(savedDraft.actionDrafts[1].note).toContain('星鸣技：160%');
   });
@@ -8281,10 +8281,10 @@ describe('Workbench view', () => {
     ).toEqual(['普通攻击', '重击', '闪击']);
     expect(
       wrapper.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('5s9f');
+    ).toContain('2000ms');
     expect(
       wrapper.find('.action-item[data-action-id="action-0003"]').text()
-    ).toContain('4s0f');
+    ).toContain('4383.333333ms');
   });
 
   it('persists a generated star-carry hit edit on its parent switch action', async () => {
@@ -9947,7 +9947,7 @@ describe('Workbench view', () => {
     ).toContain('普通攻击 / 闪击');
     expect(
       wrapper.find('[data-testid="workbench-overlap-item"]').text()
-    ).toContain('500-1000ms');
+    ).toContain('500-883ms');
     expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe(
       '有未保存改动'
     );
@@ -10361,10 +10361,10 @@ describe('Workbench view', () => {
     await selectSideInspectorPanel(wrapper, 'properties');
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
-    ).toBe('7000');
+    ).toBe('3383.333333');
     expect(
       wrapper.find('[data-testid="workbench-note-input"]').element.value
-    ).toContain('自动推迟：同轨已有动作占用，已从 2000ms 调整到 7000ms。');
+    ).toContain('自动推迟：同轨已有动作占用，已从 2000ms 调整到 3383.333333ms。');
     expect(
       wrapper
         .find(
@@ -10377,7 +10377,7 @@ describe('Workbench view', () => {
     ).toHaveLength(1);
     expect(
       wrapper.find('[data-testid="workbench-action-insert-delay-note"]').text()
-    ).toContain('自动推迟 2000ms -> 7000ms');
+    ).toContain('自动推迟 2000ms -> 3383.333333ms');
     await selectSideInspectorPanel(wrapper, 'analysis');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
@@ -10390,7 +10390,7 @@ describe('Workbench view', () => {
     ).toContain('闪击');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-item"]').text()
-    ).toContain('2000ms -> 7000ms');
+    ).toContain('2000ms -> 3383ms');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(
@@ -10413,12 +10413,12 @@ describe('Workbench view', () => {
       savedDraft.actionDrafts.find(action => action.id === 'action-0004')
     ).toMatchObject({
       actorCharacterId: workbenchSeed.defaults.characterId,
-      startMs: 7000,
+      startMs: 3383.333333,
       insertion: {
         autoDelayed: true,
         requestedStartMs: 2000,
-        resolvedStartMs: 7000,
-        delayedByMs: 5000,
+        resolvedStartMs: 3383.333333,
+        delayedByMs: 1383.333333,
         laneId: 'actor-109001',
         reason: 'same-lane-conflict',
         conflictActionIds: ['action-0002'],
@@ -10829,7 +10829,7 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-note-input"]')
       .setValue(
-        '手写备注\n自动推迟：同轨已有动作占用，已从 2000ms 调整到 7000ms。'
+        '手写备注\n自动推迟：同轨已有动作占用，已从 2000ms 调整到 3383.333333ms。'
       );
 
     expect(
@@ -10851,7 +10851,7 @@ describe('Workbench view', () => {
       insertion: {
         autoDelayed: true,
         requestedStartMs: 2000,
-        resolvedStartMs: 7000,
+        resolvedStartMs: 3383.333333,
       },
     });
   });
@@ -12541,7 +12541,7 @@ describe('Workbench view', () => {
     await vi.waitFor(
       () => {
         expect(wrapper.get('main.workbench').attributes()).toMatchObject({
-          'data-canonical-trace-hash': '0d2c57b109dab9ed',
+          'data-canonical-trace-hash': '103c39a155c6480d',
           'data-canonical-trace-action-count': '44',
           'data-machine-axis-import-active': 'true',
         });
@@ -12589,7 +12589,7 @@ describe('Workbench view', () => {
     const inspector = wrapper.get(
       '[data-testid="workbench-canonical-trace-inspector"]'
     );
-    expect(inspector.attributes('data-trace-hash')).toBe('0d2c57b109dab9ed');
+    expect(inspector.attributes('data-trace-hash')).toBe('103c39a155c6480d');
     expect(inspector.text()).toContain('control 10100703 / sub 0');
     const hitRow = inspector.get('[data-testid="canonical-trace-hit-row"]');
     const landedSelect = hitRow.get(
@@ -12628,7 +12628,7 @@ describe('Workbench view', () => {
       () => {
         expect(
           wrapper.get('main.workbench').attributes('data-canonical-trace-hash')
-        ).toBe('0d2c57b109dab9ed');
+        ).toBe('103c39a155c6480d');
         expect(
           wrapper.get('[data-testid="canonical-trace-hit-landed"]').element.value
         ).toBe('hit');

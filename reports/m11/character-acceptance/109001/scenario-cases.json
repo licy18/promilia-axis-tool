@@ -1,0 +1,1055 @@
+{
+  "schemaVersion": 1,
+  "kind": "character-acceptance-scenario-case-set",
+  "records": [
+    {
+      "schemaVersion": 1,
+      "scenarioIdentity": "m10-b3-e20-2:109001:120s-three-actor-golden",
+      "runnerKind": "canonical-character-golden",
+      "inputReference": {
+        "reportPath": "reports/m10/109001/golden-trace.json",
+        "reportHash": "d9ffe0c684834be4",
+        "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 109001 --assert-clean"
+      },
+      "execution": {
+        "status": "passed",
+        "stableReplay": true,
+        "workbenchRoundTrip": "not-applicable",
+        "canonicalHashes": {
+          "input": "5f3d003f3de9cea3",
+          "data": "15afdc4d6315dcc8",
+          "trace": "ab105f43717e0eb7",
+          "evaluation": null
+        }
+      },
+      "traceProjection": {
+        "actionForms": [
+          {
+            "actionId": "moyin-normal-a1",
+            "ownerId": 109001,
+            "controlSkillId": 10900103,
+            "subSkillIndex": 0,
+            "semanticName": "A3",
+            "projectionIdentity": "golden-action-form:m10-b3-e20-2:109001:120s-three-actor-golden:moyin-normal-a1"
+          },
+          {
+            "actionId": "moyin-star-skill",
+            "ownerId": 109001,
+            "controlSkillId": 10900112,
+            "subSkillIndex": 0,
+            "semanticName": "星鸣技",
+            "projectionIdentity": "golden-action-form:m10-b3-e20-2:109001:120s-three-actor-golden:moyin-star-skill"
+          }
+        ],
+        "hits": [],
+        "effects": [],
+        "resources": [],
+        "states": [],
+        "diagnostics": [],
+        "criticalDecisions": [],
+        "facts": {
+          "buff-apply-refresh-stack-expire": false,
+          "condition-insufficient-negative": false,
+          "foreground-background-switch": false,
+          "normal-trigger-positive": true,
+          "resource-exact-and-insufficient": false
+        }
+      },
+      "traceProjectionHash": "f83451c1b0b92b36",
+      "assertions": [
+        {
+          "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "buff-apply-refresh-stack-expire",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "blocked",
+          "actualProjectionIdentities": [],
+          "reasons": [
+            "scenario-assertion-not-satisfied"
+          ],
+          "assertionHash": "45e239727ee1b097"
+        },
+        {
+          "assertionIdentity": "scenario-fact:condition-insufficient-negative",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "condition-insufficient-negative",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "blocked",
+          "actualProjectionIdentities": [],
+          "reasons": [
+            "scenario-assertion-not-satisfied"
+          ],
+          "assertionHash": "938e38b40852aedb"
+        },
+        {
+          "assertionIdentity": "scenario-fact:foreground-background-switch",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "foreground-background-switch",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "blocked",
+          "actualProjectionIdentities": [],
+          "reasons": [
+            "scenario-assertion-not-satisfied"
+          ],
+          "assertionHash": "5ee60152939024a9"
+        },
+        {
+          "assertionIdentity": "scenario-fact:normal-trigger-positive",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "normal-trigger-positive",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:normal-trigger-positive"
+          ],
+          "reasons": [],
+          "assertionHash": "21786c93092c79ff"
+        },
+        {
+          "assertionIdentity": "scenario-fact:resource-exact-and-insufficient",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "resource-exact-and-insufficient",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "blocked",
+          "actualProjectionIdentities": [],
+          "reasons": [
+            "scenario-assertion-not-satisfied"
+          ],
+          "assertionHash": "c0c9c0bfcbbfa91f"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-three-actor-golden:moyin-normal-a1",
+          "selector": {
+            "actionId": "moyin-normal-a1",
+            "controlSkillId": 10900103,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b3-e20-2:109001:120s-three-actor-golden:moyin-normal-a1"
+          ],
+          "reasons": [],
+          "assertionHash": "f42b8b81a80542a3"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-three-actor-golden:moyin-star-skill",
+          "selector": {
+            "actionId": "moyin-star-skill",
+            "controlSkillId": 10900112,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b3-e20-2:109001:120s-three-actor-golden:moyin-star-skill"
+          ],
+          "reasons": [],
+          "assertionHash": "8f0d26754726252d"
+        }
+      ],
+      "scenarioCaseHash": "8ce451980e29f2e1"
+    },
+    {
+      "schemaVersion": 1,
+      "scenarioIdentity": "m11-d-109001-visual-acceptance",
+      "runnerKind": "machine-axis",
+      "inputReference": {
+        "fixturePath": "fixtures/character-acceptance/109001-visual.json",
+        "inputHash": "d46504f82f018f5c",
+        "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/109001-visual.json"
+      },
+      "execution": {
+        "status": "passed",
+        "stableReplay": true,
+        "workbenchRoundTrip": "passed",
+        "canonicalHashes": {
+          "algorithm": "fnv1a64-utf8-v1",
+          "input": "d46504f82f018f5c",
+          "data": "f58eb7708470192b",
+          "trace": "49c834fcc29beb21",
+          "evaluation": "80c3ff32175d7e8e"
+        }
+      },
+      "traceProjection": {
+        "actionForms": [
+          {
+            "actionId": "109001-critical-critical",
+            "ownerId": 109001,
+            "semanticName": "闪击",
+            "controlSkillId": 10900115,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 23,
+            "projectionIdentity": "machine-action-form:m11-d-109001-visual-acceptance:109001-critical-critical"
+          },
+          {
+            "actionId": "109001-critical-expected",
+            "ownerId": 109001,
+            "semanticName": "闪击",
+            "controlSkillId": 10900115,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 23,
+            "projectionIdentity": "machine-action-form:m11-d-109001-visual-acceptance:109001-critical-expected"
+          },
+          {
+            "actionId": "109001-critical-miss-critical",
+            "ownerId": 109001,
+            "semanticName": "闪击",
+            "controlSkillId": 10900115,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 23,
+            "projectionIdentity": "machine-action-form:m11-d-109001-visual-acceptance:109001-critical-miss-critical"
+          },
+          {
+            "actionId": "109001-critical-non-critical",
+            "ownerId": 109001,
+            "semanticName": "闪击",
+            "controlSkillId": 10900115,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 23,
+            "projectionIdentity": "machine-action-form:m11-d-109001-visual-acceptance:109001-critical-non-critical"
+          },
+          {
+            "actionId": "109001-critical-sampled-boundary",
+            "ownerId": 109001,
+            "semanticName": "闪击",
+            "controlSkillId": 10900115,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 23,
+            "projectionIdentity": "machine-action-form:m11-d-109001-visual-acceptance:109001-critical-sampled-boundary"
+          },
+          {
+            "actionId": "109001-critical-sampled-low",
+            "ownerId": 109001,
+            "semanticName": "闪击",
+            "controlSkillId": 10900115,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 23,
+            "projectionIdentity": "machine-action-form:m11-d-109001-visual-acceptance:109001-critical-sampled-low"
+          },
+          {
+            "actionId": "moyin-star-skill",
+            "ownerId": 109001,
+            "semanticName": "星鸣技",
+            "controlSkillId": 10900112,
+            "subSkillIndex": 0,
+            "actualDurationFrames": 60,
+            "projectionIdentity": "machine-action-form:m11-d-109001-visual-acceptance:moyin-star-skill"
+          }
+        ],
+        "hits": [
+          {
+            "actionId": "moyin-star-skill",
+            "hitIdentity": "10900112|0|elements|1|-4564820134104165813|3|1",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:0"
+          },
+          {
+            "actionId": "moyin-star-skill",
+            "hitIdentity": "10900112|0|elements|1|-4564820134104165813|8|2",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:1"
+          },
+          {
+            "actionId": "moyin-star-skill",
+            "hitIdentity": "10900112|0|elements|1|-4564820134104165813|13|3",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:2"
+          },
+          {
+            "actionId": "moyin-star-skill",
+            "hitIdentity": "10900112|0|elements|3|7337825396973098198|29|4",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:3"
+          },
+          {
+            "actionId": "109001-critical-sampled-low",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:4"
+          },
+          {
+            "actionId": "109001-critical-sampled-boundary",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:5"
+          },
+          {
+            "actionId": "109001-critical-expected",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:6"
+          },
+          {
+            "actionId": "109001-critical-critical",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:7"
+          },
+          {
+            "actionId": "109001-critical-non-critical",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "frame": null,
+            "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:8"
+          }
+        ],
+        "effects": [],
+        "resources": [],
+        "states": [],
+        "diagnostics": [],
+        "criticalDecisions": [
+          {
+            "actionId": "moyin-star-skill",
+            "hitIdentity": "10900112|0|elements|1|-4564820134104165813|3|1",
+            "mode": "sampled",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 7428,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:0"
+          },
+          {
+            "actionId": "moyin-star-skill",
+            "hitIdentity": "10900112|0|elements|1|-4564820134104165813|8|2",
+            "mode": "sampled",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 7753,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:1"
+          },
+          {
+            "actionId": "moyin-star-skill",
+            "hitIdentity": "10900112|0|elements|1|-4564820134104165813|13|3",
+            "mode": "sampled",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 7303,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:2"
+          },
+          {
+            "actionId": "moyin-star-skill",
+            "hitIdentity": "10900112|0|elements|3|7337825396973098198|29|4",
+            "mode": "sampled",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 1244,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:3"
+          },
+          {
+            "actionId": "109001-critical-sampled-low",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "mode": "captured-critical-roll",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 499,
+            "critical": true,
+            "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:4"
+          },
+          {
+            "actionId": "109001-critical-sampled-boundary",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "mode": "captured-critical-roll",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": 500,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:5"
+          },
+          {
+            "actionId": "109001-critical-expected",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "mode": "expected",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": null,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:6"
+          },
+          {
+            "actionId": "109001-critical-critical",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "mode": "critical",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": null,
+            "critical": true,
+            "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:7"
+          },
+          {
+            "actionId": "109001-critical-non-critical",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "mode": "non-critical",
+            "sourceCriticalBasisPoints": null,
+            "targetCriticalDefenseBasisPoints": null,
+            "effectiveThresholdBasisPoints": 500,
+            "criticalRoll": null,
+            "critical": false,
+            "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:8"
+          }
+        ],
+        "facts": {
+          "canonical-same-input-replay": true,
+          "critical:expectedNoCriticalEvent": true,
+          "critical:integerThresholdBoundary": true,
+          "critical:missSuppressesHit": true,
+          "critical:perHitModes": true,
+          "critical:sameSeedReplay": true,
+          "machine-axis-validation": true,
+          "probe:variant-selection:moyin-star-skill": true,
+          "workbench-import-export-round-trip": true
+        }
+      },
+      "traceProjectionHash": "cb39780784130280",
+      "assertions": [
+        {
+          "assertionIdentity": "canonical-same-input-replay",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "canonical-same-input-replay",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:canonical-same-input-replay"
+          ],
+          "reasons": [],
+          "assertionHash": "6bfbd52a7b1bb1ee"
+        },
+        {
+          "assertionIdentity": "critical:expectedNoCriticalEvent",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:expectedNoCriticalEvent",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:expectedNoCriticalEvent"
+          ],
+          "reasons": [],
+          "assertionHash": "0ae5ba891416f049"
+        },
+        {
+          "assertionIdentity": "critical:integerThresholdBoundary",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:integerThresholdBoundary",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:integerThresholdBoundary"
+          ],
+          "reasons": [],
+          "assertionHash": "79dcc2399ce52a22"
+        },
+        {
+          "assertionIdentity": "critical:missSuppressesHit",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:missSuppressesHit",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:missSuppressesHit"
+          ],
+          "reasons": [],
+          "assertionHash": "3c35e1935d9fc8c7"
+        },
+        {
+          "assertionIdentity": "critical:perHitModes",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:perHitModes",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:perHitModes"
+          ],
+          "reasons": [],
+          "assertionHash": "f484e3a91cd8fefb"
+        },
+        {
+          "assertionIdentity": "critical:sameSeedReplay",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:sameSeedReplay",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:sameSeedReplay"
+          ],
+          "reasons": [],
+          "assertionHash": "dd94f7da1761129f"
+        },
+        {
+          "assertionIdentity": "machine-axis-validation",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "machine-axis-validation",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:machine-axis-validation"
+          ],
+          "reasons": [],
+          "assertionHash": "f794adbd347bf2f5"
+        },
+        {
+          "assertionIdentity": "probe:variant-selection:moyin-star-skill",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "probe:variant-selection:moyin-star-skill",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:probe:variant-selection:moyin-star-skill"
+          ],
+          "reasons": [],
+          "assertionHash": "49cffef663a0557b"
+        },
+        {
+          "assertionIdentity": "scenario-fact:canonical-same-input-replay",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "canonical-same-input-replay",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:canonical-same-input-replay"
+          ],
+          "reasons": [],
+          "assertionHash": "d839bd0118db1f5b"
+        },
+        {
+          "assertionIdentity": "scenario-fact:critical:expectedNoCriticalEvent",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:expectedNoCriticalEvent",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:expectedNoCriticalEvent"
+          ],
+          "reasons": [],
+          "assertionHash": "da63209df112da08"
+        },
+        {
+          "assertionIdentity": "scenario-fact:critical:integerThresholdBoundary",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:integerThresholdBoundary",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:integerThresholdBoundary"
+          ],
+          "reasons": [],
+          "assertionHash": "4cecf6c5644b328f"
+        },
+        {
+          "assertionIdentity": "scenario-fact:critical:missSuppressesHit",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:missSuppressesHit",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:missSuppressesHit"
+          ],
+          "reasons": [],
+          "assertionHash": "7843eb41a7032eaa"
+        },
+        {
+          "assertionIdentity": "scenario-fact:critical:perHitModes",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:perHitModes",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:perHitModes"
+          ],
+          "reasons": [],
+          "assertionHash": "738c235f9d2b11ce"
+        },
+        {
+          "assertionIdentity": "scenario-fact:critical:sameSeedReplay",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "critical:sameSeedReplay",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:critical:sameSeedReplay"
+          ],
+          "reasons": [],
+          "assertionHash": "ed42b1efb79e6d7e"
+        },
+        {
+          "assertionIdentity": "scenario-fact:machine-axis-validation",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "machine-axis-validation",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:machine-axis-validation"
+          ],
+          "reasons": [],
+          "assertionHash": "bee1214967843864"
+        },
+        {
+          "assertionIdentity": "scenario-fact:probe:variant-selection:moyin-star-skill",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "probe:variant-selection:moyin-star-skill",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:probe:variant-selection:moyin-star-skill"
+          ],
+          "reasons": [],
+          "assertionHash": "5a0f6a2873b738ca"
+        },
+        {
+          "assertionIdentity": "scenario-fact:workbench-import-export-round-trip",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "workbench-import-export-round-trip",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:workbench-import-export-round-trip"
+          ],
+          "reasons": [],
+          "assertionHash": "58a76707b981af64"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-109001-visual-acceptance:109001-critical-critical",
+          "selector": {
+            "actionId": "109001-critical-critical",
+            "controlSkillId": 10900115,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-109001-visual-acceptance:109001-critical-critical"
+          ],
+          "reasons": [],
+          "assertionHash": "d30fc4779a3425c8"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-109001-visual-acceptance:109001-critical-expected",
+          "selector": {
+            "actionId": "109001-critical-expected",
+            "controlSkillId": 10900115,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-109001-visual-acceptance:109001-critical-expected"
+          ],
+          "reasons": [],
+          "assertionHash": "b34c4ee79f1654e5"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-109001-visual-acceptance:109001-critical-miss-critical",
+          "selector": {
+            "actionId": "109001-critical-miss-critical",
+            "controlSkillId": 10900115,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-109001-visual-acceptance:109001-critical-miss-critical"
+          ],
+          "reasons": [],
+          "assertionHash": "15be91a9feb9bf3f"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-109001-visual-acceptance:109001-critical-non-critical",
+          "selector": {
+            "actionId": "109001-critical-non-critical",
+            "controlSkillId": 10900115,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-109001-visual-acceptance:109001-critical-non-critical"
+          ],
+          "reasons": [],
+          "assertionHash": "d5103302c07cb636"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-109001-visual-acceptance:109001-critical-sampled-boundary",
+          "selector": {
+            "actionId": "109001-critical-sampled-boundary",
+            "controlSkillId": 10900115,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-109001-visual-acceptance:109001-critical-sampled-boundary"
+          ],
+          "reasons": [],
+          "assertionHash": "b4792a9dbbaa7d7e"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-109001-visual-acceptance:109001-critical-sampled-low",
+          "selector": {
+            "actionId": "109001-critical-sampled-low",
+            "controlSkillId": 10900115,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-109001-visual-acceptance:109001-critical-sampled-low"
+          ],
+          "reasons": [],
+          "assertionHash": "0515cbc83951473e"
+        },
+        {
+          "assertionIdentity": "trace-action-form:machine-action-form:m11-d-109001-visual-acceptance:moyin-star-skill",
+          "selector": {
+            "actionId": "moyin-star-skill",
+            "controlSkillId": 10900112,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-action-form:m11-d-109001-visual-acceptance:moyin-star-skill"
+          ],
+          "reasons": [],
+          "assertionHash": "1773651c9e5da871"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-109001-visual-acceptance:0",
+          "selector": {
+            "actionId": "moyin-star-skill",
+            "hitIdentity": "10900112|0|elements|1|-4564820134104165813|3|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-109001-visual-acceptance:0"
+          ],
+          "reasons": [],
+          "assertionHash": "7b757a29aff15324"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-109001-visual-acceptance:1",
+          "selector": {
+            "actionId": "moyin-star-skill",
+            "hitIdentity": "10900112|0|elements|1|-4564820134104165813|8|2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-109001-visual-acceptance:1"
+          ],
+          "reasons": [],
+          "assertionHash": "ec3b6c9970d4e3a4"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-109001-visual-acceptance:2",
+          "selector": {
+            "actionId": "moyin-star-skill",
+            "hitIdentity": "10900112|0|elements|1|-4564820134104165813|13|3",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-109001-visual-acceptance:2"
+          ],
+          "reasons": [],
+          "assertionHash": "7b32d29c6de884f9"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-109001-visual-acceptance:3",
+          "selector": {
+            "actionId": "moyin-star-skill",
+            "hitIdentity": "10900112|0|elements|3|7337825396973098198|29|4",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-109001-visual-acceptance:3"
+          ],
+          "reasons": [],
+          "assertionHash": "b93b8f9abacafb0d"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-109001-visual-acceptance:4",
+          "selector": {
+            "actionId": "109001-critical-sampled-low",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-109001-visual-acceptance:4"
+          ],
+          "reasons": [],
+          "assertionHash": "08fef97ed0822963"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-109001-visual-acceptance:5",
+          "selector": {
+            "actionId": "109001-critical-sampled-boundary",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-109001-visual-acceptance:5"
+          ],
+          "reasons": [],
+          "assertionHash": "fdeb42bc82ce3ce9"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-109001-visual-acceptance:6",
+          "selector": {
+            "actionId": "109001-critical-expected",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-109001-visual-acceptance:6"
+          ],
+          "reasons": [],
+          "assertionHash": "f29b362a57427a26"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-109001-visual-acceptance:7",
+          "selector": {
+            "actionId": "109001-critical-critical",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-109001-visual-acceptance:7"
+          ],
+          "reasons": [],
+          "assertionHash": "46074adc67df9607"
+        },
+        {
+          "assertionIdentity": "trace-hit:machine-hit:m11-d-109001-visual-acceptance:8",
+          "selector": {
+            "actionId": "109001-critical-non-critical",
+            "hitIdentity": "10900115|0|elements|2|5171384344998858661|9|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-hit:m11-d-109001-visual-acceptance:8"
+          ],
+          "reasons": [],
+          "assertionHash": "4ef55709110b26e5"
+        },
+        {
+          "assertionIdentity": "workbench-import-export-round-trip",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "workbench-import-export-round-trip",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:workbench-import-export-round-trip"
+          ],
+          "reasons": [],
+          "assertionHash": "1ebb23438e769331"
+        }
+      ],
+      "scenarioCaseHash": "71f919b49106f1e6"
+    }
+  ],
+  "summary": {
+    "scenarioCount": 2,
+    "executionPassedCount": 2,
+    "assertionCount": 41,
+    "assertionPassedCount": 37,
+    "runnerKindCounts": {
+      "canonical-character-golden": 1,
+      "machine-axis": 1
+    }
+  },
+  "scenarioSetHash": "07bd11d10933adb0"
+}

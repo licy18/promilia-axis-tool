@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "33fad35f82aa31ed",
+  "rosterHash": "de81811b2effa3dc",
   "records": [
     {
       "objectKind": "character",
@@ -27,10 +27,10 @@
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "e3421f706f7ce535"
+          "28229346accc432a"
         ]
       },
-      "manifestHash": "e915973eae61574c"
+      "manifestHash": "bccde6632dc5a484"
     },
     {
       "objectKind": "character",
@@ -84,10 +84,10 @@
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "2a128fbe6a5310f6"
+          "3a724d996c6f5949"
         ]
       },
-      "manifestHash": "8bfd61eb62ceba1d"
+      "manifestHash": "efedc8e128ac28b5"
     },
     {
       "objectKind": "character",
@@ -216,14 +216,9 @@
       "sourceIdentities": [
         "generated/characters.json#items[id=109001]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "character-acceptance-not-published",
-          "category": "not-implemented",
-          "message": "No published M11-D acceptance manifest covers every source identity."
-        },
         {
           "code": "character-not-optimization-ready",
           "category": "not-implemented",
@@ -235,9 +230,11 @@
           109001
         ],
         "mechanismHash": "fd47d5ed36224b04",
-        "characterAcceptanceManifestHashes": []
+        "characterAcceptanceManifestHashes": [
+          "7187ea19fe3b38ad"
+        ]
       },
-      "manifestHash": "ab047f786758d59f"
+      "manifestHash": "28c0ffe4228295fb"
     },
     {
       "objectKind": "character",
@@ -30829,9 +30826,9 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 24,
+      "extracted": 23,
       "optimization-ready": 210,
-      "runtime-integrated": 31
+      "runtime-integrated": 32
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -30842,5 +30839,5 @@
     },
     "optimizationReadyTotal": 210
   },
-  "manifestsHash": "a5b8e21e33950c05"
+  "manifestsHash": "3fca1f9d826ade55"
 }

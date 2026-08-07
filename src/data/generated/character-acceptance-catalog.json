@@ -3,7 +3,7 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "8d2fc4aa192f9f97",
+  "manifestIndexHash": "f7ab773921924d99",
   "entries": [
     {
       "ownerId": 101003,
@@ -22,10 +22,10 @@
       "blockingLedgerCount": 176,
       "matrixRequiredCount": 247,
       "matrixPassedCount": 62,
-      "manifestHash": "361f4ce883b7a7f9",
-      "qualificationSubjectHash": "ac1846fb94047f96",
-      "sourceOfTruthHash": "68055fe2d6683e02",
-      "profileHash": "ae79ac733287e3efef8fc4cdadf72e8a3dc3bf547a39acc91bba23979b7500b3",
+      "manifestHash": "7a3cab66dfdf4eea",
+      "qualificationSubjectHash": "c341a2fcb26dd936",
+      "sourceOfTruthHash": "f2b0b57d3be257df",
+      "profileHash": "648e40eb37028cf88a835a948a1c6f08f7a7776659285c43656d336c4c71332f",
       "visualScenarioIds": [
         "m11-d-101003-visual-acceptance"
       ]
@@ -47,10 +47,10 @@
       "blockingLedgerCount": 330,
       "matrixRequiredCount": 411,
       "matrixPassedCount": 56,
-      "manifestHash": "e3421f706f7ce535",
-      "qualificationSubjectHash": "c25d103882ceef26",
-      "sourceOfTruthHash": "29c5cefeb23c188a",
-      "profileHash": "9c5d2140c67541effe4c968f075114adbed5508ff171a45b9155f1b13fc658eb",
+      "manifestHash": "28229346accc432a",
+      "qualificationSubjectHash": "5fb44ee64190725a",
+      "sourceOfTruthHash": "b607d6a6fac4f85e",
+      "profileHash": "b1ddc354e467baf9b5092dcea9bf386e1517bbde6093a81a9ddd4ef3dd449897",
       "visualScenarioIds": [
         "m11-d-101010-visual-acceptance"
       ]
@@ -72,21 +72,46 @@
       "blockingLedgerCount": 502,
       "matrixRequiredCount": 713,
       "matrixPassedCount": 36,
-      "manifestHash": "2a128fbe6a5310f6",
-      "qualificationSubjectHash": "8a099612d7167a0f",
-      "sourceOfTruthHash": "b1595dfa0b89fc87",
-      "profileHash": "8ef09b255047d88cd6a5adff47dd55df054f9ffb90cf8e6c672f50d7d6394be6",
+      "manifestHash": "3a724d996c6f5949",
+      "qualificationSubjectHash": "fcdf9050416953e4",
+      "sourceOfTruthHash": "169a36bac877b40e",
+      "profileHash": "2530fbcc125ef825a5c72f4ab95c270b2afec395312584c0025eb8fe91a0924a",
       "visualScenarioIds": [
         "m11-d-103002-visual-acceptance"
+      ]
+    },
+    {
+      "ownerId": 109001,
+      "ownerName": "末音",
+      "maturityState": "runtime-integrated",
+      "earnedStates": [
+        "extracted",
+        "runtime-integrated"
+      ],
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending",
+        "acceptance-required-matrix-incomplete",
+        "acceptance-blocking-ledger-not-empty"
+      ],
+      "blockingLedgerCount": 183,
+      "matrixRequiredCount": 210,
+      "matrixPassedCount": 19,
+      "manifestHash": "7187ea19fe3b38ad",
+      "qualificationSubjectHash": "8059ea6b9f92f7b4",
+      "sourceOfTruthHash": "1849ab3dc04be51e",
+      "profileHash": "edd9f09962478168c4682a3c3408a2f7bd029d2f1d99c7264b304c9d61ee418a",
+      "visualScenarioIds": [
+        "m11-d-109001-visual-acceptance"
       ]
     }
   ],
   "summary": {
-    "ownerCount": 3,
+    "ownerCount": 4,
     "maturityCounts": {
-      "runtime-integrated": 3
+      "runtime-integrated": 4
     },
     "optimizationReadyCount": 0
   },
-  "catalogHash": "9218ce77c8534d29"
+  "catalogHash": "dc1b37696843dc6d"
 }

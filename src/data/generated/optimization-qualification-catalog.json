@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "33fad35f82aa31ed",
-  "manifestsHash": "a5b8e21e33950c05",
-  "gapLedgerHash": "e66027078cbdf482",
-  "bindingMatrixHash": "39af1ce5d230bdc3",
-  "sourceSnapshotHash": "2918bf3db501b2de",
+  "rosterHash": "de81811b2effa3dc",
+  "manifestsHash": "3fca1f9d826ade55",
+  "gapLedgerHash": "cee89d65135781d5",
+  "bindingMatrixHash": "c74373507fa67bdf",
+  "sourceSnapshotHash": "27e69d5b2745c771",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -26,7 +26,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "e915973eae61574c"
+      "manifestHash": "bccde6632dc5a484"
     },
     {
       "objectKind": "character",
@@ -49,7 +49,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "8bfd61eb62ceba1d"
+      "manifestHash": "efedc8e128ac28b5"
     },
     {
       "objectKind": "character",
@@ -103,13 +103,12 @@
       "objectKind": "character",
       "objectId": "109001",
       "displayName": "末音",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "character-acceptance-not-published",
         "character-not-optimization-ready"
       ],
-      "manifestHash": "ab047f786758d59f"
+      "manifestHash": "28c0ffe4228295fb"
     },
     {
       "objectKind": "character",
@@ -2663,7 +2662,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "33fad35f82aa31ed",
+    "rosterHash": "de81811b2effa3dc",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24571,7 +24570,7 @@
       "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "39af1ce5d230bdc3"
+    "bindingMatrixHash": "c74373507fa67bdf"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44339,9 +44338,9 @@
   "summary": {
     "objectCount": 265,
     "maturityCounts": {
-      "extracted": 24,
+      "extracted": 23,
       "optimization-ready": 210,
-      "runtime-integrated": 31
+      "runtime-integrated": 32
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -44351,7 +44350,7 @@
       "set-skill": 11
     },
     "optimizationReadyTotal": 210,
-    "gameplayBlockingGapCount": 23,
+    "gameplayBlockingGapCount": 22,
     "bindingQualifiedEdgeCount": 11,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44434,5 +44433,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "60141ce9481ff6f8"
+  "catalogHash": "047260a6d8d59e90"
 }

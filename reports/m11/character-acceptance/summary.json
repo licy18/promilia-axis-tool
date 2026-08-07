@@ -75,13 +75,13 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "361f4ce883b7a7f9",
-      "sourceOfTruthHash": "68055fe2d6683e02",
+      "manifestHash": "7a3cab66dfdf4eea",
+      "sourceOfTruthHash": "f2b0b57d3be257df",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "80d1d8c7d0a9776b",
-        "data": "16779c53786b8398",
-        "trace": "d4c93333fe11c986",
+        "input": "4b2d48eed402f5e7",
+        "data": "e582c49254bef6dc",
+        "trace": "5bf7f6d618883a6a",
         "evaluation": "920e7363ae12290d"
       }
     },
@@ -135,13 +135,13 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "e3421f706f7ce535",
-      "sourceOfTruthHash": "29c5cefeb23c188a",
+      "manifestHash": "28229346accc432a",
+      "sourceOfTruthHash": "b607d6a6fac4f85e",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "6cb3b363ba9918d8",
-        "data": "e6a2d4a7fa538e00",
-        "trace": "0dbffe9b9c30d49c",
+        "input": "cbb852010ea5d3fc",
+        "data": "6df33d3a1ecb5794",
+        "trace": "f26b0ba69e746e88",
         "evaluation": "adc4612197816c14"
       }
     },
@@ -196,30 +196,83 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "2a128fbe6a5310f6",
-      "sourceOfTruthHash": "b1595dfa0b89fc87",
+      "manifestHash": "3a724d996c6f5949",
+      "sourceOfTruthHash": "169a36bac877b40e",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "dd44bcf0633870ef",
-        "data": "ba77a840ee432d0a",
-        "trace": "108805f1938edd19",
+        "input": "1c484495ecddb833",
+        "data": "6c0ec6683088c3de",
+        "trace": "a5d56e08f4118365",
         "evaluation": "b06186eaa569be69"
+      }
+    },
+    {
+      "ownerId": 109001,
+      "ownerName": "末音",
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending",
+        "acceptance-required-matrix-incomplete",
+        "acceptance-blocking-ledger-not-empty"
+      ],
+      "blockingLedgerCount": 183,
+      "sourceGapCount": 21,
+      "acceptanceGapCount": 162,
+      "nonBlockingSourceCount": 9,
+      "matrix": {
+        "requirementCount": 210,
+        "requiredCount": 210,
+        "passedCount": 19,
+        "blockedCount": 191,
+        "notApplicableCount": 0,
+        "statusCounts": {
+          "blocked": 191,
+          "passed": 19
+        },
+        "dimensionCounts": {
+          "action-form": 10,
+          "buff-lifecycle": 1,
+          "control-window": 61,
+          "controlled-actor": 1,
+          "critical": 9,
+          "effect": 36,
+          "hit": 74,
+          "hit-override": 1,
+          "persistence-replay": 1,
+          "public-action": 10,
+          "resource-boundary": 1,
+          "scenario-negative": 1,
+          "scenario-positive": 1,
+          "stat-dependency": 1,
+          "switch-trigger": 1,
+          "window-boundary": 1
+        }
+      },
+      "manifestHash": "7187ea19fe3b38ad",
+      "sourceOfTruthHash": "1849ab3dc04be51e",
+      "machineScenario": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "d46504f82f018f5c",
+        "data": "f58eb7708470192b",
+        "trace": "49c834fcc29beb21",
+        "evaluation": "80c3ff32175d7e8e"
       }
     }
   ],
-  "catalogHash": "9218ce77c8534d29",
-  "manifestIndexHash": "8d2fc4aa192f9f97",
+  "catalogHash": "dc1b37696843dc6d",
+  "manifestIndexHash": "f7ab773921924d99",
   "summary": {
-    "ownerCount": 3,
-    "runtimeIntegratedCount": 3,
+    "ownerCount": 4,
+    "runtimeIntegratedCount": 4,
     "visuallyAcceptedCount": 0,
     "optimizationReadyCount": 0,
-    "machineScenarioPassCount": 3,
-    "workbenchRoundTripPassCount": 3,
-    "sourceGapCount": 273,
-    "acceptanceGapCount": 735,
-    "nonBlockingSourceCount": 389,
-    "functionalBlockers": 1008,
+    "machineScenarioPassCount": 4,
+    "workbenchRoundTripPassCount": 4,
+    "sourceGapCount": 294,
+    "acceptanceGapCount": 897,
+    "nonBlockingSourceCount": 398,
+    "functionalBlockers": 1191,
     "performanceAndBundleRisksBlocking": false
   }
 }

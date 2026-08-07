@@ -45,10 +45,10 @@ describe('verified combat mechanics package', () => {
         appliedEffectBindingCount: 1799,
         verifiedZeroEffectBindingCount: 12,
         unresolvedEffectBindingCount: 1976,
-        actionVariantSupportControlBindingCount: 47,
+        actionVariantSupportControlBindingCount: 56,
         specialResourceProfileCount: 2,
         specialResourceOperationCount: 46,
-        actionVariantNodeCount: 689,
+        actionVariantNodeCount: 699,
         actionVariantEdgeCount: 62,
         switchTriggerProfileCount: 20,
         appliedSwitchTriggerProfileCount: 17,
@@ -72,7 +72,7 @@ describe('verified combat mechanics package', () => {
         semanticEffectCount: 3479,
         semanticGameplayEffectCount: 1842,
         semanticAppliedEffectCount: 1006,
-        characterCombatProfileCount: 3,
+        characterCombatProfileCount: 4,
         characterCombatUiVerifiedProfileCount: 0,
       },
       excludedDeadBranches: expect.arrayContaining([
@@ -160,7 +160,7 @@ describe('verified combat mechanics package', () => {
         profileSchema: 'azpr://schemas/character-combat-profile/v1',
         summary: {
           publicCharacterCount: 20,
-          compiledProfileCount: 3,
+          compiledProfileCount: 4,
           uiVerifiedProfileCount: 0,
         },
       },
@@ -306,7 +306,7 @@ describe('verified combat mechanics package', () => {
       status: 'verified-action-variant-graph-ready',
       summary: {
         ownerCount: 142,
-        nodeCount: 689,
+        nodeCount: 699,
         edgeCount: 346,
         appliedEdgeCount: 62,
         unresolvedEdgeCount: 286,
@@ -673,7 +673,7 @@ describe('verified combat mechanics package', () => {
     ]);
     expect(mechanicsPackage.actionVariantGraph.summary).toMatchObject({
       ownerCount: 142,
-      nodeCount: 689,
+      nodeCount: 699,
       modeledOwnerCount: 4,
       conditionDiscoveryCount: 216,
       conditionDiscoveryStatusCounts: {

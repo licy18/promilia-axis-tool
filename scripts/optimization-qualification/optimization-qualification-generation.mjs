@@ -70,7 +70,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   soulessences:
     'cd455e6cab217c5898e35e290b7d7e9d65b42a20bd0f71250a90377dfb93badd',
   verifiedMechanics:
-    '9eba8df1697a64bc6666d98959bb852e8854fb437cccfa79a9a5720de24cdbaf',
+    '9b44e1f9de7168fc47da772895b0a01f0ac14bb965c07ae05b7ac1ab50c2e3e3',
   'newTable:accessory.json':
     '449ed58b7e0d034c7c1fb48114468078810a97e4a61fe596cea53c19208c4b39',
   'newTable:accessory_customed.json':
