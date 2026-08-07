@@ -75,13 +75,13 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "a795d6b21fafcee2",
-      "sourceOfTruthHash": "24732ad11a0d5022",
+      "manifestHash": "2245a8eed2b7cced",
+      "sourceOfTruthHash": "33eb83791a9c75c3",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "38973cc9d9290143",
-        "data": "cc797c90c6f487dc",
-        "trace": "c191bc8f089f2fba",
+        "input": "ca72df88269c31ad",
+        "data": "f863843454ddb4d6",
+        "trace": "ad5ab7fccea22840",
         "evaluation": "920e7363ae12290d"
       }
     },
@@ -135,13 +135,13 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "24794fe1fae5c5a7",
-      "sourceOfTruthHash": "5155c40ebf1c6518",
+      "manifestHash": "b2c5902c8fddcdaf",
+      "sourceOfTruthHash": "3fb5948de9dbbee7",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "7279c10f07923ac8",
-        "data": "2e5020f6fcb5bd44",
-        "trace": "2402a875d86776dc",
+        "input": "a68068be81a2745e",
+        "data": "a19b0ec9c3dc008e",
+        "trace": "9bfbc5a74167a8da",
         "evaluation": "adc4612197816c14"
       }
     },
@@ -196,13 +196,13 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "58bc7150741a68ad",
-      "sourceOfTruthHash": "ce59f40b80230893",
+      "manifestHash": "914d54a52f02a64d",
+      "sourceOfTruthHash": "208adf1ec27d43cb",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "7860cbdf6eda4553",
-        "data": "22dfc1c4faf7e95a",
-        "trace": "85c5f1cb7f4a9249",
+        "input": "8038af6c278dc129",
+        "data": "3fd08e14cd163864",
+        "trace": "2a4bc27b9fa809af",
         "evaluation": "b06186eaa569be69"
       }
     },
@@ -216,18 +216,18 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 188,
+      "blockingLedgerCount": 185,
       "sourceGapCount": 16,
-      "acceptanceGapCount": 172,
-      "nonBlockingSourceCount": 8,
+      "acceptanceGapCount": 169,
+      "nonBlockingSourceCount": 9,
       "matrix": {
-        "requirementCount": 228,
-        "requiredCount": 228,
+        "requirementCount": 225,
+        "requiredCount": 225,
         "passedCount": 29,
-        "blockedCount": 199,
+        "blockedCount": 196,
         "notApplicableCount": 0,
         "statusCounts": {
-          "blocked": 199,
+          "blocked": 196,
           "passed": 29
         },
         "dimensionCounts": {
@@ -245,7 +245,6 @@
           "persistence-replay": 1,
           "public-action": 10,
           "resource-boundary": 1,
-          "runtime-effect-binding": 3,
           "scenario-negative": 1,
           "scenario-positive": 1,
           "stat-dependency": 1,
@@ -257,19 +256,19 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "9e03ad867f9ab2b8",
-      "sourceOfTruthHash": "78df6c6b6ba6149c",
+      "manifestHash": "7e46c639d561dd3a",
+      "sourceOfTruthHash": "73a4d59a84effe6e",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "2428a24b475d99f4",
-        "data": "a2dc2f860818c59f",
-        "trace": "748fe88229302afd",
+        "input": "eee6bee1a50a2886",
+        "data": "57a5c3d03be71451",
+        "trace": "343cbd0fdfe527d9",
         "evaluation": "fefe6ba59b4e3c64"
       }
     }
   ],
-  "catalogHash": "c6c62d659cf1fead",
-  "manifestIndexHash": "15b83dbcbe3f5e69",
+  "catalogHash": "3e3e0dde9135b515",
+  "manifestIndexHash": "b79eedf20e1b18e8",
   "summary": {
     "ownerCount": 4,
     "runtimeIntegratedCount": 4,
@@ -278,9 +277,9 @@
     "machineScenarioPassCount": 4,
     "workbenchRoundTripPassCount": 4,
     "sourceGapCount": 288,
-    "acceptanceGapCount": 909,
-    "nonBlockingSourceCount": 397,
-    "functionalBlockers": 1197,
+    "acceptanceGapCount": 906,
+    "nonBlockingSourceCount": 398,
+    "functionalBlockers": 1194,
     "performanceAndBundleRisksBlocking": false
   }
 }

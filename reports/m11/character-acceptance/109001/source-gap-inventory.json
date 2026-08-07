@@ -410,6 +410,23 @@
       "sourceRecordHash": "aebf5efc4ea226ee"
     },
     {
+      "uniqueGapIdentity": "source-gap:f50e9d629dfaf4bb",
+      "sourceRecordIdentities": [
+        "actor:109001:skill:10900162",
+        "semantic-gap:ee191fb82758a32ad985"
+      ],
+      "status": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceKind": "passive-or-skill",
+      "sourceIdentities": [
+        "actor:109001:skill:10900162",
+        "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "bac1759b5c42e595"
+    },
+    {
       "uniqueGapIdentity": "source-gap:f583f9a8ae3f2821",
       "sourceRecordIdentities": [
         "effect:10900113|0|elements|9|4731523060341306954|element:4731523060341306954|unresolved-frame|0",
@@ -428,11 +445,11 @@
     }
   ],
   "summary": {
-    "uniqueGapCount": 24,
+    "uniqueGapCount": 25,
     "blockingCount": 16,
-    "nonBlockingCount": 8,
+    "nonBlockingCount": 9,
     "statusCounts": {
-      "not-applicable": 8,
+      "not-applicable": 9,
       "static-evidence-gap": 15,
       "unknown-formula": 1
     },
@@ -446,8 +463,9 @@
       "nested-effect-wrapper-semantics-unresolved": 2,
       "nested-effect-wrapper-semantics-unresolved|sp-formula-not-literal-function-5": 1,
       "tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 1,
+      "unnamed-secondary-passive-not-implemented-current-client": 1,
       "unresolved": 5
     }
   },
-  "inventoryHash": "4764505a9f2a350f"
+  "inventoryHash": "494ba8c3af72e891"
 }

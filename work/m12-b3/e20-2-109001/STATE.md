@@ -1,6 +1,6 @@
 # E20-2-109001 末音 验收状态
 
-更新：2026-08-07（全量机制矩阵 v1）
+更新：2026-08-08（被动2 回退收口）
 
 ## 目标
 
@@ -165,6 +165,8 @@
 
 ## R4 进度（2026-08-08，被动2 + 重击回能已闭合）
 
+> ⚠ 本节已被 R11 回退覆盖：M21 被动2（10900162）不再视为已实现，按无名第二被动未实装收口；M7 重击回能保留。
+
 ### 已实现
 
 - **M21 被动2（10900162）**：新增 runtimeEffectBindings 触发类型 `action-frame-with-state`（compiler + target-state runtime）。璀璨（109001270）≥1 层时，普攻第三段（10900103@0F）、第五段（10900105@0F）、重击（10900110@0F）各发 +1 SP（109001300 直连 SP，raw 10000→1.0）。条件不满足时记录 `VERIFIED_RUNTIME_EFFECT_STATE_CONDITION_NOT_MET`，不伪造回能。
@@ -271,8 +273,9 @@
 
 ### 机制矩阵最终状态（25 项）
 
-| 已实现并验证 | M1-M5, M7, M9, M12-M14, M17-M22, M24-M25 |
+| 已实现并验证 | M1-M5, M7, M9, M12-M14, M17-M20, M22, M24-M25 |
 |---|---|
+| 未实装（无名第二被动，按用户口径 N/A） | M21（10900162，见 R11） |
 | 客户端孤儿（未接线，登记不建模） | M8, M10, M11, M15, M16, M23 |
 | 待产品/实机确认 | M6（10900101 sub1 璀璨普攻变体语义） |
 
@@ -294,6 +297,44 @@
 
 - M6 的“璀璨普攻变体选择语义”登记为待产品/实机确认项：需要明确 10900101 sub1 是否确为璀璨普攻形态、其触发条件与命中选择；当前不猜测接线。
 - 不阻塞已有验收（A4 超限、追击衔接普攻4 已生效）；等待用户/产品给出 sub1 语义后接线。
+
+## R11 结论（2026-08-08，被动2 按无名第二被动未实装回退）
+
+### 用户口径确认
+
+用户质疑 10900162（被动2）是否实际有引用，并指出此前项目口径为「所有无名的被动技能都是未实装」。经核对，用户正确：
+
+- 10900162 与 10101062/10300262 相同：本地化 name/displayName 均为空，只有描述文本。
+- 10900162 所属元素（109001299/300/301）在全部 109001 控制资源图中无引用边；`10900162.asset` 的 `skillResourceMaps` 为空。
+- 项目既有 product-boundary `discoverUnnamedSecondaryPassiveBoundaries` 口径：第二被动槽无本地化名称 → `unnamed-secondary-passive-not-implemented-current-client`，N/A。
+
+### 回退内容
+
+- `scripts/character-combat/profile-recipes/109001.json`：删除 runtimeEffectBindings 中三条 `moyin-passive2-*`（A3/A5/重击 +1 SP，基于 109001300/301）。
+- `scripts/character-acceptance/acceptance-recipes/109001.json`：恢复 `unnamedSecondaryPassiveSkillId: 10900162`。
+- 删除 `verifiedActionVariantRuntime.test.js` 被动2 璀璨门控 SP 单测；`generatedCharacterAcceptance.test.js` 移除 109001 `implemented: true`。
+- 通用设施保留：`action-frame-with-state`、`directSpPresence`（M7 重击回能仍基于 directSpPresence 生效）、`actionRuleDiagnostics` 冷却缩减收集。
+
+### 同步结果
+
+- 包 hash `8f21567a…`（文件 sha `efb13246…`）；FROZEN verifiedMechanics 同步。
+- 边界恢复：10900162 → `unnamed-secondary-passive-not-implemented-current-client`；功能阻断 1197→1194（3 条 scenario-coverage 随绑定移除）。
+- 8 个 fixture（m11-b、m12 batch/cycle/search、4 character-acceptance）、m11 integrated baseline、b2 cycle 验收报告、dynamic-loadout acceptance report 的 6 项资格哈希 + canonical hashes 全部重基线。
+- 全套 Vitest 1446/1448（仅 2 条已知 process-heavy 并行超时，单独全过）；11 项审计 clean（m11-headless 包审计在提交后复跑）。
+
+### 机制矩阵最终状态（25 项，更新）
+
+| 已实现并验证 | M1-M5, M7, M9, M12-M14, M17-M20, M22, M24-M25 |
+|---|---|
+| 未实装（无名第二被动，按用户口径 N/A） | M21（10900162 璀璨下普攻3/5/重击 +1 星决蓄能） |
+| 客户端孤儿（未接线，登记不建模） | M8, M10, M11, M15, M16, M23 |
+| 待产品/实机确认 | M6（10900101 sub1 璀璨普攻变体语义） |
+
+### 下一步
+
+1. 提交回退。
+2. 提交后复跑 `audit:package:m11-headless`、production build、`git diff --check`。
+3. M6 待产品/实机确认；M12-C 前置验收（视觉签收/optimization-ready）待用户。
 
 ## 关键事实
 

@@ -518,21 +518,6 @@
       "status": "applied"
     },
     {
-      "nodeIdentity": "control:10900162",
-      "nodeKind": "control",
-      "controlSkillId": 10900162,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900162.asset/MonoBehaviour/skill_control_10900162__4751348978407621511.json",
-      "status": "static-evidence-gap"
-    },
-    {
-      "nodeIdentity": "control:10900162:sub:0",
-      "nodeKind": "control-variant",
-      "controlSkillId": 10900162,
-      "subSkillIndex": 0,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900162.asset/MonoBehaviour/skill_control_10900162__4751348978407621511.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
-      "status": "applied"
-    },
-    {
       "nodeIdentity": "hit:10900101|0|elements|0|3476557355496561381|12|1",
       "nodeKind": "hit",
       "controlSkillId": 10900101,
@@ -1157,30 +1142,6 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900149.asset/MonoBehaviour/skill_control_10900149__8207482499774098872.json#skillResourceMaps[1].elements[8]|battle-element-assets.jsonl#path_id=-7910779705807006372"
     },
     {
-      "nodeIdentity": "runtime-effect:moyin-passive2-a3-sp",
-      "nodeKind": "runtime-effect",
-      "effectId": "battle-element:109001300",
-      "targetKind": "source-actor",
-      "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-    },
-    {
-      "nodeIdentity": "runtime-effect:moyin-passive2-a5-sp",
-      "nodeKind": "runtime-effect",
-      "effectId": "battle-element:109001300",
-      "targetKind": "source-actor",
-      "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-    },
-    {
-      "nodeIdentity": "runtime-effect:moyin-passive2-charged-sp",
-      "nodeKind": "runtime-effect",
-      "effectId": "battle-element:109001300",
-      "targetKind": "source-actor",
-      "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-    },
-    {
       "nodeIdentity": "switch-trigger:109001:on-enter",
       "nodeKind": "switch-trigger",
       "triggerPhase": "on-enter",
@@ -1527,15 +1488,6 @@
       "relation": "emits-hit"
     },
     {
-      "edgeIdentity": "control:10900103:sub:0->triggers-runtime-effect->runtime-effect:moyin-passive2-a3-sp",
-      "from": "control:10900103:sub:0",
-      "to": "runtime-effect:moyin-passive2-a3-sp",
-      "relation": "triggers-runtime-effect",
-      "triggerFrame": 0,
-      "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-    },
-    {
       "edgeIdentity": "control:10900104->has-subskill->control:10900104:sub:0",
       "from": "control:10900104",
       "to": "control:10900104:sub:0",
@@ -1656,15 +1608,6 @@
       "relation": "emits-hit"
     },
     {
-      "edgeIdentity": "control:10900105:sub:0->triggers-runtime-effect->runtime-effect:moyin-passive2-a5-sp",
-      "from": "control:10900105:sub:0",
-      "to": "runtime-effect:moyin-passive2-a5-sp",
-      "relation": "triggers-runtime-effect",
-      "triggerFrame": 0,
-      "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-    },
-    {
       "edgeIdentity": "control:10900110->has-subskill->control:10900110:sub:0",
       "from": "control:10900110",
       "to": "control:10900110:sub:0",
@@ -1687,15 +1630,6 @@
       "from": "control:10900110:sub:0",
       "to": "hit:10900110|0|elements|8|3633005386339257163|60|3",
       "relation": "emits-hit"
-    },
-    {
-      "edgeIdentity": "control:10900110:sub:0->triggers-runtime-effect->runtime-effect:moyin-passive2-charged-sp",
-      "from": "control:10900110:sub:0",
-      "to": "runtime-effect:moyin-passive2-charged-sp",
-      "relation": "triggers-runtime-effect",
-      "triggerFrame": 0,
-      "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
     },
     {
       "edgeIdentity": "control:10900111->has-subskill->control:10900111:sub:0",
@@ -2062,12 +1996,6 @@
       "relation": "has-subskill"
     },
     {
-      "edgeIdentity": "control:10900162->has-subskill->control:10900162:sub:0",
-      "from": "control:10900162",
-      "to": "control:10900162:sub:0",
-      "relation": "has-subskill"
-    },
-    {
       "edgeIdentity": "control:null:sub:null->triggers-passive->actor:109001:passive:10900161",
       "from": "control:null:sub:null",
       "to": "actor:109001:passive:10900161",
@@ -2159,19 +2087,18 @@
     }
   ],
   "summary": {
-    "nodeCount": 156,
-    "edgeCount": 145,
-    "controlCount": 24,
+    "nodeCount": 151,
+    "edgeCount": 141,
+    "controlCount": 23,
     "exclusionCount": 8,
     "nodeKindCounts": {
       "action-form": 10,
       "conditional-hit-group": 2,
-      "control": 24,
-      "control-variant": 26,
+      "control": 23,
+      "control-variant": 25,
       "hit": 78,
       "passive-listener": 1,
       "public-action": 10,
-      "runtime-effect": 3,
       "switch-trigger": 1,
       "target-state": 1
     },
@@ -2181,12 +2108,11 @@
       "emits-hit": 78,
       "executes-control": 20,
       "has-form": 10,
-      "has-subskill": 26,
+      "has-subskill": 25,
       "materializes-conditional-hits": 2,
       "target-state-gain": 2,
-      "triggers-passive": 1,
-      "triggers-runtime-effect": 3
+      "triggers-passive": 1
     }
   },
-  "profileHash": "6fa978f105c6eff7bfcd0bf3fa8fd02aefd2676598da1c8a867826477d8ed17e"
+  "profileHash": "1b1be4db456200ae55509cab88344210e3b148201dee96ee163d21e9ad5f46f8"
 }

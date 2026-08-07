@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "4b7b9fc53d308454748a37104e5a4863ea5739d09ffaa1a8fe2aa5b68c20f7e5",
+  "sourcePackageHash": "040475c3e712cbb9ee0874342d6ec47f5a23ee26c91acb0ae15bf91d720c75eb",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "38ccf8a3bc471cca",
-    "traceHash": "267009b1634d4a57",
-    "dataHash": "5067293f679ba987",
+    "inputHash": "5a08de18a7887176",
+    "traceHash": "dc224728f1e8c6c4",
+    "dataHash": "0a16783a54cecc7b",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -532,9 +532,9 @@
           "actorId": "actor-109001",
           "kiboId": null,
           "initialValue": 100,
-          "currentValue": 34.44339,
+          "currentValue": 33.44339,
           "maxValue": 100,
-          "eventCount": 1216,
+          "eventCount": 1215,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-foreground",
@@ -602,76 +602,68 @@
               "afterValue": 4.549744
             },
             {
-              "timeMs": 15000,
+              "timeMs": 15083.333333,
               "actionId": "moyin-charged",
-              "reason": "verified-direct-sp",
-              "beforeValue": 5.132935,
-              "change": 1,
-              "afterValue": 6.132935
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 5.153763,
+              "change": 0.919998,
+              "afterValue": 6.073761
             },
             {
               "timeMs": 15083.333333,
               "actionId": "moyin-charged",
-              "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.153763,
-              "change": 0.919998,
+              "reason": "tuning-conditional-direct-sp",
+              "beforeValue": 6.073761,
+              "change": 1,
               "afterValue": 7.073761
             },
             {
-              "timeMs": 15083.333333,
+              "timeMs": 15333.333333,
               "actionId": "moyin-charged",
-              "reason": "tuning-conditional-direct-sp",
-              "beforeValue": 7.073761,
-              "change": 1,
-              "afterValue": 8.073761
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 7.136246,
+              "change": 0.919998,
+              "afterValue": 8.056244
             },
             {
               "timeMs": 15333.333333,
               "actionId": "moyin-charged",
-              "reason": "verified-hit-sp-recovery",
-              "beforeValue": 8.136246,
-              "change": 0.919998,
+              "reason": "tuning-conditional-direct-sp",
+              "beforeValue": 8.056244,
+              "change": 1,
               "afterValue": 9.056244
             },
             {
-              "timeMs": 15333.333333,
-              "actionId": "moyin-charged",
-              "reason": "tuning-conditional-direct-sp",
-              "beforeValue": 9.056244,
-              "change": 1,
-              "afterValue": 10.056244
-            },
-            {
               "timeMs": 16000,
               "actionId": "moyin-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 10.181214,
+              "beforeValue": 9.181214,
               "change": 0.919998,
-              "afterValue": 11.101212
+              "afterValue": 10.101212
             },
             {
               "timeMs": 16000,
               "actionId": "moyin-charged",
               "reason": "tuning-conditional-direct-sp",
-              "beforeValue": 11.101212,
+              "beforeValue": 10.101212,
               "change": 1,
-              "afterValue": 12.101212
+              "afterValue": 11.101212
             },
             {
               "timeMs": 23383.333333,
               "actionId": "moyin-star-skill-2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.642501,
+              "beforeValue": 12.642501,
               "change": 0.329987,
-              "afterValue": 13.972488
+              "afterValue": 12.972488
             },
             {
               "timeMs": 23816.666666,
               "actionId": "moyin-star-skill-2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 14.076629,
+              "beforeValue": 13.076629,
               "change": 0.329987,
-              "afterValue": 14.406616
+              "afterValue": 13.406616
             }
           ]
         }
@@ -936,9 +928,9 @@
           "actorId": "actor-109001",
           "kiboId": null,
           "initialValue": 100,
-          "currentValue": 34.44339,
+          "currentValue": 33.44339,
           "maxValue": 100,
-          "eventCount": 1216,
+          "eventCount": 1215,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-foreground",
@@ -1006,76 +998,68 @@
               "afterValue": 4.549744
             },
             {
-              "timeMs": 15000,
+              "timeMs": 15083.333333,
               "actionId": "moyin-charged",
-              "reason": "verified-direct-sp",
-              "beforeValue": 5.132935,
-              "change": 1,
-              "afterValue": 6.132935
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 5.153763,
+              "change": 0.919998,
+              "afterValue": 6.073761
             },
             {
               "timeMs": 15083.333333,
               "actionId": "moyin-charged",
-              "reason": "verified-hit-sp-recovery",
-              "beforeValue": 6.153763,
-              "change": 0.919998,
+              "reason": "tuning-conditional-direct-sp",
+              "beforeValue": 6.073761,
+              "change": 1,
               "afterValue": 7.073761
             },
             {
-              "timeMs": 15083.333333,
+              "timeMs": 15333.333333,
               "actionId": "moyin-charged",
-              "reason": "tuning-conditional-direct-sp",
-              "beforeValue": 7.073761,
-              "change": 1,
-              "afterValue": 8.073761
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 7.136246,
+              "change": 0.919998,
+              "afterValue": 8.056244
             },
             {
               "timeMs": 15333.333333,
               "actionId": "moyin-charged",
-              "reason": "verified-hit-sp-recovery",
-              "beforeValue": 8.136246,
-              "change": 0.919998,
+              "reason": "tuning-conditional-direct-sp",
+              "beforeValue": 8.056244,
+              "change": 1,
               "afterValue": 9.056244
             },
             {
-              "timeMs": 15333.333333,
-              "actionId": "moyin-charged",
-              "reason": "tuning-conditional-direct-sp",
-              "beforeValue": 9.056244,
-              "change": 1,
-              "afterValue": 10.056244
-            },
-            {
               "timeMs": 16000,
               "actionId": "moyin-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 10.181214,
+              "beforeValue": 9.181214,
               "change": 0.919998,
-              "afterValue": 11.101212
+              "afterValue": 10.101212
             },
             {
               "timeMs": 16000,
               "actionId": "moyin-charged",
               "reason": "tuning-conditional-direct-sp",
-              "beforeValue": 11.101212,
+              "beforeValue": 10.101212,
               "change": 1,
-              "afterValue": 12.101212
+              "afterValue": 11.101212
             },
             {
               "timeMs": 23383.333333,
               "actionId": "moyin-star-skill-2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.642501,
+              "beforeValue": 12.642501,
               "change": 0.329987,
-              "afterValue": 13.972488
+              "afterValue": 12.972488
             },
             {
               "timeMs": 23816.666666,
               "actionId": "moyin-star-skill-2",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 14.076629,
+              "beforeValue": 13.076629,
               "change": 0.329987,
-              "afterValue": 14.406616
+              "afterValue": 13.406616
             }
           ]
         }
@@ -1137,9 +1121,8 @@
           ]
         },
         "moyin-charged": {
-          "eventCount": 7,
+          "eventCount": 6,
           "frames": [
-            900,
             905,
             905,
             920,
@@ -1148,7 +1131,6 @@
             960
           ],
           "changes": [
-            1,
             0.919998,
             1,
             0.919998,
@@ -1156,10 +1138,9 @@
             0.919998,
             1
           ],
-          "totalChange": 6.759994,
+          "totalChange": 5.759994,
           "reasons": [
             "tuning-conditional-direct-sp",
-            "verified-direct-sp",
             "verified-hit-sp-recovery"
           ]
         },
@@ -1357,18 +1338,6 @@
       "targetStateTrace": [
         {
           "eventId": null,
-          "actionId": "moyin-a5",
-          "frame": 500,
-          "stateIdentity": "moyin-brilliant",
-          "stateName": "璀璨",
-          "operation": null,
-          "beforeValue": null,
-          "change": null,
-          "afterValue": null,
-          "maxValue": null
-        },
-        {
-          "eventId": null,
           "actionId": "moyin-limit-counter",
           "frame": 731,
           "stateIdentity": "moyin-brilliant",
@@ -1395,15 +1364,15 @@
       "conditionalHitGroups": [],
       "targetStateSummary": {
         "profileCount": 2,
-        "eventCount": 3,
+        "eventCount": 2,
         "appliedGroupCount": 0,
         "skippedGroupCount": 0,
         "effectCommandCount": 2,
-        "directSpEventCount": 1
+        "directSpEventCount": 0
       },
       "ownerDirectSp": {
-        "eventCount": 1,
-        "totalChange": 1
+        "eventCount": 0,
+        "totalChange": 0
       },
       "thresholdClearCount": 0,
       "transformCount": 0,
@@ -5243,18 +5212,6 @@
       "targetStates": [
         {
           "eventId": null,
-          "actionId": "moyin-a5",
-          "frame": 500,
-          "stateIdentity": "moyin-brilliant",
-          "stateName": "璀璨",
-          "operation": null,
-          "beforeValue": null,
-          "change": null,
-          "afterValue": null,
-          "maxValue": null
-        },
-        {
-          "eventId": null,
           "actionId": "moyin-limit-counter",
           "frame": 731,
           "stateIdentity": "moyin-brilliant",
@@ -5847,7 +5804,7 @@
         }
       ]
     },
-    "summaryHash": "73857e5b94914c5ec3e57d199eaacc2beca8e9a7f9652b6d026ebd17b2c73bec"
+    "summaryHash": "14e651637b668fd621683ecb1b355dbc7059ea2862aa4f5dfe90b0821f38f0d7"
   },
   "expected": {
     "exact": {
@@ -5898,11 +5855,11 @@
         "jsonPath": "resources.ownerActorSpTransactionsByActionId.moyin-charged.totalChange",
         "operator": "greater-than",
         "expected": 3,
-        "actual": 6.759994,
+        "actual": 5.759994,
         "passed": true
       }
     ]
   },
-  "replayHash": "f9766cd08a97f692926585676237ff875f244ecd46849c492d73d3d323ea14ed",
-  "profileHash": "6fa978f105c6eff7bfcd0bf3fa8fd02aefd2676598da1c8a867826477d8ed17e"
+  "replayHash": "da5e2302f1c5cdb377d0d23b3236712c1958de5a5ea6550385ff459d5fe6471f",
+  "profileHash": "1b1be4db456200ae55509cab88344210e3b148201dee96ee163d21e9ad5f46f8"
 }

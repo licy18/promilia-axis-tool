@@ -43,7 +43,6 @@ const owners = [
     passiveId: 10900162,
     manifest: moyinManifest,
     profile: moyinProfile,
-    implemented: true,
   },
 ];
 

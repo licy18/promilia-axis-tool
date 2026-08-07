@@ -2,24 +2,27 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-unresolved-ledger",
   "ownerId": 109001,
-  "profileHash": "6fa978f105c6eff7bfcd0bf3fa8fd02aefd2676598da1c8a867826477d8ed17e",
+  "profileHash": "1b1be4db456200ae55509cab88344210e3b148201dee96ee163d21e9ad5f46f8",
   "summary": {
-    "semanticRecordCount": 24,
-    "rawRecordCount": 31,
+    "semanticRecordCount": 25,
+    "rawRecordCount": 32,
     "semanticStatusCounts": {
+      "not-applicable": 1,
       "static-evidence-gap": 24
     },
     "rawStatusCounts": {
+      "not-applicable": 1,
       "static-evidence-gap": 31
     },
     "impactClassificationCounts": {
       "gameplay-impacting": 16,
+      "not-applicable": 1,
       "wrapper-or-duplicate": 8
     },
     "gameplayImpactingCount": 16,
     "wrapperOrDuplicateCount": 8,
     "transitionCandidateSupersededCount": 0,
-    "unreachableOrNotApplicableCount": 0
+    "unreachableOrNotApplicableCount": 1
   },
   "records": [
     {
@@ -558,6 +561,28 @@
       "rawRecordCount": 1
     },
     {
+      "recordIdentity": "semantic-gap:ee191fb82758a32ad985",
+      "ownerId": 109001,
+      "sourceKind": "passive-or-skill",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "unnamed-secondary-passive-not-implemented-current-client"
+      ],
+      "sourceIdentity": "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json",
+      "sourceIdentities": [
+        "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "actor:109001:skill:10900162"
+      ],
+      "rawRecordCount": 1
+    },
+    {
       "recordIdentity": "semantic-gap:ef05dcd69253985a2519",
       "ownerId": 109001,
       "sourceKind": "effect",
@@ -582,6 +607,20 @@
     }
   ],
   "rawRecords": [
+    {
+      "recordIdentity": "actor:109001:skill:10900162",
+      "ownerId": 109001,
+      "sourceKind": "passive-or-skill",
+      "status": "not-applicable",
+      "reasons": [
+        "unnamed-secondary-passive-not-implemented-current-client"
+      ],
+      "sourceIdentity": "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json",
+      "referenceKind": null,
+      "sourceEvidenceStatus": null,
+      "scenarioRuntimeStatus": null,
+      "metadata": null
+    },
     {
       "recordIdentity": "effect:10900101|1|elements|3|8949110464361487189|element:8949110464361487189|0|0",
       "ownerId": 109001,

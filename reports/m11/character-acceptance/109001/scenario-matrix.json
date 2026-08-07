@@ -64,7 +64,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:b3ed54a5d55e8f1d"
+        "coverage-edge:4404122cc35fea44"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -145,10 +145,10 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:900a899d32062090",
-        "coverage-edge:db30998c867fceb9",
-        "coverage-edge:dd0b5aa39caceda8",
-        "coverage-edge:f686e065bab2ed94"
+        "coverage-edge:154e073f86087ae8",
+        "coverage-edge:36754bc00ba37985",
+        "coverage-edge:510b5086c3f06249",
+        "coverage-edge:dd0b5aa39caceda8"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
@@ -199,7 +199,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:077ea67d78269de4"
+        "coverage-edge:297778c12f127bb5"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -249,7 +249,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:0129617826f30c0b"
+        "coverage-edge:0c2d756b46deebf6"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -275,7 +275,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:f9a4ec9ec9afe47b"
+        "coverage-edge:9df81d0b9751a5c6"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -2164,8 +2164,8 @@
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:8e4087e0255e6c67",
-        "coverage-edge:bd8a0a6487bb1760"
+        "coverage-edge:7f13d3a29fc40fb9",
+        "coverage-edge:eb959c2bd68ef82a"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -4157,7 +4157,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:68b34bab85ab794f"
+        "coverage-edge:188596b5f0560c02"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -4232,9 +4232,9 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:1abf94dcc725bd96",
-        "coverage-edge:5bea15dfacc7689b",
-        "coverage-edge:6cc7671fd2dde0f2",
+        "coverage-edge:2895bc876a7a0266",
+        "coverage-edge:2bc5e7caf4b545bf",
+        "coverage-edge:f05d8ecf8cd26beb",
         "coverage-edge:f88a55d5e7e2835a"
       ],
       "evidenceScenarioIds": [
@@ -4282,7 +4282,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:9c8d7fed74733026"
+        "coverage-edge:72eb5a120ef52b5b"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -4328,7 +4328,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:397e26e953bb54eb"
+        "coverage-edge:59549a8cd705fdd6"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -4352,79 +4352,13 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:2483239dfd3dbbcb"
+        "coverage-edge:59db06df5379ae36"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
       ],
       "sourceIdentities": [],
       "reasons": []
-    },
-    {
-      "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a3-sp",
-      "dimension": "runtime-effect-binding",
-      "subjectIdentity": "moyin-passive2-a3-sp",
-      "required": true,
-      "status": "blocked",
-      "contractStatus": "verified-runtime-effect-binding-ready",
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "b0bc890c2555ce2d",
-      "coverageSelector": {
-        "effectIdentity": "battle-element:109001300",
-        "kind": "effect"
-      },
-      "coverageEdgeIds": [],
-      "evidenceScenarioIds": [],
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-      ],
-      "reasons": [
-        "acceptance-scenario-coverage-missing"
-      ]
-    },
-    {
-      "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a5-sp",
-      "dimension": "runtime-effect-binding",
-      "subjectIdentity": "moyin-passive2-a5-sp",
-      "required": true,
-      "status": "blocked",
-      "contractStatus": "verified-runtime-effect-binding-ready",
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "61a589a939edc72a",
-      "coverageSelector": {
-        "effectIdentity": "battle-element:109001300",
-        "kind": "effect"
-      },
-      "coverageEdgeIds": [],
-      "evidenceScenarioIds": [],
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-      ],
-      "reasons": [
-        "acceptance-scenario-coverage-missing"
-      ]
-    },
-    {
-      "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-charged-sp",
-      "dimension": "runtime-effect-binding",
-      "subjectIdentity": "moyin-passive2-charged-sp",
-      "required": true,
-      "status": "blocked",
-      "contractStatus": "verified-runtime-effect-binding-ready",
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "b722d63bbb771b4c",
-      "coverageSelector": {
-        "effectIdentity": "battle-element:109001300",
-        "kind": "effect"
-      },
-      "coverageEdgeIds": [],
-      "evidenceScenarioIds": [],
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-      ],
-      "reasons": [
-        "acceptance-scenario-coverage-missing"
-      ]
     },
     {
       "requirementIdentity": "contract:stat-dependency:stat-dependency:0:1c17084b92b59bea",
@@ -4481,9 +4415,8 @@
         "stateIdentity": "moyin-brilliant"
       },
       "coverageEdgeIds": [
-        "coverage-edge:4f51bc8658b2af40",
-        "coverage-edge:62e4cc54df14956b",
-        "coverage-edge:d4e1b68b267b0b27"
+        "coverage-edge:649f32c777cff7ec",
+        "coverage-edge:7a7f4b677b576688"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -4507,9 +4440,8 @@
         "stateIdentity": "moyin-brilliant"
       },
       "coverageEdgeIds": [
-        "coverage-edge:376cd98bf9dab05d",
-        "coverage-edge:ca09ae994395dafe",
-        "coverage-edge:cbdd332240a231a9"
+        "coverage-edge:5ffdd3128d47c8be",
+        "coverage-edge:78a3773a0f7c0d4a"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -4533,9 +4465,8 @@
         "stateIdentity": "moyin-brilliant"
       },
       "coverageEdgeIds": [
-        "coverage-edge:263b2a90cbff9e65",
-        "coverage-edge:8092a379f960fe09",
-        "coverage-edge:f4fb454e07aae8fe"
+        "coverage-edge:1cd2df28bd565a3a",
+        "coverage-edge:55f077db706e2c16"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -4974,7 +4905,7 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:d937fe830441003d"
+        "coverage-edge:fca502b0096a2be4"
       ],
       "evidenceScenarioIds": [
         "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -5035,13 +4966,13 @@
     }
   ],
   "summary": {
-    "requirementCount": 228,
-    "requiredCount": 228,
+    "requirementCount": 225,
+    "requiredCount": 225,
     "passedCount": 29,
-    "blockedCount": 199,
+    "blockedCount": 196,
     "notApplicableCount": 0,
     "statusCounts": {
-      "blocked": 199,
+      "blocked": 196,
       "passed": 29
     },
     "dimensionCounts": {
@@ -5059,7 +4990,6 @@
       "persistence-replay": 1,
       "public-action": 10,
       "resource-boundary": 1,
-      "runtime-effect-binding": 3,
       "scenario-negative": 1,
       "scenario-positive": 1,
       "stat-dependency": 1,
@@ -5071,5 +5001,5 @@
       "window-boundary": 1
     }
   },
-  "matrixHash": "b6c874c870698764"
+  "matrixHash": "0cee2d55acda2775"
 }

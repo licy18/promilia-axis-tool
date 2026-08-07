@@ -383,7 +383,7 @@
       }
     },
     {
-      "boundaryIdentity": "actor:109001:skill:10900162:implemented",
+      "boundaryIdentity": "actor:109001:skill:10900162:product-boundary",
       "ownerId": 109001,
       "ownerName": "末音",
       "passiveSlotIndex": 1,
@@ -399,8 +399,8 @@
         "skillId": 10900161,
         "name": "哈库茵之耀"
       },
-      "classification": "implemented",
-      "reason": null,
+      "classification": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
       "sourceIdentities": [
         "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]",
         "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
@@ -408,7 +408,7 @@
       "runtimeContractPolicy": {
         "passiveProfile": false,
         "listener": false,
-        "effectBinding": true,
+        "effectBinding": false,
         "captureRequirement": false,
         "gameplayImpactingGap": false
       }

@@ -2028,6 +2028,18 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 
 下一阶段任务：M6 璀璨普攻变体语义（待产品确认）→ 残响登记 → M12-C 前置验收。每完成一个子阶段即更新本手册并单独提交。
 
+### M12-B3-E20-2-109001 R11 已完成：被动2 按无名第二被动未实装回退（2026-08-08）
+
+用户质疑 10900162（被动2）是否有实际引用，并提示项目既有口径「所有无名的被动技能都是未实装」。核对后确认用户正确，R4 对被动2 的接入被回退：
+
+- 10900162 与 10101062/10300262 相同：本地化 name/displayName 均为空，只有描述文本；所属元素（109001299/300/301）在全部 109001 控制资源图中无引用边，`10900162.asset` 的 `skillResourceMaps` 为空。
+- 回退：删除 recipe 中三条 `moyin-passive2-*` runtimeEffectBindings（A3/A5/重击 +1 SP）、恢复 `unnamedSecondaryPassiveSkillId: 10900162`、删除被动2 单测、移除 109001 `implemented: true`；通用设施（`action-frame-with-state`、`directSpPresence`、冷却缩减收集）保留，M7 重击回能不受影响。
+- 边界自动恢复 `unnamed-secondary-passive-not-implemented-current-client`；功能阻断 1197→1194（3 条 scenario-coverage 随绑定移除）；M21 从已实现移入未实装 N/A，机制矩阵为：已实现 M1-M5/M7/M9/M12-M14/M17-M20/M22/M24-M25；孤儿 M8/M10/M11/M15/M16/M23；待产品确认 M6。
+- 包 hash `8f21567a…`（文件 sha `efb13246…`），FROZEN verifiedMechanics 同步；8 个 fixture、m11 integrated baseline、b2 cycle 验收报告、dynamic-loadout acceptance report（6 项资格哈希 + canonical hashes）全部重基线。
+- 验证：全套 Vitest 1446/1448（仅 2 条已知 process-heavy 并行超时，单独全过）；10 项审计 clean（m11-headless 包审计在提交后复跑）；production build 与 `git diff --check` 通过。
+
+下一阶段任务：提交回退后复跑 m11-headless 包审计；M6 璀璨普攻变体语义（待产品确认）→ M12-C 前置验收（视觉签收/optimization-ready，待用户）。
+
 ### M12-B3-E18 sub3 已完成：500213 SpacialProperty 按战斗属性闭合，目标 signature 行清零（2026-08-07）
 
 二进制/数据证据链：dump.cs `ESpecialPropertyType`（1=ALL_PROPERTY_SHOOTDMGUP 全属性伤害增幅 / 2=ALL_PROPERTY_DEFENSE 全属性受伤减免）；changeType=2 全库仅 5 个元素（520012001/540074/53201902/53201903/53110406），均携带战斗 attributeID（26=PHYSICAL_SUFFERDMGDOWN、62=FIRE_DEFENSE）与 specialPropertyType；census 被动侧 520012 神圣之躯（changeType=2、attr26、+20%）早已按战斗属性解析为 `equipped-kibo-self-property-effect` 并进入运行时被动生成。据此修正 sync `classifyBattleEffectNode`：changeType=2 且 specialPropertyType ∈ {1,2} 不再推 `property-change-type-not-battle-property`，`propertyChange` 契约携带 `specialPropertyType`/`specialPropertyTypeName`（changeType=1 玩家属性仍保持非战斗门禁）。540074（全元素抗性下降 -0.91%/16s）因此从 unresolved 转 applied。结果：**50021301 菇噜噜 signature 行 evidence-closed，目标 signature 开放 1→0；publicActionClosure 360/6/0→361/5/0；appliedNodeCount 971→972 / unresolvedNodeCount 1865→1864；semanticAppliedEffectCount 961→962**；资格缺口保持 35（kibo 0）、视觉 253/254（kibo 43/43）不变。包 hash `1478862f…`（内部 packageHash `807f0104…`），Machine Axis 标准哈希 `5585c6fb / 3284ab09 / 08c9cc8c / 0b410dc9`，cycle `c44ef286 / c0c07d89 / ed68ea5f / 13fc3bf3 / 1f2e8b1e`，资格哈希 `d53c8c1b / 9cc0bdd8 / f4e8a71e / fe44f482 / 63a4de45 / cbbf175e`。同步更新：FROZEN_B3_SOURCE_HASHES.verifiedMechanics、7 个 fixture、m11 集成基线、cycle/资格/验收报告、迁移/回放/包/覆盖/Workbench/canonical/census/cycle 测试锁定。验证：全套 Vitest 1427/1428（仅已知 process-heavy `characterCombatProfilePipeline` 并行超时，单独全过）、11 项确定性审计 clean、production build 与 `git diff --check` 通过。**奇波侧缺口全部清零（资格 byObjectKind kibo=0、视觉 kibo 43/43、census 目标 signature 0、被动 520059 已闭合）；剩余为非奇波/非 roster 项：set-skill:3:4 视觉阻断（C14 来源冲突，需产品决策或新证据）与 3 条非 roster 被动（520004/520005/520006）**。每完成一个子阶段即更新本手册并单独提交。

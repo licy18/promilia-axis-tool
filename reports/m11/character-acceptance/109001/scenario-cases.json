@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/109001/golden-trace.json",
-        "reportHash": "3cd7d5aae25dfbd9",
+        "reportHash": "a24a7c8d090c27c5",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 109001 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "38ccf8a3bc471cca",
-          "data": "5067293f679ba987",
-          "trace": "267009b1634d4a57",
+          "input": "5a08de18a7887176",
+          "data": "0a16783a54cecc7b",
+          "trace": "dc224728f1e8c6c4",
           "evaluation": null
         }
       },
@@ -200,20 +200,12 @@
         "resources": [],
         "states": [
           {
-            "actionId": "moyin-a5",
-            "stateIdentity": "moyin-brilliant",
-            "operation": null,
-            "beforeValue": null,
-            "afterValue": null,
-            "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0"
-          },
-          {
             "actionId": "moyin-limit-counter",
             "stateIdentity": "moyin-brilliant",
             "operation": "gain",
             "beforeValue": 0,
             "afterValue": 1,
-            "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1"
+            "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0"
           },
           {
             "actionId": null,
@@ -221,7 +213,7 @@
             "operation": "expire",
             "beforeValue": 1,
             "afterValue": 0,
-            "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2"
+            "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1"
           }
         ],
         "diagnostics": [],
@@ -234,7 +226,7 @@
           "resource-exact-and-insufficient": false
         }
       },
-      "traceProjectionHash": "e1c17e8ebda6bedd",
+      "traceProjectionHash": "7ba34b826150a585",
       "assertions": [
         {
           "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
@@ -756,24 +748,6 @@
         {
           "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0",
           "selector": {
-            "actionId": "moyin-a5",
-            "kind": "state",
-            "operation": null,
-            "stateIdentity": "moyin-brilliant"
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0"
-          ],
-          "reasons": [],
-          "assertionHash": "54472f3f3783d879"
-        },
-        {
-          "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1",
-          "selector": {
             "actionId": "moyin-limit-counter",
             "kind": "state",
             "operation": "gain",
@@ -784,13 +758,13 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1"
+            "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0"
           ],
           "reasons": [],
-          "assertionHash": "391c63a34fa928db"
+          "assertionHash": "7cd6fc9890fec5c3"
         },
         {
-          "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2",
+          "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1",
           "selector": {
             "actionId": null,
             "kind": "state",
@@ -802,13 +776,13 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2"
+            "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1"
           ],
           "reasons": [],
-          "assertionHash": "7b2b3a04ea31710f"
+          "assertionHash": "7f6e77404ba2f897"
         }
       ],
-      "scenarioCaseHash": "6c5b7a4875840562"
+      "scenarioCaseHash": "15807c315ec69d5f"
     },
     {
       "schemaVersion": 1,
@@ -816,7 +790,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/109001-visual.json",
-        "inputHash": "2428a24b475d99f4",
+        "inputHash": "eee6bee1a50a2886",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/109001-visual.json"
       },
       "execution": {
@@ -825,9 +799,9 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "2428a24b475d99f4",
-          "data": "a2dc2f860818c59f",
-          "trace": "748fe88229302afd",
+          "input": "eee6bee1a50a2886",
+          "data": "57a5c3d03be71451",
+          "trace": "343cbd0fdfe527d9",
           "evaluation": "fefe6ba59b4e3c64"
         }
       },
@@ -1691,18 +1665,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "3092aa1f13bb044a"
+      "scenarioCaseHash": "d0a851a0aa1fed1c"
     }
   ],
   "summary": {
     "scenarioCount": 2,
     "executionPassedCount": 2,
-    "assertionCount": 66,
-    "assertionPassedCount": 62,
+    "assertionCount": 65,
+    "assertionPassedCount": 61,
     "runnerKindCounts": {
       "canonical-character-golden": 1,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "76084bd2f800c995"
+  "scenarioSetHash": "060fc56aa2470ce2"
 }

@@ -5,8 +5,8 @@
   "ownerId": 109001,
   "ownerName": "末音",
   "recipeIdentity": "actor:109001:character-combat-recipe:v1",
-  "recipeHash": "ba05d94992952f69bab059ea64f14ddffb56182c30bfc99586265e5869d7bed1",
-  "compilerInputHash": "9c74b9831838f744b1e71a60ec09f4e5962dd5ae4b6024c0692d5290029f23e2",
+  "recipeHash": "ddd95a970ab489bab273691aa1aace700ee005bd342c9aa89864d6a6fe5eb2e8",
+  "compilerInputHash": "ff5b064ea4365e2b915e7ae4a4aa71a5e02120f4340cb56c30aedf566ae99a27",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": true,
   "reachableControlSkillIds": [
@@ -37,8 +37,7 @@
     10900147,
     10900148,
     10900149,
-    10900161,
-    10900162
+    10900161
   ],
   "contracts": {
     "publicActions": [
@@ -24110,60 +24109,6 @@
         "status": "verified-skill-control-mechanics-binding-applied",
         "confidence": "high",
         "applied": true
-      },
-      {
-        "controlSkillId": 10900162,
-        "runtimePolicy": {
-          "behaviorTriggerScope": "skill-player",
-          "sourceIdentity": "character-combat-recipe:109001#runtimePolicies.defaultControlPolicy.behaviorTriggerScope=skill-player|controlSkillId=10900162",
-          "ownerId": 109001,
-          "controlSkillId": 10900162
-        },
-        "frameRate": 60,
-        "frameCounts": [
-          {
-            "key": 0,
-            "frameCount": 6
-          }
-        ],
-        "sourcePath": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900162.asset/MonoBehaviour/skill_control_10900162__4751348978407621511.json",
-        "logic": {
-          "spCost": 0,
-          "cooldownMs": 0,
-          "cooldownCount": 0,
-          "skillTag": "0",
-          "petSkillLogicTag": "-1",
-          "inputTriggerType": 0,
-          "holdTriggerTimeMs": 0,
-          "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10900162]",
-          "status": "verified-skill-logic-ready",
-          "applied": true
-        },
-        "variants": [
-          {
-            "subSkillIndex": 0,
-            "playerSkillId": 1,
-            "frameCounts": [
-              {
-                "key": 0,
-                "frameCount": 6
-              }
-            ],
-            "directElementReferenceCount": 0,
-            "bulletElementReferenceCount": 0,
-            "elementCount": 0,
-            "runnableElementCount": 0,
-            "effectNodeCount": 0,
-            "runnableEffectCount": 0,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900162.asset/MonoBehaviour/skill_control_10900162__4751348978407621511.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
-          }
-        ],
-        "hits": [],
-        "effects": [],
-        "effectGraph": [],
-        "status": "verified-skill-control-mechanics-binding-unresolved",
-        "confidence": "unresolved",
-        "applied": false
       }
     ],
     "timingInputEdges": [],
@@ -26717,104 +26662,7 @@
         "applied": true
       }
     ],
-    "runtimeEffectBindings": [
-      {
-        "bindingIdentity": "moyin-passive2-a3-sp",
-        "ownerId": 109001,
-        "triggerKind": "action-frame-with-state",
-        "conditionalGroupIdentity": null,
-        "stateIdentity": "moyin-brilliant",
-        "stateName": "璀璨",
-        "minimumStacks": 1,
-        "controlSkillId": 10900103,
-        "subSkillIndex": 0,
-        "triggerFrame": 0,
-        "frameRate": 60,
-        "targetKind": "source-actor",
-        "effectId": "battle-element:109001300",
-        "effectName": "被动2 晶石回能量",
-        "durationMs": null,
-        "stackMode": "refresh",
-        "stackDelta": 1,
-        "maxStacks": 1,
-        "modifiers": [],
-        "directSp": {
-          "elementId": 109001300,
-          "value": 1,
-          "enhanceable": false,
-          "shareType": 0,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300#A=10000/10000"
-        },
-        "inheritance": null,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
-        "status": "verified-runtime-effect-binding-ready",
-        "applied": true
-      },
-      {
-        "bindingIdentity": "moyin-passive2-a5-sp",
-        "ownerId": 109001,
-        "triggerKind": "action-frame-with-state",
-        "conditionalGroupIdentity": null,
-        "stateIdentity": "moyin-brilliant",
-        "stateName": "璀璨",
-        "minimumStacks": 1,
-        "controlSkillId": 10900105,
-        "subSkillIndex": 0,
-        "triggerFrame": 0,
-        "frameRate": 60,
-        "targetKind": "source-actor",
-        "effectId": "battle-element:109001300",
-        "effectName": "被动2 晶石回能量",
-        "durationMs": null,
-        "stackMode": "refresh",
-        "stackDelta": 1,
-        "maxStacks": 1,
-        "modifiers": [],
-        "directSp": {
-          "elementId": 109001300,
-          "value": 1,
-          "enhanceable": false,
-          "shareType": 0,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300#A=10000/10000"
-        },
-        "inheritance": null,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
-        "status": "verified-runtime-effect-binding-ready",
-        "applied": true
-      },
-      {
-        "bindingIdentity": "moyin-passive2-charged-sp",
-        "ownerId": 109001,
-        "triggerKind": "action-frame-with-state",
-        "conditionalGroupIdentity": null,
-        "stateIdentity": "moyin-brilliant",
-        "stateName": "璀璨",
-        "minimumStacks": 1,
-        "controlSkillId": 10900110,
-        "subSkillIndex": 0,
-        "triggerFrame": 0,
-        "frameRate": 60,
-        "targetKind": "source-actor",
-        "effectId": "battle-element:109001300",
-        "effectName": "被动2 晶石回能量",
-        "durationMs": null,
-        "stackMode": "refresh",
-        "stackDelta": 1,
-        "maxStacks": 1,
-        "modifiers": [],
-        "directSp": {
-          "elementId": 109001300,
-          "value": 1,
-          "enhanceable": false,
-          "shareType": 0,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300#A=10000/10000"
-        },
-        "inheritance": null,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270",
-        "status": "verified-runtime-effect-binding-ready",
-        "applied": true
-      }
-    ],
+    "runtimeEffectBindings": [],
     "hits": [
       {
         "elementId": 109001081,
@@ -45633,7 +45481,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=109001].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|battle-effect:10900161:0:-2193895459641539428:-2633118252501932489:0|hero-module:109001#skill:10900161#level.labels=暴击率/values=3%|Battle/Element/ast_109001296.asset#被动1加暴击 attributeID=7 calculateType=1 functionParams[0]=300|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/skill_control_10900105__1562824798995844947.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/skill_control_10900105__1562824798995844947.json#skillResourceMaps[0].elements[8]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/skill_control_10900105__1562824798995844947.json#skillResourceMaps[0].elements[9]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/skill_control_10900105__1562824798995844947.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/skill_control_10900105__1562824798995844947.json#skillResourceMaps[0].elements[10]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/skill_control_10900105__1562824798995844947.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900127.asset/MonoBehaviour/MonoBehaviour_8340818065355282527__8340818065355282527.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900127.asset/MonoBehaviour/skill_control_10900127__4167699101078258301.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2840539820446947370|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900127.asset/MonoBehaviour/skill_control_10900127__4167699101078258301.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=2840539820446947370"
     }
   },
-  "contractHash": "e6f3526d3f07d4de7eab0aaf359c030ac41c5cf7f83ec0a6f54e6ea5e9d568d8",
+  "contractHash": "54780bc40f3fdf7e749d20f296dc13bd7c52b96450c44ad5a29f7873c182edce",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 0,
@@ -45647,7 +45495,7 @@
     "targetStateProfileCount": 1,
     "targetStateTransactionCount": 2,
     "conditionalHitGroupCount": 2,
-    "runtimeEffectBindingCount": 3,
+    "runtimeEffectBindingCount": 0,
     "resourceProfileCount": 0,
     "resourceTransactionCount": 0,
     "appliedResourceTransactionCount": 0,
@@ -45655,5 +45503,5 @@
     "thresholdTransitionCount": 0,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "0f7ae29786964e0364a6c2cb83b979a4bbe618ee3c5cdcafc6d00e105c7b265e"
+  "recipeContractHash": "ba5a4aa4a0d3dd5cd84eed8eab68dadde8514042b7e4e40d1577cfcdf2c16af8"
 }

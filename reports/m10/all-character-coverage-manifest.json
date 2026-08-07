@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "4b7b9fc53d308454748a37104e5a4863ea5739d09ffaa1a8fe2aa5b68c20f7e5",
+  "sourcePackageHash": "040475c3e712cbb9ee0874342d6ec47f5a23ee26c91acb0ae15bf91d720c75eb",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "245a9a3d9bb4fecffc22444ee148a19e1d751de6390fe2b4c6e6ef79b864374e"
+      "profileHash": "64ca11ad9f64ab9a896d04d8abf33e47751bd018a8da2f172ec55f907f67f11d"
     },
     {
       "ownerId": 103002,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "05fbcad861d77843149ea206f3510ebdf1db8e19a5f3d6178f449991bcaef19d"
+      "profileHash": "9d0698e62ef93fb07d9168f8a8a316b02ca296da7f04fa9746b810d1a72e5862"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "1cabf98f79cf8f17cb94aac17c554fa7d1950f326e0aba9930580cc1e68bc4ca"
+      "profileHash": "644db8ae8d1eeaf430e0ce569ef823389e05da5cfc8917d4d17acd3adf0c7a00"
     },
     {
       "ownerId": 101007,
@@ -588,7 +588,7 @@
       "zeroDistanceSimulationComplete": false,
       "realClientEvidenceComplete": false,
       "publicActionCount": 10,
-      "reachableFormCount": 31,
+      "reachableFormCount": 30,
       "indexedControlCount": 14,
       "specialResourceCount": 0,
       "stateMachineCount": 0,
@@ -596,8 +596,8 @@
       "passiveCount": 1,
       "unnamedSecondaryPassive": {
         "skillId": 10900162,
-        "status": "implemented",
-        "reason": null
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client"
       },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
@@ -613,7 +613,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:109001:character-combat-profile:v1",
-      "profileHash": "6fa978f105c6eff7bfcd0bf3fa8fd02aefd2676598da1c8a867826477d8ed17e"
+      "profileHash": "1b1be4db456200ae55509cab88344210e3b148201dee96ee163d21e9ad5f46f8"
     },
     {
       "ownerId": 109002,

@@ -9,9 +9,9 @@
   },
   "source": {
     "profileIdentity": "actor:109001:character-combat-profile:v1",
-    "profileHash": "6fa978f105c6eff7bfcd0bf3fa8fd02aefd2676598da1c8a867826477d8ed17e",
+    "profileHash": "1b1be4db456200ae55509cab88344210e3b148201dee96ee163d21e9ad5f46f8",
     "profileValidationStatus": "character-combat-profile-valid",
-    "sourcePackageHash": "4b7b9fc53d308454748a37104e5a4863ea5739d09ffaa1a8fe2aa5b68c20f7e5",
+    "sourcePackageHash": "040475c3e712cbb9ee0874342d6ec47f5a23ee26c91acb0ae15bf91d720c75eb",
     "pipelineMaturity": "runtime-applied",
     "combatCoverageState": "partial",
     "characterComplete": false,
@@ -24,12 +24,12 @@
         "evidenceIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
         "reportPath": "reports/m10/109001/golden-trace.json",
         "status": "passed",
-        "replayHash": "f9766cd08a97f692926585676237ff875f244ecd46849c492d73d3d323ea14ed",
-        "summaryHash": "73857e5b94914c5ec3e57d199eaacc2beca8e9a7f9652b6d026ebd17b2c73bec",
+        "replayHash": "da5e2302f1c5cdb377d0d23b3236712c1958de5a5ea6550385ff459d5fe6471f",
+        "summaryHash": "14e651637b668fd621683ecb1b355dbc7059ea2862aa4f5dfe90b0821f38f0d7",
         "canonicalHashes": {
-          "input": "38ccf8a3bc471cca",
-          "data": "5067293f679ba987",
-          "trace": "267009b1634d4a57",
+          "input": "5a08de18a7887176",
+          "data": "0a16783a54cecc7b",
+          "trace": "dc224728f1e8c6c4",
           "evaluation": null
         },
         "assertionCount": 5
@@ -44,15 +44,15 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "2428a24b475d99f4",
-          "data": "a2dc2f860818c59f",
-          "trace": "748fe88229302afd",
+          "input": "eee6bee1a50a2886",
+          "data": "57a5c3d03be71451",
+          "trace": "343cbd0fdfe527d9",
           "evaluation": "fefe6ba59b4e3c64"
         },
         "actionCount": 7,
         "executedActionCount": 7,
         "traceIndex": {
-          "traceHash": "748fe88229302afd",
+          "traceHash": "343cbd0fdfe527d9",
           "actionCount": 7,
           "hitCount": 10,
           "effectEventCount": 1,
@@ -78,9 +78,9 @@
       "scenarioSetHash": null,
       "bindingStatus": "not-requested",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:109001::709d5bcca0b8588a",
-        "qualificationSubjectHash": "709d5bcca0b8588a",
-        "scenarioSetHash": "a0f69795d2d48ff8",
+        "recordIdentity": "character-product-acceptance:109001::8463ceb660a44b67",
+        "qualificationSubjectHash": "8463ceb660a44b67",
+        "scenarioSetHash": "50c6ff602d5d5aa8",
         "scenarioIdentities": [
           "m11-d-109001-visual-acceptance"
         ]
@@ -3456,57 +3456,6 @@
         "sourceRecordHash": "e80d6ded7b4bb6d6"
       },
       {
-        "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a3-sp",
-        "dimension": "runtime-effect-binding",
-        "subjectIdentity": "moyin-passive2-a3-sp",
-        "sourceDisposition": "applied",
-        "contractStatus": "verified-runtime-effect-binding-ready",
-        "impactClassification": "gameplay-impacting",
-        "coverageSelector": {
-          "effectIdentity": "battle-element:109001300",
-          "kind": "effect"
-        },
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-        ],
-        "reasons": [],
-        "sourceRecordHash": "b0bc890c2555ce2d"
-      },
-      {
-        "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a5-sp",
-        "dimension": "runtime-effect-binding",
-        "subjectIdentity": "moyin-passive2-a5-sp",
-        "sourceDisposition": "applied",
-        "contractStatus": "verified-runtime-effect-binding-ready",
-        "impactClassification": "gameplay-impacting",
-        "coverageSelector": {
-          "effectIdentity": "battle-element:109001300",
-          "kind": "effect"
-        },
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-        ],
-        "reasons": [],
-        "sourceRecordHash": "61a589a939edc72a"
-      },
-      {
-        "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-charged-sp",
-        "dimension": "runtime-effect-binding",
-        "subjectIdentity": "moyin-passive2-charged-sp",
-        "sourceDisposition": "applied",
-        "contractStatus": "verified-runtime-effect-binding-ready",
-        "impactClassification": "gameplay-impacting",
-        "coverageSelector": {
-          "effectIdentity": "battle-element:109001300",
-          "kind": "effect"
-        },
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-        ],
-        "reasons": [],
-        "sourceRecordHash": "b722d63bbb771b4c"
-      },
-      {
         "requirementIdentity": "contract:stat-dependency:stat-dependency:0:1c17084b92b59bea",
         "dimension": "stat-dependency",
         "subjectIdentity": "stat-dependency:0:1c17084b92b59bea",
@@ -3984,8 +3933,8 @@
       }
     ],
     "summary": {
-      "recordCount": 228,
-      "appliedCount": 201,
+      "recordCount": 225,
+      "appliedCount": 198,
       "gapCount": 27,
       "notApplicableCount": 0,
       "dimensionCounts": {
@@ -4003,7 +3952,6 @@
         "persistence-replay": 1,
         "public-action": 10,
         "resource-boundary": 1,
-        "runtime-effect-binding": 3,
         "scenario-negative": 1,
         "scenario-positive": 1,
         "stat-dependency": 1,
@@ -4015,7 +3963,7 @@
         "window-boundary": 1
       }
     },
-    "inventoryHash": "94262e81119e42b3"
+    "inventoryHash": "3fd5135c59158144"
   },
   "sourceGapInventory": {
     "schemaVersion": 1,
@@ -4429,6 +4377,23 @@
         "sourceRecordHash": "aebf5efc4ea226ee"
       },
       {
+        "uniqueGapIdentity": "source-gap:f50e9d629dfaf4bb",
+        "sourceRecordIdentities": [
+          "actor:109001:skill:10900162",
+          "semantic-gap:ee191fb82758a32ad985"
+        ],
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client",
+        "sourceKind": "passive-or-skill",
+        "sourceIdentities": [
+          "actor:109001:skill:10900162",
+          "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
+        ],
+        "impactClassification": "not-applicable",
+        "blocking": false,
+        "sourceRecordHash": "bac1759b5c42e595"
+      },
+      {
         "uniqueGapIdentity": "source-gap:f583f9a8ae3f2821",
         "sourceRecordIdentities": [
           "effect:10900113|0|elements|9|4731523060341306954|element:4731523060341306954|unresolved-frame|0",
@@ -4447,11 +4412,11 @@
       }
     ],
     "summary": {
-      "uniqueGapCount": 24,
+      "uniqueGapCount": 25,
       "blockingCount": 16,
-      "nonBlockingCount": 8,
+      "nonBlockingCount": 9,
       "statusCounts": {
-        "not-applicable": 8,
+        "not-applicable": 9,
         "static-evidence-gap": 15,
         "unknown-formula": 1
       },
@@ -4465,10 +4430,11 @@
         "nested-effect-wrapper-semantics-unresolved": 2,
         "nested-effect-wrapper-semantics-unresolved|sp-formula-not-literal-function-5": 1,
         "tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 1,
+        "unnamed-secondary-passive-not-implemented-current-client": 1,
         "unresolved": 5
       }
     },
-    "inventoryHash": "4764505a9f2a350f"
+    "inventoryHash": "494ba8c3af72e891"
   },
   "scenarioCases": {
     "schemaVersion": 1,
@@ -4480,7 +4446,7 @@
         "runnerKind": "canonical-character-golden",
         "inputReference": {
           "reportPath": "reports/m10/109001/golden-trace.json",
-          "reportHash": "3cd7d5aae25dfbd9",
+          "reportHash": "a24a7c8d090c27c5",
           "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 109001 --assert-clean"
         },
         "execution": {
@@ -4488,9 +4454,9 @@
           "stableReplay": true,
           "workbenchRoundTrip": "not-applicable",
           "canonicalHashes": {
-            "input": "38ccf8a3bc471cca",
-            "data": "5067293f679ba987",
-            "trace": "267009b1634d4a57",
+            "input": "5a08de18a7887176",
+            "data": "0a16783a54cecc7b",
+            "trace": "dc224728f1e8c6c4",
             "evaluation": null
           }
         },
@@ -4672,20 +4638,12 @@
           "resources": [],
           "states": [
             {
-              "actionId": "moyin-a5",
-              "stateIdentity": "moyin-brilliant",
-              "operation": null,
-              "beforeValue": null,
-              "afterValue": null,
-              "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0"
-            },
-            {
               "actionId": "moyin-limit-counter",
               "stateIdentity": "moyin-brilliant",
               "operation": "gain",
               "beforeValue": 0,
               "afterValue": 1,
-              "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1"
+              "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0"
             },
             {
               "actionId": null,
@@ -4693,7 +4651,7 @@
               "operation": "expire",
               "beforeValue": 1,
               "afterValue": 0,
-              "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2"
+              "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1"
             }
           ],
           "diagnostics": [],
@@ -4706,7 +4664,7 @@
             "resource-exact-and-insufficient": false
           }
         },
-        "traceProjectionHash": "e1c17e8ebda6bedd",
+        "traceProjectionHash": "7ba34b826150a585",
         "assertions": [
           {
             "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
@@ -5228,24 +5186,6 @@
           {
             "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0",
             "selector": {
-              "actionId": "moyin-a5",
-              "kind": "state",
-              "operation": null,
-              "stateIdentity": "moyin-brilliant"
-            },
-            "expectation": {
-              "minimumCount": 1
-            },
-            "status": "passed",
-            "actualProjectionIdentities": [
-              "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0"
-            ],
-            "reasons": [],
-            "assertionHash": "54472f3f3783d879"
-          },
-          {
-            "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1",
-            "selector": {
               "actionId": "moyin-limit-counter",
               "kind": "state",
               "operation": "gain",
@@ -5256,13 +5196,13 @@
             },
             "status": "passed",
             "actualProjectionIdentities": [
-              "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1"
+              "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0"
             ],
             "reasons": [],
-            "assertionHash": "391c63a34fa928db"
+            "assertionHash": "7cd6fc9890fec5c3"
           },
           {
-            "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2",
+            "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1",
             "selector": {
               "actionId": null,
               "kind": "state",
@@ -5274,13 +5214,13 @@
             },
             "status": "passed",
             "actualProjectionIdentities": [
-              "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2"
+              "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1"
             ],
             "reasons": [],
-            "assertionHash": "7b2b3a04ea31710f"
+            "assertionHash": "7f6e77404ba2f897"
           }
         ],
-        "scenarioCaseHash": "6c5b7a4875840562"
+        "scenarioCaseHash": "15807c315ec69d5f"
       },
       {
         "schemaVersion": 1,
@@ -5288,7 +5228,7 @@
         "runnerKind": "machine-axis",
         "inputReference": {
           "fixturePath": "fixtures/character-acceptance/109001-visual.json",
-          "inputHash": "2428a24b475d99f4",
+          "inputHash": "eee6bee1a50a2886",
           "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/109001-visual.json"
         },
         "execution": {
@@ -5297,9 +5237,9 @@
           "workbenchRoundTrip": "passed",
           "canonicalHashes": {
             "algorithm": "fnv1a64-utf8-v1",
-            "input": "2428a24b475d99f4",
-            "data": "a2dc2f860818c59f",
-            "trace": "748fe88229302afd",
+            "input": "eee6bee1a50a2886",
+            "data": "57a5c3d03be71451",
+            "trace": "343cbd0fdfe527d9",
             "evaluation": "fefe6ba59b4e3c64"
           }
         },
@@ -6163,25 +6103,25 @@
             "assertionHash": "1ebb23438e769331"
           }
         ],
-        "scenarioCaseHash": "3092aa1f13bb044a"
+        "scenarioCaseHash": "d0a851a0aa1fed1c"
       }
     ],
     "summary": {
       "scenarioCount": 2,
       "executionPassedCount": 2,
-      "assertionCount": 66,
-      "assertionPassedCount": 62,
+      "assertionCount": 65,
+      "assertionPassedCount": 61,
       "runnerKindCounts": {
         "canonical-character-golden": 1,
         "machine-axis": 1
       }
     },
-    "scenarioSetHash": "76084bd2f800c995"
+    "scenarioSetHash": "060fc56aa2470ce2"
   },
   "coverageContext": {
     "denominator": {
       "publicActionCount": 10,
-      "reachableControlCount": 24,
+      "reachableControlCount": 23,
       "executionFormCount": 10,
       "verifiedWindowCount": 0,
       "hitCount": 78,
@@ -6192,7 +6132,7 @@
       "actionCount": 10,
       "runtimeReadyActionCount": 9,
       "executionFormCount": 10,
-      "controlCount": 24,
+      "controlCount": 23,
       "hitCount": 78,
       "rawEffectCount": 52,
       "semanticEffectCount": 36,
@@ -6202,7 +6142,7 @@
       "targetStateProfileCount": 1,
       "targetStateTransactionCount": 2,
       "conditionalHitGroupCount": 2,
-      "runtimeEffectBindingCount": 3,
+      "runtimeEffectBindingCount": 0,
       "passiveCount": 1,
       "switchTriggerCount": 1,
       "coverageStatusCounts": {
@@ -6227,24 +6167,9 @@
           "subSkillIndex": 0
         },
         "assertionHash": "5f08644551e13fd1",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
+        "traceProjectionHash": "7ba34b826150a585",
         "status": "verified",
-        "edgeIdentity": "coverage-edge:0129617826f30c0b"
-      },
-      {
-        "requirementIdentity": "contract:action-form:actor|109001|10900113|0|10900113|ultimate:default",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-ultimate",
-        "selector": {
-          "controlSkillId": 10900113,
-          "kind": "action-form",
-          "ownerId": 109001,
-          "subSkillIndex": 0
-        },
-        "assertionHash": "7eb7636d63f9af43",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:077ea67d78269de4"
+        "edgeIdentity": "coverage-edge:0c2d756b46deebf6"
       },
       {
         "requirementIdentity": "contract:public-action:actor|109001|10900101|2|10900115|dodge-attack",
@@ -6275,6 +6200,21 @@
         "edgeIdentity": "coverage-edge:14a287257cc41f0b"
       },
       {
+        "requirementIdentity": "contract:action-form:actor|109001|10900112|0|10900112|star-skill:default",
+        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
+        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-2",
+        "selector": {
+          "controlSkillId": 10900112,
+          "kind": "action-form",
+          "ownerId": 109001,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "52518c4469ae8a90",
+        "traceProjectionHash": "7ba34b826150a585",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:154e073f86087ae8"
+      },
+      {
         "requirementIdentity": "protocol:109001:critical-sampled-same-seed",
         "scenarioIdentity": "m11-d-109001-visual-acceptance",
         "assertionIdentity": "scenario-fact:critical:sameSeedReplay",
@@ -6287,6 +6227,21 @@
         "traceProjectionHash": "a2452bfb190fc51f",
         "status": "verified",
         "edgeIdentity": "coverage-edge:16cadea7f471dc50"
+      },
+      {
+        "requirementIdentity": "contract:public-action:actor|109001|10900101|1|10900110|charged-attack",
+        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
+        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-charged",
+        "selector": {
+          "controlSkillId": 10900110,
+          "kind": "action-form",
+          "ownerId": 109001,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "becb24dd1f8cc70f",
+        "traceProjectionHash": "7ba34b826150a585",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:188596b5f0560c02"
       },
       {
         "requirementIdentity": "protocol:109001:critical-miss-coexistence",
@@ -6303,19 +6258,17 @@
         "edgeIdentity": "coverage-edge:1abf5e2d11314f84"
       },
       {
-        "requirementIdentity": "contract:public-action:actor|109001|10900112|0|10900112|star-skill",
+        "requirementIdentity": "contract:target-state-transaction:moyin-brilliant-limit-counter",
         "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-3",
+        "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0",
         "selector": {
-          "controlSkillId": 10900112,
-          "kind": "action-form",
-          "ownerId": 109001,
-          "subSkillIndex": 0
+          "kind": "state",
+          "stateIdentity": "moyin-brilliant"
         },
-        "assertionHash": "0a834915f28925c7",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
+        "assertionHash": "7cd6fc9890fec5c3",
+        "traceProjectionHash": "7ba34b826150a585",
         "status": "verified",
-        "edgeIdentity": "coverage-edge:1abf94dcc725bd96"
+        "edgeIdentity": "coverage-edge:1cd2df28bd565a3a"
       },
       {
         "requirementIdentity": "contract:public-action:actor|109001|10900101|2|10900115|dodge-attack",
@@ -6333,32 +6286,34 @@
         "edgeIdentity": "coverage-edge:215034ede4269821"
       },
       {
-        "requirementIdentity": "contract:public-action:actor|109001|10900121|3|10900127|perfect-parry",
+        "requirementIdentity": "contract:public-action:actor|109001|10900112|0|10900112|star-skill",
         "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-perfect-parry",
+        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-2",
         "selector": {
-          "controlSkillId": 10900127,
+          "controlSkillId": 10900112,
           "kind": "action-form",
           "ownerId": 109001,
           "subSkillIndex": 0
         },
-        "assertionHash": "17fd3a87e59e9627",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
+        "assertionHash": "52518c4469ae8a90",
+        "traceProjectionHash": "7ba34b826150a585",
         "status": "verified",
-        "edgeIdentity": "coverage-edge:2483239dfd3dbbcb"
+        "edgeIdentity": "coverage-edge:2895bc876a7a0266"
       },
       {
-        "requirementIdentity": "contract:target-state-transaction:moyin-brilliant-limit-counter",
+        "requirementIdentity": "contract:action-form:actor|109001|10900113|0|10900113|ultimate:default",
         "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1",
+        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-ultimate",
         "selector": {
-          "kind": "state",
-          "stateIdentity": "moyin-brilliant"
+          "controlSkillId": 10900113,
+          "kind": "action-form",
+          "ownerId": 109001,
+          "subSkillIndex": 0
         },
-        "assertionHash": "391c63a34fa928db",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
+        "assertionHash": "7eb7636d63f9af43",
+        "traceProjectionHash": "7ba34b826150a585",
         "status": "verified",
-        "edgeIdentity": "coverage-edge:263b2a90cbff9e65"
+        "edgeIdentity": "coverage-edge:297778c12f127bb5"
       },
       {
         "requirementIdentity": "contract:hit:10900112|0|elements|1|-4564820134104165813|13|3",
@@ -6374,32 +6329,34 @@
         "edgeIdentity": "coverage-edge:2a1f59697a6b0e6d"
       },
       {
-        "requirementIdentity": "contract:target-state-transaction:moyin-brilliant-chase",
+        "requirementIdentity": "contract:public-action:actor|109001|10900112|0|10900112|star-skill",
         "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0",
+        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill",
         "selector": {
-          "kind": "state",
-          "stateIdentity": "moyin-brilliant"
-        },
-        "assertionHash": "54472f3f3783d879",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:376cd98bf9dab05d"
-      },
-      {
-        "requirementIdentity": "contract:public-action:actor|109001|10900121|2|10900125|limit-counter",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-limit-counter",
-        "selector": {
-          "controlSkillId": 10900125,
+          "controlSkillId": 10900112,
           "kind": "action-form",
           "ownerId": 109001,
           "subSkillIndex": 0
         },
-        "assertionHash": "5f08644551e13fd1",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
+        "assertionHash": "b431cad8875e5e13",
+        "traceProjectionHash": "7ba34b826150a585",
         "status": "verified",
-        "edgeIdentity": "coverage-edge:397e26e953bb54eb"
+        "edgeIdentity": "coverage-edge:2bc5e7caf4b545bf"
+      },
+      {
+        "requirementIdentity": "contract:action-form:actor|109001|10900112|0|10900112|star-skill:default",
+        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
+        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill",
+        "selector": {
+          "controlSkillId": 10900112,
+          "kind": "action-form",
+          "ownerId": 109001,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "b431cad8875e5e13",
+        "traceProjectionHash": "7ba34b826150a585",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:36754bc00ba37985"
       },
       {
         "requirementIdentity": "protocol:109001:critical-integer-threshold-boundary",
@@ -6416,6 +6373,21 @@
         "edgeIdentity": "coverage-edge:3f4c35c92593d51a"
       },
       {
+        "requirementIdentity": "contract:action-form:actor|109001|10900101|1|10900110|charged-attack:default",
+        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
+        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-charged",
+        "selector": {
+          "controlSkillId": 10900110,
+          "kind": "action-form",
+          "ownerId": 109001,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "becb24dd1f8cc70f",
+        "traceProjectionHash": "7ba34b826150a585",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:4404122cc35fea44"
+      },
+      {
         "requirementIdentity": "protocol:109001:hit-landed-and-miss",
         "scenarioIdentity": "m11-d-109001-visual-acceptance",
         "assertionIdentity": "critical:missSuppressesHit",
@@ -6430,17 +6402,62 @@
         "edgeIdentity": "coverage-edge:4e50c6bffe88e7a8"
       },
       {
-        "requirementIdentity": "contract:target-state-profile:moyin-brilliant",
+        "requirementIdentity": "contract:action-form:actor|109001|10900112|0|10900112|star-skill:default",
         "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2",
+        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-3",
+        "selector": {
+          "controlSkillId": 10900112,
+          "kind": "action-form",
+          "ownerId": 109001,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "0a834915f28925c7",
+        "traceProjectionHash": "7ba34b826150a585",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:510b5086c3f06249"
+      },
+      {
+        "requirementIdentity": "contract:target-state-transaction:moyin-brilliant-limit-counter",
+        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
+        "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1",
         "selector": {
           "kind": "state",
           "stateIdentity": "moyin-brilliant"
         },
-        "assertionHash": "7b2b3a04ea31710f",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
+        "assertionHash": "7f6e77404ba2f897",
+        "traceProjectionHash": "7ba34b826150a585",
         "status": "verified",
-        "edgeIdentity": "coverage-edge:4f51bc8658b2af40"
+        "edgeIdentity": "coverage-edge:55f077db706e2c16"
+      },
+      {
+        "requirementIdentity": "contract:public-action:actor|109001|10900121|2|10900125|limit-counter",
+        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
+        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-limit-counter",
+        "selector": {
+          "controlSkillId": 10900125,
+          "kind": "action-form",
+          "ownerId": 109001,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "5f08644551e13fd1",
+        "traceProjectionHash": "7ba34b826150a585",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:59549a8cd705fdd6"
+      },
+      {
+        "requirementIdentity": "contract:public-action:actor|109001|10900121|3|10900127|perfect-parry",
+        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
+        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-perfect-parry",
+        "selector": {
+          "controlSkillId": 10900127,
+          "kind": "action-form",
+          "ownerId": 109001,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "17fd3a87e59e9627",
+        "traceProjectionHash": "7ba34b826150a585",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:59db06df5379ae36"
       },
       {
         "requirementIdentity": "contract:action-form:actor|109001|10900101|2|10900115|dodge-attack:default",
@@ -6456,21 +6473,6 @@
         "traceProjectionHash": "a2452bfb190fc51f",
         "status": "verified",
         "edgeIdentity": "coverage-edge:5ac51c24ab0e47ea"
-      },
-      {
-        "requirementIdentity": "contract:public-action:actor|109001|10900112|0|10900112|star-skill",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-2",
-        "selector": {
-          "controlSkillId": 10900112,
-          "kind": "action-form",
-          "ownerId": 109001,
-          "subSkillIndex": 0
-        },
-        "assertionHash": "52518c4469ae8a90",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:5bea15dfacc7689b"
       },
       {
         "requirementIdentity": "contract:action-form:actor|109001|10900101|2|10900115|dodge-attack:default",
@@ -6502,6 +6504,19 @@
         "edgeIdentity": "coverage-edge:5f98bb8cd379ec7c"
       },
       {
+        "requirementIdentity": "contract:target-state-transaction:moyin-brilliant-chase",
+        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
+        "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0",
+        "selector": {
+          "kind": "state",
+          "stateIdentity": "moyin-brilliant"
+        },
+        "assertionHash": "7cd6fc9890fec5c3",
+        "traceProjectionHash": "7ba34b826150a585",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:5ffdd3128d47c8be"
+      },
+      {
         "requirementIdentity": "contract:target-state-profile:moyin-brilliant",
         "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
         "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1",
@@ -6509,25 +6524,10 @@
           "kind": "state",
           "stateIdentity": "moyin-brilliant"
         },
-        "assertionHash": "391c63a34fa928db",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
+        "assertionHash": "7f6e77404ba2f897",
+        "traceProjectionHash": "7ba34b826150a585",
         "status": "verified",
-        "edgeIdentity": "coverage-edge:62e4cc54df14956b"
-      },
-      {
-        "requirementIdentity": "contract:public-action:actor|109001|10900101|1|10900110|charged-attack",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-charged",
-        "selector": {
-          "controlSkillId": 10900110,
-          "kind": "action-form",
-          "ownerId": 109001,
-          "subSkillIndex": 0
-        },
-        "assertionHash": "becb24dd1f8cc70f",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:68b34bab85ab794f"
+        "edgeIdentity": "coverage-edge:649f32c777cff7ec"
       },
       {
         "requirementIdentity": "protocol:109001:save-import-replay",
@@ -6544,19 +6544,19 @@
         "edgeIdentity": "coverage-edge:6994cdbe243a54ea"
       },
       {
-        "requirementIdentity": "contract:public-action:actor|109001|10900112|0|10900112|star-skill",
+        "requirementIdentity": "contract:public-action:actor|109001|10900113|0|10900113|ultimate",
         "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill",
+        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-ultimate",
         "selector": {
-          "controlSkillId": 10900112,
+          "controlSkillId": 10900113,
           "kind": "action-form",
           "ownerId": 109001,
           "subSkillIndex": 0
         },
-        "assertionHash": "b431cad8875e5e13",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
+        "assertionHash": "7eb7636d63f9af43",
+        "traceProjectionHash": "7ba34b826150a585",
         "status": "verified",
-        "edgeIdentity": "coverage-edge:6cc7671fd2dde0f2"
+        "edgeIdentity": "coverage-edge:72eb5a120ef52b5b"
       },
       {
         "requirementIdentity": "contract:public-action:actor|109001|10900101|2|10900115|dodge-attack",
@@ -6587,6 +6587,19 @@
         "edgeIdentity": "coverage-edge:73f0318bb38b2e84"
       },
       {
+        "requirementIdentity": "contract:target-state-transaction:moyin-brilliant-chase",
+        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
+        "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1",
+        "selector": {
+          "kind": "state",
+          "stateIdentity": "moyin-brilliant"
+        },
+        "assertionHash": "7f6e77404ba2f897",
+        "traceProjectionHash": "7ba34b826150a585",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:78a3773a0f7c0d4a"
+      },
+      {
         "requirementIdentity": "contract:hit:10900112|0|elements|1|-4564820134104165813|8|2",
         "scenarioIdentity": "m11-d-109001-visual-acceptance",
         "assertionIdentity": "trace-hit:machine-hit:m11-d-109001-visual-acceptance:1",
@@ -6600,17 +6613,30 @@
         "edgeIdentity": "coverage-edge:7919d1c9f7e7900c"
       },
       {
-        "requirementIdentity": "contract:target-state-transaction:moyin-brilliant-limit-counter",
+        "requirementIdentity": "contract:target-state-profile:moyin-brilliant",
         "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
         "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0",
         "selector": {
           "kind": "state",
           "stateIdentity": "moyin-brilliant"
         },
-        "assertionHash": "54472f3f3783d879",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
+        "assertionHash": "7cd6fc9890fec5c3",
+        "traceProjectionHash": "7ba34b826150a585",
         "status": "verified",
-        "edgeIdentity": "coverage-edge:8092a379f960fe09"
+        "edgeIdentity": "coverage-edge:7a7f4b677b576688"
+      },
+      {
+        "requirementIdentity": "contract:effect:effect:33:8f39aa39c0774a7b",
+        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
+        "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:8",
+        "selector": {
+          "effectIdentity": "battle-element:109001003",
+          "kind": "effect"
+        },
+        "assertionHash": "547a0058d6c764db",
+        "traceProjectionHash": "7ba34b826150a585",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:7f13d3a29fc40fb9"
       },
       {
         "requirementIdentity": "contract:hit:10900115|0|elements|2|5171384344998858661|9|1",
@@ -6624,34 +6650,6 @@
         "traceProjectionHash": "a2452bfb190fc51f",
         "status": "verified",
         "edgeIdentity": "coverage-edge:8dbd0ffeb38046de"
-      },
-      {
-        "requirementIdentity": "contract:effect:effect:33:8f39aa39c0774a7b",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:9",
-        "selector": {
-          "effectIdentity": "battle-element:109001003",
-          "kind": "effect"
-        },
-        "assertionHash": "f3a93ff25367d3f4",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:8e4087e0255e6c67"
-      },
-      {
-        "requirementIdentity": "contract:action-form:actor|109001|10900112|0|10900112|star-skill:default",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-3",
-        "selector": {
-          "controlSkillId": 10900112,
-          "kind": "action-form",
-          "ownerId": 109001,
-          "subSkillIndex": 0
-        },
-        "assertionHash": "0a834915f28925c7",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:900a899d32062090"
       },
       {
         "requirementIdentity": "protocol:109001:critical-integer-threshold-boundary",
@@ -6710,19 +6708,19 @@
         "edgeIdentity": "coverage-edge:9c691d5e9e1e2813"
       },
       {
-        "requirementIdentity": "contract:public-action:actor|109001|10900113|0|10900113|ultimate",
+        "requirementIdentity": "contract:action-form:actor|109001|10900121|3|10900127|perfect-parry:default",
         "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-ultimate",
+        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-perfect-parry",
         "selector": {
-          "controlSkillId": 10900113,
+          "controlSkillId": 10900127,
           "kind": "action-form",
           "ownerId": 109001,
           "subSkillIndex": 0
         },
-        "assertionHash": "7eb7636d63f9af43",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
+        "assertionHash": "17fd3a87e59e9627",
+        "traceProjectionHash": "7ba34b826150a585",
         "status": "verified",
-        "edgeIdentity": "coverage-edge:9c8d7fed74733026"
+        "edgeIdentity": "coverage-edge:9df81d0b9751a5c6"
       },
       {
         "requirementIdentity": "protocol:109001:critical-per-hit-modes",
@@ -6824,21 +6822,6 @@
         "edgeIdentity": "coverage-edge:b30dce803f0fe106"
       },
       {
-        "requirementIdentity": "contract:action-form:actor|109001|10900101|1|10900110|charged-attack:default",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-charged",
-        "selector": {
-          "controlSkillId": 10900110,
-          "kind": "action-form",
-          "ownerId": 109001,
-          "subSkillIndex": 0
-        },
-        "assertionHash": "becb24dd1f8cc70f",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:b3ed54a5d55e8f1d"
-      },
-      {
         "requirementIdentity": "protocol:109001:critical-per-hit-modes",
         "scenarioIdentity": "m11-d-109001-visual-acceptance",
         "assertionIdentity": "scenario-fact:critical:perHitModes",
@@ -6851,45 +6834,6 @@
         "traceProjectionHash": "a2452bfb190fc51f",
         "status": "verified",
         "edgeIdentity": "coverage-edge:b7cad64d7a7badf3"
-      },
-      {
-        "requirementIdentity": "contract:effect:effect:33:8f39aa39c0774a7b",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:8",
-        "selector": {
-          "effectIdentity": "battle-element:109001003",
-          "kind": "effect"
-        },
-        "assertionHash": "547a0058d6c764db",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:bd8a0a6487bb1760"
-      },
-      {
-        "requirementIdentity": "contract:target-state-transaction:moyin-brilliant-chase",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2",
-        "selector": {
-          "kind": "state",
-          "stateIdentity": "moyin-brilliant"
-        },
-        "assertionHash": "7b2b3a04ea31710f",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:ca09ae994395dafe"
-      },
-      {
-        "requirementIdentity": "contract:target-state-transaction:moyin-brilliant-chase",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1",
-        "selector": {
-          "kind": "state",
-          "stateIdentity": "moyin-brilliant"
-        },
-        "assertionHash": "391c63a34fa928db",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:cbdd332240a231a9"
       },
       {
         "requirementIdentity": "contract:hit:10900112|0|elements|1|-4564820134104165813|3|1",
@@ -6920,19 +6864,6 @@
         "edgeIdentity": "coverage-edge:d35cb01a73abb2b2"
       },
       {
-        "requirementIdentity": "contract:target-state-profile:moyin-brilliant",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0",
-        "selector": {
-          "kind": "state",
-          "stateIdentity": "moyin-brilliant"
-        },
-        "assertionHash": "54472f3f3783d879",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:d4e1b68b267b0b27"
-      },
-      {
         "requirementIdentity": "contract:action-form:actor|109001|10900101|2|10900115|dodge-attack:default",
         "scenarioIdentity": "m11-d-109001-visual-acceptance",
         "assertionIdentity": "trace-action-form:machine-action-form:m11-d-109001-visual-acceptance:109001-critical-sampled-low",
@@ -6948,35 +6879,6 @@
         "edgeIdentity": "coverage-edge:d7b5cb64b2dbd4c9"
       },
       {
-        "requirementIdentity": "protocol:109001:normal-trigger-positive",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "scenario-fact:normal-trigger-positive",
-        "selector": {
-          "expectedValue": true,
-          "factIdentity": "normal-trigger-positive",
-          "kind": "scenario-fact"
-        },
-        "assertionHash": "21786c93092c79ff",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:d937fe830441003d"
-      },
-      {
-        "requirementIdentity": "contract:action-form:actor|109001|10900112|0|10900112|star-skill:default",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-2",
-        "selector": {
-          "controlSkillId": 10900112,
-          "kind": "action-form",
-          "ownerId": 109001,
-          "subSkillIndex": 0
-        },
-        "assertionHash": "52518c4469ae8a90",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:db30998c867fceb9"
-      },
-      {
         "requirementIdentity": "contract:action-form:actor|109001|10900112|0|10900112|star-skill:default",
         "scenarioIdentity": "m11-d-109001-visual-acceptance",
         "assertionIdentity": "trace-action-form:machine-action-form:m11-d-109001-visual-acceptance:moyin-star-skill",
@@ -6990,6 +6892,34 @@
         "traceProjectionHash": "a2452bfb190fc51f",
         "status": "verified",
         "edgeIdentity": "coverage-edge:dd0b5aa39caceda8"
+      },
+      {
+        "requirementIdentity": "contract:effect:effect:33:8f39aa39c0774a7b",
+        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
+        "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:9",
+        "selector": {
+          "effectIdentity": "battle-element:109001003",
+          "kind": "effect"
+        },
+        "assertionHash": "f3a93ff25367d3f4",
+        "traceProjectionHash": "7ba34b826150a585",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:eb959c2bd68ef82a"
+      },
+      {
+        "requirementIdentity": "contract:public-action:actor|109001|10900112|0|10900112|star-skill",
+        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
+        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-3",
+        "selector": {
+          "controlSkillId": 10900112,
+          "kind": "action-form",
+          "ownerId": 109001,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "0a834915f28925c7",
+        "traceProjectionHash": "7ba34b826150a585",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:f05d8ecf8cd26beb"
       },
       {
         "requirementIdentity": "contract:hit:10900115|0|elements|2|5171384344998858661|9|1",
@@ -7020,34 +6950,6 @@
         "edgeIdentity": "coverage-edge:f3ac5085b8c92bb4"
       },
       {
-        "requirementIdentity": "contract:target-state-transaction:moyin-brilliant-limit-counter",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2",
-        "selector": {
-          "kind": "state",
-          "stateIdentity": "moyin-brilliant"
-        },
-        "assertionHash": "7b2b3a04ea31710f",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:f4fb454e07aae8fe"
-      },
-      {
-        "requirementIdentity": "contract:action-form:actor|109001|10900112|0|10900112|star-skill:default",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill",
-        "selector": {
-          "controlSkillId": 10900112,
-          "kind": "action-form",
-          "ownerId": 109001,
-          "subSkillIndex": 0
-        },
-        "assertionHash": "b431cad8875e5e13",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:f686e065bab2ed94"
-      },
-      {
         "requirementIdentity": "contract:public-action:actor|109001|10900112|0|10900112|star-skill",
         "scenarioIdentity": "m11-d-109001-visual-acceptance",
         "assertionIdentity": "trace-action-form:machine-action-form:m11-d-109001-visual-acceptance:moyin-star-skill",
@@ -7063,21 +6965,6 @@
         "edgeIdentity": "coverage-edge:f88a55d5e7e2835a"
       },
       {
-        "requirementIdentity": "contract:action-form:actor|109001|10900121|3|10900127|perfect-parry:default",
-        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
-        "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-perfect-parry",
-        "selector": {
-          "controlSkillId": 10900127,
-          "kind": "action-form",
-          "ownerId": 109001,
-          "subSkillIndex": 0
-        },
-        "assertionHash": "17fd3a87e59e9627",
-        "traceProjectionHash": "e1c17e8ebda6bedd",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:f9a4ec9ec9afe47b"
-      },
-      {
         "requirementIdentity": "protocol:109001:save-import-replay",
         "scenarioIdentity": "m11-d-109001-visual-acceptance",
         "assertionIdentity": "workbench-import-export-round-trip",
@@ -7090,6 +6977,20 @@
         "traceProjectionHash": "a2452bfb190fc51f",
         "status": "verified",
         "edgeIdentity": "coverage-edge:fa4e73d8ea984315"
+      },
+      {
+        "requirementIdentity": "protocol:109001:normal-trigger-positive",
+        "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
+        "assertionIdentity": "scenario-fact:normal-trigger-positive",
+        "selector": {
+          "expectedValue": true,
+          "factIdentity": "normal-trigger-positive",
+          "kind": "scenario-fact"
+        },
+        "assertionHash": "21786c93092c79ff",
+        "traceProjectionHash": "7ba34b826150a585",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:fca502b0096a2be4"
       },
       {
         "requirementIdentity": "contract:action-form:actor|109001|10900101|2|10900115|dodge-attack:default",
@@ -7109,7 +7010,7 @@
     ],
     "denominator": {
       "publicActionCount": 10,
-      "reachableControlCount": 24,
+      "reachableControlCount": 23,
       "executionFormCount": 10,
       "verifiedWindowCount": 0,
       "hitCount": 78,
@@ -7120,7 +7021,7 @@
       "actionCount": 10,
       "runtimeReadyActionCount": 9,
       "executionFormCount": 10,
-      "controlCount": 24,
+      "controlCount": 23,
       "hitCount": 78,
       "rawEffectCount": 52,
       "semanticEffectCount": 36,
@@ -7130,7 +7031,7 @@
       "targetStateProfileCount": 1,
       "targetStateTransactionCount": 2,
       "conditionalHitGroupCount": 2,
-      "runtimeEffectBindingCount": 3,
+      "runtimeEffectBindingCount": 0,
       "passiveCount": 1,
       "switchTriggerCount": 1,
       "coverageStatusCounts": {
@@ -7140,14 +7041,14 @@
       }
     },
     "summary": {
-      "edgeCount": 63,
+      "edgeCount": 60,
       "coveredRequirementCount": 29,
       "scenarioCounts": {
-        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden": 26,
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden": 23,
         "m11-d-109001-visual-acceptance": 37
       }
     },
-    "coverageHash": "6b0e43183b3c7965"
+    "coverageHash": "62df29d0d9739a23"
   },
   "matrix": {
     "schemaVersion": 1,
@@ -7215,7 +7116,7 @@
           "subSkillIndex": 0
         },
         "coverageEdgeIds": [
-          "coverage-edge:b3ed54a5d55e8f1d"
+          "coverage-edge:4404122cc35fea44"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -7296,10 +7197,10 @@
           "subSkillIndex": 0
         },
         "coverageEdgeIds": [
-          "coverage-edge:900a899d32062090",
-          "coverage-edge:db30998c867fceb9",
-          "coverage-edge:dd0b5aa39caceda8",
-          "coverage-edge:f686e065bab2ed94"
+          "coverage-edge:154e073f86087ae8",
+          "coverage-edge:36754bc00ba37985",
+          "coverage-edge:510b5086c3f06249",
+          "coverage-edge:dd0b5aa39caceda8"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
@@ -7350,7 +7251,7 @@
           "subSkillIndex": 0
         },
         "coverageEdgeIds": [
-          "coverage-edge:077ea67d78269de4"
+          "coverage-edge:297778c12f127bb5"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -7400,7 +7301,7 @@
           "subSkillIndex": 0
         },
         "coverageEdgeIds": [
-          "coverage-edge:0129617826f30c0b"
+          "coverage-edge:0c2d756b46deebf6"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -7426,7 +7327,7 @@
           "subSkillIndex": 0
         },
         "coverageEdgeIds": [
-          "coverage-edge:f9a4ec9ec9afe47b"
+          "coverage-edge:9df81d0b9751a5c6"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -9315,8 +9216,8 @@
           "kind": "effect"
         },
         "coverageEdgeIds": [
-          "coverage-edge:8e4087e0255e6c67",
-          "coverage-edge:bd8a0a6487bb1760"
+          "coverage-edge:7f13d3a29fc40fb9",
+          "coverage-edge:eb959c2bd68ef82a"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -11308,7 +11209,7 @@
           "subSkillIndex": 0
         },
         "coverageEdgeIds": [
-          "coverage-edge:68b34bab85ab794f"
+          "coverage-edge:188596b5f0560c02"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -11383,9 +11284,9 @@
           "subSkillIndex": 0
         },
         "coverageEdgeIds": [
-          "coverage-edge:1abf94dcc725bd96",
-          "coverage-edge:5bea15dfacc7689b",
-          "coverage-edge:6cc7671fd2dde0f2",
+          "coverage-edge:2895bc876a7a0266",
+          "coverage-edge:2bc5e7caf4b545bf",
+          "coverage-edge:f05d8ecf8cd26beb",
           "coverage-edge:f88a55d5e7e2835a"
         ],
         "evidenceScenarioIds": [
@@ -11433,7 +11334,7 @@
           "subSkillIndex": 0
         },
         "coverageEdgeIds": [
-          "coverage-edge:9c8d7fed74733026"
+          "coverage-edge:72eb5a120ef52b5b"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -11479,7 +11380,7 @@
           "subSkillIndex": 0
         },
         "coverageEdgeIds": [
-          "coverage-edge:397e26e953bb54eb"
+          "coverage-edge:59549a8cd705fdd6"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -11503,79 +11404,13 @@
           "subSkillIndex": 0
         },
         "coverageEdgeIds": [
-          "coverage-edge:2483239dfd3dbbcb"
+          "coverage-edge:59db06df5379ae36"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
         ],
         "sourceIdentities": [],
         "reasons": []
-      },
-      {
-        "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a3-sp",
-        "dimension": "runtime-effect-binding",
-        "subjectIdentity": "moyin-passive2-a3-sp",
-        "required": true,
-        "status": "blocked",
-        "contractStatus": "verified-runtime-effect-binding-ready",
-        "sourceDisposition": "applied",
-        "sourceRecordHash": "b0bc890c2555ce2d",
-        "coverageSelector": {
-          "effectIdentity": "battle-element:109001300",
-          "kind": "effect"
-        },
-        "coverageEdgeIds": [],
-        "evidenceScenarioIds": [],
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-        ],
-        "reasons": [
-          "acceptance-scenario-coverage-missing"
-        ]
-      },
-      {
-        "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a5-sp",
-        "dimension": "runtime-effect-binding",
-        "subjectIdentity": "moyin-passive2-a5-sp",
-        "required": true,
-        "status": "blocked",
-        "contractStatus": "verified-runtime-effect-binding-ready",
-        "sourceDisposition": "applied",
-        "sourceRecordHash": "61a589a939edc72a",
-        "coverageSelector": {
-          "effectIdentity": "battle-element:109001300",
-          "kind": "effect"
-        },
-        "coverageEdgeIds": [],
-        "evidenceScenarioIds": [],
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-        ],
-        "reasons": [
-          "acceptance-scenario-coverage-missing"
-        ]
-      },
-      {
-        "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-charged-sp",
-        "dimension": "runtime-effect-binding",
-        "subjectIdentity": "moyin-passive2-charged-sp",
-        "required": true,
-        "status": "blocked",
-        "contractStatus": "verified-runtime-effect-binding-ready",
-        "sourceDisposition": "applied",
-        "sourceRecordHash": "b722d63bbb771b4c",
-        "coverageSelector": {
-          "effectIdentity": "battle-element:109001300",
-          "kind": "effect"
-        },
-        "coverageEdgeIds": [],
-        "evidenceScenarioIds": [],
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-        ],
-        "reasons": [
-          "acceptance-scenario-coverage-missing"
-        ]
       },
       {
         "requirementIdentity": "contract:stat-dependency:stat-dependency:0:1c17084b92b59bea",
@@ -11632,9 +11467,8 @@
           "stateIdentity": "moyin-brilliant"
         },
         "coverageEdgeIds": [
-          "coverage-edge:4f51bc8658b2af40",
-          "coverage-edge:62e4cc54df14956b",
-          "coverage-edge:d4e1b68b267b0b27"
+          "coverage-edge:649f32c777cff7ec",
+          "coverage-edge:7a7f4b677b576688"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -11658,9 +11492,8 @@
           "stateIdentity": "moyin-brilliant"
         },
         "coverageEdgeIds": [
-          "coverage-edge:376cd98bf9dab05d",
-          "coverage-edge:ca09ae994395dafe",
-          "coverage-edge:cbdd332240a231a9"
+          "coverage-edge:5ffdd3128d47c8be",
+          "coverage-edge:78a3773a0f7c0d4a"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -11684,9 +11517,8 @@
           "stateIdentity": "moyin-brilliant"
         },
         "coverageEdgeIds": [
-          "coverage-edge:263b2a90cbff9e65",
-          "coverage-edge:8092a379f960fe09",
-          "coverage-edge:f4fb454e07aae8fe"
+          "coverage-edge:1cd2df28bd565a3a",
+          "coverage-edge:55f077db706e2c16"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -12125,7 +11957,7 @@
           "kind": "scenario-fact"
         },
         "coverageEdgeIds": [
-          "coverage-edge:d937fe830441003d"
+          "coverage-edge:fca502b0096a2be4"
         ],
         "evidenceScenarioIds": [
           "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
@@ -12186,13 +12018,13 @@
       }
     ],
     "summary": {
-      "requirementCount": 228,
-      "requiredCount": 228,
+      "requirementCount": 225,
+      "requiredCount": 225,
       "passedCount": 29,
-      "blockedCount": 199,
+      "blockedCount": 196,
       "notApplicableCount": 0,
       "statusCounts": {
-        "blocked": 199,
+        "blocked": 196,
         "passed": 29
       },
       "dimensionCounts": {
@@ -12210,7 +12042,6 @@
         "persistence-replay": 1,
         "public-action": 10,
         "resource-boundary": 1,
-        "runtime-effect-binding": 3,
         "scenario-negative": 1,
         "scenario-positive": 1,
         "stat-dependency": 1,
@@ -12222,7 +12053,7 @@
         "window-boundary": 1
       }
     },
-    "matrixHash": "b6c874c870698764"
+    "matrixHash": "0cee2d55acda2775"
   },
   "ledger": {
     "schemaVersion": 1,
@@ -14384,42 +14215,6 @@
       },
       {
         "category": "acceptance-scenario-gap",
-        "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a3-sp",
-        "status": "static-evidence-gap",
-        "reason": "acceptance-scenario-coverage-missing",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-        ],
-        "blocking": true,
-        "recordIdentity": "acceptance-gap:65e8189664e7068d",
-        "uniqueGapIdentity": "acceptance-gap:65e8189664e7068d"
-      },
-      {
-        "category": "acceptance-scenario-gap",
-        "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a5-sp",
-        "status": "static-evidence-gap",
-        "reason": "acceptance-scenario-coverage-missing",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-        ],
-        "blocking": true,
-        "recordIdentity": "acceptance-gap:54334968ee10f20b",
-        "uniqueGapIdentity": "acceptance-gap:54334968ee10f20b"
-      },
-      {
-        "category": "acceptance-scenario-gap",
-        "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-charged-sp",
-        "status": "static-evidence-gap",
-        "reason": "acceptance-scenario-coverage-missing",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-        ],
-        "blocking": true,
-        "recordIdentity": "acceptance-gap:cce03bd8cbeeb975",
-        "uniqueGapIdentity": "acceptance-gap:cce03bd8cbeeb975"
-      },
-      {
-        "category": "acceptance-scenario-gap",
         "requirementIdentity": "contract:switch-trigger:actor:109001|switch-trigger:on-enter|skill:10900121",
         "status": "static-evidence-gap",
         "reason": "acceptance-selector-unavailable",
@@ -15219,18 +15014,6 @@
       },
       {
         "category": "acceptance-scenario-gap",
-        "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a5-sp",
-        "status": "static-evidence-gap",
-        "reason": "acceptance-scenario-coverage-missing",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-        ],
-        "blocking": true,
-        "recordIdentity": "acceptance-gap:54334968ee10f20b",
-        "uniqueGapIdentity": "acceptance-gap:54334968ee10f20b"
-      },
-      {
-        "category": "acceptance-scenario-gap",
         "requirementIdentity": "contract:control-window:control-window:57:ad44781dca2d0ed1",
         "status": "static-evidence-gap",
         "reason": "acceptance-selector-unavailable",
@@ -15372,18 +15155,6 @@
         "blocking": true,
         "recordIdentity": "acceptance-gap:6545b33d52c10687",
         "uniqueGapIdentity": "acceptance-gap:6545b33d52c10687"
-      },
-      {
-        "category": "acceptance-scenario-gap",
-        "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a3-sp",
-        "status": "static-evidence-gap",
-        "reason": "acceptance-scenario-coverage-missing",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-        ],
-        "blocking": true,
-        "recordIdentity": "acceptance-gap:65e8189664e7068d",
-        "uniqueGapIdentity": "acceptance-gap:65e8189664e7068d"
       },
       {
         "category": "acceptance-scenario-gap",
@@ -16158,18 +15929,6 @@
         "blocking": true,
         "recordIdentity": "acceptance-gap:c999ce4332d9d29e",
         "uniqueGapIdentity": "acceptance-gap:c999ce4332d9d29e"
-      },
-      {
-        "category": "acceptance-scenario-gap",
-        "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-charged-sp",
-        "status": "static-evidence-gap",
-        "reason": "acceptance-scenario-coverage-missing",
-        "sourceIdentities": [
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-        ],
-        "blocking": true,
-        "recordIdentity": "acceptance-gap:cce03bd8cbeeb975",
-        "uniqueGapIdentity": "acceptance-gap:cce03bd8cbeeb975"
       },
       {
         "category": "acceptance-scenario-gap",
@@ -17093,19 +16852,36 @@
           "semantic-gap:4e385e97b66340bd72b8"
         ],
         "blocking": false
+      },
+      {
+        "recordIdentity": "source-gap:f50e9d629dfaf4bb",
+        "uniqueGapIdentity": "source-gap:f50e9d629dfaf4bb",
+        "category": "non-gameplay-source-record",
+        "status": "not-applicable",
+        "reason": "unnamed-secondary-passive-not-implemented-current-client",
+        "sourceKind": "passive-or-skill",
+        "sourceIdentities": [
+          "actor:109001:skill:10900162",
+          "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
+        ],
+        "sourceRecordIdentities": [
+          "actor:109001:skill:10900162",
+          "semantic-gap:ee191fb82758a32ad985"
+        ],
+        "blocking": false
       }
     ],
     "summary": {
-      "uniqueBlockingCount": 188,
+      "uniqueBlockingCount": 185,
       "sourceGapCount": 16,
-      "acceptanceGapCount": 172,
-      "nonBlockingCount": 8,
+      "acceptanceGapCount": 169,
+      "nonBlockingCount": 9,
       "statusCounts": {
-        "static-evidence-gap": 187,
+        "static-evidence-gap": 184,
         "unknown-formula": 1
       },
       "reasonCounts": {
-        "acceptance-scenario-coverage-missing": 103,
+        "acceptance-scenario-coverage-missing": 100,
         "acceptance-selector-unavailable": 69,
         "effect-target-unresolved|effect-trigger-frame-missing": 5,
         "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded": 1,
@@ -17116,11 +16892,11 @@
         "unresolved": 5
       },
       "categoryCounts": {
-        "acceptance-scenario-gap": 172,
+        "acceptance-scenario-gap": 169,
         "upstream-source-gap": 16
       }
     },
-    "ledgerHash": "ad6827459f45de0c"
+    "ledgerHash": "d0b9d556dc0bfab7"
   },
   "notApplicableRecords": [
     {
@@ -17214,14 +16990,25 @@
         "effect:10900110|0|elements|2|8910682160033441487|element:5554021792138642848|60|0"
       ],
       "sourceRecordHash": "c9c198d6bee146ec"
+    },
+    {
+      "recordIdentity": "not-applicable:source-gap:f50e9d629dfaf4bb",
+      "status": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceKind": "passive-or-skill",
+      "sourceIdentities": [
+        "actor:109001:skill:10900162",
+        "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
+      ],
+      "sourceRecordHash": "bac1759b5c42e595"
     }
   ],
   "derivation": {
     "status": "derived-artifacts-verified",
     "inputIncludedDerivedArtifacts": false,
-    "sourceOfTruthHash": "78df6c6b6ba6149c"
+    "sourceOfTruthHash": "73a4d59a84effe6e"
   },
-  "qualificationSubjectHash": "709d5bcca0b8588a",
+  "qualificationSubjectHash": "8463ceb660a44b67",
   "maturity": {
     "currentState": "runtime-integrated",
     "earnedStates": [
@@ -17239,10 +17026,10 @@
       "canonicalReplayStable": true,
       "workbenchImportPassed": true,
       "productVisualAccepted": false,
-      "matrixRequiredCount": 228,
+      "matrixRequiredCount": 225,
       "matrixPassedCount": 29,
       "matrixComplete": false,
-      "blockingLedgerCount": 188,
+      "blockingLedgerCount": 185,
       "functionalFailureCount": 0
     },
     "gates": {
@@ -17261,5 +17048,5 @@
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "9e03ad867f9ab2b8"
+  "manifestHash": "7e46c639d561dd3a"
 }

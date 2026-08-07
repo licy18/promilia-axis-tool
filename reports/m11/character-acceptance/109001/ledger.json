@@ -2158,42 +2158,6 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a3-sp",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:65e8189664e7068d",
-      "uniqueGapIdentity": "acceptance-gap:65e8189664e7068d"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a5-sp",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:54334968ee10f20b",
-      "uniqueGapIdentity": "acceptance-gap:54334968ee10f20b"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-charged-sp",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:cce03bd8cbeeb975",
-      "uniqueGapIdentity": "acceptance-gap:cce03bd8cbeeb975"
-    },
-    {
-      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:switch-trigger:actor:109001|switch-trigger:on-enter|skill:10900121",
       "status": "static-evidence-gap",
       "reason": "acceptance-selector-unavailable",
@@ -2993,18 +2957,6 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a5-sp",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:54334968ee10f20b",
-      "uniqueGapIdentity": "acceptance-gap:54334968ee10f20b"
-    },
-    {
-      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:control-window:control-window:57:ad44781dca2d0ed1",
       "status": "static-evidence-gap",
       "reason": "acceptance-selector-unavailable",
@@ -3146,18 +3098,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:6545b33d52c10687",
       "uniqueGapIdentity": "acceptance-gap:6545b33d52c10687"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a3-sp",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:65e8189664e7068d",
-      "uniqueGapIdentity": "acceptance-gap:65e8189664e7068d"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -3932,18 +3872,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:c999ce4332d9d29e",
       "uniqueGapIdentity": "acceptance-gap:c999ce4332d9d29e"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-charged-sp",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:cce03bd8cbeeb975",
-      "uniqueGapIdentity": "acceptance-gap:cce03bd8cbeeb975"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -4867,19 +4795,36 @@
         "semantic-gap:4e385e97b66340bd72b8"
       ],
       "blocking": false
+    },
+    {
+      "recordIdentity": "source-gap:f50e9d629dfaf4bb",
+      "uniqueGapIdentity": "source-gap:f50e9d629dfaf4bb",
+      "category": "non-gameplay-source-record",
+      "status": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceKind": "passive-or-skill",
+      "sourceIdentities": [
+        "actor:109001:skill:10900162",
+        "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
+      ],
+      "sourceRecordIdentities": [
+        "actor:109001:skill:10900162",
+        "semantic-gap:ee191fb82758a32ad985"
+      ],
+      "blocking": false
     }
   ],
   "summary": {
-    "uniqueBlockingCount": 188,
+    "uniqueBlockingCount": 185,
     "sourceGapCount": 16,
-    "acceptanceGapCount": 172,
-    "nonBlockingCount": 8,
+    "acceptanceGapCount": 169,
+    "nonBlockingCount": 9,
     "statusCounts": {
-      "static-evidence-gap": 187,
+      "static-evidence-gap": 184,
       "unknown-formula": 1
     },
     "reasonCounts": {
-      "acceptance-scenario-coverage-missing": 103,
+      "acceptance-scenario-coverage-missing": 100,
       "acceptance-selector-unavailable": 69,
       "effect-target-unresolved|effect-trigger-frame-missing": 5,
       "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded": 1,
@@ -4890,11 +4835,11 @@
       "unresolved": 5
     },
     "categoryCounts": {
-      "acceptance-scenario-gap": 172,
+      "acceptance-scenario-gap": 169,
       "upstream-source-gap": 16
     }
   },
-  "ledgerHash": "ad6827459f45de0c",
+  "ledgerHash": "d0b9d556dc0bfab7",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:source-gap:1662c4ae53c64baa",
@@ -4987,6 +4932,17 @@
         "effect:10900110|0|elements|2|8910682160033441487|element:5554021792138642848|60|0"
       ],
       "sourceRecordHash": "c9c198d6bee146ec"
+    },
+    {
+      "recordIdentity": "not-applicable:source-gap:f50e9d629dfaf4bb",
+      "status": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceKind": "passive-or-skill",
+      "sourceIdentities": [
+        "actor:109001:skill:10900162",
+        "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
+      ],
+      "sourceRecordHash": "bac1759b5c42e595"
     }
   ]
 }

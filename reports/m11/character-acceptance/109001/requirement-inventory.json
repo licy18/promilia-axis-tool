@@ -3359,57 +3359,6 @@
       "sourceRecordHash": "e80d6ded7b4bb6d6"
     },
     {
-      "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a3-sp",
-      "dimension": "runtime-effect-binding",
-      "subjectIdentity": "moyin-passive2-a3-sp",
-      "sourceDisposition": "applied",
-      "contractStatus": "verified-runtime-effect-binding-ready",
-      "impactClassification": "gameplay-impacting",
-      "coverageSelector": {
-        "effectIdentity": "battle-element:109001300",
-        "kind": "effect"
-      },
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第三段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-      ],
-      "reasons": [],
-      "sourceRecordHash": "b0bc890c2555ce2d"
-    },
-    {
-      "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a5-sp",
-      "dimension": "runtime-effect-binding",
-      "subjectIdentity": "moyin-passive2-a5-sp",
-      "sourceDisposition": "applied",
-      "contractStatus": "verified-runtime-effect-binding-ready",
-      "impactClassification": "gameplay-impacting",
-      "coverageSelector": {
-        "effectIdentity": "battle-element:109001300",
-        "kind": "effect"
-      },
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下普攻第五段额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-      ],
-      "reasons": [],
-      "sourceRecordHash": "61a589a939edc72a"
-    },
-    {
-      "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-charged-sp",
-      "dimension": "runtime-effect-binding",
-      "subjectIdentity": "moyin-passive2-charged-sp",
-      "sourceDisposition": "applied",
-      "contractStatus": "verified-runtime-effect-binding-ready",
-      "impactClassification": "gameplay-impacting",
-      "coverageSelector": {
-        "effectIdentity": "battle-element:109001300",
-        "kind": "effect"
-      },
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001300.asset/MonoBehaviour/ast_109001300__-5421258170660714944.json#elementConfigId=109001300|hero-module:109001#skill:10900162#description=璀璨状态下重击额外+1星决蓄能|Battle/Element/ast_109001300.asset#被动2晶石回能量 functionParams[0]=10000|Battle/Element/ast_109001301.asset#被动2判断晶石->璀璨109001270"
-      ],
-      "reasons": [],
-      "sourceRecordHash": "b722d63bbb771b4c"
-    },
-    {
       "requirementIdentity": "contract:stat-dependency:stat-dependency:0:1c17084b92b59bea",
       "dimension": "stat-dependency",
       "subjectIdentity": "stat-dependency:0:1c17084b92b59bea",
@@ -3887,8 +3836,8 @@
     }
   ],
   "summary": {
-    "recordCount": 228,
-    "appliedCount": 201,
+    "recordCount": 225,
+    "appliedCount": 198,
     "gapCount": 27,
     "notApplicableCount": 0,
     "dimensionCounts": {
@@ -3906,7 +3855,6 @@
       "persistence-replay": 1,
       "public-action": 10,
       "resource-boundary": 1,
-      "runtime-effect-binding": 3,
       "scenario-negative": 1,
       "scenario-positive": 1,
       "stat-dependency": 1,
@@ -3918,5 +3866,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "94262e81119e42b3"
+  "inventoryHash": "3fd5135c59158144"
 }
