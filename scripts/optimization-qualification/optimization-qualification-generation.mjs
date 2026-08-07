@@ -122,7 +122,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   il2cppRuntimeContracts:
     '0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a',
   heroRankRuntimeEvidence:
-    '3e38b30fdeaba6695083996d30cdd4eaaddc2fea490997a7197b9ce662a49132',
+    'd565e1e3a987ea39f4154442f5f1338b5714017f3e4040021cbb8b010af301e8',
   soulEffectGetElementRuntimeEvidence:
     '06db8dd699ccad3a5b28b1099b5879ff6dd0990620d230918342d5ee80988ab3',
   soulEffectGetElementTypeRuntimeEvidence:

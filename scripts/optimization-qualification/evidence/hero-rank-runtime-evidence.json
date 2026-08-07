@@ -277,13 +277,24 @@
     "attributeApplicationStatus": "runtime-evidence-required",
     "levelTemplateIncludesBreakthroughAttributes": "unresolved",
     "applicationMode": "unresolved",
-    "reason": "HeroAttrInfo supplies AttrModuleInfo to RefreshAttributes; reviewed client methods are obfuscated dispatch stubs and do not establish whether server-provided attributes already include hero_rank.attribute. Adjacent-rank capture contract is ready (expected deltas indexed for all roster characters at level 80, rank 2 vs 3, empty loadout).",
+    "reason": "Client semantics documented: final panel attributes and skill list are server-provided (HeroAttrInfo.modules[].subModules[].attrs/skills); the client never applies hero_rank.attribute or hero_rank.skill from tables. Whether the server panel already includes hero_rank attributes can only be settled by an adjacent-rank final-panel capture (expected deltas are indexed); skill availability by the same capture reading UnitSkillInfo. PlayerModule methods are obfuscated dispatch stubs, so static closure is not possible.",
     "staticClosureBoundary": {
       "status": "runtime-evidence-required",
       "playerModuleMethodsAreObfuscatedDispatchStubs": true,
       "upstreamConstructionPathProven": false,
       "adjacentRankCaptureRequired": true,
-      "reason": "PlayerModule.HeroData/HeroStore panel-construction methods are obfuscated dispatch stubs; server-provided HeroAttrInfo panel inclusion of hero_rank.attribute cannot be proven statically. The adjacent-rank final-panel capture contract is ready with expected deltas for all 11 optimization objects (12 source identities)."
+      "reason": "PlayerModule.HeroData/HeroStore/AttrModuleInfo panel-construction methods are obfuscated dispatch stubs; server-provided HeroAttrInfo inclusion of hero_rank.attribute cannot be proven statically. Client semantics report documents the server-driven panel; adjacent-rank capture remains the only closure for attributes and skill availability."
+    },
+    "clientSemantics": {
+      "status": "documented",
+      "reportPath": "C:/PC2/Codex/AzPr/work/blue-origin-mechanics-review/hero-rank-client-semantics.md",
+      "finalPanelSource": "server-HeroAttrInfo-modules-submodules-attrs",
+      "clientSideHeroRankAttributeApplication": "none",
+      "skillAvailabilitySource": "server-HeroAttrInfo-modules-submodules-skills",
+      "clientSideHeroRankSkillUnlockLogic": "none",
+      "staticUpstreamClosurePossible": false,
+      "adjacentRankCaptureRequiredForAttributes": true,
+      "skillListCaptureRequiredForUnlocks": true
     }
   }
 }

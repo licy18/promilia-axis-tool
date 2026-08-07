@@ -1914,6 +1914,17 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 
 **E20-1 剩余依赖**：hero_rank 属性/技能可用性的客户端语义结论 + 实机相邻档最终面板捕获（捕获后按已建合同自动校验放行）；`level-breakthrough-skill-unlock-source-mismatch`（112001）来源核对与 E20-2 角色验收并行推进；每完成一个子阶段即更新本手册并单独提交。
 
+### M12-B3-E20-1b 已执行：hero_rank 客户端语义结论（2026-08-07）
+
+用户要求先明确 hero_rank 在客户端的具体语义再放行后两个证据族。结论已写入知识库 `C:\PC2\Codex\AzPr\work\blue-origin-mechanics-review\hero-rank-client-semantics.md`，要点：
+
+- **最终面板属性完全由服务端下发**：`HeroAttrInfo`（proto TypeDefIndex 21301）只有 `hero_guid/hero_conf_id/type/modules`，`modules[].subModules[].attrs=FightAttr`；`AttrModuleInfo` 由它构造，`RefreshAttributes` 只做面板→战斗属性转换。客户端 Lua 与二进制均无 `hero_rank` 表补属性路径，`HeroData.heroRank` 只随存档保存。
+- **技能可用性同样服务端驱动**：`HeroAttrSubModuleInfo.skills=List<UnitSkillInfo>` 随面板下发，`RefreshHeroSkill` 只写 `skillInfoDic`；客户端不存在按 `hero_rank.skill` 自行解锁的逻辑。`hero_rank.skill` 是服务端应解锁的源表契约；已知被动（如 10101061）运行时已 applied 与客户端一致。
+- **放行条件因此收窄**：`character.levelBreakthroughAttributes` 的唯一闭环 = 相邻档最终面板差分捕获（面板(rank3)−面板(rank2) 等于 `hero_rank.attribute(rank3)` 则服务端已含、我们应加；等于 0 则不加）；`character.levelBreakthroughSkillUnlocks` 可由同一捕获读取 `UnitSkillInfo` 闭合；112001 的 `hero_rank.skill` 前缀错误（10300261/10300262）保持来源冲突，等产品决策或新证据。
+- 证据文件 `hero-rank-runtime-evidence.json` 的 `conclusion.clientSemantics` 已落库并冻结哈希 `d565e1e3…`；资格缺口仍 35，`m12cLocked` 保持锁定。
+
+**E20-1 剩余依赖（更新）**：实机相邻档最终面板捕获（属性差分 + `UnitSkillInfo` 技能列表，捕获后按已建合同自动校验）；112001 来源冲突产品决策；随后进入 E20-2 角色验收。
+
 ### M12-B3-E20-1a 已完成：星赐节点技能等级接入 canonical 核心（2026-08-07）
 
 星赐节点（`talent_rune.runeSkill = skillIndex#level`）的等级加成此前只登记为 `star-gift-node-skill-level-runtime-unapplied`，本轮实现运行时通道：
