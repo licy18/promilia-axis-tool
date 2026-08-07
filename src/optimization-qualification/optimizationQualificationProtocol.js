@@ -1056,9 +1056,22 @@ export function resolveStarGiftSkillIndexToSkillId(character, skillIndex) {
   const slotByIndex = {
     1: ['ground', 3],
     2: ['ground', 4],
-    3: ['ground', 203],
   };
-  const [group, slot] = slotByIndex[normalized] ?? [];
+  // skillIndex 3 is the star-carry skill (星携技). Client slot convention is
+  // per-character: 203 = on-enter star carry, 201 = on-exit star carry
+  // (displayType 5); each character carries exactly one of the two.
+  const [group, slot] =
+    normalized === 3
+      ? [
+          'ground',
+          [203, 201].find(candidate =>
+            slots.some(
+              entry =>
+                entry.group === 'ground' && Number(entry.slot) === candidate
+            )
+          ),
+        ]
+      : (slotByIndex[normalized] ?? []);
   if (!group) return null;
   const match = slots.find(
     candidate =>

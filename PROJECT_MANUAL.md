@@ -1942,6 +1942,7 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 - 公共 schema：`levelBreakthroughRank` 从 `required` 移除（仍容忍旧字段，但不产生任何效果）；`ascensionRank` 依旧被拒绝。
 - 证据：`hero-rank-runtime-evidence.json` 新增 `productDecision`，`conclusion` 全部改为 `not-applicable`，原相邻档捕获合同保留为归档证据（`adjacentRankCaptureRequired=false`）；生成器校验决策与结论一致性。
 - 验收报告 `m12-b3-c-dynamic-loadout-effect-acceptance.json` 的 qualification/hashes 同步新基线。
+- 星携技槽位映射修复（E20-1c-R1）：`resolveStarGiftSkillIndexToSkillId` 的 `skillIndex=3` 由固定 `ground/203` 改为数据驱动回退 `203 -> 201`（客户端 203=入场星携技、201=退场星携技，displayType=5，每角色二选一）。此前 102001/107002/108003/199001/199002 的星携技星赐升级被丢弃（如星临者 19900122 应有 +7 级却只显示 1 级）；修复后 199001/199002 星携技=8 级、102001/107002=6 级、108003=4 级。新增全 roster 校验测试（每个角色的 skillIndex=3 必须落到 displayType=5 的 201/203 槽位）。
 
 验证与结果：
 

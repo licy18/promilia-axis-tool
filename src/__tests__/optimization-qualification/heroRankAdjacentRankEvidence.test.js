@@ -3,6 +3,7 @@ import evidence from '../../../scripts/optimization-qualification/evidence/hero-
 import equipmentCatalog from '../../data/generated/equipment.json';
 import qualificationCatalog from '../../data/generated/optimization-qualification-catalog.json';
 import charactersCatalog from '../../data/generated/characters.json';
+import skillsCatalog from '../../data/generated/skills.json';
 import {
   assertHeroRankExpectedDeltaCoverage,
   validateHeroRankAdjacentRankCaptureComparisons,
@@ -218,6 +219,59 @@ describe('E20-1 strict character cultivation runtime baseline (hero_rank dead co
     expect(bonuses[10101012]).toBeGreaterThan(0);
     expect(bonuses[10101013]).toBeGreaterThan(0);
     expect(bonuses[10101021]).toBeGreaterThan(0);
+
+    const starborn = characterById.get(199001);
+    expect(resolveStarGiftSkillIndexToSkillId(starborn, 0)).toBe(19900101);
+    expect(resolveStarGiftSkillIndexToSkillId(starborn, 1)).toBe(19900112);
+    expect(resolveStarGiftSkillIndexToSkillId(starborn, 2)).toBe(19900113);
+    expect(resolveStarGiftSkillIndexToSkillId(starborn, 3)).toBe(19900122);
+
+    const starbornSourceProfile =
+      qualificationCatalog.cultivation.character.profiles.find(
+        entry => Number(entry.characterId) === 199001
+      );
+    const starbornNodes = starbornSourceProfile.starGiftRanks
+      .filter(row => Number(row.rank) <= 7)
+      .flatMap(row => row.nodes);
+    const starbornBonuses = resolveStarGiftSkillLevelBonusesBySkillId({
+      character: starborn,
+      starGiftNodeSkillLevels: starbornNodes
+        .filter(node => node.skillUpgrade)
+        .map(node => ({
+          skillIndex: node.skillUpgrade.skillIndex,
+          level: node.skillUpgrade.level,
+        })),
+    });
+    expect(starbornBonuses[19900101]).toBe(5); // 普攻
+    expect(starbornBonuses[19900112]).toBe(7); // 星鸣技
+    expect(starbornBonuses[19900113]).toBe(5); // 星决技
+    expect(starbornBonuses[19900122]).toBe(7); // 星携技（ground/201 退场型）
+  });
+
+  it('maps skillIndex 3 to the character star-carry slot for every roster profile', () => {
+    const skillsById = new Map(
+      (skillsCatalog.items ?? []).map(skill => [Number(skill.id), skill])
+    );
+    for (const sourceProfile of qualificationCatalog.cultivation.character
+      .profiles) {
+      const character = charactersCatalog.items.find(
+        item => Number(item.id) === Number(sourceProfile.characterId)
+      );
+      const skillId = resolveStarGiftSkillIndexToSkillId(character, 3);
+      expect(skillId, `character=${sourceProfile.characterId}`).not.toBeNull();
+      const skill = skillsById.get(Number(skillId));
+      expect(skill?.displayType, `character=${sourceProfile.characterId}`).toBe(
+        5
+      );
+      const groundSlot = character.skillSlots.find(
+        slot =>
+          slot.group === 'ground' && Number(slot.skillId) === Number(skillId)
+      );
+      expect(
+        [201, 203].includes(Number(groundSlot?.slot)),
+        `character=${sourceProfile.characterId}`
+      ).toBe(true);
+    }
   });
 
   it('applies star-gift skill level bonuses to machine axis action drafts', async () => {
