@@ -866,6 +866,39 @@ describe('verified tuning mark runtime', () => {
     expect(star3Readiness?.status).toBe('ready');
   });
 
+  it('fires a thunder overlimit on perfect parry when a mark is held', () => {
+    const thunder = mechanicsPackage.tuningMechanicsCatalog.profiles.find(
+      profile => profile.key === 'thunder'
+    );
+    const result = simulateVerifiedProject({
+      durationMs: 2_000,
+      initialRuntimeState: {
+        tuningMarks: [createInheritedMark(thunder, 20_000)],
+      },
+      actions: [
+        createWorkbenchActionDraft({
+          id: 'moyin-perfect-parry',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900121,
+          actionVariantIndex: 3,
+          startMs: 0,
+          durationMs: 1_000,
+        }),
+      ],
+    });
+    const parryOverlimit =
+      result.verifiedTuningMarkGeneration.combatEvents.filter(
+        event =>
+          event.kind === 'overlimit-damage' && event.timeMs === 483.333333
+      );
+    expect(parryOverlimit.length).toBeGreaterThan(0);
+    const consume = result.verifiedTuningMarkGeneration.events.find(
+      event => event.kind === 'consume' && event.profileKey === 'thunder'
+    );
+    expect(consume).toMatchObject({ timeMs: 483.333333, before: 1, after: 0 });
+  });
+
   it('expires inherited layers on an empty action axis without synthetic damage', () => {
     const fire = mechanicsPackage.tuningMechanicsCatalog.profiles.find(
       profile => profile.key === 'fire'

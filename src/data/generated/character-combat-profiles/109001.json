@@ -66,7 +66,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "c65f69bee7e785caca4d8e9b8fcfc56f595d985db3bdecfdb70494a6ff72f056",
+    "packageHash": "4b7b9fc53d308454748a37104e5a4863ea5739d09ffaa1a8fe2aa5b68c20f7e5",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -8001,7 +8001,7 @@
         "linked": true,
         "runtimeReady": true,
         "runtimeHitCount": 0,
-        "runtimeEffectCount": 3,
+        "runtimeEffectCount": 4,
         "runtimeResourceTransactionCount": 0,
         "selectedResourceTransactionIdentities": [],
         "selectedElementCount": 4,
@@ -8010,7 +8010,8 @@
           "10900127|0|elements|0|5494341043412151088|element:5494341043412151088|0|0",
           "10900127|0|elements|0|5494341043412151088|element:2840539820446947370|0|0",
           "10900127|0|elements|0|5494341043412151088|element:-2035055823451510697|0|0",
-          "10900127|0|elements|1|2840539820446947370|element:2840539820446947370|unresolved-frame|0"
+          "10900127|0|elements|1|2840539820446947370|element:2840539820446947370|unresolved-frame|0",
+          "10900149|1|elements|5|-6711007604037179960|element:-6711007604037179960|29|0"
         ],
         "classification": "applied",
         "sourceEvidenceStatus": "applied",
@@ -8040,26 +8041,27 @@
         "effectDimensionSummary": {
           "damage": {
             "applied": 1,
-            "verified-zero": 3
+            "verified-zero": 4
           },
           "toughness": {
-            "verified-zero": 4
+            "verified-zero": 5
           },
           "sp": {
-            "verified-zero": 4
+            "verified-zero": 5
           },
           "hp": {
-            "verified-zero": 4
+            "verified-zero": 5
           },
           "shield": {
-            "verified-zero": 4
+            "verified-zero": 5
           },
           "dynamicProperty": {
             "applied": 1,
             "unresolved": 1,
-            "verified-zero": 2
+            "verified-zero": 3
           },
           "mark": {
+            "applied": 1,
             "verified-zero": 4
           }
         },
@@ -21439,6 +21441,143 @@
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
             "applied": false
+          },
+          {
+            "effectIdentity": "10900149|1|elements|5|-6711007604037179960|element:-6711007604037179960|29|0",
+            "graphIdentity": "10900149|1|elements|5|-6711007604037179960",
+            "controlSkillId": 10900149,
+            "mapIndex": 0,
+            "rootElementId": 109001362,
+            "rootPathId": "-6711007604037179960",
+            "elementId": 109001362,
+            "pathId": "-6711007604037179960",
+            "name": "有buff时消耗1层雷调谐",
+            "rawSourceName": "有buff时消耗1层雷调谐",
+            "sourceNameStatus": "source-name-ready",
+            "displayLabel": "有buff时消耗1层雷调谐",
+            "kind": "judgment",
+            "depth": 0,
+            "relationPath": [],
+            "trigger": {
+              "behaviorPathId": "7463435849639967761",
+              "subSkillIndexes": [
+                1
+              ],
+              "startFrame": 29,
+              "frameCount": 1,
+              "behaviorIndex": -863904558,
+              "timelineGroupIndex": 0,
+              "targetCode": 1,
+              "targetKind": "enemy",
+              "targetSourceField": "targetType",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900149.asset/MonoBehaviour/MonoBehaviour_7463435849639967761__7463435849639967761.json#startFrame|targetType"
+            },
+            "activationConditions": [],
+            "propertyConditionStatus": null,
+            "sourceOrder": {
+              "contractName": "AzPrVerifiedEffectSourceSequence",
+              "status": "verified-battle-effect-source-order-ready",
+              "referenceKind": "elements",
+              "timelineGroupIndex": 0,
+              "mapIndex": 1,
+              "referenceKindOrder": 0,
+              "elementIndex": 5,
+              "nodeTraversalIndex": 0,
+              "triggerIndex": 0,
+              "missingFields": [],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900149.asset/MonoBehaviour/skill_control_10900149__8207482499774098872.json#skillResourceMaps[1].elements[5]|battle-element-assets.jsonl#path_id=-6711007604037179960|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900149.asset/MonoBehaviour/MonoBehaviour_7463435849639967761__7463435849639967761.json#startFrame|targetType"
+            },
+            "target": {
+              "kind": "enemy",
+              "code": 250,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=-6711007604037179960"
+            },
+            "scenarioRuntimeStatus": "source-verified",
+            "lifecycle": {
+              "durationMs": null,
+              "stackMode": "stack",
+              "stackDelta": 1,
+              "maxStacks": 1,
+              "instanceScope": "team-tuning-pool",
+              "combineType": 1,
+              "mutuallyExclusiveId": 0,
+              "tags": []
+            },
+            "propertyChange": null,
+            "directSp": null,
+            "cooldownReduction": null,
+            "heal": null,
+            "shield": false,
+            "tuningMark": null,
+            "tuningOverlimit": {
+              "profileKey": "thunder",
+              "element": "雷",
+              "markId": 250,
+              "packetElementId": 299,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=536980873299289094",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": 0,
+              "judgmentElementId": 109001362,
+              "judgmentPathId": "-6711007604037179960",
+              "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=-6711007604037179960",
+              "judgmentCandidateMarkIds": [
+                250
+              ],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10900149:1:109001362:-6711007604037179960",
+              "judgmentCandidates": [
+                {
+                  "priorityIndex": 0,
+                  "markId": 250,
+                  "packetElementId": 299,
+                  "packetPathId": "battle-element-assets.jsonl#path_id=536980873299289094",
+                  "packetSourceIdentity": "battle-element-assets.jsonl#path_id=536980873299289094"
+                }
+              ]
+            },
+            "directSpPresence": null,
+            "formula": {
+              "commonFunctionId": 102100,
+              "baseFunctionId": 0,
+              "commonExpression": "IF(self.ELEMENT_LAYERS[M]>I,T,F)",
+              "baseExpression": null
+            },
+            "sourceIdentity": "battle-effect:10900149:1:-6711007604037179960:7463435849639967761:29",
+            "dimensions": {
+              "damage": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "toughness": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "sp": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "hp": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "shield": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "dynamicProperty": {
+                "status": "verified-zero",
+                "sourceField": null
+              },
+              "mark": {
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
+              }
+            },
+            "classification": "applied",
+            "reasons": [],
+            "status": "verified-action-effect-binding-applied",
+            "confidence": "high",
+            "applied": true
           }
         ],
         "effectGraph": [
@@ -37939,6 +38078,143 @@
           "applied": true
         },
         {
+          "effectIdentity": "10900149|1|elements|5|-6711007604037179960|element:-6711007604037179960|29|0",
+          "graphIdentity": "10900149|1|elements|5|-6711007604037179960",
+          "controlSkillId": 10900127,
+          "mapIndex": 0,
+          "rootElementId": 109001362,
+          "rootPathId": "-6711007604037179960",
+          "elementId": 109001362,
+          "pathId": "-6711007604037179960",
+          "name": "有buff时消耗1层雷调谐",
+          "rawSourceName": "有buff时消耗1层雷调谐",
+          "sourceNameStatus": "source-name-ready",
+          "displayLabel": "有buff时消耗1层雷调谐",
+          "kind": "judgment",
+          "depth": 0,
+          "relationPath": [],
+          "trigger": {
+            "behaviorPathId": "7463435849639967761",
+            "subSkillIndexes": [
+              1
+            ],
+            "startFrame": 29,
+            "frameCount": 1,
+            "behaviorIndex": -863904558,
+            "timelineGroupIndex": 0,
+            "targetCode": 1,
+            "targetKind": "enemy",
+            "targetSourceField": "targetType",
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900149.asset/MonoBehaviour/MonoBehaviour_7463435849639967761__7463435849639967761.json#startFrame|targetType"
+          },
+          "activationConditions": [],
+          "propertyConditionStatus": null,
+          "sourceOrder": {
+            "contractName": "AzPrVerifiedEffectSourceSequence",
+            "status": "verified-battle-effect-source-order-ready",
+            "referenceKind": "elements",
+            "timelineGroupIndex": 0,
+            "mapIndex": 1,
+            "referenceKindOrder": 0,
+            "elementIndex": 5,
+            "nodeTraversalIndex": 0,
+            "triggerIndex": 0,
+            "missingFields": [],
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900149.asset/MonoBehaviour/skill_control_10900149__8207482499774098872.json#skillResourceMaps[1].elements[5]|battle-element-assets.jsonl#path_id=-6711007604037179960|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900149.asset/MonoBehaviour/MonoBehaviour_7463435849639967761__7463435849639967761.json#startFrame|targetType"
+          },
+          "target": {
+            "kind": "enemy",
+            "code": 250,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-6711007604037179960"
+          },
+          "scenarioRuntimeStatus": "source-verified",
+          "lifecycle": {
+            "durationMs": null,
+            "stackMode": "stack",
+            "stackDelta": 1,
+            "maxStacks": 1,
+            "instanceScope": "team-tuning-pool",
+            "combineType": 1,
+            "mutuallyExclusiveId": 0,
+            "tags": []
+          },
+          "propertyChange": null,
+          "directSp": null,
+          "cooldownReduction": null,
+          "heal": null,
+          "shield": false,
+          "tuningMark": null,
+          "tuningOverlimit": {
+            "profileKey": "thunder",
+            "element": "雷",
+            "markId": 250,
+            "packetElementId": 299,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=536980873299289094",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": 0,
+            "judgmentElementId": 109001362,
+            "judgmentPathId": "-6711007604037179960",
+            "judgmentSourceIdentity": "battle-element-assets.jsonl#path_id=-6711007604037179960",
+            "judgmentCandidateMarkIds": [
+              250
+            ],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10900149:1:109001362:-6711007604037179960",
+            "judgmentCandidates": [
+              {
+                "priorityIndex": 0,
+                "markId": 250,
+                "packetElementId": 299,
+                "packetPathId": "battle-element-assets.jsonl#path_id=536980873299289094",
+                "packetSourceIdentity": "battle-element-assets.jsonl#path_id=536980873299289094"
+              }
+            ]
+          },
+          "directSpPresence": null,
+          "formula": {
+            "commonFunctionId": 102100,
+            "baseFunctionId": 0,
+            "commonExpression": "IF(self.ELEMENT_LAYERS[M]>I,T,F)",
+            "baseExpression": null
+          },
+          "sourceIdentity": "battle-effect:10900149:1:-6711007604037179960:7463435849639967761:29",
+          "dimensions": {
+            "damage": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "toughness": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "sp": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "hp": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "shield": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "dynamicProperty": {
+              "status": "verified-zero",
+              "sourceField": null
+            },
+            "mark": {
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
+            }
+          },
+          "classification": "applied",
+          "reasons": [],
+          "status": "verified-action-effect-binding-applied",
+          "confidence": "high",
+          "applied": true
+        },
+        {
           "effectIdentity": "10900143|0|elements|3|-7506081561353179437|element:-5022202969777715803|13|0",
           "graphIdentity": "10900143|0|elements|3|-7506081561353179437",
           "controlSkillId": 10900143,
@@ -45357,9 +45633,9 @@
       "compilerVersion": 3,
       "recipeIdentity": "actor:109001:character-combat-recipe:v1",
       "recipeHash": "a83b4b4acced2f55a84c7c7b0f49e7b4662a24f00337363464d3b928bc0b6b76",
-      "compilerInputHash": "bf23dc4141242c77780af44aaedd2269752202a5756da723020d8963bbe9e05f",
+      "compilerInputHash": "9c74b9831838f744b1e71a60ec09f4e5962dd5ae4b6024c0692d5290029f23e2",
       "recipeContractHash": "0f7ae29786964e0364a6c2cb83b979a4bbe618ee3c5cdcafc6d00e105c7b265e",
-      "ownerContractHash": "40a0ecf98844b69e7fdb13281ab1ba8b62ea4c81865fcd9d8259735fcc304269"
+      "ownerContractHash": "e6f3526d3f07d4de7eab0aaf359c030ac41c5cf7f83ec0a6f54e6ea5e9d568d8"
     },
     "operators": [
       "public-action-binding",
@@ -45380,7 +45656,7 @@
         "packagePath": "actionMappings",
         "operator": "public-action-binding",
         "recordCount": 10,
-        "recordsHash": "80dfc489ed261fa03d8e8eea2c3919a197c1faa979fc716fbb73154265dd6f4f"
+        "recordsHash": "dee1b2cfed33f6d64477181cb8e9b2f11c2423a088d1c6f0196797cc31b0eb5b"
       },
       {
         "packagePath": "actionVariantGraph.publicActionForms",
@@ -45449,7 +45725,7 @@
         "recordsHash": "7428051a5bd9503331d1c3d9364b3c838eac742cec215944543d9d948e456631"
       }
     ],
-    "contractHash": "d85cec95295bfc65858141a2354129aa40f9421e2c1fd83a3be4dbbe5e25b1ab"
+    "contractHash": "097503dfa5069670e0ee78eba3e7b6e8756645a2d629b87400109a2aa513f7ec"
   },
   "coverage": [
     {
@@ -46464,7 +46740,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "437563b9b852232b97d0b34d8c55153c924a32e9ad9a3157d54b4a31ff6eab61"
+    "deterministicInputHash": "7440f34d12a2cba238aaec3bf4af7f49e2a14868a73ba1b0a0ce20a878e923d4"
   },
-  "profileHash": "09c9983a318729b6f598a9119d42a1f7babe7046f4a475b1632ad27a729c79dd"
+  "profileHash": "64eb7f92641c9c49bf28700230f009b94710964cad744f117064a034c5b44735"
 }

@@ -222,6 +222,28 @@
 3. M8/M15/M23：残响（201/701）注入与曲线（需确认残响是否仅为内部状态，不进三值）。
 4. Golden/验收场景覆盖 M7/M21/M12/M18 → 消除 scenario-coverage 阻断 → 全量测试/哈希/提交。
 
+## R7 进度（2026-08-08，M18 完美招架弹反链已闭合）
+
+### 已实现
+
+- **M18 完美招架璀璨超限**：sync 构建新增 `applyHeroParryRuntimeChainMerge`，把 10900149/sub1 弹反链的 applied 效果（109001362 消耗1雷判断，带 tuningOverlimit）并入完美招架公开控制 10900127/sub0；完美招架 action resolution 现在同时携带基础反击与弹反超限链。实测：完美招架 + 1 雷印记 → 29F（483ms）消耗印记并触发雷 overlimit 伤害。
+- 新增单测：`fires a thunder overlimit on perfect parry when a mark is held`（consume 1→0 + overlimit-damage@483ms）。
+- 包 hash `44ddb7ef…`（file sha `f2065b2e…`）；fixtures/baseline/cycle/loadout 验收报告、FROZEN、replay/migration/package/coverage/workbench/canonicalTrace 单测期望全部重基线。
+
+### 验证
+
+- 全套 Vitest 1447/1449（仅 2 条已知 process-heavy 并行超时，单独通过）；11 项审计 clean；build 通过。
+
+### 已知细化项（记录，不阻塞）
+
+- 弹反链的“璀璨”门控：当前 consume 仅检查雷印记存在，未检查璀璨状态；A4 条件组同款语义待统一核对（跨 target-state/tuning 两系统的状态门控）。
+
+### 下一步
+
+1. M6：10900101 sub1（璀璨普攻变体）选择语义核对/接线。
+2. M8/M15/M23：残响（201/701）注入与曲线。
+3. Golden/验收场景覆盖 M7/M21/M12/M18 → 消除 scenario-coverage 阻断 → 全量测试/哈希/提交。
+
 ## 关键事实
 
 - 109001 末音：element=4（雷），position 详见 characters.json；普攻=10900101 哈库茵剑舞、星鸣=10900112 涌雷动之跃、星决=10900113 绽华章之舞、星携=10900121 凝飓风之旋（203 入场型）、被动=10900161 哈库茵之耀 + 10900162 无名第二被动（按 10101062/10300262 先例 N/A）

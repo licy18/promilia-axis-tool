@@ -532,7 +532,8 @@ export async function createVerifiedCombatMechanicsBuild({
   const overridesBySkillAndElement = indexLevelOverrides(
     readJson(path.join(NEW_TABLE_ROOT, 'skillsub_ele_value.json')).rows
   );
-  const controlBindings = controls.map(control =>
+  const controlBindings = applyHeroParryRuntimeChainMerge(
+    controls.map(control =>
     createControlBinding({
       control,
       indexedElements,
@@ -544,6 +545,7 @@ export async function createVerifiedCombatMechanicsBuild({
       skillLogicById,
       tuningMechanicsCatalog,
     })
+    )
   );
   const publicControlBindings = controlBindings.filter(binding =>
     publicControlIds.has(binding.controlSkillId)
@@ -5342,6 +5344,68 @@ function indexLevelOverrides(rows) {
     entries.sort((left, right) => left.level - right.level);
   }
   return result;
+}
+
+function applyHeroParryRuntimeChainMerge(controlBindings) {
+  // 109001 末音：完美招架公开控制 10900127 的弹反链在客户端独立于
+  // 10900149 弹反执行控制；技能文案要求反击同时结算弹反多段与璀璨超限。
+  // 将 10900149/sub1 的 applied 效果与命中并入 10900127/sub0，使完美招架
+  // action resolution 同时携带基础反击与 109001362 璀璨超限消耗链。
+  const bySkillId = new Map(
+    controlBindings.map(binding => [
+      Number(binding.controlSkillId),
+      binding,
+    ])
+  );
+  const parryPublic = bySkillId.get(10900127);
+  const parryRuntime = bySkillId.get(10900149);
+  if (!parryPublic || !parryRuntime) return controlBindings;
+  const runtimeEffects = (parryRuntime.effects ?? []).filter(
+    effect =>
+      effect.classification === 'applied' &&
+      Number(effect.mapIndex) === 1
+  );
+  const runtimeHits = (parryRuntime.hits ?? []).filter(
+    hit => Number(hit.mapIndex) === 1
+  );
+  if (runtimeEffects.length === 0 && runtimeHits.length === 0) {
+    return controlBindings;
+  }
+  return controlBindings.map(binding => {
+    if (Number(binding.controlSkillId) !== 10900127) return binding;
+    return {
+      ...binding,
+      effects: dedupeBy(
+        [
+          ...(binding.effects ?? []),
+          ...runtimeEffects.map(effect => ({
+            ...effect,
+            mapIndex: 0,
+          })),
+        ],
+        effect => effect.effectIdentity
+      ),
+      hits: dedupeBy(
+        [
+          ...(binding.hits ?? []),
+          ...runtimeHits.map(hit => ({
+            ...hit,
+            mapIndex: 0,
+          })),
+        ],
+        hit => hit.hitIdentity
+      ),
+      parryRuntimeChainMerge: {
+        publicControlSkillId: 10900127,
+        runtimeControlSkillId: 10900149,
+        mergedEffectCount: runtimeEffects.length,
+        mergedHitCount: runtimeHits.length,
+        sourceIdentity:
+          'character-combat-sync:109001#perfect-parry-runtime-chain-merge(10900149/sub1 -> 10900127/sub0)',
+        applied: true,
+      },
+    };
+  });
 }
 
 function createControlBinding({

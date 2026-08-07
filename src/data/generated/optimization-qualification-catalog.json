@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "008683c01308d7fe",
-  "manifestsHash": "de5946205dc0a8bc",
-  "gapLedgerHash": "54fd9a6ac542af13",
-  "bindingMatrixHash": "b62ea56b1efe47d3",
-  "sourceSnapshotHash": "c838fbd97fda99b5",
+  "rosterHash": "42b0779685006bbc",
+  "manifestsHash": "c64e1db8e6a17975",
+  "gapLedgerHash": "c583d0eadad1f0e7",
+  "bindingMatrixHash": "3f567a185ff4f0be",
+  "sourceSnapshotHash": "7780acedd9aa03d7",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -26,7 +26,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "af01ad1d3dd1189d"
+      "manifestHash": "377179f02b62bc3f"
     },
     {
       "objectKind": "character",
@@ -49,7 +49,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "8db6af0c7a0b6736"
+      "manifestHash": "1db0fffbce2b7e45"
     },
     {
       "objectKind": "character",
@@ -108,7 +108,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "df65960621ff1984"
+      "manifestHash": "f6a4078b61d9f714"
     },
     {
       "objectKind": "character",
@@ -2662,7 +2662,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "008683c01308d7fe",
+    "rosterHash": "42b0779685006bbc",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24570,7 +24570,7 @@
       "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "b62ea56b1efe47d3"
+    "bindingMatrixHash": "3f567a185ff4f0be"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44433,5 +44433,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "8cc8fddea36d9805"
+  "catalogHash": "5fc20f477fa19701"
 }
