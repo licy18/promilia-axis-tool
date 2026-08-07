@@ -3978,10 +3978,10 @@
       "sourceRecordHash": "71728e807d21c965"
     },
     {
-      "requirementIdentity": "contract:effect:effect:61:69cda60cb7cc92d6",
+      "requirementIdentity": "contract:effect:effect:61:30dd5b0d6b4d81c6",
       "dimension": "effect",
-      "subjectIdentity": "effect:61:69cda60cb7cc92d6",
-      "sourceDisposition": "gap",
+      "subjectIdentity": "effect:61:30dd5b0d6b4d81c6",
+      "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -3993,11 +3993,8 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillResourceMaps[0].elements[0]",
         "battle-element-assets.jsonl#path_id=-2035055823451510697"
       ],
-      "reasons": [
-        "nested-damage-runtime-family-unimplemented",
-        "wrapper-condition-semantics-unresolved"
-      ],
-      "sourceRecordHash": "9bdae39bc09f4c7e"
+      "reasons": [],
+      "sourceRecordHash": "e20d0a5ceb5ef79b"
     },
     {
       "requirementIdentity": "contract:effect:effect:62:5a54370c3e581afe",
@@ -11704,8 +11701,8 @@
   ],
   "summary": {
     "recordCount": 713,
-    "appliedCount": 405,
-    "gapCount": 308,
+    "appliedCount": 406,
+    "gapCount": 307,
     "notApplicableCount": 0,
     "dimensionCounts": {
       "action-effect-binding": 3,
@@ -11734,5 +11731,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "f78f481c446ff36f"
+  "inventoryHash": "184cd10dff5c2561"
 }

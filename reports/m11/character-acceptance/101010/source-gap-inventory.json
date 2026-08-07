@@ -3186,23 +3186,6 @@
       "sourceRecordHash": "daea5e595049965d"
     },
     {
-      "uniqueGapIdentity": "source-gap:dcc01122b7c858f6",
-      "sourceRecordIdentities": [
-        "effect:10101027|0|elements|0|-3932294994803982599|element:-2035055823451510697|0|0",
-        "semantic-gap:d5dc7e408a36f78c311e"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101027:0:-2035055823451510697:-7068593164247836478:0",
-        "effect:10101027|0|elements|0|-3932294994803982599|element:-2035055823451510697|0|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "17771f0b9139c806"
-    },
-    {
       "uniqueGapIdentity": "source-gap:de33dd3823956265",
       "sourceRecordIdentities": [
         "semantic-gap:130665465d8fa8b132a9",
@@ -3789,11 +3772,11 @@
     }
   ],
   "summary": {
-    "uniqueGapCount": 210,
+    "uniqueGapCount": 209,
     "blockingCount": 119,
-    "nonBlockingCount": 91,
+    "nonBlockingCount": 90,
     "statusCounts": {
-      "not-applicable": 91,
+      "not-applicable": 90,
       "runtime-evidence-required": 13,
       "static-evidence-gap": 101,
       "unknown-formula": 5
@@ -3812,7 +3795,7 @@
       "effect-trigger-frame-missing|sp-formula-not-literal-function-5": 5,
       "effect-trigger-frame-missing|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 7,
       "judgment-condition-runtime-unimplemented": 7,
-      "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 10,
+      "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 9,
       "nested-effect-wrapper-semantics-unresolved": 5,
       "nested-effect-wrapper-semantics-unresolved|sp-formula-not-literal-function-5": 5,
       "runtime-dependent": 13,
@@ -3827,5 +3810,5 @@
       "window-does-not-select-an-action-control": 36
     }
   },
-  "inventoryHash": "b391673a4a84de82"
+  "inventoryHash": "649da73eac0e7ec7"
 }

@@ -3150,23 +3150,6 @@
       "sourceRecordHash": "2d21b185e1f53c35"
     },
     {
-      "uniqueGapIdentity": "source-gap:72967b470f0aa424",
-      "sourceRecordIdentities": [
-        "effect:10300227|0|elements|0|-6766905428157734921|element:-2035055823451510697|0|0",
-        "semantic-gap:6722f1249dea861162bf"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300227:0:-2035055823451510697:166774690136961000:0",
-        "effect:10300227|0|elements|0|-6766905428157734921|element:-2035055823451510697|0|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "c18044621692be10"
-    },
-    {
       "uniqueGapIdentity": "source-gap:74d3c32b4c7c9279",
       "sourceRecordIdentities": [
         "effect:10300202|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
@@ -7336,11 +7319,11 @@
     }
   ],
   "summary": {
-    "uniqueGapCount": 430,
+    "uniqueGapCount": 429,
     "blockingCount": 132,
-    "nonBlockingCount": 298,
+    "nonBlockingCount": 297,
     "statusCounts": {
-      "not-applicable": 298,
+      "not-applicable": 297,
       "runtime-evidence-required": 4,
       "static-evidence-gap": 128
     },
@@ -7352,7 +7335,7 @@
       "effect-trigger-frame-missing": 1,
       "judgment-condition-runtime-unimplemented": 8,
       "legacy-or-unreachable-current-client": 1,
-      "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 9,
+      "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 8,
       "nested-effect-wrapper-semantics-unresolved": 14,
       "reexported-subskill-container-unreachable-from-current-skill-list": 1,
       "resource-root-wrapper-reference-not-a-runtime-transaction": 19,
@@ -7364,5 +7347,5 @@
       "unresolved": 59
     }
   },
-  "inventoryHash": "a6571b00b4484828"
+  "inventoryHash": "c7611f8528429e70"
 }

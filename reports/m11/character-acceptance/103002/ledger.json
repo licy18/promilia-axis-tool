@@ -4516,6 +4516,20 @@
     },
     {
       "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:61:30dd5b0d6b4d81c6",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387500083290000.asset/MonoBehaviour/ast_17387500083290000__166774690136961000.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillResourceMaps[0].elements[0]",
+        "battle-element-assets.jsonl#path_id=-2035055823451510697"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:2bea7f4701208b17",
+      "uniqueGapIdentity": "acceptance-gap:2bea7f4701208b17"
+    },
+    {
+      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:hit:10300201|2|elements|12|6530960959018090325|19|1",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
@@ -7299,6 +7313,20 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:2bb91746596b3b0a",
       "uniqueGapIdentity": "acceptance-gap:2bb91746596b3b0a"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:61:30dd5b0d6b4d81c6",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387500083290000.asset/MonoBehaviour/ast_17387500083290000__166774690136961000.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillResourceMaps[0].elements[0]",
+        "battle-element-assets.jsonl#path_id=-2035055823451510697"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:2bea7f4701208b17",
+      "uniqueGapIdentity": "acceptance-gap:2bea7f4701208b17"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -15570,23 +15598,6 @@
       "blocking": false
     },
     {
-      "recordIdentity": "source-gap:72967b470f0aa424",
-      "uniqueGapIdentity": "source-gap:72967b470f0aa424",
-      "category": "non-gameplay-source-record",
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300227:0:-2035055823451510697:166774690136961000:0",
-        "effect:10300227|0|elements|0|-6766905428157734921|element:-2035055823451510697|0|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300227|0|elements|0|-6766905428157734921|element:-2035055823451510697|0|0",
-        "semantic-gap:6722f1249dea861162bf"
-      ],
-      "blocking": false
-    },
-    {
       "recordIdentity": "source-gap:75bb8e3916327343",
       "uniqueGapIdentity": "source-gap:75bb8e3916327343",
       "category": "non-gameplay-source-record",
@@ -18490,16 +18501,16 @@
     }
   ],
   "summary": {
-    "uniqueBlockingCount": 501,
+    "uniqueBlockingCount": 502,
     "sourceGapCount": 132,
-    "acceptanceGapCount": 369,
-    "nonBlockingCount": 298,
+    "acceptanceGapCount": 370,
+    "nonBlockingCount": 297,
     "statusCounts": {
       "runtime-evidence-required": 4,
-      "static-evidence-gap": 497
+      "static-evidence-gap": 498
     },
     "reasonCounts": {
-      "acceptance-scenario-coverage-missing": 152,
+      "acceptance-scenario-coverage-missing": 153,
       "acceptance-selector-unavailable": 217,
       "effect-target-unresolved|effect-trigger-frame-missing": 60,
       "effect-trigger-frame-missing": 1,
@@ -18508,11 +18519,11 @@
       "unresolved": 59
     },
     "categoryCounts": {
-      "acceptance-scenario-gap": 369,
+      "acceptance-scenario-gap": 370,
       "upstream-source-gap": 132
     }
   },
-  "ledgerHash": "67440df390ab113a",
+  "ledgerHash": "e7488fa7a688315d",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:source-gap:0090f2ac6f468ecc",
@@ -19910,17 +19921,6 @@
         "actor:103002|control:10300212|sub:0->actor:103002|control:10300201|sub:3->6179147025350945402->0"
       ],
       "sourceRecordHash": "3c580266ee078afd"
-    },
-    {
-      "recordIdentity": "not-applicable:source-gap:72967b470f0aa424",
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300227:0:-2035055823451510697:166774690136961000:0",
-        "effect:10300227|0|elements|0|-6766905428157734921|element:-2035055823451510697|0|0"
-      ],
-      "sourceRecordHash": "c18044621692be10"
     },
     {
       "recordIdentity": "not-applicable:source-gap:75bb8e3916327343",

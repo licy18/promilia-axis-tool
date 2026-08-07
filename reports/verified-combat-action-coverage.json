@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "ea800e86d8886a21d89be5b61faeadbcfc6efa54f90d1c190d5c53604ff71299",
+  "packageHash": "7ba530f69546b79a4ee1cd9ce85378fe11fb53db9744372443b73947b0ea2b4e",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -27,17 +27,17 @@
     "scenarioResolvedActionCount": 504,
     "verifiedZeroActionCount": 0,
     "unresolvedActionCount": 13,
-    "hitNodeCount": 2522,
+    "hitNodeCount": 2523,
     "dimensions": {
       "hp": {
-        "nonzero": 806,
+        "nonzero": 807,
         "verified-zero": 0,
-        "unresolved": 1970
+        "unresolved": 1969
       },
       "toughness": {
-        "nonzero": 780,
+        "nonzero": 781,
         "verified-zero": 26,
-        "unresolved": 1970
+        "unresolved": 1969
       },
       "actorSp": {
         "nonzero": 267,
@@ -55,7 +55,7 @@
     "nonzeroRecoveryElementCount": 667,
     "unresolvedNonzeroRecoveryElementCount": 464,
     "scenarioResolvedNonzeroRecoveryElementCount": 212,
-    "scenarioResolvedProjectileHitCount": 2437,
+    "scenarioResolvedProjectileHitCount": 2443,
     "disabledScenarioHitCount": 0,
     "unresolvedProjectileLaunchCount": 70,
     "unresolvedProjectileFormulaCount": 7,
@@ -454,17 +454,17 @@
       "scenarioResolvedActionCount": 117,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 1007,
+      "hitNodeCount": 1008,
       "dimensions": {
         "hp": {
-          "nonzero": 134,
+          "nonzero": 135,
           "verified-zero": 0,
-          "unresolved": 123
+          "unresolved": 122
         },
         "toughness": {
-          "nonzero": 134,
+          "nonzero": 135,
           "verified-zero": 0,
-          "unresolved": 123
+          "unresolved": 122
         },
         "actorSp": {
           "nonzero": 0,
@@ -3025,17 +3025,17 @@
       "scenarioResolvedActionCount": 3,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 6,
+      "hitNodeCount": 7,
       "dimensions": {
         "hp": {
-          "nonzero": 4,
+          "nonzero": 5,
           "verified-zero": 0,
-          "unresolved": 9
+          "unresolved": 8
         },
         "toughness": {
-          "nonzero": 4,
+          "nonzero": 5,
           "verified-zero": 0,
-          "unresolved": 9
+          "unresolved": 8
         },
         "actorSp": {
           "nonzero": 0,
@@ -35783,12 +35783,9 @@
       "elementId": 50701325,
       "referenceKind": "elements",
       "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
+      "scenarioClassification": "applied",
       "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502004.asset/MonoBehaviour/skill_control_502004__3277679916060157055.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1021361166687248402"
     },
@@ -54399,8 +54396,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -54701,8 +54696,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -54733,9 +54726,7 @@
       "classification": "applied",
       "reasons": [
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10200113].level.labels[0]"
     },
@@ -54763,8 +54754,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -55101,8 +55090,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -55257,10 +55244,7 @@
       "publicVariantLabel": "集中闪避",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10700222].level.labels[2]"
     },
     {
@@ -55463,8 +55447,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -55642,8 +55624,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -55832,8 +55812,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -56015,8 +55993,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -56158,8 +56134,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -56312,8 +56286,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -56501,8 +56473,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -56650,8 +56620,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -56856,8 +56824,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -57036,8 +57002,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -57180,8 +57144,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -57324,8 +57286,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -57521,8 +57481,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -58877,14 +58835,7 @@
       "publicVariantLabel": "毒液弹",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500066].actions[skillId=502004]"
     },
     {
@@ -62669,8 +62620,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -62976,8 +62925,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -63021,9 +62968,7 @@
       "classification": "applied",
       "reasons": [
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/skill_control_10200113__-6869786966838262589.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -63064,8 +63009,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -63593,8 +63536,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -63801,10 +63742,7 @@
         "actor|107002|10700222|2|10700227"
       ],
       "classification": "applied",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700227.asset/MonoBehaviour/skill_control_10700227__-4499558189561410934.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -64038,8 +63976,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -64267,8 +64203,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -64479,8 +64413,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -64645,8 +64577,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -64814,8 +64744,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -64968,8 +64896,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -65138,8 +65064,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -65339,8 +65263,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -65576,8 +65498,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -65767,8 +65687,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -65909,8 +65827,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -66051,8 +65967,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -66242,8 +66156,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -68610,14 +68522,7 @@
         "kibo|500066|502004|0|502004"
       ],
       "classification": "applied",
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502004.asset/MonoBehaviour/skill_control_502004__3277679916060157055.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -131604,11 +131509,11 @@
             "10700305|0|elements|98|-6782021254926881992|element:6700000335208321442|unresolved-frame|0"
           ],
           "hitCount": 4,
-          "effectCount": 67,
+          "effectCount": 68,
           "effectDimensionSummary": {
             "damage": {
-              "applied": 17,
-              "unresolved": 43,
+              "applied": 18,
+              "unresolved": 42,
               "verified-zero": 234
             },
             "toughness": {
@@ -131644,8 +131549,6 @@
             "hp:damage-formula-inputs-incomplete",
             "toughness:pre-shield-damage-inputs-incomplete",
             "stack-lifecycle-runtime-unimplemented",
-            "nested-damage-trigger-lifecycle-not-expanded",
-            "nested-effect-wrapper-semantics-unresolved",
             "property-formula-not-literal-function-5",
             "effect-trigger-frame-missing",
             "effect-target-unresolved"

@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "ea800e86d8886a21d89be5b61faeadbcfc6efa54f90d1c190d5c53604ff71299",
+  "packageHash": "7ba530f69546b79a4ee1cd9ce85378fe11fb53db9744372443b73947b0ea2b4e",
   "fixedProductDenominator": {
     "publicActionCount": 563,
     "actorOwnerCount": 20,
@@ -52,14 +52,14 @@
     },
     "actionDimensions": {
       "hp": {
-        "nonzero": 806,
+        "nonzero": 807,
         "verified-zero": 0,
-        "unresolved": 1970
+        "unresolved": 1969
       },
       "toughness": {
-        "nonzero": 780,
+        "nonzero": 781,
         "verified-zero": 26,
-        "unresolved": 1970
+        "unresolved": 1969
       },
       "actorSp": {
         "nonzero": 267,
@@ -74,8 +74,8 @@
     },
     "effectDimensions": {
       "damage": {
-        "applied": 149,
-        "unresolved": 379,
+        "applied": 199,
+        "unresolved": 329,
         "verified-zero": 3258
       },
       "toughness": {
@@ -110,9 +110,9 @@
     "semanticEffects": {
       "total": 3479,
       "gameplay": 1842,
-      "applied": 962,
+      "applied": 1006,
       "verifiedZero": 7,
-      "unresolved": 873
+      "unresolved": 829
     },
     "timing": {
       "appliedActionCount": 552,
@@ -1800,14 +1800,12 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 7,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -1881,16 +1879,14 @@
       },
       "semanticEffects": {
         "total": 16,
-        "applied": 10,
+        "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=4]"
     },
@@ -3264,9 +3260,9 @@
       },
       "semanticEffects": {
         "total": 102,
-        "applied": 31,
+        "applied": 32,
         "verifiedZero": 0,
-        "unresolved": 71
+        "unresolved": 70
       },
       "settlement": null,
       "reasons": [
@@ -13041,12 +13037,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 2,
+          "unresolved": 2
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 2,
+          "unresolved": 2
         },
         "actorSp": {
           "unresolved": 2,
@@ -13076,14 +13072,7 @@
         "unresolved": 3
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500066].actions[skillId=502004].skillId"
     },
     {
@@ -31572,9 +31561,9 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": {
         "required": true,
@@ -32323,14 +32312,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -33783,9 +33770,9 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": {
         "required": true,
@@ -34169,14 +34156,12 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 7,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -34314,16 +34299,14 @@
       },
       "semanticEffects": {
         "total": 16,
-        "applied": 10,
+        "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [
         "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=4]"
     },
@@ -34453,14 +34436,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -35869,9 +35850,9 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": {
         "required": true,
@@ -36648,14 +36629,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -37372,15 +37351,12 @@
       },
       "semanticEffects": {
         "total": 1,
-        "applied": 0,
+        "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=209]"
     },
     {
@@ -37450,9 +37426,9 @@
       },
       "semanticEffects": {
         "total": 102,
-        "applied": 31,
+        "applied": 32,
         "verifiedZero": 0,
-        "unresolved": 71
+        "unresolved": 70
       },
       "settlement": null,
       "reasons": [
@@ -38083,14 +38059,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -38807,14 +38781,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -39506,14 +39478,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -40206,14 +40176,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -40903,14 +40871,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -41616,14 +41582,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -42324,14 +42288,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -43038,14 +43000,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -43731,14 +43691,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -44464,14 +44422,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -45091,14 +45047,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -45718,14 +45672,12 @@
       },
       "semanticEffects": {
         "total": 3,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -46410,14 +46362,12 @@
       },
       "semanticEffects": {
         "total": 5,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -53273,12 +53223,12 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 2,
+          "unresolved": 2
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 2,
+          "unresolved": 2
         },
         "actorSp": {
           "unresolved": 2,
@@ -53308,14 +53258,7 @@
         "unresolved": 3
       },
       "settlement": null,
-      "reasons": [
-        "base-function-unverified",
-        "trigger-frame-missing",
-        "hp:damage-formula-inputs-incomplete",
-        "toughness:pre-shield-damage-inputs-incomplete",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-kibo-action-catalog.items[kiboId=500066].actions[skillId=502004].skillId"
     },
     {

@@ -276,7 +276,9 @@ const bulletInjectionContractCache = new Map();
 const unityObjectFileIndexCache = new Map();
 let externalGameplayObjectFileIndexCache = null;
 let petExternalGameplayObjectFileIndexCache = null;
-const SUPPORTED_BASE_FUNCTION_IDS = new Set([2, 101, 116, 119]);
+// element_formula.json aliases: id 4 and id 110 both resolve to
+// `source.ATK[0]*A/10000`, so function 110 is a supported damage base.
+const SUPPORTED_BASE_FUNCTION_IDS = new Set([2, 101, 110, 116, 119]);
 
 function resolveElementFormulaInputs(tree) {
   const formulaParams = tree?.formulaParams;
@@ -6316,9 +6318,11 @@ function classifyBattleEffectNode({
   } else if (kind === 'damage') {
     if (
       depth > 0 &&
-      ['additionalHitElementDataList', 'triggerEffectList'].includes(
-        incomingRelation
-      )
+      [
+        'additionalHitElementDataList',
+        'triggerEffectList',
+        'sustainElement',
+      ].includes(incomingRelation)
     ) {
       dimensions.damage = createDimensionClassification(
         'applied',
@@ -6658,6 +6662,7 @@ function createControlRuntimeEffectBinding({
           'elementDataList',
           'additionalHitElementDataList',
           'triggerEffectList',
+          'sustainElement',
           'layerInfoList',
           'zeroEffectList',
           'finishEffectList',

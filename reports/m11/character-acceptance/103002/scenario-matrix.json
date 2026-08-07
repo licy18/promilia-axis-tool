@@ -5153,14 +5153,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:61:69cda60cb7cc92d6",
+      "requirementIdentity": "contract:effect:effect:61:30dd5b0d6b4d81c6",
       "dimension": "effect",
-      "subjectIdentity": "effect:61:69cda60cb7cc92d6",
+      "subjectIdentity": "effect:61:30dd5b0d6b4d81c6",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
-      "sourceDisposition": "gap",
-      "sourceRecordHash": "9bdae39bc09f4c7e",
+      "sourceDisposition": "applied",
+      "sourceRecordHash": "e20d0a5ceb5ef79b",
       "coverageSelector": {
         "effectIdentity": "battle-element:102001093",
         "kind": "effect"
@@ -5173,8 +5173,7 @@
         "battle-element-assets.jsonl#path_id=-2035055823451510697"
       ],
       "reasons": [
-        "nested-damage-runtime-family-unimplemented",
-        "wrapper-condition-semantics-unresolved"
+        "acceptance-scenario-coverage-missing"
       ]
     },
     {
@@ -14776,5 +14775,5 @@
       "window-boundary": 1
     }
   },
-  "matrixHash": "0b78198aaf6d456b"
+  "matrixHash": "fe7a8005a894d715"
 }

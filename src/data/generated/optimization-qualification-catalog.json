@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "69766b66f1f4ec59",
-  "manifestsHash": "16692087697f4c62",
-  "gapLedgerHash": "44f9eb327b18a106",
-  "bindingMatrixHash": "5621ba67aaadbe24",
-  "sourceSnapshotHash": "210b854e87e4cb3e",
+  "rosterHash": "d6e3249edac8f37d",
+  "manifestsHash": "975a21af51c9f8e5",
+  "gapLedgerHash": "43d8831d1aafa322",
+  "bindingMatrixHash": "dbfd227752bcf587",
+  "sourceSnapshotHash": "4d3a49b434cc0c96",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -27,7 +27,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "f55d1632fca06438"
+      "manifestHash": "eb7d19045cbc2a50"
     },
     {
       "objectKind": "character",
@@ -52,7 +52,7 @@
         "character-not-optimization-ready",
         "strict-character-cultivation-runtime-partial"
       ],
-      "manifestHash": "90eb1f90843093ee"
+      "manifestHash": "1627d25ad02b2303"
     },
     {
       "objectKind": "character",
@@ -2675,7 +2675,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "69766b66f1f4ec59",
+    "rosterHash": "d6e3249edac8f37d",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24583,7 +24583,7 @@
       "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "5621ba67aaadbe24"
+    "bindingMatrixHash": "dbfd227752bcf587"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -44180,5 +44180,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "525b2d112f51a82d"
+  "catalogHash": "4127198ea4feb3d9"
 }

@@ -852,18 +852,18 @@ describe('M10-B1 Ruby character combat profile', () => {
       rawRecordIdentities: ['actor:103002:skill:10300262'],
     });
     expect(unresolvedLedger.summary).toMatchObject({
-      semanticRecordCount: 430,
-      rawRecordCount: 438,
+      semanticRecordCount: 429,
+      rawRecordCount: 437,
       semanticStatusCounts: {
         'not-applicable': 22,
         'runtime-evidence-required': 4,
-        'static-evidence-gap': 404,
+        'static-evidence-gap': 403,
       },
       impactClassificationCounts: {
         'gameplay-impacting': 132,
         'not-applicable': 22,
         'superseded-by-semantic-transition-closure': 253,
-        'wrapper-or-duplicate': 23,
+        'wrapper-or-duplicate': 22,
       },
       transitionCandidateSupersededCount: 253,
     });

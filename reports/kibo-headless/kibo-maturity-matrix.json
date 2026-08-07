@@ -8595,32 +8595,17 @@
           "actionKind": "active",
           "sourceSkillId": 502004,
           "controlSkillId": 502004,
-          "closureClass": "scenario-assumed",
+          "closureClass": "evidence-closed",
           "runtimeStatus": "runnable",
           "runnable": true,
           "sourceEvidenceStatus": "applied",
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
-          "reasons": [
-            "base-function-unverified",
-            "trigger-frame-missing",
-            "hp:damage-formula-inputs-incomplete",
-            "toughness:pre-shield-damage-inputs-incomplete",
-            "nested-damage-trigger-lifecycle-evidence-gap",
-            "nested-effect-wrapper-semantics-unresolved"
-          ],
+          "reasons": [],
           "zeroDistancePolicy": {
             "approved": "user-approved-sync-rebaseline-2026-08-05",
-            "coversAllReasons": false,
-            "coveredReasons": [
-              "trigger-frame-missing"
-            ],
-            "unresolvedReasons": [
-              "base-function-unverified",
-              "hp:damage-formula-inputs-incomplete",
-              "toughness:pre-shield-damage-inputs-incomplete",
-              "nested-damage-trigger-lifecycle-evidence-gap",
-              "nested-effect-wrapper-semantics-unresolved"
-            ]
+            "coversAllReasons": true,
+            "coveredReasons": [],
+            "unresolvedReasons": []
           },
           "timing": {
             "status": "applied",
@@ -8632,12 +8617,12 @@
           },
           "dimensions": {
             "enemyHp": {
-              "applied": 1,
-              "unresolved": 3
+              "applied": 2,
+              "unresolved": 2
             },
             "enemyToughness": {
-              "applied": 1,
-              "unresolved": 3
+              "applied": 2,
+              "unresolved": 2
             },
             "actorSp": {
               "unresolved": 2,
@@ -8739,8 +8724,8 @@
       },
       "hit": {
         "statuses": {
-          "applied": 8,
-          "unresolved": 18
+          "applied": 10,
+          "unresolved": 16
         },
         "closureClass": "unresolved"
       },
@@ -8751,14 +8736,12 @@
         "closureClass": "evidence-closed"
       },
       "zeroDistanceClosure": {
-        "evidenceClosed": 2,
-        "scenarioAssumed": 1,
+        "evidenceClosed": 3,
+        "scenarioAssumed": 0,
         "unresolved": 0
       },
-      "machineOptimizationReady": false,
-      "remainingGaps": [
-        "public-action-closure-incomplete"
-      ]
+      "machineOptimizationReady": true,
+      "remainingGaps": []
     },
     {
       "kiboId": 500067,
@@ -30477,7 +30460,7 @@
   ],
   "summary": {
     "kiboCount": 122,
-    "machineOptimizationReadyCount": 120,
+    "machineOptimizationReadyCount": 121,
     "machineOptimizationReadyKiboIds": [
       500001,
       500002,
@@ -30513,6 +30496,7 @@
       500058,
       500064,
       500065,
+      500066,
       500067,
       500068,
       500072,
@@ -30601,8 +30585,8 @@
       500470
     ],
     "actionClosure": {
-      "evidenceClosed": 364,
-      "scenarioAssumed": 2,
+      "evidenceClosed": 365,
+      "scenarioAssumed": 1,
       "unresolved": 0
     },
     "pvePassiveMechanics": {
