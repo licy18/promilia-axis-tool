@@ -1889,7 +1889,30 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 - UI：动作库 kibo 区只保留特性技/合击技可拖入，新增「奇波普攻与主动技为自动释放」提示与普攻标签；Workbench 摘要显示「机器输入 42 / 实际执行 44」。
 - 验证：全套 Vitest 1431 通过（仅已知 process-heavy `characterCombatProfilePipeline` 并行超时，单独全过）、11 项确定性审计 clean、production build 与 `git diff --check` 通过。
 
-下一阶段任务：**E19 sub3 收口**——如需要可补充自动动作在 Workbench 时间轴上的只读/徽标展示与持久化往返测试；随后继续 M12-C 之前的剩余非奇波阻断（set-skill:3:4 来源冲突产品决策、33 角色资格阻断为既有范围外）。每完成一个子阶段即更新本手册并单独提交。
+下一阶段任务（重排后的 M12-C 前路线图，E20 起按依赖顺序推进）：
+
+1. **E20 角色管线打通（33 个角色缺口）**
+   - E20-1 严格培养运行时基线：11 个优化对象全部接入严格培养合同（星赐 7 层 + 第 7 层节点全选 + talent_rank 1..6 层属性 + hero_rank 80 级合法突破档 3 + 固定 profile `c432bd0a`），机器可验证非 hero_rank 维度全部 applied；hero_rank 属性应用依赖“相邻档最终面板差分”捕获（`hero-rank-runtime-evidence.json` 已建立捕获合同与预期差分账本，捕获到达后自动校验并放行）。
+   - E20-2 发布 9 个缺失角色验收：102001 莉莉、107001 西芙莉雅、107002 米砂、108001 忒拉拉、108003 米蒂、109001 末音、111001 法兰塔、112001 姬瑟贝露、STARBORN，逐个走 `extracted -> runtime-integrated -> visually-accepted -> optimization-ready`，每角色独立提交与产品签收；112001 的 `level-breakthrough-skill-unlock-source-mismatch` 单独闭合（hero_rank 解锁技能与角色被动槽来源核对）。
+   - E20-3 STARBORN 统一对象：199001/199002 别名归一化、`actor-static-profile-missing` 清零、机制 hash 一致。
+2. **E21 套装技能收口（2 个缺口）**：`set-skill:3:4` 需产品决策选权威来源或从更新客户端包重提取 resourceMap 闭合；随后 12/12 runtime-applied + visual signoff。
+3. **E22 绑定矩阵与正式准入（依赖 E20/E21）**：角色-装配-奇波绑定矩阵全绿（装配→角色、角色→奇波继承、来源/目标、前后台/切人、同名奇波跨 owner 隔离、同帧顺序、保存重放、连续循环），11/11+43/43+62/62+137/137+12/12 全绿且 hash 一致，`m12cLocked` 解锁。
+4. **E23 M12-C 末音试点（解锁后）**：末音 + 已签收候选队友；先可持续循环 DPS，再爆发/有限时长总伤/削韧；Top-N 自动回灌 Workbench 人工复验。
+
+依赖与并行：E22 依赖 E20/E21；kibo/灵子/装备侧无需新增数据工作，只等绑定矩阵放行；`set-skill:3:4` 是唯一需要外部输入（产品决策或新客户端证据）的项；E20 内各角色可并行推进（末音与候选队友优先），hero_rank 捕获可与角色验收并行。每完成一个子阶段即更新本手册并单独提交。
+
+### M12-B3-E20-1 已执行：严格培养运行时基线 + hero_rank 相邻档捕获合同（2026-08-07）
+
+目标是把 11 个角色优化对象的严格培养合同（星赐 7 层 + 第 7 层节点全选 + talent_rank 1..6 层属性 + hero_rank 80 级合法突破档 3 + 固定 profile `c432bd0a`）接入并逐对象验证，先清掉 11 条 `strict-character-cultivation-runtime-partial`。本轮完成可静态闭合部分：
+
+- **hero_rank 相邻档捕获合同**：`hero-rank-runtime-evidence.json` 新增 `adjacentRankCapture.expectedDeltas`——按 12 个来源身份（10 名角色 + STARBORN 199001/199002）从 `hero_rank.attribute` 计算 80 级空装配 rank3−rank2 的预期差分（如 101010/103002/107002/108001/112001/199001/199002=`1001#810`，107001/108003=`7#750`，109001=`58#830`，111001=`53#830`，102001=`1003#1040`）；捕获到达后由 `validateHeroRankAdjacentRankCaptureComparisons` 自动按预期差分校验放行。
+- **静态上游路径边界**：反汇编确认 PlayerModule.HeroData/HeroStore 面板构建方法为混淆分发桩（static class-init guard + `[rax+0x60]` 虚派发），`rankTableLookupObserved=false`，无法静态证明服务端 `HeroAttrInfo` 面板是否已含 hero_rank.attribute；结论新增 `staticClosureBoundary`，明确该维度必须实机相邻档捕获，不伪造放行。证据文件新增 RefreshHeroSkill 观察（RVA 0x2458F50），并保持原 Populate/RefreshAttributes/Populate(HeroItemInfo) 观察与调用边断言。
+- **验证器**：`assertHeroRankExpectedDeltaCoverage`（12 条、80 级、rank2/3、空装配、非空差分）与 `validateHeroRankAdjacentRankCaptureComparisons`（captured 时必须逐源匹配预期差分，否则拒绝）接入 `readHeroRankRuntimeEvidenceSource`。
+- **11 对象基线测试**：新增 `heroRankAdjacentRankEvidence.test.js`，为 11 个优化对象逐个构造严格 profile（星赐 7 层全节点、四维天赋 10 级、羁绊 1、灵子 80/6/1、五部位 4 星 +9/同调110 缘星实例）并 resolve+project：`character.level/starGiftRank/starGiftNodeAttributes/completedStarGiftAttributes/levelBreakthroughLegality`、kibo、soul、equipment 全部 `appliedDimensions`；`unresolvedDimensions` 精确锁定为三个证据族：`character.starGiftNodeSkillLevels`（星赐节点技能等级运行时，232/420 节点带升级，属后续 E20-1a 运行时实现）、`character.levelBreakthroughAttributes`、`character.levelBreakthroughSkillUnlocks`（hero_rank 捕获/来源核对）。
+- 冻结哈希：`heroRankRuntimeEvidence` 重基线为 `3e38b30f…`；资格摘要哈希 `9b04428d / e1b776a3 / 796977fe / b97033f3 / cfd5a025 / a36f4cc4`；资格缺口仍 35（11 条 strict-cultivation 与 24 条其余角色/套装阻断不变），`m12cLocked` 保持 true。
+- 验证：新增 3 测试 + 全套 qualification 目录 101 测试 + machineAxisService 14 测试全过；optimization-qualification/visual/kibo-headless 审计 clean。
+
+**E20-1 剩余依赖**：① E20-1a 星赐节点技能等级（`skillUpgrade`）运行时应用——涉及 canonical 核心技能等级通道，属实现项；② hero_rank 属性/技能可用性的实机相邻档最终面板捕获（捕获后按已建合同自动校验放行）。这两项与 E20-2 角色验收并行推进；每完成一个子阶段即更新本手册并单独提交。
 
 ### M12-B3-E18 sub3 已完成：500213 SpacialProperty 按战斗属性闭合，目标 signature 行清零（2026-08-07）
 

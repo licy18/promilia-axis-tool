@@ -122,7 +122,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   il2cppRuntimeContracts:
     '0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a',
   heroRankRuntimeEvidence:
-    '2161ca317a3f641dd6b5d8721fd9422c2598fada3c37af86f8248cfbf511c91f',
+    '3e38b30fdeaba6695083996d30cdd4eaaddc2fea490997a7197b9ce662a49132',
   soulEffectGetElementRuntimeEvidence:
     '06db8dd699ccad3a5b28b1099b5879ff6dd0990620d230918342d5ee80988ab3',
   soulEffectGetElementTypeRuntimeEvidence:
@@ -3492,6 +3492,8 @@ async function readHeroRankRuntimeEvidenceSource(
     il2cppRuntimeContracts.value.heroRuntimeDeclarations
   );
   assertHeroRankRuntimeCallEdges(value);
+  assertHeroRankExpectedDeltaCoverage(value);
+  validateHeroRankAdjacentRankCaptureComparisons(value);
   if (
     value.adjacentRankCapture.status === 'captured' &&
     (!value.adjacentRankCapture.captureIdentity ||
@@ -3523,6 +3525,95 @@ async function readHeroRankRuntimeEvidenceSource(
       },
     },
   };
+}
+
+export function assertHeroRankExpectedDeltaCoverage(evidence) {
+  const expectedDeltas = evidence?.adjacentRankCapture?.expectedDeltas;
+  if (!Array.isArray(expectedDeltas) || expectedDeltas.length < 12) {
+    throw new Error(
+      'optimization-qualification-hero-rank-evidence-expected-delta-coverage-missing'
+    );
+  }
+  const invalid = expectedDeltas.filter(
+    delta =>
+      !delta?.sourceCharacterId ||
+      Number(delta?.level) !== 80 ||
+      Number(delta?.lowerRank) !== 2 ||
+      Number(delta?.higherRank) !== 3 ||
+      delta?.emptyLoadout !== true ||
+      !Array.isArray(delta?.attributes) ||
+      delta.attributes.length === 0
+  );
+  if (invalid.length) {
+    throw new Error(
+      `optimization-qualification-hero-rank-evidence-expected-delta-invalid:${invalid
+        .map(delta => delta?.sourceCharacterId ?? 'unknown')
+        .join(',')}`
+    );
+  }
+}
+
+export function validateHeroRankAdjacentRankCaptureComparisons(evidence) {
+  const capture = evidence?.adjacentRankCapture;
+  if (capture?.status !== 'captured') {
+    return;
+  }
+  if (
+    !capture.captureIdentity ||
+    !Array.isArray(capture.comparisons) ||
+    capture.comparisons.length === 0
+  ) {
+    throw new Error(
+      'optimization-qualification-hero-rank-evidence-capture-incomplete'
+    );
+  }
+  const expectedBySource = new Map(
+    (capture.expectedDeltas ?? []).map(delta => [
+      Number(delta.sourceCharacterId),
+      delta,
+    ])
+  );
+  for (const comparison of capture.comparisons) {
+    const expected = expectedBySource.get(
+      Number(comparison.sourceCharacterId)
+    );
+    if (
+      !expected ||
+      Number(comparison.level) !== 80 ||
+      Number(comparison.lowerRank) !== 2 ||
+      Number(comparison.higherRank) !== 3 ||
+      comparison.emptyLoadout !== true
+    ) {
+      throw new Error(
+        `optimization-qualification-hero-rank-evidence-capture-comparison-invalid:${comparison.sourceCharacterId}`
+      );
+    }
+    const actualDelta = normalizeAttributePairs(comparison.actualDelta);
+    const expectedDelta = normalizeAttributePairs(expected.expectedDelta);
+    if (
+      actualDelta.size !== expectedDelta.size ||
+      [...actualDelta.entries()].some(
+        ([attributeId, value]) =>
+          Number(expectedDelta.get(attributeId)) !== Number(value)
+      )
+    ) {
+      throw new Error(
+        `optimization-qualification-hero-rank-evidence-capture-delta-mismatch:${comparison.sourceCharacterId}`
+      );
+    }
+  }
+}
+
+function normalizeAttributePairs(rawValue) {
+  return new Map(
+    String(rawValue ?? '')
+      .split('|')
+      .filter(Boolean)
+      .map(part => {
+        const [attributeId, value] = part.split('#');
+        return [Number(attributeId), Number(value)];
+      })
+  );
 }
 
 async function readSoulEffectGetElementRuntimeEvidenceSource(

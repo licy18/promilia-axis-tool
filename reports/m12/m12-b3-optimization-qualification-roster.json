@@ -163,8 +163,8 @@
       },
       "heroRankRuntimeEvidence": {
         "path": "scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json",
-        "sha256": "2161ca317a3f641dd6b5d8721fd9422c2598fada3c37af86f8248cfbf511c91f",
-        "bytes": 2663,
+        "sha256": "3e38b30fdeaba6695083996d30cdd4eaaddc2fea490997a7197b9ce662a49132",
+        "bytes": 9519,
         "value": {
           "schemaVersion": 1,
           "contractName": "AzPrHeroRankRuntimeEvidence",
@@ -221,6 +221,15 @@
                 "heroRank"
               ],
               "sourceIdentity": "GameAssembly.dll#Azur.Gameplay.PlayerModule.HeroData.Populate(HeroItemInfo)@RVA=0x24577F0"
+            },
+            {
+              "identity": "Azur.Gameplay.PlayerModule.HeroData.RefreshHeroSkill",
+              "rva": "0x2458F50",
+              "dispatchStubObserved": true,
+              "rankTableLookupObserved": false,
+              "callEdges": [],
+              "sourceIdentity": "GameAssembly.dll#Azur.Gameplay.PlayerModule.HeroData.RefreshHeroSkill@RVA=0x2458F50",
+              "note": "Method body is an obfuscated dispatch stub (static class-init guard + virtual dispatch through [rax+0x60]); no direct hero_rank table lookup is observable in the stub."
             }
           ],
           "adjacentRankCapture": {
@@ -234,13 +243,215 @@
               "emptyLoadout": true,
               "adjacentHeroRanks": true,
               "expectedDeltaSource": "NewTable/hero_rank.attribute"
-            }
+            },
+            "expectedDeltas": [
+              {
+                "optimizationObjectId": "101010",
+                "sourceCharacterId": 101010,
+                "level": 80,
+                "lowerRank": 2,
+                "higherRank": 3,
+                "emptyLoadout": true,
+                "expectedDelta": "1001#810",
+                "expectedDeltaSource": "NewTable/hero_rank.rows[heroId=101010,rank=3].attribute - rank=2.attribute",
+                "attributes": [
+                  {
+                    "attributeId": 1001,
+                    "value": 810
+                  }
+                ]
+              },
+              {
+                "optimizationObjectId": "102001",
+                "sourceCharacterId": 102001,
+                "level": 80,
+                "lowerRank": 2,
+                "higherRank": 3,
+                "emptyLoadout": true,
+                "expectedDelta": "1003#1040",
+                "expectedDeltaSource": "NewTable/hero_rank.rows[heroId=102001,rank=3].attribute - rank=2.attribute",
+                "attributes": [
+                  {
+                    "attributeId": 1003,
+                    "value": 1040
+                  }
+                ]
+              },
+              {
+                "optimizationObjectId": "103002",
+                "sourceCharacterId": 103002,
+                "level": 80,
+                "lowerRank": 2,
+                "higherRank": 3,
+                "emptyLoadout": true,
+                "expectedDelta": "1001#810",
+                "expectedDeltaSource": "NewTable/hero_rank.rows[heroId=103002,rank=3].attribute - rank=2.attribute",
+                "attributes": [
+                  {
+                    "attributeId": 1001,
+                    "value": 810
+                  }
+                ]
+              },
+              {
+                "optimizationObjectId": "107001",
+                "sourceCharacterId": 107001,
+                "level": 80,
+                "lowerRank": 2,
+                "higherRank": 3,
+                "emptyLoadout": true,
+                "expectedDelta": "7#750",
+                "expectedDeltaSource": "NewTable/hero_rank.rows[heroId=107001,rank=3].attribute - rank=2.attribute",
+                "attributes": [
+                  {
+                    "attributeId": 7,
+                    "value": 750
+                  }
+                ]
+              },
+              {
+                "optimizationObjectId": "107002",
+                "sourceCharacterId": 107002,
+                "level": 80,
+                "lowerRank": 2,
+                "higherRank": 3,
+                "emptyLoadout": true,
+                "expectedDelta": "1001#810",
+                "expectedDeltaSource": "NewTable/hero_rank.rows[heroId=107002,rank=3].attribute - rank=2.attribute",
+                "attributes": [
+                  {
+                    "attributeId": 1001,
+                    "value": 810
+                  }
+                ]
+              },
+              {
+                "optimizationObjectId": "108001",
+                "sourceCharacterId": 108001,
+                "level": 80,
+                "lowerRank": 2,
+                "higherRank": 3,
+                "emptyLoadout": true,
+                "expectedDelta": "1001#810",
+                "expectedDeltaSource": "NewTable/hero_rank.rows[heroId=108001,rank=3].attribute - rank=2.attribute",
+                "attributes": [
+                  {
+                    "attributeId": 1001,
+                    "value": 810
+                  }
+                ]
+              },
+              {
+                "optimizationObjectId": "108003",
+                "sourceCharacterId": 108003,
+                "level": 80,
+                "lowerRank": 2,
+                "higherRank": 3,
+                "emptyLoadout": true,
+                "expectedDelta": "7#750",
+                "expectedDeltaSource": "NewTable/hero_rank.rows[heroId=108003,rank=3].attribute - rank=2.attribute",
+                "attributes": [
+                  {
+                    "attributeId": 7,
+                    "value": 750
+                  }
+                ]
+              },
+              {
+                "optimizationObjectId": "109001",
+                "sourceCharacterId": 109001,
+                "level": 80,
+                "lowerRank": 2,
+                "higherRank": 3,
+                "emptyLoadout": true,
+                "expectedDelta": "58#830",
+                "expectedDeltaSource": "NewTable/hero_rank.rows[heroId=109001,rank=3].attribute - rank=2.attribute",
+                "attributes": [
+                  {
+                    "attributeId": 58,
+                    "value": 830
+                  }
+                ]
+              },
+              {
+                "optimizationObjectId": "111001",
+                "sourceCharacterId": 111001,
+                "level": 80,
+                "lowerRank": 2,
+                "higherRank": 3,
+                "emptyLoadout": true,
+                "expectedDelta": "53#830",
+                "expectedDeltaSource": "NewTable/hero_rank.rows[heroId=111001,rank=3].attribute - rank=2.attribute",
+                "attributes": [
+                  {
+                    "attributeId": 53,
+                    "value": 830
+                  }
+                ]
+              },
+              {
+                "optimizationObjectId": "112001",
+                "sourceCharacterId": 112001,
+                "level": 80,
+                "lowerRank": 2,
+                "higherRank": 3,
+                "emptyLoadout": true,
+                "expectedDelta": "1001#810",
+                "expectedDeltaSource": "NewTable/hero_rank.rows[heroId=112001,rank=3].attribute - rank=2.attribute",
+                "attributes": [
+                  {
+                    "attributeId": 1001,
+                    "value": 810
+                  }
+                ]
+              },
+              {
+                "optimizationObjectId": "STARBORN",
+                "sourceCharacterId": 199001,
+                "level": 80,
+                "lowerRank": 2,
+                "higherRank": 3,
+                "emptyLoadout": true,
+                "expectedDelta": "1001#810",
+                "expectedDeltaSource": "NewTable/hero_rank.rows[heroId=199001,rank=3].attribute - rank=2.attribute",
+                "attributes": [
+                  {
+                    "attributeId": 1001,
+                    "value": 810
+                  }
+                ]
+              },
+              {
+                "optimizationObjectId": "STARBORN",
+                "sourceCharacterId": 199002,
+                "level": 80,
+                "lowerRank": 2,
+                "higherRank": 3,
+                "emptyLoadout": true,
+                "expectedDelta": "1001#810",
+                "expectedDeltaSource": "NewTable/hero_rank.rows[heroId=199002,rank=3].attribute - rank=2.attribute",
+                "attributes": [
+                  {
+                    "attributeId": 1001,
+                    "value": 810
+                  }
+                ]
+              }
+            ],
+            "expectedDeltaSource": "NewTable/hero_rank.attribute rank3-rank2 at level 80 empty loadout"
           },
           "conclusion": {
             "attributeApplicationStatus": "runtime-evidence-required",
             "levelTemplateIncludesBreakthroughAttributes": "unresolved",
             "applicationMode": "unresolved",
-            "reason": "HeroAttrInfo supplies AttrModuleInfo to RefreshAttributes, and the reviewed client methods do not establish whether server-provided attributes already include hero_rank.attribute. No adjacent-rank final-panel capture is available."
+            "reason": "HeroAttrInfo supplies AttrModuleInfo to RefreshAttributes; reviewed client methods are obfuscated dispatch stubs and do not establish whether server-provided attributes already include hero_rank.attribute. Adjacent-rank capture contract is ready (expected deltas indexed for all roster characters at level 80, rank 2 vs 3, empty loadout).",
+            "staticClosureBoundary": {
+              "status": "runtime-evidence-required",
+              "playerModuleMethodsAreObfuscatedDispatchStubs": true,
+              "upstreamConstructionPathProven": false,
+              "adjacentRankCaptureRequired": true,
+              "reason": "PlayerModule.HeroData/HeroStore panel-construction methods are obfuscated dispatch stubs; server-provided HeroAttrInfo panel inclusion of hero_rank.attribute cannot be proven statically. The adjacent-rank final-panel capture contract is ready with expected deltas for all 11 optimization objects (12 source identities)."
+            }
           },
           "verifiedBinary": {
             "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
@@ -3958,7 +4169,7 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "5f8c6621ef29fa40"
+    "sourceSnapshotHash": "9b04428dd30fea56"
   },
   "filterContract": {
     "characterElements": [
@@ -29141,5 +29352,5 @@
       ]
     }
   },
-  "rosterHash": "22d0c76f613afd9b"
+  "rosterHash": "e1b776a315bbde7c"
 }
