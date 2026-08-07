@@ -30,7 +30,6 @@ function createCultivationProfile({
   bondLevel = 1,
   actorLevel = 80,
   starGiftRank = 7,
-  levelBreakthroughRank = 3,
   dnaFactors = [],
   soulEssenceLevel = 80,
   soulEssenceRank = 6,
@@ -63,7 +62,6 @@ function createCultivationProfile({
           level: actorLevel,
           starGiftRank,
           starGiftNodeIds: selectedNodeIds,
-          levelBreakthroughRank,
         },
         kibo: {
           level: 80,
@@ -261,10 +259,10 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 35,
+      blockingUniqueGapCount: 23,
       byCategory: {
         'not-implemented': 22,
-        'evidence-insufficient': 13,
+        'evidence-insufficient': 1,
       },
     });
     expect(artifacts.summary.optimizationReadyCounts).toEqual({
@@ -348,7 +346,6 @@ describe('M12-B3 optimization qualification generation', () => {
         starGiftRank: 7,
         completedStarGiftAttributeRank: 6,
         currentRankNodeSelection: 'all',
-        levelBreakthroughRank: 3,
       },
       kibo: {
         level: 80,
@@ -373,10 +370,15 @@ describe('M12-B3 optimization qualification generation', () => {
     expect(
       artifacts.catalog.cultivation.character.levelBreakthrough
     ).toMatchObject({
-      status: 'source-indexed-legality-applied-runtime-evidence-required',
-      levelTemplateIncludesBreakthroughAttributes: null,
-      applicationMode: 'unresolved',
-      attributeApplicationStatus: 'runtime-evidence-required',
+      status: 'not-applicable-unimplemented-dead-config',
+      levelTemplateIncludesBreakthroughAttributes: 'not-applicable',
+      applicationMode: 'not-applicable',
+      attributeApplicationStatus: 'not-applicable',
+      skillUnlockMode: 'not-applicable',
+      productDecision: {
+        decision: 'unimplemented-dead-config',
+        decidedAt: '2026-08-07',
+      },
     });
     expect(artifacts.catalog.cultivation.character.profiles).toHaveLength(12);
     for (const profile of artifacts.catalog.cultivation.character.profiles) {
@@ -385,19 +387,19 @@ describe('M12-B3 optimization qualification generation', () => {
         profile.levelBreakthroughRanks.every(
           row =>
             row.runtimeApplicationStatus ===
-            'source-indexed-legality-applied-attributes-unapplied'
+            'not-applicable-unimplemented-dead-config'
         )
       ).toBe(true);
     }
     expect(
       artifacts.manifests.records
         .filter(record => record.objectKind === 'character')
-        .every(record =>
-          record.blockers.some(
-            blocker =>
-              blocker.code === 'strict-character-cultivation-runtime-partial' &&
-              blocker.category === 'evidence-insufficient'
-          )
+        .every(
+          record =>
+            !record.blockers.some(
+              blocker =>
+                blocker.code === 'strict-character-cultivation-runtime-partial'
+            )
         )
     ).toBe(true);
     const mismatchedUnlockProfile =
@@ -412,15 +414,17 @@ describe('M12-B3 optimization qualification generation', () => {
       expect.objectContaining({
         skillId: 10300261,
         declarationStatus: 'source-indexed-table-declaration',
-        availabilityStatus: 'static-evidence-gap',
-        effectRuntimeStatus: 'static-evidence-gap',
+        availabilityStatus: 'not-applicable',
+        effectRuntimeStatus: 'not-applicable',
+        productDecision: 'unimplemented-dead-config',
         expectedPassiveSkillIds: expect.arrayContaining([11200161]),
       }),
       expect.objectContaining({
         skillId: 10300262,
         declarationStatus: 'source-indexed-table-declaration',
-        availabilityStatus: 'static-evidence-gap',
-        effectRuntimeStatus: 'static-evidence-gap',
+        availabilityStatus: 'not-applicable',
+        effectRuntimeStatus: 'not-applicable',
+        productDecision: 'unimplemented-dead-config',
         expectedPassiveSkillIds: expect.arrayContaining([11200162]),
       }),
     ]);
@@ -429,11 +433,10 @@ describe('M12-B3 optimization qualification generation', () => {
         record =>
           record.objectKind === 'character' && record.objectId === '112001'
       ).blockers
-    ).toEqual(
+    ).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           code: 'level-breakthrough-skill-unlock-source-mismatch',
-          category: 'evidence-insufficient',
         }),
       ])
     );
@@ -475,9 +478,9 @@ describe('M12-B3 optimization qualification generation', () => {
           comparisons: [],
         },
         conclusion: {
-          attributeApplicationStatus: 'runtime-evidence-required',
-          levelTemplateIncludesBreakthroughAttributes: 'unresolved',
-          applicationMode: 'unresolved',
+          attributeApplicationStatus: 'not-applicable',
+          levelTemplateIncludesBreakthroughAttributes: 'not-applicable',
+          applicationMode: 'not-applicable',
         },
       },
     });
@@ -518,7 +521,7 @@ describe('M12-B3 optimization qualification generation', () => {
       artifacts.gaps.records.filter(
         record => record.code === 'strict-character-cultivation-runtime-partial'
       )
-    ).toHaveLength(11);
+    ).toHaveLength(0);
     expect(artifacts.catalog.cultivation.soulEssence).toMatchObject({
       star: { minimum: 1, maximum: 4 },
       profiles: expect.arrayContaining([
@@ -548,6 +551,10 @@ describe('M12-B3 optimization qualification generation', () => {
         }),
         expect.objectContaining({
           capabilityIdentity: 'b3-hero-rank-legality-and-evidence-boundary',
+          status: 'implemented',
+        }),
+        expect.objectContaining({
+          capabilityIdentity: 'b3-hero-rank-unimplemented-dead-config-closure',
           status: 'implemented',
         }),
         expect.objectContaining({
@@ -801,11 +808,10 @@ describe('M12-B3 strict cultivation profile', () => {
     );
   });
 
-  it('requires the unambiguous level-breakthrough field at the public schema boundary', () => {
+  it('does not require the level-breakthrough field at the public schema boundary', () => {
     const axis = createAxis();
     const character = axis.scenario.cultivationProfile.actors[0].character;
-    character.ascensionRank = character.levelBreakthroughRank;
-    delete character.levelBreakthroughRank;
+    character.ascensionRank = 1;
 
     const prepared = createMachineAxisService().prepare(axis);
 
@@ -813,15 +819,16 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(prepared.issues).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          code: 'machine-axis-schema-required',
-          path: 'scenario.cultivationProfile.actors.0.character.levelBreakthroughRank',
-        }),
-        expect.objectContaining({
           code: 'machine-axis-schema-additional-property',
           path: 'scenario.cultivationProfile.actors.0.character.ascensionRank',
         }),
       ])
     );
+    expect(
+      prepared.issues.some(issue =>
+        String(issue.path ?? '').includes('levelBreakthroughRank')
+      )
+    ).toBe(false);
   });
 
   it('rejects a star-gift node that does not belong to the selected character rank', () => {
@@ -926,13 +933,12 @@ describe('M12-B3 strict cultivation profile', () => {
         },
       },
       optimizationCultivationApplication: {
-        status: 'partially-applied',
+        status: 'fully-applied',
         appliedDimensions: expect.arrayContaining([
           'character.level',
           'character.starGiftRank',
           'character.starGiftNodeAttributes',
           'character.completedStarGiftAttributes',
-          'character.levelBreakthroughLegality',
           'character.starGiftNodeSkillLevels',
           'kibo.level',
           'kibo.talents',
@@ -946,12 +952,11 @@ describe('M12-B3 strict cultivation profile', () => {
           'equipment.tuningScore',
           'equipment.instanceTier',
         ]),
-        unresolvedDimensions: expect.arrayContaining([
-          'character.levelBreakthroughAttributes',
-          'character.levelBreakthroughSkillUnlocks',
-        ]),
       },
     });
+    expect(
+      actorConfig.optimizationCultivationApplication.unresolvedDimensions
+    ).toEqual([]);
     expect(
       actorConfig.optimizationCultivationApplication.unresolvedDimensions
     ).not.toContain('kibo.dnaFactorRuntime');
@@ -1081,11 +1086,10 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(full.hashes.input).not.toBe(base.hashes.input);
   });
 
-  it('keeps hero_rank attributes unapplied until a final-panel or adjacent-rank capture closes the evidence gap', () => {
+  it('keeps hero_rank attributes and skills out of runtime as unimplemented dead config', () => {
     const profile = createCultivationProfile({
       actorLevel: 80,
       starGiftRank: 7,
-      levelBreakthroughRank: 3,
     });
     const compilation = createMachineAxisService().compile(
       createAxis({ profile })
@@ -1140,31 +1144,20 @@ describe('M12-B3 strict cultivation profile', () => {
       actor.verifiedStaticProperties.unapplied.filter(
         source => source.kind === 'actor-level-breakthrough-attribute'
       )
-    ).toEqual([
-      expect.objectContaining({
-        sourceId: '101010:0',
-        reason: 'hero-rank-attribute-runtime-application-evidence-required',
-      }),
-      expect.objectContaining({ sourceId: '101010:1' }),
-      expect.objectContaining({ sourceId: '101010:2' }),
-      expect.objectContaining({ sourceId: '101010:3' }),
-    ]);
+    ).toEqual([]);
     expect(
       compilation.project.optimizationCultivationProfile.actors[0].character
         .levelBreakthroughSkillDeclarations
-    ).toEqual([
-      expect.objectContaining({
-        skillId: 10101061,
-        declarationStatus: 'source-indexed-table-declaration',
-        availabilityStatus: 'runtime-evidence-required',
-        effectRuntimeStatus: 'runtime-applied',
-      }),
-      expect.objectContaining({
-        skillId: 10101062,
-        availabilityStatus: 'not-applicable',
-        reason: 'unnamed-secondary-passive-not-implemented-current-client',
-      }),
-    ]);
+    ).toEqual([]);
+    expect(
+      compilation.project.metadata.actorConfigs[0]
+        .optimizationCultivationApplication.unresolvedDimensions
+    ).not.toEqual(
+      expect.arrayContaining([
+        'character.levelBreakthroughAttributes',
+        'character.levelBreakthroughSkillUnlocks',
+      ])
+    );
     expect(
       actor.verifiedStaticKiboProperties.sources.find(
         source => source.kind === 'kibo-actor-intimacy-inheritance'
@@ -1172,42 +1165,20 @@ describe('M12-B3 strict cultivation profile', () => {
     ).toContain(actor.verifiedStaticProperties.sourceIdentity);
   });
 
-  it('rejects level and level-breakthrough combinations outside the client rank caps', () => {
+  it('does not constrain actor level by hero_rank caps (dead config)', () => {
     const team = createAxis().scenario.team;
-    const invalidBeforeBreak = createCultivationProfile({
-      actorLevel: 80,
-      levelBreakthroughRank: 0,
-    });
-    const invalidPastCap = createCultivationProfile({
-      actorLevel: 81,
-      levelBreakthroughRank: 3,
-    });
-    const legalAtCap = createCultivationProfile({
-      actorLevel: 80,
-      levelBreakthroughRank: 3,
-    });
-    const legalAfterBreak = createCultivationProfile({
-      actorLevel: 80,
-      levelBreakthroughRank: 4,
-    });
-
-    for (const invalid of [invalidBeforeBreak, invalidPastCap]) {
-      expect(
-        validateOptimizationCultivationProfile(invalid, { team }).issues
-      ).toEqual(
+    for (const actorLevel of [80, 81]) {
+      const profile = createCultivationProfile({ actorLevel });
+      const result = validateOptimizationCultivationProfile(profile, { team });
+      expect(result.valid).toBe(true);
+      expect(result.issues).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            code: 'machine-axis-cultivation-level-breakthrough-combination-invalid',
+            code: expect.stringMatching(/level-breakthrough/),
           }),
         ])
       );
     }
-    expect(
-      validateOptimizationCultivationProfile(legalAtCap, { team }).valid
-    ).toBe(true);
-    expect(
-      validateOptimizationCultivationProfile(legalAfterBreak, { team }).valid
-    ).toBe(true);
   });
 
   it('enforces normal and starborn instance maxValue before canonical compilation', () => {
@@ -1305,11 +1276,12 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(high.hashes.input).not.toBe(low.hashes.input);
   });
 
-  it('does not double-add hero_rank when the authoritative panel may already contain it', () => {
+  it('ignores a provided hero_rank field without affecting values (dead config)', () => {
     const service = createMachineAxisService();
     const createDamageAxis = levelBreakthroughRank => {
-      const axis = createAxis({
-        profile: createCultivationProfile({ levelBreakthroughRank }),
+      const axis = createAxis();
+      axis.scenario.cultivationProfile.actors.forEach(actor => {
+        actor.character.levelBreakthroughRank = levelBreakthroughRank;
       });
       axis.actions = [
         {

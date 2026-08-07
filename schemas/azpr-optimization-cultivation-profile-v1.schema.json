@@ -38,7 +38,7 @@
     "characterCultivation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["level", "starGiftRank", "starGiftNodeIds", "levelBreakthroughRank"],
+      "required": ["level", "starGiftRank", "starGiftNodeIds"],
       "properties": {
         "level": { "type": "integer", "minimum": 1, "maximum": 100 },
         "starGiftRank": { "type": "integer", "minimum": 0, "maximum": 7 },

@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
-  "generatedAt": "2026-08-05T00:00:00.000Z",
-  "rosterHash": "2df8e858d4ee3292",
-  "manifestsHash": "2f553b14c675bf24",
-  "gapLedgerHash": "6db42df1366bfe39",
-  "bindingMatrixHash": "428b54d9d73a9dd1",
-  "sourceSnapshotHash": "a72901d7189f3f34",
+  "generatedAt": "2026-08-07T00:00:00.000Z",
+  "rosterHash": "33fad35f82aa31ed",
+  "manifestsHash": "a5b8e21e33950c05",
+  "gapLedgerHash": "e66027078cbdf482",
+  "bindingMatrixHash": "39af1ce5d230bdc3",
+  "sourceSnapshotHash": "2918bf3db501b2de",
   "denominators": {
     "characterOptimizationObjects": 11,
     "sourceCharacterAliases": 12,
@@ -24,10 +24,9 @@
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "68a617f5e8b3e97e"
+      "manifestHash": "e915973eae61574c"
     },
     {
       "objectKind": "character",
@@ -37,10 +36,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "93200696e43a8698"
+      "manifestHash": "6b569cecc223eeac"
     },
     {
       "objectKind": "character",
@@ -49,10 +47,9 @@
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "225718e2ee2a88bf"
+      "manifestHash": "8bfd61eb62ceba1d"
     },
     {
       "objectKind": "character",
@@ -62,10 +59,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "7019de61460b0f5b"
+      "manifestHash": "ebea1bbd8c579f57"
     },
     {
       "objectKind": "character",
@@ -75,10 +71,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "f2f22de5401473d5"
+      "manifestHash": "00a774693d93b141"
     },
     {
       "objectKind": "character",
@@ -88,10 +83,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "4d3ca59183c757c7"
+      "manifestHash": "d2ad55f14dda8abb"
     },
     {
       "objectKind": "character",
@@ -101,10 +95,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "3fe5fd128af6842f"
+      "manifestHash": "de8fb7fd1a6710f3"
     },
     {
       "objectKind": "character",
@@ -114,10 +107,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "45373e0dd3999c43"
+      "manifestHash": "ab047f786758d59f"
     },
     {
       "objectKind": "character",
@@ -127,10 +119,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "a79d213fd07aac23"
+      "manifestHash": "030b7e2ec8ea2f7f"
     },
     {
       "objectKind": "character",
@@ -140,11 +131,9 @@
       "optimizationReady": false,
       "blockerCodes": [
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial",
-        "level-breakthrough-skill-unlock-source-mismatch"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "a0f569340f1c5f4f"
+      "manifestHash": "f97685fbe5c6e4af"
     },
     {
       "objectKind": "character",
@@ -155,10 +144,9 @@
       "blockerCodes": [
         "actor-static-profile-missing",
         "character-acceptance-not-published",
-        "character-not-optimization-ready",
-        "strict-character-cultivation-runtime-partial"
+        "character-not-optimization-ready"
       ],
-      "manifestHash": "413c5f8d9053d23e"
+      "manifestHash": "dbbf27bb089c0700"
     },
     {
       "objectKind": "equipment",
@@ -2674,8 +2662,8 @@
     "schemaVersion": 1,
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
-    "generatedAt": "2026-08-05T00:00:00.000Z",
-    "rosterHash": "2df8e858d4ee3292",
+    "generatedAt": "2026-08-07T00:00:00.000Z",
+    "rosterHash": "33fad35f82aa31ed",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -24583,7 +24571,7 @@
       "setSkillThresholdQualifiedCount": 11,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "428b54d9d73a9dd1"
+    "bindingMatrixHash": "39af1ce5d230bdc3"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -24593,8 +24581,7 @@
         "level": 80,
         "starGiftRank": 7,
         "completedStarGiftAttributeRank": 6,
-        "currentRankNodeSelection": "all",
-        "levelBreakthroughRank": 3
+        "currentRankNodeSelection": "all"
       },
       "kibo": {
         "level": 80,
@@ -24628,7 +24615,7 @@
         "maxValue": 110
       },
       "optimizationEnumeratedDimensions": [],
-      "fixedProfileHash": "c432bd0a3f2d6415"
+      "fixedProfileHash": "22f28f1f4b5b0d90"
     },
     "character": {
       "optimizationObjectIds": [
@@ -24652,20 +24639,21 @@
         "minimum": 0,
         "maximum": 7
       },
-      "levelBreakthroughRank": {
-        "minimum": 0,
-        "maximum": 5
-      },
       "starGiftNodes": {
         "status": "source-indexed-current-rank-nodes-applied-prior-rank-attributes-applied",
         "sourceIdentity": "NewTable/talent_rank|NewTable/talent_rune"
       },
       "levelBreakthrough": {
-        "status": "source-indexed-legality-applied-runtime-evidence-required",
-        "levelTemplateIncludesBreakthroughAttributes": null,
-        "applicationMode": "unresolved",
-        "attributeApplicationStatus": "runtime-evidence-required",
-        "skillUnlockMode": "table-declaration-separate-from-availability-and-runtime-effect",
+        "status": "not-applicable-unimplemented-dead-config",
+        "levelTemplateIncludesBreakthroughAttributes": "not-applicable",
+        "applicationMode": "not-applicable",
+        "attributeApplicationStatus": "not-applicable",
+        "skillUnlockMode": "not-applicable",
+        "productDecision": {
+          "decision": "unimplemented-dead-config",
+          "decidedAt": "2026-08-07",
+          "summary": "hero_rank is unimplemented dead config in the current client: no UI page, no protocol request, no system-open entry, dangling guide behavior, no gameplay consumer of TDHeroRank, and every HeroRank-named client artifact actually refers to talent_rank. Cultivation state and values are not affected by hero_rank; the optimizer does not specify it."
+        },
         "sourceIdentity": "NewTable/hero_rank.rankLevelLimit|attribute|skill|scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json",
         "runtimeEvidence": {
           "schemaVersion": 1,
@@ -24942,17 +24930,36 @@
             ],
             "expectedDeltaSource": "NewTable/hero_rank.attribute rank3-rank2 at level 80 empty loadout"
           },
+          "productDecision": {
+            "decision": "unimplemented-dead-config",
+            "decidedAt": "2026-08-07",
+            "summary": "hero_rank（等级上限突破 0..5）在当前 CBT2 客户端中未被接线：无 UI 页面、无协议请求、无系统开放项，行为树引用悬空，TDHeroRank 无玩法消费，且客户端所有 HeroRank 命名实际指向临阶（talent_rank）。按未实装废案收口：角色培养状态与数值不受 hero_rank 影响，优化器不需要指定 hero_rank，原相邻档捕获合同归档不再要求。",
+            "evidenceIndex": [
+              "src 全量搜索：heroRankTpl 未注册且无调用，hero_rank_shell 无消费方",
+              "MsgGenCode：无角色突破消息（仅 6018 星赐合成/6019 临阶度奖励/6049 灵子突破/6510 宠物突破）",
+              "errorCode：ErrCodeHeroRank* 文案均为星赐/临阶（10790-10804）",
+              "guide_group 引用 behavior_ce4_hero_rank_up.json 但资源不存在",
+              "lang_system_unlock 无角色突破开放项",
+              "hero_rank 消耗道具 10#2#1 指向不存在的 common_item id=2",
+              "112001 行技能前缀错误（10300261/10300262），数据为未完成状态"
+            ],
+            "supersedes": {
+              "adjacentRankCaptureRequirement": true,
+              "skillListCaptureRequirement": true,
+              "status": "archived-not-required"
+            }
+          },
           "conclusion": {
-            "attributeApplicationStatus": "runtime-evidence-required",
-            "levelTemplateIncludesBreakthroughAttributes": "unresolved",
-            "applicationMode": "unresolved",
-            "reason": "Client semantics documented: final panel attributes and skill list are server-provided (HeroAttrInfo.modules[].subModules[].attrs/skills); the client never applies hero_rank.attribute or hero_rank.skill from tables. Whether the server panel already includes hero_rank attributes can only be settled by an adjacent-rank final-panel capture (expected deltas are indexed); skill availability by the same capture reading UnitSkillInfo. PlayerModule methods are obfuscated dispatch stubs, so static closure is not possible.",
+            "attributeApplicationStatus": "not-applicable",
+            "levelTemplateIncludesBreakthroughAttributes": "not-applicable",
+            "applicationMode": "not-applicable",
+            "reason": "Client semantics documented: final panel attributes and skill list are server-provided (HeroAttrInfo.modules[].subModules[].attrs/skills); the client never applies hero_rank.attribute or hero_rank.skill from tables. Product decision 2026-08-07: hero_rank is unimplemented dead config in the current client (no UI/protocol/system-open/guide wiring; every HeroRank-named client artifact actually refers to talent_rank). Cultivation state and values are therefore not affected by hero_rank, and the optimizer does not specify it. The adjacent-rank capture contract is archived as evidence of the superseded closure path and is no longer required.",
             "staticClosureBoundary": {
-              "status": "runtime-evidence-required",
+              "status": "closed-by-product-decision",
               "playerModuleMethodsAreObfuscatedDispatchStubs": true,
               "upstreamConstructionPathProven": false,
-              "adjacentRankCaptureRequired": true,
-              "reason": "PlayerModule.HeroData/HeroStore/AttrModuleInfo panel-construction methods are obfuscated dispatch stubs; server-provided HeroAttrInfo inclusion of hero_rank.attribute cannot be proven statically. Client semantics report documents the server-driven panel; adjacent-rank capture remains the only closure for attributes and skill availability."
+              "adjacentRankCaptureRequired": false,
+              "reason": "PlayerModule.HeroData/HeroStore/AttrModuleInfo panel-construction methods are obfuscated dispatch stubs, so static proof was impossible; the closure is now the product decision that hero_rank is unimplemented dead config, which removes the runtime requirement entirely."
             },
             "clientSemantics": {
               "status": "documented",
@@ -24962,8 +24969,9 @@
               "skillAvailabilitySource": "server-HeroAttrInfo-modules-submodules-skills",
               "clientSideHeroRankSkillUnlockLogic": "none",
               "staticUpstreamClosurePossible": false,
-              "adjacentRankCaptureRequiredForAttributes": true,
-              "skillListCaptureRequiredForUnlocks": true
+              "adjacentRankCaptureRequiredForAttributes": false,
+              "skillListCaptureRequiredForUnlocks": false,
+              "productDecision": "unimplemented-dead-config"
             }
           },
           "verifiedBinary": {
@@ -25909,7 +25917,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=31,heroId=101010,rank=0]"
             },
             {
@@ -25942,10 +25950,11 @@
               "skillUnlock": {
                 "skillId": 10101061,
                 "declarationStatus": "source-indexed-table-declaration",
-                "availabilityStatus": "runtime-evidence-required",
-                "effectRuntimeStatus": "runtime-applied"
+                "availabilityStatus": "not-applicable",
+                "effectRuntimeStatus": "not-applicable",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=32,heroId=101010,rank=1]"
             },
             {
@@ -25971,7 +25980,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=33,heroId=101010,rank=2]"
             },
             {
@@ -26007,9 +26016,10 @@
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
                 "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:101010:skill:10101062:product-boundary"
+                "productBoundaryIdentity": "actor:101010:skill:10101062:product-boundary",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=34,heroId=101010,rank=3]"
             },
             {
@@ -26039,7 +26049,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=35,heroId=101010,rank=4]"
             },
             {
@@ -26048,7 +26058,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=36,heroId=101010,rank=5]"
             }
           ]
@@ -27015,7 +27025,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=43,heroId=102001,rank=0]"
             },
             {
@@ -27048,10 +27058,11 @@
               "skillUnlock": {
                 "skillId": 10200161,
                 "declarationStatus": "source-indexed-table-declaration",
-                "availabilityStatus": "runtime-evidence-required",
-                "effectRuntimeStatus": "source-indexed-separate-runtime-contract"
+                "availabilityStatus": "not-applicable",
+                "effectRuntimeStatus": "not-applicable",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=44,heroId=102001,rank=1]"
             },
             {
@@ -27077,7 +27088,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=45,heroId=102001,rank=2]"
             },
             {
@@ -27113,9 +27124,10 @@
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
                 "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:102001:skill:10200162:product-boundary"
+                "productBoundaryIdentity": "actor:102001:skill:10200162:product-boundary",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=46,heroId=102001,rank=3]"
             },
             {
@@ -27145,7 +27157,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=47,heroId=102001,rank=4]"
             },
             {
@@ -27154,7 +27166,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=48,heroId=102001,rank=5]"
             }
           ]
@@ -28107,7 +28119,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=55,heroId=103002,rank=0]"
             },
             {
@@ -28140,10 +28152,11 @@
               "skillUnlock": {
                 "skillId": 10300261,
                 "declarationStatus": "source-indexed-table-declaration",
-                "availabilityStatus": "runtime-evidence-required",
-                "effectRuntimeStatus": "runtime-applied"
+                "availabilityStatus": "not-applicable",
+                "effectRuntimeStatus": "not-applicable",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=56,heroId=103002,rank=1]"
             },
             {
@@ -28169,7 +28182,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=57,heroId=103002,rank=2]"
             },
             {
@@ -28205,9 +28218,10 @@
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
                 "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:103002:skill:10300262:product-boundary"
+                "productBoundaryIdentity": "actor:103002:skill:10300262:product-boundary",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=58,heroId=103002,rank=3]"
             },
             {
@@ -28237,7 +28251,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=59,heroId=103002,rank=4]"
             },
             {
@@ -28246,7 +28260,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=60,heroId=103002,rank=5]"
             }
           ]
@@ -29221,7 +29235,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=67,heroId=107001,rank=0]"
             },
             {
@@ -29254,10 +29268,11 @@
               "skillUnlock": {
                 "skillId": 10700161,
                 "declarationStatus": "source-indexed-table-declaration",
-                "availabilityStatus": "runtime-evidence-required",
-                "effectRuntimeStatus": "source-indexed-separate-runtime-contract"
+                "availabilityStatus": "not-applicable",
+                "effectRuntimeStatus": "not-applicable",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=68,heroId=107001,rank=1]"
             },
             {
@@ -29283,7 +29298,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=69,heroId=107001,rank=2]"
             },
             {
@@ -29319,9 +29334,10 @@
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
                 "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:107001:skill:10700162:product-boundary"
+                "productBoundaryIdentity": "actor:107001:skill:10700162:product-boundary",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=70,heroId=107001,rank=3]"
             },
             {
@@ -29351,7 +29367,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=71,heroId=107001,rank=4]"
             },
             {
@@ -29360,7 +29376,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=72,heroId=107001,rank=5]"
             }
           ]
@@ -30339,7 +30355,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=73,heroId=107002,rank=0]"
             },
             {
@@ -30372,10 +30388,11 @@
               "skillUnlock": {
                 "skillId": 10700261,
                 "declarationStatus": "source-indexed-table-declaration",
-                "availabilityStatus": "runtime-evidence-required",
-                "effectRuntimeStatus": "source-indexed-separate-runtime-contract"
+                "availabilityStatus": "not-applicable",
+                "effectRuntimeStatus": "not-applicable",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=74,heroId=107002,rank=1]"
             },
             {
@@ -30401,7 +30418,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=75,heroId=107002,rank=2]"
             },
             {
@@ -30437,9 +30454,10 @@
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
                 "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:107002:skill:10700262:product-boundary"
+                "productBoundaryIdentity": "actor:107002:skill:10700262:product-boundary",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=76,heroId=107002,rank=3]"
             },
             {
@@ -30469,7 +30487,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=77,heroId=107002,rank=4]"
             },
             {
@@ -30478,7 +30496,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=78,heroId=107002,rank=5]"
             }
           ]
@@ -31425,7 +31443,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=85,heroId=108001,rank=0]"
             },
             {
@@ -31458,10 +31476,11 @@
               "skillUnlock": {
                 "skillId": 10800161,
                 "declarationStatus": "source-indexed-table-declaration",
-                "availabilityStatus": "runtime-evidence-required",
-                "effectRuntimeStatus": "source-indexed-separate-runtime-contract"
+                "availabilityStatus": "not-applicable",
+                "effectRuntimeStatus": "not-applicable",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=86,heroId=108001,rank=1]"
             },
             {
@@ -31487,7 +31506,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=87,heroId=108001,rank=2]"
             },
             {
@@ -31523,9 +31542,10 @@
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
                 "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:108001:skill:10800162:product-boundary"
+                "productBoundaryIdentity": "actor:108001:skill:10800162:product-boundary",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=88,heroId=108001,rank=3]"
             },
             {
@@ -31555,7 +31575,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=89,heroId=108001,rank=4]"
             },
             {
@@ -31564,7 +31584,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=90,heroId=108001,rank=5]"
             }
           ]
@@ -32500,7 +32520,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=97,heroId=108003,rank=0]"
             },
             {
@@ -32533,10 +32553,11 @@
               "skillUnlock": {
                 "skillId": 10800361,
                 "declarationStatus": "source-indexed-table-declaration",
-                "availabilityStatus": "runtime-evidence-required",
-                "effectRuntimeStatus": "source-indexed-separate-runtime-contract"
+                "availabilityStatus": "not-applicable",
+                "effectRuntimeStatus": "not-applicable",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=98,heroId=108003,rank=1]"
             },
             {
@@ -32562,7 +32583,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=99,heroId=108003,rank=2]"
             },
             {
@@ -32598,9 +32619,10 @@
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
                 "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:108003:skill:10800362:product-boundary"
+                "productBoundaryIdentity": "actor:108003:skill:10800362:product-boundary",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=100,heroId=108003,rank=3]"
             },
             {
@@ -32630,7 +32652,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=101,heroId=108003,rank=4]"
             },
             {
@@ -32639,7 +32661,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=102,heroId=108003,rank=5]"
             }
           ]
@@ -33559,7 +33581,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=109,heroId=109001,rank=0]"
             },
             {
@@ -33592,10 +33614,11 @@
               "skillUnlock": {
                 "skillId": 10900161,
                 "declarationStatus": "source-indexed-table-declaration",
-                "availabilityStatus": "runtime-evidence-required",
-                "effectRuntimeStatus": "source-indexed-separate-runtime-contract"
+                "availabilityStatus": "not-applicable",
+                "effectRuntimeStatus": "not-applicable",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=110,heroId=109001,rank=1]"
             },
             {
@@ -33621,7 +33644,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=111,heroId=109001,rank=2]"
             },
             {
@@ -33657,9 +33680,10 @@
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
                 "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:109001:skill:10900162:product-boundary"
+                "productBoundaryIdentity": "actor:109001:skill:10900162:product-boundary",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=112,heroId=109001,rank=3]"
             },
             {
@@ -33689,7 +33713,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=113,heroId=109001,rank=4]"
             },
             {
@@ -33698,7 +33722,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=114,heroId=109001,rank=5]"
             }
           ]
@@ -34640,7 +34664,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=145,heroId=111001,rank=0]"
             },
             {
@@ -34673,10 +34697,11 @@
               "skillUnlock": {
                 "skillId": 11100161,
                 "declarationStatus": "source-indexed-table-declaration",
-                "availabilityStatus": "runtime-evidence-required",
-                "effectRuntimeStatus": "source-indexed-separate-runtime-contract"
+                "availabilityStatus": "not-applicable",
+                "effectRuntimeStatus": "not-applicable",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=146,heroId=111001,rank=1]"
             },
             {
@@ -34702,7 +34727,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=147,heroId=111001,rank=2]"
             },
             {
@@ -34738,9 +34763,10 @@
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
                 "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:111001:skill:11100162:product-boundary"
+                "productBoundaryIdentity": "actor:111001:skill:11100162:product-boundary",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=148,heroId=111001,rank=3]"
             },
             {
@@ -34770,7 +34796,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=149,heroId=111001,rank=4]"
             },
             {
@@ -34779,7 +34805,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=150,heroId=111001,rank=5]"
             }
           ]
@@ -35736,7 +35762,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=151,heroId=112001,rank=0]"
             },
             {
@@ -35769,17 +35795,18 @@
               "skillUnlock": {
                 "skillId": 10300261,
                 "declarationStatus": "source-indexed-table-declaration",
-                "availabilityStatus": "static-evidence-gap",
-                "effectRuntimeStatus": "static-evidence-gap",
+                "availabilityStatus": "not-applicable",
+                "effectRuntimeStatus": "not-applicable",
                 "reason": "hero-rank-skill-id-not-in-character-passive-slots",
                 "expectedPassiveSkillIds": [
                   11200161,
                   11200162,
                   19996298,
                   19996798
-                ]
+                ],
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=152,heroId=112001,rank=1]"
             },
             {
@@ -35805,7 +35832,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=153,heroId=112001,rank=2]"
             },
             {
@@ -35838,17 +35865,18 @@
               "skillUnlock": {
                 "skillId": 10300262,
                 "declarationStatus": "source-indexed-table-declaration",
-                "availabilityStatus": "static-evidence-gap",
-                "effectRuntimeStatus": "static-evidence-gap",
+                "availabilityStatus": "not-applicable",
+                "effectRuntimeStatus": "not-applicable",
                 "reason": "hero-rank-skill-id-not-in-character-passive-slots",
                 "expectedPassiveSkillIds": [
                   11200161,
                   11200162,
                   19996298,
                   19996798
-                ]
+                ],
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=154,heroId=112001,rank=3]"
             },
             {
@@ -35878,7 +35906,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=155,heroId=112001,rank=4]"
             },
             {
@@ -35887,7 +35915,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=156,heroId=112001,rank=5]"
             }
           ]
@@ -36833,7 +36861,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=127,heroId=199001,rank=0]"
             },
             {
@@ -36866,10 +36894,11 @@
               "skillUnlock": {
                 "skillId": 19900161,
                 "declarationStatus": "source-indexed-table-declaration",
-                "availabilityStatus": "runtime-evidence-required",
-                "effectRuntimeStatus": "source-indexed-separate-runtime-contract"
+                "availabilityStatus": "not-applicable",
+                "effectRuntimeStatus": "not-applicable",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=128,heroId=199001,rank=1]"
             },
             {
@@ -36895,7 +36924,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=129,heroId=199001,rank=2]"
             },
             {
@@ -36931,9 +36960,10 @@
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
                 "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:199001:skill:19900162:product-boundary"
+                "productBoundaryIdentity": "actor:199001:skill:19900162:product-boundary",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=130,heroId=199001,rank=3]"
             },
             {
@@ -36963,7 +36993,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=131,heroId=199001,rank=4]"
             },
             {
@@ -36972,7 +37002,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=132,heroId=199001,rank=5]"
             }
           ]
@@ -37918,7 +37948,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=133,heroId=199002,rank=0]"
             },
             {
@@ -37951,10 +37981,11 @@
               "skillUnlock": {
                 "skillId": 19900261,
                 "declarationStatus": "source-indexed-table-declaration",
-                "availabilityStatus": "runtime-evidence-required",
-                "effectRuntimeStatus": "source-indexed-separate-runtime-contract"
+                "availabilityStatus": "not-applicable",
+                "effectRuntimeStatus": "not-applicable",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=134,heroId=199002,rank=1]"
             },
             {
@@ -37980,7 +38011,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=135,heroId=199002,rank=2]"
             },
             {
@@ -38016,9 +38047,10 @@
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
                 "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:199002:skill:19900262:product-boundary"
+                "productBoundaryIdentity": "actor:199002:skill:19900262:product-boundary",
+                "productDecision": "unimplemented-dead-config"
               },
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=136,heroId=199002,rank=3]"
             },
             {
@@ -38048,7 +38080,7 @@
                 }
               ],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=137,heroId=199002,rank=4]"
             },
             {
@@ -38057,7 +38089,7 @@
               "levelLimit": 100,
               "attributes": [],
               "unlockedSkillId": null,
-              "runtimeApplicationStatus": "source-indexed-legality-applied-attributes-unapplied",
+              "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
               "sourceIdentity": "NewTable/hero_rank.rows[id=138,heroId=199002,rank=5]"
             }
           ]
@@ -44319,7 +44351,7 @@
       "set-skill": 11
     },
     "optimizationReadyTotal": 210,
-    "gameplayBlockingGapCount": 35,
+    "gameplayBlockingGapCount": 23,
     "bindingQualifiedEdgeCount": 11,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -44402,5 +44434,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "3f7891ce30de1495"
+  "catalogHash": "60141ce9481ff6f8"
 }

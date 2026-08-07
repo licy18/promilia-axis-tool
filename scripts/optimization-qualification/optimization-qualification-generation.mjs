@@ -60,7 +60,7 @@ import {
 } from './set-three-source-identity-evidence.mjs';
 
 export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
-  '2026-08-05T00:00:00.000Z';
+  '2026-08-07T00:00:00.000Z';
 
 export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   characters:
@@ -122,7 +122,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   il2cppRuntimeContracts:
     '0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a',
   heroRankRuntimeEvidence:
-    'd565e1e3a987ea39f4154442f5f1338b5714017f3e4040021cbb8b010af301e8',
+    '15b104602e833d29e35c8a452c0ee3b3b6b9fe6d0b8cc1dd55f32c37883c88c8',
   soulEffectGetElementRuntimeEvidence:
     '06db8dd699ccad3a5b28b1099b5879ff6dd0990620d230918342d5ee80988ab3',
   soulEffectGetElementTypeRuntimeEvidence:
@@ -172,6 +172,12 @@ const KIBO_DNA_PRODUCT_SCOPE = Object.freeze({
   status: 'not-applicable',
   reason: 'kibo-dna-out-of-scope-current-version',
   canonicalValue: [],
+});
+const HERO_RANK_PRODUCT_DECISION = Object.freeze({
+  decision: 'unimplemented-dead-config',
+  decidedAt: '2026-08-07',
+  summary:
+    'hero_rank is unimplemented dead config in the current client: no UI page, no protocol request, no system-open entry, dangling guide behavior, no gameplay consumer of TDHeroRank, and every HeroRank-named client artifact actually refers to talent_rank. Cultivation state and values are not affected by hero_rank; the optimizer does not specify it.',
 });
 const EQUIPMENT_SLOT_BY_TYPE = Object.freeze({
   1: 'weapon',
@@ -1052,7 +1058,9 @@ function createQualificationManifests({
     }
     if (
       cultivationCatalog.character.levelBreakthrough
-        .attributeApplicationStatus !== 'runtime-applied'
+        .attributeApplicationStatus !== 'runtime-applied' &&
+      cultivationCatalog.character.levelBreakthrough
+        .attributeApplicationStatus !== 'not-applicable'
     ) {
       blockers.push(
         blocker(
@@ -1062,20 +1070,28 @@ function createQualificationManifests({
         )
       );
     }
-    const skillUnlockGaps = sourceIds.flatMap(characterId =>
-      (cultivationCharacterById.get(characterId)?.levelBreakthroughRanks ?? [])
-        .filter(
-          row => row.skillUnlock?.availabilityStatus === 'static-evidence-gap'
-        )
-        .map(row => ({
-          characterId,
-          rank: row.rank,
-          skillId: row.skillUnlock.skillId,
-          expectedPassiveSkillIds:
-            row.skillUnlock.expectedPassiveSkillIds ?? [],
-          sourceIdentity: row.sourceIdentity,
-        }))
-    );
+    const skillUnlockGaps =
+      cultivationCatalog.character.levelBreakthrough.skillUnlockMode ===
+      'not-applicable'
+        ? []
+        : sourceIds.flatMap(characterId =>
+            (
+              cultivationCharacterById.get(characterId)
+                ?.levelBreakthroughRanks ?? []
+            )
+              .filter(
+                row =>
+                  row.skillUnlock?.availabilityStatus === 'static-evidence-gap'
+              )
+              .map(row => ({
+                characterId,
+                rank: row.rank,
+                skillId: row.skillUnlock.skillId,
+                expectedPassiveSkillIds:
+                  row.skillUnlock.expectedPassiveSkillIds ?? [],
+                sourceIdentity: row.sourceIdentity,
+              }))
+          );
     if (skillUnlockGaps.length) {
       blockers.push(
         blocker(
@@ -1380,11 +1396,6 @@ function createCultivationCatalog({
       entry,
     ])
   );
-  const runtimePassiveKeys = new Set(
-    (mechanics.specialResourceCatalog?.passiveEffects ?? [])
-      .filter(entry => entry.applied === true)
-      .map(entry => `${Number(entry.ownerId)}:${Number(entry.skillId)}`)
-  );
   const characterPassiveSkillIdsById = new Map(
     (sources.characters.value.items ?? []).map(character => [
       Number(character.id),
@@ -1429,7 +1440,6 @@ function createCultivationCatalog({
         .sort((left, right) => Number(left.rank) - Number(right.rank)),
       {
         productBoundaryByOwnerSkillId,
-        runtimePassiveKeys,
         characterPassiveSkillIds:
           characterPassiveSkillIdsById.get(Number(characterId)) ?? [],
       }
@@ -1514,7 +1524,6 @@ function createCultivationCatalog({
       starGiftRank: 7,
       completedStarGiftAttributeRank: 6,
       currentRankNodeSelection: 'all',
-      levelBreakthroughRank: 3,
     },
     kibo: {
       level: 80,
@@ -1548,19 +1557,19 @@ function createCultivationCatalog({
       ),
       level: { minimum: 1, maximum: 100 },
       starGiftRank: { minimum: 0, maximum: 7 },
-      levelBreakthroughRank: { minimum: 0, maximum: 5 },
       starGiftNodes: {
         status:
           'source-indexed-current-rank-nodes-applied-prior-rank-attributes-applied',
         sourceIdentity: 'NewTable/talent_rank|NewTable/talent_rune',
       },
       levelBreakthrough: {
-        status: 'source-indexed-legality-applied-runtime-evidence-required',
-        levelTemplateIncludesBreakthroughAttributes: null,
-        applicationMode: 'unresolved',
-        attributeApplicationStatus: 'runtime-evidence-required',
+        status: 'not-applicable-unimplemented-dead-config',
+        levelTemplateIncludesBreakthroughAttributes: 'not-applicable',
+        applicationMode: 'not-applicable',
+        attributeApplicationStatus: 'not-applicable',
         skillUnlockMode:
-          'table-declaration-separate-from-availability-and-runtime-effect',
+          'not-applicable',
+        productDecision: HERO_RANK_PRODUCT_DECISION,
         sourceIdentity:
           'NewTable/hero_rank.rankLevelLimit|attribute|skill|scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json',
         runtimeEvidence: structuredClone(sources.heroRankRuntimeEvidence.value),
@@ -1893,7 +1902,6 @@ function createLevelBreakthroughRanks(
   rows,
   {
     productBoundaryByOwnerSkillId,
-    runtimePassiveKeys,
     characterPassiveSkillIds,
   }
 ) {
@@ -1917,18 +1925,8 @@ function createLevelBreakthroughRanks(
             skillUnlock: {
               skillId: unlockedSkillId,
               declarationStatus: 'source-indexed-table-declaration',
-              availabilityStatus: !skillBelongsToCharacter
-                ? 'static-evidence-gap'
-                : productBoundary
-                  ? 'not-applicable'
-                  : 'runtime-evidence-required',
-              effectRuntimeStatus: !skillBelongsToCharacter
-                ? 'static-evidence-gap'
-                : productBoundary
-                  ? 'not-applicable'
-                  : runtimePassiveKeys.has(`${ownerId}:${unlockedSkillId}`)
-                    ? 'runtime-applied'
-                    : 'source-indexed-separate-runtime-contract',
+              availabilityStatus: 'not-applicable',
+              effectRuntimeStatus: 'not-applicable',
               ...(!skillBelongsToCharacter
                 ? {
                     reason: 'hero-rank-skill-id-not-in-character-passive-slots',
@@ -1941,11 +1939,11 @@ function createLevelBreakthroughRanks(
                     productBoundaryIdentity: productBoundary.boundaryIdentity,
                   }
                 : {}),
+              productDecision: HERO_RANK_PRODUCT_DECISION.decision,
             },
           }
         : {}),
-      runtimeApplicationStatus:
-        'source-indexed-legality-applied-attributes-unapplied',
+      runtimeApplicationStatus: 'not-applicable-unimplemented-dead-config',
       sourceIdentity: `NewTable/hero_rank.rows[id=${row.id},heroId=${row.heroId},rank=${row.rank}]`,
     };
   });
@@ -2197,12 +2195,22 @@ function createImplementationCapabilities({
     },
     {
       capabilityIdentity:
-        'b3-character-star-gift-and-level-breakthrough-projection',
+        'b3-character-star-gift-projection-with-hero-rank-dead-config',
       status: 'implemented',
       evidence: [
         cultivationCatalog.character.starGiftNodes.sourceIdentity,
         cultivationCatalog.character.levelBreakthrough.sourceIdentity,
         'src/simulation/mechanics/verifiedCombatStaticProperties.js',
+      ],
+    },
+    {
+      capabilityIdentity: 'b3-hero-rank-unimplemented-dead-config-closure',
+      status: 'implemented',
+      evidence: [
+        cultivationCatalog.character.levelBreakthrough.productDecision.decision,
+        cultivationCatalog.character.levelBreakthrough.runtimeEvidence
+          .productDecision.decision,
+        'scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json',
       ],
     },
     {
@@ -2366,7 +2374,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Denominators: characters ${summary.denominators.characterOptimizationObjects}, Kibo ${summary.denominators.kibos}, soul essence ${summary.denominators.soulEssences}, equipment ${summary.denominators.equipment}, set skills ${summary.denominators.setSkills}\n` +
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
-    '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank legality with explicit unapplied attribute and skill-availability evidence, Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
+    '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank closed as unimplemented dead config (no cultivation state/value effect; optimizer input not required), Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
     '- Dynamic loadout batches: C2-C14 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, target-debuff, and set-three source-conflict contracts. C15 adds a source-driven periodic persistent-root family with native time-loop cadence, condition re-evaluation, finite Cover leaves, right-open expiry, unload provenance, and cycle phase state. Soul essences 10084, 10152, and 10197 are runtime-applied; 10078 remains evidence-insufficient because native multi-PropertyTag matching for tags 302/303 is not closed. E11 registers the product-confirmed dead tuning-intensity branch (element 19003206) of soul 10095 as excluded, closes 10095 as runtime-applied with the single team-attack leaf 19003203, and leaves no runtime-unresolved souls (62/62). E12 gates soul effect activation by character profession: the cultivation catalog carries character position and soul profession, the runtime emits no effect commands for profession-mismatched loadouts while static level/rank growth still applies, formal binding edges remain profession-aware (103 match / 198 universal / 381 mismatch), and the Workbench picker marks mismatched souls as stat-only. E13 publishes the M12-B3 visual acceptance pipeline: per-object manifests with icon asset evidence, display/effect binding, deterministic requirement matrix and blocking ledger for 62 soul essences, 137 equipment contracts and 12 set skills; 210 objects reach optimization-ready (62 souls / 137 equipment / 11 set skills), set-skill:3:4 remains blocked by its dynamic-unapplied evidence, and blocking gaps drop from 335 to 125. E14 implements the Kibo static-attribute inheritance audit (all 122 Workbench Kibos verified against the combat mechanics package: 83 species attributes, 100 growth rows, 9 hobbies, 10 intimacy levels, 54 comprehension grades) and publishes visual acceptance manifests for all 43 target Kibos; Kibos remain blocked only by action closure, fixed-skill classification and PVE passive runtime evidence (43 + 4 gaps), and the qualification gate now distinguishes published-but-blocked Kibo manifests (kibo-visual-acceptance-evidence-blocked). E15 closes the fixed-skill slot semantics: 505/506/507/508 are SystemConst.systemEnum pet decoration/release/feed/box, 602/603 are KiBoVersusCommonSkill slots, and 50206 is a four-occurrence PetPuzzleBlink-consistent anomaly; all 172 unique fixed skills become evidence-closed with slot semantics, and the maturity matrix removes the fixed-skill classification gate (105 Kibos left with action-closure-only gaps, 17 with action-closure plus PVE passive). E16 closes the first PVE passive evidence and adds the receive-damage runtime channel: 520013/520015/520018 become evidence-closed and runtime-ready (AfterReceiveDamage self-property family + skillResourceMaps static injection), the runtime derives Kibo vital damage events from the preflight combat run and dispatches after-receive-damage commands, kibo-passive-static-evidence-gap drops from 4 to 3 (500231 cleared), and blocking gaps drop from 125 to 124.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
@@ -3511,6 +3519,20 @@ async function readHeroRankRuntimeEvidenceSource(
     throw new Error(
       'optimization-qualification-hero-rank-evidence-applied-without-capture'
     );
+  }
+  if (value.productDecision?.decision === 'unimplemented-dead-config') {
+    if (
+      value.conclusion?.attributeApplicationStatus !== 'not-applicable' ||
+      value.conclusion?.applicationMode !== 'not-applicable' ||
+      value.conclusion?.staticClosureBoundary
+        ?.adjacentRankCaptureRequired !== false ||
+      value.conclusion?.clientSemantics?.productDecision !==
+        'unimplemented-dead-config'
+    ) {
+      throw new Error(
+        'optimization-qualification-hero-rank-evidence-decision-inconsistent'
+      );
+    }
   }
   return {
     path: normalizeSourcePath(sourcePath, projectRoot),

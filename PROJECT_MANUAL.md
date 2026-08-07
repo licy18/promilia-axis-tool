@@ -1,6 +1,6 @@
 # promilia-axis-tool 项目手册
 
-最后更新：2026-07-18
+最后更新：2026-08-07
 
 当前策略是以 Endaxis 为架构和交互参考，对 `promilia-axis-tool` 进行从头重构。真实 Workbench 已成为唯一生产排轴入口，旧页面、旧 editor/timeline 组件、旧项目 store 和旧计算工具已经按引用审计退役。完整任务拆解见 `DEVELOPMENT_PLAN.md`，本文件保留最终目标、阶段目标、项目状态和当前事实。
 
@@ -1781,7 +1781,7 @@ M12-B2 已通过产品验收并关闭，M12-B3-A 现从生成数据重算带来�
 
 所有角色优化对象、奇波、灵子和装备都必须分别走完 `extracted -> runtime-integrated -> visually-accepted -> optimization-ready`。现有 62/62 灵子和 137/137 装备的静态 profile 可复用；B3-C10 后灵子效果为 38/62 `runtime-applied`、24/62 `dynamic-unapplied`，套装技能为 8/12 `runtime-applied`、4/12 `dynamic-unapplied`，因此当前仍不能取得优化资格。137 件公开装备的 410 条副属性记录全部是确定值，可变副词条为 0；计划不引入随机词条、roll 或词条预算搜索。Machine Axis 需结构化接收角色等级/星赐/临阶、奇波等级/四维天赋/空 DNA/羁绊、灵子等级/突破阶/升星级和装备稀有度/强化/同调，并把结果传播到角色、奇波和伤害；非法或缺失条件在运行前拒绝。当前版本的 `dnaFactors` 规范值固定为 `[]`，不研究、不应用、不枚举 DNA；省略时 canonical 明示为空，非空输入结构化拒绝，DNA 证据不计入资格缺口。所有其余培养参数都是调用方固定的场景条件，不是优化维度，优化器只枚举角色、奇波、灵子、装备 ID、队伍/套装组合及动作轴。装备仍依据 `accessory_level`、`accessory_customed.score` 与 `EQUIPMENT_SCORE_FORMULA_PARAM` 结算，并按实例上的 `bGoldSide/maxValue` 区分缘星 110 与普通最多 100 的同调上限。固定培养 profile 及其解析值必须进入输入、Top-N、replay、Workbench 导入和 build hash，不能按候选静默取满。星临者只生成一份资格 manifest 和一个优化候选，两个底层身份必须编译为相同机制 hash。
 
-M12-C 首个末音优化场景的输入条件仍固定为：全体候选角色 80 级、星赐当前层为 7，应用 `talent_rank` 已完成的 1..6 层属性并全选第 7 层节点；`hero_rank` 记录并校验 80 级合法突破档 3，但在取得同角色同等级空装配的相邻档最终面板差分前，不把表内 attribute 或 skill availability 应用到运行时。灵子 80 级且不使用同名灵子升星（初始 `star=1`，达到 80 级所需等级上限突破依法解析为 `rank=6`）；装备统一为四星 `+9 / 同调110` 的合法缘星实例；奇波 80 级，四个核心属性天赋均 10 级并解析为四维值 `120`，`dnaFactors: []`，不进行羁绊培养但使用客户端初始有效羁绊 `favor_lv=1`，按 `pet_favorability.levelEffect=900` 以 9% 系数继承角色属性。非空 DNA 在当前版本拒绝，`favor_lv=0` 是缺失/未初始化占位而非合法等级，严格输入必须拒绝。该输入 profile 仍以 `c432bd0a3f2d6415` 冻结；搜索只更换各类 ID、队伍/装配组合和动作轴，不改变任何培养值。
+M12-C 首个末音优化场景的输入条件仍固定为：全体候选角色 80 级、星赐当前层为 7，应用 `talent_rank` 已完成的 1..6 层属性并全选第 7 层节点；`hero_rank` 已按未实装（废案）收口——不参与培养状态与数值，优化器输入不要求也不消费 hero_rank，原相邻档捕获合同归档。灵子 80 级且不使用同名灵子升星（初始 `star=1`，达到 80 级所需等级上限突破依法解析为 `rank=6`）；装备统一为四星 `+9 / 同调110` 的合法缘星实例；奇波 80 级，四个核心属性天赋均 10 级并解析为四维值 `120`，`dnaFactors: []`，不进行羁绊培养但使用客户端初始有效羁绊 `favor_lv=1`，按 `pet_favorability.levelEffect=900` 以 9% 系数继承角色属性。非空 DNA 在当前版本拒绝，`favor_lv=0` 是缺失/未初始化占位而非合法等级，严格输入必须拒绝。该输入 profile 以 `22f28f1f4b5b0d90` 冻结；搜索只更换各类 ID、队伍/装配组合和动作轴，不改变任何培养值。
 
 角色-装配-奇波组合还需证明静态和动态属性传播、来源/目标、前后台/切人、同帧顺序、状态隔离、保存重放及连续循环。C9 已在 `bd812d64226a371a55a01981a239e33c318c9e98` 通过产品验收；direct PropertyElement 根的装配初始化与 unload 由版本化二进制证据闭合。C10 以 `four-piece-set-stack-runtime-evidence.json` 约束 `Overlying=4` 的单一聚合层数、combineNumber 上限、共享绝对到期、Self 来源隔离与 BeforeDamage 当前包顺序，并由统一 compiler/runtime 接入 `set-skill:2:4` 和 `set-skill:4:4`。11/11 角色优化对象、43/43 奇波、62/62 灵子、137/137 装备、12/12 套装技能和规定绑定场景未全部通过前，阶段不得部分放行，任何 `dynamic-unapplied` 必须结构化拒绝而非 warning，M12-C 保持锁定；UI 美化、包体和纯性能工作不作为资格阻断项。
 
@@ -1892,14 +1892,14 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 下一阶段任务（重排后的 M12-C 前路线图，E20 起按依赖顺序推进）：
 
 1. **E20 角色管线打通（33 个角色缺口）**
-   - E20-1 严格培养运行时基线：11 个优化对象全部接入严格培养合同（星赐 7 层 + 第 7 层节点全选 + talent_rank 1..6 层属性 + hero_rank 80 级合法突破档 3 + 固定 profile `c432bd0a`）。E20-1a 已把星赐节点技能等级（`skillUpgrade`）接入 canonical 核心技能等级通道并进入 applied 账本；hero_rank 属性/技能可用性仍依赖“相邻档最终面板差分”捕获与客户端语义结论（`hero-rank-runtime-evidence.json` 已建立捕获合同与预期差分账本，捕获到达后自动校验并放行）。
-   - E20-2 发布 9 个缺失角色验收：102001 莉莉、107001 西芙莉雅、107002 米砂、108001 忒拉拉、108003 米蒂、109001 末音、111001 法兰塔、112001 姬瑟贝露、STARBORN，逐个走 `extracted -> runtime-integrated -> visually-accepted -> optimization-ready`，每角色独立提交与产品签收；112001 的 `level-breakthrough-skill-unlock-source-mismatch` 单独闭合（hero_rank 解锁技能与角色被动槽来源核对）。
+   - E20-1 严格培养运行时基线：11 个优化对象全部接入严格培养合同（星赐 7 层 + 第 7 层节点全选 + talent_rank 1..6 层属性 + 固定 profile `22f28f1f4b5b0d90`，不再含 hero_rank）。E20-1a 已把星赐节点技能等级（`skillUpgrade`）接入 canonical 核心技能等级通道并进入 applied 账本；hero_rank 已由 E20-1c 按未实装（废案）收口，属性/技能可用性不再要求捕获。
+   - E20-2 发布 9 个缺失角色验收：102001 莉莉、107001 西芙莉雅、107002 米砂、108001 忒拉拉、108003 米蒂、109001 末音、111001 法兰塔、112001 姬瑟贝露、STARBORN，逐个走 `extracted -> runtime-integrated -> visually-accepted -> optimization-ready`，每角色独立提交与产品签收；112001 的 hero_rank 解锁技能来源冲突已随废案收口一并关闭。
    - E20-3 STARBORN 统一对象：199001/199002 别名归一化、`actor-static-profile-missing` 清零、机制 hash 一致。
 2. **E21 套装技能收口（2 个缺口）**：`set-skill:3:4` 需产品决策选权威来源或从更新客户端包重提取 resourceMap 闭合；随后 12/12 runtime-applied + visual signoff。
 3. **E22 绑定矩阵与正式准入（依赖 E20/E21）**：角色-装配-奇波绑定矩阵全绿（装配→角色、角色→奇波继承、来源/目标、前后台/切人、同名奇波跨 owner 隔离、同帧顺序、保存重放、连续循环），11/11+43/43+62/62+137/137+12/12 全绿且 hash 一致，`m12cLocked` 解锁。
 4. **E23 M12-C 末音试点（解锁后）**：末音 + 已签收候选队友；先可持续循环 DPS，再爆发/有限时长总伤/削韧；Top-N 自动回灌 Workbench 人工复验。
 
-依赖与并行：E22 依赖 E20/E21；kibo/灵子/装备侧无需新增数据工作，只等绑定矩阵放行；`set-skill:3:4` 是唯一需要外部输入（产品决策或新客户端证据）的项；E20 内各角色可并行推进（末音与候选队友优先），hero_rank 捕获可与角色验收并行。每完成一个子阶段即更新本手册并单独提交。
+依赖与并行：E22 依赖 E20/E21；kibo/灵子/装备侧无需新增数据工作，只等绑定矩阵放行；`set-skill:3:4` 是唯一需要外部输入（产品决策或新客户端证据）的项；E20 内各角色可并行推进（末音与候选队友优先），hero_rank 已收口不再占用并行捕获资源。每完成一个子阶段即更新本手册并单独提交。
 
 ### M12-B3-E20-1 已执行：严格培养运行时基线 + hero_rank 相邻档捕获合同（2026-08-07）
 
@@ -1923,7 +1923,31 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 - **放行条件因此收窄**：`character.levelBreakthroughAttributes` 的唯一闭环 = 相邻档最终面板差分捕获（面板(rank3)−面板(rank2) 等于 `hero_rank.attribute(rank3)` 则服务端已含、我们应加；等于 0 则不加）；`character.levelBreakthroughSkillUnlocks` 可由同一捕获读取 `UnitSkillInfo` 闭合；112001 的 `hero_rank.skill` 前缀错误（10300261/10300262）保持来源冲突，等产品决策或新证据。
 - 证据文件 `hero-rank-runtime-evidence.json` 的 `conclusion.clientSemantics` 已落库并冻结哈希 `d565e1e3…`；资格缺口仍 35，`m12cLocked` 保持锁定。
 
-**E20-1 剩余依赖（更新）**：实机相邻档最终面板捕获（属性差分 + `UnitSkillInfo` 技能列表，捕获后按已建合同自动校验）；112001 来源冲突产品决策；随后进入 E20-2 角色验收。
+**E20-1 剩余依赖（更新）**：实机相邻档最终面板捕获与 112001 来源冲突均已由 E20-1c 按未实装（废案）收口关闭；随后进入 E20-2 角色验收。
+
+### M12-B3-E20-1c 已执行：hero_rank 按未实装（废案）收口（2026-08-07）
+
+用户决策：hero_rank（等级上限突破 0..5）在当前客户端未实装，按废案直接收口；**角色培养状态和数值不受 hero_rank 影响，优化器不需要指定 hero_rank**。
+
+决策依据（客户端侧证据）：
+
+- C# 方法表 `TDHeroRank` 只有表结构 getter 与通用表框架，无玩法消费；Lua 侧 `heroRankTpl` 未注册且无调用，`hero_rank_shell` 无消费。
+- `MsgGenCode` 无角色突破请求（仅 6018 星赐合成 / 6019 临阶度奖励 / 6049 灵子突破 / 6510 宠物突破）；`ErrCodeHeroRank*`（10790-10804）实际文案全部是星赐/临阶，说明 “HeroRank” 命名实为临阶系统。
+- 无系统开放项（`lang_system_unlock` 只有灵子突破/星赐），`guide_group` 引用的 `behavior_ce4_hero_rank_up.json` 不存在；hero_rank 全表消耗道具 `10#2#1` 指向不存在的 `common_item id=2`；112001 行技能前缀错误。
+
+实施内容：
+
+- 资格模型：`character.levelBreakthrough` 改为 `not-applicable-unimplemented-dead-config`，`attributeApplicationStatus/skillUnlockMode` 均为 `not-applicable`；`levelBreakthroughRanks` 保留为来源审计，行状态统一 `not-applicable-unimplemented-dead-config`。
+- 计算核心：`resolveCharacterCultivation` 不再选择任何 level-breakthrough 源（即使旧输入携带该字段也按空处理）；`appliedDimensions` 移除 `character.levelBreakthroughLegality`，`unresolvedDimensions` 移除两个 hero_rank 证据族；application 状态在无 unresolved 时变为 `fully-applied`。
+- 公共 schema：`levelBreakthroughRank` 从 `required` 移除（仍容忍旧字段，但不产生任何效果）；`ascensionRank` 依旧被拒绝。
+- 证据：`hero-rank-runtime-evidence.json` 新增 `productDecision`，`conclusion` 全部改为 `not-applicable`，原相邻档捕获合同保留为归档证据（`adjacentRankCaptureRequired=false`）；生成器校验决策与结论一致性。
+- 验收报告 `m12-b3-c-dynamic-loadout-effect-acceptance.json` 的 qualification/hashes 同步新基线。
+
+验证与结果：
+
+- 资格缺口 35 → 23（not-implemented 22 + evidence-insufficient 1，仅剩 `set-skill:3:4`）；11 条 `strict-character-cultivation-runtime-partial` 清零，112001 `level-breakthrough-skill-unlock-source-mismatch` 关闭；`m12cLocked` 保持 true。
+- 全套 Vitest 1437 条（2 条已知 process-heavy 并行超时，单独全过）；optimization-qualification 16 文件 90 条全过；production-import / workbench-data / action-status / verified-combat / character-acceptance / applied-source-bindings / kibo-headless / bundle 审计全 clean；production build 通过。
+- 冻结哈希：`heroRankRuntimeEvidence` 重基线 `15b104602e833d29e35c8a452c0ee3b3b6b9fe6d0b8cc1dd55f32c37883c88c8`；fixed profile `22f28f1f4b5b0d90`；资格摘要 `sourceSnapshot 2918bf3db501b2de / roster 33fad35f82aa31ed / manifests a5b8e21e33950c05 / ledger e66027078cbdf482 / binding 39af1ce5d230bdc3 / catalog 60141ce9481ff6f8`。
 
 ### M12-B3-E20-1a 已完成：星赐节点技能等级接入 canonical 核心（2026-08-07）
 

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "contractName": "AzPrOptimizationQualificationRoster",
   "kind": "azpr-optimization-qualification-roster",
-  "generatedAt": "2026-08-05T00:00:00.000Z",
+  "generatedAt": "2026-08-07T00:00:00.000Z",
   "phase": "M12-B3-E16",
   "sourceSnapshot": {
     "files": {
@@ -163,8 +163,8 @@
       },
       "heroRankRuntimeEvidence": {
         "path": "scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json",
-        "sha256": "d565e1e3a987ea39f4154442f5f1338b5714017f3e4040021cbb8b010af301e8",
-        "bytes": 10302,
+        "sha256": "15b104602e833d29e35c8a452c0ee3b3b6b9fe6d0b8cc1dd55f32c37883c88c8",
+        "bytes": 11736,
         "value": {
           "schemaVersion": 1,
           "contractName": "AzPrHeroRankRuntimeEvidence",
@@ -440,17 +440,36 @@
             ],
             "expectedDeltaSource": "NewTable/hero_rank.attribute rank3-rank2 at level 80 empty loadout"
           },
+          "productDecision": {
+            "decision": "unimplemented-dead-config",
+            "decidedAt": "2026-08-07",
+            "summary": "hero_rank（等级上限突破 0..5）在当前 CBT2 客户端中未被接线：无 UI 页面、无协议请求、无系统开放项，行为树引用悬空，TDHeroRank 无玩法消费，且客户端所有 HeroRank 命名实际指向临阶（talent_rank）。按未实装废案收口：角色培养状态与数值不受 hero_rank 影响，优化器不需要指定 hero_rank，原相邻档捕获合同归档不再要求。",
+            "evidenceIndex": [
+              "src 全量搜索：heroRankTpl 未注册且无调用，hero_rank_shell 无消费方",
+              "MsgGenCode：无角色突破消息（仅 6018 星赐合成/6019 临阶度奖励/6049 灵子突破/6510 宠物突破）",
+              "errorCode：ErrCodeHeroRank* 文案均为星赐/临阶（10790-10804）",
+              "guide_group 引用 behavior_ce4_hero_rank_up.json 但资源不存在",
+              "lang_system_unlock 无角色突破开放项",
+              "hero_rank 消耗道具 10#2#1 指向不存在的 common_item id=2",
+              "112001 行技能前缀错误（10300261/10300262），数据为未完成状态"
+            ],
+            "supersedes": {
+              "adjacentRankCaptureRequirement": true,
+              "skillListCaptureRequirement": true,
+              "status": "archived-not-required"
+            }
+          },
           "conclusion": {
-            "attributeApplicationStatus": "runtime-evidence-required",
-            "levelTemplateIncludesBreakthroughAttributes": "unresolved",
-            "applicationMode": "unresolved",
-            "reason": "Client semantics documented: final panel attributes and skill list are server-provided (HeroAttrInfo.modules[].subModules[].attrs/skills); the client never applies hero_rank.attribute or hero_rank.skill from tables. Whether the server panel already includes hero_rank attributes can only be settled by an adjacent-rank final-panel capture (expected deltas are indexed); skill availability by the same capture reading UnitSkillInfo. PlayerModule methods are obfuscated dispatch stubs, so static closure is not possible.",
+            "attributeApplicationStatus": "not-applicable",
+            "levelTemplateIncludesBreakthroughAttributes": "not-applicable",
+            "applicationMode": "not-applicable",
+            "reason": "Client semantics documented: final panel attributes and skill list are server-provided (HeroAttrInfo.modules[].subModules[].attrs/skills); the client never applies hero_rank.attribute or hero_rank.skill from tables. Product decision 2026-08-07: hero_rank is unimplemented dead config in the current client (no UI/protocol/system-open/guide wiring; every HeroRank-named client artifact actually refers to talent_rank). Cultivation state and values are therefore not affected by hero_rank, and the optimizer does not specify it. The adjacent-rank capture contract is archived as evidence of the superseded closure path and is no longer required.",
             "staticClosureBoundary": {
-              "status": "runtime-evidence-required",
+              "status": "closed-by-product-decision",
               "playerModuleMethodsAreObfuscatedDispatchStubs": true,
               "upstreamConstructionPathProven": false,
-              "adjacentRankCaptureRequired": true,
-              "reason": "PlayerModule.HeroData/HeroStore/AttrModuleInfo panel-construction methods are obfuscated dispatch stubs; server-provided HeroAttrInfo inclusion of hero_rank.attribute cannot be proven statically. Client semantics report documents the server-driven panel; adjacent-rank capture remains the only closure for attributes and skill availability."
+              "adjacentRankCaptureRequired": false,
+              "reason": "PlayerModule.HeroData/HeroStore/AttrModuleInfo panel-construction methods are obfuscated dispatch stubs, so static proof was impossible; the closure is now the product decision that hero_rank is unimplemented dead config, which removes the runtime requirement entirely."
             },
             "clientSemantics": {
               "status": "documented",
@@ -460,8 +479,9 @@
               "skillAvailabilitySource": "server-HeroAttrInfo-modules-submodules-skills",
               "clientSideHeroRankSkillUnlockLogic": "none",
               "staticUpstreamClosurePossible": false,
-              "adjacentRankCaptureRequiredForAttributes": true,
-              "skillListCaptureRequiredForUnlocks": true
+              "adjacentRankCaptureRequiredForAttributes": false,
+              "skillListCaptureRequiredForUnlocks": false,
+              "productDecision": "unimplemented-dead-config"
             }
           },
           "verifiedBinary": {
@@ -4180,7 +4200,7 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "a72901d7189f3f34"
+    "sourceSnapshotHash": "2918bf3db501b2de"
   },
   "filterContract": {
     "characterElements": [
@@ -29363,5 +29383,5 @@
       ]
     }
   },
-  "rosterHash": "2df8e858d4ee3292"
+  "rosterHash": "33fad35f82aa31ed"
 }

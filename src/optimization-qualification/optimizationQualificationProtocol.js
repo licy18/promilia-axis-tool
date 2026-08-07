@@ -333,19 +333,6 @@ export function projectResolvedOptimizationCultivationActor(
   );
   const soulEssenceEffectRuntimeApplied =
     resolvedActor.soulEssence?.effectSkill?.runtimeStatus === 'runtime-applied';
-  const levelBreakthroughAttributesApplied =
-    (resolvedActor.character?.staticSources
-      ?.levelBreakthroughAttributeSources?.length ?? 0) > 0 &&
-    !resolvedActor.character?.staticSources?.unappliedStaticSources?.some(
-      source => source.kind === 'actor-level-breakthrough-attribute'
-    );
-  const levelBreakthroughSkillUnlocksApplied =
-    (resolvedActor.character?.levelBreakthroughSkillDeclarations ?? []).some(
-      source => source.availabilityStatus === 'runtime-verified-available'
-    ) &&
-    !resolvedActor.character?.staticSources?.unappliedSkillSources?.some(
-      source => source.kind === 'actor-level-breakthrough-skill-unlock'
-    );
   const starGiftNodeSkillLevelsApplied =
     Array.isArray(
       resolvedActor.character?.staticSources?.starGiftNodeSkillLevels
@@ -358,15 +345,8 @@ export function projectResolvedOptimizationCultivationActor(
     'character.starGiftRank',
     'character.starGiftNodeAttributes',
     'character.completedStarGiftAttributes',
-    'character.levelBreakthroughLegality',
     ...(starGiftNodeSkillLevelsApplied
       ? ['character.starGiftNodeSkillLevels']
-      : []),
-    ...(levelBreakthroughAttributesApplied
-      ? ['character.levelBreakthroughAttributes']
-      : []),
-    ...(levelBreakthroughSkillUnlocksApplied
-      ? ['character.levelBreakthroughSkillUnlocks']
       : []),
     'kibo.level',
     'kibo.talents',
@@ -386,12 +366,6 @@ export function projectResolvedOptimizationCultivationActor(
     ...(!starGiftNodeSkillLevelsApplied
       ? ['character.starGiftNodeSkillLevels']
       : []),
-    ...(!levelBreakthroughAttributesApplied
-      ? ['character.levelBreakthroughAttributes']
-      : []),
-    ...(!levelBreakthroughSkillUnlocksApplied
-      ? ['character.levelBreakthroughSkillUnlocks']
-      : []),
     ...(resolvedActor.soulEssence?.effectSkill &&
     !soulEssenceEffectRuntimeApplied
       ? ['soulEssence.effectSkillRuntime']
@@ -402,9 +376,6 @@ export function projectResolvedOptimizationCultivationActor(
       level: Number(resolvedActor.character.level),
       cultivation: {
         starGiftRank: Number(resolvedActor.character.starGiftRank),
-        levelBreakthroughSkillDeclarations: structuredClone(
-          resolvedActor.character.levelBreakthroughSkillDeclarations ?? []
-        ),
         optimizationStaticSources: structuredClone(
           resolvedActor.character.staticSources
         ),
@@ -433,7 +404,8 @@ export function projectResolvedOptimizationCultivationActor(
     application: {
       schemaVersion: 1,
       contractName: 'AzPrOptimizationCultivationApplication',
-      status: 'partially-applied',
+      status:
+        unresolvedDimensions.length === 0 ? 'fully-applied' : 'partially-applied',
       profileHash,
       qualificationCatalogHash:
         catalog.catalogHash,
@@ -542,13 +514,6 @@ export function validateOptimizationCultivationProfile(
       'machine-axis-cultivation-star-gift-rank-invalid',
       issues
     );
-    validateRange(
-      actor.character?.levelBreakthroughRank,
-      catalog.cultivation.character.levelBreakthroughRank,
-      `${basePath}.character.levelBreakthroughRank`,
-      'machine-axis-cultivation-level-breakthrough-rank-invalid',
-      issues
-    );
     if (teamSlot && !characterSourceProfile) {
       issues.push(
         createIssue(
@@ -574,55 +539,6 @@ export function validateOptimizationCultivationProfile(
           {
             characterId: Number(teamSlot.characterId),
             starGiftRank: selectedStarGiftRank,
-          }
-        )
-      );
-    }
-    if (
-      characterSourceProfile &&
-      !characterSourceProfile.levelBreakthroughRanks.some(
-        row =>
-          Number(row.rank) ===
-          Number(actor.character?.levelBreakthroughRank)
-      )
-    ) {
-      issues.push(
-        createIssue(
-          'machine-axis-cultivation-level-breakthrough-source-missing',
-          `${basePath}.character.levelBreakthroughRank`,
-          {
-            characterId: Number(teamSlot.characterId),
-            actual: actor.character?.levelBreakthroughRank,
-          }
-        )
-      );
-    }
-    const levelBreakthroughSource =
-      characterSourceProfile?.levelBreakthroughRanks.find(
-        row =>
-          Number(row.rank) ===
-          Number(actor.character?.levelBreakthroughRank)
-      );
-    if (
-      levelBreakthroughSource &&
-      (Number(actor.character?.level) <
-        Number(levelBreakthroughSource.minimumLevel) ||
-        Number(actor.character?.level) >
-          Number(levelBreakthroughSource.levelLimit))
-    ) {
-      issues.push(
-        createIssue(
-          'machine-axis-cultivation-level-breakthrough-combination-invalid',
-          `${basePath}.character.levelBreakthroughRank`,
-          {
-            characterId: Number(teamSlot?.characterId) || null,
-            level: Number(actor.character?.level),
-            levelBreakthroughRank: Number(
-              actor.character?.levelBreakthroughRank
-            ),
-            minimumLevel: Number(levelBreakthroughSource.minimumLevel),
-            maximumLevel: Number(levelBreakthroughSource.levelLimit),
-            sourceIdentity: levelBreakthroughSource.sourceIdentity,
           }
         )
       );
@@ -1027,13 +943,10 @@ function resolveCharacterCultivation(value, sourceProfile) {
           .join('|'),
       }))
   );
-  const levelBreakthroughSources = sourceProfile.levelBreakthroughRanks
-    .filter(row => Number(row.rank) <= Number(value.levelBreakthroughRank))
-    .map(row => ({
-      ...structuredClone(row),
-      kind: 'actor-level-breakthrough',
-      sourceId: `${sourceProfile.characterId}:${row.rank}`,
-    }));
+  // hero_rank is closed as unimplemented dead config (product decision
+  // 2026-08-07): no level-breakthrough source is ever selected or applied,
+  // regardless of any tolerated legacy input field.
+  const levelBreakthroughSources = [];
   const unappliedLevelBreakthroughAttributeSources = levelBreakthroughSources
     .filter(row => row.attributes.length > 0)
     .map(row => ({

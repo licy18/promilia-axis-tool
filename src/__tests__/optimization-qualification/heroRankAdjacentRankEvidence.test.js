@@ -98,7 +98,6 @@ function createStrictProfile(characterId) {
             level: 80,
             starGiftRank: 7,
             starGiftNodeIds: nodeIdsFor(characterId),
-            levelBreakthroughRank: 3,
           },
           kibo: {
             level: 80,
@@ -129,7 +128,6 @@ function createStrictProfile(characterId) {
             level: 80,
             starGiftRank: 7,
             starGiftNodeIds: nodeIdsFor(101010),
-            levelBreakthroughRank: 3,
           },
           kibo: {
             level: 80,
@@ -160,7 +158,6 @@ function createStrictProfile(characterId) {
             level: 80,
             starGiftRank: 7,
             starGiftNodeIds: nodeIdsFor(103002),
-            levelBreakthroughRank: 3,
           },
           kibo: {
             level: 80,
@@ -190,7 +187,7 @@ function createStrictProfile(characterId) {
   };
 }
 
-describe('E20-1 strict character cultivation runtime baseline', () => {
+describe('E20-1 strict character cultivation runtime baseline (hero_rank dead config)', () => {
   it('maps star-gift skillIndex to client skill ids and aggregates level bonuses', () => {
     const characterById = new Map(
       charactersCatalog.items.map(item => [Number(item.id), item])
@@ -286,7 +283,7 @@ describe('E20-1 strict character cultivation runtime baseline', () => {
     expect(draft.level).toBe(1 + expectedBonus);
   });
 
-  it('indexes adjacent-rank expected deltas for all 11 optimization objects', () => {
+  it('archives adjacent-rank expected deltas for all 11 optimization objects', () => {
     expect(() => assertHeroRankExpectedDeltaCoverage(evidence)).not.toThrow();
     const deltas = evidence.adjacentRankCapture.expectedDeltas;
     expect(deltas).toHaveLength(12);
@@ -347,7 +344,7 @@ describe('E20-1 strict character cultivation runtime baseline', () => {
     );
   });
 
-  it('resolves strict cultivation for all 11 objects with only the hero_rank evidence boundary unresolved', () => {
+  it('resolves strict cultivation for all 11 objects with hero_rank closed as unimplemented dead config', () => {
     const objectIds = [
       '101010',
       '102001',
@@ -395,7 +392,6 @@ describe('E20-1 strict character cultivation runtime baseline', () => {
         'character.starGiftRank',
         'character.starGiftNodeAttributes',
         'character.completedStarGiftAttributes',
-        'character.levelBreakthroughLegality',
         'character.starGiftNodeSkillLevels',
         'kibo.level',
         'kibo.talents',
@@ -413,10 +409,7 @@ describe('E20-1 strict character cultivation runtime baseline', () => {
           `${objectId}:${dimension}`
         ).toContain(dimension);
       }
-      const expectedUnresolved = [
-        'character.levelBreakthroughAttributes',
-        'character.levelBreakthroughSkillUnlocks',
-      ];
+      const expectedUnresolved = [];
       if (
         application.application.unresolvedDimensions.includes(
           'soulEssence.effectSkillRuntime'
@@ -427,6 +420,39 @@ describe('E20-1 strict character cultivation runtime baseline', () => {
       expect(application.application.unresolvedDimensions, objectId).toEqual(
         expectedUnresolved
       );
+      expect(
+        resolved.profile.actors[0].character.levelBreakthroughSkillDeclarations,
+        objectId
+      ).toEqual([]);
+      expect(
+        resolved.profile.actors[0].character.staticSources
+          .unappliedStaticSources,
+        objectId
+      ).toEqual([]);
+      expect(
+        resolved.profile.actors[0].character.staticSources
+          .unappliedSkillSources,
+        objectId
+      ).toEqual([]);
     }
+  });
+
+  it('ignores a legacy hero_rank field without changing resolved values', () => {
+    const { team, profile } = createStrictProfile(109001);
+    profile.actors[0].character.levelBreakthroughRank = 4;
+    const resolved = resolveOptimizationCultivationProfile(profile, {
+      team,
+      catalog: qualificationCatalog,
+    });
+    expect(resolved.valid).toBe(true);
+    expect(resolved.profile.actors[0].character.staticSources).toMatchObject({
+      levelBreakthroughSources: [],
+      levelBreakthroughAttributeSources: [],
+      unappliedStaticSources: [],
+      unappliedSkillSources: [],
+    });
+    expect(
+      resolved.profile.actors[0].character.levelBreakthroughSkillDeclarations
+    ).toEqual([]);
   });
 });

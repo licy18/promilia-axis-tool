@@ -197,12 +197,6 @@ export function compileVerifiedStaticActorProperties({
     unresolved,
     unapplied,
     setSkillActivations,
-    skillAvailability: (
-      cultivation.levelBreakthroughSkillDeclarations ?? []
-    ).map(entry => ({
-      ...structuredClone(entry),
-      applied: entry.availabilityStatus === 'runtime-verified-available',
-    })),
     sourceIdentity: `verified-static-actor:${characterId}|${mechanicsPackage.packageHash}`,
     complete,
     ready: complete,
