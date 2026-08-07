@@ -381,6 +381,10 @@ function executeVisualScenario({
 
 function inspectCriticalMatrix(ownerId, first, second) {
   const prefix = String(ownerId) + '-critical-';
+  const boundary =
+    Number(ownerId) === 109001
+      ? { low: 799, threshold: 800 }
+      : { low: 499, threshold: 500 };
   const findHit = suffix =>
     (first.trace?.damage ?? []).find(
       event =>
@@ -397,11 +401,14 @@ function inspectCriticalMatrix(ownerId, first, second) {
   return {
     sameSeedReplay: sameHashes(first.hashes, second.hashes),
     integerThresholdBoundary:
-      sampledLow?.formula?.randomBranch?.criticalRoll === 499 &&
-      sampledLow?.formula?.randomBranch?.criticalThreshold === 500 &&
+      sampledLow?.formula?.randomBranch?.criticalRoll === boundary.low &&
+      sampledLow?.formula?.randomBranch?.criticalThreshold ===
+        boundary.threshold &&
       sampledLow?.formula?.randomBranch?.critical === true &&
-      sampledBoundary?.formula?.randomBranch?.criticalRoll === 500 &&
-      sampledBoundary?.formula?.randomBranch?.criticalThreshold === 500 &&
+      sampledBoundary?.formula?.randomBranch?.criticalRoll ===
+        boundary.threshold &&
+      sampledBoundary?.formula?.randomBranch?.criticalThreshold ===
+        boundary.threshold &&
       sampledBoundary?.formula?.randomBranch?.critical === false,
     perHitModes:
       sampledLow?.formula?.randomBranch?.mode === 'captured-critical-roll' &&

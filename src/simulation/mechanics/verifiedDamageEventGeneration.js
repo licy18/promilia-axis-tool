@@ -131,7 +131,14 @@ export function createVerifiedDamageEventGeneration({
           tuningEvent.template?.elementTypes ?? eventContext.elementTypes ?? []
         ),
         damageType: finiteIntegerOrNull(tuningEvent.template?.damageType),
-        propertyTags: propertyTagResolution.propertyTags ?? [],
+        propertyTags: [
+          ...new Set([
+            ...(Array.isArray(eventContext.propertyTags)
+              ? eventContext.propertyTags
+              : []),
+            ...(propertyTagResolution.propertyTags ?? []),
+          ]),
+        ],
         skillTagIds: uniqueFiniteIntegers(
           eventContext.skillTagIds ?? resolveSkillTagIds(resolution)
         ),

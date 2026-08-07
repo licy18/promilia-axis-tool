@@ -4,6 +4,13 @@
   "ownerId": 109001,
   "nodes": [
     {
+      "nodeIdentity": "actor:109001:passive:10900161",
+      "nodeKind": "passive-listener",
+      "skillId": 10900161,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900161.asset/MonoBehaviour/skill_control_10900161__2111014539659534776.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001316.asset/MonoBehaviour/ast_109001316__-2193895459641539428.json#elementConfigId=109001316|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001296.asset/MonoBehaviour/ast_109001296__586698730667078251.json#elementConfigId=109001296|hero-module:109001#skill:10900161#description=末音造成的超限伤害增加54%|Battle/Element/ast_109001316.asset#新被动overdrive伤害提升 attributeID=21 defaultPropertyTags[307]|Battle/Element/ast_109001296.asset#被动1加暴击"
+    },
+    {
       "nodeIdentity": "actor|109001|10900101|0|10900103|normal-attack",
       "nodeKind": "public-action",
       "actionKind": "normal-attack",
@@ -132,6 +139,22 @@
       "nodeKind": "action-form",
       "semanticName": "完美招架",
       "status": "applied"
+    },
+    {
+      "nodeIdentity": "conditional-hit-group:moyin-a4-brilliant-thunder-overdrive",
+      "nodeKind": "conditional-hit-group",
+      "decisionFrame": 29,
+      "minimumStacks": 1,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant"
+    },
+    {
+      "nodeIdentity": "conditional-hit-group:moyin-chase-thunder-overdrive",
+      "nodeKind": "conditional-hit-group",
+      "decisionFrame": 13,
+      "minimumStacks": 1,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
     },
     {
       "nodeIdentity": "control:10900101",
@@ -668,10 +691,18 @@
       "controlSkillId": 10900104,
       "frame": 29,
       "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant"
     },
     {
-      "nodeIdentity": "hit:10900104|0|elements|8|-1163125552202303495|45|5",
+      "nodeIdentity": "hit:10900104|0|elements|3|4184198133427158765|29|5",
+      "nodeKind": "hit",
+      "controlSkillId": 10900104,
+      "frame": 29,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant"
+    },
+    {
+      "nodeIdentity": "hit:10900104|0|elements|8|-1163125552202303495|45|6",
       "nodeKind": "hit",
       "controlSkillId": 10900104,
       "frame": 45,
@@ -679,7 +710,7 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-1163125552202303495"
     },
     {
-      "nodeIdentity": "hit:10900104|0|elements|8|-1163125552202303495|49|6",
+      "nodeIdentity": "hit:10900104|0|elements|8|-1163125552202303495|49|7",
       "nodeKind": "hit",
       "controlSkillId": 10900104,
       "frame": 49,
@@ -687,7 +718,7 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-1163125552202303495"
     },
     {
-      "nodeIdentity": "hit:10900104|0|elements|8|-1163125552202303495|53|7",
+      "nodeIdentity": "hit:10900104|0|elements|8|-1163125552202303495|53|8",
       "nodeKind": "hit",
       "controlSkillId": 10900104,
       "frame": 53,
@@ -1012,23 +1043,47 @@
       "controlSkillId": 10900143,
       "frame": 13,
       "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
     },
     {
-      "nodeIdentity": "hit:10900143|0|elements|0|2642523047740593292|18|2",
+      "nodeIdentity": "hit:10900143|0|elements|0|2642523047740593292|13|2",
+      "nodeKind": "hit",
+      "controlSkillId": 10900143,
+      "frame": 13,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
+    },
+    {
+      "nodeIdentity": "hit:10900143|0|elements|0|2642523047740593292|18|3",
       "nodeKind": "hit",
       "controlSkillId": 10900143,
       "frame": 18,
       "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
     },
     {
-      "nodeIdentity": "hit:10900143|0|elements|0|2642523047740593292|23|3",
+      "nodeIdentity": "hit:10900143|0|elements|0|2642523047740593292|18|4",
+      "nodeKind": "hit",
+      "controlSkillId": 10900143,
+      "frame": 18,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
+    },
+    {
+      "nodeIdentity": "hit:10900143|0|elements|0|2642523047740593292|23|5",
       "nodeKind": "hit",
       "controlSkillId": 10900143,
       "frame": 23,
       "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
+    },
+    {
+      "nodeIdentity": "hit:10900143|0|elements|0|2642523047740593292|23|6",
+      "nodeKind": "hit",
+      "controlSkillId": 10900143,
+      "frame": 23,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
     },
     {
       "nodeIdentity": "hit:10900149|1|elements|0|-7354766802121318499|11|2",
@@ -1092,6 +1147,15 @@
       "triggerPhase": "on-enter",
       "status": "applied",
       "sourceIdentity": "characters.items[id=109001].skillSlots[slot=203,skillId=10900121]"
+    },
+    {
+      "nodeIdentity": "target-state:moyin-brilliant",
+      "nodeKind": "target-state",
+      "targetKind": "self",
+      "durationMs": 8000,
+      "capacity": 1,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#time=8000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#combineNumber=-1|declared-capacity-override=1|Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1"
     }
   ],
   "edges": [
@@ -1276,6 +1340,22 @@
       "relation": "executes-control"
     },
     {
+      "edgeIdentity": "conditional-hit-group:moyin-a4-brilliant-thunder-overdrive->materializes-conditional-hits->control:10900104:sub:0",
+      "from": "conditional-hit-group:moyin-a4-brilliant-thunder-overdrive",
+      "to": "control:10900104:sub:0",
+      "relation": "materializes-conditional-hits",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant"
+    },
+    {
+      "edgeIdentity": "conditional-hit-group:moyin-chase-thunder-overdrive->materializes-conditional-hits->control:10900143:sub:0",
+      "from": "conditional-hit-group:moyin-chase-thunder-overdrive",
+      "to": "control:10900143:sub:0",
+      "relation": "materializes-conditional-hits",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
+    },
+    {
       "edgeIdentity": "control:10900101->has-subskill->control:10900101:sub:0",
       "from": "control:10900101",
       "to": "control:10900101:sub:0",
@@ -1438,21 +1518,27 @@
       "relation": "emits-hit"
     },
     {
-      "edgeIdentity": "control:10900104:sub:0->emits-hit->hit:10900104|0|elements|8|-1163125552202303495|45|5",
+      "edgeIdentity": "control:10900104:sub:0->emits-hit->hit:10900104|0|elements|3|4184198133427158765|29|5",
       "from": "control:10900104:sub:0",
-      "to": "hit:10900104|0|elements|8|-1163125552202303495|45|5",
+      "to": "hit:10900104|0|elements|3|4184198133427158765|29|5",
       "relation": "emits-hit"
     },
     {
-      "edgeIdentity": "control:10900104:sub:0->emits-hit->hit:10900104|0|elements|8|-1163125552202303495|49|6",
+      "edgeIdentity": "control:10900104:sub:0->emits-hit->hit:10900104|0|elements|8|-1163125552202303495|45|6",
       "from": "control:10900104:sub:0",
-      "to": "hit:10900104|0|elements|8|-1163125552202303495|49|6",
+      "to": "hit:10900104|0|elements|8|-1163125552202303495|45|6",
       "relation": "emits-hit"
     },
     {
-      "edgeIdentity": "control:10900104:sub:0->emits-hit->hit:10900104|0|elements|8|-1163125552202303495|53|7",
+      "edgeIdentity": "control:10900104:sub:0->emits-hit->hit:10900104|0|elements|8|-1163125552202303495|49|7",
       "from": "control:10900104:sub:0",
-      "to": "hit:10900104|0|elements|8|-1163125552202303495|53|7",
+      "to": "hit:10900104|0|elements|8|-1163125552202303495|49|7",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10900104:sub:0->emits-hit->hit:10900104|0|elements|8|-1163125552202303495|53|8",
+      "from": "control:10900104:sub:0",
+      "to": "hit:10900104|0|elements|8|-1163125552202303495|53|8",
       "relation": "emits-hit"
     },
     {
@@ -1756,6 +1842,17 @@
       "relation": "emits-hit"
     },
     {
+      "edgeIdentity": "control:10900125:sub:0->target-state-gain->target-state:moyin-brilliant",
+      "from": "control:10900125:sub:0",
+      "to": "target-state:moyin-brilliant",
+      "relation": "target-state-gain",
+      "triggerFrame": 31,
+      "amount": 1,
+      "requiresHitElementId": null,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900125.asset/MonoBehaviour/MonoBehaviour_7308935574334620133__7308935574334620133.json#brilliant-buff@31F"
+    },
+    {
       "edgeIdentity": "control:10900126->has-subskill->control:10900126:sub:0",
       "from": "control:10900126",
       "to": "control:10900126:sub:0",
@@ -1798,16 +1895,45 @@
       "relation": "emits-hit"
     },
     {
-      "edgeIdentity": "control:10900143:sub:0->emits-hit->hit:10900143|0|elements|0|2642523047740593292|18|2",
+      "edgeIdentity": "control:10900143:sub:0->emits-hit->hit:10900143|0|elements|0|2642523047740593292|13|2",
       "from": "control:10900143:sub:0",
-      "to": "hit:10900143|0|elements|0|2642523047740593292|18|2",
+      "to": "hit:10900143|0|elements|0|2642523047740593292|13|2",
       "relation": "emits-hit"
     },
     {
-      "edgeIdentity": "control:10900143:sub:0->emits-hit->hit:10900143|0|elements|0|2642523047740593292|23|3",
+      "edgeIdentity": "control:10900143:sub:0->emits-hit->hit:10900143|0|elements|0|2642523047740593292|18|3",
       "from": "control:10900143:sub:0",
-      "to": "hit:10900143|0|elements|0|2642523047740593292|23|3",
+      "to": "hit:10900143|0|elements|0|2642523047740593292|18|3",
       "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10900143:sub:0->emits-hit->hit:10900143|0|elements|0|2642523047740593292|18|4",
+      "from": "control:10900143:sub:0",
+      "to": "hit:10900143|0|elements|0|2642523047740593292|18|4",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10900143:sub:0->emits-hit->hit:10900143|0|elements|0|2642523047740593292|23|5",
+      "from": "control:10900143:sub:0",
+      "to": "hit:10900143|0|elements|0|2642523047740593292|23|5",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10900143:sub:0->emits-hit->hit:10900143|0|elements|0|2642523047740593292|23|6",
+      "from": "control:10900143:sub:0",
+      "to": "hit:10900143|0|elements|0|2642523047740593292|23|6",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10900143:sub:0->target-state-gain->target-state:moyin-brilliant",
+      "from": "control:10900143:sub:0",
+      "to": "target-state:moyin-brilliant",
+      "relation": "target-state-gain",
+      "triggerFrame": 10,
+      "amount": 1,
+      "requiresHitElementId": null,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F"
     },
     {
       "edgeIdentity": "control:10900149->has-subskill->control:10900149:sub:0",
@@ -1870,11 +1996,36 @@
       "relation": "has-subskill"
     },
     {
+      "edgeIdentity": "control:null:sub:null->triggers-passive->actor:109001:passive:10900161",
+      "from": "control:null:sub:null",
+      "to": "actor:109001:passive:10900161",
+      "relation": "triggers-passive",
+      "triggerFrame": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900161.asset/MonoBehaviour/skill_control_10900161__2111014539659534776.json",
+      "status": "applied"
+    },
+    {
       "edgeIdentity": "switch-trigger:109001:on-enter->derives-star-carry->actor|109001|10900121|0|10900121|star-carry",
       "from": "switch-trigger:109001:on-enter",
       "to": "actor|109001|10900121|0|10900121|star-carry",
       "relation": "derives-star-carry",
       "status": "applied"
+    },
+    {
+      "edgeIdentity": "target-state:moyin-brilliant->conditions-hit-group->conditional-hit-group:moyin-a4-brilliant-thunder-overdrive",
+      "from": "target-state:moyin-brilliant",
+      "to": "conditional-hit-group:moyin-a4-brilliant-thunder-overdrive",
+      "relation": "conditions-hit-group",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant"
+    },
+    {
+      "edgeIdentity": "target-state:moyin-brilliant->conditions-hit-group->conditional-hit-group:moyin-chase-thunder-overdrive",
+      "from": "target-state:moyin-brilliant",
+      "to": "conditional-hit-group:moyin-chase-thunder-overdrive",
+      "relation": "conditions-hit-group",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
     }
   ],
   "exclusions": [
@@ -1889,13 +2040,6 @@
       "ownerId": 109001,
       "controlSkillId": 10900142,
       "sourceIdentity": "characters.items[id=109001].skillSlots[group=backup,skillId=10900142]",
-      "status": "not-applicable",
-      "exclusionReason": "backup-control-not-reachable-from-public-action-or-verified-runtime-edge"
-    },
-    {
-      "ownerId": 109001,
-      "controlSkillId": 10900143,
-      "sourceIdentity": "characters.items[id=109001].skillSlots[group=backup,skillId=10900143]",
       "status": "not-applicable",
       "exclusionReason": "backup-control-not-reachable-from-public-action-or-verified-runtime-edge"
     },
@@ -1943,25 +2087,32 @@
     }
   ],
   "summary": {
-    "nodeCount": 143,
-    "edgeCount": 130,
+    "nodeCount": 151,
+    "edgeCount": 141,
     "controlCount": 23,
-    "exclusionCount": 9,
+    "exclusionCount": 8,
     "nodeKindCounts": {
       "action-form": 10,
+      "conditional-hit-group": 2,
       "control": 23,
       "control-variant": 25,
-      "hit": 74,
+      "hit": 78,
+      "passive-listener": 1,
       "public-action": 10,
-      "switch-trigger": 1
+      "switch-trigger": 1,
+      "target-state": 1
     },
     "edgeRelationCounts": {
+      "conditions-hit-group": 2,
       "derives-star-carry": 1,
-      "emits-hit": 74,
+      "emits-hit": 78,
       "executes-control": 20,
       "has-form": 10,
-      "has-subskill": 25
+      "has-subskill": 25,
+      "materializes-conditional-hits": 2,
+      "target-state-gain": 2,
+      "triggers-passive": 1
     }
   },
-  "profileHash": "edd9f09962478168c4682a3c3408a2f7bd029d2f1d99c7264b304c9d61ee418a"
+  "profileHash": "31b0dfe9c052a01fb45daa30b729970f595eaa4e6d8d677eac68f2124e4d6ed4"
 }

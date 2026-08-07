@@ -2,7 +2,7 @@
 
 - 公开动作：10
 - 原始控制窗口：61
-- 语义转移：0/0
+- 语义转移：2/2
 - 仅索引未接入窗口：0
 - 玩法影响缺口：0
 
@@ -10,6 +10,8 @@
 
 | 来源 | 触发 | 输入窗 | 资源/印记 | 目标 | 语义 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
+| star-skill 10900112/sub0 | input-window | [40,77) | - | null/subnull | continue-chain | applied |
+| star-carry 10900121/sub0 | input-window | [108,145) | - | null/subnull | continue-chain | applied |
 
 ## 公开动作覆盖
 
@@ -19,9 +21,9 @@
 | charged-attack | 10900110/sub0 | 0/0 | 0 | 0 | not-applicable |
 | dodge-attack | 10900115/sub0 | 0/0 | 0 | 0 | not-applicable |
 | plunging-attack | 10900111/sub0 | 0/0 | 0 | 0 | not-applicable |
-| star-skill | 10900112/sub0 | 0/0 | 0 | 0 | not-applicable |
+| star-skill | 10900112/sub0 | 1/1 | 0 | 0 | applied |
 | star-combo | 10900126/sub0 | 0/0 | 0 | 0 | not-applicable |
 | ultimate | 10900113/sub0 | 0/0 | 0 | 0 | not-applicable |
-| star-carry | 10900121/sub0 | 0/0 | 0 | 0 | not-applicable |
+| star-carry | 10900121/sub0 | 1/1 | 0 | 0 | applied |
 | limit-counter | 10900125/sub0 | 0/0 | 0 | 0 | not-applicable |
 | perfect-parry | 10900127/sub0 | 0/0 | 0 | 0 | not-applicable |

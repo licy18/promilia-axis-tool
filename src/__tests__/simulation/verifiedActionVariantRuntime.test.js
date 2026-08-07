@@ -102,6 +102,49 @@ describe('verified action variant and special resource runtime', () => {
     });
   });
 
+  it('emits Moyin persistent passive 1 modifiers at battle start', () => {
+    const action = createActorAction({
+      id: 'moyin-a1',
+      characterId: 109001,
+      skillId: 10900101,
+      startMs: 0,
+    });
+    const runtime = runVariantRuntime({
+      actors: [action.actor],
+      actions: [action],
+      durationMs: 1000,
+    });
+    const passiveCommands = runtime.effectCommands.filter(command =>
+      String(command.id).startsWith('verified-passive|battle-start|')
+    );
+    expect(passiveCommands).toHaveLength(1);
+    expect(passiveCommands[0]).toMatchObject({
+      effectId: 'battle-element:109001316',
+      targetKind: 'actor',
+      targetId: 'actor-109001',
+      timeMs: 0,
+      durationMs: null,
+      stackMode: 'refresh',
+      sourceStatus: 'verified-passive-effect-generated',
+      appliedToCalculators: true,
+    });
+    expect(passiveCommands[0].modifiers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attributeId: 21,
+          bucket: 'dynamicExtra',
+          valueRaw: 5400,
+          propertyTags: [307],
+        }),
+        expect.objectContaining({
+          attributeId: 7,
+          bucket: 'dynamicExtra',
+          valueRaw: 300,
+        }),
+      ])
+    );
+  });
+
   it('uses Ruby source frames and preserves the explicit attack phase', () => {
     const ultimate = createActorAction({
       id: 'ruby-ultimate',

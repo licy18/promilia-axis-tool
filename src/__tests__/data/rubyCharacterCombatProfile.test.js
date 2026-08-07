@@ -854,15 +854,15 @@ describe('M10-B1 Ruby character combat profile', () => {
       rawRecordIdentities: ['actor:103002:skill:10300262'],
     });
     expect(unresolvedLedger.summary).toMatchObject({
-      semanticRecordCount: 429,
-      rawRecordCount: 437,
+      semanticRecordCount: 428,
+      rawRecordCount: 435,
       semanticStatusCounts: {
         'not-applicable': 22,
         'runtime-evidence-required': 4,
-        'static-evidence-gap': 403,
+        'static-evidence-gap': 402,
       },
       impactClassificationCounts: {
-        'gameplay-impacting': 132,
+        'gameplay-impacting': 131,
         'not-applicable': 22,
         'superseded-by-semantic-transition-closure': 253,
         'wrapper-or-duplicate': 22,
@@ -949,7 +949,7 @@ describe('M10-B1 Ruby character combat profile', () => {
           zeroDistanceRuntimeCapturesResolved: true,
           authoritativeGoldenPassed: true,
         },
-        sourceEvidenceGapCount: 132,
+        sourceEvidenceGapCount: 131,
         sourceEvidenceGapsRemainAuditable: true,
         realClientEvidenceCaptureCount: 4,
       },
@@ -957,7 +957,7 @@ describe('M10-B1 Ruby character combat profile', () => {
         status: 'incomplete',
         complete: false,
         runtimeCaptureCount: 4,
-        staticEvidenceGapCount: 128,
+        staticEvidenceGapCount: 127,
       },
     });
   });

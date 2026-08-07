@@ -32,17 +32,17 @@ describe('M9 public runtime coverage', () => {
 
   it('keeps every unresolved public action explicit and source-scoped', () => {
     expect(coverage.summary).toMatchObject({
-      runnableActionCount: 632,
+      runnableActionCount: 631,
       sourceAppliedActionCount: 459,
       sourceRuntimeDependentActionCount: 173,
       scenarioResolvedActionCount: 586,
       verifiedZeroActionCount: 0,
-      unresolvedActionCount: 13,
+      unresolvedActionCount: 14,
       unclassifiedUnresolvedActionCount: 0,
       unresolvedStatusCounts: {
         'runtime-and-evidence-gap': 9,
 
-        'static-evidence-gap': 4,
+        'static-evidence-gap': 5,
       },
     });
     expect(

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-unresolved-ledger",
   "ownerId": 101010,
-  "profileHash": "b1ddc354e467baf9b5092dcea9bf386e1517bbde6093a81a9ddd4ef3dd449897",
+  "profileHash": "f14a26f2433f5f6f150e3d6707716c58bc017242e858c4f6cef9556b10a52168",
   "summary": {
     "semanticRecordCount": 209,
     "rawRecordCount": 301,
@@ -217,32 +217,6 @@
         "effect:10101042|1|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
       ],
       "rawRecordCount": 6
-    },
-    {
-      "recordIdentity": "semantic-gap:0941808e1a31d759df46",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:-8630062226069243067:-1947040752449218730:272",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-8630062226069243067:-1947040752449218730:272",
-        "battle-effect:10101013:0:-8630062226069243067:-6717776740476971178:284",
-        "battle-effect:10101013:0:-8630062226069243067:4819247235648853846:278"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|272|0",
-        "effect:10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|278|2",
-        "effect:10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|284|1"
-      ],
-      "rawRecordCount": 3
     },
     {
       "recordIdentity": "semantic-gap:0c1f4c32f84e78f7cfc5",
@@ -906,30 +880,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:2c66cf621b41eeaba5df",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101042:1:-5107736885784262990:unresolved:unresolved",
-      "sourceIdentities": [
-        "battle-effect:10101042:1:-5107736885784262990:unresolved:unresolved"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101042|1|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:2ccbe990f029a11adf31",
       "ownerId": 101010,
       "sourceKind": "hidden-input-window",
@@ -1146,6 +1096,31 @@
       "metadata": null,
       "rawRecordIdentities": [
         "effect:10101010|0|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:34f16776b0c00a121e80",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101042:1:-5107736885784262990:-1521643003225462709:31",
+      "sourceIdentities": [
+        "battle-effect:10101042:1:-5107736885784262990:-1521643003225462709:31"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101042|1|bulletElements|3|element-101010210|element:-5107736885784262990|31|0"
       ],
       "rawRecordCount": 1
     },
@@ -1762,30 +1737,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:55829e8bb8f23c7dc2cd",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101042:0:-5107736885784262990:unresolved:unresolved",
-      "sourceIdentities": [
-        "battle-effect:10101042:0:-5107736885784262990:unresolved:unresolved"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101042|0|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:559a8e8834165936c634",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -1925,6 +1876,57 @@
       "rawRecordCount": 2
     },
     {
+      "recordIdentity": "semantic-gap:5c455f685320c7bd4920",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101042:0:-5107736885784262990:1082770784268020564:53",
+      "sourceIdentities": [
+        "battle-effect:10101042:0:-5107736885784262990:1082770784268020564:53"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101042|0|bulletElements|3|element-101010210|element:-5107736885784262990|53|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:5ddd5fc1fdf6694ec107",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "effect-trigger-frame-missing",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101042:1:-5107736885784262990:unresolved:unresolved",
+      "sourceIdentities": [
+        "battle-effect:10101042:1:-5107736885784262990:unresolved:unresolved"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101042|1|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
       "recordIdentity": "semantic-gap:5e2292a9d09fa33db690",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -1947,6 +1949,35 @@
         "effect:10101042|1|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0"
       ],
       "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:5e3abec261c9e2666743",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101013:0:-8630062226069243067:-1947040752449218730:272",
+      "sourceIdentities": [
+        "battle-effect:10101013:0:-8630062226069243067:-1947040752449218730:272",
+        "battle-effect:10101013:0:-8630062226069243067:-6717776740476971178:284",
+        "battle-effect:10101013:0:-8630062226069243067:4819247235648853846:278"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|272|0",
+        "effect:10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|278|2",
+        "effect:10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|284|1"
+      ],
+      "rawRecordCount": 3
     },
     {
       "recordIdentity": "semantic-gap:5fca62b0e080c05a66f5",
@@ -2494,6 +2525,31 @@
       "rawRecordCount": 1
     },
     {
+      "recordIdentity": "semantic-gap:7cbb3f5997b46eb32c95",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101021:0:-5107736885784262990:-7178919562725074255:109",
+      "sourceIdentities": [
+        "battle-effect:10101021:0:-5107736885784262990:-7178919562725074255:109"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101021|0|bulletElements|3|element-101010210|element:-5107736885784262990|109|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
       "recordIdentity": "semantic-gap:7cce8cd87bbf2ffd9a29",
       "ownerId": 101010,
       "sourceKind": "hidden-input-window",
@@ -2749,28 +2805,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:8977dbced0da8c24321e",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101049:1:-5107736885784262990:-1456802738572092772:96",
-      "sourceIdentities": [
-        "battle-effect:10101049:1:-5107736885784262990:-1456802738572092772:96"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101049|1|bulletElements|3|element-101010210|element:-5107736885784262990|96|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:8aa717d714c98156b788",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -2823,28 +2857,6 @@
         "effect:10101021|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
       ],
       "rawRecordCount": 6
-    },
-    {
-      "recordIdentity": "semantic-gap:8b449361d6939a508612",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101012:0:-8630062226069243067:3857329302774606883:50",
-      "sourceIdentities": [
-        "battle-effect:10101012:0:-8630062226069243067:3857329302774606883:50"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101012|0|elements|3|-8630062226069243067|element:-8630062226069243067|50|0"
-      ],
-      "rawRecordCount": 1
     },
     {
       "recordIdentity": "semantic-gap:8bc99cae289e6637fc2a",
@@ -2963,32 +2975,6 @@
         "actor:101010|control:10101013|sub:0->actor:101010|control:10101010|sub:2->-3332207699858072492->missing"
       ],
       "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:90c8c55e577ee1584b8c",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:-5107736885784262990:6463115307445065558:219",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-5107736885784262990:-6326209782415091882:225",
-        "battle-effect:10101013:0:-5107736885784262990:6463115307445065558:219",
-        "battle-effect:10101013:0:-5107736885784262990:962689896015664982:231"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|219|1",
-        "effect:10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|225|0",
-        "effect:10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|231|2"
-      ],
-      "rawRecordCount": 3
     },
     {
       "recordIdentity": "semantic-gap:92c6190a031cbf066403",
@@ -3173,6 +3159,35 @@
       "rawRecordCount": 1
     },
     {
+      "recordIdentity": "semantic-gap:9a6e45c0a616a75f7569",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101013:0:-5107736885784262990:6463115307445065558:219",
+      "sourceIdentities": [
+        "battle-effect:10101013:0:-5107736885784262990:-6326209782415091882:225",
+        "battle-effect:10101013:0:-5107736885784262990:6463115307445065558:219",
+        "battle-effect:10101013:0:-5107736885784262990:962689896015664982:231"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|219|1",
+        "effect:10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|225|0",
+        "effect:10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|231|2"
+      ],
+      "rawRecordCount": 3
+    },
+    {
       "recordIdentity": "semantic-gap:9aeaaea064c959755918",
       "ownerId": 101010,
       "sourceKind": "variant-edge",
@@ -3332,24 +3347,27 @@
       "rawRecordCount": 2
     },
     {
-      "recordIdentity": "semantic-gap:a1e8b471c07c8ff87ae7",
+      "recordIdentity": "semantic-gap:a22843f718fc30c197b8",
       "ownerId": 101010,
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "impactClassification": "gameplay-impacting",
       "reasons": [
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceIdentity": "battle-effect:10101021:0:-5107736885784262990:-7178919562725074255:109",
+      "sourceIdentity": "battle-effect:10101049:1:-5107736885784262990:-1456802738572092772:96",
       "sourceIdentities": [
-        "battle-effect:10101021:0:-5107736885784262990:-7178919562725074255:109"
+        "battle-effect:10101049:1:-5107736885784262990:-1456802738572092772:96"
       ],
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10101021|0|bulletElements|3|element-101010210|element:-5107736885784262990|109|0"
+        "effect:10101049|1|bulletElements|3|element-101010210|element:-5107736885784262990|96|0"
       ],
       "rawRecordCount": 1
     },
@@ -3544,6 +3562,32 @@
       "metadata": null,
       "rawRecordIdentities": [
         "support-control:10101049/sub0|control:10101049|sub:0|window:0-137:0|target:80102|sub:0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:b0f011ef4623ff0ab402",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "effect-trigger-frame-missing",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101049:1:-5107736885784262990:unresolved:unresolved",
+      "sourceIdentities": [
+        "battle-effect:10101049:1:-5107736885784262990:unresolved:unresolved"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101049|1|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0"
       ],
       "rawRecordCount": 1
     },
@@ -3814,6 +3858,31 @@
       "rawRecordCount": 1
     },
     {
+      "recordIdentity": "semantic-gap:bbd28a4e7f3db68dbe4d",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101012:0:-8630062226069243067:3857329302774606883:50",
+      "sourceIdentities": [
+        "battle-effect:10101012:0:-8630062226069243067:3857329302774606883:50"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101012|0|elements|3|-8630062226069243067|element:-8630062226069243067|50|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
       "recordIdentity": "semantic-gap:be6537e81428312e3da9",
       "ownerId": 101010,
       "sourceKind": "hit",
@@ -3864,15 +3933,17 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:c0333834b72a5c55443e",
+      "recordIdentity": "semantic-gap:bfda08c7049dfe5c7de9",
       "ownerId": 101010,
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "impactClassification": "gameplay-impacting",
       "reasons": [
-        "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101021:0:-5107736885784262990:unresolved:unresolved",
       "sourceIdentities": [
@@ -4051,6 +4122,32 @@
       "rawRecordCount": 1
     },
     {
+      "recordIdentity": "semantic-gap:cdf1bbaca3fb9da83182",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "effect-trigger-frame-missing",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101042:0:-5107736885784262990:unresolved:unresolved",
+      "sourceIdentities": [
+        "battle-effect:10101042:0:-5107736885784262990:unresolved:unresolved"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101042|0|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
       "recordIdentity": "semantic-gap:ce54a4748dfe6610f820",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -4095,30 +4192,6 @@
       "metadata": null,
       "rawRecordIdentities": [
         "actor:101010|control:10101010|sub:0->actor:101010|control:10101010|sub:1->-2323960829737228709->0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:cfb2fe27237d6a6bf292",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101049:1:-5107736885784262990:unresolved:unresolved",
-      "sourceIdentities": [
-        "battle-effect:10101049:1:-5107736885784262990:unresolved:unresolved"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101049|1|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0"
       ],
       "rawRecordCount": 1
     },
@@ -4413,28 +4486,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:de98f073831c2bc707c5",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101042:0:-5107736885784262990:1082770784268020564:53",
-      "sourceIdentities": [
-        "battle-effect:10101042:0:-5107736885784262990:1082770784268020564:53"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101042|0|bulletElements|3|element-101010210|element:-5107736885784262990|53|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:dee1b03a165e9711dd33",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -4663,28 +4714,6 @@
       "metadata": null,
       "rawRecordIdentities": [
         "actor:101010:perfect-parry:xiaoyu-perfect-parry-counter|control:10101049|sub:1|window:60-100:1|target:0|sub:0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:edde014402af214a3a94",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101042:1:-5107736885784262990:-1521643003225462709:31",
-      "sourceIdentities": [
-        "battle-effect:10101042:1:-5107736885784262990:-1521643003225462709:31"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101042|1|bulletElements|3|element-101010210|element:-5107736885784262990|31|0"
       ],
       "rawRecordCount": 1
     },
@@ -6451,7 +6480,10 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101012:0:-8630062226069243067:3857329302774606883:50",
       "referenceKind": null,
@@ -6575,7 +6607,10 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-8630062226069243067:-1947040752449218730:272",
       "referenceKind": null,
@@ -6589,7 +6624,10 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-8630062226069243067:4819247235648853846:278",
       "referenceKind": null,
@@ -6603,7 +6641,10 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-8630062226069243067:-6717776740476971178:284",
       "referenceKind": null,
@@ -7002,7 +7043,10 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-5107736885784262990:6463115307445065558:219",
       "referenceKind": null,
@@ -7016,7 +7060,10 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-5107736885784262990:-6326209782415091882:225",
       "referenceKind": null,
@@ -7030,7 +7077,10 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101013:0:-5107736885784262990:962689896015664982:231",
       "referenceKind": null,
@@ -7227,7 +7277,10 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101021:0:-5107736885784262990:-7178919562725074255:109",
       "referenceKind": null,
@@ -7426,9 +7479,11 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101021:0:-5107736885784262990:unresolved:unresolved",
       "referenceKind": null,
@@ -7753,7 +7808,10 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101042:0:-5107736885784262990:1082770784268020564:53",
       "referenceKind": null,
@@ -7952,9 +8010,11 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101042:0:-5107736885784262990:unresolved:unresolved",
       "referenceKind": null,
@@ -8137,7 +8197,10 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101042:1:-5107736885784262990:-1521643003225462709:31",
       "referenceKind": null,
@@ -8336,9 +8399,11 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101042:1:-5107736885784262990:unresolved:unresolved",
       "referenceKind": null,
@@ -8535,7 +8600,10 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101049:1:-5107736885784262990:-1456802738572092772:96",
       "referenceKind": null,
@@ -8734,9 +8802,11 @@
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "reasons": [
-        "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101049:1:-5107736885784262990:unresolved:unresolved",
       "referenceKind": null,

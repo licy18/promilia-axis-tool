@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "c6b01d4f83bf4523f2e0ad39648362dc01b5b74b74ed598e043f4f9344895909",
+  "sourcePackageHash": "50c2554bd569f1d59f55b889f9dfa22a57288b491e5177665f3daf704e59b34d",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "b1ddc354e467baf9b5092dcea9bf386e1517bbde6093a81a9ddd4ef3dd449897"
+      "profileHash": "f14a26f2433f5f6f150e3d6707716c58bc017242e858c4f6cef9556b10a52168"
     },
     {
       "ownerId": 103002,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "2530fbcc125ef825a5c72f4ab95c270b2afec395312584c0025eb8fe91a0924a"
+      "profileHash": "834284223172ae13c92b6eb0090f4a9d6dab57847886f48f3b4485644dc53975"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "648e40eb37028cf88a835a948a1c6f08f7a7776659285c43656d336c4c71332f"
+      "profileHash": "3da77125cc44cc403ad5754204c3095414c1197f019b8f02e9b6d7a8d3b6878d"
     },
     {
       "ownerId": 101007,
@@ -576,6 +576,8 @@
       "recommendedOrder": 13,
       "reviewBatch": "M10-C2",
       "mechanicFocus": [
+        "派生形态",
+        "被动监听",
         "切人/星携技"
       ],
       "estimatedWorkUnits": 1,
@@ -590,8 +592,8 @@
       "indexedControlCount": 14,
       "specialResourceCount": 0,
       "stateMachineCount": 0,
-      "derivedEdgeCount": 0,
-      "passiveCount": 0,
+      "derivedEdgeCount": 2,
+      "passiveCount": 1,
       "unnamedSecondaryPassive": {
         "skillId": 10900162,
         "status": "not-applicable",
@@ -606,10 +608,12 @@
       "staticEvidenceGapCount": 0,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
+        "derived-action",
+        "passive-listener",
         "switch-trigger"
       ],
       "profileIdentity": "actor:109001:character-combat-profile:v1",
-      "profileHash": "edd9f09962478168c4682a3c3408a2f7bd029d2f1d99c7264b304c9d61ee418a"
+      "profileHash": "31b0dfe9c052a01fb45daa30b729970f595eaa4e6d8d677eac68f2124e4d6ed4"
     },
     {
       "ownerId": 109002,

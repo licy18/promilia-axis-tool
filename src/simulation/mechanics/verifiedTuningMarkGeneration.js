@@ -21,6 +21,7 @@ export const VERIFIED_TUNING_MARK_GENERATION_CONTRACT_NAME =
 
 const FRAME_RATE = 60;
 const TUNING_EFFECT_SOURCE_STATUS = 'verified-tuning-mark-generated';
+export const VERIFIED_BATTLE_PROPERTY_TAG_OVERDRIVE = 307;
 
 export function createVerifiedTuningMarkGeneration({
   scenario = {},
@@ -1246,6 +1247,9 @@ function createCombatEvent({
       judgmentGroupIdentity:
         descriptor.effect?.tuningOverlimit?.judgmentGroupIdentity ?? null,
       selectedPriorityCandidate: descriptor.selectedPriorityCandidate ?? null,
+      propertyTags: kind.startsWith('overlimit-')
+        ? [VERIFIED_BATTLE_PROPERTY_TAG_OVERDRIVE]
+        : [],
     },
     sourceIdentity: template?.sourceIdentity ?? profile.sourceIdentity,
     appliedToCalculators: true,

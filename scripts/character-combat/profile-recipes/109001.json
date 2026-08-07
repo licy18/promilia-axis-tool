@@ -50,12 +50,165 @@
     "publicActionDeclarations": [],
     "publicActionForms": [],
     "attackInputChains": [],
-    "variantWindowBindings": [],
-    "actionEffectBindings": [],
+    "variantWindowBindings": [
+      {
+        "bindingIdentity": "moyin-star-skill-chase",
+        "evidenceKind": "control-transition-window",
+        "sourceControlSkillId": 10900112,
+        "sourceSubSkillIndex": 0,
+        "targetControlSkillId": 10900143,
+        "targetSubSkillIndex": 0,
+        "inputWindow": {
+          "startFrame": 40,
+          "endFrame": 77
+        },
+        "inputCommand": "normal-attack",
+        "relationType": "input-derived",
+        "sourceIdentity": "skill_control_10900112.asset/MonoBehaviour/MonoBehaviour_1696984098510319773__1696984098510319773.json#chase-input-window[40,77)->10900143/sub0"
+      },
+      {
+        "bindingIdentity": "moyin-star-carry-chase",
+        "evidenceKind": "control-transition-window",
+        "sourceControlSkillId": 10900121,
+        "sourceSubSkillIndex": 0,
+        "targetControlSkillId": 10900143,
+        "targetSubSkillIndex": 0,
+        "inputWindow": {
+          "startFrame": 108,
+          "endFrame": 145
+        },
+        "inputCommand": "normal-attack",
+        "relationType": "input-derived",
+        "sourceIdentity": "skill_control_10900121.asset/MonoBehaviour/MonoBehaviour_2966879362501739099__2966879362501739099.json#chase-input-window[108,145)->10900143/sub0"
+      }
+    ],
+    "targetStateProfiles": [
+      {
+        "stateIdentity": "moyin-brilliant",
+        "name": "璀璨",
+        "targetKind": "self",
+        "elementId": 109001270,
+        "capacityElementId": 109001270,
+        "expectedDurationMs": 8000,
+        "expectedMaxStacks": 1,
+        "sourceIdentity": "Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1"
+      }
+    ],
+    "targetStateTransactions": [
+      {
+        "transactionIdentity": "moyin-brilliant-limit-counter",
+        "stateIdentity": "moyin-brilliant",
+        "controlSkillId": 10900125,
+        "subSkillIndex": 0,
+        "triggerFrame": 31,
+        "amount": 1,
+        "sourceIdentity": "skill_control_10900125.asset/MonoBehaviour/MonoBehaviour_7308935574334620133__7308935574334620133.json#brilliant-buff@31F"
+      },
+      {
+        "transactionIdentity": "moyin-brilliant-chase",
+        "stateIdentity": "moyin-brilliant",
+        "controlSkillId": 10900143,
+        "subSkillIndex": 0,
+        "triggerFrame": 10,
+        "amount": 1,
+        "sourceIdentity": "skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F"
+      }
+    ],
+    "actionEffectBindings": [
+      {
+        "bindingIdentity": "moyin-a5-thunder-mark",
+        "controlSkillId": 10900105,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 250,
+        "triggerFrame": 47,
+        "frameCount": 1,
+        "tuningMarkProfileKey": "thunder",
+        "stackDelta": 2,
+        "sourceIdentity": "skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2"
+      }
+    ],
     "actionHitBindings": [],
+    "conditionalHitGroups": [
+      {
+        "groupIdentity": "moyin-a4-brilliant-thunder-overdrive",
+        "controlSkillId": 10900104,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 10900104,
+        "sourceSubSkillIndex": 0,
+        "elementId": 109001135,
+        "triggerFrames": [
+          29
+        ],
+        "decisionFrame": 29,
+        "stateIdentity": "moyin-brilliant",
+        "minimumStacks": 1,
+        "tuningMarkProfileKey": "thunder",
+        "tuningMarkStackDelta": 1,
+        "consumeBands": [
+          {
+            "sourceElementId": 109001362,
+            "amount": 1,
+            "minimumStacks": 1,
+            "sourceIdentity": "Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant"
+          }
+        ],
+        "semanticName": "普攻四段·璀璨超限",
+        "sourceIdentity": "skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F"
+      },
+      {
+        "groupIdentity": "moyin-chase-thunder-overdrive",
+        "controlSkillId": 10900143,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 10900143,
+        "sourceSubSkillIndex": 0,
+        "elementId": 109001302,
+        "triggerFrames": [
+          13,
+          18,
+          23
+        ],
+        "decisionFrame": 13,
+        "stateIdentity": "moyin-brilliant",
+        "minimumStacks": 1,
+        "tuningMarkProfileKey": "thunder",
+        "tuningMarkStackDelta": 1,
+        "consumeBands": [
+          {
+            "sourceElementId": 109001359,
+            "amount": 1,
+            "minimumStacks": 1,
+            "sourceIdentity": "Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
+          }
+        ],
+        "semanticName": "二段追击·超限",
+        "sourceIdentity": "skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F"
+      }
+    ],
     "specialResources": [],
     "thresholdTransitions": [],
-    "passiveEffects": []
+    "passiveEffects": [
+      {
+        "skillId": 10900161,
+        "runtimeGenerationMode": "persistent-property-runtime",
+        "sourceElementIds": [
+          109001316,
+          109001296
+        ],
+        "modifiers": [
+          {
+            "attributeId": 7,
+            "bucket": "dynamicExtra",
+            "valueRaw": 300,
+            "calculateType": 1,
+            "functionId": 5,
+            "propertyTags": [],
+            "sourceIdentity": "hero-module:109001#skill:10900161#level.labels=暴击率/values=3%|Battle/Element/ast_109001296.asset#被动1加暴击 attributeID=7 calculateType=1 functionParams[0]=300"
+          }
+        ],
+        "sourceIdentity": "hero-module:109001#skill:10900161#description=末音造成的超限伤害增加54%|Battle/Element/ast_109001316.asset#新被动overdrive伤害提升 attributeID=21 defaultPropertyTags[307]|Battle/Element/ast_109001296.asset#被动1加暴击"
+      }
+    ]
   },
   "unresolvedRecords": [],
   "goldenScenario": {

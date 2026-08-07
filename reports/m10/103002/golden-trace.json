@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "c6b01d4f83bf4523f2e0ad39648362dc01b5b74b74ed598e043f4f9344895909",
+  "sourcePackageHash": "50c2554bd569f1d59f55b889f9dfa22a57288b491e5177665f3daf704e59b34d",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "52c984beb3c57f67",
-    "traceHash": "8782ea9515e1c0c0",
-    "dataHash": "322425296f7c3841",
+    "inputHash": "77d721cd50cf0333",
+    "traceHash": "31444252f1968667",
+    "dataHash": "7d94e0dca51d0b4d",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -1241,7 +1241,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|consume|41400|29",
+          "eventIdentity": "tuning-mark|150|consume|41400|31",
           "actionId": "ruby-ultimate",
           "frame": 2484,
           "kind": "consume",
@@ -1253,7 +1253,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|65900|67",
+          "eventIdentity": "tuning-mark|250|acquire|65900|69",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 3954,
           "kind": "acquire",
@@ -1277,7 +1277,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|expire|85900|80",
+          "eventIdentity": "tuning-mark|250|expire|85900|82",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 5154,
           "kind": "expire",
@@ -1302,7 +1302,7 @@
       "targetStateTrace": [],
       "conditionalHitGroups": [],
       "targetStateSummary": {
-        "profileCount": 1,
+        "profileCount": 2,
         "eventCount": 0,
         "appliedGroupCount": 0,
         "skippedGroupCount": 0,
@@ -4366,7 +4366,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|consume|41400|29",
+          "eventIdentity": "tuning-mark|150|consume|41400|31",
           "actionId": "ruby-ultimate",
           "frame": 2484,
           "kind": "consume",
@@ -4378,7 +4378,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|65900|67",
+          "eventIdentity": "tuning-mark|250|acquire|65900|69",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 3954,
           "kind": "acquire",
@@ -4402,7 +4402,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|expire|85900|80",
+          "eventIdentity": "tuning-mark|250|expire|85900|82",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 5154,
           "kind": "expire",
@@ -5177,7 +5177,7 @@
         }
       ]
     },
-    "summaryHash": "27925aca23a0a7822ac181d5eabd39192b04872f27c1c7eb7feacfdc1e7027de"
+    "summaryHash": "849fbb4800dac387a62401deffd2d036083ad814bce336e610a730244b166dfe"
   },
   "expected": {
     "exact": {
@@ -6267,6 +6267,6 @@
       }
     ]
   },
-  "replayHash": "f1aa2b155e4eec77ad102b0959e3b85042ac52bcc258276d7af96196c24fd99f",
-  "profileHash": "2530fbcc125ef825a5c72f4ab95c270b2afec395312584c0025eb8fe91a0924a"
+  "replayHash": "749b28bb496c557e16d3c5cbcad1d5ee81a1c975f798a20629f42fa95c938587",
+  "profileHash": "834284223172ae13c92b6eb0090f4a9d6dab57847886f48f3b4485644dc53975"
 }

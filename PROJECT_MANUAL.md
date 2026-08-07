@@ -1952,6 +1952,8 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 
 ### M12-B3-E20-2-109001 已执行：末音进入验收管线（2026-08-07）
 
+**E20 验收规则（2026-08-07 用户确认）**：E20 阶段每个角色都必须把该角色的**全部机制完全拆解并还原**后才能验收（runtime-integrated/visually-accepted/optimization-ready 任一签收均以此为前提），不允许只做基础动作/命中闭合后放行。用户明确“只是随便举了几个例子”，后续需自行补齐所有机制，包括但不限于：璀璨状态及其普攻变体、二段星鸣追击、大招重置星鸣充能冷却、大招消耗印记造成超限伤害、印记/残响注入与消耗、星决蓄能、被动联动等。当前 109001 仅为基础闭合（`runtime-integrated` 为中间状态），**不得作为验收结论**，必须完成机制拆解还原后再走产品签收。
+
 首个 E20-2 角色：109001 末音。目标四段 `extracted -> runtime-integrated -> visually-accepted -> optimization-ready`，当前完成到 **runtime-integrated**（视觉签收 pending，优化就绪待后续时序/账本闭合）。
 
 实施内容：
@@ -1964,7 +1966,7 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 
 验证：全套 Vitest 1430 条（并行负载下 7 条超时/worker 崩溃，单独全部通过，含两个已知 process-heavy 用例）；optimization-qualification / character-acceptance / verified-combat / workbench-data / action-status / applied-source-bindings / kibo-headless / bundle 审计 clean；production build 通过。
 
-109001 剩余阻断（记录在案，不伪造放行）：
+109001 剩余阻断（记录在案，不伪造放行；E20 规则下属必做项）：
 
 - Workbench 动作时序：星鸣技当前为未验证占位（2000ms 兜底/60f 输入窗口），charged/dodge 等动作显示“真实动作帧等待 asset 或运行时捕获补充”——需后续按 103002 模式逐窗验证（`optimization-ready` 前必须闭合）。
 - 验收矩阵 210 项当前通过 4 项、source gap 294、blocking ledger 需清零后才到 `optimization-ready`。
@@ -1979,6 +1981,18 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 - `projectResolvedOptimizationCultivationActor`：`character.starGiftNodeSkillLevels` 进入 `appliedDimensions`，`unresolvedDimensions` 移除该族；`actorConfigPatch.cultivation.starGiftNodeSkillLevels` 透出（`normalizeWorkbenchCultivation` 同步保留）。
 - Machine Axis：`prepare()` 按队伍槽把星赐加成解析为 skillId→level bonus（用完整 `characters.json.skillSlots` 映射，seed 投影无槽位信息），在 actionDraft 构建时 `level = intent.level + bonus`（如 109001 普攻 +7、星鸣技 +5、星决技 +4、星携技 +3；101010 普攻 +7）。仅带 cultivation profile 的正式路径生效，既有 fixture（无培养合同）哈希不变。
 - 验证：`heroRankAdjacentRankEvidence.test.js` 新增映射与 Machine Axis 等级断言（109001 星鸣技 10900112 level=1+5）；qualification 目录 103 测试 + machineAxisService 全过；全套 Vitest 1435/1436（仅已知 process-heavy 并行超时，单独全过）；production-import 审计 clean。资格缺口仍 35（`strict-character-cultivation-runtime-partial` 11 条剩余全部来自 hero_rank 两族证据边界），`m12cLocked` 保持锁定。
+
+### M12-B3-E20-2-109001 R3 已完成：被动1 持久化 + Overdrive tag 307 运行时闭合（2026-08-07）
+
+在 E20 全量机制矩阵 v1（`work/m12-b3/e20-2-109001/STATE.md`）基础上，先闭合两个易项：
+
+- **被动1（10900161 哈库茵之耀）**：新增 `persistent-property-runtime` 被动编译模式，被动控制 10900161@0F 直接注入的元素 109001316 编译为 attr21 +5400（defaultPropertyTags[307] = Overdrive，超限伤害+54%）；hero-module 等级文案 + ast_109001296 补暴击率+3%（attr7 +300）。variant runtime 战前（timeMs=0）生成持久效果命令（`verified-passive|battle-start|…`）。
+- **Overdrive 命中 tag 307**：`verifiedTuningMarkGeneration` 为 overlimit-* 事件写入 `propertyTags=[307]`；`verifiedDamageEventGeneration` 取“事件 tags ∪ 技能 tag”并集（保留 302/303 等技能 tag，避免破坏 10123/10150 灵魂加成）；超限结算按 tags 应用被动乘区。
+- **109001 暴击阈值 500→800 适配**：被动暴击使临界矩阵 boundary 变化，fixture sampled roll 改 799/800，`inspectCriticalMatrix` 按 owner 边界校验。
+- **哈希/期望全量重基线**：包 hash `c87fb71b…`、FROZEN `e7b18d90…`；9 个 fixture、m11 integrated baseline、cycle/dynamic-loadout acceptance report、migration/pipeline/ruby/han/tuning/coverage/package/workbench/canonicalTraceView 单测期望同步。
+- 验证：新增 2 组单测（战前被动命令、超限 tag 307 并集）；全套 Vitest 1443/1445（仅已知 process-heavy 并行超时，单独通过）；11 项审计 clean；109001 保持 `runtime-integrated`（4/4），资格缺口 22，`m12cLocked` true。
+
+下一阶段任务（按依赖顺序）：星决蓄能资源+被动2（璀璨下普攻3/5/重击+1）→ 重击检测回能 → 大招减CD+星鸣 2 充能 → E技能/入场检测条件门控 → 璀璨普攻变体/残响曲线 → golden 全覆盖。每完成一个子阶段即更新本手册并单独提交。
 
 ### M12-B3-E18 sub3 已完成：500213 SpacialProperty 按战斗属性闭合，目标 signature 行清零（2026-08-07）
 

@@ -684,6 +684,24 @@ describe('verified tuning mark runtime', () => {
     const directSp = result.verifiedCombatRuntime.resourceEvents.find(
       event => event.payload.reason === 'tuning-overlimit-direct-sp'
     );
+    const overlimitEvents =
+      result.verifiedTuningMarkGeneration.combatEvents.filter(
+        event =>
+          event.kind === 'overlimit-damage' && event.profile.key === 'wind'
+      );
+    const overlimitTransactions = (
+      result.verifiedDamageEventGeneration?.transactions ?? []
+    ).filter(
+      transaction =>
+        transaction.sourceKind === 'tuning-damage' &&
+        transaction.tuningEvent?.kind === 'overlimit-damage' &&
+        Number(transaction.tuningEvent?.profile?.markId) === Number(wind.markId)
+    );
+    const passiveCommands = result.verifiedActionVariantRuntime.effectCommands.filter(
+      command =>
+        String(command.id).startsWith('verified-passive|battle-start|') &&
+        command.sourceActorId === 'actor-109001'
+    );
 
     expect(consume).toMatchObject({
       timeMs: 3050,
@@ -691,6 +709,25 @@ describe('verified tuning mark runtime', () => {
       delta: -3,
       after: 0,
     });
+    expect(overlimitEvents.length).toBeGreaterThan(0);
+    expect(overlimitEvents.every(event => event.eventContext.propertyTags)).toBe(
+      true
+    );
+    expect(overlimitEvents[0].eventContext.propertyTags).toEqual([307]);
+    expect(overlimitTransactions.length).toBeGreaterThan(0);
+    expect(
+      overlimitTransactions[0].beforeEvent.eventContext.propertyTags
+    ).toEqual(expect.arrayContaining([307]));
+    expect(passiveCommands).toHaveLength(1);
+    expect(passiveCommands[0].modifiers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attributeId: 21,
+          valueRaw: 5400,
+          propertyTags: [307],
+        }),
+      ])
+    );
     expect(directSp.payload).toMatchObject({
       valueUnit: 'absolute-sp-points',
       change: 6,

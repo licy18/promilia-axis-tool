@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b3-e20-2:109001:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "c6b01d4f83bf4523f2e0ad39648362dc01b5b74b74ed598e043f4f9344895909",
+  "sourcePackageHash": "50c2554bd569f1d59f55b889f9dfa22a57288b491e5177665f3daf704e59b34d",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "5f3d003f3de9cea3",
-    "traceHash": "ab105f43717e0eb7",
-    "dataHash": "15afdc4d6315dcc8",
+    "inputHash": "ee6be576a97d0877",
+    "traceHash": "e3190ba2b8ab7fcf",
+    "dataHash": "d28cdc515c1c74e4",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -447,7 +447,7 @@
       "targetStateTrace": [],
       "conditionalHitGroups": [],
       "targetStateSummary": {
-        "profileCount": 1,
+        "profileCount": 2,
         "eventCount": 0,
         "appliedGroupCount": 0,
         "skippedGroupCount": 0,
@@ -474,17 +474,55 @@
       "burstTransitions": []
     },
     "dynamicProperties": {
-      "ownerSources": [],
+      "ownerSources": [
+        {
+          "attributeId": 7,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 300,
+          "effectIds": [
+            "battle-element:109001316"
+          ]
+        }
+      ],
       "byActionId": {
-        "moyin-normal-a1": [],
-        "moyin-star-skill": []
+        "moyin-normal-a1": [
+          {
+            "attributeId": 7,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 300,
+            "effectIds": [
+              "battle-element:109001316"
+            ]
+          }
+        ],
+        "moyin-star-skill": [
+          {
+            "attributeId": 7,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 300,
+            "effectIds": [
+              "battle-element:109001316"
+            ]
+          }
+        ]
       },
       "effectIdsByActionId": {
-        "moyin-normal-a1": [],
-        "moyin-star-skill": []
+        "moyin-normal-a1": [
+          "battle-element:109001316"
+        ],
+        "moyin-star-skill": [
+          "battle-element:109001316"
+        ]
       },
-      "maxPercentRawByAttributeId": {},
-      "maxExtraRawByAttributeId": {}
+      "maxPercentRawByAttributeId": {
+        "7": 0
+      },
+      "maxExtraRawByAttributeId": {
+        "7": 300
+      }
     },
     "comparison": {
       "compareActionKey": "",
@@ -493,8 +531,28 @@
       "primaryDamage": 0,
       "baselineDamage": 0,
       "damageDelta": 0,
-      "primaryDynamicPropertySources": [],
-      "baselineDynamicPropertySources": [],
+      "primaryDynamicPropertySources": [
+        {
+          "attributeId": 7,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 300,
+          "effectIds": [
+            "battle-element:109001316"
+          ]
+        }
+      ],
+      "baselineDynamicPropertySources": [
+        {
+          "attributeId": 7,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 300,
+          "effectIds": [
+            "battle-element:109001316"
+          ]
+        }
+      ],
       "primaryEffectFormulaValuesById": {},
       "baselineEffectFormulaValuesById": {},
       "baselineReplayHash": "2008f40855e6b0286e79f17b0b7d84f17852c10ad44652a9b34cfdbb0d55fa97"
@@ -758,9 +816,51 @@
       "tuningMarks": [],
       "targetStates": [],
       "conditionalHitGroups": [],
-      "effects": []
+      "effects": [
+        {
+          "eventId": "actor/actor-109001/battle-element:109001316/verified-calculator|EFFECT_APPLIED|0|1",
+          "actionId": null,
+          "frame": 0,
+          "effectId": "battle-element:109001316",
+          "runtimeEffectId": "battle-element:109001316",
+          "sourceElementId": null,
+          "effectName": "哈库茵之耀",
+          "targetKind": "actor",
+          "targetId": "actor-109001",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-109001",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "battle-element:109001316|unknown-action|0",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 21,
+              "bucket": "dynamicExtra",
+              "valueRaw": 5400,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 300,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        }
+      ]
     },
-    "summaryHash": "51ccd2876bda25bbd1e195d19ec7d4afc9a87d3823ed8a25cfff99db8ada9b93"
+    "summaryHash": "b35199f423cd1208e01750b2efcc43fcfb67d04f0b0e0b9b7fe8a42dc3eeeca1"
   },
   "expected": {
     "exact": {
@@ -800,6 +900,6 @@
       }
     ]
   },
-  "replayHash": "908bbceba5d97c8e20244594bfec2ef9103d2fee0165f2ee7b53aa50e1b6ec3d",
-  "profileHash": "edd9f09962478168c4682a3c3408a2f7bd029d2f1d99c7264b304c9d61ee418a"
+  "replayHash": "120c211181f084fffae936940dd9f47c0159e5cc82f73a77859844a754deb3ec",
+  "profileHash": "31b0dfe9c052a01fb45daa30b729970f595eaa4e6d8d677eac68f2124e4d6ed4"
 }

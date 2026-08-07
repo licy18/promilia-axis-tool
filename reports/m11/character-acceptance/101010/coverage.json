@@ -16,6 +16,21 @@
       "edgeIdentity": "coverage-edge:045073c352bd4f10"
     },
     {
+      "requirementIdentity": "contract:action-form:actor:101010:charged-attack:xiaoyu-enhanced-special-charged",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-enhanced-special-charged",
+      "selector": {
+        "controlSkillId": 10101042,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 1
+      },
+      "assertionHash": "6f9c863c03c3bbf1",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:064cbd3acdb9d713"
+    },
+    {
       "requirementIdentity": "contract:hit:10101013|0|elements|2|-6429706496330270988|151|3",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "trace-hit:machine-hit:m11-d-101010-visual-acceptance:7",
@@ -27,21 +42,6 @@
       "traceProjectionHash": "c53458c12b0717f3",
       "status": "verified",
       "edgeIdentity": "coverage-edge:06f6c476374cb88f"
-    },
-    {
-      "requirementIdentity": "contract:action-form:xiaoyu-burst-three-inputs:segment:1",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-burst-a1",
-      "selector": {
-        "controlSkillId": 10101001,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 1
-      },
-      "assertionHash": "665326a3f21fb872",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:07db3954a6f394e5"
     },
     {
       "requirementIdentity": "protocol:101010:critical-per-hit-modes",
@@ -85,6 +85,36 @@
       "edgeIdentity": "coverage-edge:0abfe2c2b9bea4cd"
     },
     {
+      "requirementIdentity": "contract:action-form:actor|101010|10101013|0|10101013|ultimate:default",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-refresh",
+      "selector": {
+        "controlSkillId": 10101013,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "160ea6eb08a92172",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:0d63cbc2b07a901c"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|101010|10101001|2|10101010|charged-attack",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-charged",
+      "selector": {
+        "controlSkillId": 10101010,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "394d2f81d232e438",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:0f90fc313d684416"
+    },
+    {
       "requirementIdentity": "protocol:101010:critical-miss-coexistence",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "scenario-fact:critical:missSuppressesHit",
@@ -99,19 +129,17 @@
       "edgeIdentity": "coverage-edge:10c86b5e0b3b7be1"
     },
     {
-      "requirementIdentity": "contract:action-form:actor|101010|10101021|1|10101025|limit-counter:default",
+      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-limit-counter",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:6",
       "selector": {
-        "controlSkillId": 10101025,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
       },
-      "assertionHash": "3abbc043539f185f",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "eff2a4776fb90a41",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:12c834318e8f3782"
+      "edgeIdentity": "coverage-edge:12675d2643c9c5e0"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
@@ -142,18 +170,73 @@
       "edgeIdentity": "coverage-edge:161b1b266c8f873f"
     },
     {
-      "requirementIdentity": "protocol:101010:normal-trigger-positive",
+      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "scenario-fact:normal-trigger-positive",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:6",
       "selector": {
-        "expectedValue": true,
-        "factIdentity": "normal-trigger-positive",
-        "kind": "scenario-fact"
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
       },
-      "assertionHash": "21786c93092c79ff",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "eff2a4776fb90a41",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:239bd0b50d19c8d4"
+      "edgeIdentity": "coverage-edge:1807ee0ab9585f0f"
+    },
+    {
+      "requirementIdentity": "contract:action-form:xiaoyu-burst-three-inputs:segment:3",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-burst-a3",
+      "selector": {
+        "controlSkillId": 10101005,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 1
+      },
+      "assertionHash": "7f19fb995696dab4",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:1862225b87351207"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:4",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
+      },
+      "assertionHash": "af7385b80853a020",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:1cd091b953bdd6bc"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:3",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
+      },
+      "assertionHash": "c038437ccf88d85e",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:214303da2efa8dca"
+    },
+    {
+      "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:1",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a1",
+      "selector": {
+        "controlSkillId": 10101001,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "a39abdaf59926a8c",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:24279ad224375340"
     },
     {
       "requirementIdentity": "protocol:101010:hit-landed-and-miss",
@@ -183,6 +266,19 @@
       "edgeIdentity": "coverage-edge:29591db8c5362882"
     },
     {
+      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:2",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
+      },
+      "assertionHash": "afd5379e5ad0180d",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:2bd24e90b692ecd5"
+    },
+    {
       "requirementIdentity": "contract:hit:10101013|0|elements|16|59197623417195618|284|12",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "trace-hit:machine-hit:m11-d-101010-visual-acceptance:16",
@@ -207,6 +303,19 @@
       "traceProjectionHash": "c53458c12b0717f3",
       "status": "verified",
       "edgeIdentity": "coverage-edge:2d3a3d7cd40ebbee"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:0",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
+      },
+      "assertionHash": "32ce81f1319acafd",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:2ec15769f1c5f74f"
     },
     {
       "requirementIdentity": "contract:public-action:actor|101010|10101013|0|10101013|ultimate",
@@ -250,58 +359,19 @@
       "edgeIdentity": "coverage-edge:34e79a48822ba0ab"
     },
     {
-      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
+      "requirementIdentity": "contract:action-form:xiaoyu-burst-three-inputs:segment:2",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:5",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-burst-a2",
       "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
-      },
-      "assertionHash": "d797656387134886",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:37a07095c2d14242"
-    },
-    {
-      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:7",
-      "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
-      },
-      "assertionHash": "9d4f6026fb09b136",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:3803dcfe40c1d279"
-    },
-    {
-      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:6",
-      "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
-      },
-      "assertionHash": "eff2a4776fb90a41",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:39f6c10641c8b1f6"
-    },
-    {
-      "requirementIdentity": "contract:action-form:actor:101010:charged-attack:xiaoyu-special-charged",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-special-charged",
-      "selector": {
-        "controlSkillId": 10101042,
+        "controlSkillId": 10101004,
         "kind": "action-form",
         "ownerId": 101010,
-        "subSkillIndex": 0
+        "subSkillIndex": 1
       },
-      "assertionHash": "76237875cd90f9e3",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "fdd4349418a64706",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:3b6b8e1ec924c784"
+      "edgeIdentity": "coverage-edge:3a56665b2c9f2355"
     },
     {
       "requirementIdentity": "protocol:101010:save-import-replay",
@@ -318,34 +388,32 @@
       "edgeIdentity": "coverage-edge:3c86baa2c9b78a81"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101012|0|10101012|star-skill",
+      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-star-skill",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:8",
       "selector": {
-        "controlSkillId": 10101012,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
       },
-      "assertionHash": "ecccb8628c3c8861",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "b00bc96197aed4e3",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:3d35e22474b5de88"
+      "edgeIdentity": "coverage-edge:3e5b5964a5f78a08"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101001|2|10101010|charged-attack",
+      "requirementIdentity": "contract:public-action:actor|101010|10101021|0|10101021|star-carry",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-charged",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:switch-back-to-xiaoyu--on-enter--actor-101010--star-carry",
       "selector": {
-        "controlSkillId": 10101010,
+        "controlSkillId": 10101021,
         "kind": "action-form",
         "ownerId": 101010,
         "subSkillIndex": 0
       },
-      "assertionHash": "394d2f81d232e438",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "d0f549770332d265",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:47c3746afc1bddcc"
+      "edgeIdentity": "coverage-edge:46825f2ddf381dd3"
     },
     {
       "requirementIdentity": "protocol:101010:critical-integer-threshold-boundary",
@@ -362,30 +430,45 @@
       "edgeIdentity": "coverage-edge:4826cd71f6b2d88d"
     },
     {
-      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
+      "requirementIdentity": "contract:action-form:xiaoyu-burst-three-inputs:segment:1",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:2",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-burst-a1",
       "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
+        "controlSkillId": 10101001,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 1
       },
-      "assertionHash": "afd5379e5ad0180d",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "2ff798b6ee1d3cda",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:4a5145ad69ec23e0"
+      "edgeIdentity": "coverage-edge:4973faab28fefdeb"
     },
     {
       "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:1",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:0",
       "selector": {
         "kind": "resource",
         "resourceIdentity": "actor:101010:element:101010115"
       },
-      "assertionHash": "eb9bbeed1ea431ef",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "32ce81f1319acafd",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:4d2ba46ce912329e"
+      "edgeIdentity": "coverage-edge:4ad589d66f588b20"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:5",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
+      },
+      "assertionHash": "d797656387134886",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:4d73932ac41317a3"
     },
     {
       "requirementIdentity": "contract:hit:10101001|0|elements|0|-2245783402811878012|12|1",
@@ -403,30 +486,15 @@
     {
       "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:4",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:7",
       "selector": {
         "kind": "resource",
         "resourceIdentity": "actor:101010:element:101010115"
       },
-      "assertionHash": "af7385b80853a020",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "9d4f6026fb09b136",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:53961d6f01603d22"
-    },
-    {
-      "requirementIdentity": "contract:action-form:actor|101010|10101013|0|10101013|ultimate:default",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-refresh",
-      "selector": {
-        "controlSkillId": 10101013,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "160ea6eb08a92172",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:578380bc82b20682"
+      "edgeIdentity": "coverage-edge:537bc026a57946e8"
     },
     {
       "requirementIdentity": "contract:action-form:actor|101010|10101013|0|10101013|ultimate:default",
@@ -458,21 +526,6 @@
       "edgeIdentity": "coverage-edge:5c60ae0e31fe5272"
     },
     {
-      "requirementIdentity": "contract:action-form:actor:101010:star-carry:xiaoyu-star-carry",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:switch-back-to-xiaoyu--on-enter--actor-101010--star-carry",
-      "selector": {
-        "controlSkillId": 10101021,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "d0f549770332d265",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:5d0313540ec43edc"
-    },
-    {
       "requirementIdentity": "contract:hit:10101013|0|elements|16|59197623417195618|272|10",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "trace-hit:machine-hit:m11-d-101010-visual-acceptance:14",
@@ -484,19 +537,6 @@
       "traceProjectionHash": "c53458c12b0717f3",
       "status": "verified",
       "edgeIdentity": "coverage-edge:5ed1d59b659bfcb6"
-    },
-    {
-      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:5",
-      "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
-      },
-      "assertionHash": "d797656387134886",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:5f09729879ddb195"
     },
     {
       "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:1",
@@ -527,45 +567,47 @@
       "edgeIdentity": "coverage-edge:60165992e56be839"
     },
     {
+      "requirementIdentity": "contract:action-form:xiaoyu-burst-three-inputs:segment:1",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-burst-a1",
+      "selector": {
+        "controlSkillId": 10101001,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 1
+      },
+      "assertionHash": "665326a3f21fb872",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:63bf23bc1fe8b3d3"
+    },
+    {
       "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:8",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:4",
       "selector": {
         "kind": "resource",
         "resourceIdentity": "actor:101010:element:101010115"
       },
-      "assertionHash": "b00bc96197aed4e3",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "af7385b80853a020",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:6141a80fd152a819"
+      "edgeIdentity": "coverage-edge:64a7df3019ad1683"
     },
     {
-      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
+      "requirementIdentity": "contract:action-form:actor:101010:star-carry:xiaoyu-star-carry",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:0",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:switch-back-to-xiaoyu--on-enter--actor-101010--star-carry",
       "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
-      },
-      "assertionHash": "32ce81f1319acafd",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:65662613767e9ab6"
-    },
-    {
-      "requirementIdentity": "contract:action-form:actor|101010|10101012|0|10101012|star-skill:default",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-star-skill",
-      "selector": {
-        "controlSkillId": 10101012,
+        "controlSkillId": 10101021,
         "kind": "action-form",
         "ownerId": 101010,
         "subSkillIndex": 0
       },
-      "assertionHash": "ecccb8628c3c8861",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "d0f549770332d265",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:6916f327347033c6"
+      "edgeIdentity": "coverage-edge:6a70f9e509c559c6"
     },
     {
       "requirementIdentity": "protocol:101010:critical-expected-no-random-side-effect",
@@ -582,7 +624,22 @@
       "edgeIdentity": "coverage-edge:6a8dad679830ba8f"
     },
     {
-      "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:3",
+      "requirementIdentity": "contract:action-form:xiaoyu-burst-three-inputs:segment:2",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-burst-a2",
+      "selector": {
+        "controlSkillId": 10101004,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 1
+      },
+      "assertionHash": "659b31605fe724a8",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:6d14ad80e3662964"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|101010|10101001|0|10101003|normal-attack",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
       "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a3",
       "selector": {
@@ -592,22 +649,9 @@
         "subSkillIndex": 0
       },
       "assertionHash": "e7c668b8a5ab58d4",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:6e74b2699274824d"
-    },
-    {
-      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:0",
-      "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
-      },
-      "assertionHash": "32ce81f1319acafd",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:6ecee97d4c794581"
+      "edgeIdentity": "coverage-edge:70ebe73465e7bb58"
     },
     {
       "requirementIdentity": "contract:hit:10101001|0|elements|0|-2245783402811878012|12|1",
@@ -623,6 +667,21 @@
       "edgeIdentity": "coverage-edge:720830fa4a65ce55"
     },
     {
+      "requirementIdentity": "contract:action-form:actor:101010:charged-attack:xiaoyu-special-charged",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-special-charged",
+      "selector": {
+        "controlSkillId": 10101042,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "76237875cd90f9e3",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:7546737e6985bd2e"
+    },
+    {
       "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "trace-resource:machine-resource:m11-d-101010-visual-acceptance:2",
@@ -636,19 +695,17 @@
       "edgeIdentity": "coverage-edge:76ff8d0ded20bfb2"
     },
     {
-      "requirementIdentity": "contract:action-form:actor:101010:charged-attack:xiaoyu-ordinary-charged",
+      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-charged",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:5",
       "selector": {
-        "controlSkillId": 10101010,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
       },
-      "assertionHash": "394d2f81d232e438",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "d797656387134886",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:78cb342910c95d98"
+      "edgeIdentity": "coverage-edge:773a7570fa45735c"
     },
     {
       "requirementIdentity": "contract:hit:10101001|1|elements|1|7245988392201001564|13|1",
@@ -664,33 +721,17 @@
       "edgeIdentity": "coverage-edge:79bad397b71dd92b"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101021|1|10101025|limit-counter",
+      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-limit-counter",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:7",
       "selector": {
-        "controlSkillId": 10101025,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
       },
-      "assertionHash": "3abbc043539f185f",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "9d4f6026fb09b136",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:7ad18b0943135916"
-    },
-    {
-      "requirementIdentity": "protocol:101010:buff-apply-refresh-stack-expire",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "buff-apply-refresh-stack-expire",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "70ac503c6ac0d236",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:84da2ba861617951"
+      "edgeIdentity": "coverage-edge:87ce9a97cd65e6c7"
     },
     {
       "requirementIdentity": "contract:hit:10101001|1|elements|1|7245988392201001564|38|6",
@@ -706,19 +747,34 @@
       "edgeIdentity": "coverage-edge:87fd06ed76f3136d"
     },
     {
-      "requirementIdentity": "contract:action-form:xiaoyu-burst-three-inputs:segment:2",
+      "requirementIdentity": "contract:public-action:actor|101010|10101012|0|10101012|star-skill",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-burst-a2",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-star-skill",
       "selector": {
-        "controlSkillId": 10101004,
+        "controlSkillId": 10101012,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "ecccb8628c3c8861",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:88d0d2d45470b622"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor:101010:charged-attack:xiaoyu-enhanced-special-charged",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-enhanced-special-charged",
+      "selector": {
+        "controlSkillId": 10101042,
         "kind": "action-form",
         "ownerId": 101010,
         "subSkillIndex": 1
       },
-      "assertionHash": "659b31605fe724a8",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "205bdfbd2955f4c5",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:891fb806c20626ca"
+      "edgeIdentity": "coverage-edge:898aae28dfe85969"
     },
     {
       "requirementIdentity": "contract:hit:10101013|0|elements|4|8275426223765851682|237|9",
@@ -745,19 +801,6 @@
       "traceProjectionHash": "c53458c12b0717f3",
       "status": "verified",
       "edgeIdentity": "coverage-edge:912d33f98f2e8f9f"
-    },
-    {
-      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:1",
-      "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
-      },
-      "assertionHash": "eb9bbeed1ea431ef",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:924c0da179d117f9"
     },
     {
       "requirementIdentity": "protocol:101010:hit-landed-and-miss",
@@ -787,6 +830,21 @@
       "edgeIdentity": "coverage-edge:9466110959f8c864"
     },
     {
+      "requirementIdentity": "contract:action-form:actor|101010|10101012|0|10101012|star-skill:default",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-star-skill",
+      "selector": {
+        "controlSkillId": 10101012,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "ecccb8628c3c8861",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:95180c57ced3ce50"
+    },
+    {
       "requirementIdentity": "contract:hit:10101001|0|elements|0|-2245783402811878012|12|1",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "trace-hit:machine-hit:m11-d-101010-visual-acceptance:2",
@@ -800,17 +858,33 @@
       "edgeIdentity": "coverage-edge:997fc2f710b4b9c1"
     },
     {
-      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
+      "requirementIdentity": "contract:public-action:actor|101010|10101021|1|10101025|limit-counter",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:3",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-limit-counter",
       "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
+        "controlSkillId": 10101025,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
       },
-      "assertionHash": "c038437ccf88d85e",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "3abbc043539f185f",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:9c53ab0e59717517"
+      "edgeIdentity": "coverage-edge:9a17236ebd04eb80"
+    },
+    {
+      "requirementIdentity": "protocol:101010:buff-apply-refresh-stack-expire",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "buff-apply-refresh-stack-expire",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "70ac503c6ac0d236",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9cb8cfe072213c3f"
     },
     {
       "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
@@ -826,36 +900,6 @@
       "edgeIdentity": "coverage-edge:9ccd4b7c7bff1a9e"
     },
     {
-      "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:4",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a4",
-      "selector": {
-        "controlSkillId": 10101004,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "9fec4b8977e27ef0",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:9f116bea27d94e78"
-    },
-    {
-      "requirementIdentity": "contract:action-form:xiaoyu-burst-three-inputs:segment:1",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-burst-a1",
-      "selector": {
-        "controlSkillId": 10101001,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 1
-      },
-      "assertionHash": "2ff798b6ee1d3cda",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:a12656608581babd"
-    },
-    {
       "requirementIdentity": "contract:hit:10101001|1|elements|1|7245988392201001564|28|4",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "trace-hit:machine-hit:m11-d-101010-visual-acceptance:20",
@@ -869,32 +913,19 @@
       "edgeIdentity": "coverage-edge:a2e9768a76e6d0fa"
     },
     {
-      "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:5",
+      "requirementIdentity": "contract:action-form:actor:101010:charged-attack:xiaoyu-special-charged",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a5",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-star-derived-charged",
       "selector": {
-        "controlSkillId": 10101005,
+        "controlSkillId": 10101042,
         "kind": "action-form",
         "ownerId": 101010,
         "subSkillIndex": 0
       },
-      "assertionHash": "efc353dfc4c47344",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "5b869c19df414821",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:a9c9c88a119c4ef3"
-    },
-    {
-      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:2",
-      "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
-      },
-      "assertionHash": "afd5379e5ad0180d",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:aaf0bb1c6163d707"
+      "edgeIdentity": "coverage-edge:a40040e0e149871f"
     },
     {
       "requirementIdentity": "contract:hit:10101013|0|elements|4|8275426223765851682|225|7",
@@ -908,45 +939,6 @@
       "traceProjectionHash": "c53458c12b0717f3",
       "status": "verified",
       "edgeIdentity": "coverage-edge:ac0cf648f48693bb"
-    },
-    {
-      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:6",
-      "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
-      },
-      "assertionHash": "eff2a4776fb90a41",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:add0df10e9d319c1"
-    },
-    {
-      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:7",
-      "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
-      },
-      "assertionHash": "9d4f6026fb09b136",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:b051899d89fe851e"
-    },
-    {
-      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:4",
-      "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
-      },
-      "assertionHash": "af7385b80853a020",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:b0c88128692ca875"
     },
     {
       "requirementIdentity": "protocol:101010:critical-miss-coexistence",
@@ -963,34 +955,47 @@
       "edgeIdentity": "coverage-edge:b8baffab0b56b077"
     },
     {
-      "requirementIdentity": "contract:action-form:xiaoyu-burst-three-inputs:segment:2",
+      "requirementIdentity": "contract:action-form:actor:101010:charged-attack:xiaoyu-ordinary-charged",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-burst-a2",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-charged",
       "selector": {
-        "controlSkillId": 10101004,
+        "controlSkillId": 10101010,
         "kind": "action-form",
         "ownerId": 101010,
-        "subSkillIndex": 1
+        "subSkillIndex": 0
       },
-      "assertionHash": "fdd4349418a64706",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "394d2f81d232e438",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:b974d2e6d7700d87"
+      "edgeIdentity": "coverage-edge:bb006a929fae8792"
     },
     {
-      "requirementIdentity": "contract:action-form:actor:101010:charged-attack:xiaoyu-enhanced-special-charged",
+      "requirementIdentity": "contract:action-form:actor:101010:perfect-parry:xiaoyu-perfect-parry-counter",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-enhanced-special-charged",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-perfect-parry",
       "selector": {
-        "controlSkillId": 10101042,
+        "controlSkillId": 10101049,
         "kind": "action-form",
         "ownerId": 101010,
         "subSkillIndex": 1
       },
-      "assertionHash": "205bdfbd2955f4c5",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "2e19d738f7cf8dd6",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:bd9bd02f107dde0b"
+      "edgeIdentity": "coverage-edge:be7e629fcd553c52"
+    },
+    {
+      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:2",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
+      },
+      "assertionHash": "afd5379e5ad0180d",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:bf075f4f21fc2cda"
     },
     {
       "requirementIdentity": "contract:hit:10101013|0|elements|2|-6429706496330270988|163|5",
@@ -1006,48 +1011,19 @@
       "edgeIdentity": "coverage-edge:bf9ce17e5f465c78"
     },
     {
-      "requirementIdentity": "contract:action-form:xiaoyu-burst-three-inputs:segment:3",
+      "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:2",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-burst-a3",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a2",
       "selector": {
-        "controlSkillId": 10101005,
+        "controlSkillId": 10101002,
         "kind": "action-form",
         "ownerId": 101010,
-        "subSkillIndex": 1
+        "subSkillIndex": 0
       },
-      "assertionHash": "3f10e9e33f7bdaf0",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "2def160ed6e95d60",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:c0842c6451e4e726"
-    },
-    {
-      "requirementIdentity": "contract:action-form:actor:101010:perfect-parry:xiaoyu-perfect-parry-counter",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-perfect-parry",
-      "selector": {
-        "controlSkillId": 10101049,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 1
-      },
-      "assertionHash": "2e19d738f7cf8dd6",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:c17166a3de6871d8"
-    },
-    {
-      "requirementIdentity": "protocol:101010:foreground-background-switch",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "scenario-fact:foreground-background-switch",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "foreground-background-switch",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "40d77802e738a442",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:c314d94ae0a3ec26"
+      "edgeIdentity": "coverage-edge:c0736840de156afd"
     },
     {
       "requirementIdentity": "protocol:101010:critical-expected-no-random-side-effect",
@@ -1064,19 +1040,49 @@
       "edgeIdentity": "coverage-edge:c6090143e422d2da"
     },
     {
-      "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:2",
+      "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:4",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a2",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a4",
       "selector": {
-        "controlSkillId": 10101002,
+        "controlSkillId": 10101004,
         "kind": "action-form",
         "ownerId": 101010,
         "subSkillIndex": 0
       },
-      "assertionHash": "2def160ed6e95d60",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "9fec4b8977e27ef0",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:c927dd3f7a871daf"
+      "edgeIdentity": "coverage-edge:c684dc7a1ddbc2f2"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|101010|10101021|1|10101025|limit-counter:default",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-limit-counter",
+      "selector": {
+        "controlSkillId": 10101025,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "3abbc043539f185f",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c8a87f37bc57c11c"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|101010|10101013|0|10101013|ultimate",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-refresh",
+      "selector": {
+        "controlSkillId": 10101013,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "160ea6eb08a92172",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:cb2a848601ecc086"
     },
     {
       "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:1",
@@ -1107,7 +1113,21 @@
       "edgeIdentity": "coverage-edge:d4ae658a221eb8f0"
     },
     {
-      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
+      "requirementIdentity": "protocol:101010:normal-trigger-positive",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "scenario-fact:normal-trigger-positive",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "normal-trigger-positive",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "21786c93092c79ff",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:dbe2fbc6b657ff9e"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
       "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:3",
       "selector": {
@@ -1115,37 +1135,9 @@
         "resourceIdentity": "actor:101010:element:101010115"
       },
       "assertionHash": "c038437ccf88d85e",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:d55a448e2dff13f0"
-    },
-    {
-      "requirementIdentity": "contract:public-action:actor|101010|10101013|0|10101013|ultimate",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-refresh",
-      "selector": {
-        "controlSkillId": 10101013,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "160ea6eb08a92172",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:d8a193c2f1a7a71c"
-    },
-    {
-      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:8",
-      "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:101010:element:101010115"
-      },
-      "assertionHash": "b00bc96197aed4e3",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:dbc4b2ed392334be"
+      "edgeIdentity": "coverage-edge:dd02e521253d75c5"
     },
     {
       "requirementIdentity": "contract:hit:10101013|0|elements|2|-6429706496330270988|145|2",
@@ -1204,6 +1196,19 @@
       "edgeIdentity": "coverage-edge:e0b26d283e545dd4"
     },
     {
+      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:1",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
+      },
+      "assertionHash": "eb9bbeed1ea431ef",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:e216cb3b06752c47"
+    },
+    {
       "requirementIdentity": "contract:hit:10101013|0|elements|16|59197623417195618|278|11",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "trace-hit:machine-hit:m11-d-101010-visual-acceptance:15",
@@ -1215,6 +1220,19 @@
       "traceProjectionHash": "c53458c12b0717f3",
       "status": "verified",
       "edgeIdentity": "coverage-edge:e47223b1c2161200"
+    },
+    {
+      "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:8",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
+      },
+      "assertionHash": "b00bc96197aed4e3",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:e6f946d30c5450e7"
     },
     {
       "requirementIdentity": "contract:hit:10101013|0|elements|4|8275426223765851682|219|6",
@@ -1259,51 +1277,6 @@
       "edgeIdentity": "coverage-edge:e8a0d340ee724bba"
     },
     {
-      "requirementIdentity": "contract:action-form:actor:101010:charged-attack:xiaoyu-special-charged",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-star-derived-charged",
-      "selector": {
-        "controlSkillId": 10101042,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "5b869c19df414821",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:e8b64c7d51fb6b31"
-    },
-    {
-      "requirementIdentity": "contract:public-action:actor|101010|10101021|0|10101021|star-carry",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:switch-back-to-xiaoyu--on-enter--actor-101010--star-carry",
-      "selector": {
-        "controlSkillId": 10101021,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "d0f549770332d265",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:ea9e74c66642fee5"
-    },
-    {
-      "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:1",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a1",
-      "selector": {
-        "controlSkillId": 10101001,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "a39abdaf59926a8c",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:eb0aebab5b045656"
-    },
-    {
       "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "trace-resource:machine-resource:m11-d-101010-visual-acceptance:1",
@@ -1331,34 +1304,17 @@
       "edgeIdentity": "coverage-edge:ed6e9832ee791564"
     },
     {
-      "requirementIdentity": "contract:action-form:actor:101010:charged-attack:xiaoyu-enhanced-special-charged",
+      "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-enhanced-special-charged",
+      "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:1",
       "selector": {
-        "controlSkillId": 10101042,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 1
+        "kind": "resource",
+        "resourceIdentity": "actor:101010:element:101010115"
       },
-      "assertionHash": "6f9c863c03c3bbf1",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "eb9bbeed1ea431ef",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:f09fec4d903961a5"
-    },
-    {
-      "requirementIdentity": "contract:public-action:actor|101010|10101001|0|10101003|normal-attack",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a3",
-      "selector": {
-        "controlSkillId": 10101003,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "e7c668b8a5ab58d4",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:f1442f6e61415a2e"
+      "edgeIdentity": "coverage-edge:f055daf6048cf468"
     },
     {
       "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
@@ -1418,17 +1374,61 @@
     {
       "requirementIdentity": "contract:action-form:xiaoyu-burst-three-inputs:segment:3",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-burst-a3",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-burst-a3",
       "selector": {
         "controlSkillId": 10101005,
         "kind": "action-form",
         "ownerId": 101010,
         "subSkillIndex": 1
       },
-      "assertionHash": "7f19fb995696dab4",
-      "traceProjectionHash": "f58518e83d37bd05",
+      "assertionHash": "3f10e9e33f7bdaf0",
+      "traceProjectionHash": "007d34509fc8b683",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:f540a7a03ce53339"
+      "edgeIdentity": "coverage-edge:f41f37ee69e5d6b0"
+    },
+    {
+      "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:5",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a5",
+      "selector": {
+        "controlSkillId": 10101005,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "efc353dfc4c47344",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:f4cd71441405f2b1"
+    },
+    {
+      "requirementIdentity": "protocol:101010:foreground-background-switch",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "scenario-fact:foreground-background-switch",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "foreground-background-switch",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "40d77802e738a442",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:f6afe4d4f8a4dbb0"
+    },
+    {
+      "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:3",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a3",
+      "selector": {
+        "controlSkillId": 10101003,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "e7c668b8a5ab58d4",
+      "traceProjectionHash": "007d34509fc8b683",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ff8dc55416e0f19b"
     }
   ],
   "denominator": {
@@ -1471,5 +1471,5 @@
       "m11-d-101010-visual-acceptance": 55
     }
   },
-  "coverageHash": "ed5b2f76bcb12b68"
+  "coverageHash": "4321be852c05891c"
 }

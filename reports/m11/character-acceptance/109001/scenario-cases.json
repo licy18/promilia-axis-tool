@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/109001/golden-trace.json",
-        "reportHash": "d9ffe0c684834be4",
+        "reportHash": "b26405418f5dff21",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 109001 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "5f3d003f3de9cea3",
-          "data": "15afdc4d6315dcc8",
-          "trace": "ab105f43717e0eb7",
+          "input": "ee6be576a97d0877",
+          "data": "d28cdc515c1c74e4",
+          "trace": "e3190ba2b8ab7fcf",
           "evaluation": null
         }
       },
@@ -42,7 +42,15 @@
           }
         ],
         "hits": [],
-        "effects": [],
+        "effects": [
+          {
+            "actionId": null,
+            "effectIdentity": "battle-element:109001316",
+            "operation": "apply",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-three-actor-golden:0"
+          }
+        ],
         "resources": [],
         "states": [],
         "diagnostics": [],
@@ -55,7 +63,7 @@
           "resource-exact-and-insufficient": false
         }
       },
-      "traceProjectionHash": "f83451c1b0b92b36",
+      "traceProjectionHash": "5c4f4cbe20ab2b16",
       "assertions": [
         {
           "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
@@ -179,9 +187,27 @@
           ],
           "reasons": [],
           "assertionHash": "8f0d26754726252d"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-three-actor-golden:0",
+          "selector": {
+            "actionId": null,
+            "effectIdentity": "battle-element:109001316",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-three-actor-golden:0"
+          ],
+          "reasons": [],
+          "assertionHash": "7fdc43e63c842052"
         }
       ],
-      "scenarioCaseHash": "8ce451980e29f2e1"
+      "scenarioCaseHash": "5346bafc5bd029a2"
     },
     {
       "schemaVersion": 1,
@@ -189,7 +215,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/109001-visual.json",
-        "inputHash": "d46504f82f018f5c",
+        "inputHash": "b5b6d868d3a713b8",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/109001-visual.json"
       },
       "execution": {
@@ -198,10 +224,10 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "d46504f82f018f5c",
-          "data": "f58eb7708470192b",
-          "trace": "49c834fcc29beb21",
-          "evaluation": "80c3ff32175d7e8e"
+          "input": "b5b6d868d3a713b8",
+          "data": "6b38d644b034c443",
+          "trace": "6c4f7df38d253c91",
+          "evaluation": "fefe6ba59b4e3c64"
         }
       },
       "traceProjection": {
@@ -326,7 +352,15 @@
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:8"
           }
         ],
-        "effects": [],
+        "effects": [
+          {
+            "actionId": null,
+            "effectIdentity": "battle-element:109001316",
+            "operation": "apply",
+            "targetId": "actor-109001",
+            "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:0"
+          }
+        ],
         "resources": [],
         "states": [],
         "diagnostics": [],
@@ -337,7 +371,7 @@
             "mode": "sampled",
             "sourceCriticalBasisPoints": null,
             "targetCriticalDefenseBasisPoints": null,
-            "effectiveThresholdBasisPoints": 500,
+            "effectiveThresholdBasisPoints": 800,
             "criticalRoll": 7428,
             "critical": false,
             "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:0"
@@ -348,7 +382,7 @@
             "mode": "sampled",
             "sourceCriticalBasisPoints": null,
             "targetCriticalDefenseBasisPoints": null,
-            "effectiveThresholdBasisPoints": 500,
+            "effectiveThresholdBasisPoints": 800,
             "criticalRoll": 7753,
             "critical": false,
             "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:1"
@@ -359,7 +393,7 @@
             "mode": "sampled",
             "sourceCriticalBasisPoints": null,
             "targetCriticalDefenseBasisPoints": null,
-            "effectiveThresholdBasisPoints": 500,
+            "effectiveThresholdBasisPoints": 800,
             "criticalRoll": 7303,
             "critical": false,
             "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:2"
@@ -370,7 +404,7 @@
             "mode": "sampled",
             "sourceCriticalBasisPoints": null,
             "targetCriticalDefenseBasisPoints": null,
-            "effectiveThresholdBasisPoints": 500,
+            "effectiveThresholdBasisPoints": 800,
             "criticalRoll": 1244,
             "critical": false,
             "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:3"
@@ -381,8 +415,8 @@
             "mode": "captured-critical-roll",
             "sourceCriticalBasisPoints": null,
             "targetCriticalDefenseBasisPoints": null,
-            "effectiveThresholdBasisPoints": 500,
-            "criticalRoll": 499,
+            "effectiveThresholdBasisPoints": 800,
+            "criticalRoll": 799,
             "critical": true,
             "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:4"
           },
@@ -392,8 +426,8 @@
             "mode": "captured-critical-roll",
             "sourceCriticalBasisPoints": null,
             "targetCriticalDefenseBasisPoints": null,
-            "effectiveThresholdBasisPoints": 500,
-            "criticalRoll": 500,
+            "effectiveThresholdBasisPoints": 800,
+            "criticalRoll": 800,
             "critical": false,
             "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:5"
           },
@@ -403,7 +437,7 @@
             "mode": "expected",
             "sourceCriticalBasisPoints": null,
             "targetCriticalDefenseBasisPoints": null,
-            "effectiveThresholdBasisPoints": 500,
+            "effectiveThresholdBasisPoints": 800,
             "criticalRoll": null,
             "critical": false,
             "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:6"
@@ -414,7 +448,7 @@
             "mode": "critical",
             "sourceCriticalBasisPoints": null,
             "targetCriticalDefenseBasisPoints": null,
-            "effectiveThresholdBasisPoints": 500,
+            "effectiveThresholdBasisPoints": 800,
             "criticalRoll": null,
             "critical": true,
             "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:7"
@@ -425,7 +459,7 @@
             "mode": "non-critical",
             "sourceCriticalBasisPoints": null,
             "targetCriticalDefenseBasisPoints": null,
-            "effectiveThresholdBasisPoints": 500,
+            "effectiveThresholdBasisPoints": 800,
             "criticalRoll": null,
             "critical": false,
             "projectionIdentity": "machine-critical:m11-d-109001-visual-acceptance:8"
@@ -443,7 +477,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "cb39780784130280",
+      "traceProjectionHash": "a2452bfb190fc51f",
       "assertions": [
         {
           "assertionIdentity": "canonical-same-input-replay",
@@ -868,6 +902,24 @@
           "assertionHash": "1773651c9e5da871"
         },
         {
+          "assertionIdentity": "trace-effect:machine-effect:m11-d-109001-visual-acceptance:0",
+          "selector": {
+            "actionId": null,
+            "effectIdentity": "battle-element:109001316",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-effect:m11-d-109001-visual-acceptance:0"
+          ],
+          "reasons": [],
+          "assertionHash": "4b46cf9aa51e944a"
+        },
+        {
           "assertionIdentity": "trace-hit:machine-hit:m11-d-109001-visual-acceptance:0",
           "selector": {
             "actionId": "moyin-star-skill",
@@ -1038,18 +1090,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "71f919b49106f1e6"
+      "scenarioCaseHash": "b2843316acb3aa79"
     }
   ],
   "summary": {
     "scenarioCount": 2,
     "executionPassedCount": 2,
-    "assertionCount": 41,
-    "assertionPassedCount": 37,
+    "assertionCount": 43,
+    "assertionPassedCount": 39,
     "runnerKindCounts": {
       "canonical-character-golden": 1,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "07bd11d10933adb0"
+  "scenarioSetHash": "ff6858795349e873"
 }

@@ -1667,10 +1667,12 @@
       "text": "末音造成的超限伤害增加54%。",
       "mechanicKinds": [
         "action-settlement",
+        "passive-listener",
         "team-tuning-mark"
       ],
       "status": "applied",
       "coverageReferences": [
+        "actor:109001:passive:10900161",
         "verified-tuning-mechanics-catalog"
       ],
       "publicFormSettlements": [],
@@ -1707,5 +1709,5 @@
       "static-evidence-gap": 4
     }
   },
-  "profileHash": "edd9f09962478168c4682a3c3408a2f7bd029d2f1d99c7264b304c9d61ee418a"
+  "profileHash": "31b0dfe9c052a01fb45daa30b729970f595eaa4e6d8d677eac68f2124e4d6ed4"
 }

@@ -5977,7 +5977,7 @@ function createBattleEffectGraphNode({
   const commonFunctionId = resolvedFormula.commonFunctionId;
   const tuningProfile = resolveTuningProfileForBattleElement(
     tuningMechanicsCatalog,
-    { kind, elementId }
+    { kind, elementId, tree }
   );
   const mechanic = createBattleMechanicNodeContract(tree);
   const levelOverrides =
@@ -6119,6 +6119,16 @@ function createBattleEffectGraphNode({
             packetElementId: tuningProfile.overlimitPacket.elementId,
             sourceIdentity: tuningProfile.overlimitPacket.sourceIdentity,
           }
+        : kind === 'judgment' &&
+            Number(tree.consume) === 1 &&
+            tuningProfile
+          ? {
+              profileKey: tuningProfile.key,
+              element: tuningProfile.element,
+              markId: tuningProfile.markId,
+              packetElementId: tuningProfile.overlimitPacket.elementId,
+              sourceIdentity: tuningProfile.overlimitPacket.sourceIdentity,
+            }
         : null,
     judgment:
       kind === 'judgment'
@@ -6268,7 +6278,7 @@ function classifyBattleEffectNode({
   const elementId = integerOrNull(tree.elementConfigId);
   const tuningProfile = resolveTuningProfileForBattleElement(
     tuningMechanicsCatalog,
-    { kind, elementId }
+    { kind, elementId, tree }
   );
 
   if (kind === 'property-change') {
@@ -6405,16 +6415,28 @@ function classifyBattleEffectNode({
       );
     }
   } else if (['stack', 'judgment'].includes(kind)) {
-    reasons.push(
-      kind === 'judgment'
-        ? 'judgment-condition-runtime-unimplemented'
-        : `${kind}-lifecycle-runtime-unimplemented`
-    );
-    dimensions.mark = createDimensionClassification(
-      'unresolved',
-      reasons,
-      'elementConfigId'
-    );
+    if (
+      kind === 'judgment' &&
+      Number(tree.consume) === 1 &&
+      Number.isInteger(Number(tuningProfile?.markId))
+    ) {
+      dimensions.mark = createDimensionClassification(
+        'applied',
+        [],
+        'elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum'
+      );
+    } else {
+      reasons.push(
+        kind === 'judgment'
+          ? 'judgment-condition-runtime-unimplemented'
+          : `${kind}-lifecycle-runtime-unimplemented`
+      );
+      dimensions.mark = createDimensionClassification(
+        'unresolved',
+        reasons,
+        'elementConfigId'
+      );
+    }
   } else if (kind === 'inject') {
     const childReferenceCount = collectBattleElementChildReferences(
       tree
@@ -6947,6 +6969,71 @@ function resolveTuningEffectBindingContract({
     };
   }
   if (!node.tuningOverlimit) return null;
+
+  // Consume judgments that carry their own tuningOverlimit (no inject packet
+  // pairing in the same behavior) build a self-contained consume contract
+  // directly from the consume element's mark identity and layer fields.
+  if (
+    node.judgment?.consume &&
+    !root.nodes.some(
+      candidate =>
+        candidate !== node &&
+        candidate.kind === 'inject' &&
+        candidate.tuningOverlimit &&
+        Number(candidate.tuningOverlimit.markId) ===
+          Number(node.tuningOverlimit.markId)
+    )
+  ) {
+    const markIds = (node.judgment.markElementIds ?? [])
+      .map(Number)
+      .filter(Number.isInteger);
+    const markId = Number(node.tuningOverlimit.markId);
+    const minimumStacks =
+      positiveIntegerOrNull(node.judgment.consumeLayerNum) ?? 1;
+    const configuredMaximum = positiveIntegerOrNull(
+      node.judgment.consumeLayerMaxNum
+    );
+    return {
+      kind: 'consume',
+      target: {
+        kind: 'enemy',
+        code: markId,
+        sourceIdentity: node.sourceIdentity,
+      },
+      maxStacks: configuredMaximum ?? minimumStacks,
+      contract: {
+        ...node.tuningOverlimit,
+        minimumStacks,
+        maximumStacks: configuredMaximum,
+        consumeMode: integerOrNull(node.judgment.consumeMode),
+        judgmentElementId: integerOrNull(node.elementId),
+        judgmentPathId: String(node.pathId ?? ''),
+        judgmentSourceIdentity: node.sourceIdentity ?? null,
+        judgmentCandidateMarkIds: markIds,
+        judgmentGroupIdentity: [
+          'tuning-consume-judgment',
+          root.controlSkillId,
+          root.mapIndex,
+          node.elementId,
+          node.pathId,
+        ].join(':'),
+        judgmentCandidates: markIds.map((candidateMarkId, priorityIndex) => ({
+          priorityIndex,
+          markId: Number(candidateMarkId),
+          packetElementId: Number(node.tuningOverlimit.packetElementId),
+          packetPathId: String(
+            node.tuningOverlimit.sourceIdentity ?? node.pathId ?? ''
+          ),
+          packetSourceIdentity:
+            node.tuningOverlimit.sourceIdentity ??
+            node.sourceIdentity ??
+            null,
+        })),
+      },
+      reasons: [],
+      applied: true,
+    };
+  }
 
   const judgmentNode = [...ancestorNodes]
     .reverse()
@@ -7757,7 +7844,7 @@ function resolveDynamicPropertyBucket(calculateType) {
 
 function resolveTuningProfileForBattleElement(
   tuningMechanicsCatalog,
-  { kind, elementId }
+  { kind, elementId, tree = {} }
 ) {
   if (!tuningMechanicsCatalog || elementId == null) return null;
   if (kind === 'stack') {
@@ -7773,6 +7860,18 @@ function resolveTuningProfileForBattleElement(
         profile => profile.overlimitPacket.elementId === Number(elementId)
       ) ?? null
     );
+  }
+  if (kind === 'judgment') {
+    const markIds = (tree.elementArr ?? [])
+      .map(Number)
+      .filter(Number.isInteger);
+    if (Number(tree.consume) === 1 && markIds.length > 0) {
+      return (
+        tuningMechanicsCatalog.profiles.find(profile =>
+          markIds.includes(Number(profile.markId))
+        ) ?? null
+      );
+    }
   }
   return null;
 }

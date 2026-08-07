@@ -389,7 +389,7 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       failedCount: 0,
     });
     expect(goldenTrace.actual.resources.targetStateSummary).toMatchObject({
-      profileCount: 1,
+      profileCount: 2,
       eventCount: 9,
       appliedGroupCount: 2,
       skippedGroupCount: 0,

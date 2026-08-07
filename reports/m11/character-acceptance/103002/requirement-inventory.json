@@ -3336,9 +3336,9 @@
       "sourceRecordHash": "008cd1c595b4fa70"
     },
     {
-      "requirementIdentity": "contract:effect:effect:33:a313cd3a4da32383",
+      "requirementIdentity": "contract:effect:effect:33:62c1af50d516eb6f",
       "dimension": "effect",
-      "subjectIdentity": "effect:33:a313cd3a4da32383",
+      "subjectIdentity": "effect:33:62c1af50d516eb6f",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3352,15 +3352,18 @@
         "battle-element-assets.jsonl#path_id=-6187686510236149564"
       ],
       "reasons": [
-        "judgment-condition-runtime-unimplemented",
-        "semantic-condition-not-standalone-gameplay-effect"
+        "effect-target-static-evidence-gap",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "c758fccff90b175c"
+      "sourceRecordHash": "fb1c88006d556494"
     },
     {
-      "requirementIdentity": "contract:effect:effect:34:48347fd674f6ad39",
+      "requirementIdentity": "contract:effect:effect:34:a0a28e0734e99a43",
       "dimension": "effect",
-      "subjectIdentity": "effect:34:48347fd674f6ad39",
+      "subjectIdentity": "effect:34:a0a28e0734e99a43",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3374,16 +3377,19 @@
         "battle-element-assets.jsonl#path_id=-6187686510236149564"
       ],
       "reasons": [
-        "judgment-condition-runtime-unimplemented",
-        "semantic-condition-not-standalone-gameplay-effect"
+        "effect-target-static-evidence-gap",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "0684316d2c985466"
+      "sourceRecordHash": "f241deda7d4f2c6e"
     },
     {
-      "requirementIdentity": "contract:effect:effect:35:f14aeda8be639301",
+      "requirementIdentity": "contract:effect:effect:35:1a8759ccdf6097bd",
       "dimension": "effect",
-      "subjectIdentity": "effect:35:f14aeda8be639301",
-      "sourceDisposition": "gap",
+      "subjectIdentity": "effect:35:1a8759ccdf6097bd",
+      "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -3395,17 +3401,14 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[34]",
         "battle-element-assets.jsonl#path_id=-8725062263845393396"
       ],
-      "reasons": [
-        "judgment-condition-runtime-unimplemented",
-        "semantic-condition-not-standalone-gameplay-effect"
-      ],
-      "sourceRecordHash": "0352999f717b2da2"
+      "reasons": [],
+      "sourceRecordHash": "deaae424c2738d3b"
     },
     {
-      "requirementIdentity": "contract:effect:effect:36:e450a5b1d2e3bdeb",
+      "requirementIdentity": "contract:effect:effect:36:b1d21e8d258d6b7b",
       "dimension": "effect",
-      "subjectIdentity": "effect:36:e450a5b1d2e3bdeb",
-      "sourceDisposition": "gap",
+      "subjectIdentity": "effect:36:b1d21e8d258d6b7b",
+      "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -3417,11 +3420,8 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[34]",
         "battle-element-assets.jsonl#path_id=-8725062263845393396"
       ],
-      "reasons": [
-        "judgment-condition-runtime-unimplemented",
-        "semantic-condition-not-standalone-gameplay-effect"
-      ],
-      "sourceRecordHash": "274fee333061f7a8"
+      "reasons": [],
+      "sourceRecordHash": "5ad1611c2a8103a3"
     },
     {
       "requirementIdentity": "contract:effect:effect:37:6b63ebdb87f0bebd",
@@ -11701,8 +11701,8 @@
   ],
   "summary": {
     "recordCount": 713,
-    "appliedCount": 406,
-    "gapCount": 307,
+    "appliedCount": 408,
+    "gapCount": 305,
     "notApplicableCount": 0,
     "dimensionCounts": {
       "action-effect-binding": 3,
@@ -11731,5 +11731,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "492df852e5b0f227"
+  "inventoryHash": "8186720865ad4954"
 }

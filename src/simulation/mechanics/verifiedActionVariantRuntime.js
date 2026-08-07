@@ -141,7 +141,8 @@ export function createVerifiedActionVariantRuntime({
     profile =>
       profile.applied &&
       (profile.runtimeGenerationMode == null ||
-        profile.runtimeGenerationMode === 'action-variant-runtime')
+        profile.runtimeGenerationMode === 'action-variant-runtime' ||
+        profile.runtimeGenerationMode === 'persistent-property-runtime')
   );
   const graph = mechanicsPackage.actionVariantGraph;
   const switchBindings = graph.edges
@@ -608,6 +609,32 @@ export function createVerifiedActionVariantRuntime({
     stateEvents.push(event);
     resourceEvents.push(event);
   };
+
+  for (const [actorId, actorState] of variantActorStateById) {
+    const characterId = Number(
+      actorState?.actor?.characterId ?? actorState?.profile?.ownerId
+    );
+    for (const passiveProfile of passiveEffects) {
+      if (
+        passiveProfile.runtimeGenerationMode !==
+          'persistent-property-runtime' ||
+        Number(passiveProfile.ownerId) !== characterId
+      ) {
+        continue;
+      }
+      for (const trigger of passiveProfile.triggerBindings ?? []) {
+        effectCommands.push(
+          createPersistentPassiveEffectCommand({
+            mechanicsPackage,
+            actorState,
+            profile: passiveProfile,
+            trigger,
+            timeMs: 0,
+          })
+        );
+      }
+    }
+  }
 
   for (const { action } of actions) {
     const actionTimeMs = Number(action.startMs) || 0;
@@ -1836,6 +1863,57 @@ function createPassiveEffectCommand({
       packageId: mechanicsPackage.packageId,
       packageHash: mechanicsPackage.packageHash,
       actionBindingIdentity: resolution.actionBinding.identity,
+      effectIdentity,
+      sourceIdentity: [profile.sourceIdentity, trigger.sourceIdentity].join(
+        '|'
+      ),
+    },
+    modifiers: profile.modifiers.map(modifier => ({
+      kind: 'battle-property',
+      attributeId: modifier.attributeId,
+      bucket: modifier.bucket,
+      valueRaw: modifier.valueRaw,
+      propertyTags: modifier.propertyTags ?? [],
+      sourceIdentity: modifier.sourceIdentity,
+    })),
+    appliedToCalculators: true,
+    generatedVerified: true,
+  };
+}
+
+function createPersistentPassiveEffectCommand({
+  mechanicsPackage,
+  actorState,
+  profile,
+  trigger,
+  timeMs,
+}) {
+  const effectIdentity = profile.passiveIdentity;
+  return {
+    id: `verified-passive|battle-start|${effectIdentity}|${trigger.triggerIdentity}`,
+    sourceActionId: null,
+    sourceActionName: null,
+    sourceActorId: actorState.actor.id,
+    sourceActorName: actorState.actor.name,
+    effectId: profile.effectId,
+    effectName: profile.name,
+    operation: EFFECT_OPERATIONS.APPLY,
+    targetKind: EFFECT_TARGET_KINDS.ACTOR,
+    targetId: String(actorState.actor.id),
+    targetName: actorState.actor.name,
+    timeMs,
+    durationMs: profile.durationMs,
+    stackMode: EFFECT_STACK_MODES.REFRESH,
+    stackDelta: profile.stackDelta ?? 1,
+    maxStacks: profile.maxStacks ?? 1,
+    tags: ['passive', `passive:${profile.skillId}`],
+    sourceStatus: 'verified-passive-effect-generated',
+    confidence: 'high',
+    trackingStatus: 'applied',
+    sourceIdentity: {
+      packageId: mechanicsPackage.packageId,
+      packageHash: mechanicsPackage.packageHash,
+      actionBindingIdentity: 'battle-start',
       effectIdentity,
       sourceIdentity: [profile.sourceIdentity, trigger.sourceIdentity].join(
         '|'

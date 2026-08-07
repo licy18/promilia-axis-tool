@@ -343,7 +343,7 @@ describe('verified Battle effect generation', () => {
       }),
     ]);
     expect(integrated.effectTimeline.summary).toMatchObject({
-      calculatorAppliedEffectCount: 9,
+      calculatorAppliedEffectCount: 10,
     });
     expect(
       sumDamage(integrated.verifiedCombatRuntime, 'fire-kibo-signature')

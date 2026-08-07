@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "79f8e8df10b85ee8d611729f73893c4ff6015b7ee8d96dc846364704f639c406",
+  "packageHash": "c87fb71b44b3a135b3c48ac7cac9e537a11746c8c0128c3e87b6d2bef9e36e3e",
   "fixedProductDenominator": {
     "publicActionCount": 645,
     "actorOwnerCount": 20,
@@ -102,17 +102,17 @@
         "verified-zero": 2650
       },
       "mark": {
-        "applied": 181,
-        "unresolved": 169,
+        "applied": 231,
+        "unresolved": 119,
         "verified-zero": 3436
       }
     },
     "semanticEffects": {
       "total": 3479,
-      "gameplay": 1842,
-      "applied": 1006,
+      "gameplay": 1892,
+      "applied": 1018,
       "verifiedZero": 7,
-      "unresolved": 829
+      "unresolved": 867
     },
     "timing": {
       "appliedActionCount": 634,
@@ -165,12 +165,12 @@
       "unresolvedOwnerCount": 1,
       "notApplicableOperationCount": 19,
       "thresholdTransitionCount": 1,
-      "passiveEffectCount": 3,
-      "appliedPassiveEffectCount": 3,
+      "passiveEffectCount": 4,
+      "appliedPassiveEffectCount": 4,
       "ownerCount": 142,
       "nodeCount": 699,
       "edgeCount": 346,
-      "appliedEdgeCount": 62,
+      "appliedEdgeCount": 64,
       "unresolvedEdgeCount": 286,
       "resourceConditionEdgeCount": 272,
       "modeledOwnerCount": 4,
@@ -201,10 +201,10 @@
       "publicActionFormCount": 10,
       "attackInputChainCount": 5,
       "compiledInputVariantSelectorCount": 1,
-      "compiledVariantWindowBindingCount": 4,
-      "targetStateProfileCount": 1,
-      "targetStateTransactionCount": 7,
-      "conditionalHitGroupCount": 2,
+      "compiledVariantWindowBindingCount": 6,
+      "targetStateProfileCount": 2,
+      "targetStateTransactionCount": 9,
+      "conditionalHitGroupCount": 4,
       "runtimeEffectBindingCount": 6,
       "hiddenInputAuditRowCount": 89,
       "hiddenInputPublicExecutionFormCount": 21
@@ -1459,16 +1459,15 @@
           "verified-zero": 7
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 1,
+          "applied": 3,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
-        "total": 6,
+        "total": 7,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 6
       },
       "settlement": {
         "required": true,
@@ -1518,13 +1517,12 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-semantics-evidence-gap",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -1591,16 +1589,16 @@
           "verified-zero": 52
         },
         "tuningMark": {
-          "applied": 10,
-          "unresolved": 7,
+          "applied": 16,
+          "unresolved": 1,
           "verified-zero": 39
         }
       },
       "semanticEffects": {
-        "total": 35,
+        "total": 41,
         "applied": 10,
         "verifiedZero": 1,
-        "unresolved": 24
+        "unresolved": 30
       },
       "settlement": {
         "required": true,
@@ -1654,14 +1652,13 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-semantics-evidence-gap",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
+        "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "effect-combine-semantics-unresolved",
@@ -2632,16 +2629,15 @@
           "verified-zero": 22
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 4,
+          "applied": 6,
           "verified-zero": 19
         }
       },
       "semanticEffects": {
-        "total": 10,
-        "applied": 3,
+        "total": 14,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 9
       },
       "settlement": {
         "required": true,
@@ -2706,9 +2702,12 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-semantics-evidence-gap",
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map"
       ],
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=4]"
     },
@@ -3101,16 +3100,16 @@
           "verified-zero": 13
         },
         "tuningMark": {
-          "applied": 3,
-          "unresolved": 2,
+          "applied": 4,
+          "unresolved": 1,
           "verified-zero": 17
         }
       },
       "semanticEffects": {
-        "total": 14,
+        "total": 15,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 10
       },
       "settlement": null,
       "reasons": [
@@ -3120,6 +3119,10 @@
         "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "property-formula-not-literal-function-5",
         "sp-formula-not-literal-function-5"
@@ -3416,16 +3419,16 @@
           "verified-zero": 12
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 2,
+          "applied": 3,
+          "unresolved": 1,
           "verified-zero": 19
         }
       },
       "semanticEffects": {
-        "total": 13,
+        "total": 14,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 11
+        "unresolved": 12
       },
       "settlement": null,
       "reasons": [
@@ -3433,6 +3436,10 @@
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "property-formula-not-literal-function-5"
       ],
@@ -3575,16 +3582,15 @@
           "verified-zero": 18
         },
         "tuningMark": {
-          "applied": 3,
-          "unresolved": 1,
+          "applied": 4,
           "verified-zero": 20
         }
       },
       "semanticEffects": {
-        "total": 16,
+        "total": 17,
         "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 11
       },
       "settlement": null,
       "reasons": [
@@ -3594,14 +3600,13 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-semantics-evidence-gap",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
-        "tuning-consume-current-packet-not-in-candidate-map"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
+        "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=108001].skillSlots[group=ground,slot=3]"
     },
@@ -3666,16 +3671,15 @@
           "verified-zero": 16
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 2,
+          "applied": 4,
           "verified-zero": 18
         }
       },
       "semanticEffects": {
-        "total": 15,
+        "total": 17,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 12
       },
       "settlement": null,
       "reasons": [
@@ -3683,7 +3687,10 @@
         "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-semantics-evidence-gap",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -3890,16 +3897,16 @@
           "verified-zero": 10
         },
         "tuningMark": {
-          "applied": 3,
-          "unresolved": 2,
+          "applied": 4,
+          "unresolved": 1,
           "verified-zero": 13
         }
       },
       "semanticEffects": {
-        "total": 13,
+        "total": 14,
         "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 8
       },
       "settlement": null,
       "reasons": [
@@ -3909,6 +3916,10 @@
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "property-formula-not-literal-function-5"
       ],
@@ -4403,14 +4414,14 @@
           "verified-zero": 7
         },
         "tuningMark": {
-          "applied": 1,
-          "unresolved": 2,
+          "applied": 2,
+          "unresolved": 1,
           "verified-zero": 10
         }
       },
       "semanticEffects": {
-        "total": 9,
-        "applied": 4,
+        "total": 10,
+        "applied": 5,
         "verifiedZero": 0,
         "unresolved": 5
       },
@@ -4487,8 +4498,10 @@
         "variantModelStatus": "resolved"
       },
       "variants": {
-        "status": "not-applicable",
-        "total": 0
+        "status": "applied",
+        "total": 1,
+        "applied": 1,
+        "unresolved": 0
       },
       "specialResource": {
         "status": "not-applicable"
@@ -4614,16 +4627,15 @@
           "verified-zero": 15
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 2,
+          "applied": 4,
           "verified-zero": 11
         }
       },
       "semanticEffects": {
-        "total": 8,
-        "applied": 2,
+        "total": 10,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 7
       },
       "settlement": {
         "required": true,
@@ -4677,14 +4689,13 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-semantics-evidence-gap",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
+        "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -5136,16 +5147,15 @@
           "verified-zero": 11
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 1,
+          "applied": 3,
           "verified-zero": 10
         }
       },
       "semanticEffects": {
-        "total": 9,
+        "total": 10,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 8
       },
       "settlement": null,
       "reasons": [
@@ -5153,7 +5163,10 @@
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-semantics-evidence-gap",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
@@ -5363,23 +5376,25 @@
           "verified-zero": 10
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 1,
+          "applied": 3,
           "verified-zero": 23
         }
       },
       "semanticEffects": {
-        "total": 22,
+        "total": 23,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 17
+        "unresolved": 18
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-semantics-evidence-gap",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
@@ -5614,16 +5629,16 @@
           "verified-zero": 18
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 2,
+          "applied": 3,
+          "unresolved": 1,
           "verified-zero": 19
         }
       },
       "semanticEffects": {
-        "total": 13,
+        "total": 14,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 8
+        "unresolved": 9
       },
       "settlement": null,
       "reasons": [
@@ -5632,6 +5647,10 @@
         "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "property-formula-not-literal-function-5"
       ],
@@ -6282,16 +6301,16 @@
           "verified-zero": 9
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 2,
+          "applied": 3,
+          "unresolved": 1,
           "verified-zero": 14
         }
       },
       "semanticEffects": {
-        "total": 11,
+        "total": 12,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 11
       },
       "settlement": null,
       "reasons": [
@@ -6304,11 +6323,11 @@
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
-        "tuning-consume-current-packet-not-in-candidate-map"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-evidence-gap"
       ],
       "sourceIdentity": "characters.items[id=199003].skillSlots[group=ground,slot=4]"
     }
@@ -38563,16 +38582,15 @@
           "verified-zero": 7
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 1,
+          "applied": 3,
           "verified-zero": 4
         }
       },
       "semanticEffects": {
-        "total": 6,
+        "total": 7,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 6
       },
       "settlement": {
         "required": true,
@@ -38622,13 +38640,12 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-semantics-evidence-gap",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -38792,16 +38809,16 @@
           "verified-zero": 52
         },
         "tuningMark": {
-          "applied": 10,
-          "unresolved": 7,
+          "applied": 16,
+          "unresolved": 1,
           "verified-zero": 39
         }
       },
       "semanticEffects": {
-        "total": 35,
+        "total": 41,
         "applied": 10,
         "verifiedZero": 1,
-        "unresolved": 24
+        "unresolved": 30
       },
       "settlement": {
         "required": true,
@@ -38855,14 +38872,13 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-semantics-evidence-gap",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
+        "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "effect-combine-semantics-unresolved",
@@ -38928,16 +38944,16 @@
           "verified-zero": 27
         },
         "tuningMark": {
-          "applied": 3,
-          "unresolved": 3,
+          "applied": 5,
+          "unresolved": 1,
           "verified-zero": 21
         }
       },
       "semanticEffects": {
-        "total": 13,
+        "total": 15,
         "applied": 0,
         "verifiedZero": 1,
-        "unresolved": 12
+        "unresolved": 14
       },
       "settlement": {
         "required": true,
@@ -40870,16 +40886,15 @@
           "verified-zero": 22
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 4,
+          "applied": 6,
           "verified-zero": 19
         }
       },
       "semanticEffects": {
-        "total": 10,
-        "applied": 3,
+        "total": 14,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 9
       },
       "settlement": {
         "required": true,
@@ -40944,9 +40959,12 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-semantics-evidence-gap",
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved"
+        "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map"
       ],
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=4]"
     },
@@ -42383,16 +42401,16 @@
           "verified-zero": 13
         },
         "tuningMark": {
-          "applied": 3,
-          "unresolved": 2,
+          "applied": 4,
+          "unresolved": 1,
           "verified-zero": 17
         }
       },
       "semanticEffects": {
-        "total": 14,
+        "total": 15,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 10
       },
       "settlement": null,
       "reasons": [
@@ -42402,6 +42420,10 @@
         "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "property-formula-not-literal-function-5",
         "sp-formula-not-literal-function-5"
@@ -43235,16 +43257,16 @@
           "verified-zero": 12
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 2,
+          "applied": 3,
+          "unresolved": 1,
           "verified-zero": 19
         }
       },
       "semanticEffects": {
-        "total": 13,
+        "total": 14,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 11
+        "unresolved": 12
       },
       "settlement": null,
       "reasons": [
@@ -43252,6 +43274,10 @@
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "property-formula-not-literal-function-5"
       ],
@@ -43787,16 +43813,15 @@
           "verified-zero": 18
         },
         "tuningMark": {
-          "applied": 3,
-          "unresolved": 1,
+          "applied": 4,
           "verified-zero": 20
         }
       },
       "semanticEffects": {
-        "total": 16,
+        "total": 17,
         "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 11
       },
       "settlement": null,
       "reasons": [
@@ -43806,14 +43831,13 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-semantics-evidence-gap",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
-        "tuning-consume-current-packet-not-in-candidate-map"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
+        "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=108001].skillSlots[group=ground,slot=3]"
     },
@@ -43942,16 +43966,15 @@
           "verified-zero": 16
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 2,
+          "applied": 4,
           "verified-zero": 18
         }
       },
       "semanticEffects": {
-        "total": 15,
+        "total": 17,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 12
       },
       "settlement": null,
       "reasons": [
@@ -43959,7 +43982,10 @@
         "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-semantics-evidence-gap",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -44652,16 +44678,16 @@
           "verified-zero": 10
         },
         "tuningMark": {
-          "applied": 3,
-          "unresolved": 2,
+          "applied": 4,
+          "unresolved": 1,
           "verified-zero": 13
         }
       },
       "semanticEffects": {
-        "total": 13,
+        "total": 14,
         "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 8
       },
       "settlement": null,
       "reasons": [
@@ -44671,6 +44697,10 @@
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "property-formula-not-literal-function-5"
       ],
@@ -46327,14 +46357,14 @@
           "verified-zero": 7
         },
         "tuningMark": {
-          "applied": 1,
-          "unresolved": 2,
+          "applied": 2,
+          "unresolved": 1,
           "verified-zero": 10
         }
       },
       "semanticEffects": {
-        "total": 9,
-        "applied": 4,
+        "total": 10,
+        "applied": 5,
         "verifiedZero": 0,
         "unresolved": 5
       },
@@ -46719,8 +46749,10 @@
         "variantModelStatus": "resolved"
       },
       "variants": {
-        "status": "not-applicable",
-        "total": 0
+        "status": "applied",
+        "total": 1,
+        "applied": 1,
+        "unresolved": 0
       },
       "specialResource": {
         "status": "not-applicable"
@@ -46941,16 +46973,15 @@
           "verified-zero": 15
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 2,
+          "applied": 4,
           "verified-zero": 11
         }
       },
       "semanticEffects": {
-        "total": 8,
-        "applied": 2,
+        "total": 10,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 7
       },
       "settlement": {
         "required": true,
@@ -47004,14 +47035,13 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-semantics-evidence-gap",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
+        "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -47043,8 +47073,10 @@
         "variantModelStatus": "resolved"
       },
       "variants": {
-        "status": "not-applicable",
-        "total": 0
+        "status": "applied",
+        "total": 1,
+        "applied": 1,
+        "unresolved": 0
       },
       "specialResource": {
         "status": "not-applicable"
@@ -48512,16 +48544,15 @@
           "verified-zero": 11
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 1,
+          "applied": 3,
           "verified-zero": 10
         }
       },
       "semanticEffects": {
-        "total": 9,
+        "total": 10,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 8
       },
       "settlement": null,
       "reasons": [
@@ -48529,7 +48560,10 @@
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-semantics-evidence-gap",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
@@ -49214,23 +49248,25 @@
           "verified-zero": 10
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 1,
+          "applied": 3,
           "verified-zero": 23
         }
       },
       "semanticEffects": {
-        "total": 22,
+        "total": 23,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 17
+        "unresolved": 18
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-semantics-evidence-gap",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
@@ -49936,16 +49972,16 @@
           "verified-zero": 18
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 2,
+          "applied": 3,
+          "unresolved": 1,
           "verified-zero": 19
         }
       },
       "semanticEffects": {
-        "total": 13,
+        "total": 14,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 8
+        "unresolved": 9
       },
       "settlement": null,
       "reasons": [
@@ -49954,6 +49990,10 @@
         "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "property-formula-not-literal-function-5"
       ],
@@ -51878,16 +51918,16 @@
           "verified-zero": 9
         },
         "tuningMark": {
-          "applied": 2,
-          "unresolved": 2,
+          "applied": 3,
+          "unresolved": 1,
           "verified-zero": 14
         }
       },
       "semanticEffects": {
-        "total": 11,
+        "total": 12,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 11
       },
       "settlement": null,
       "reasons": [
@@ -51900,11 +51940,11 @@
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-evidence-gap",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
-        "tuning-consume-current-packet-not-in-candidate-map"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-evidence-gap"
       ],
       "sourceIdentity": "characters.items[id=199003].skillSlots[group=ground,slot=4]"
     },

@@ -28,18 +28,11 @@ describe('legacy golden axes under shared tuning-mark decay', () => {
         3,
         'switch-to-ruby--on-exit--actor-101003--star-carry',
       ],
+      ['thunder', 'consume', 1773, 1, 0, 'ruby-ultimate'],
       ['fire', 'consume', 1884, 3, 2, 'ruby-ultimate'],
       ['fire', 'consume', 1900, 2, 1, 'ruby-ultimate'],
       ['wind', 'acquire', 2463, 0, 1, 'normal-a5'],
       ['wind', 'consume', 2565, 1, 0, 'normal-special-charged'],
-      [
-        'thunder',
-        'expire',
-        2604,
-        1,
-        0,
-        'switch-to-ruby--on-enter--actor-103002--star-carry',
-      ],
       [
         'fire',
         'expire',
@@ -50,7 +43,7 @@ describe('legacy golden axes under shared tuning-mark decay', () => {
       ],
     ]);
     expect(xiaoyuGoldenTrace.actual.combat).toMatchObject({
-      ownerTotalHpDamage: 699206,
+      ownerTotalHpDamage: 648551,
       ownerTotalToughnessDamage: 0,
     });
     expect(

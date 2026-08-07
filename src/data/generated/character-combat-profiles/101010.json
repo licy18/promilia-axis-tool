@@ -66,7 +66,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "c6b01d4f83bf4523f2e0ad39648362dc01b5b74b74ed598e043f4f9344895909",
+    "packageHash": "50c2554bd569f1d59f55b889f9dfa22a57288b491e5177665f3daf704e59b34d",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -8753,13 +8753,12 @@
           "trigger-frame-missing",
           "hp:damage-formula-inputs-incomplete",
           "toughness:pre-shield-damage-inputs-incomplete",
-          "judgment-condition-runtime-unimplemented",
-          "nested-damage-trigger-lifecycle-not-expanded",
-          "nested-effect-wrapper-semantics-unresolved",
           "tuning-consume-judgment-missing",
           "tuning-consume-mark-identity-ambiguous",
           "tuning-consume-success-branch-unresolved",
           "tuning-consume-current-packet-not-in-candidate-map",
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
           "effect-trigger-frame-missing",
           "effect-target-unresolved"
         ],
@@ -8804,8 +8803,7 @@
             "verified-zero": 7
           },
           "mark": {
-            "applied": 2,
-            "unresolved": 1,
+            "applied": 3,
             "verified-zero": 4
           }
         },
@@ -9778,14 +9776,13 @@
           "trigger-frame-missing",
           "hp:damage-formula-inputs-incomplete",
           "toughness:pre-shield-damage-inputs-incomplete",
-          "judgment-condition-runtime-unimplemented",
-          "nested-damage-trigger-lifecycle-not-expanded",
-          "nested-effect-wrapper-semantics-unresolved",
-          "sp-formula-not-literal-function-5",
           "tuning-consume-judgment-missing",
           "tuning-consume-mark-identity-ambiguous",
           "tuning-consume-success-branch-unresolved",
           "tuning-consume-current-packet-not-in-candidate-map",
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "sp-formula-not-literal-function-5",
           "effect-trigger-frame-missing",
           "effect-target-unresolved",
           "effect-combine-semantics-unresolved",
@@ -9835,8 +9832,8 @@
             "verified-zero": 52
           },
           "mark": {
-            "applied": 10,
-            "unresolved": 7,
+            "applied": 16,
+            "unresolved": 1,
             "verified-zero": 39
           }
         },
@@ -10484,8 +10481,8 @@
             "verified-zero": 27
           },
           "mark": {
-            "applied": 3,
-            "unresolved": 3,
+            "applied": 5,
+            "unresolved": 1,
             "verified-zero": 21
           }
         },
@@ -31030,16 +31027,16 @@
             },
             "target": {
               "kind": "enemy",
-              "code": 1,
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_3857329302774606883__3857329302774606883.json#startFrame|targetType"
+              "code": null,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
             },
             "scenarioRuntimeStatus": "source-verified",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": []
@@ -31050,7 +31047,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "light",
+              "element": "光",
+              "markId": 950,
+              "packetElementId": 999,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101012:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -31084,13 +31099,16 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -31948,9 +31966,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 1,
+            "appliedNodeCount": 2,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10101012|element:-8630062226069243067",
               "10101012|element:1781318263043700654",
@@ -32969,16 +32987,16 @@
             },
             "target": {
               "kind": "enemy",
-              "code": 1,
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6326209782415091882__-6326209782415091882.json#startFrame|targetType"
+              "code": null,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
             },
             "scenarioRuntimeStatus": "source-verified",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": [
@@ -32991,7 +33009,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "wind",
+              "element": "风",
+              "markId": 750,
+              "packetElementId": 799,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -33025,13 +33061,16 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -33084,16 +33123,16 @@
             },
             "target": {
               "kind": "enemy",
-              "code": 1,
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_6463115307445065558__6463115307445065558.json#startFrame|targetType"
+              "code": null,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
             },
             "scenarioRuntimeStatus": "source-verified",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": [
@@ -33106,7 +33145,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "wind",
+              "element": "风",
+              "markId": 750,
+              "packetElementId": 799,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -33140,13 +33197,16 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -33199,16 +33259,16 @@
             },
             "target": {
               "kind": "enemy",
-              "code": 1,
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_962689896015664982__962689896015664982.json#startFrame|targetType"
+              "code": null,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
             },
             "scenarioRuntimeStatus": "source-verified",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": [
@@ -33221,7 +33281,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "wind",
+              "element": "风",
+              "markId": 750,
+              "packetElementId": 799,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -33255,13 +33333,16 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -35853,16 +35934,16 @@
             },
             "target": {
               "kind": "enemy",
-              "code": 1,
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1947040752449218730__-1947040752449218730.json#startFrame|targetType"
+              "code": null,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
             },
             "scenarioRuntimeStatus": "source-verified",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": []
@@ -35873,7 +35954,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "light",
+              "element": "光",
+              "markId": 950,
+              "packetElementId": 999,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -35907,13 +36006,16 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -35966,16 +36068,16 @@
             },
             "target": {
               "kind": "enemy",
-              "code": 1,
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6717776740476971178__-6717776740476971178.json#startFrame|targetType"
+              "code": null,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
             },
             "scenarioRuntimeStatus": "source-verified",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": []
@@ -35986,7 +36088,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "light",
+              "element": "光",
+              "markId": 950,
+              "packetElementId": 999,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -36020,13 +36140,16 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -36079,16 +36202,16 @@
             },
             "target": {
               "kind": "enemy",
-              "code": 1,
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_4819247235648853846__4819247235648853846.json#startFrame|targetType"
+              "code": null,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
             },
             "scenarioRuntimeStatus": "source-verified",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": []
@@ -36099,7 +36222,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "light",
+              "element": "光",
+              "markId": 950,
+              "packetElementId": 999,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -36133,13 +36274,16 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -40338,9 +40482,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10101013|element:-5107736885784262990",
               "10101013|element:4731523060341306954",
@@ -40517,9 +40661,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 1,
+            "appliedNodeCount": 2,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10101013|element:-8630062226069243067",
               "10101013|element:1781318263043700654",
@@ -42119,17 +42263,17 @@
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=-5107736885784262990|trigger-unresolved"
             },
             "target": {
-              "kind": "unresolved",
+              "kind": "enemy",
               "code": null,
-              "sourceIdentity": null
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
             },
             "scenarioRuntimeStatus": "scenario-runtime-unresolved",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": [
@@ -42142,7 +42286,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "wind",
+              "element": "风",
+              "markId": 750,
+              "packetElementId": 799,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101021:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -42176,15 +42338,17 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -43621,15 +43785,15 @@
             "target": {
               "kind": "enemy",
               "code": null,
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-7178919562725074255__-7178919562725074255.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010211.asset/MonoBehaviour/ast_bullet_101010211__5241030791795842222.json#bulletTargetType|bulletLogicObjects|conditionType=3(timer)|lifeTime=900|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010211.asset/MonoBehaviour/ast_bullet_101010211__5241030791795842222.json#bulletLogicObjects[2].actionObjects[1].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010212.asset/MonoBehaviour/ast_bullet_101010212__8010027229995626354.json#bulletLogicObjects[1].actionObjects[1].actionElementParameter.elementInfos[0].elementId"
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
             },
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": [
@@ -43642,7 +43806,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "wind",
+              "element": "风",
+              "markId": 750,
+              "packetElementId": 799,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101021:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -43676,13 +43858,16 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -45259,9 +45444,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10101021|element:-5107736885784262990",
               "10101021|element:4731523060341306954",
@@ -45462,9 +45647,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10101021|element:-5107736885784262990",
               "10101021|element:4731523060341306954",
@@ -50150,17 +50335,17 @@
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=-5107736885784262990|trigger-unresolved"
             },
             "target": {
-              "kind": "unresolved",
+              "kind": "enemy",
               "code": null,
-              "sourceIdentity": null
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
             },
             "scenarioRuntimeStatus": "scenario-runtime-unresolved",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": [
@@ -50173,7 +50358,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "wind",
+              "element": "风",
+              "markId": 750,
+              "packetElementId": 799,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101042:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -50207,15 +50410,17 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -51652,15 +51857,15 @@
             "target": {
               "kind": "enemy",
               "code": null,
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/MonoBehaviour_1082770784268020564__1082770784268020564.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010015.asset/MonoBehaviour/ast_bullet_101010015__-5574880831731051181.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010015.asset/MonoBehaviour/ast_bullet_101010015__-5574880831731051181.json#bulletLogicObjects[2].actionObjects[1].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010017.asset/MonoBehaviour/ast_bullet_101010017__6443427038070952918.json#bulletLogicObjects[1].actionObjects[1].actionElementParameter.elementInfos[0].elementId"
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
             },
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": [
@@ -51673,7 +51878,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "wind",
+              "element": "风",
+              "markId": 750,
+              "packetElementId": 799,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101042:0:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -51707,13 +51930,16 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -53573,17 +53799,17 @@
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillResourceMaps[1].elements[5]|battle-element-assets.jsonl#path_id=-5107736885784262990|trigger-unresolved"
             },
             "target": {
-              "kind": "unresolved",
+              "kind": "enemy",
               "code": null,
-              "sourceIdentity": null
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
             },
             "scenarioRuntimeStatus": "scenario-runtime-unresolved",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": [
@@ -53596,7 +53822,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "wind",
+              "element": "风",
+              "markId": 750,
+              "packetElementId": 799,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101042:1:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -53630,15 +53874,17 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -55075,15 +55321,15 @@
             "target": {
               "kind": "enemy",
               "code": null,
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/MonoBehaviour_-1521643003225462709__-1521643003225462709.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010016.asset/MonoBehaviour/ast_bullet_101010016__-4672595522468277755.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010016.asset/MonoBehaviour/ast_bullet_101010016__-4672595522468277755.json#bulletLogicObjects[2].actionObjects[1].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010018.asset/MonoBehaviour/ast_bullet_101010018__6769701407337772921.json#bulletLogicObjects[1].actionObjects[1].actionElementParameter.elementInfos[0].elementId"
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
             },
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": [
@@ -55096,7 +55342,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "wind",
+              "element": "风",
+              "markId": 750,
+              "packetElementId": 799,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101042:1:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -55130,13 +55394,16 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -56713,9 +56980,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10101042|element:-5107736885784262990",
               "10101042|element:4731523060341306954",
@@ -56916,9 +57183,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10101042|element:-5107736885784262990",
               "10101042|element:4731523060341306954",
@@ -57163,9 +57430,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10101042|element:-5107736885784262990",
               "10101042|element:4731523060341306954",
@@ -57366,9 +57633,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10101042|element:-5107736885784262990",
               "10101042|element:4731523060341306954",
@@ -58244,17 +58511,17 @@
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/skill_control_10101049__-5945960915407495316.json#skillResourceMaps[1].elements[5]|battle-element-assets.jsonl#path_id=-5107736885784262990|trigger-unresolved"
             },
             "target": {
-              "kind": "unresolved",
+              "kind": "enemy",
               "code": null,
-              "sourceIdentity": null
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
             },
             "scenarioRuntimeStatus": "scenario-runtime-unresolved",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": [
@@ -58267,7 +58534,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "wind",
+              "element": "风",
+              "markId": 750,
+              "packetElementId": 799,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101049:1:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -58301,15 +58586,17 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented",
-              "effect-trigger-frame-missing",
-              "effect-target-unresolved"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map",
+              "effect-trigger-frame-missing"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -59746,15 +60033,15 @@
             "target": {
               "kind": "enemy",
               "code": null,
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-1456802738572092772__-1456802738572092772.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010271.asset/MonoBehaviour/ast_bullet_101010271__-1650893850653619612.json#bulletTargetType|bulletLogicObjects|conditionType=3(timer)|lifeTime=1080|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010271.asset/MonoBehaviour/ast_bullet_101010271__-1650893850653619612.json#bulletLogicObjects[2].actionObjects[1].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010272.asset/MonoBehaviour/ast_bullet_101010272__-1571182015398968202.json#bulletLogicObjects[1].actionObjects[1].actionElementParameter.elementInfos[0].elementId"
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
             },
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "lifecycle": {
               "durationMs": null,
-              "stackMode": "replace",
+              "stackMode": "stack",
               "stackDelta": 1,
-              "maxStacks": 1,
-              "instanceScope": "source-action",
+              "maxStacks": 5,
+              "instanceScope": "team-tuning-pool",
               "combineType": 1,
               "mutuallyExclusiveId": 0,
               "tags": [
@@ -59767,7 +60054,25 @@
             "heal": null,
             "shield": false,
             "tuningMark": null,
-            "tuningOverlimit": null,
+            "tuningOverlimit": {
+              "profileKey": "wind",
+              "element": "风",
+              "markId": 750,
+              "packetElementId": 799,
+              "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+              "minimumStacks": 1,
+              "maximumStacks": null,
+              "consumeMode": null,
+              "judgmentElementId": null,
+              "judgmentPathId": null,
+              "judgmentSourceIdentity": null,
+              "judgmentCandidateMarkIds": [],
+              "judgmentGroupIdentity": "tuning-consume-judgment:10101049:1:unknown-element:unknown-path",
+              "judgmentCandidates": [],
+              "runtimeSelectionMode": "single-mark-packet",
+              "priorityDirection": null,
+              "priorityRuntimeEvidence": null
+            },
             "formula": {
               "commonFunctionId": 1,
               "baseFunctionId": 0,
@@ -59801,13 +60106,16 @@
                 "sourceField": null
               },
               "mark": {
-                "status": "unresolved",
-                "sourceField": "elementConfigId"
+                "status": "applied",
+                "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
               }
             },
             "classification": "unresolved",
             "reasons": [
-              "judgment-condition-runtime-unimplemented"
+              "tuning-consume-judgment-missing",
+              "tuning-consume-mark-identity-ambiguous",
+              "tuning-consume-success-branch-unresolved",
+              "tuning-consume-current-packet-not-in-candidate-map"
             ],
             "status": "verified-action-effect-binding-unresolved",
             "confidence": "unresolved",
@@ -61438,9 +61746,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10101049|element:-5107736885784262990",
               "10101049|element:4731523060341306954",
@@ -61641,9 +61949,9 @@
                 "status": "verified-battle-element-reference-resolved"
               }
             ],
-            "appliedNodeCount": 2,
+            "appliedNodeCount": 3,
             "verifiedZeroNodeCount": 0,
-            "unresolvedNodeCount": 3,
+            "unresolvedNodeCount": 2,
             "nodeIdentities": [
               "10101049|element:-5107736885784262990",
               "10101049|element:4731523060341306954",
@@ -86787,16 +87095,16 @@
           },
           "target": {
             "kind": "enemy",
-            "code": 1,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_3857329302774606883__3857329302774606883.json#startFrame|targetType"
+            "code": null,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
           },
           "scenarioRuntimeStatus": "source-verified",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": []
@@ -86807,7 +87115,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "light",
+            "element": "光",
+            "markId": 950,
+            "packetElementId": 999,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101012:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -86841,13 +87167,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -90488,16 +90817,16 @@
           },
           "target": {
             "kind": "enemy",
-            "code": 1,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6326209782415091882__-6326209782415091882.json#startFrame|targetType"
+            "code": null,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
           "scenarioRuntimeStatus": "source-verified",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": [
@@ -90510,7 +90839,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -90544,13 +90891,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -90603,16 +90953,16 @@
           },
           "target": {
             "kind": "enemy",
-            "code": 1,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_6463115307445065558__6463115307445065558.json#startFrame|targetType"
+            "code": null,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
           "scenarioRuntimeStatus": "source-verified",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": [
@@ -90625,7 +90975,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -90659,13 +91027,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -90718,16 +91089,16 @@
           },
           "target": {
             "kind": "enemy",
-            "code": 1,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_962689896015664982__962689896015664982.json#startFrame|targetType"
+            "code": null,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
           "scenarioRuntimeStatus": "source-verified",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": [
@@ -90740,7 +91111,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -90774,13 +91163,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -91721,16 +92113,16 @@
           },
           "target": {
             "kind": "enemy",
-            "code": 1,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1947040752449218730__-1947040752449218730.json#startFrame|targetType"
+            "code": null,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
           },
           "scenarioRuntimeStatus": "source-verified",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": []
@@ -91741,7 +92133,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "light",
+            "element": "光",
+            "markId": 950,
+            "packetElementId": 999,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -91775,13 +92185,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -91834,16 +92247,16 @@
           },
           "target": {
             "kind": "enemy",
-            "code": 1,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6717776740476971178__-6717776740476971178.json#startFrame|targetType"
+            "code": null,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
           },
           "scenarioRuntimeStatus": "source-verified",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": []
@@ -91854,7 +92267,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "light",
+            "element": "光",
+            "markId": 950,
+            "packetElementId": 999,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -91888,13 +92319,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -91947,16 +92381,16 @@
           },
           "target": {
             "kind": "enemy",
-            "code": 1,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_4819247235648853846__4819247235648853846.json#startFrame|targetType"
+            "code": null,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
           },
           "scenarioRuntimeStatus": "source-verified",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": []
@@ -91967,7 +92401,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "light",
+            "element": "光",
+            "markId": 950,
+            "packetElementId": 999,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101013:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -92001,13 +92453,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -96881,15 +97336,15 @@
           "target": {
             "kind": "enemy",
             "code": null,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/MonoBehaviour_-7178919562725074255__-7178919562725074255.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010211.asset/MonoBehaviour/ast_bullet_101010211__5241030791795842222.json#bulletTargetType|bulletLogicObjects|conditionType=3(timer)|lifeTime=900|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010211.asset/MonoBehaviour/ast_bullet_101010211__5241030791795842222.json#bulletLogicObjects[2].actionObjects[1].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010212.asset/MonoBehaviour/ast_bullet_101010212__8010027229995626354.json#bulletLogicObjects[1].actionObjects[1].actionElementParameter.elementInfos[0].elementId"
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": [
@@ -96902,7 +97357,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101021:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -96936,13 +97409,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -96983,17 +97459,17 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=-5107736885784262990|trigger-unresolved"
           },
           "target": {
-            "kind": "unresolved",
+            "kind": "enemy",
             "code": null,
-            "sourceIdentity": null
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
           "scenarioRuntimeStatus": "scenario-runtime-unresolved",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": [
@@ -97006,7 +97482,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101021:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -97040,15 +97534,17 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -102916,15 +103412,15 @@
           "target": {
             "kind": "enemy",
             "code": null,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/MonoBehaviour_1082770784268020564__1082770784268020564.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010015.asset/MonoBehaviour/ast_bullet_101010015__-5574880831731051181.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010015.asset/MonoBehaviour/ast_bullet_101010015__-5574880831731051181.json#bulletLogicObjects[2].actionObjects[1].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010017.asset/MonoBehaviour/ast_bullet_101010017__6443427038070952918.json#bulletLogicObjects[1].actionObjects[1].actionElementParameter.elementInfos[0].elementId"
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": [
@@ -102937,7 +103433,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101042:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -102971,13 +103485,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -103018,17 +103535,17 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=-5107736885784262990|trigger-unresolved"
           },
           "target": {
-            "kind": "unresolved",
+            "kind": "enemy",
             "code": null,
-            "sourceIdentity": null
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
           "scenarioRuntimeStatus": "scenario-runtime-unresolved",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": [
@@ -103041,7 +103558,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101042:0:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -103075,15 +103610,17 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -106339,15 +106876,15 @@
           "target": {
             "kind": "enemy",
             "code": null,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/MonoBehaviour_-1521643003225462709__-1521643003225462709.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010016.asset/MonoBehaviour/ast_bullet_101010016__-4672595522468277755.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010016.asset/MonoBehaviour/ast_bullet_101010016__-4672595522468277755.json#bulletLogicObjects[2].actionObjects[1].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010018.asset/MonoBehaviour/ast_bullet_101010018__6769701407337772921.json#bulletLogicObjects[1].actionObjects[1].actionElementParameter.elementInfos[0].elementId"
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": [
@@ -106360,7 +106897,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101042:1:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -106394,13 +106949,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -106441,17 +106999,17 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101042.asset/MonoBehaviour/skill_control_10101042__-7482828443596052429.json#skillResourceMaps[1].elements[5]|battle-element-assets.jsonl#path_id=-5107736885784262990|trigger-unresolved"
           },
           "target": {
-            "kind": "unresolved",
+            "kind": "enemy",
             "code": null,
-            "sourceIdentity": null
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
           "scenarioRuntimeStatus": "scenario-runtime-unresolved",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": [
@@ -106464,7 +107022,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101042:1:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -106498,15 +107074,17 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -109873,15 +110451,15 @@
           "target": {
             "kind": "enemy",
             "code": null,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-1456802738572092772__-1456802738572092772.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010271.asset/MonoBehaviour/ast_bullet_101010271__-1650893850653619612.json#bulletTargetType|bulletLogicObjects|conditionType=3(timer)|lifeTime=1080|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010271.asset/MonoBehaviour/ast_bullet_101010271__-1650893850653619612.json#bulletLogicObjects[2].actionObjects[1].actionSummonBulletParameter.bulletShootDataConfigs[0].bullets[0]|conditionType=0(collision)|targetDistance=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_101010272.asset/MonoBehaviour/ast_bullet_101010272__-1571182015398968202.json#bulletLogicObjects[1].actionObjects[1].actionElementParameter.elementInfos[0].elementId"
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
           "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": [
@@ -109894,7 +110472,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101049:1:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -109928,13 +110524,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -109975,17 +110574,17 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/skill_control_10101049__-5945960915407495316.json#skillResourceMaps[1].elements[5]|battle-element-assets.jsonl#path_id=-5107736885784262990|trigger-unresolved"
           },
           "target": {
-            "kind": "unresolved",
+            "kind": "enemy",
             "code": null,
-            "sourceIdentity": null
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
           },
           "scenarioRuntimeStatus": "scenario-runtime-unresolved",
           "lifecycle": {
             "durationMs": null,
-            "stackMode": "replace",
+            "stackMode": "stack",
             "stackDelta": 1,
-            "maxStacks": 1,
-            "instanceScope": "source-action",
+            "maxStacks": 5,
+            "instanceScope": "team-tuning-pool",
             "combineType": 1,
             "mutuallyExclusiveId": 0,
             "tags": [
@@ -109998,7 +110597,25 @@
           "heal": null,
           "shield": false,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954",
+            "minimumStacks": 1,
+            "maximumStacks": null,
+            "consumeMode": null,
+            "judgmentElementId": null,
+            "judgmentPathId": null,
+            "judgmentSourceIdentity": null,
+            "judgmentCandidateMarkIds": [],
+            "judgmentGroupIdentity": "tuning-consume-judgment:10101049:1:unknown-element:unknown-path",
+            "judgmentCandidates": [],
+            "runtimeSelectionMode": "single-mark-packet",
+            "priorityDirection": null,
+            "priorityRuntimeEvidence": null
+          },
           "formula": {
             "commonFunctionId": 1,
             "baseFunctionId": 0,
@@ -110032,15 +110649,17 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "classification": "unresolved",
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
+            "effect-trigger-frame-missing"
           ],
           "status": "verified-action-effect-binding-unresolved",
           "confidence": "unresolved",
@@ -116021,7 +116640,7 @@
           "sourceNameStatus": "source-name-ready",
           "displayLabel": "消耗1层光调谐",
           "kind": "judgment",
-          "role": "condition",
+          "role": "gameplay-effect",
           "conditional": false,
           "relationPath": [],
           "trigger": {
@@ -116045,18 +116664,16 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/MonoBehaviour_3857329302774606883__3857329302774606883.json#startFrame|targetType"
           },
           "target": {
-            "code": 1,
-            "kind": "enemy",
-            "sourceField": "targetType",
-            "containerField": "elementBaseDatas",
-            "enumName": "ETargetType",
-            "enumMember": "Enemy",
-            "resolution": "static-resolved",
-            "runtimeReason": null,
-            "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETargetType.Enemy"
+            "kind": "unresolved",
+            "code": null,
+            "resolution": "static-evidence-gap",
+            "enumName": null,
+            "enumMember": null,
+            "sourceField": "verified-tuning-mechanics",
+            "runtimeReason": null
           },
-          "placementResolution": "static-resolved",
-          "staticallyResolvable": true,
+          "placementResolution": "static-evidence-gap",
+          "staticallyResolvable": false,
           "lifecycle": {
             "durationMs": null,
             "tags": [],
@@ -116085,7 +116702,13 @@
           "shield": false,
           "damage": null,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "light",
+            "element": "光",
+            "markId": 950,
+            "packetElementId": 999,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
+          },
           "judgment": {
             "judgmentType": 0,
             "consume": true,
@@ -116111,7 +116734,7 @@
             ],
             "effectPathIds": []
           },
-          "classification": "structural",
+          "classification": "unresolved",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -116138,13 +116761,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
-            "semantic-condition-not-standalone-gameplay-effect"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
+            "effect-target-static-evidence-gap"
           ],
           "rawEffectIdentities": [
             "10101012|0|elements|3|-8630062226069243067|element:-8630062226069243067|50|0"
@@ -120261,7 +120887,7 @@
           "sourceNameStatus": "source-name-ready",
           "displayLabel": "消耗1层风调谐",
           "kind": "judgment",
-          "role": "condition",
+          "role": "gameplay-effect",
           "conditional": false,
           "relationPath": [],
           "trigger": {
@@ -120285,18 +120911,16 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6326209782415091882__-6326209782415091882.json#startFrame|targetType"
           },
           "target": {
-            "code": 1,
-            "kind": "enemy",
-            "sourceField": "targetType",
-            "containerField": "elementBaseDatas",
-            "enumName": "ETargetType",
-            "enumMember": "Enemy",
-            "resolution": "static-resolved",
-            "runtimeReason": null,
-            "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETargetType.Enemy"
+            "kind": "unresolved",
+            "code": null,
+            "resolution": "static-evidence-gap",
+            "enumName": null,
+            "enumMember": null,
+            "sourceField": "verified-tuning-mechanics",
+            "runtimeReason": null
           },
-          "placementResolution": "static-resolved",
-          "staticallyResolvable": true,
+          "placementResolution": "static-evidence-gap",
+          "staticallyResolvable": false,
           "lifecycle": {
             "durationMs": null,
             "tags": [
@@ -120327,7 +120951,13 @@
           "shield": false,
           "damage": null,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+          },
           "judgment": {
             "judgmentType": 0,
             "consume": true,
@@ -120353,7 +120983,7 @@
             ],
             "effectPathIds": []
           },
-          "classification": "structural",
+          "classification": "unresolved",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -120380,13 +121010,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
-            "semantic-condition-not-standalone-gameplay-effect"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
+            "effect-target-static-evidence-gap"
           ],
           "rawEffectIdentities": [
             "10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|225|0",
@@ -120446,7 +121079,7 @@
           "sourceNameStatus": "source-name-ready",
           "displayLabel": "消耗1层风调谐",
           "kind": "judgment",
-          "role": "condition",
+          "role": "gameplay-effect",
           "conditional": false,
           "relationPath": [],
           "trigger": {
@@ -120470,18 +121103,16 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_6463115307445065558__6463115307445065558.json#startFrame|targetType"
           },
           "target": {
-            "code": 1,
-            "kind": "enemy",
-            "sourceField": "targetType",
-            "containerField": "elementBaseDatas",
-            "enumName": "ETargetType",
-            "enumMember": "Enemy",
-            "resolution": "static-resolved",
-            "runtimeReason": null,
-            "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETargetType.Enemy"
+            "kind": "unresolved",
+            "code": null,
+            "resolution": "static-evidence-gap",
+            "enumName": null,
+            "enumMember": null,
+            "sourceField": "verified-tuning-mechanics",
+            "runtimeReason": null
           },
-          "placementResolution": "static-resolved",
-          "staticallyResolvable": true,
+          "placementResolution": "static-evidence-gap",
+          "staticallyResolvable": false,
           "lifecycle": {
             "durationMs": null,
             "tags": [
@@ -120512,7 +121143,13 @@
           "shield": false,
           "damage": null,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+          },
           "judgment": {
             "judgmentType": 0,
             "consume": true,
@@ -120538,7 +121175,7 @@
             ],
             "effectPathIds": []
           },
-          "classification": "structural",
+          "classification": "unresolved",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -120565,13 +121202,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
-            "semantic-condition-not-standalone-gameplay-effect"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
+            "effect-target-static-evidence-gap"
           ],
           "rawEffectIdentities": [
             "10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|225|0",
@@ -120631,7 +121271,7 @@
           "sourceNameStatus": "source-name-ready",
           "displayLabel": "消耗1层风调谐",
           "kind": "judgment",
-          "role": "condition",
+          "role": "gameplay-effect",
           "conditional": false,
           "relationPath": [],
           "trigger": {
@@ -120655,18 +121295,16 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_962689896015664982__962689896015664982.json#startFrame|targetType"
           },
           "target": {
-            "code": 1,
-            "kind": "enemy",
-            "sourceField": "targetType",
-            "containerField": "elementBaseDatas",
-            "enumName": "ETargetType",
-            "enumMember": "Enemy",
-            "resolution": "static-resolved",
-            "runtimeReason": null,
-            "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETargetType.Enemy"
+            "kind": "unresolved",
+            "code": null,
+            "resolution": "static-evidence-gap",
+            "enumName": null,
+            "enumMember": null,
+            "sourceField": "verified-tuning-mechanics",
+            "runtimeReason": null
           },
-          "placementResolution": "static-resolved",
-          "staticallyResolvable": true,
+          "placementResolution": "static-evidence-gap",
+          "staticallyResolvable": false,
           "lifecycle": {
             "durationMs": null,
             "tags": [
@@ -120697,7 +121335,13 @@
           "shield": false,
           "damage": null,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+          },
           "judgment": {
             "judgmentType": 0,
             "consume": true,
@@ -120723,7 +121367,7 @@
             ],
             "effectPathIds": []
           },
-          "classification": "structural",
+          "classification": "unresolved",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -120750,13 +121394,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
-            "semantic-condition-not-standalone-gameplay-effect"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
+            "effect-target-static-evidence-gap"
           ],
           "rawEffectIdentities": [
             "10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|225|0",
@@ -122054,7 +122701,7 @@
           "sourceNameStatus": "source-name-ready",
           "displayLabel": "消耗1层光调谐",
           "kind": "judgment",
-          "role": "condition",
+          "role": "gameplay-effect",
           "conditional": false,
           "relationPath": [],
           "trigger": {
@@ -122078,18 +122725,16 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1947040752449218730__-1947040752449218730.json#startFrame|targetType"
           },
           "target": {
-            "code": 1,
-            "kind": "enemy",
-            "sourceField": "targetType",
-            "containerField": "elementBaseDatas",
-            "enumName": "ETargetType",
-            "enumMember": "Enemy",
-            "resolution": "static-resolved",
-            "runtimeReason": null,
-            "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETargetType.Enemy"
+            "kind": "unresolved",
+            "code": null,
+            "resolution": "static-evidence-gap",
+            "enumName": null,
+            "enumMember": null,
+            "sourceField": "verified-tuning-mechanics",
+            "runtimeReason": null
           },
-          "placementResolution": "static-resolved",
-          "staticallyResolvable": true,
+          "placementResolution": "static-evidence-gap",
+          "staticallyResolvable": false,
           "lifecycle": {
             "durationMs": null,
             "tags": [],
@@ -122118,7 +122763,13 @@
           "shield": false,
           "damage": null,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "light",
+            "element": "光",
+            "markId": 950,
+            "packetElementId": 999,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
+          },
           "judgment": {
             "judgmentType": 0,
             "consume": true,
@@ -122144,7 +122795,7 @@
             ],
             "effectPathIds": []
           },
-          "classification": "structural",
+          "classification": "unresolved",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -122171,13 +122822,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
-            "semantic-condition-not-standalone-gameplay-effect"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
+            "effect-target-static-evidence-gap"
           ],
           "rawEffectIdentities": [
             "10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|272|0",
@@ -122237,7 +122891,7 @@
           "sourceNameStatus": "source-name-ready",
           "displayLabel": "消耗1层光调谐",
           "kind": "judgment",
-          "role": "condition",
+          "role": "gameplay-effect",
           "conditional": false,
           "relationPath": [],
           "trigger": {
@@ -122261,18 +122915,16 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6717776740476971178__-6717776740476971178.json#startFrame|targetType"
           },
           "target": {
-            "code": 1,
-            "kind": "enemy",
-            "sourceField": "targetType",
-            "containerField": "elementBaseDatas",
-            "enumName": "ETargetType",
-            "enumMember": "Enemy",
-            "resolution": "static-resolved",
-            "runtimeReason": null,
-            "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETargetType.Enemy"
+            "kind": "unresolved",
+            "code": null,
+            "resolution": "static-evidence-gap",
+            "enumName": null,
+            "enumMember": null,
+            "sourceField": "verified-tuning-mechanics",
+            "runtimeReason": null
           },
-          "placementResolution": "static-resolved",
-          "staticallyResolvable": true,
+          "placementResolution": "static-evidence-gap",
+          "staticallyResolvable": false,
           "lifecycle": {
             "durationMs": null,
             "tags": [],
@@ -122301,7 +122953,13 @@
           "shield": false,
           "damage": null,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "light",
+            "element": "光",
+            "markId": 950,
+            "packetElementId": 999,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
+          },
           "judgment": {
             "judgmentType": 0,
             "consume": true,
@@ -122327,7 +122985,7 @@
             ],
             "effectPathIds": []
           },
-          "classification": "structural",
+          "classification": "unresolved",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -122354,13 +123012,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
-            "semantic-condition-not-standalone-gameplay-effect"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
+            "effect-target-static-evidence-gap"
           ],
           "rawEffectIdentities": [
             "10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|272|0",
@@ -122420,7 +123081,7 @@
           "sourceNameStatus": "source-name-ready",
           "displayLabel": "消耗1层光调谐",
           "kind": "judgment",
-          "role": "condition",
+          "role": "gameplay-effect",
           "conditional": false,
           "relationPath": [],
           "trigger": {
@@ -122444,18 +123105,16 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_4819247235648853846__4819247235648853846.json#startFrame|targetType"
           },
           "target": {
-            "code": 1,
-            "kind": "enemy",
-            "sourceField": "targetType",
-            "containerField": "elementBaseDatas",
-            "enumName": "ETargetType",
-            "enumMember": "Enemy",
-            "resolution": "static-resolved",
-            "runtimeReason": null,
-            "sourceIdentity": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ETargetType.Enemy"
+            "kind": "unresolved",
+            "code": null,
+            "resolution": "static-evidence-gap",
+            "enumName": null,
+            "enumMember": null,
+            "sourceField": "verified-tuning-mechanics",
+            "runtimeReason": null
           },
-          "placementResolution": "static-resolved",
-          "staticallyResolvable": true,
+          "placementResolution": "static-evidence-gap",
+          "staticallyResolvable": false,
           "lifecycle": {
             "durationMs": null,
             "tags": [],
@@ -122484,7 +123143,13 @@
           "shield": false,
           "damage": null,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "light",
+            "element": "光",
+            "markId": 950,
+            "packetElementId": 999,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=1781318263043700654"
+          },
           "judgment": {
             "judgmentType": 0,
             "consume": true,
@@ -122510,7 +123175,7 @@
             ],
             "effectPathIds": []
           },
-          "classification": "structural",
+          "classification": "unresolved",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -122537,13 +123202,16 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
-            "semantic-condition-not-standalone-gameplay-effect"
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
+            "effect-target-static-evidence-gap"
           ],
           "rawEffectIdentities": [
             "10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|272|0",
@@ -127807,7 +128475,7 @@
           "sourceNameStatus": "source-name-ready",
           "displayLabel": "消耗1层风调谐",
           "kind": "judgment",
-          "role": "condition",
+          "role": "gameplay-effect",
           "conditional": false,
           "relationPath": [],
           "trigger": {
@@ -127833,14 +128501,13 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillResourceMaps[0].bulletElements[3]"
           },
           "target": {
+            "kind": "unresolved",
             "code": null,
-            "kind": "runtime-hit-target",
-            "sourceField": "skillResourceMaps[].bulletElements",
+            "resolution": "static-evidence-gap",
             "enumName": null,
             "enumMember": null,
-            "resolution": "runtime-dependent",
-            "runtimeReason": "runtime-target-from-projectile-collision",
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillResourceMaps[0].bulletElements[3]"
+            "sourceField": "verified-tuning-mechanics",
+            "runtimeReason": null
           },
           "placementResolution": "runtime-dependent",
           "staticallyResolvable": false,
@@ -127874,7 +128541,13 @@
           "shield": false,
           "damage": null,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+          },
           "judgment": {
             "judgmentType": 0,
             "consume": true,
@@ -127900,7 +128573,7 @@
             ],
             "effectPathIds": []
           },
-          "classification": "structural",
+          "classification": "unresolved",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -127927,15 +128600,18 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "runtime-trigger-projectile-collision-frame",
             "runtime-target-from-projectile-collision",
-            "semantic-condition-not-standalone-gameplay-effect"
+            "effect-target-static-evidence-gap"
           ],
           "rawEffectIdentities": [
             "10101021|0|bulletElements|3|element-101010210|element:-5107736885784262990|109|0"
@@ -127965,9 +128641,9 @@
             }
           ],
           "calculationMultiplicity": {
-            "mode": "runtime-selected-recipient",
+            "mode": "single-semantic-target",
             "semanticRecordCount": 1,
-            "runtimeCopyCount": 1
+            "runtimeCopyCount": null
           },
           "rawEffectBindingCount": 1,
           "collapsedCandidateCount": 1,
@@ -127992,7 +128668,7 @@
           "sourceNameStatus": "source-name-ready",
           "displayLabel": "消耗1层风调谐",
           "kind": "judgment",
-          "role": "condition",
+          "role": "gameplay-effect",
           "conditional": false,
           "relationPath": [],
           "trigger": {
@@ -128018,14 +128694,13 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillResourceMaps[0].elements[5]"
           },
           "target": {
-            "code": null,
             "kind": "unresolved",
-            "sourceField": null,
+            "code": null,
+            "resolution": "static-evidence-gap",
             "enumName": null,
             "enumMember": null,
-            "resolution": "static-evidence-gap",
-            "runtimeReason": null,
-            "sourceIdentity": null
+            "sourceField": "verified-tuning-mechanics",
+            "runtimeReason": null
           },
           "placementResolution": "static-evidence-gap",
           "staticallyResolvable": false,
@@ -128059,7 +128734,13 @@
           "shield": false,
           "damage": null,
           "tuningMark": null,
-          "tuningOverlimit": null,
+          "tuningOverlimit": {
+            "profileKey": "wind",
+            "element": "风",
+            "markId": 750,
+            "packetElementId": 799,
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=4731523060341306954"
+          },
           "judgment": {
             "judgmentType": 0,
             "consume": true,
@@ -128085,7 +128766,7 @@
             ],
             "effectPathIds": []
           },
-          "classification": "structural",
+          "classification": "unresolved",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -128112,15 +128793,17 @@
               "sourceField": null
             },
             "mark": {
-              "status": "unresolved",
-              "sourceField": "elementConfigId"
+              "status": "applied",
+              "sourceField": "elementConfigId|elementArr|consumeLayerNum|consumeLayerMaxNum"
             }
           },
           "reasons": [
-            "judgment-condition-runtime-unimplemented",
+            "tuning-consume-judgment-missing",
+            "tuning-consume-mark-identity-ambiguous",
+            "tuning-consume-success-branch-unresolved",
+            "tuning-consume-current-packet-not-in-candidate-map",
             "effect-trigger-frame-static-evidence-gap",
-            "effect-target-static-evidence-gap",
-            "semantic-condition-not-standalone-gameplay-effect"
+            "effect-target-static-evidence-gap"
           ],
           "rawEffectIdentities": [
             "10101021|0|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0"
@@ -133126,14 +133809,13 @@
           "projectile-impact-frame-runtime-dependent",
           "effect-trigger-frame-missing",
           "effect-target-unresolved",
-          "judgment-condition-runtime-unimplemented",
-          "nested-damage-trigger-lifecycle-not-expanded",
-          "nested-effect-wrapper-semantics-unresolved",
-          "sp-formula-not-literal-function-5",
           "tuning-consume-judgment-missing",
           "tuning-consume-mark-identity-ambiguous",
           "tuning-consume-success-branch-unresolved",
-          "tuning-consume-current-packet-not-in-candidate-map"
+          "tuning-consume-current-packet-not-in-candidate-map",
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "sp-formula-not-literal-function-5"
         ],
         "sourceIdentity": "characters.items[id=101010].skillSlots[slot=203,skillId=10101021]",
         "sourceIdentities": [
@@ -133251,10 +133933,10 @@
     "sourceCompilation": {
       "compilerVersion": 3,
       "recipeIdentity": "actor:101010:character-combat-recipe:v1",
-      "recipeHash": "e98bf716a662b1f5f68f21819b48a0dd4f5bbcb27517ef98493bced93a49b04b",
+      "recipeHash": "ba8051702ac30dd4c5c59cfef3f01ce562b11012859f91ee72e5f250b7c97d78",
       "compilerInputHash": "99563386f09ac69fbfa972720c4a08e52589368c200ed6189900661f953ec4d1",
       "recipeContractHash": "ffd5e5fdffb7c64ef19926b6ce2ba2a28b4bf874e5acc1c4a2b9758e6518459a",
-      "ownerContractHash": "b45f9f03d495e0b841560e79cba80ff492ade15e078175ff73f4178191d35a44"
+      "ownerContractHash": "598ed92145192f060f0b4cbe9ff9c53a78c8a3d44f050577d6abd52ee8025d21"
     },
     "operators": [
       "public-action-binding",
@@ -133275,7 +133957,7 @@
         "packagePath": "actionMappings",
         "operator": "public-action-binding",
         "recordCount": 10,
-        "recordsHash": "bc8d58162c0ec3ddf05fd4195ff7bae28d058c06f6c9ec79a123939950cfc873"
+        "recordsHash": "7a566db1cbf9fe57efb4ba04c27e30b859f5c84b044a47696751f2dbff04da93"
       },
       {
         "packagePath": "actionVariantGraph.publicActionForms",
@@ -133335,7 +134017,7 @@
         "packagePath": "switchTriggerCatalog.profiles",
         "operator": "switch-trigger",
         "recordCount": 1,
-        "recordsHash": "56854ea3e52b8d154de444789567c59cd040adf00d3ac8f9a048a9fd8d955d66"
+        "recordsHash": "a780956024ef388478db57e540bc9cc6c3ad9335a06e35c5004d13281a32ba5e"
       },
       {
         "packagePath": "staticPropertyCatalog",
@@ -133344,7 +134026,7 @@
         "recordsHash": "da76ed738720d9b25b28173b238c9cdbb20f42a561e8a067a236d672f7a912ed"
       }
     ],
-    "contractHash": "a813779988f6eb7d4749577486607a84251dd3d2d94ee981b69387fbb1265bef"
+    "contractHash": "f40d843a8c9668c90ea5e6c5aa1b553e9ce8bca8d559702da4f6e84c5f62b996"
   },
   "coverage": [
     {
@@ -134113,32 +134795,6 @@
       "rawRecordCount": 6
     },
     {
-      "recordIdentity": "semantic-gap:0941808e1a31d759df46",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:-8630062226069243067:-1947040752449218730:272",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-8630062226069243067:-1947040752449218730:272",
-        "battle-effect:10101013:0:-8630062226069243067:-6717776740476971178:284",
-        "battle-effect:10101013:0:-8630062226069243067:4819247235648853846:278"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|272|0",
-        "effect:10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|278|2",
-        "effect:10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|284|1"
-      ],
-      "rawRecordCount": 3
-    },
-    {
       "recordIdentity": "semantic-gap:0c1f4c32f84e78f7cfc5",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -134800,30 +135456,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:2c66cf621b41eeaba5df",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101042:1:-5107736885784262990:unresolved:unresolved",
-      "sourceIdentities": [
-        "battle-effect:10101042:1:-5107736885784262990:unresolved:unresolved"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101042|1|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:2ccbe990f029a11adf31",
       "ownerId": 101010,
       "sourceKind": "hidden-input-window",
@@ -135040,6 +135672,31 @@
       "metadata": null,
       "rawRecordIdentities": [
         "effect:10101010|0|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:34f16776b0c00a121e80",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101042:1:-5107736885784262990:-1521643003225462709:31",
+      "sourceIdentities": [
+        "battle-effect:10101042:1:-5107736885784262990:-1521643003225462709:31"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101042|1|bulletElements|3|element-101010210|element:-5107736885784262990|31|0"
       ],
       "rawRecordCount": 1
     },
@@ -135656,30 +136313,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:55829e8bb8f23c7dc2cd",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101042:0:-5107736885784262990:unresolved:unresolved",
-      "sourceIdentities": [
-        "battle-effect:10101042:0:-5107736885784262990:unresolved:unresolved"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101042|0|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:559a8e8834165936c634",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -135819,6 +136452,57 @@
       "rawRecordCount": 2
     },
     {
+      "recordIdentity": "semantic-gap:5c455f685320c7bd4920",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101042:0:-5107736885784262990:1082770784268020564:53",
+      "sourceIdentities": [
+        "battle-effect:10101042:0:-5107736885784262990:1082770784268020564:53"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101042|0|bulletElements|3|element-101010210|element:-5107736885784262990|53|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:5ddd5fc1fdf6694ec107",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "effect-trigger-frame-missing",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101042:1:-5107736885784262990:unresolved:unresolved",
+      "sourceIdentities": [
+        "battle-effect:10101042:1:-5107736885784262990:unresolved:unresolved"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101042|1|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
       "recordIdentity": "semantic-gap:5e2292a9d09fa33db690",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -135841,6 +136525,35 @@
         "effect:10101042|1|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0"
       ],
       "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:5e3abec261c9e2666743",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101013:0:-8630062226069243067:-1947040752449218730:272",
+      "sourceIdentities": [
+        "battle-effect:10101013:0:-8630062226069243067:-1947040752449218730:272",
+        "battle-effect:10101013:0:-8630062226069243067:-6717776740476971178:284",
+        "battle-effect:10101013:0:-8630062226069243067:4819247235648853846:278"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|272|0",
+        "effect:10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|278|2",
+        "effect:10101013|0|elements|12|-8630062226069243067|element:-8630062226069243067|284|1"
+      ],
+      "rawRecordCount": 3
     },
     {
       "recordIdentity": "semantic-gap:5fca62b0e080c05a66f5",
@@ -136388,6 +137101,31 @@
       "rawRecordCount": 1
     },
     {
+      "recordIdentity": "semantic-gap:7cbb3f5997b46eb32c95",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101021:0:-5107736885784262990:-7178919562725074255:109",
+      "sourceIdentities": [
+        "battle-effect:10101021:0:-5107736885784262990:-7178919562725074255:109"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101021|0|bulletElements|3|element-101010210|element:-5107736885784262990|109|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
       "recordIdentity": "semantic-gap:7cce8cd87bbf2ffd9a29",
       "ownerId": 101010,
       "sourceKind": "hidden-input-window",
@@ -136643,28 +137381,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:8977dbced0da8c24321e",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101049:1:-5107736885784262990:-1456802738572092772:96",
-      "sourceIdentities": [
-        "battle-effect:10101049:1:-5107736885784262990:-1456802738572092772:96"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101049|1|bulletElements|3|element-101010210|element:-5107736885784262990|96|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:8aa717d714c98156b788",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -136717,28 +137433,6 @@
         "effect:10101021|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
       ],
       "rawRecordCount": 6
-    },
-    {
-      "recordIdentity": "semantic-gap:8b449361d6939a508612",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101012:0:-8630062226069243067:3857329302774606883:50",
-      "sourceIdentities": [
-        "battle-effect:10101012:0:-8630062226069243067:3857329302774606883:50"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101012|0|elements|3|-8630062226069243067|element:-8630062226069243067|50|0"
-      ],
-      "rawRecordCount": 1
     },
     {
       "recordIdentity": "semantic-gap:8bc99cae289e6637fc2a",
@@ -136857,32 +137551,6 @@
         "actor:101010|control:10101013|sub:0->actor:101010|control:10101010|sub:2->-3332207699858072492->missing"
       ],
       "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:90c8c55e577ee1584b8c",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101013:0:-5107736885784262990:6463115307445065558:219",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-5107736885784262990:-6326209782415091882:225",
-        "battle-effect:10101013:0:-5107736885784262990:6463115307445065558:219",
-        "battle-effect:10101013:0:-5107736885784262990:962689896015664982:231"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|219|1",
-        "effect:10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|225|0",
-        "effect:10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|231|2"
-      ],
-      "rawRecordCount": 3
     },
     {
       "recordIdentity": "semantic-gap:92c6190a031cbf066403",
@@ -137067,6 +137735,35 @@
       "rawRecordCount": 1
     },
     {
+      "recordIdentity": "semantic-gap:9a6e45c0a616a75f7569",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101013:0:-5107736885784262990:6463115307445065558:219",
+      "sourceIdentities": [
+        "battle-effect:10101013:0:-5107736885784262990:-6326209782415091882:225",
+        "battle-effect:10101013:0:-5107736885784262990:6463115307445065558:219",
+        "battle-effect:10101013:0:-5107736885784262990:962689896015664982:231"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|219|1",
+        "effect:10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|225|0",
+        "effect:10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|231|2"
+      ],
+      "rawRecordCount": 3
+    },
+    {
       "recordIdentity": "semantic-gap:9aeaaea064c959755918",
       "ownerId": 101010,
       "sourceKind": "variant-edge",
@@ -137226,24 +137923,27 @@
       "rawRecordCount": 2
     },
     {
-      "recordIdentity": "semantic-gap:a1e8b471c07c8ff87ae7",
+      "recordIdentity": "semantic-gap:a22843f718fc30c197b8",
       "ownerId": 101010,
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "impactClassification": "gameplay-impacting",
       "reasons": [
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceIdentity": "battle-effect:10101021:0:-5107736885784262990:-7178919562725074255:109",
+      "sourceIdentity": "battle-effect:10101049:1:-5107736885784262990:-1456802738572092772:96",
       "sourceIdentities": [
-        "battle-effect:10101021:0:-5107736885784262990:-7178919562725074255:109"
+        "battle-effect:10101049:1:-5107736885784262990:-1456802738572092772:96"
       ],
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10101021|0|bulletElements|3|element-101010210|element:-5107736885784262990|109|0"
+        "effect:10101049|1|bulletElements|3|element-101010210|element:-5107736885784262990|96|0"
       ],
       "rawRecordCount": 1
     },
@@ -137438,6 +138138,32 @@
       "metadata": null,
       "rawRecordIdentities": [
         "support-control:10101049/sub0|control:10101049|sub:0|window:0-137:0|target:80102|sub:0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:b0f011ef4623ff0ab402",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "effect-trigger-frame-missing",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101049:1:-5107736885784262990:unresolved:unresolved",
+      "sourceIdentities": [
+        "battle-effect:10101049:1:-5107736885784262990:unresolved:unresolved"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101049|1|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0"
       ],
       "rawRecordCount": 1
     },
@@ -137708,6 +138434,31 @@
       "rawRecordCount": 1
     },
     {
+      "recordIdentity": "semantic-gap:bbd28a4e7f3db68dbe4d",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101012:0:-8630062226069243067:3857329302774606883:50",
+      "sourceIdentities": [
+        "battle-effect:10101012:0:-8630062226069243067:3857329302774606883:50"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101012|0|elements|3|-8630062226069243067|element:-8630062226069243067|50|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
       "recordIdentity": "semantic-gap:be6537e81428312e3da9",
       "ownerId": 101010,
       "sourceKind": "hit",
@@ -137758,15 +138509,17 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:c0333834b72a5c55443e",
+      "recordIdentity": "semantic-gap:bfda08c7049dfe5c7de9",
       "ownerId": 101010,
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "impactClassification": "gameplay-impacting",
       "reasons": [
-        "effect-target-unresolved",
         "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
       "sourceIdentity": "battle-effect:10101021:0:-5107736885784262990:unresolved:unresolved",
       "sourceIdentities": [
@@ -137945,6 +138698,32 @@
       "rawRecordCount": 1
     },
     {
+      "recordIdentity": "semantic-gap:cdf1bbaca3fb9da83182",
+      "ownerId": 101010,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "effect-trigger-frame-missing",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10101042:0:-5107736885784262990:unresolved:unresolved",
+      "sourceIdentities": [
+        "battle-effect:10101042:0:-5107736885784262990:unresolved:unresolved"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10101042|0|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
       "recordIdentity": "semantic-gap:ce54a4748dfe6610f820",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -137989,30 +138768,6 @@
       "metadata": null,
       "rawRecordIdentities": [
         "actor:101010|control:10101010|sub:0->actor:101010|control:10101010|sub:1->-2323960829737228709->0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:cfb2fe27237d6a6bf292",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101049:1:-5107736885784262990:unresolved:unresolved",
-      "sourceIdentities": [
-        "battle-effect:10101049:1:-5107736885784262990:unresolved:unresolved"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101049|1|elements|5|-5107736885784262990|element:-5107736885784262990|unresolved-frame|0"
       ],
       "rawRecordCount": 1
     },
@@ -138307,28 +139062,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:de98f073831c2bc707c5",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101042:0:-5107736885784262990:1082770784268020564:53",
-      "sourceIdentities": [
-        "battle-effect:10101042:0:-5107736885784262990:1082770784268020564:53"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101042|0|bulletElements|3|element-101010210|element:-5107736885784262990|53|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:dee1b03a165e9711dd33",
       "ownerId": 101010,
       "sourceKind": "effect",
@@ -138557,28 +139290,6 @@
       "metadata": null,
       "rawRecordIdentities": [
         "actor:101010:perfect-parry:xiaoyu-perfect-parry-counter|control:10101049|sub:1|window:60-100:1|target:0|sub:0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:edde014402af214a3a94",
-      "ownerId": 101010,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "judgment-condition-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10101042:1:-5107736885784262990:-1521643003225462709:31",
-      "sourceIdentities": [
-        "battle-effect:10101042:1:-5107736885784262990:-1521643003225462709:31"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10101042|1|bulletElements|3|element-101010210|element:-5107736885784262990|31|0"
       ],
       "rawRecordCount": 1
     },
@@ -138882,7 +139593,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "68f92202dee75560de474cfc39b2d85eb4e15038a86ef7b4cdd3079ea696eecf"
+    "deterministicInputHash": "29bf35c56b7fe9291e7ba3426edc01ce791c52d98bcfb4b4a6b4295ad798a4ed"
   },
-  "profileHash": "b1ddc354e467baf9b5092dcea9bf386e1517bbde6093a81a9ddd4ef3dd449897"
+  "profileHash": "f14a26f2433f5f6f150e3d6707716c58bc017242e858c4f6cef9556b10a52168"
 }

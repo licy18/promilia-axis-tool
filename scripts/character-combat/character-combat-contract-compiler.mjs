@@ -2575,7 +2575,13 @@ function compileTargetStateProfiles({ ownerId, definitions, operators }) {
       definition.capacityElementId ?? definition.elementId
     );
     const durationMs = Number(stateAsset?.tree?.time);
-    const maxStacks = Number(capacityAsset?.tree?.combineNumber);
+    const configuredMaxStacks = Number(capacityAsset?.tree?.combineNumber);
+    // Buff-type state elements commonly carry combineNumber=-1 (marker);
+    // allow an explicit recipe-declared capacity to override it.
+    const maxStacks =
+      configuredMaxStacks > 0
+        ? configuredMaxStacks
+        : Number(definition.expectedMaxStacks ?? 0);
     if (
       !stateAsset ||
       !capacityAsset ||
@@ -2609,7 +2615,9 @@ function compileTargetStateProfiles({ ownerId, definitions, operators }) {
         stateAsset.sourceIdentity,
         `${stateAsset.sourceIdentity}#time=${durationMs}`,
         capacityAsset.sourceIdentity,
-        `${capacityAsset.sourceIdentity}#combineNumber=${maxStacks}`,
+        configuredMaxStacks > 0
+          ? `${capacityAsset.sourceIdentity}#combineNumber=${maxStacks}`
+          : `${capacityAsset.sourceIdentity}#combineNumber=${configuredMaxStacks}|declared-capacity-override=${maxStacks}`,
         definition.sourceIdentity,
       ]
         .filter(Boolean)
@@ -3421,6 +3429,15 @@ function compilePassiveEffects({
         operators,
       });
     }
+    if (definition.runtimeGenerationMode === 'persistent-property-runtime') {
+      return compilePersistentPropertyPassiveEffect({
+        ownerId,
+        definition,
+        controlBySkillId,
+        skills,
+        operators,
+      });
+    }
     if (
       [
         'semantic-effect-catalog',
@@ -3767,6 +3784,126 @@ function compileTargetStateRuntimePassiveEffect({
         ? []
         : ['passive-runtime-trigger-missing']),
       ...(modifiers.length > 0 ? [] : ['passive-runtime-output-missing']),
+    ],
+    applied,
+  };
+}
+
+function compilePersistentPropertyPassiveEffect({
+  ownerId,
+  definition,
+  controlBySkillId,
+  skills,
+  operators,
+}) {
+  const passiveControl = controlBySkillId.get(Number(definition.skillId));
+  const sourceElementIds = (definition.sourceElementIds ?? [])
+    .map(Number)
+    .filter(Number.isInteger);
+  const sourceAssets = sourceElementIds.map(elementId =>
+    operators.readElementAsset(elementId)
+  );
+  const derivedModifiers = (passiveControl?.effects ?? [])
+    .filter(
+      effect =>
+        sourceElementIds.includes(Number(effect.elementId)) &&
+        effect.propertyChange != null
+    )
+    .map(effect => ({
+      attributeId: Number(effect.propertyChange.attributeId),
+      bucket: effect.propertyChange.bucket ?? null,
+      valueRaw: Number(effect.propertyChange.valueByLevel?.['1']),
+      calculateType: Number(effect.propertyChange.calculateType),
+      functionId: Number(effect.propertyChange.functionId ?? 5),
+      propertyTags: effect.propertyChange.defaultPropertyTags ?? [],
+      sourceIdentity:
+        effect.sourceIdentity ??
+        effect.propertyChange.sourceIdentity ??
+        null,
+    }));
+  const declaredModifiers = (definition.modifiers ?? []).map(modifier => ({
+    attributeId: Number(modifier.attributeId),
+    bucket: modifier.bucket ?? null,
+    valueRaw: Number(modifier.valueRaw),
+    calculateType:
+      modifier.calculateType == null ? null : Number(modifier.calculateType),
+    functionId:
+      modifier.functionId == null ? null : Number(modifier.functionId),
+    propertyTags: (modifier.propertyTags ?? []).map(Number).filter(Number.isInteger),
+    sourceIdentity: modifier.sourceIdentity ?? null,
+  }));
+  const modifiers = dedupeBy(
+    [...derivedModifiers, ...declaredModifiers],
+    modifier =>
+      [
+        modifier.attributeId,
+        modifier.bucket,
+        modifier.valueRaw,
+        modifier.calculateType ?? '',
+        modifier.functionId ?? '',
+        (modifier.propertyTags ?? []).join(','),
+      ].join('|')
+  );
+  const triggerBindings = [
+    {
+      triggerIdentity: `${definition.skillId}|battle-start|0`,
+      controlSkillId: null,
+      subSkillIndex: null,
+      triggerFrame: 0,
+      frameRate: 60,
+      sourceElementId: sourceElementIds[0] ?? null,
+      sourcePathId:
+        sourceAssets[0]?.pathId == null ? null : String(sourceAssets[0].pathId),
+      sourceIdentity:
+        passiveControl?.sourcePath ??
+        definition.sourceIdentity ??
+        `character-combat-recipe:${ownerId}#passiveEffects[skillId=${definition.skillId}]`,
+      status: 'verified-persistent-passive-battle-start-trigger-ready',
+      applied: true,
+    },
+  ];
+  const applied =
+    passiveControl != null &&
+    sourceElementIds.length > 0 &&
+    sourceAssets.every(Boolean) &&
+    modifiers.length > 0;
+  return {
+    passiveIdentity: `actor:${ownerId}:passive:${definition.skillId}`,
+    ownerId,
+    skillId: Number(definition.skillId),
+    name:
+      skills.find(skill => Number(skill.id) === Number(definition.skillId))
+        ?.name ?? `被动 ${definition.skillId}`,
+    effectId: `battle-element:${sourceElementIds[0]}`,
+    effectElementId: sourceElementIds[0],
+    markerElementId: null,
+    propertyElementId: sourceElementIds[0],
+    durationMs: null,
+    stackMode: 'persistent',
+    maxStacks: 1,
+    stackDelta: 1,
+    runtimeGenerationMode: 'persistent-property-runtime',
+    triggerBindings,
+    unresolvedTriggerBindings: [],
+    modifiers,
+    sourceIdentity: [
+      passiveControl?.sourcePath,
+      ...sourceAssets.filter(Boolean).map(asset => asset.sourceIdentity),
+      definition.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: applied
+      ? 'verified-persistent-passive-effect-profile-ready'
+      : 'unresolved-persistent-passive-effect-profile',
+    reasons: [
+      ...(passiveControl ? [] : ['passive-skill-control-missing']),
+      ...(sourceElementIds.length > 0 && sourceAssets.every(Boolean)
+        ? []
+        : ['passive-source-element-missing']),
+      ...(modifiers.length > 0
+        ? []
+        : ['passive-persistent-modifier-missing']),
     ],
     applied,
   };

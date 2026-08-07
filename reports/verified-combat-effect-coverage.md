@@ -7,17 +7,17 @@
 - 原始引用边：1809
 - 效果图节点：3731
 - 去重语义效果：3479
-- 最终玩法效果：1842
-- 结构包装/条件：1637
-- 语义可计算：1006
+- 最终玩法效果：1892
+- 结构包装/条件：1587
+- 语义可计算：1018
 - 语义明确零：7
-- 语义未解析：829
+- 语义未解析：867
 
 ## 语义放置
 
-- runtime-dependent: 105
-- static-evidence-gap: 409
-- static-resolved: 1328
+- runtime-dependent: 106
+- static-evidence-gap: 446
+- static-resolved: 1340
 
 ## 公式族
 
@@ -27,9 +27,9 @@
 - source-atk-ratio-heal: 7
 - source-tuning-ratio-with-common-ratio: 1
 - unsupported-0-0: 10
-- unsupported-1-0: 64
+- unsupported-1-0: 76
 - unsupported-1-2: 193
-- unsupported-1-3: 324
+- unsupported-1-3: 361
 - unsupported-1-4: 23
 - unsupported-1-101: 2
 - unsupported-1-104: 19
@@ -49,15 +49,16 @@
 - unsupported-108-12: 5
 - unsupported-1007-3: 6
 - unsupported-1007-5: 4
+- unsupported-102100-0: 1
 - unsupported-102100-3: 1
 - verified-tuning-state-formula: 306
 
 ## 原始边审计
 
 - 效果绑定：3786
-- 可计算：1798
+- 可计算：1810
 - 明确零：12
-- 未解析：1976
+- 未解析：1964
 
 ## 元素类型
 
@@ -73,20 +74,20 @@
 
 ## 未解析原因
 
-- effect-target-static-evidence-gap: 419
-- effect-trigger-frame-static-evidence-gap: 403
+- effect-target-static-evidence-gap: 457
+- effect-trigger-frame-static-evidence-gap: 404
 - nested-damage-runtime-family-unimplemented: 224
 - property-duration-zero-unresolved: 5
 - property-formula-not-literal-function-5: 93
-- runtime-target-from-projectile-collision: 67
+- runtime-target-from-projectile-collision: 68
 - runtime-target-selection-ally: 43
-- runtime-trigger-projectile-collision-frame: 67
+- runtime-trigger-projectile-collision-frame: 68
 - shield-formula-not-literal-function-5: 2
 - sp-formula-not-literal-function-5: 37
-- tuning-consume-current-packet-not-in-candidate-map: 9
-- tuning-consume-judgment-missing: 9
-- tuning-consume-mark-identity-ambiguous: 9
-- tuning-consume-success-branch-unresolved: 9
+- tuning-consume-current-packet-not-in-candidate-map: 47
+- tuning-consume-judgment-missing: 47
+- tuning-consume-mark-identity-ambiguous: 47
+- tuning-consume-success-branch-unresolved: 47
 - tuning-mark-relation-elementDataList-unresolved: 2
 - tuning-mark-relation-notDelElementDataList-unresolved: 13
 - tuning-mark-relation-triggerEffectList-unresolved: 1

@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "c6b01d4f83bf4523f2e0ad39648362dc01b5b74b74ed598e043f4f9344895909",
+  "sourcePackageHash": "50c2554bd569f1d59f55b889f9dfa22a57288b491e5177665f3daf704e59b34d",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "b06853413f0cd5c1",
-    "traceHash": "561a8c82e7c94862",
-    "dataHash": "26aa934195570f8c",
+    "inputHash": "9549d0ee4ad0ae95",
+    "traceHash": "efe307c0684f2fc2",
+    "dataHash": "75e5328fb5440d30",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -2067,7 +2067,7 @@
         }
       ],
       "targetStateSummary": {
-        "profileCount": 1,
+        "profileCount": 2,
         "eventCount": 9,
         "appliedGroupCount": 2,
         "skippedGroupCount": 0,
@@ -9739,7 +9739,7 @@
         }
       ]
     },
-    "summaryHash": "1540b7df01fbf8d82964e333e91fedef129479a3c6d6466ddd29faa9fdcf1744"
+    "summaryHash": "d1171da7888048910469a601262574c52d46b7c177bfc1ec4214d8ae7b88c7fc"
   },
   "expected": {
     "exact": {
@@ -9764,7 +9764,7 @@
       "combat.ownerHitCountByActionId.han-ultimate": 7,
       "combat.ownerTotalHpDamage": 78149,
       "combat.ownerTotalToughnessDamage": 0,
-      "resources.targetStateSummary.profileCount": 1,
+      "resources.targetStateSummary.profileCount": 2,
       "resources.targetStateSummary.eventCount": 9,
       "resources.targetStateSummary.appliedGroupCount": 2,
       "resources.targetStateSummary.skippedGroupCount": 0,
@@ -9981,8 +9981,8 @@
       {
         "jsonPath": "resources.targetStateSummary.profileCount",
         "operator": "exact",
-        "expected": 1,
-        "actual": 1,
+        "expected": 2,
+        "actual": 2,
         "passed": true
       },
       {
@@ -10429,6 +10429,6 @@
       }
     ]
   },
-  "replayHash": "a55e51cf1114f97b012cce0fee723351118518f2019024a608cb788eb687b635",
-  "profileHash": "648e40eb37028cf88a835a948a1c6f08f7a7776659285c43656d336c4c71332f"
+  "replayHash": "308f972eb6e16124c712c663ee3b26bcb448722467833516b81ed1496926b0b7",
+  "profileHash": "3da77125cc44cc403ad5754204c3095414c1197f019b8f02e9b6d7a8d3b6878d"
 }

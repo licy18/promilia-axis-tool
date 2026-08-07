@@ -6,13 +6,82 @@
   "summary": {
     "publicActionCount": 10,
     "rawWindowCount": 61,
-    "semanticTransitionCount": 0,
-    "appliedTransitionCount": 0,
+    "semanticTransitionCount": 2,
+    "appliedTransitionCount": 2,
     "staticEvidenceOnlyWindowCount": 0,
     "gameplayGapCount": 0,
-    "notApplicableActionCount": 10
+    "notApplicableActionCount": 8
   },
-  "transitions": [],
+  "transitions": [
+    {
+      "transitionIdentity": "moyin-star-skill-chase",
+      "ownerId": 109001,
+      "sourcePublicActionIdentity": "actor|109001|10900112|0|10900112|star-skill",
+      "sourceActionKind": "star-skill",
+      "sourceControlSkillId": 10900112,
+      "sourceSubSkillIndex": 0,
+      "triggerPhase": "input-window",
+      "resourceTransactions": [],
+      "actionEffects": [],
+      "inputCommand": "normal-attack",
+      "inputWindow": {
+        "startFrame": 40,
+        "endFrame": 77,
+        "durationFrames": 37
+      },
+      "condition": {
+        "kind": "always"
+      },
+      "targetChainIdentity": null,
+      "targetSequenceIndex": null,
+      "targetControlSkillId": null,
+      "targetSubSkillIndex": null,
+      "targetSemanticName": null,
+      "transitionSemantics": "continue-chain",
+      "exitRules": null,
+      "evidenceKind": "control-transition-window",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900112.asset/MonoBehaviour/MonoBehaviour_1696984098510319773__1696984098510319773.json#behaviorlineControl[0].behaviorList[pathId=4847376838923694237]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900112.asset/MonoBehaviour/MonoBehaviour_4847376838923694237__4847376838923694237.json|skill_control_10900112.asset/MonoBehaviour/MonoBehaviour_1696984098510319773__1696984098510319773.json#chase-input-window[40,77)->10900143/sub0",
+      "runtimeCoverage": "applied",
+      "workbenchCoverage": "generic-runtime-projection",
+      "e2eCoverage": "not-covered",
+      "status": "applied",
+      "applied": true
+    },
+    {
+      "transitionIdentity": "moyin-star-carry-chase",
+      "ownerId": 109001,
+      "sourcePublicActionIdentity": "actor|109001|10900121|0|10900121|star-carry",
+      "sourceActionKind": "star-carry",
+      "sourceControlSkillId": 10900121,
+      "sourceSubSkillIndex": 0,
+      "triggerPhase": "input-window",
+      "resourceTransactions": [],
+      "actionEffects": [],
+      "inputCommand": "normal-attack",
+      "inputWindow": {
+        "startFrame": 108,
+        "endFrame": 145,
+        "durationFrames": 37
+      },
+      "condition": {
+        "kind": "always"
+      },
+      "targetChainIdentity": null,
+      "targetSequenceIndex": null,
+      "targetControlSkillId": null,
+      "targetSubSkillIndex": null,
+      "targetSemanticName": null,
+      "transitionSemantics": "continue-chain",
+      "exitRules": null,
+      "evidenceKind": "control-transition-window",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900121.asset/MonoBehaviour/MonoBehaviour_2966879362501739099__2966879362501739099.json#behaviorlineControl[0].behaviorList[pathId=4663241007872442971]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900121.asset/MonoBehaviour/MonoBehaviour_4663241007872442971__4663241007872442971.json|skill_control_10900121.asset/MonoBehaviour/MonoBehaviour_2966879362501739099__2966879362501739099.json#chase-input-window[108,145)->10900143/sub0",
+      "runtimeCoverage": "applied",
+      "workbenchCoverage": "generic-runtime-projection",
+      "e2eCoverage": "not-covered",
+      "status": "applied",
+      "applied": true
+    }
+  ],
   "publicActionCoverage": [
     {
       "publicActionIdentity": "actor|109001|10900101|0|10900103|normal-attack",
@@ -80,12 +149,12 @@
       "sourceSkillId": 10900112,
       "controlSkillId": 10900112,
       "subSkillIndex": 0,
-      "transitionCount": 0,
-      "appliedTransitionCount": 0,
+      "transitionCount": 1,
+      "appliedTransitionCount": 1,
       "directWindowCount": 4,
       "appliedResourceTransactionCount": 0,
       "appliedTuningEffectCount": 0,
-      "status": "not-applicable",
+      "status": "applied",
       "reasons": [],
       "sourceIdentity": "characters.items[id=109001].skillSlots[group=ground,slot=3]"
     },
@@ -125,12 +194,12 @@
       "sourceSkillId": 10900121,
       "controlSkillId": 10900121,
       "subSkillIndex": 0,
-      "transitionCount": 0,
-      "appliedTransitionCount": 0,
+      "transitionCount": 1,
+      "appliedTransitionCount": 1,
       "directWindowCount": 4,
       "appliedResourceTransactionCount": 0,
       "appliedTuningEffectCount": 0,
-      "status": "not-applicable",
+      "status": "applied",
       "reasons": [],
       "sourceIdentity": "characters.items[id=109001].skillSlots[skillId=10900121]"
     },
@@ -2401,5 +2470,5 @@
       "runtimeStatus": "not-runtime-transition"
     }
   ],
-  "profileHash": "edd9f09962478168c4682a3c3408a2f7bd029d2f1d99c7264b304c9d61ee418a"
+  "profileHash": "31b0dfe9c052a01fb45daa30b729970f595eaa4e6d8d677eac68f2124e4d6ed4"
 }

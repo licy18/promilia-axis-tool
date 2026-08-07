@@ -3,7 +3,7 @@
 - Package: `azpr-tc-2026-07-18`
 - Resource profiles: 2/2
 - Resource operations: 46/72
-- Variant edges: 62/346
+- Variant edges: 64/346
 - Variant nodes: 699
 
 | Owner | Resource | Capacity | Operations | Variant edges |

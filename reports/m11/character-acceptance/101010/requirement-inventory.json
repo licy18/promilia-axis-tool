@@ -2735,9 +2735,9 @@
       "sourceRecordHash": "6307d43f0930112e"
     },
     {
-      "requirementIdentity": "contract:effect:effect:28:ddd1615dd9809f5d",
+      "requirementIdentity": "contract:effect:effect:28:266545f33eab58d0",
       "dimension": "effect",
-      "subjectIdentity": "effect:28:ddd1615dd9809f5d",
+      "subjectIdentity": "effect:28:266545f33eab58d0",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2751,10 +2751,13 @@
         "battle-element-assets.jsonl#path_id=-8630062226069243067"
       ],
       "reasons": [
-        "judgment-condition-runtime-unimplemented",
-        "semantic-condition-not-standalone-gameplay-effect"
+        "effect-target-static-evidence-gap",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "a2f1122912012231"
+      "sourceRecordHash": "8b665f9dc4d0bf19"
     },
     {
       "requirementIdentity": "contract:effect:effect:29:2fcdc2aea26f53d7",
@@ -3315,9 +3318,9 @@
       "sourceRecordHash": "f94837aa9f9ba511"
     },
     {
-      "requirementIdentity": "contract:effect:effect:52:5ecd559ca774cdeb",
+      "requirementIdentity": "contract:effect:effect:52:c334126da9b8346a",
       "dimension": "effect",
-      "subjectIdentity": "effect:52:5ecd559ca774cdeb",
+      "subjectIdentity": "effect:52:c334126da9b8346a",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3331,15 +3334,18 @@
         "battle-element-assets.jsonl#path_id=-5107736885784262990"
       ],
       "reasons": [
-        "judgment-condition-runtime-unimplemented",
-        "semantic-condition-not-standalone-gameplay-effect"
+        "effect-target-static-evidence-gap",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "4ecd5ccc5c5914be"
+      "sourceRecordHash": "c61b61a8a2e36fd6"
     },
     {
-      "requirementIdentity": "contract:effect:effect:53:6072dc1599617256",
+      "requirementIdentity": "contract:effect:effect:53:7b132d741d17ac5b",
       "dimension": "effect",
-      "subjectIdentity": "effect:53:6072dc1599617256",
+      "subjectIdentity": "effect:53:7b132d741d17ac5b",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3353,15 +3359,18 @@
         "battle-element-assets.jsonl#path_id=-5107736885784262990"
       ],
       "reasons": [
-        "judgment-condition-runtime-unimplemented",
-        "semantic-condition-not-standalone-gameplay-effect"
+        "effect-target-static-evidence-gap",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "ba8a4ad41ddf9f12"
+      "sourceRecordHash": "ac664a4c88861e40"
     },
     {
-      "requirementIdentity": "contract:effect:effect:54:05223e4408103072",
+      "requirementIdentity": "contract:effect:effect:54:0357de046af4bf9d",
       "dimension": "effect",
-      "subjectIdentity": "effect:54:05223e4408103072",
+      "subjectIdentity": "effect:54:0357de046af4bf9d",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3375,10 +3384,13 @@
         "battle-element-assets.jsonl#path_id=-5107736885784262990"
       ],
       "reasons": [
-        "judgment-condition-runtime-unimplemented",
-        "semantic-condition-not-standalone-gameplay-effect"
+        "effect-target-static-evidence-gap",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "daa18f1257b12f26"
+      "sourceRecordHash": "a447d0d1fc6ac492"
     },
     {
       "requirementIdentity": "contract:effect:effect:55:c8111da376bd7c1d",
@@ -3549,9 +3561,9 @@
       "sourceRecordHash": "358e9d769abb4d9c"
     },
     {
-      "requirementIdentity": "contract:effect:effect:62:03a1ed43dd884418",
+      "requirementIdentity": "contract:effect:effect:62:9b63c045c9f6ef61",
       "dimension": "effect",
-      "subjectIdentity": "effect:62:03a1ed43dd884418",
+      "subjectIdentity": "effect:62:9b63c045c9f6ef61",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3565,15 +3577,18 @@
         "battle-element-assets.jsonl#path_id=-8630062226069243067"
       ],
       "reasons": [
-        "judgment-condition-runtime-unimplemented",
-        "semantic-condition-not-standalone-gameplay-effect"
+        "effect-target-static-evidence-gap",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "69a78b0f9b312b3f"
+      "sourceRecordHash": "7f9d7581f763e8f3"
     },
     {
-      "requirementIdentity": "contract:effect:effect:63:ea82d026f5989918",
+      "requirementIdentity": "contract:effect:effect:63:974f204df53e14bd",
       "dimension": "effect",
-      "subjectIdentity": "effect:63:ea82d026f5989918",
+      "subjectIdentity": "effect:63:974f204df53e14bd",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3587,15 +3602,18 @@
         "battle-element-assets.jsonl#path_id=-8630062226069243067"
       ],
       "reasons": [
-        "judgment-condition-runtime-unimplemented",
-        "semantic-condition-not-standalone-gameplay-effect"
+        "effect-target-static-evidence-gap",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "84780a46f8681b23"
+      "sourceRecordHash": "38989822bf1803ab"
     },
     {
-      "requirementIdentity": "contract:effect:effect:64:f04bf25a033d7ac3",
+      "requirementIdentity": "contract:effect:effect:64:a1192db2497242f4",
       "dimension": "effect",
-      "subjectIdentity": "effect:64:f04bf25a033d7ac3",
+      "subjectIdentity": "effect:64:a1192db2497242f4",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3609,10 +3627,13 @@
         "battle-element-assets.jsonl#path_id=-8630062226069243067"
       ],
       "reasons": [
-        "judgment-condition-runtime-unimplemented",
-        "semantic-condition-not-standalone-gameplay-effect"
+        "effect-target-static-evidence-gap",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "8457fde643930605"
+      "sourceRecordHash": "163668da6d5e4f79"
     },
     {
       "requirementIdentity": "contract:effect:effect:65:1cacb1c00eed6bc4",
@@ -4329,9 +4350,9 @@
       "sourceRecordHash": "77f967b3938ed97e"
     },
     {
-      "requirementIdentity": "contract:effect:effect:95:d925a5ec4633dd1e",
+      "requirementIdentity": "contract:effect:effect:95:1ef370b6458f9661",
       "dimension": "effect",
-      "subjectIdentity": "effect:95:d925a5ec4633dd1e",
+      "subjectIdentity": "effect:95:1ef370b6458f9661",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4344,17 +4365,20 @@
         "battle-element-assets.jsonl#path_id=-5107736885784262990"
       ],
       "reasons": [
-        "judgment-condition-runtime-unimplemented",
+        "effect-target-static-evidence-gap",
         "runtime-target-from-projectile-collision",
         "runtime-trigger-projectile-collision-frame",
-        "semantic-condition-not-standalone-gameplay-effect"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "aa13d0f9e119c0f9"
+      "sourceRecordHash": "27c4b39d29298541"
     },
     {
-      "requirementIdentity": "contract:effect:effect:96:f4523889516f0202",
+      "requirementIdentity": "contract:effect:effect:96:5b43e73a2cbf72e4",
       "dimension": "effect",
-      "subjectIdentity": "effect:96:f4523889516f0202",
+      "subjectIdentity": "effect:96:5b43e73a2cbf72e4",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4369,10 +4393,12 @@
       "reasons": [
         "effect-target-static-evidence-gap",
         "effect-trigger-frame-static-evidence-gap",
-        "judgment-condition-runtime-unimplemented",
-        "semantic-condition-not-standalone-gameplay-effect"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "1b2ff33066c7f620"
+      "sourceRecordHash": "81e005ce4d3619ff"
     },
     {
       "requirementIdentity": "contract:effect:effect:97:43783e75d41dffbe",
@@ -7360,5 +7386,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "3824b8d6487a12fc"
+  "inventoryHash": "52480bc4359a7739"
 }

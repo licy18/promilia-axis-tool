@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "79f8e8df10b85ee8d611729f73893c4ff6015b7ee8d96dc846364704f639c406",
+  "packageHash": "c87fb71b44b3a135b3c48ac7cac9e537a11746c8c0128c3e87b6d2bef9e36e3e",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -57699,13 +57699,12 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-runtime-unimplemented",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -57739,14 +57738,13 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-runtime-unimplemented",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "effect-combine-semantics-unresolved",
@@ -58025,9 +58023,12 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10300213].level.labels[0]"
     },
@@ -58336,6 +58337,10 @@
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "property-formula-not-literal-function-5",
         "sp-formula-not-literal-function-5"
@@ -58569,6 +58574,10 @@
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "property-formula-not-literal-function-5"
       ],
@@ -58702,14 +58711,13 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-runtime-unimplemented",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
-        "tuning-consume-current-packet-not-in-candidate-map"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800112].level.labels[0]"
     },
@@ -58741,7 +58749,10 @@
         "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-runtime-unimplemented",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -58930,6 +58941,10 @@
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "property-formula-not-literal-function-5"
       ],
@@ -59400,14 +59415,13 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
+        "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -59738,7 +59752,10 @@
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-runtime-unimplemented",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
@@ -59944,7 +59961,10 @@
         "trigger-frame-missing",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-runtime-unimplemented",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
@@ -60118,6 +60138,10 @@
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "property-formula-not-literal-function-5"
       ],
@@ -60600,11 +60624,11 @@
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
-        "tuning-consume-current-packet-not-in-candidate-map"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-not-expanded"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900313].level.labels[0]"
     },
@@ -66952,13 +66976,12 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-runtime-unimplemented",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -66992,14 +67015,13 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-runtime-unimplemented",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "effect-combine-semantics-unresolved",
@@ -67393,9 +67415,12 @@
       "reasons": [
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
+        "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -67858,6 +67883,10 @@
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "property-formula-not-literal-function-5",
         "sp-formula-not-literal-function-5"
@@ -68148,6 +68177,10 @@
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "property-formula-not-literal-function-5"
       ],
@@ -68344,14 +68377,13 @@
         "toughness:pre-shield-damage-inputs-incomplete",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-runtime-unimplemented",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
-        "tuning-consume-current-packet-not-in-candidate-map"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/skill_control_10800112__-4901894643090470632.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -68383,7 +68415,10 @@
         "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-runtime-unimplemented",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved"
       ],
@@ -68594,6 +68629,10 @@
         "nested-effect-wrapper-semantics-unresolved",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "property-formula-not-literal-function-5"
       ],
@@ -69073,14 +69112,13 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
+        "sp-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved"
       ],
@@ -69431,7 +69469,10 @@
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-runtime-unimplemented",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5"
@@ -69642,7 +69683,10 @@
         "trigger-frame-missing",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "judgment-condition-runtime-unimplemented",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5"
@@ -69866,6 +69910,10 @@
         "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved",
+        "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
         "property-formula-not-literal-function-5"
       ],
@@ -70325,11 +70373,11 @@
         "property-formula-not-literal-function-5",
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
-        "nested-damage-trigger-lifecycle-not-expanded",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
-        "tuning-consume-current-packet-not-in-candidate-map"
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "nested-damage-trigger-lifecycle-not-expanded"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900313.asset/MonoBehaviour/skill_control_19900313__-3472649091528756862.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -150103,21 +150151,28 @@
                 "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#startFrame|targetType"
               },
               {
-                "hitIdentity": "10900104|0|elements|8|-1163125552202303495|45|5",
+                "hitIdentity": "10900104|0|elements|3|4184198133427158765|29|5",
+                "elementId": 109001135,
+                "pathId": "4184198133427158765",
+                "frame": 29,
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant"
+              },
+              {
+                "hitIdentity": "10900104|0|elements|8|-1163125552202303495|45|6",
                 "elementId": 109001328,
                 "pathId": "-1163125552202303495",
                 "frame": 45,
                 "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-2779822515663406448__-2779822515663406448.json#startFrame|targetType"
               },
               {
-                "hitIdentity": "10900104|0|elements|8|-1163125552202303495|49|6",
+                "hitIdentity": "10900104|0|elements|8|-1163125552202303495|49|7",
                 "elementId": 109001328,
                 "pathId": "-1163125552202303495",
                 "frame": 49,
                 "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_3973804349781244560__3973804349781244560.json#startFrame|targetType"
               },
               {
-                "hitIdentity": "10900104|0|elements|8|-1163125552202303495|53|7",
+                "hitIdentity": "10900104|0|elements|8|-1163125552202303495|53|8",
                 "elementId": 109001328,
                 "pathId": "-1163125552202303495",
                 "frame": 53,
@@ -150133,6 +150188,7 @@
                 "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-3473951910220137840__-3473951910220137840.json#startFrame|targetType",
                 "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-6925364881711498608__-6925364881711498608.json#startFrame|targetType",
                 "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#startFrame|targetType",
+                "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant",
                 "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-2779822515663406448__-2779822515663406448.json#startFrame|targetType",
                 "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_3973804349781244560__3973804349781244560.json#startFrame|targetType",
                 "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-7661259569899636080__-7661259569899636080.json#startFrame|targetType"
@@ -150321,21 +150377,28 @@
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#startFrame|targetType"
                   },
                   {
-                    "hitIdentity": "10900104|0|elements|8|-1163125552202303495|45|5",
+                    "hitIdentity": "10900104|0|elements|3|4184198133427158765|29|5",
+                    "elementId": 109001135,
+                    "pathId": "4184198133427158765",
+                    "frame": 29,
+                    "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant"
+                  },
+                  {
+                    "hitIdentity": "10900104|0|elements|8|-1163125552202303495|45|6",
                     "elementId": 109001328,
                     "pathId": "-1163125552202303495",
                     "frame": 45,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-2779822515663406448__-2779822515663406448.json#startFrame|targetType"
                   },
                   {
-                    "hitIdentity": "10900104|0|elements|8|-1163125552202303495|49|6",
+                    "hitIdentity": "10900104|0|elements|8|-1163125552202303495|49|7",
                     "elementId": 109001328,
                     "pathId": "-1163125552202303495",
                     "frame": 49,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_3973804349781244560__3973804349781244560.json#startFrame|targetType"
                   },
                   {
-                    "hitIdentity": "10900104|0|elements|8|-1163125552202303495|53|7",
+                    "hitIdentity": "10900104|0|elements|8|-1163125552202303495|53|8",
                     "elementId": 109001328,
                     "pathId": "-1163125552202303495",
                     "frame": 53,
@@ -150351,6 +150414,7 @@
                     "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-3473951910220137840__-3473951910220137840.json#startFrame|targetType",
                     "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-6925364881711498608__-6925364881711498608.json#startFrame|targetType",
                     "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#startFrame|targetType",
+                    "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant",
                     "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-2779822515663406448__-2779822515663406448.json#startFrame|targetType",
                     "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_3973804349781244560__3973804349781244560.json#startFrame|targetType",
                     "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-7661259569899636080__-7661259569899636080.json#startFrame|targetType"
@@ -150547,21 +150611,28 @@
                   "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#startFrame|targetType"
                 },
                 {
-                  "hitIdentity": "10900104|0|elements|8|-1163125552202303495|45|5",
+                  "hitIdentity": "10900104|0|elements|3|4184198133427158765|29|5",
+                  "elementId": 109001135,
+                  "pathId": "4184198133427158765",
+                  "frame": 29,
+                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant"
+                },
+                {
+                  "hitIdentity": "10900104|0|elements|8|-1163125552202303495|45|6",
                   "elementId": 109001328,
                   "pathId": "-1163125552202303495",
                   "frame": 45,
                   "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-2779822515663406448__-2779822515663406448.json#startFrame|targetType"
                 },
                 {
-                  "hitIdentity": "10900104|0|elements|8|-1163125552202303495|49|6",
+                  "hitIdentity": "10900104|0|elements|8|-1163125552202303495|49|7",
                   "elementId": 109001328,
                   "pathId": "-1163125552202303495",
                   "frame": 49,
                   "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_3973804349781244560__3973804349781244560.json#startFrame|targetType"
                 },
                 {
-                  "hitIdentity": "10900104|0|elements|8|-1163125552202303495|53|7",
+                  "hitIdentity": "10900104|0|elements|8|-1163125552202303495|53|8",
                   "elementId": 109001328,
                   "pathId": "-1163125552202303495",
                   "frame": 53,
@@ -150577,6 +150648,7 @@
                   "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-3473951910220137840__-3473951910220137840.json#startFrame|targetType",
                   "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-6925364881711498608__-6925364881711498608.json#startFrame|targetType",
                   "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#startFrame|targetType",
+                  "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant",
                   "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-2779822515663406448__-2779822515663406448.json#startFrame|targetType",
                   "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_3973804349781244560__3973804349781244560.json#startFrame|targetType",
                   "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_-7661259569899636080__-7661259569899636080.json#startFrame|targetType"
@@ -150689,16 +150761,17 @@
             "10900104|0|elements|0|610497198600338323|11|2",
             "10900104|0|elements|0|610497198600338323|15|3",
             "10900104|0|elements|3|4184198133427158765|29|4",
-            "10900104|0|elements|8|-1163125552202303495|45|5",
-            "10900104|0|elements|8|-1163125552202303495|49|6",
-            "10900104|0|elements|8|-1163125552202303495|53|7"
+            "10900104|0|elements|3|4184198133427158765|29|5",
+            "10900104|0|elements|8|-1163125552202303495|45|6",
+            "10900104|0|elements|8|-1163125552202303495|49|7",
+            "10900104|0|elements|8|-1163125552202303495|53|8"
           ],
           "selectedEffectIdentities": [
             "10900104|0|elements|5|-6711007604037179960|element:-6711007604037179960|29|0",
             "10900104|0|elements|5|-6711007604037179960|element:-5022202969777715803|29|0"
           ],
-          "hitCount": 7,
-          "effectCount": 0,
+          "hitCount": 8,
+          "effectCount": 1,
           "effectDimensionSummary": {
             "damage": {
               "unresolved": 1,
@@ -150720,7 +150793,7 @@
               "verified-zero": 2
             },
             "mark": {
-              "unresolved": 1,
+              "applied": 1,
               "verified-zero": 1
             }
           },
@@ -150732,7 +150805,6 @@
             "trigger-frame-missing",
             "hp:damage-formula-inputs-incomplete",
             "toughness:pre-shield-damage-inputs-incomplete",
-            "judgment-condition-runtime-unimplemented",
             "nested-damage-trigger-lifecycle-not-expanded",
             "nested-effect-wrapper-semantics-unresolved"
           ],
@@ -151543,7 +151615,7 @@
           ],
           "selectedEffectIdentities": [
             "10900105|0|elements|7|5485634636675905737|element:5485634636675905737|47|0",
-            "10900105|0|elements|7|5485634636675905737|element:-3809486317990090417|47|0",
+            "10900105|0|elements|7|5485634636675905737|47|1",
             "10900105|0|elements|7|5485634636675905737|element:-637110086033006477|47|0",
             "10900105|0|elements|7|5485634636675905737|element:-1715488869977622004|47|0",
             "10900105|0|elements|7|5485634636675905737|element:-7783775984244194322|47|0",
