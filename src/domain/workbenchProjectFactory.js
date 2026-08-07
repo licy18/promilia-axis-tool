@@ -628,6 +628,13 @@ export function normalizeWorkbenchCultivation(cultivation = {}) {
             cultivation.optimizationStaticSources
           ),
         }),
+    ...(cultivation?.starGiftNodeSkillLevels == null
+      ? {}
+      : {
+          starGiftNodeSkillLevels: structuredClone(
+            cultivation.starGiftNodeSkillLevels
+          ),
+        }),
   };
 }
 

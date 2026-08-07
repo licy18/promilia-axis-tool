@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import evidence from '../../../scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json';
 import equipmentCatalog from '../../data/generated/equipment.json';
 import qualificationCatalog from '../../data/generated/optimization-qualification-catalog.json';
+import charactersCatalog from '../../data/generated/characters.json';
 import {
   assertHeroRankExpectedDeltaCoverage,
   validateHeroRankAdjacentRankCaptureComparisons,
@@ -9,7 +10,12 @@ import {
 import {
   projectResolvedOptimizationCultivationActor,
   resolveOptimizationCultivationProfile,
+  resolveStarGiftSkillIndexToSkillId,
+  resolveStarGiftSkillLevelBonusesBySkillId,
 } from '../../optimization-qualification/optimizationQualificationProtocol';
+import { createMachineAxisService } from '../../machine-axis/machineAxisService';
+import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 
 const ROSTER_SOURCE_IDS = [
   101010, 102001, 103002, 107001, 107002, 108001, 108003, 109001, 111001,
@@ -185,6 +191,101 @@ function createStrictProfile(characterId) {
 }
 
 describe('E20-1 strict character cultivation runtime baseline', () => {
+  it('maps star-gift skillIndex to client skill ids and aggregates level bonuses', () => {
+    const characterById = new Map(
+      charactersCatalog.items.map(item => [Number(item.id), item])
+    );
+    const xiaoyu = characterById.get(101010);
+    expect(resolveStarGiftSkillIndexToSkillId(xiaoyu, 0)).toBe(10101001);
+    expect(resolveStarGiftSkillIndexToSkillId(xiaoyu, 1)).toBe(10101012);
+    expect(resolveStarGiftSkillIndexToSkillId(xiaoyu, 2)).toBe(10101013);
+    expect(resolveStarGiftSkillIndexToSkillId(xiaoyu, 3)).toBe(10101021);
+
+    const sourceProfile =
+      qualificationCatalog.cultivation.character.profiles.find(
+        entry => Number(entry.characterId) === 101010
+      );
+    const selectedNodes = sourceProfile.starGiftRanks
+      .filter(row => Number(row.rank) <= 7)
+      .flatMap(row => row.nodes);
+    const bonuses = resolveStarGiftSkillLevelBonusesBySkillId({
+      character: xiaoyu,
+      starGiftNodeSkillLevels: selectedNodes
+        .filter(node => node.skillUpgrade)
+        .map(node => ({
+          skillIndex: node.skillUpgrade.skillIndex,
+          level: node.skillUpgrade.level,
+        })),
+    });
+    expect(bonuses[10101001]).toBe(7); // 普通攻击 upgrade nodes across ranks 1..7
+    expect(bonuses[10101012]).toBeGreaterThan(0);
+    expect(bonuses[10101013]).toBeGreaterThan(0);
+    expect(bonuses[10101021]).toBeGreaterThan(0);
+  });
+
+  it('applies star-gift skill level bonuses to machine axis action drafts', async () => {
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+    const { team, profile } = createStrictProfile(109001);
+    const service = createMachineAxisService();
+    const prepared = service.prepare({
+      schemaVersion: 1,
+      contractName: 'AzPrMachineAxis',
+      kind: 'azpr-machine-axis',
+      dataIdentity: {
+        verifiedMechanicsPackageId: mechanicsPackage.packageId,
+        verifiedMechanicsPackageHash: mechanicsPackage.packageHash,
+        mechanicsProfileId: 'azpr-three-value-verified-tc-20260718',
+        mechanicsProfileVersion: 1,
+      },
+      scenario: {
+        id: 'e20-1a-star-gift-skill-level',
+        name: 'E20-1a',
+        fps: 60,
+        durationFrames: 600,
+        team,
+        enemy: { enemyId: 300032 },
+        initialRuntimeState: {},
+        projectile: { targetDistance: 0, defaultWillHit: true },
+        critical: { policy: 'expected', seed: null },
+        optimizationQualification: {
+          mode: 'research',
+          catalogHash: qualificationCatalog.catalogHash,
+        },
+        cultivationProfile: profile,
+      },
+      actions: [
+        {
+          id: 'moyin-star-skill',
+          owner: { kind: 'actor', slotId: 'slot-1' },
+          intent: {
+            kind: 'public-action',
+            publicActionId: 10900112,
+            actionKind: 'star-skill',
+            level: 1,
+          },
+          schedule: { mode: 'absolute', frame: 0 },
+        },
+      ],
+    });
+    if (!prepared.valid) {
+      console.log(
+        'ISSUES',
+        JSON.stringify(prepared.issues?.slice(0, 6), null, 1)
+      );
+    }
+    expect(prepared.valid).toBe(true);
+    const draft = prepared.project.actions.find(
+      action => action.id === 'moyin-star-skill'
+    );
+    expect(draft.level).toBeGreaterThan(1);
+    const expectedBonus = resolveStarGiftSkillLevelBonusesBySkillId({
+      character: charactersCatalog.items.find(item => Number(item.id) === 109001),
+      starGiftNodeSkillLevels:
+        prepared.project.actors[0].cultivation.starGiftNodeSkillLevels,
+    })[10900112];
+    expect(draft.level).toBe(1 + expectedBonus);
+  });
+
   it('indexes adjacent-rank expected deltas for all 11 optimization objects', () => {
     expect(() => assertHeroRankExpectedDeltaCoverage(evidence)).not.toThrow();
     const deltas = evidence.adjacentRankCapture.expectedDeltas;
@@ -295,6 +396,7 @@ describe('E20-1 strict character cultivation runtime baseline', () => {
         'character.starGiftNodeAttributes',
         'character.completedStarGiftAttributes',
         'character.levelBreakthroughLegality',
+        'character.starGiftNodeSkillLevels',
         'kibo.level',
         'kibo.talents',
         'kibo.bondLevel',
@@ -312,7 +414,6 @@ describe('E20-1 strict character cultivation runtime baseline', () => {
         ).toContain(dimension);
       }
       const expectedUnresolved = [
-        'character.starGiftNodeSkillLevels',
         'character.levelBreakthroughAttributes',
         'character.levelBreakthroughSkillUnlocks',
       ];

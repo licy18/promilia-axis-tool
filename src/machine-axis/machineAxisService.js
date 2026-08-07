@@ -11,6 +11,7 @@ import {
 import { getSkillActionCatalog } from '../domain/skillActionCatalog';
 import { frameToMs, msToFrame } from '../domain/timebase';
 import { resolveWorkbenchActionScheduling } from '../domain/workbenchActionScheduling';
+import generatedCharacters from '../data/generated/characters.json';
 import generatedWorkbenchKiboActionCatalog from '../data/generated/workbench-kibo-action-catalog.json';
 import {
   getInstalledVerifiedCombatMechanicsPackage,
@@ -22,6 +23,7 @@ import {
   getOptimizationQualificationCatalog,
   projectResolvedOptimizationCultivationActor,
   resolveOptimizationCultivationProfile,
+  resolveStarGiftSkillLevelBonusesBySkillId,
 } from '../optimization-qualification/optimizationQualificationProtocol';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
 import { DEFAULT_HEADLESS_COMBAT_CORE } from '../simulation/headless/defaultHeadlessCombatCore';
@@ -533,6 +535,38 @@ export function createMachineAxisService({
         }),
       ])
     );
+    const starGiftSkillLevelBonusBySlot = new Map(
+      [...cultivationBySlot.entries()].map(([slotId, projection]) => {
+        const slot = contract.scenario.team.find(
+          candidate => String(candidate.slotId) === String(slotId)
+        );
+        const character = (generatedCharacters.items ?? []).find(
+          candidate => Number(candidate.id) === Number(slot?.characterId)
+        );
+        return [
+          slotId,
+          resolveStarGiftSkillLevelBonusesBySkillId({
+            character,
+            starGiftNodeSkillLevels:
+              projection?.actorConfigPatch?.cultivation
+                ?.starGiftNodeSkillLevels,
+          }),
+        ];
+      })
+    );
+    for (const draft of actionDrafts) {
+      if (draft.type !== ACTION_TYPES.SKILL) continue;
+      const slot = contract.scenario.team.find(
+        candidate => Number(candidate.characterId) === Number(draft.actorCharacterId)
+      );
+      const bonusesForSlot = starGiftSkillLevelBonusBySlot.get(
+        String(slot?.slotId ?? '')
+      );
+      const bonus = Number(bonusesForSlot?.[draft.skillId] ?? 0);
+      if (bonus > 0) {
+        draft.level = Math.max(1, draft.level + bonus);
+      }
+    }
     const actorConfigs = contract.scenario.team.map(slot => {
       const projection = cultivationBySlot.get(slot.slotId);
       return {

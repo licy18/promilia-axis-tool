@@ -1892,7 +1892,7 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 下一阶段任务（重排后的 M12-C 前路线图，E20 起按依赖顺序推进）：
 
 1. **E20 角色管线打通（33 个角色缺口）**
-   - E20-1 严格培养运行时基线：11 个优化对象全部接入严格培养合同（星赐 7 层 + 第 7 层节点全选 + talent_rank 1..6 层属性 + hero_rank 80 级合法突破档 3 + 固定 profile `c432bd0a`），机器可验证非 hero_rank 维度全部 applied；hero_rank 属性应用依赖“相邻档最终面板差分”捕获（`hero-rank-runtime-evidence.json` 已建立捕获合同与预期差分账本，捕获到达后自动校验并放行）。
+   - E20-1 严格培养运行时基线：11 个优化对象全部接入严格培养合同（星赐 7 层 + 第 7 层节点全选 + talent_rank 1..6 层属性 + hero_rank 80 级合法突破档 3 + 固定 profile `c432bd0a`）。E20-1a 已把星赐节点技能等级（`skillUpgrade`）接入 canonical 核心技能等级通道并进入 applied 账本；hero_rank 属性/技能可用性仍依赖“相邻档最终面板差分”捕获与客户端语义结论（`hero-rank-runtime-evidence.json` 已建立捕获合同与预期差分账本，捕获到达后自动校验并放行）。
    - E20-2 发布 9 个缺失角色验收：102001 莉莉、107001 西芙莉雅、107002 米砂、108001 忒拉拉、108003 米蒂、109001 末音、111001 法兰塔、112001 姬瑟贝露、STARBORN，逐个走 `extracted -> runtime-integrated -> visually-accepted -> optimization-ready`，每角色独立提交与产品签收；112001 的 `level-breakthrough-skill-unlock-source-mismatch` 单独闭合（hero_rank 解锁技能与角色被动槽来源核对）。
    - E20-3 STARBORN 统一对象：199001/199002 别名归一化、`actor-static-profile-missing` 清零、机制 hash 一致。
 2. **E21 套装技能收口（2 个缺口）**：`set-skill:3:4` 需产品决策选权威来源或从更新客户端包重提取 resourceMap 闭合；随后 12/12 runtime-applied + visual signoff。
@@ -1912,7 +1912,17 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 - 冻结哈希：`heroRankRuntimeEvidence` 重基线为 `3e38b30f…`；资格摘要哈希 `9b04428d / e1b776a3 / 796977fe / b97033f3 / cfd5a025 / a36f4cc4`；资格缺口仍 35（11 条 strict-cultivation 与 24 条其余角色/套装阻断不变），`m12cLocked` 保持 true。
 - 验证：新增 3 测试 + 全套 qualification 目录 101 测试 + machineAxisService 14 测试全过；optimization-qualification/visual/kibo-headless 审计 clean。
 
-**E20-1 剩余依赖**：① E20-1a 星赐节点技能等级（`skillUpgrade`）运行时应用——涉及 canonical 核心技能等级通道，属实现项；② hero_rank 属性/技能可用性的实机相邻档最终面板捕获（捕获后按已建合同自动校验放行）。这两项与 E20-2 角色验收并行推进；每完成一个子阶段即更新本手册并单独提交。
+**E20-1 剩余依赖**：hero_rank 属性/技能可用性的客户端语义结论 + 实机相邻档最终面板捕获（捕获后按已建合同自动校验放行）；`level-breakthrough-skill-unlock-source-mismatch`（112001）来源核对与 E20-2 角色验收并行推进；每完成一个子阶段即更新本手册并单独提交。
+
+### M12-B3-E20-1a 已完成：星赐节点技能等级接入 canonical 核心（2026-08-07）
+
+星赐节点（`talent_rune.runeSkill = skillIndex#level`）的等级加成此前只登记为 `star-gift-node-skill-level-runtime-unapplied`，本轮实现运行时通道：
+
+- **skillIndex 语义确认**（BWiki 星赐属性描述与 runeSkill 互验）：0=普通攻击（`characterId*100+1`）、1=星鸣技（ground slot 3）、2=星决技（ground slot 4）、3=星携技（ground slot 203）。
+- `resolveCharacterCultivation`：`staticSources.starGiftNodeSources[].skillUpgrade` 透出，新增 `starGiftNodeSkillLevels` applied 清单（每节点 skillIndex/level/sourceIdentity）；`unappliedSkillSources` 只保留 hero_rank 解锁技能族。
+- `projectResolvedOptimizationCultivationActor`：`character.starGiftNodeSkillLevels` 进入 `appliedDimensions`，`unresolvedDimensions` 移除该族；`actorConfigPatch.cultivation.starGiftNodeSkillLevels` 透出（`normalizeWorkbenchCultivation` 同步保留）。
+- Machine Axis：`prepare()` 按队伍槽把星赐加成解析为 skillId→level bonus（用完整 `characters.json.skillSlots` 映射，seed 投影无槽位信息），在 actionDraft 构建时 `level = intent.level + bonus`（如 109001 普攻 +7、星鸣技 +5、星决技 +4、星携技 +3；101010 普攻 +7）。仅带 cultivation profile 的正式路径生效，既有 fixture（无培养合同）哈希不变。
+- 验证：`heroRankAdjacentRankEvidence.test.js` 新增映射与 Machine Axis 等级断言（109001 星鸣技 10900112 level=1+5）；qualification 目录 103 测试 + machineAxisService 全过；全套 Vitest 1435/1436（仅已知 process-heavy 并行超时，单独全过）；production-import 审计 clean。资格缺口仍 35（`strict-character-cultivation-runtime-partial` 11 条剩余全部来自 hero_rank 两族证据边界），`m12cLocked` 保持锁定。
 
 ### M12-B3-E18 sub3 已完成：500213 SpacialProperty 按战斗属性闭合，目标 signature 行清零（2026-08-07）
 

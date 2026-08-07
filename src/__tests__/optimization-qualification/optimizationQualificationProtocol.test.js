@@ -933,6 +933,7 @@ describe('M12-B3 strict cultivation profile', () => {
           'character.starGiftNodeAttributes',
           'character.completedStarGiftAttributes',
           'character.levelBreakthroughLegality',
+          'character.starGiftNodeSkillLevels',
           'kibo.level',
           'kibo.talents',
           'kibo.bondLevel',
@@ -946,7 +947,6 @@ describe('M12-B3 strict cultivation profile', () => {
           'equipment.instanceTier',
         ]),
         unresolvedDimensions: expect.arrayContaining([
-          'character.starGiftNodeSkillLevels',
           'character.levelBreakthroughAttributes',
           'character.levelBreakthroughSkillUnlocks',
         ]),

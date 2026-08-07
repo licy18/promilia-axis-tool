@@ -346,12 +346,22 @@ export function projectResolvedOptimizationCultivationActor(
     !resolvedActor.character?.staticSources?.unappliedSkillSources?.some(
       source => source.kind === 'actor-level-breakthrough-skill-unlock'
     );
+  const starGiftNodeSkillLevelsApplied =
+    Array.isArray(
+      resolvedActor.character?.staticSources?.starGiftNodeSkillLevels
+    ) &&
+    resolvedActor.character?.staticSources?.starGiftNodeSkillLevels.every(
+      source => source.applied === true
+    );
   const appliedDimensions = [
     'character.level',
     'character.starGiftRank',
     'character.starGiftNodeAttributes',
     'character.completedStarGiftAttributes',
     'character.levelBreakthroughLegality',
+    ...(starGiftNodeSkillLevelsApplied
+      ? ['character.starGiftNodeSkillLevels']
+      : []),
     ...(levelBreakthroughAttributesApplied
       ? ['character.levelBreakthroughAttributes']
       : []),
@@ -373,9 +383,7 @@ export function projectResolvedOptimizationCultivationActor(
     'equipment.instanceTier',
   ];
   const unresolvedDimensions = [
-    ...(resolvedActor.character?.staticSources?.unappliedSkillSources?.some(
-      source => source.kind === 'star-gift-node-skill-level'
-    )
+    ...(!starGiftNodeSkillLevelsApplied
       ? ['character.starGiftNodeSkillLevels']
       : []),
     ...(!levelBreakthroughAttributesApplied
@@ -399,6 +407,9 @@ export function projectResolvedOptimizationCultivationActor(
         ),
         optimizationStaticSources: structuredClone(
           resolvedActor.character.staticSources
+        ),
+        starGiftNodeSkillLevels: structuredClone(
+          resolvedActor.character.staticSources.starGiftNodeSkillLevels ?? []
         ),
       },
       loadout: {
@@ -1044,18 +1055,6 @@ function resolveCharacterCultivation(value, sourceProfile) {
       sourceIdentity: row.sourceIdentity,
     }));
   const unappliedSkillSources = [
-    ...selectedNodes
-      .filter(node => node.skillUpgrade)
-      .map(node => ({
-        kind: 'star-gift-node-skill-level',
-        sourceId: node.sourceId,
-        rank: node.rank,
-        runeId: node.runeId,
-        skillIndex: node.skillUpgrade.skillIndex,
-        level: node.skillUpgrade.level,
-        reason: 'star-gift-node-skill-level-runtime-unapplied',
-        sourceIdentity: node.sourceIdentity,
-      })),
     ...levelBreakthroughSkillDeclarations
       .filter(
         skill =>
@@ -1085,8 +1084,21 @@ function resolveCharacterCultivation(value, sourceProfile) {
         rank: node.rank,
         runeId: node.runeId,
         attributes: structuredClone(node.attributes),
+        skillUpgrade: structuredClone(node.skillUpgrade ?? null),
         sourceIdentity: node.sourceIdentity,
       })),
+      starGiftNodeSkillLevels: selectedNodes
+        .filter(node => node.skillUpgrade)
+        .map(node => ({
+          kind: 'star-gift-node-skill-level',
+          sourceId: node.sourceId,
+          rank: node.rank,
+          runeId: node.runeId,
+          skillIndex: Number(node.skillUpgrade.skillIndex),
+          level: Number(node.skillUpgrade.level),
+          applied: true,
+          sourceIdentity: node.sourceIdentity,
+        })),
       levelBreakthroughAttributeSources: [],
       levelBreakthroughSelection: levelBreakthroughSources
         .filter(
@@ -1117,6 +1129,45 @@ function resolveCharacterCultivation(value, sourceProfile) {
     },
     levelBreakthroughSkillDeclarations,
   };
+}
+
+export function resolveStarGiftSkillIndexToSkillId(character, skillIndex) {
+  const normalized = Number(skillIndex);
+  const slots = character?.skillSlots ?? [];
+  if (normalized === 0) {
+    const ownerPrefix = Number(character?.id) * 100;
+    return Number.isInteger(ownerPrefix) && ownerPrefix > 0
+      ? ownerPrefix + 1
+      : null;
+  }
+  const slotByIndex = {
+    1: ['ground', 3],
+    2: ['ground', 4],
+    3: ['ground', 203],
+  };
+  const [group, slot] = slotByIndex[normalized] ?? [];
+  if (!group) return null;
+  const match = slots.find(
+    candidate =>
+      candidate.group === group && Number(candidate.slot) === Number(slot)
+  );
+  return Number.isInteger(Number(match?.skillId)) ? Number(match.skillId) : null;
+}
+
+export function resolveStarGiftSkillLevelBonusesBySkillId({
+  character,
+  starGiftNodeSkillLevels,
+}) {
+  const bonuses = new Map();
+  for (const entry of starGiftNodeSkillLevels ?? []) {
+    const skillId = resolveStarGiftSkillIndexToSkillId(
+      character,
+      entry.skillIndex
+    );
+    if (skillId == null) continue;
+    bonuses.set(skillId, (bonuses.get(skillId) ?? 0) + Number(entry.level ?? 0));
+  }
+  return Object.fromEntries([...bonuses.entries()].sort((a, b) => a[0] - b[0]));
 }
 
 function resolveEquipmentCultivation(value, equipmentCatalog) {
