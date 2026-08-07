@@ -24887,8 +24887,8 @@
           "verified-zero": 7
         },
         "dynamicProperty": {
-          "applied": 4,
-          "verified-zero": 3
+          "applied": 2,
+          "verified-zero": 5
         },
         "tuningMark": {
           "applied": 1,
@@ -24980,23 +24980,17 @@
       "actionKind": "break",
       "sourceSkillId": 50008104,
       "controlSkillId": 50008104,
-      "closureClass": "scenario-assumed",
+      "closureClass": "evidence-closed",
       "runtimeStatus": "runnable",
       "runnable": true,
       "sourceEvidenceStatus": "applied",
       "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "zeroDistancePolicy": {
         "approved": "user-approved-sync-rebaseline-2026-08-05",
-        "coversAllReasons": false,
+        "coversAllReasons": true,
         "coveredReasons": [],
-        "unresolvedReasons": [
-          "effect-trigger-frame-missing",
-          "effect-target-unresolved"
-        ]
+        "unresolvedReasons": []
       },
       "timing": {
         "status": "applied",
@@ -25030,7 +25024,7 @@
           "verified-zero": 1
         },
         "dynamicProperty": {
-          "unresolved": 1
+          "verified-zero": 1
         },
         "tuningMark": {
           "verified-zero": 1
@@ -40229,8 +40223,8 @@
       "unresolved": 0
     },
     "publicActionClosure": {
-      "evidenceClosed": 365,
-      "scenarioAssumed": 1,
+      "evidenceClosed": 366,
+      "scenarioAssumed": 0,
       "unresolved": 0
     },
     "fixedSkillScopeClasses": {

@@ -280,6 +280,27 @@ let petExternalGameplayObjectFileIndexCache = null;
 // `source.ATK[0]*A/10000`, so function 110 is a supported damage base.
 const SUPPORTED_BASE_FUNCTION_IDS = new Set([2, 101, 110, 116, 119]);
 
+const PRODUCT_CONFIRMED_DEAD_BRANCHES = Object.freeze([
+  {
+    controlSkillId: 50008104,
+    elementId: 500081044,
+    pathId: '3531304960055990726',
+    decision: 'product-confirmed-dead-branch',
+    decisionSource:
+      'user-confirmation-2026-08-07: break skill 50008104 description only mentions ice damage and toughness damage; element 500081044 永霜诅咒-冰抗下降 has no trigger/reference edge in current client data (battle-element-assets scan finds only the control resource map self-reference); upstream C:\\AP client pack is byte-identical to the local extraction',
+  },
+]);
+
+function resolveProductConfirmedDeadBranch(elementId, pathId) {
+  return (
+    PRODUCT_CONFIRMED_DEAD_BRANCHES.find(
+      row =>
+        Number(row.elementId) === Number(elementId) &&
+        (row.pathId == null || String(row.pathId) === String(pathId))
+    ) ?? null
+  );
+}
+
 function resolveElementFormulaInputs(tree) {
   const formulaParams = tree?.formulaParams;
   const hasFormulaParams =
@@ -6685,6 +6706,10 @@ function createControlRuntimeEffectBinding({
     reasons.push('property-duration-zero-unresolved');
   }
   const valueByLevel = node.formula.valueByLevel;
+  const deadBranch = resolveProductConfirmedDeadBranch(
+    node.elementId,
+    node.pathId
+  );
   const blockingReasons = dedupeBy(
     reasons.filter(
       reason =>
@@ -6694,32 +6719,50 @@ function createControlRuntimeEffectBinding({
         !reason.endsWith('-does-not-write-hp') &&
         !reason.endsWith('-does-not-write-shield') &&
         !reason.endsWith('-does-not-write-dynamicProperty') &&
-        !reason.endsWith('-does-not-write-mark')
+        !reason.endsWith('-does-not-write-mark') &&
+        !(
+          deadBranch &&
+          (reason === 'effect-trigger-frame-missing' ||
+            reason === 'effect-target-unresolved' ||
+            reason.startsWith('effect-target-'))
+        )
     ),
     value => value
   );
   const baseApplied =
     node.classification === 'applied' && tuningBinding?.applied !== false;
   const classification =
-    baseApplied && blockingReasons.length === 0
+    deadBranch
+      ? 'verified-zero'
+      : baseApplied && blockingReasons.length === 0
       ? 'applied'
       : node.classification === 'verified-zero' && blockingReasons.length === 0
         ? 'verified-zero'
         : 'unresolved';
-  const dimensions = Object.fromEntries(
-    Object.entries(node.dimensions).map(([key, dimension]) => [
-      key,
-      baseApplied &&
-      dimension.status === 'applied' &&
-      classification !== 'applied'
-        ? createDimensionClassification(
-            'unresolved',
-            blockingReasons,
-            dimension.sourceField
-          )
-        : dimension,
-    ])
-  );
+  const dimensions = deadBranch
+    ? Object.fromEntries(
+        Object.keys(node.dimensions).map(key => [
+          key,
+          createDimensionClassification(
+            'verified-zero',
+            [`product-confirmed-dead-branch-does-not-write-${key}`]
+          ),
+        ])
+      )
+    : Object.fromEntries(
+        Object.entries(node.dimensions).map(([key, dimension]) => [
+          key,
+          baseApplied &&
+          dimension.status === 'applied' &&
+          classification !== 'applied'
+            ? createDimensionClassification(
+                'unresolved',
+                blockingReasons,
+                dimension.sourceField
+              )
+            : dimension,
+        ])
+      );
   return {
     effectIdentity: [
       root.graphIdentity,
@@ -6808,6 +6851,16 @@ function createControlRuntimeEffectBinding({
       commonExpression: node.formula.commonExpression,
       baseExpression: node.formula.baseExpression,
     },
+    ...(deadBranch
+      ? {
+          deadBranch: {
+            elementId: Number(deadBranch.elementId),
+            pathId: String(deadBranch.pathId),
+            decision: deadBranch.decision,
+            decisionSource: deadBranch.decisionSource,
+          },
+        }
+      : {}),
     sourceIdentity: `battle-effect:${root.controlSkillId}:${root.mapIndex}:${node.pathId}:${trigger?.behaviorPathId ?? 'unresolved'}:${trigger?.startFrame ?? 'unresolved'}`,
     dimensions,
     classification,
@@ -8653,6 +8706,13 @@ function createPackage({
     mechanismEvidence,
     verifiedFindingIds: (evidence.findings ?? []).map(finding => finding.id),
     knownGaps: evidence.knownGaps ?? [],
+    excludedDeadBranches: PRODUCT_CONFIRMED_DEAD_BRANCHES.map(row => ({
+      controlSkillId: Number(row.controlSkillId),
+      elementId: Number(row.elementId),
+      pathId: String(row.pathId),
+      decision: row.decision,
+      decisionSource: row.decisionSource,
+    })),
     policy: {
       uniqueSourceRequired: true,
       completeFormulaInputsRequired: true,

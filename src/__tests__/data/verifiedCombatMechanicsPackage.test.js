@@ -42,9 +42,9 @@ describe('verified combat mechanics package', () => {
         classifiedActionCount: 563,
         appliedActionBindingCount: 611,
         appliedHitBindingCount: 2758,
-        appliedEffectBindingCount: 1801,
-        verifiedZeroEffectBindingCount: 9,
-        unresolvedEffectBindingCount: 1977,
+        appliedEffectBindingCount: 1799,
+        verifiedZeroEffectBindingCount: 12,
+        unresolvedEffectBindingCount: 1976,
         actionVariantSupportControlBindingCount: 47,
         specialResourceProfileCount: 2,
         specialResourceOperationCount: 46,
@@ -75,6 +75,17 @@ describe('verified combat mechanics package', () => {
         characterCombatProfileCount: 3,
         characterCombatUiVerifiedProfileCount: 0,
       },
+      excludedDeadBranches: expect.arrayContaining([
+        expect.objectContaining({
+          controlSkillId: 50008104,
+          elementId: 500081044,
+          pathId: '3531304960055990726',
+          decision: 'product-confirmed-dead-branch',
+          decisionSource: expect.stringContaining(
+            'user-confirmation-2026-08-07'
+          ),
+        }),
+      ]),
       mechanismEvidence: {
         contractName: 'AzPrVerifiedMechanismEvidenceManifest',
         status: 'verified-mechanism-evidence-manifest-ready',
@@ -194,9 +205,9 @@ describe('verified combat mechanics package', () => {
         'static-resolved': 1328,
       },
       effectBindingCount: 3786,
-      appliedEffectBindingCount: 1800,
-      verifiedZeroEffectBindingCount: 9,
-      unresolvedEffectBindingCount: 1977,
+      appliedEffectBindingCount: 1798,
+      verifiedZeroEffectBindingCount: 12,
+      unresolvedEffectBindingCount: 1976,
       bindingKindCounts: {
         damage: 580,
         inject: 1398,
@@ -214,9 +225,9 @@ describe('verified combat mechanics package', () => {
         hp: expect.any(Object),
         shield: expect.any(Object),
         dynamicProperty: expect.objectContaining({
-          applied: 706,
-          unresolved: 433,
-          'verified-zero': 2647,
+          applied: 704,
+          unresolved: 432,
+          'verified-zero': 2650,
         }),
         mark: expect.any(Object),
       }),
