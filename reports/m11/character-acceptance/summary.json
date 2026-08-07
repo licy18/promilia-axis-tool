@@ -75,13 +75,13 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "6c5a82ef3b0eaef0",
-      "sourceOfTruthHash": "08b47a1d0614108b",
+      "manifestHash": "a795d6b21fafcee2",
+      "sourceOfTruthHash": "24732ad11a0d5022",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "a8d7989b00578cf8",
-        "data": "f6dd191b3ec97595",
-        "trace": "fd01b36b1da5c85f",
+        "input": "38973cc9d9290143",
+        "data": "cc797c90c6f487dc",
+        "trace": "c191bc8f089f2fba",
         "evaluation": "920e7363ae12290d"
       }
     },
@@ -135,13 +135,13 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "6cf0a00df66e0e25",
-      "sourceOfTruthHash": "255e79541a31558a",
+      "manifestHash": "24794fe1fae5c5a7",
+      "sourceOfTruthHash": "5155c40ebf1c6518",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "872dea8aa48df06d",
-        "data": "89d284d05ec8532d",
-        "trace": "3c4e7e76cb13e9ef",
+        "input": "7279c10f07923ac8",
+        "data": "2e5020f6fcb5bd44",
+        "trace": "2402a875d86776dc",
         "evaluation": "adc4612197816c14"
       }
     },
@@ -196,13 +196,13 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "33344db5f40ef396",
-      "sourceOfTruthHash": "677c12dbb22566a4",
+      "manifestHash": "58bc7150741a68ad",
+      "sourceOfTruthHash": "ce59f40b80230893",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "4b0e3c88916935ee",
-        "data": "cd4b47c95ed9da8b",
-        "trace": "9f81eb5fe4d84c92",
+        "input": "7860cbdf6eda4553",
+        "data": "22dfc1c4faf7e95a",
+        "trace": "85c5f1cb7f4a9249",
         "evaluation": "b06186eaa569be69"
       }
     },
@@ -216,19 +216,19 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 195,
+      "blockingLedgerCount": 188,
       "sourceGapCount": 16,
-      "acceptanceGapCount": 179,
+      "acceptanceGapCount": 172,
       "nonBlockingSourceCount": 8,
       "matrix": {
         "requirementCount": 228,
         "requiredCount": 228,
-        "passedCount": 22,
-        "blockedCount": 206,
+        "passedCount": 29,
+        "blockedCount": 199,
         "notApplicableCount": 0,
         "statusCounts": {
-          "blocked": 206,
-          "passed": 22
+          "blocked": 199,
+          "passed": 29
         },
         "dimensionCounts": {
           "action-effect-binding": 1,
@@ -257,19 +257,19 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "fab301e2f3170aca",
-      "sourceOfTruthHash": "65718829353a66d5",
+      "manifestHash": "9e03ad867f9ab2b8",
+      "sourceOfTruthHash": "78df6c6b6ba6149c",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "ac17d2beb5985aeb",
-        "data": "2407eec4f3593812",
-        "trace": "53270aec7c11ed15",
+        "input": "2428a24b475d99f4",
+        "data": "a2dc2f860818c59f",
+        "trace": "748fe88229302afd",
         "evaluation": "fefe6ba59b4e3c64"
       }
     }
   ],
-  "catalogHash": "c7bc8e06056067e0",
-  "manifestIndexHash": "87908a64bad6fcbf",
+  "catalogHash": "c6c62d659cf1fead",
+  "manifestIndexHash": "15b83dbcbe3f5e69",
   "summary": {
     "ownerCount": 4,
     "runtimeIntegratedCount": 4,
@@ -278,9 +278,9 @@
     "machineScenarioPassCount": 4,
     "workbenchRoundTripPassCount": 4,
     "sourceGapCount": 288,
-    "acceptanceGapCount": 916,
+    "acceptanceGapCount": 909,
     "nonBlockingSourceCount": 397,
-    "functionalBlockers": 1204,
+    "functionalBlockers": 1197,
     "performanceAndBundleRisksBlocking": false
   }
 }

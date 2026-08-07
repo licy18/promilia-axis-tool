@@ -5128,6 +5128,38 @@
           "totalDelta": 2
         }
       },
+      "tuningMarkConsumeByActionId": {
+        "normal-special-charged": {
+          "eventCount": 1,
+          "consumedStacks": 1,
+          "frames": [
+            2565
+          ]
+        },
+        "ruby-ultimate": {
+          "eventCount": 3,
+          "consumedStacks": 3,
+          "frames": [
+            1773,
+            1884,
+            1900
+          ]
+        },
+        "threshold-enhanced-special-charged": {
+          "eventCount": 1,
+          "consumedStacks": 1,
+          "frames": [
+            324
+          ]
+        },
+        "ultimate-refresh": {
+          "eventCount": 1,
+          "consumedStacks": 1,
+          "frames": [
+            579
+          ]
+        }
+      },
       "targetStateTrace": [
         {
           "eventId": null,
@@ -14521,7 +14553,7 @@
         }
       ]
     },
-    "summaryHash": "218265744ae9831643b21e7f23f1f633454740d39816e908a299d9ec8234ec4f"
+    "summaryHash": "89737fcbe41831dcb2f85c0cce77ff1732e19518e025ac7a179327a695f65037"
   },
   "expected": {
     "exact": {
@@ -15580,6 +15612,6 @@
       }
     ]
   },
-  "replayHash": "a93a6fc484a07a8fc7308e919d21d42349002d5edb6f9f37bc2f6e991c57357e",
+  "replayHash": "aab4c3a74b1ae0f27ffd833eecdd584653e3fa5fea3581a0a85ebc4ba5372679",
   "profileHash": "245a9a3d9bb4fecffc22444ee148a19e1d751de6390fe2b4c6e6ef79b864374e"
 }

@@ -3,7 +3,7 @@
   "kind": "azpr-character-combat-authoritative-golden-runtime",
   "status": "authoritative-golden-runtime-verified",
   "ownerId": 109001,
-  "scenarioIdentity": "m10-b3-e20-2:109001:120s-three-actor-golden",
+  "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
   "durationMs": 120000,
   "frameRate": 60,
   "sourcePackageHash": "4b7b9fc53d308454748a37104e5a4863ea5739d09ffaa1a8fe2aa5b68c20f7e5",
@@ -11,15 +11,15 @@
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "3ca645f27adac274",
-    "traceHash": "26c31a9f4e5002e3",
-    "dataHash": "33655339ffd19f5d",
+    "inputHash": "38ccf8a3bc471cca",
+    "traceHash": "267009b1634d4a57",
+    "dataHash": "5067293f679ba987",
     "criticalPolicy": "non-critical"
   },
   "actual": {
     "project": {
       "durationMs": 120000,
-      "actionCount": 2,
+      "actionCount": 8,
       "teamCharacterIds": [
         109001,
         101010,
@@ -28,18 +28,51 @@
     },
     "actions": {
       "executedActionIds": [
-        "moyin-normal-a1",
-        "moyin-star-skill"
+        "moyin-a5",
+        "moyin-charged",
+        "moyin-limit-counter",
+        "moyin-perfect-parry",
+        "moyin-star-skill",
+        "moyin-star-skill-2",
+        "moyin-star-skill-3",
+        "moyin-ultimate"
       ],
       "blockedActionIds": [],
       "selections": [
         {
-          "actionId": "moyin-normal-a1",
+          "actionId": "moyin-a5",
           "ownerId": 109001,
-          "semanticName": "A3",
-          "controlSkillId": 10900103,
+          "semanticName": "A5",
+          "controlSkillId": 10900105,
           "subSkillIndex": 0,
-          "actualDurationFrames": 65,
+          "actualDurationFrames": 78,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "moyin-charged",
+          "ownerId": 109001,
+          "semanticName": "重击",
+          "controlSkillId": 10900110,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 83,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "moyin-limit-counter",
+          "ownerId": 109001,
+          "semanticName": "极限反击",
+          "controlSkillId": 10900125,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 53,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "moyin-perfect-parry",
+          "ownerId": 109001,
+          "semanticName": "完美招架",
+          "controlSkillId": 10900127,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 40,
           "sourceKind": "workbench-explicit-input-variant"
         },
         {
@@ -50,15 +83,66 @@
           "subSkillIndex": 0,
           "actualDurationFrames": 60,
           "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "moyin-star-skill-2",
+          "ownerId": 109001,
+          "semanticName": "星鸣技",
+          "controlSkillId": 10900112,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 60,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "moyin-star-skill-3",
+          "ownerId": 109001,
+          "semanticName": "星鸣技",
+          "controlSkillId": 10900112,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 60,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        {
+          "actionId": "moyin-ultimate",
+          "ownerId": 109001,
+          "semanticName": "星决技",
+          "controlSkillId": 10900113,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 235,
+          "sourceKind": "workbench-explicit-input-variant"
         }
       ],
       "selectionByActionId": {
-        "moyin-normal-a1": {
+        "moyin-a5": {
           "ownerId": 109001,
-          "semanticName": "A3",
-          "controlSkillId": 10900103,
+          "semanticName": "A5",
+          "controlSkillId": 10900105,
           "subSkillIndex": 0,
-          "actualDurationFrames": 65,
+          "actualDurationFrames": 78,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "moyin-charged": {
+          "ownerId": 109001,
+          "semanticName": "重击",
+          "controlSkillId": 10900110,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 83,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "moyin-limit-counter": {
+          "ownerId": 109001,
+          "semanticName": "极限反击",
+          "controlSkillId": 10900125,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 53,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "moyin-perfect-parry": {
+          "ownerId": 109001,
+          "semanticName": "完美招架",
+          "controlSkillId": 10900127,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 40,
           "sourceKind": "workbench-explicit-input-variant"
         },
         "moyin-star-skill": {
@@ -68,60 +152,157 @@
           "subSkillIndex": 0,
           "actualDurationFrames": 60,
           "sourceKind": "workbench-explicit-input-variant"
+        },
+        "moyin-star-skill-2": {
+          "ownerId": 109001,
+          "semanticName": "星鸣技",
+          "controlSkillId": 10900112,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 60,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "moyin-star-skill-3": {
+          "ownerId": 109001,
+          "semanticName": "星鸣技",
+          "controlSkillId": 10900112,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 60,
+          "sourceKind": "workbench-explicit-input-variant"
+        },
+        "moyin-ultimate": {
+          "ownerId": 109001,
+          "semanticName": "星决技",
+          "controlSkillId": 10900113,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 235,
+          "sourceKind": "workbench-explicit-input-variant"
         }
       }
     },
     "combat": {
-      "damageEventCount": 21,
-      "ownerDamageEventCount": 21,
-      "ownerHitEventCount": 13,
+      "damageEventCount": 271,
+      "ownerDamageEventCount": 271,
+      "ownerHitEventCount": 40,
       "ownerHitCountByActionId": {
-        "moyin-normal-a1": 9,
-        "moyin-star-skill": 4
+        "moyin-a5": 10,
+        "moyin-charged": 3,
+        "moyin-limit-counter": 3,
+        "moyin-star-skill": 4,
+        "moyin-star-skill-2": 4,
+        "moyin-star-skill-3": 4,
+        "moyin-ultimate": 12
       },
       "ownerHitSummaryByActionId": {
-        "moyin-normal-a1": {
-          "hitCount": 9,
+        "moyin-a5": {
+          "hitCount": 10,
           "frames": [
-            312,
-            318,
-            324,
-            330,
-            336,
-            342,
-            348,
-            354,
-            360
+            504,
+            508,
+            512,
+            516,
+            520,
+            547,
+            556,
+            561,
+            566,
+            571
           ],
-          "totalHpDamage": 360,
-          "totalToughnessDamage": 252
+          "totalHpDamage": 1085,
+          "totalToughnessDamage": 0
+        },
+        "moyin-charged": {
+          "hitCount": 3,
+          "frames": [
+            905,
+            920,
+            960
+          ],
+          "totalHpDamage": 519,
+          "totalToughnessDamage": 369
+        },
+        "moyin-limit-counter": {
+          "hitCount": 3,
+          "frames": [
+            730,
+            732,
+            734
+          ],
+          "totalHpDamage": 636,
+          "totalToughnessDamage": 0
         },
         "moyin-star-skill": {
           "hitCount": 4,
           "frames": [
-            3,
-            8,
-            13,
-            29
+            303,
+            308,
+            313,
+            329
           ],
-          "totalHpDamage": 376,
-          "totalToughnessDamage": 264
+          "totalHpDamage": 756,
+          "totalToughnessDamage": 0
+        },
+        "moyin-star-skill-2": {
+          "hitCount": 4,
+          "frames": [
+            1403,
+            1408,
+            1413,
+            1429
+          ],
+          "totalHpDamage": 756,
+          "totalToughnessDamage": 0
+        },
+        "moyin-star-skill-3": {
+          "hitCount": 4,
+          "frames": [
+            1703,
+            1708,
+            1713,
+            1729
+          ],
+          "totalHpDamage": 756,
+          "totalToughnessDamage": 0
+        },
+        "moyin-ultimate": {
+          "hitCount": 12,
+          "frames": [
+            135,
+            140,
+            145,
+            183,
+            189,
+            195,
+            201,
+            207,
+            213,
+            219,
+            225,
+            231
+          ],
+          "totalHpDamage": 2923,
+          "totalToughnessDamage": 462
         }
       },
-      "ownerHitTotalHpDamage": 736,
-      "ownerHitTotalToughnessDamage": 516,
+      "ownerHitTotalHpDamage": 7431,
+      "ownerHitTotalToughnessDamage": 831,
       "selectedHpDamageByActionId": {
-        "moyin-normal-a1": 360,
-        "moyin-star-skill": 376
+        "moyin-a5": 8559,
+        "moyin-charged": 7993,
+        "moyin-limit-counter": 636,
+        "moyin-perfect-parry": 110461,
+        "moyin-star-skill": 756,
+        "moyin-star-skill-2": 4493,
+        "moyin-star-skill-3": 4493,
+        "moyin-ultimate": 115252
       },
-      "totalHpDamage": 736,
+      "totalHpDamage": 252643,
       "totalToughnessDamage": 0,
-      "ownerTotalHpDamage": 736,
+      "ownerTotalHpDamage": 252643,
       "ownerTotalToughnessDamage": 0,
       "enemy": {
-        "pointCount": 34,
+        "pointCount": 318,
         "initialHp": 862800,
-        "finalHp": 862064,
+        "finalHp": 610157,
         "maxHp": 862800,
         "initialToughness": 6667,
         "finalToughness": 6667,
@@ -135,9 +316,9 @@
           "actorId": "actor-101010",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 13.057678,
+          "currentValue": 15.212509,
           "maxValue": 100,
-          "eventCount": 1204,
+          "eventCount": 1211,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -149,36 +330,92 @@
           ],
           "actionTransactions": [
             {
-              "timeMs": 50,
+              "timeMs": 5050,
               "actionId": "moyin-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0,
+              "beforeValue": 0.520325,
               "change": 0.164993,
-              "afterValue": 0.164993
+              "afterValue": 0.685318
             },
             {
-              "timeMs": 483.333333,
+              "timeMs": 5483.333333,
               "actionId": "moyin-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.20662,
+              "beforeValue": 0.726944,
               "change": 0.164993,
-              "afterValue": 0.371613
+              "afterValue": 0.891937
             },
             {
-              "timeMs": 5200,
-              "actionId": "moyin-normal-a1",
+              "timeMs": 8400,
+              "actionId": "moyin-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.860718,
-              "change": 0.119949,
-              "afterValue": 0.980667
+              "beforeValue": 1.193725,
+              "change": 0.129944,
+              "afterValue": 1.323669
             },
             {
-              "timeMs": 5300,
-              "actionId": "moyin-normal-a1",
+              "timeMs": 8466.666666,
+              "actionId": "moyin-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.991074,
-              "change": 0.119949,
-              "afterValue": 1.111023
+              "beforeValue": 1.334076,
+              "change": 0.129944,
+              "afterValue": 1.46402
+            },
+            {
+              "timeMs": 9116.666666,
+              "actionId": "moyin-a5",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.536865,
+              "change": 0.129944,
+              "afterValue": 1.666809
+            },
+            {
+              "timeMs": 12166.666667,
+              "actionId": "moyin-limit-counter",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.979004,
+              "change": 0.294937,
+              "afterValue": 2.273941
+            },
+            {
+              "timeMs": 15083.333333,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 2.57573,
+              "change": 0.459991,
+              "afterValue": 3.035721
+            },
+            {
+              "timeMs": 15333.333333,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.066941,
+              "change": 0.459991,
+              "afterValue": 3.526932
+            },
+            {
+              "timeMs": 16000,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.589371,
+              "change": 0.459991,
+              "afterValue": 4.049362
+            },
+            {
+              "timeMs": 23383.333333,
+              "actionId": "moyin-star-skill-2",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 4.819443,
+              "change": 0.164993,
+              "afterValue": 4.984436
+            },
+            {
+              "timeMs": 23816.666666,
+              "actionId": "moyin-star-skill-2",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 5.036469,
+              "change": 0.164993,
+              "afterValue": 5.201462
             }
           ]
         },
@@ -187,9 +424,9 @@
           "actorId": "actor-103002",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 13.057678,
+          "currentValue": 15.212509,
           "maxValue": 100,
-          "eventCount": 1204,
+          "eventCount": 1211,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -201,36 +438,92 @@
           ],
           "actionTransactions": [
             {
-              "timeMs": 50,
+              "timeMs": 5050,
               "actionId": "moyin-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0,
+              "beforeValue": 0.520325,
               "change": 0.164993,
-              "afterValue": 0.164993
+              "afterValue": 0.685318
             },
             {
-              "timeMs": 483.333333,
+              "timeMs": 5483.333333,
               "actionId": "moyin-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.20662,
+              "beforeValue": 0.726944,
               "change": 0.164993,
-              "afterValue": 0.371613
+              "afterValue": 0.891937
             },
             {
-              "timeMs": 5200,
-              "actionId": "moyin-normal-a1",
+              "timeMs": 8400,
+              "actionId": "moyin-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.860718,
-              "change": 0.119949,
-              "afterValue": 0.980667
+              "beforeValue": 1.193725,
+              "change": 0.129944,
+              "afterValue": 1.323669
             },
             {
-              "timeMs": 5300,
-              "actionId": "moyin-normal-a1",
+              "timeMs": 8466.666666,
+              "actionId": "moyin-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.991074,
-              "change": 0.119949,
-              "afterValue": 1.111023
+              "beforeValue": 1.334076,
+              "change": 0.129944,
+              "afterValue": 1.46402
+            },
+            {
+              "timeMs": 9116.666666,
+              "actionId": "moyin-a5",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.536865,
+              "change": 0.129944,
+              "afterValue": 1.666809
+            },
+            {
+              "timeMs": 12166.666667,
+              "actionId": "moyin-limit-counter",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.979004,
+              "change": 0.294937,
+              "afterValue": 2.273941
+            },
+            {
+              "timeMs": 15083.333333,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 2.57573,
+              "change": 0.459991,
+              "afterValue": 3.035721
+            },
+            {
+              "timeMs": 15333.333333,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.066941,
+              "change": 0.459991,
+              "afterValue": 3.526932
+            },
+            {
+              "timeMs": 16000,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.589371,
+              "change": 0.459991,
+              "afterValue": 4.049362
+            },
+            {
+              "timeMs": 23383.333333,
+              "actionId": "moyin-star-skill-2",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 4.819443,
+              "change": 0.164993,
+              "afterValue": 4.984436
+            },
+            {
+              "timeMs": 23816.666666,
+              "actionId": "moyin-star-skill-2",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 5.036469,
+              "change": 0.164993,
+              "afterValue": 5.201462
             }
           ]
         },
@@ -239,11 +532,148 @@
           "actorId": "actor-109001",
           "kiboId": null,
           "initialValue": 100,
-          "currentValue": 100,
+          "currentValue": 34.44339,
           "maxValue": 100,
-          "eventCount": 0,
-          "autoRecovery": [],
-          "actionTransactions": []
+          "eventCount": 1216,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-foreground",
+              "count": 1200,
+              "totalChange": 24.9936,
+              "firstTimeMs": 100,
+              "lastTimeMs": 120000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 0,
+              "actionId": "moyin-ultimate",
+              "reason": "verified-skill-cost",
+              "beforeValue": 100,
+              "change": -100,
+              "afterValue": 0
+            },
+            {
+              "timeMs": 5050,
+              "actionId": "moyin-star-skill",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 1.041412,
+              "change": 0.329987,
+              "afterValue": 1.371399
+            },
+            {
+              "timeMs": 5483.333333,
+              "actionId": "moyin-star-skill",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 1.454711,
+              "change": 0.329987,
+              "afterValue": 1.784698
+            },
+            {
+              "timeMs": 8400,
+              "actionId": "moyin-a5",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 2.388717,
+              "change": 0.259888,
+              "afterValue": 2.648605
+            },
+            {
+              "timeMs": 8466.666666,
+              "actionId": "moyin-a5",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 2.669433,
+              "change": 0.259888,
+              "afterValue": 2.929321
+            },
+            {
+              "timeMs": 9116.666666,
+              "actionId": "moyin-a5",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 3.075119,
+              "change": 0.259888,
+              "afterValue": 3.335007
+            },
+            {
+              "timeMs": 12166.666667,
+              "actionId": "moyin-limit-counter",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 3.959854,
+              "change": 0.58989,
+              "afterValue": 4.549744
+            },
+            {
+              "timeMs": 15000,
+              "actionId": "moyin-charged",
+              "reason": "verified-direct-sp",
+              "beforeValue": 5.132935,
+              "change": 1,
+              "afterValue": 6.132935
+            },
+            {
+              "timeMs": 15083.333333,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 6.153763,
+              "change": 0.919998,
+              "afterValue": 7.073761
+            },
+            {
+              "timeMs": 15083.333333,
+              "actionId": "moyin-charged",
+              "reason": "tuning-conditional-direct-sp",
+              "beforeValue": 7.073761,
+              "change": 1,
+              "afterValue": 8.073761
+            },
+            {
+              "timeMs": 15333.333333,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 8.136246,
+              "change": 0.919998,
+              "afterValue": 9.056244
+            },
+            {
+              "timeMs": 15333.333333,
+              "actionId": "moyin-charged",
+              "reason": "tuning-conditional-direct-sp",
+              "beforeValue": 9.056244,
+              "change": 1,
+              "afterValue": 10.056244
+            },
+            {
+              "timeMs": 16000,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 10.181214,
+              "change": 0.919998,
+              "afterValue": 11.101212
+            },
+            {
+              "timeMs": 16000,
+              "actionId": "moyin-charged",
+              "reason": "tuning-conditional-direct-sp",
+              "beforeValue": 11.101212,
+              "change": 1,
+              "afterValue": 12.101212
+            },
+            {
+              "timeMs": 23383.333333,
+              "actionId": "moyin-star-skill-2",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 13.642501,
+              "change": 0.329987,
+              "afterValue": 13.972488
+            },
+            {
+              "timeMs": 23816.666666,
+              "actionId": "moyin-star-skill-2",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 14.076629,
+              "change": 0.329987,
+              "afterValue": 14.406616
+            }
+          ]
         }
       ],
       "kiboSp": [
@@ -290,9 +720,9 @@
           "actorId": "actor-101010",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 13.057678,
+          "currentValue": 15.212509,
           "maxValue": 100,
-          "eventCount": 1204,
+          "eventCount": 1211,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -304,36 +734,92 @@
           ],
           "actionTransactions": [
             {
-              "timeMs": 50,
+              "timeMs": 5050,
               "actionId": "moyin-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0,
+              "beforeValue": 0.520325,
               "change": 0.164993,
-              "afterValue": 0.164993
+              "afterValue": 0.685318
             },
             {
-              "timeMs": 483.333333,
+              "timeMs": 5483.333333,
               "actionId": "moyin-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.20662,
+              "beforeValue": 0.726944,
               "change": 0.164993,
-              "afterValue": 0.371613
+              "afterValue": 0.891937
             },
             {
-              "timeMs": 5200,
-              "actionId": "moyin-normal-a1",
+              "timeMs": 8400,
+              "actionId": "moyin-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.860718,
-              "change": 0.119949,
-              "afterValue": 0.980667
+              "beforeValue": 1.193725,
+              "change": 0.129944,
+              "afterValue": 1.323669
             },
             {
-              "timeMs": 5300,
-              "actionId": "moyin-normal-a1",
+              "timeMs": 8466.666666,
+              "actionId": "moyin-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.991074,
-              "change": 0.119949,
-              "afterValue": 1.111023
+              "beforeValue": 1.334076,
+              "change": 0.129944,
+              "afterValue": 1.46402
+            },
+            {
+              "timeMs": 9116.666666,
+              "actionId": "moyin-a5",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.536865,
+              "change": 0.129944,
+              "afterValue": 1.666809
+            },
+            {
+              "timeMs": 12166.666667,
+              "actionId": "moyin-limit-counter",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.979004,
+              "change": 0.294937,
+              "afterValue": 2.273941
+            },
+            {
+              "timeMs": 15083.333333,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 2.57573,
+              "change": 0.459991,
+              "afterValue": 3.035721
+            },
+            {
+              "timeMs": 15333.333333,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.066941,
+              "change": 0.459991,
+              "afterValue": 3.526932
+            },
+            {
+              "timeMs": 16000,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.589371,
+              "change": 0.459991,
+              "afterValue": 4.049362
+            },
+            {
+              "timeMs": 23383.333333,
+              "actionId": "moyin-star-skill-2",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 4.819443,
+              "change": 0.164993,
+              "afterValue": 4.984436
+            },
+            {
+              "timeMs": 23816.666666,
+              "actionId": "moyin-star-skill-2",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 5.036469,
+              "change": 0.164993,
+              "afterValue": 5.201462
             }
           ]
         },
@@ -342,9 +828,9 @@
           "actorId": "actor-103002",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 13.057678,
+          "currentValue": 15.212509,
           "maxValue": 100,
-          "eventCount": 1204,
+          "eventCount": 1211,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -356,36 +842,92 @@
           ],
           "actionTransactions": [
             {
-              "timeMs": 50,
+              "timeMs": 5050,
               "actionId": "moyin-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0,
+              "beforeValue": 0.520325,
               "change": 0.164993,
-              "afterValue": 0.164993
+              "afterValue": 0.685318
             },
             {
-              "timeMs": 483.333333,
+              "timeMs": 5483.333333,
               "actionId": "moyin-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.20662,
+              "beforeValue": 0.726944,
               "change": 0.164993,
-              "afterValue": 0.371613
+              "afterValue": 0.891937
             },
             {
-              "timeMs": 5200,
-              "actionId": "moyin-normal-a1",
+              "timeMs": 8400,
+              "actionId": "moyin-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.860718,
-              "change": 0.119949,
-              "afterValue": 0.980667
+              "beforeValue": 1.193725,
+              "change": 0.129944,
+              "afterValue": 1.323669
             },
             {
-              "timeMs": 5300,
-              "actionId": "moyin-normal-a1",
+              "timeMs": 8466.666666,
+              "actionId": "moyin-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 0.991074,
-              "change": 0.119949,
-              "afterValue": 1.111023
+              "beforeValue": 1.334076,
+              "change": 0.129944,
+              "afterValue": 1.46402
+            },
+            {
+              "timeMs": 9116.666666,
+              "actionId": "moyin-a5",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.536865,
+              "change": 0.129944,
+              "afterValue": 1.666809
+            },
+            {
+              "timeMs": 12166.666667,
+              "actionId": "moyin-limit-counter",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 1.979004,
+              "change": 0.294937,
+              "afterValue": 2.273941
+            },
+            {
+              "timeMs": 15083.333333,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 2.57573,
+              "change": 0.459991,
+              "afterValue": 3.035721
+            },
+            {
+              "timeMs": 15333.333333,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.066941,
+              "change": 0.459991,
+              "afterValue": 3.526932
+            },
+            {
+              "timeMs": 16000,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.589371,
+              "change": 0.459991,
+              "afterValue": 4.049362
+            },
+            {
+              "timeMs": 23383.333333,
+              "actionId": "moyin-star-skill-2",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 4.819443,
+              "change": 0.164993,
+              "afterValue": 4.984436
+            },
+            {
+              "timeMs": 23816.666666,
+              "actionId": "moyin-star-skill-2",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 5.036469,
+              "change": 0.164993,
+              "afterValue": 5.201462
             }
           ]
         },
@@ -394,11 +936,148 @@
           "actorId": "actor-109001",
           "kiboId": null,
           "initialValue": 100,
-          "currentValue": 100,
+          "currentValue": 34.44339,
           "maxValue": 100,
-          "eventCount": 0,
-          "autoRecovery": [],
-          "actionTransactions": []
+          "eventCount": 1216,
+          "autoRecovery": [
+            {
+              "reason": "verified-auto-sp-foreground",
+              "count": 1200,
+              "totalChange": 24.9936,
+              "firstTimeMs": 100,
+              "lastTimeMs": 120000
+            }
+          ],
+          "actionTransactions": [
+            {
+              "timeMs": 0,
+              "actionId": "moyin-ultimate",
+              "reason": "verified-skill-cost",
+              "beforeValue": 100,
+              "change": -100,
+              "afterValue": 0
+            },
+            {
+              "timeMs": 5050,
+              "actionId": "moyin-star-skill",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 1.041412,
+              "change": 0.329987,
+              "afterValue": 1.371399
+            },
+            {
+              "timeMs": 5483.333333,
+              "actionId": "moyin-star-skill",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 1.454711,
+              "change": 0.329987,
+              "afterValue": 1.784698
+            },
+            {
+              "timeMs": 8400,
+              "actionId": "moyin-a5",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 2.388717,
+              "change": 0.259888,
+              "afterValue": 2.648605
+            },
+            {
+              "timeMs": 8466.666666,
+              "actionId": "moyin-a5",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 2.669433,
+              "change": 0.259888,
+              "afterValue": 2.929321
+            },
+            {
+              "timeMs": 9116.666666,
+              "actionId": "moyin-a5",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 3.075119,
+              "change": 0.259888,
+              "afterValue": 3.335007
+            },
+            {
+              "timeMs": 12166.666667,
+              "actionId": "moyin-limit-counter",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 3.959854,
+              "change": 0.58989,
+              "afterValue": 4.549744
+            },
+            {
+              "timeMs": 15000,
+              "actionId": "moyin-charged",
+              "reason": "verified-direct-sp",
+              "beforeValue": 5.132935,
+              "change": 1,
+              "afterValue": 6.132935
+            },
+            {
+              "timeMs": 15083.333333,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 6.153763,
+              "change": 0.919998,
+              "afterValue": 7.073761
+            },
+            {
+              "timeMs": 15083.333333,
+              "actionId": "moyin-charged",
+              "reason": "tuning-conditional-direct-sp",
+              "beforeValue": 7.073761,
+              "change": 1,
+              "afterValue": 8.073761
+            },
+            {
+              "timeMs": 15333.333333,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 8.136246,
+              "change": 0.919998,
+              "afterValue": 9.056244
+            },
+            {
+              "timeMs": 15333.333333,
+              "actionId": "moyin-charged",
+              "reason": "tuning-conditional-direct-sp",
+              "beforeValue": 9.056244,
+              "change": 1,
+              "afterValue": 10.056244
+            },
+            {
+              "timeMs": 16000,
+              "actionId": "moyin-charged",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 10.181214,
+              "change": 0.919998,
+              "afterValue": 11.101212
+            },
+            {
+              "timeMs": 16000,
+              "actionId": "moyin-charged",
+              "reason": "tuning-conditional-direct-sp",
+              "beforeValue": 11.101212,
+              "change": 1,
+              "afterValue": 12.101212
+            },
+            {
+              "timeMs": 23383.333333,
+              "actionId": "moyin-star-skill-2",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 13.642501,
+              "change": 0.329987,
+              "afterValue": 13.972488
+            },
+            {
+              "timeMs": 23816.666666,
+              "actionId": "moyin-star-skill-2",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 14.076629,
+              "change": 0.329987,
+              "afterValue": 14.406616
+            }
+          ]
         }
       },
       "kiboSpBySlotId": {
@@ -439,16 +1118,247 @@
           "actionTransactions": []
         }
       },
-      "ownerActorSpTransactionsByActionId": {},
+      "ownerActorSpTransactionsByActionId": {
+        "moyin-a5": {
+          "eventCount": 3,
+          "frames": [
+            504,
+            508,
+            547
+          ],
+          "changes": [
+            0.259888,
+            0.259888,
+            0.259888
+          ],
+          "totalChange": 0.779664,
+          "reasons": [
+            "verified-hit-sp-recovery"
+          ]
+        },
+        "moyin-charged": {
+          "eventCount": 7,
+          "frames": [
+            900,
+            905,
+            905,
+            920,
+            920,
+            960,
+            960
+          ],
+          "changes": [
+            1,
+            0.919998,
+            1,
+            0.919998,
+            1,
+            0.919998,
+            1
+          ],
+          "totalChange": 6.759994,
+          "reasons": [
+            "tuning-conditional-direct-sp",
+            "verified-direct-sp",
+            "verified-hit-sp-recovery"
+          ]
+        },
+        "moyin-limit-counter": {
+          "eventCount": 1,
+          "frames": [
+            730
+          ],
+          "changes": [
+            0.58989
+          ],
+          "totalChange": 0.58989,
+          "reasons": [
+            "verified-hit-sp-recovery"
+          ]
+        },
+        "moyin-star-skill": {
+          "eventCount": 2,
+          "frames": [
+            303,
+            329
+          ],
+          "changes": [
+            0.329987,
+            0.329987
+          ],
+          "totalChange": 0.659974,
+          "reasons": [
+            "verified-hit-sp-recovery"
+          ]
+        },
+        "moyin-star-skill-2": {
+          "eventCount": 2,
+          "frames": [
+            1403,
+            1429
+          ],
+          "changes": [
+            0.329987,
+            0.329987
+          ],
+          "totalChange": 0.659974,
+          "reasons": [
+            "verified-hit-sp-recovery"
+          ]
+        },
+        "moyin-ultimate": {
+          "eventCount": 1,
+          "frames": [
+            0
+          ],
+          "changes": [
+            -100
+          ],
+          "totalChange": -100,
+          "reasons": [
+            "verified-skill-cost"
+          ]
+        }
+      },
       "ownerKiboSpTransactionsByActionId": {},
       "specialResourceTrace": [],
-      "tuningMarkTrace": [],
-      "tuningMarkAcquireByActionId": {},
+      "tuningMarkTrace": [
+        {
+          "eventIdentity": "tuning-held|250|2250|10900113|0|elements|0|1759694688090026391|135|1",
+          "actionId": "moyin-ultimate",
+          "frame": 135,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|250|consume|3050|1",
+          "actionId": "moyin-ultimate",
+          "frame": 183,
+          "kind": "consume",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": -1,
+          "after": 0,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|250|acquire|9116.666666|19",
+          "actionId": "moyin-a5",
+          "frame": 547,
+          "kind": "acquire",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 0,
+          "delta": 2,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|9116.666666|10900105|0|elements|6|2602386345610884148|47|6",
+          "actionId": "moyin-a5",
+          "frame": 547,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 2,
+          "delta": 0,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|15083.333333|10900110|0|elements|1|-6106517431423721114|5|1",
+          "actionId": "moyin-charged",
+          "frame": 905,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 2,
+          "delta": 0,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|250|consume|18816.666666|39",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1129,
+          "kind": "consume",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 2,
+          "delta": -1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|23383.333333|10900112|0|elements|1|-4564820134104165813|3|1",
+          "actionId": "moyin-star-skill-2",
+          "frame": 1403,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|28383.333333|10900112|0|elements|1|-4564820134104165813|3|1",
+          "actionId": "moyin-star-skill-3",
+          "frame": 1703,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|250|expire|29116.666666|48",
+          "actionId": "moyin-a5",
+          "frame": 1747,
+          "kind": "expire",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": -1,
+          "after": 0,
+          "maximum": 5
+        }
+      ],
+      "tuningMarkAcquireByActionId": {
+        "moyin-a5": {
+          "eventCount": 1,
+          "totalDelta": 2
+        }
+      },
+      "tuningMarkConsumeByActionId": {
+        "moyin-perfect-parry": {
+          "eventCount": 1,
+          "consumedStacks": 1,
+          "frames": [
+            1129
+          ]
+        },
+        "moyin-ultimate": {
+          "eventCount": 1,
+          "consumedStacks": 1,
+          "frames": [
+            183
+          ]
+        }
+      },
       "targetStateTrace": [
         {
           "eventId": null,
-          "actionId": "moyin-normal-a1",
-          "frame": 300,
+          "actionId": "moyin-a5",
+          "frame": 500,
           "stateIdentity": "moyin-brilliant",
           "stateName": "璀璨",
           "operation": null,
@@ -456,20 +1366,44 @@
           "change": null,
           "afterValue": null,
           "maxValue": null
+        },
+        {
+          "eventId": null,
+          "actionId": "moyin-limit-counter",
+          "frame": 731,
+          "stateIdentity": "moyin-brilliant",
+          "stateName": "璀璨",
+          "operation": "gain",
+          "beforeValue": 0,
+          "change": 1,
+          "afterValue": 1,
+          "maxValue": 1
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1211,
+          "stateIdentity": "moyin-brilliant",
+          "stateName": "璀璨",
+          "operation": "expire",
+          "beforeValue": 1,
+          "change": -1,
+          "afterValue": 0,
+          "maxValue": 1
         }
       ],
       "conditionalHitGroups": [],
       "targetStateSummary": {
         "profileCount": 2,
-        "eventCount": 1,
+        "eventCount": 3,
         "appliedGroupCount": 0,
         "skippedGroupCount": 0,
-        "effectCommandCount": 0,
-        "directSpEventCount": 0
+        "effectCommandCount": 2,
+        "directSpEventCount": 1
       },
       "ownerDirectSp": {
-        "eventCount": 0,
-        "totalChange": 0
+        "eventCount": 1,
+        "totalChange": 1
       },
       "thresholdClearCount": 0,
       "transformCount": 0,
@@ -481,7 +1415,35 @@
       "passiveMaxStacks": 0,
       "firstPassiveMaxStackFrame": null,
       "burstTrace": [],
-      "selectedEffectSummaryByElementId": {},
+      "selectedEffectSummaryByElementId": {
+        "109001003": {
+          "effectId": "battle-element:109001003",
+          "effectNames": [
+            "基础属性变更"
+          ],
+          "targetKinds": [
+            "actor"
+          ],
+          "targetIds": [
+            "actor-109001"
+          ],
+          "appliedEventCount": 1,
+          "transferredEventCount": 0,
+          "expiredEventCount": 1,
+          "firstAppliedFrame": 1100,
+          "firstExpiredFrame": 1124,
+          "maxStacks": 1,
+          "attributeIds": [
+            113
+          ],
+          "formulaFamilies": [
+            "literal-a-with-common-ratio"
+          ],
+          "formulaValues": [
+            99
+          ]
+        }
+      },
       "inheritanceTransferCountByEffectId": {},
       "inheritanceTransfers": [],
       "burstTransitions": []
@@ -496,15 +1458,153 @@
           "effectIds": [
             "battle-element:109001316"
           ]
+        },
+        {
+          "attributeId": 7,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 343,
+          "effectIds": [
+            "battle-element:109001316",
+            "tuning-mark:250:persistent"
+          ]
+        },
+        {
+          "attributeId": 7,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 386,
+          "effectIds": [
+            "battle-element:109001316",
+            "tuning-mark:250:persistent"
+          ]
+        },
+        {
+          "attributeId": 8,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 172,
+          "effectIds": [
+            "tuning-mark:250:persistent"
+          ]
+        },
+        {
+          "attributeId": 8,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 86,
+          "effectIds": [
+            "tuning-mark:250:persistent"
+          ]
+        },
+        {
+          "attributeId": 21,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 5400,
+          "effectIds": [
+            "battle-element:109001316"
+          ]
         }
       ],
       "byActionId": {
-        "moyin-normal-a1": [
+        "moyin-a5": [
           {
             "attributeId": 7,
             "dynamicBaseRaw": 0,
             "dynamicPercentRaw": 0,
             "dynamicExtraRaw": 300,
+            "effectIds": [
+              "battle-element:109001316"
+            ]
+          },
+          {
+            "attributeId": 7,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 386,
+            "effectIds": [
+              "battle-element:109001316",
+              "tuning-mark:250:persistent"
+            ]
+          },
+          {
+            "attributeId": 8,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 172,
+            "effectIds": [
+              "tuning-mark:250:persistent"
+            ]
+          }
+        ],
+        "moyin-charged": [
+          {
+            "attributeId": 7,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 386,
+            "effectIds": [
+              "battle-element:109001316",
+              "tuning-mark:250:persistent"
+            ]
+          },
+          {
+            "attributeId": 8,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 172,
+            "effectIds": [
+              "tuning-mark:250:persistent"
+            ]
+          }
+        ],
+        "moyin-limit-counter": [
+          {
+            "attributeId": 7,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 386,
+            "effectIds": [
+              "battle-element:109001316",
+              "tuning-mark:250:persistent"
+            ]
+          },
+          {
+            "attributeId": 8,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 172,
+            "effectIds": [
+              "tuning-mark:250:persistent"
+            ]
+          }
+        ],
+        "moyin-perfect-parry": [
+          {
+            "attributeId": 7,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 386,
+            "effectIds": [
+              "battle-element:109001316",
+              "tuning-mark:250:persistent"
+            ]
+          },
+          {
+            "attributeId": 8,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 172,
+            "effectIds": [
+              "tuning-mark:250:persistent"
+            ]
+          },
+          {
+            "attributeId": 21,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 5400,
             "effectIds": [
               "battle-element:109001316"
             ]
@@ -516,6 +1616,87 @@
             "dynamicBaseRaw": 0,
             "dynamicPercentRaw": 0,
             "dynamicExtraRaw": 300,
+            "effectIds": [
+              "battle-element:109001316"
+            ]
+          }
+        ],
+        "moyin-star-skill-2": [
+          {
+            "attributeId": 7,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 343,
+            "effectIds": [
+              "battle-element:109001316",
+              "tuning-mark:250:persistent"
+            ]
+          },
+          {
+            "attributeId": 8,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 86,
+            "effectIds": [
+              "tuning-mark:250:persistent"
+            ]
+          }
+        ],
+        "moyin-star-skill-3": [
+          {
+            "attributeId": 7,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 343,
+            "effectIds": [
+              "battle-element:109001316",
+              "tuning-mark:250:persistent"
+            ]
+          },
+          {
+            "attributeId": 8,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 86,
+            "effectIds": [
+              "tuning-mark:250:persistent"
+            ]
+          }
+        ],
+        "moyin-ultimate": [
+          {
+            "attributeId": 7,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 300,
+            "effectIds": [
+              "battle-element:109001316"
+            ]
+          },
+          {
+            "attributeId": 7,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 343,
+            "effectIds": [
+              "battle-element:109001316",
+              "tuning-mark:250:persistent"
+            ]
+          },
+          {
+            "attributeId": 8,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 86,
+            "effectIds": [
+              "tuning-mark:250:persistent"
+            ]
+          },
+          {
+            "attributeId": 21,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 5400,
             "effectIds": [
               "battle-element:109001316"
             ]
@@ -523,18 +1704,47 @@
         ]
       },
       "effectIdsByActionId": {
-        "moyin-normal-a1": [
-          "battle-element:109001316"
+        "moyin-a5": [
+          "battle-element:109001316",
+          "tuning-mark:250:persistent"
+        ],
+        "moyin-charged": [
+          "battle-element:109001316",
+          "tuning-mark:250:persistent"
+        ],
+        "moyin-limit-counter": [
+          "battle-element:109001316",
+          "tuning-mark:250:persistent"
+        ],
+        "moyin-perfect-parry": [
+          "battle-element:109001316",
+          "tuning-mark:250:persistent"
         ],
         "moyin-star-skill": [
           "battle-element:109001316"
+        ],
+        "moyin-star-skill-2": [
+          "battle-element:109001316",
+          "tuning-mark:250:persistent"
+        ],
+        "moyin-star-skill-3": [
+          "battle-element:109001316",
+          "tuning-mark:250:persistent"
+        ],
+        "moyin-ultimate": [
+          "battle-element:109001316",
+          "tuning-mark:250:persistent"
         ]
       },
       "maxPercentRawByAttributeId": {
-        "7": 0
+        "7": 0,
+        "8": 0,
+        "21": 0
       },
       "maxExtraRawByAttributeId": {
-        "7": 300
+        "7": 386,
+        "8": 172,
+        "21": 5400
       }
     },
     "comparison": {
@@ -553,6 +1763,53 @@
           "effectIds": [
             "battle-element:109001316"
           ]
+        },
+        {
+          "attributeId": 7,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 343,
+          "effectIds": [
+            "battle-element:109001316",
+            "tuning-mark:250:persistent"
+          ]
+        },
+        {
+          "attributeId": 7,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 386,
+          "effectIds": [
+            "battle-element:109001316",
+            "tuning-mark:250:persistent"
+          ]
+        },
+        {
+          "attributeId": 8,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 172,
+          "effectIds": [
+            "tuning-mark:250:persistent"
+          ]
+        },
+        {
+          "attributeId": 8,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 86,
+          "effectIds": [
+            "tuning-mark:250:persistent"
+          ]
+        },
+        {
+          "attributeId": 21,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 5400,
+          "effectIds": [
+            "battle-element:109001316"
+          ]
         }
       ],
       "baselineDynamicPropertySources": [
@@ -564,23 +1821,466 @@
           "effectIds": [
             "battle-element:109001316"
           ]
+        },
+        {
+          "attributeId": 7,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 343,
+          "effectIds": [
+            "battle-element:109001316",
+            "tuning-mark:250:persistent"
+          ]
+        },
+        {
+          "attributeId": 7,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 386,
+          "effectIds": [
+            "battle-element:109001316",
+            "tuning-mark:250:persistent"
+          ]
+        },
+        {
+          "attributeId": 8,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 172,
+          "effectIds": [
+            "tuning-mark:250:persistent"
+          ]
+        },
+        {
+          "attributeId": 8,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 86,
+          "effectIds": [
+            "tuning-mark:250:persistent"
+          ]
+        },
+        {
+          "attributeId": 21,
+          "dynamicBaseRaw": 0,
+          "dynamicPercentRaw": 0,
+          "dynamicExtraRaw": 5400,
+          "effectIds": [
+            "battle-element:109001316"
+          ]
         }
       ],
       "primaryEffectFormulaValuesById": {},
       "baselineEffectFormulaValuesById": {},
-      "baselineReplayHash": "2008f40855e6b0286e79f17b0b7d84f17852c10ad44652a9b34cfdbb0d55fa97"
+      "baselineReplayHash": "c3e0e451cabe09fe47e01d278c347073c5c8ee6b50f6cc36faa1e947f4f7714d"
     },
     "trace": {
       "damage": [
         {
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "moyin-star-skill",
-          "frame": 3,
+          "actionId": "moyin-ultimate",
+          "frame": 135,
           "hitIdentity": null,
-          "rawDamage": 94,
-          "hpDamage": 94,
-          "toughnessDamage": 66,
+          "rawDamage": 141,
+          "hpDamage": 141,
+          "toughnessDamage": 99,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "moyin-ultimate",
+          "frame": 135,
+          "hitIdentity": null,
+          "rawDamage": 1868,
+          "hpDamage": 1868,
+          "toughnessDamage": 1308,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-ultimate",
+          "frame": 140,
+          "hitIdentity": null,
+          "rawDamage": 141,
+          "hpDamage": 141,
+          "toughnessDamage": 99,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-ultimate",
+          "frame": 145,
+          "hitIdentity": null,
+          "rawDamage": 141,
+          "hpDamage": 141,
+          "toughnessDamage": 99,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-ultimate",
+          "frame": 183,
+          "hitIdentity": null,
+          "rawDamage": 236,
+          "hpDamage": 236,
+          "toughnessDamage": 165,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "moyin-ultimate",
+          "frame": 183,
+          "hitIdentity": null,
+          "rawDamage": 110461,
+          "hpDamage": 110461,
+          "toughnessDamage": 4897,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 186,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -30.213913,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-ultimate",
+          "frame": 189,
+          "hitIdentity": null,
+          "rawDamage": 283,
+          "hpDamage": 283,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 192,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-ultimate",
+          "frame": 195,
+          "hitIdentity": null,
+          "rawDamage": 283,
+          "hpDamage": 283,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 198,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-ultimate",
+          "frame": 201,
+          "hitIdentity": null,
+          "rawDamage": 283,
+          "hpDamage": 283,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 204,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-ultimate",
+          "frame": 207,
+          "hitIdentity": null,
+          "rawDamage": 283,
+          "hpDamage": 283,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 210,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-ultimate",
+          "frame": 213,
+          "hitIdentity": null,
+          "rawDamage": 283,
+          "hpDamage": 283,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 216,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-ultimate",
+          "frame": 219,
+          "hitIdentity": null,
+          "rawDamage": 283,
+          "hpDamage": 283,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 222,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-ultimate",
+          "frame": 225,
+          "hitIdentity": null,
+          "rawDamage": 283,
+          "hpDamage": 283,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 228,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-ultimate",
+          "frame": 231,
+          "hitIdentity": null,
+          "rawDamage": 283,
+          "hpDamage": 283,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 234,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 240,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 246,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 252,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 258,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 264,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 270,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 276,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 282,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 288,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 294,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 300,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -588,11 +2288,23 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "moyin-star-skill",
-          "frame": 8,
+          "frame": 303,
           "hitIdentity": null,
-          "rawDamage": 94,
-          "hpDamage": 94,
-          "toughnessDamage": 66,
+          "rawDamage": 189,
+          "hpDamage": 189,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 306,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -600,238 +2312,2939 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "moyin-star-skill",
-          "frame": 13,
+          "frame": 308,
           "hitIdentity": null,
-          "rawDamage": 94,
-          "hpDamage": 94,
-          "toughnessDamage": 66,
+          "rawDamage": 189,
+          "hpDamage": 189,
+          "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "moyin-star-skill",
-          "frame": 29,
-          "hitIdentity": null,
-          "rawDamage": 94,
-          "hpDamage": 94,
-          "toughnessDamage": 66,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "moyin-normal-a1",
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
           "frame": 312,
           "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 28,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "moyin-normal-a1",
+          "actionId": "moyin-star-skill",
+          "frame": 313,
+          "hitIdentity": null,
+          "rawDamage": 189,
+          "hpDamage": 189,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
           "frame": 318,
           "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 28,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "moyin-normal-a1",
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
           "frame": 324,
           "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 28,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "moyin-normal-a1",
+          "actionId": "moyin-star-skill",
+          "frame": 329,
+          "hitIdentity": null,
+          "rawDamage": 189,
+          "hpDamage": 189,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
           "frame": 330,
           "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 28,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "moyin-normal-a1",
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
           "frame": 336,
           "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 28,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "moyin-normal-a1",
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
           "frame": 342,
           "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 28,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "moyin-normal-a1",
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
           "frame": 348,
           "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 28,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "moyin-normal-a1",
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
           "frame": 354,
           "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 28,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 360,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 366,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 372,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 378,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 384,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 390,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 396,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 402,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 408,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 414,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 420,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 426,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 432,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 438,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 444,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 450,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 456,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 462,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 468,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 474,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 480,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 486,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 492,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 498,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 504,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "moyin-normal-a1",
-          "frame": 360,
+          "actionId": "moyin-a5",
+          "frame": 504,
           "hitIdentity": null,
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 28,
+          "rawDamage": 94,
+          "hpDamage": 94,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-a5",
+          "frame": 508,
+          "hitIdentity": null,
+          "rawDamage": 94,
+          "hpDamage": 94,
+          "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "moyin-normal-a1",
-          "frame": 3960,
+          "actionId": "moyin-ultimate",
+          "frame": 510,
           "hitIdentity": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -66.657791,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-a5",
+          "frame": 512,
+          "hitIdentity": null,
+          "rawDamage": 94,
+          "hpDamage": 94,
+          "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "moyin-normal-a1",
-          "frame": 3966,
+          "actionId": "moyin-ultimate",
+          "frame": 516,
           "hitIdentity": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -66.657791,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-a5",
+          "frame": 516,
+          "hitIdentity": null,
+          "rawDamage": 94,
+          "hpDamage": 94,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-a5",
+          "frame": 520,
+          "hitIdentity": null,
+          "rawDamage": 94,
+          "hpDamage": 94,
+          "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "moyin-normal-a1",
-          "frame": 3972,
+          "actionId": "moyin-ultimate",
+          "frame": 522,
           "hitIdentity": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -66.657791,
+          "toughnessDamage": -60.631287,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "moyin-normal-a1",
-          "frame": 3978,
+          "actionId": "moyin-ultimate",
+          "frame": 528,
           "hitIdentity": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -66.657791,
+          "toughnessDamage": -60.631286,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "moyin-normal-a1",
-          "frame": 3984,
+          "actionId": "moyin-ultimate",
+          "frame": 534,
           "hitIdentity": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -66.657791,
+          "toughnessDamage": -60.631287,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "moyin-normal-a1",
-          "frame": 3990,
+          "actionId": "moyin-ultimate",
+          "frame": 540,
           "hitIdentity": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -66.657791,
+          "toughnessDamage": -60.631286,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "moyin-normal-a1",
-          "frame": 3996,
+          "actionId": "moyin-ultimate",
+          "frame": 546,
           "hitIdentity": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -66.657791,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-a5",
+          "frame": 547,
+          "hitIdentity": null,
+          "rawDamage": 123,
+          "hpDamage": 123,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "moyin-a5",
+          "frame": 547,
+          "hitIdentity": null,
+          "rawDamage": 7474,
+          "hpDamage": 7474,
+          "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "moyin-normal-a1",
-          "frame": 4002,
+          "actionId": "moyin-ultimate",
+          "frame": 552,
           "hitIdentity": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -49.395463,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-a5",
+          "frame": 556,
+          "hitIdentity": null,
+          "rawDamage": 123,
+          "hpDamage": 123,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 558,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-a5",
+          "frame": 561,
+          "hitIdentity": null,
+          "rawDamage": 123,
+          "hpDamage": 123,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 564,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-a5",
+          "frame": 566,
+          "hitIdentity": null,
+          "rawDamage": 123,
+          "hpDamage": 123,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 570,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-a5",
+          "frame": 571,
+          "hitIdentity": null,
+          "rawDamage": 123,
+          "hpDamage": 123,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 576,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 582,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 588,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 594,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 600,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 606,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 612,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 618,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 624,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 630,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 636,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 642,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 648,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 654,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 660,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 666,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 672,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 678,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 684,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 690,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 696,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 702,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 708,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 714,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 720,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 726,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-limit-counter",
+          "frame": 730,
+          "hitIdentity": null,
+          "rawDamage": 212,
+          "hpDamage": 212,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 732,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-limit-counter",
+          "frame": 732,
+          "hitIdentity": null,
+          "rawDamage": 212,
+          "hpDamage": 212,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-limit-counter",
+          "frame": 734,
+          "hitIdentity": null,
+          "rawDamage": 212,
+          "hpDamage": 212,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 738,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 744,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 750,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 756,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 762,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 768,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 774,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 780,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 786,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 792,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 798,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 804,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 810,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 816,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 822,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 828,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 834,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 840,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 846,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -30.315643,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-charged",
+          "frame": 905,
+          "hitIdentity": null,
+          "rawDamage": 141,
+          "hpDamage": 141,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "moyin-charged",
+          "frame": 905,
+          "hitIdentity": null,
+          "rawDamage": 7474,
+          "hpDamage": 7474,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-ultimate",
+          "frame": 906,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-charged",
+          "frame": 920,
+          "hitIdentity": null,
+          "rawDamage": 71,
+          "hpDamage": 71,
+          "toughnessDamage": 69,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-charged",
+          "frame": 960,
+          "hitIdentity": null,
+          "rawDamage": 307,
+          "hpDamage": 307,
+          "toughnessDamage": 300,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1129,
+          "hitIdentity": null,
+          "rawDamage": 110461,
+          "hpDamage": 110461,
+          "toughnessDamage": 6298,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1134,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -50.458252,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1140,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1146,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1152,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1158,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1164,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1170,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1176,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1182,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1188,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1194,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1200,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1206,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1212,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1218,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1224,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1230,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1236,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1242,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1248,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1254,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1260,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1266,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1272,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1278,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1284,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1290,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1296,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1302,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1308,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1314,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1320,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1326,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1332,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1338,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1344,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1350,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1356,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1362,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1368,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1374,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1380,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1386,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1392,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1398,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-star-skill-2",
+          "frame": 1403,
+          "hitIdentity": null,
+          "rawDamage": 189,
+          "hpDamage": 189,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "moyin-star-skill-2",
+          "frame": 1403,
+          "hitIdentity": null,
+          "rawDamage": 3737,
+          "hpDamage": 3737,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1404,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-star-skill-2",
+          "frame": 1408,
+          "hitIdentity": null,
+          "rawDamage": 189,
+          "hpDamage": 189,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1410,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-star-skill-2",
+          "frame": 1413,
+          "hitIdentity": null,
+          "rawDamage": 189,
+          "hpDamage": 189,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1416,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1422,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1428,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-star-skill-2",
+          "frame": 1429,
+          "hitIdentity": null,
+          "rawDamage": 189,
+          "hpDamage": 189,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1434,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1440,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1446,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1452,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1458,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1464,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1470,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1476,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1482,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1488,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1494,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1500,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1506,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1512,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1518,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1524,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1530,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1536,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1542,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1548,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1554,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1560,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1566,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1572,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1578,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1584,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1590,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1596,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1602,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1608,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1614,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1620,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1626,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1632,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1638,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1644,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1650,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1656,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1662,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1668,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1674,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1680,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1686,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1692,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1698,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-star-skill-3",
+          "frame": 1703,
+          "hitIdentity": null,
+          "rawDamage": 189,
+          "hpDamage": 189,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "moyin-star-skill-3",
+          "frame": 1703,
+          "hitIdentity": null,
+          "rawDamage": 3737,
+          "hpDamage": 3737,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1704,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-star-skill-3",
+          "frame": 1708,
+          "hitIdentity": null,
+          "rawDamage": 189,
+          "hpDamage": 189,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1710,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-star-skill-3",
+          "frame": 1713,
+          "hitIdentity": null,
+          "rawDamage": 189,
+          "hpDamage": 189,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1716,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1722,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1728,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529556,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "moyin-star-skill-3",
+          "frame": 1729,
+          "hitIdentity": null,
+          "rawDamage": 189,
+          "hpDamage": 189,
+          "toughnessDamage": 0,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1734,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1740,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1746,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1752,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1758,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1764,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1770,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631287,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1776,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1782,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.529557,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1788,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -60.631286,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1794,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -10.173035,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1854,
+          "hitIdentity": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         }
       ],
       "specialResources": [],
-      "tuningMarks": [],
+      "tuningMarks": [
+        {
+          "eventIdentity": "tuning-held|250|2250|10900113|0|elements|0|1759694688090026391|135|1",
+          "actionId": "moyin-ultimate",
+          "frame": 135,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|250|consume|3050|1",
+          "actionId": "moyin-ultimate",
+          "frame": 183,
+          "kind": "consume",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": -1,
+          "after": 0,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|250|acquire|9116.666666|19",
+          "actionId": "moyin-a5",
+          "frame": 547,
+          "kind": "acquire",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 0,
+          "delta": 2,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|9116.666666|10900105|0|elements|6|2602386345610884148|47|6",
+          "actionId": "moyin-a5",
+          "frame": 547,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 2,
+          "delta": 0,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|15083.333333|10900110|0|elements|1|-6106517431423721114|5|1",
+          "actionId": "moyin-charged",
+          "frame": 905,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 2,
+          "delta": 0,
+          "after": 2,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|250|consume|18816.666666|39",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1129,
+          "kind": "consume",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 2,
+          "delta": -1,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|23383.333333|10900112|0|elements|1|-4564820134104165813|3|1",
+          "actionId": "moyin-star-skill-2",
+          "frame": 1403,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-held|250|28383.333333|10900112|0|elements|1|-4564820134104165813|3|1",
+          "actionId": "moyin-star-skill-3",
+          "frame": 1703,
+          "kind": "held-trigger",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": 0,
+          "after": 1,
+          "maximum": 5
+        },
+        {
+          "eventIdentity": "tuning-mark|250|expire|29116.666666|48",
+          "actionId": "moyin-a5",
+          "frame": 1747,
+          "kind": "expire",
+          "profileKey": "thunder",
+          "markId": 250,
+          "before": 1,
+          "delta": -1,
+          "after": 0,
+          "maximum": 5
+        }
+      ],
       "targetStates": [
         {
           "eventId": null,
-          "actionId": "moyin-normal-a1",
-          "frame": 300,
+          "actionId": "moyin-a5",
+          "frame": 500,
           "stateIdentity": "moyin-brilliant",
           "stateName": "璀璨",
           "operation": null,
@@ -839,6 +5252,30 @@
           "change": null,
           "afterValue": null,
           "maxValue": null
+        },
+        {
+          "eventId": null,
+          "actionId": "moyin-limit-counter",
+          "frame": 731,
+          "stateIdentity": "moyin-brilliant",
+          "stateName": "璀璨",
+          "operation": "gain",
+          "beforeValue": 0,
+          "change": 1,
+          "afterValue": 1,
+          "maxValue": 1
+        },
+        {
+          "eventId": null,
+          "actionId": null,
+          "frame": 1211,
+          "stateIdentity": "moyin-brilliant",
+          "stateName": "璀璨",
+          "operation": "expire",
+          "beforeValue": 1,
+          "change": -1,
+          "afterValue": 0,
+          "maxValue": 1
         }
       ],
       "conditionalHitGroups": [],
@@ -883,24 +5320,550 @@
               "formulaValue": null
             }
           ]
+        },
+        {
+          "eventId": "actor/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|0|1",
+          "actionId": "inherited-thunder-1",
+          "frame": 0,
+          "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-109001",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-109001",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "tuning-mark:250:persistent|inherited-thunder-1|0",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|0|1",
+          "actionId": "inherited-thunder-1",
+          "frame": 0,
+          "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-109001",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-109001",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "tuning-mark:250:persistent|inherited-thunder-1|0",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|3050|1",
+          "actionId": "moyin-ultimate",
+          "frame": 183,
+          "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-109001",
+          "operation": "remove",
+          "previousTargetId": "actor-109001",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "tuning-mark:250:persistent|inherited-thunder-1|0",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|3050|1",
+          "actionId": "moyin-ultimate",
+          "frame": 183,
+          "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-109001",
+          "operation": "remove",
+          "previousTargetId": "actor-109001",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "tuning-mark:250:persistent|inherited-thunder-1|0",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|9116.667|1",
+          "actionId": "moyin-a5",
+          "frame": 547,
+          "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-109001",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-109001",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "tuning-mark:250:persistent|moyin-a5|9116.667",
+          "beforeStacks": null,
+          "afterStacks": 2,
+          "stackChange": 2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|9116.667|1",
+          "actionId": "moyin-a5",
+          "frame": 547,
+          "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-109001",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-109001",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "tuning-mark:250:persistent|moyin-a5|9116.667",
+          "beforeStacks": null,
+          "afterStacks": 2,
+          "stackChange": 2,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-109001/battle-element:109001270|EFFECT_APPLIED|12183.333|1",
+          "actionId": "moyin-limit-counter",
+          "frame": 731,
+          "effectId": "battle-element:109001270",
+          "runtimeEffectId": "battle-element:109001270",
+          "sourceElementId": null,
+          "effectName": "璀璨",
+          "targetKind": "actor",
+          "targetId": "actor-109001",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-109001",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "battle-element:109001270|moyin-limit-counter|12183.333",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": 20183.333,
+          "modifiers": []
+        },
+        {
+          "eventId": "actor/actor-109001/battle-element:2840539820446947370/source:moyin-perfect-parry/verified-calculator|EFFECT_APPLIED|18333.333|1",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1100,
+          "effectId": "battle-element:109001003",
+          "runtimeEffectId": "battle-element:2840539820446947370|source:moyin-perfect-parry",
+          "sourceElementId": 109001003,
+          "effectName": "基础属性变更",
+          "targetKind": "actor",
+          "targetId": "actor-109001",
+          "operation": "apply",
+          "previousTargetId": null,
+          "nextTargetId": "actor-109001",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "battle-element:2840539820446947370/source:moyin-perfect-parry|moyin-perfect-parry|18333.333",
+          "beforeStacks": null,
+          "afterStacks": 1,
+          "stackChange": 1,
+          "expiresAtMs": 18733.333,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 113,
+              "bucket": "dynamicExtra",
+              "valueRaw": 99,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 99
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-109001/battle-element:2840539820446947370/source:moyin-perfect-parry/verified-calculator|EFFECT_EXPIRED|18733.333|1",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1124,
+          "effectId": "battle-element:109001003",
+          "runtimeEffectId": "battle-element:2840539820446947370|source:moyin-perfect-parry",
+          "sourceElementId": 109001003,
+          "effectName": "基础属性变更",
+          "targetKind": "actor",
+          "targetId": "actor-109001",
+          "operation": "expire",
+          "previousTargetId": "actor-109001",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "battle-element:2840539820446947370/source:moyin-perfect-parry|moyin-perfect-parry|18333.333",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 113,
+              "bucket": "dynamicExtra",
+              "valueRaw": 99,
+              "formulaFamily": "literal-a-with-common-ratio",
+              "formulaValue": 99
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|18816.667|2",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1129,
+          "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-109001",
+          "operation": "apply",
+          "previousTargetId": "actor-109001",
+          "nextTargetId": "actor-109001",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "tuning-mark:250:persistent|moyin-a5|9116.667",
+          "beforeStacks": 2,
+          "afterStacks": 1,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|18816.667|2",
+          "actionId": "moyin-perfect-parry",
+          "frame": 1129,
+          "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-109001",
+          "operation": "apply",
+          "previousTargetId": "actor-109001",
+          "nextTargetId": "actor-109001",
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "tuning-mark:250:persistent|moyin-a5|9116.667",
+          "beforeStacks": 2,
+          "afterStacks": 1,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "actor/actor-109001/battle-element:109001270|EFFECT_EXPIRED|20183.333|1",
+          "actionId": "moyin-limit-counter",
+          "frame": 1211,
+          "effectId": "battle-element:109001270",
+          "runtimeEffectId": "battle-element:109001270",
+          "sourceElementId": null,
+          "effectName": "璀璨",
+          "targetKind": "actor",
+          "targetId": "actor-109001",
+          "operation": "expire",
+          "previousTargetId": "actor-109001",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "battle-element:109001270|moyin-limit-counter|12183.333",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": []
+        },
+        {
+          "eventId": "actor/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|29116.667|2",
+          "actionId": "moyin-a5",
+          "frame": 1747,
+          "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "actor",
+          "targetId": "actor-109001",
+          "operation": "remove",
+          "previousTargetId": "actor-109001",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "tuning-mark:250:persistent|moyin-a5|9116.667",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
+        },
+        {
+          "eventId": "kibo/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|29116.667|2",
+          "actionId": "moyin-a5",
+          "frame": 1747,
+          "effectId": "tuning-mark:250:persistent",
+          "runtimeEffectId": "tuning-mark:250:persistent",
+          "sourceElementId": null,
+          "effectName": "雷调谐印记",
+          "targetKind": "kibo",
+          "targetId": "actor-109001",
+          "operation": "remove",
+          "previousTargetId": "actor-109001",
+          "nextTargetId": null,
+          "controlledActorTransitionId": null,
+          "inheritType": null,
+          "formulaSourceActorId": "actor-109001",
+          "effectAdderActorId": "actor-109001",
+          "effectInstanceId": "tuning-mark:250:persistent|moyin-a5|9116.667",
+          "beforeStacks": 1,
+          "afterStacks": null,
+          "stackChange": -1,
+          "expiresAtMs": null,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 86,
+              "formulaFamily": null,
+              "formulaValue": null
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 43,
+              "formulaFamily": null,
+              "formulaValue": null
+            }
+          ]
         }
       ]
     },
-    "summaryHash": "ec0bd9f64aa68589e74db5a6c574f2d3f1c8d026674723176e8eb62807ab223f"
+    "summaryHash": "73857e5b94914c5ec3e57d199eaacc2beca8e9a7f9652b6d026ebd17b2c73bec"
   },
   "expected": {
     "exact": {
       "project.durationMs": 120000,
-      "actions.executedActionIds.length": 2
+      "actions.executedActionIds.length": 8,
+      "resources.tuningMarkConsumeByActionId.moyin-perfect-parry.consumedStacks": 1
     },
     "greaterThan": {
-      "combat.ownerHitTotalHpDamage": 0
+      "combat.ownerHitTotalHpDamage": 0,
+      "resources.ownerActorSpTransactionsByActionId.moyin-charged.totalChange": 3
     }
   },
   "validation": {
     "status": "authoritative-golden-runtime-expectation-passed",
     "passed": true,
-    "assertionCount": 3,
+    "assertionCount": 5,
     "failedCount": 0,
     "assertions": [
       {
@@ -913,19 +5876,33 @@
       {
         "jsonPath": "actions.executedActionIds.length",
         "operator": "exact",
-        "expected": 2,
-        "actual": 2,
+        "expected": 8,
+        "actual": 8,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.tuningMarkConsumeByActionId.moyin-perfect-parry.consumedStacks",
+        "operator": "exact",
+        "expected": 1,
+        "actual": 1,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerHitTotalHpDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 736,
+        "actual": 7431,
+        "passed": true
+      },
+      {
+        "jsonPath": "resources.ownerActorSpTransactionsByActionId.moyin-charged.totalChange",
+        "operator": "greater-than",
+        "expected": 3,
+        "actual": 6.759994,
         "passed": true
       }
     ]
   },
-  "replayHash": "554c2902d8e71f68764e20f8b7c485a540992ebbac1a5de97ebfbb63a21599ef",
-  "profileHash": "64eb7f92641c9c49bf28700230f009b94710964cad744f117064a034c5b44735"
+  "replayHash": "f9766cd08a97f692926585676237ff875f244ecd46849c492d73d3d323ea14ed",
+  "profileHash": "6fa978f105c6eff7bfcd0bf3fa8fd02aefd2676598da1c8a867826477d8ed17e"
 }

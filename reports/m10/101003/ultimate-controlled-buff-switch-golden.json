@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
   "durationMs": 30000,
   "frameRate": 60,
-  "sourcePackageHash": "44ddb7ef2f430433a06089bfaa8086a7f660f07718dd9a343494669aaef0bd2b",
+  "sourcePackageHash": "b9a2b9a4dc1cab255fa69e85744dfb6c6553985a9d6bafe1c854e1f7fe5a8066",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "96a68d867401148e",
-    "traceHash": "b2440f363e9bbdb3",
-    "dataHash": "c3a1513f9f29f478",
+    "inputHash": "da8f671485358b39",
+    "traceHash": "d014fc5554e4a29a",
+    "dataHash": "233ca804d87d107d",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -614,6 +614,7 @@
           "totalDelta": 1
         }
       },
+      "tuningMarkConsumeByActionId": {},
       "targetStateTrace": [],
       "conditionalHitGroups": [],
       "targetStateSummary": {
@@ -3469,7 +3470,7 @@
         }
       ]
     },
-    "summaryHash": "b157daed14cee85aced15c3508218daaddd93f794f255ef237c96341fa299175"
+    "summaryHash": "f6c2c3369f3490c81f3b213dc94caf36798bc16af953f9e78a498887ca499aab"
   },
   "expected": {
     "exact": {
@@ -3824,5 +3825,5 @@
       }
     ]
   },
-  "replayHash": "19f06f106c919426e96c7accf63333acd3f070c44bafd66533b067de82ba1a60"
+  "replayHash": "c123b54f01765293871efa8e770e2236996f24914436fb91f44c1ec5f14decca"
 }

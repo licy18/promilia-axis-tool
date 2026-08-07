@@ -709,7 +709,7 @@ function applyMarkConsumption({
   const maximum = positiveIntegerOrNull(contract.maximumStacks);
   const consumedCount = Math.min(
     state.layers.length,
-    maximum ?? state.layers.length
+    maximum ?? minimum
   );
   const before = state.layers.length;
   sortLayers(state.layers);

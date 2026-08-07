@@ -253,7 +253,7 @@
   },
   "unresolvedRecords": [],
   "goldenScenario": {
-    "scenarioIdentity": "m10-b3-e20-2:109001:120s-three-actor-golden",
+    "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
     "durationFrames": 7200,
     "frameRate": 60,
     "teamCharacterIds": [
@@ -277,6 +277,13 @@
       "101010": 100,
       "103002": 100
     },
+    "initialTuningMarks": [
+      {
+        "profileKey": "thunder",
+        "layerCount": 1,
+        "remainingDurationMs": 20000
+      }
+    ],
     "loadoutByCharacterId": {
       "109001": {
         "soulessenceId": 10001,
@@ -286,22 +293,78 @@
     },
     "actions": [
       {
+        "actionKey": "moyin-ultimate",
+        "actorCharacterId": 109001,
+        "skillId": 10900113,
+        "actionKind": "ultimate",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 0
+      },
+      {
         "actionKey": "moyin-star-skill",
         "actorCharacterId": 109001,
         "skillId": 10900112,
         "actionKind": "star-skill",
         "actionVariantIndex": 0,
         "controlSubSkillIndex": 0,
-        "startFrame": 0
+        "startFrame": 300
       },
       {
-        "actionKey": "moyin-normal-a1",
+        "actionKey": "moyin-a5",
         "actorCharacterId": 109001,
         "skillId": 10900101,
         "actionKind": "normal-attack",
         "actionVariantIndex": 0,
         "controlSubSkillIndex": 0,
-        "startFrame": 300
+        "startFrame": 500,
+        "attackInputControlSkillId": 10900105,
+        "attackSequenceIndex": 5
+      },
+      {
+        "actionKey": "moyin-limit-counter",
+        "actorCharacterId": 109001,
+        "skillId": 10900121,
+        "actionKind": "limit-counter",
+        "actionVariantIndex": 2,
+        "controlSubSkillIndex": 0,
+        "startFrame": 700
+      },
+      {
+        "actionKey": "moyin-charged",
+        "actorCharacterId": 109001,
+        "skillId": 10900101,
+        "actionKind": "charged-attack",
+        "actionVariantIndex": 1,
+        "controlSubSkillIndex": 0,
+        "startFrame": 900
+      },
+      {
+        "actionKey": "moyin-perfect-parry",
+        "actorCharacterId": 109001,
+        "skillId": 10900121,
+        "actionKind": "perfect-parry",
+        "actionVariantIndex": 3,
+        "controlSubSkillIndex": 0,
+        "startFrame": 1100
+      },
+      {
+        "actionKey": "moyin-star-skill-2",
+        "actorCharacterId": 109001,
+        "skillId": 10900112,
+        "actionKind": "star-skill",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 1400
+      },
+      {
+        "actionKey": "moyin-star-skill-3",
+        "actorCharacterId": 109001,
+        "skillId": 10900112,
+        "actionKind": "star-skill",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 1700
       }
     ],
     "comparison": {},
@@ -309,10 +372,12 @@
     "expectedRuntime": {
       "exact": {
         "project.durationMs": 120000,
-        "actions.executedActionIds.length": 2
+        "actions.executedActionIds.length": 8,
+        "resources.tuningMarkConsumeByActionId.moyin-perfect-parry.consumedStacks": 1
       },
       "greaterThan": {
-        "combat.ownerHitTotalHpDamage": 0
+        "combat.ownerHitTotalHpDamage": 0,
+        "resources.ownerActorSpTransactionsByActionId.moyin-charged.totalChange": 3
       }
     }
   }

@@ -1299,6 +1299,15 @@
           "totalDelta": 1
         }
       },
+      "tuningMarkConsumeByActionId": {
+        "ruby-ultimate": {
+          "eventCount": 1,
+          "consumedStacks": 1,
+          "frames": [
+            2484
+          ]
+        }
+      },
       "targetStateTrace": [],
       "conditionalHitGroups": [],
       "targetStateSummary": {
@@ -5177,7 +5186,7 @@
         }
       ]
     },
-    "summaryHash": "849fbb4800dac387a62401deffd2d036083ad814bce336e610a730244b166dfe"
+    "summaryHash": "a5ae7f54b16b1e4f4d66624dd461004e3096a6045c1d239c98fd06b7a38a5d3e"
   },
   "expected": {
     "exact": {
@@ -6267,6 +6276,6 @@
       }
     ]
   },
-  "replayHash": "749b28bb496c557e16d3c5cbcad1d5ee81a1c975f798a20629f42fa95c938587",
+  "replayHash": "8aba5762bbcf2326c2049e0ee408887241a1c36baf31074f31efb3aa4942e223",
   "profileHash": "05fbcad861d77843149ea206f3510ebdf1db8e19a5f3d6178f449991bcaef19d"
 }

@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101010/golden-trace.json",
-        "reportHash": "3db7c1cc4632c5ea",
+        "reportHash": "006bbe3498bf977e",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101010 --assert-clean"
       },
       "execution": {
@@ -2717,7 +2717,7 @@
           "assertionHash": "9a31b725a9945cad"
         }
       ],
-      "scenarioCaseHash": "209bcb897e4b5297"
+      "scenarioCaseHash": "a098baab5a7044e7"
     },
     {
       "schemaVersion": 1,
@@ -2725,7 +2725,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/101010-visual.json",
-        "inputHash": "872dea8aa48df06d",
+        "inputHash": "7279c10f07923ac8",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/101010-visual.json"
       },
       "execution": {
@@ -2734,9 +2734,9 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "872dea8aa48df06d",
-          "data": "89d284d05ec8532d",
-          "trace": "3c4e7e76cb13e9ef",
+          "input": "7279c10f07923ac8",
+          "data": "2e5020f6fcb5bd44",
+          "trace": "2402a875d86776dc",
           "evaluation": "adc4612197816c14"
         }
       },
@@ -4373,7 +4373,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "519c57f04076c36c"
+      "scenarioCaseHash": "e357d8555582d168"
     }
   ],
   "summary": {
@@ -4386,5 +4386,5 @@
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "f562076d865bab9d"
+  "scenarioSetHash": "2284ec81623a0e01"
 }

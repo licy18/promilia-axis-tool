@@ -4,11 +4,11 @@
   "records": [
     {
       "schemaVersion": 1,
-      "scenarioIdentity": "m10-b3-e20-2:109001:120s-three-actor-golden",
+      "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/109001/golden-trace.json",
-        "reportHash": "6c16079d7f7d57e0",
+        "reportHash": "3cd7d5aae25dfbd9",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 109001 --assert-clean"
       },
       "execution": {
@@ -16,21 +16,45 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "3ca645f27adac274",
-          "data": "33655339ffd19f5d",
-          "trace": "26c31a9f4e5002e3",
+          "input": "38ccf8a3bc471cca",
+          "data": "5067293f679ba987",
+          "trace": "267009b1634d4a57",
           "evaluation": null
         }
       },
       "traceProjection": {
         "actionForms": [
           {
-            "actionId": "moyin-normal-a1",
+            "actionId": "moyin-a5",
             "ownerId": 109001,
-            "controlSkillId": 10900103,
+            "controlSkillId": 10900105,
             "subSkillIndex": 0,
-            "semanticName": "A3",
-            "projectionIdentity": "golden-action-form:m10-b3-e20-2:109001:120s-three-actor-golden:moyin-normal-a1"
+            "semanticName": "A5",
+            "projectionIdentity": "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-a5"
+          },
+          {
+            "actionId": "moyin-charged",
+            "ownerId": 109001,
+            "controlSkillId": 10900110,
+            "subSkillIndex": 0,
+            "semanticName": "重击",
+            "projectionIdentity": "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-charged"
+          },
+          {
+            "actionId": "moyin-limit-counter",
+            "ownerId": 109001,
+            "controlSkillId": 10900125,
+            "subSkillIndex": 0,
+            "semanticName": "极限反击",
+            "projectionIdentity": "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-limit-counter"
+          },
+          {
+            "actionId": "moyin-perfect-parry",
+            "ownerId": 109001,
+            "controlSkillId": 10900127,
+            "subSkillIndex": 0,
+            "semanticName": "完美招架",
+            "projectionIdentity": "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-perfect-parry"
           },
           {
             "actionId": "moyin-star-skill",
@@ -38,7 +62,31 @@
             "controlSkillId": 10900112,
             "subSkillIndex": 0,
             "semanticName": "星鸣技",
-            "projectionIdentity": "golden-action-form:m10-b3-e20-2:109001:120s-three-actor-golden:moyin-star-skill"
+            "projectionIdentity": "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill"
+          },
+          {
+            "actionId": "moyin-star-skill-2",
+            "ownerId": 109001,
+            "controlSkillId": 10900112,
+            "subSkillIndex": 0,
+            "semanticName": "星鸣技",
+            "projectionIdentity": "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-2"
+          },
+          {
+            "actionId": "moyin-star-skill-3",
+            "ownerId": 109001,
+            "controlSkillId": 10900112,
+            "subSkillIndex": 0,
+            "semanticName": "星鸣技",
+            "projectionIdentity": "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-3"
+          },
+          {
+            "actionId": "moyin-ultimate",
+            "ownerId": 109001,
+            "controlSkillId": 10900113,
+            "subSkillIndex": 0,
+            "semanticName": "星决技",
+            "projectionIdentity": "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-ultimate"
           }
         ],
         "hits": [],
@@ -48,18 +96,132 @@
             "effectIdentity": "battle-element:109001316",
             "operation": "apply",
             "targetId": "actor-109001",
-            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-three-actor-golden:0"
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0"
+          },
+          {
+            "actionId": "inherited-thunder-1",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "apply",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1"
+          },
+          {
+            "actionId": "moyin-perfect-parry",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "apply",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:10"
+          },
+          {
+            "actionId": "moyin-perfect-parry",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "apply",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:11"
+          },
+          {
+            "actionId": "moyin-limit-counter",
+            "effectIdentity": "battle-element:109001270",
+            "operation": "expire",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:12"
+          },
+          {
+            "actionId": "moyin-a5",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "remove",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:13"
+          },
+          {
+            "actionId": "moyin-a5",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "remove",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:14"
+          },
+          {
+            "actionId": "inherited-thunder-1",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "apply",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2"
+          },
+          {
+            "actionId": "moyin-ultimate",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "remove",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:3"
+          },
+          {
+            "actionId": "moyin-ultimate",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "remove",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:4"
+          },
+          {
+            "actionId": "moyin-a5",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "apply",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:5"
+          },
+          {
+            "actionId": "moyin-a5",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "operation": "apply",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:6"
+          },
+          {
+            "actionId": "moyin-limit-counter",
+            "effectIdentity": "battle-element:109001270",
+            "operation": "apply",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:7"
+          },
+          {
+            "actionId": "moyin-perfect-parry",
+            "effectIdentity": "battle-element:109001003",
+            "operation": "apply",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:8"
+          },
+          {
+            "actionId": "moyin-perfect-parry",
+            "effectIdentity": "battle-element:109001003",
+            "operation": "expire",
+            "targetId": "actor-109001",
+            "projectionIdentity": "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:9"
           }
         ],
         "resources": [],
         "states": [
           {
-            "actionId": "moyin-normal-a1",
+            "actionId": "moyin-a5",
             "stateIdentity": "moyin-brilliant",
             "operation": null,
             "beforeValue": null,
             "afterValue": null,
-            "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-three-actor-golden:0"
+            "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0"
+          },
+          {
+            "actionId": "moyin-limit-counter",
+            "stateIdentity": "moyin-brilliant",
+            "operation": "gain",
+            "beforeValue": 0,
+            "afterValue": 1,
+            "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1"
+          },
+          {
+            "actionId": null,
+            "stateIdentity": "moyin-brilliant",
+            "operation": "expire",
+            "beforeValue": 1,
+            "afterValue": 0,
+            "projectionIdentity": "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2"
           }
         ],
         "diagnostics": [],
@@ -72,7 +234,7 @@
           "resource-exact-and-insufficient": false
         }
       },
-      "traceProjectionHash": "58a791eadacda5f1",
+      "traceProjectionHash": "e1c17e8ebda6bedd",
       "assertions": [
         {
           "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
@@ -160,10 +322,10 @@
           "assertionHash": "c0c9c0bfcbbfa91f"
         },
         {
-          "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-three-actor-golden:moyin-normal-a1",
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-a5",
           "selector": {
-            "actionId": "moyin-normal-a1",
-            "controlSkillId": 10900103,
+            "actionId": "moyin-a5",
+            "controlSkillId": 10900105,
             "kind": "action-form",
             "ownerId": 109001,
             "subSkillIndex": 0
@@ -173,13 +335,70 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-action-form:m10-b3-e20-2:109001:120s-three-actor-golden:moyin-normal-a1"
+            "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-a5"
           ],
           "reasons": [],
-          "assertionHash": "f42b8b81a80542a3"
+          "assertionHash": "64a4220518eff24d"
         },
         {
-          "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-three-actor-golden:moyin-star-skill",
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-charged",
+          "selector": {
+            "actionId": "moyin-charged",
+            "controlSkillId": 10900110,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-charged"
+          ],
+          "reasons": [],
+          "assertionHash": "becb24dd1f8cc70f"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-limit-counter",
+          "selector": {
+            "actionId": "moyin-limit-counter",
+            "controlSkillId": 10900125,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-limit-counter"
+          ],
+          "reasons": [],
+          "assertionHash": "5f08644551e13fd1"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-perfect-parry",
+          "selector": {
+            "actionId": "moyin-perfect-parry",
+            "controlSkillId": 10900127,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-perfect-parry"
+          ],
+          "reasons": [],
+          "assertionHash": "17fd3a87e59e9627"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill",
           "selector": {
             "actionId": "moyin-star-skill",
             "controlSkillId": 10900112,
@@ -192,13 +411,70 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-action-form:m10-b3-e20-2:109001:120s-three-actor-golden:moyin-star-skill"
+            "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill"
           ],
           "reasons": [],
-          "assertionHash": "8f0d26754726252d"
+          "assertionHash": "b431cad8875e5e13"
         },
         {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-three-actor-golden:0",
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-2",
+          "selector": {
+            "actionId": "moyin-star-skill-2",
+            "controlSkillId": 10900112,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-2"
+          ],
+          "reasons": [],
+          "assertionHash": "52518c4469ae8a90"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-3",
+          "selector": {
+            "actionId": "moyin-star-skill-3",
+            "controlSkillId": 10900112,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-star-skill-3"
+          ],
+          "reasons": [],
+          "assertionHash": "0a834915f28925c7"
+        },
+        {
+          "assertionIdentity": "trace-action-form:golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-ultimate",
+          "selector": {
+            "actionId": "moyin-ultimate",
+            "controlSkillId": 10900113,
+            "kind": "action-form",
+            "ownerId": 109001,
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-action-form:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:moyin-ultimate"
+          ],
+          "reasons": [],
+          "assertionHash": "7eb7636d63f9af43"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0",
           "selector": {
             "actionId": null,
             "effectIdentity": "battle-element:109001316",
@@ -210,15 +486,277 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b3-e20-2:109001:120s-three-actor-golden:0"
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0"
           ],
           "reasons": [],
-          "assertionHash": "7fdc43e63c842052"
+          "assertionHash": "4172331bba3ea0ce"
         },
         {
-          "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-three-actor-golden:0",
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1",
           "selector": {
-            "actionId": "moyin-normal-a1",
+            "actionId": "inherited-thunder-1",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1",
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2"
+          ],
+          "reasons": [],
+          "assertionHash": "6440eac45062f2a8"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:10",
+          "selector": {
+            "actionId": "moyin-perfect-parry",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:10",
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:11"
+          ],
+          "reasons": [],
+          "assertionHash": "6a6fa6c72a6b17f8"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:11",
+          "selector": {
+            "actionId": "moyin-perfect-parry",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:10",
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:11"
+          ],
+          "reasons": [],
+          "assertionHash": "8798b09a3abc60e7"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:12",
+          "selector": {
+            "actionId": "moyin-limit-counter",
+            "effectIdentity": "battle-element:109001270",
+            "kind": "effect",
+            "operation": "expire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:12"
+          ],
+          "reasons": [],
+          "assertionHash": "1972aa8f8a45b7bc"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:13",
+          "selector": {
+            "actionId": "moyin-a5",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "remove"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:13",
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:14"
+          ],
+          "reasons": [],
+          "assertionHash": "3e021bad33828631"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:14",
+          "selector": {
+            "actionId": "moyin-a5",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "remove"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:13",
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:14"
+          ],
+          "reasons": [],
+          "assertionHash": "707041db65ba2380"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2",
+          "selector": {
+            "actionId": "inherited-thunder-1",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1",
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2"
+          ],
+          "reasons": [],
+          "assertionHash": "645f3fb918ebc025"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:3",
+          "selector": {
+            "actionId": "moyin-ultimate",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "remove"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:3",
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:4"
+          ],
+          "reasons": [],
+          "assertionHash": "299fa44214398b13"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:4",
+          "selector": {
+            "actionId": "moyin-ultimate",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "remove"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:3",
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:4"
+          ],
+          "reasons": [],
+          "assertionHash": "1e9317e8df1dd6b6"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:5",
+          "selector": {
+            "actionId": "moyin-a5",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:5",
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:6"
+          ],
+          "reasons": [],
+          "assertionHash": "1e734fcc4b4d83d4"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:6",
+          "selector": {
+            "actionId": "moyin-a5",
+            "effectIdentity": "tuning-mark:250:persistent",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:5",
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:6"
+          ],
+          "reasons": [],
+          "assertionHash": "119aea3191d454b7"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:7",
+          "selector": {
+            "actionId": "moyin-limit-counter",
+            "effectIdentity": "battle-element:109001270",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:7"
+          ],
+          "reasons": [],
+          "assertionHash": "d06a54687ec5c007"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:8",
+          "selector": {
+            "actionId": "moyin-perfect-parry",
+            "effectIdentity": "battle-element:109001003",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:8"
+          ],
+          "reasons": [],
+          "assertionHash": "547a0058d6c764db"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:9",
+          "selector": {
+            "actionId": "moyin-perfect-parry",
+            "effectIdentity": "battle-element:109001003",
+            "kind": "effect",
+            "operation": "expire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:9"
+          ],
+          "reasons": [],
+          "assertionHash": "f3a93ff25367d3f4"
+        },
+        {
+          "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0",
+          "selector": {
+            "actionId": "moyin-a5",
             "kind": "state",
             "operation": null,
             "stateIdentity": "moyin-brilliant"
@@ -228,13 +766,49 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-state:m10-b3-e20-2:109001:120s-three-actor-golden:0"
+            "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:0"
           ],
           "reasons": [],
-          "assertionHash": "1237eb4a89a47e95"
+          "assertionHash": "54472f3f3783d879"
+        },
+        {
+          "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1",
+          "selector": {
+            "actionId": "moyin-limit-counter",
+            "kind": "state",
+            "operation": "gain",
+            "stateIdentity": "moyin-brilliant"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:1"
+          ],
+          "reasons": [],
+          "assertionHash": "391c63a34fa928db"
+        },
+        {
+          "assertionIdentity": "trace-state:golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2",
+          "selector": {
+            "actionId": null,
+            "kind": "state",
+            "operation": "expire",
+            "stateIdentity": "moyin-brilliant"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-state:m10-b3-e20-2:109001:120s-mechanisms-coverage-golden:2"
+          ],
+          "reasons": [],
+          "assertionHash": "7b2b3a04ea31710f"
         }
       ],
-      "scenarioCaseHash": "9a0a26f15c983799"
+      "scenarioCaseHash": "6c5b7a4875840562"
     },
     {
       "schemaVersion": 1,
@@ -242,7 +816,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/109001-visual.json",
-        "inputHash": "ac17d2beb5985aeb",
+        "inputHash": "2428a24b475d99f4",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/109001-visual.json"
       },
       "execution": {
@@ -251,9 +825,9 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "ac17d2beb5985aeb",
-          "data": "2407eec4f3593812",
-          "trace": "53270aec7c11ed15",
+          "input": "2428a24b475d99f4",
+          "data": "a2dc2f860818c59f",
+          "trace": "748fe88229302afd",
           "evaluation": "fefe6ba59b4e3c64"
         }
       },
@@ -1117,18 +1691,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "b7d2f2358fff7ee3"
+      "scenarioCaseHash": "3092aa1f13bb044a"
     }
   ],
   "summary": {
     "scenarioCount": 2,
     "executionPassedCount": 2,
-    "assertionCount": 44,
-    "assertionPassedCount": 40,
+    "assertionCount": 66,
+    "assertionPassedCount": 62,
     "runnerKindCounts": {
       "canonical-character-golden": 1,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "b75e69f07f13967a"
+  "scenarioSetHash": "76084bd2f800c995"
 }

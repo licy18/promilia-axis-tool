@@ -29,7 +29,7 @@
       "dimension": "action-form",
       "subjectIdentity": "actor|109001|10900101|0|10900103|normal-attack:default",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
       "sourceRecordHash": "e7e01498fabe2900",
@@ -39,23 +39,21 @@
         "ownerId": 109001,
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [
-        "coverage-edge:6488af6f5f4a913b"
-      ],
-      "evidenceScenarioIds": [
-        "m10-b3-e20-2:109001:120s-three-actor-golden"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "characters.items[id=109001].skillSlots[group=backup,skillId=10900103]"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:action-form:actor|109001|10900101|1|10900110|charged-attack:default",
       "dimension": "action-form",
       "subjectIdentity": "actor|109001|10900101|1|10900110|charged-attack:default",
       "required": true,
-      "status": "blocked",
+      "status": "passed",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
       "sourceRecordHash": "b3bc4db8516a86a3",
@@ -65,14 +63,16 @@
         "ownerId": 109001,
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [],
-      "evidenceScenarioIds": [],
+      "coverageEdgeIds": [
+        "coverage-edge:b3ed54a5d55e8f1d"
+      ],
+      "evidenceScenarioIds": [
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
+      ],
       "sourceIdentities": [
         "characters.items[id=109001].skillSlots[group=ground,slot=2]"
       ],
-      "reasons": [
-        "acceptance-scenario-coverage-missing"
-      ]
+      "reasons": []
     },
     {
       "requirementIdentity": "contract:action-form:actor|109001|10900101|2|10900115|dodge-attack:default",
@@ -145,11 +145,13 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:86eb26c9393a8fd6",
-        "coverage-edge:dd0b5aa39caceda8"
+        "coverage-edge:900a899d32062090",
+        "coverage-edge:db30998c867fceb9",
+        "coverage-edge:dd0b5aa39caceda8",
+        "coverage-edge:f686e065bab2ed94"
       ],
       "evidenceScenarioIds": [
-        "m10-b3-e20-2:109001:120s-three-actor-golden",
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
         "m11-d-109001-visual-acceptance"
       ],
       "sourceIdentities": [
@@ -186,7 +188,7 @@
       "dimension": "action-form",
       "subjectIdentity": "actor|109001|10900113|0|10900113|ultimate:default",
       "required": true,
-      "status": "blocked",
+      "status": "passed",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
       "sourceRecordHash": "2471acfb65077760",
@@ -196,14 +198,16 @@
         "ownerId": 109001,
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [],
-      "evidenceScenarioIds": [],
+      "coverageEdgeIds": [
+        "coverage-edge:077ea67d78269de4"
+      ],
+      "evidenceScenarioIds": [
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
+      ],
       "sourceIdentities": [
         "characters.items[id=109001].skillSlots[group=ground,slot=4]"
       ],
-      "reasons": [
-        "acceptance-scenario-coverage-missing"
-      ]
+      "reasons": []
     },
     {
       "requirementIdentity": "contract:action-form:actor|109001|10900121|0|10900121|star-carry:default",
@@ -234,7 +238,7 @@
       "dimension": "action-form",
       "subjectIdentity": "actor|109001|10900121|2|10900125|limit-counter:default",
       "required": true,
-      "status": "blocked",
+      "status": "passed",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
       "sourceRecordHash": "0b1a02268c347484",
@@ -244,21 +248,23 @@
         "ownerId": 109001,
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [],
-      "evidenceScenarioIds": [],
+      "coverageEdgeIds": [
+        "coverage-edge:0129617826f30c0b"
+      ],
+      "evidenceScenarioIds": [
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
+      ],
       "sourceIdentities": [
         "characters.items[id=109001].skillSlots[group=ground,slot=207]"
       ],
-      "reasons": [
-        "acceptance-scenario-coverage-missing"
-      ]
+      "reasons": []
     },
     {
       "requirementIdentity": "contract:action-form:actor|109001|10900121|3|10900127|perfect-parry:default",
       "dimension": "action-form",
       "subjectIdentity": "actor|109001|10900121|3|10900127|perfect-parry:default",
       "required": true,
-      "status": "blocked",
+      "status": "passed",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
       "sourceRecordHash": "b5958811f86367fc",
@@ -268,14 +274,16 @@
         "ownerId": 109001,
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [],
-      "evidenceScenarioIds": [],
+      "coverageEdgeIds": [
+        "coverage-edge:f9a4ec9ec9afe47b"
+      ],
+      "evidenceScenarioIds": [
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
+      ],
       "sourceIdentities": [
         "characters.items[id=109001].skillSlots[group=ground,slot=209]"
       ],
-      "reasons": [
-        "acceptance-scenario-coverage-missing"
-      ]
+      "reasons": []
     },
     {
       "requirementIdentity": "contract:conditional-hit-group:moyin-a4-brilliant-thunder-overdrive",
@@ -2147,7 +2155,7 @@
       "dimension": "effect",
       "subjectIdentity": "effect:33:8f39aa39c0774a7b",
       "required": true,
-      "status": "blocked",
+      "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "9c247c35f7971e0c",
@@ -2155,16 +2163,19 @@
         "effectIdentity": "battle-element:109001003",
         "kind": "effect"
       },
-      "coverageEdgeIds": [],
-      "evidenceScenarioIds": [],
+      "coverageEdgeIds": [
+        "coverage-edge:8e4087e0255e6c67",
+        "coverage-edge:bd8a0a6487bb1760"
+      ],
+      "evidenceScenarioIds": [
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
+      ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900127.asset/MonoBehaviour/MonoBehaviour_8340818065355282527__8340818065355282527.json#startFrame|directInjectTargetType",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900127.asset/MonoBehaviour/skill_control_10900127__4167699101078258301.json#skillResourceMaps[0].elements[0]",
         "battle-element-assets.jsonl#path_id=2840539820446947370"
       ],
-      "reasons": [
-        "acceptance-scenario-coverage-missing"
-      ]
+      "reasons": []
     },
     {
       "requirementIdentity": "contract:effect:effect:34:9d701bfdf9fa0d9d",
@@ -4113,36 +4124,12 @@
       "dimension": "public-action",
       "subjectIdentity": "actor|109001|10900101|0|10900103|normal-attack",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "4bb4e36fc867164e",
       "coverageSelector": {
         "controlSkillId": 10900103,
-        "kind": "action-form",
-        "ownerId": 109001,
-        "subSkillIndex": 0
-      },
-      "coverageEdgeIds": [
-        "coverage-edge:8ae1168a738e01d3"
-      ],
-      "evidenceScenarioIds": [
-        "m10-b3-e20-2:109001:120s-three-actor-golden"
-      ],
-      "sourceIdentities": [],
-      "reasons": []
-    },
-    {
-      "requirementIdentity": "contract:public-action:actor|109001|10900101|1|10900110|charged-attack",
-      "dimension": "public-action",
-      "subjectIdentity": "actor|109001|10900101|1|10900110|charged-attack",
-      "required": true,
-      "status": "blocked",
-      "contractStatus": null,
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "9ffa18e422c948f6",
-      "coverageSelector": {
-        "controlSkillId": 10900110,
         "kind": "action-form",
         "ownerId": 109001,
         "subSkillIndex": 0
@@ -4153,6 +4140,30 @@
       "reasons": [
         "acceptance-scenario-coverage-missing"
       ]
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|109001|10900101|1|10900110|charged-attack",
+      "dimension": "public-action",
+      "subjectIdentity": "actor|109001|10900101|1|10900110|charged-attack",
+      "required": true,
+      "status": "passed",
+      "contractStatus": null,
+      "sourceDisposition": "applied",
+      "sourceRecordHash": "9ffa18e422c948f6",
+      "coverageSelector": {
+        "controlSkillId": 10900110,
+        "kind": "action-form",
+        "ownerId": 109001,
+        "subSkillIndex": 0
+      },
+      "coverageEdgeIds": [
+        "coverage-edge:68b34bab85ab794f"
+      ],
+      "evidenceScenarioIds": [
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
+      ],
+      "sourceIdentities": [],
+      "reasons": []
     },
     {
       "requirementIdentity": "contract:public-action:actor|109001|10900101|2|10900115|dodge-attack",
@@ -4221,11 +4232,13 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:cae39c2f6da5b478",
+        "coverage-edge:1abf94dcc725bd96",
+        "coverage-edge:5bea15dfacc7689b",
+        "coverage-edge:6cc7671fd2dde0f2",
         "coverage-edge:f88a55d5e7e2835a"
       ],
       "evidenceScenarioIds": [
-        "m10-b3-e20-2:109001:120s-three-actor-golden",
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
         "m11-d-109001-visual-acceptance"
       ],
       "sourceIdentities": [],
@@ -4258,7 +4271,7 @@
       "dimension": "public-action",
       "subjectIdentity": "actor|109001|10900113|0|10900113|ultimate",
       "required": true,
-      "status": "blocked",
+      "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "ef220d8212ab4dcb",
@@ -4268,12 +4281,14 @@
         "ownerId": 109001,
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [],
-      "evidenceScenarioIds": [],
+      "coverageEdgeIds": [
+        "coverage-edge:9c8d7fed74733026"
+      ],
+      "evidenceScenarioIds": [
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
+      ],
       "sourceIdentities": [],
-      "reasons": [
-        "acceptance-scenario-coverage-missing"
-      ]
+      "reasons": []
     },
     {
       "requirementIdentity": "contract:public-action:actor|109001|10900121|0|10900121|star-carry",
@@ -4302,7 +4317,7 @@
       "dimension": "public-action",
       "subjectIdentity": "actor|109001|10900121|2|10900125|limit-counter",
       "required": true,
-      "status": "blocked",
+      "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "f05d8822f35cdf7e",
@@ -4312,19 +4327,21 @@
         "ownerId": 109001,
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [],
-      "evidenceScenarioIds": [],
+      "coverageEdgeIds": [
+        "coverage-edge:397e26e953bb54eb"
+      ],
+      "evidenceScenarioIds": [
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
+      ],
       "sourceIdentities": [],
-      "reasons": [
-        "acceptance-scenario-coverage-missing"
-      ]
+      "reasons": []
     },
     {
       "requirementIdentity": "contract:public-action:actor|109001|10900121|3|10900127|perfect-parry",
       "dimension": "public-action",
       "subjectIdentity": "actor|109001|10900121|3|10900127|perfect-parry",
       "required": true,
-      "status": "blocked",
+      "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "e80d6ded7b4bb6d6",
@@ -4334,12 +4351,14 @@
         "ownerId": 109001,
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [],
-      "evidenceScenarioIds": [],
+      "coverageEdgeIds": [
+        "coverage-edge:2483239dfd3dbbcb"
+      ],
+      "evidenceScenarioIds": [
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
+      ],
       "sourceIdentities": [],
-      "reasons": [
-        "acceptance-scenario-coverage-missing"
-      ]
+      "reasons": []
     },
     {
       "requirementIdentity": "contract:runtime-effect-binding:moyin-passive2-a3-sp",
@@ -4462,10 +4481,12 @@
         "stateIdentity": "moyin-brilliant"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3c7567b27cb8a8a7"
+        "coverage-edge:4f51bc8658b2af40",
+        "coverage-edge:62e4cc54df14956b",
+        "coverage-edge:d4e1b68b267b0b27"
       ],
       "evidenceScenarioIds": [
-        "m10-b3-e20-2:109001:120s-three-actor-golden"
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#time=8000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#combineNumber=-1|declared-capacity-override=1|Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1"
@@ -4486,10 +4507,12 @@
         "stateIdentity": "moyin-brilliant"
       },
       "coverageEdgeIds": [
-        "coverage-edge:10b48e0cd2a62ae9"
+        "coverage-edge:376cd98bf9dab05d",
+        "coverage-edge:ca09ae994395dafe",
+        "coverage-edge:cbdd332240a231a9"
       ],
       "evidenceScenarioIds": [
-        "m10-b3-e20-2:109001:120s-three-actor-golden"
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F"
@@ -4510,10 +4533,12 @@
         "stateIdentity": "moyin-brilliant"
       },
       "coverageEdgeIds": [
-        "coverage-edge:e21ceb6290cd1875"
+        "coverage-edge:263b2a90cbff9e65",
+        "coverage-edge:8092a379f960fe09",
+        "coverage-edge:f4fb454e07aae8fe"
       ],
       "evidenceScenarioIds": [
-        "m10-b3-e20-2:109001:120s-three-actor-golden"
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900125.asset/MonoBehaviour/MonoBehaviour_7308935574334620133__7308935574334620133.json#brilliant-buff@31F"
@@ -4949,10 +4974,10 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:bd42f1caf18d28b1"
+        "coverage-edge:d937fe830441003d"
       ],
       "evidenceScenarioIds": [
-        "m10-b3-e20-2:109001:120s-three-actor-golden"
+        "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden"
       ],
       "sourceIdentities": [
         "protocol:m11-d-character-acceptance-v1:owner:109001"
@@ -5012,12 +5037,12 @@
   "summary": {
     "requirementCount": 228,
     "requiredCount": 228,
-    "passedCount": 22,
-    "blockedCount": 206,
+    "passedCount": 29,
+    "blockedCount": 199,
     "notApplicableCount": 0,
     "statusCounts": {
-      "blocked": 206,
-      "passed": 22
+      "blocked": 199,
+      "passed": 29
     },
     "dimensionCounts": {
       "action-effect-binding": 1,
@@ -5046,5 +5071,5 @@
       "window-boundary": 1
     }
   },
-  "matrixHash": "94346562da8c27de"
+  "matrixHash": "b6c874c870698764"
 }

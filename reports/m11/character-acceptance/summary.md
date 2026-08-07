@@ -11,6 +11,6 @@
 | 寒悠悠 (101003) | runtime-integrated | 62/247 | 22 | 154 | 否 |
 | 涂山小玉 (101010) | runtime-integrated | 56/411 | 119 | 211 | 否 |
 | 红宝石 (103002) | runtime-integrated | 36/713 | 131 | 372 | 否 |
-| 末音 (109001) | runtime-integrated | 22/228 | 16 | 179 | 否 |
+| 末音 (109001) | runtime-integrated | 29/228 | 16 | 172 | 否 |
 
 三份 Machine Axis 场景继续由唯一 canonical core 重放并通过 Workbench 导入/导出；产品可视签收仍为 pending，真实 source gap 与尚缺场景覆盖继续阻断优化资格。

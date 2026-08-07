@@ -218,6 +218,39 @@ function runGoldenScenario({
         ),
         maxValue: 100,
       })),
+    ...(Array.isArray(scenarioRecipe.initialTuningMarks)
+      ? {
+          tuningMarks: scenarioRecipe.initialTuningMarks.map(mark => {
+            const profile = (
+              mechanicsPackage.tuningMechanicsCatalog?.profiles ?? []
+            ).find(
+              candidate => candidate.key === String(mark.profileKey)
+            );
+            if (!profile) {
+              throw new Error(
+                `golden initial tuning mark profile missing: ${mark.profileKey}`
+              );
+            }
+            const layerCount = Math.max(1, Number(mark.layerCount) || 1);
+            const remainingDurationMs =
+              Number(mark.remainingDurationMs) ||
+              Number(profile.decayDurationMs) ||
+              20_000;
+            return {
+              markId: Number(profile.markId),
+              profileKey: profile.key,
+              elementName: profile.element,
+              decayRemainingMs: remainingDurationMs,
+              heldReadyRemainingMs: 0,
+              layers: Array.from({ length: layerCount }, (_, layerIndex) => ({
+                sourceActionId: `inherited-${profile.key}-${layerIndex + 1}`,
+                sourceActorId: `actor-${recipe.ownerId}`,
+                sourceIdentity: { profile: profile.sourceIdentity },
+              })),
+            };
+          }),
+        }
+      : {}),
   };
   const project = factory.createWorkbenchProject(selection, {
     durationMs: frameToMs(
@@ -647,6 +680,34 @@ function createGoldenActualProjection({
         ];
       })
   );
+  const tuningMarkConsumeByActionId = Object.fromEntries(
+    [
+      ...new Set(
+        tuningMarkTrace
+          .filter(event => event.kind === 'consume' && event.actionId)
+          .map(event => event.actionId)
+      ),
+    ]
+      .sort()
+      .map(actionId => {
+        const events = tuningMarkTrace.filter(
+          event => event.kind === 'consume' && event.actionId === actionId
+        );
+        return [
+          actionId,
+          {
+            eventCount: events.length,
+            consumedStacks: roundNumber(
+              events.reduce(
+                (sum, event) => sum + Math.abs(Number(event.delta) || 0),
+                0
+              )
+            ),
+            frames: events.map(event => event.frame),
+          },
+        ];
+      })
+  );
   const targetStateRuntime = specialRuntime?.targetStateRuntime;
   const targetStateTrace = (targetStateRuntime?.events ?? [])
     .map(event => ({
@@ -955,6 +1016,7 @@ function createGoldenActualProjection({
       specialResourceTrace,
       tuningMarkTrace,
       tuningMarkAcquireByActionId,
+      tuningMarkConsumeByActionId,
       targetStateTrace,
       conditionalHitGroups,
       targetStateSummary: targetStateRuntime?.summary ?? null,
@@ -1512,6 +1574,20 @@ function resolveMappingDurationFrames(
           form.applied === true
       );
     value = Number(actionForm?.executionTiming?.occupancy?.durationFrames);
+  }
+  if (!Number.isInteger(value) || value <= 0) {
+    const controlSkillId = Number(
+      explicitControlSkillId ?? mapping.controlSkillId
+    );
+    const segment = (mapping.attackInputSegments ?? []).find(
+      candidate =>
+        Number(candidate.controlSkillId) === controlSkillId &&
+        (selectedSubSkillIndex == null ||
+          Number(
+            candidate.selectedSubSkillIndex ?? candidate.subSkillIndex
+          ) === Number(selectedSubSkillIndex))
+    );
+    value = Number(segment?.durationFrames);
   }
   if (!Number.isInteger(value) || value <= 0) {
     throw new Error(

@@ -244,6 +244,24 @@
 2. M8/M15/M23：残响（201/701）注入与曲线。
 3. Golden/验收场景覆盖 M7/M21/M12/M18 → 消除 scenario-coverage 阻断 → 全量测试/哈希/提交。
 
+## R9 进度（2026-08-08，golden 机制覆盖 + 消耗语义修正已闭合）
+
+### 已实现
+
+- **golden 覆盖全部已还原机制**：109001 golden 场景扩为 8 动作（星决→星鸣→A5→极限反击→重击→完美招架→星鸣×2），断言：8 动作全部执行（M12 第三次星鸣不被充能阻断）、完美招架消耗 1 雷印记（M18）、重击 SP 总变化 >3（M7×3+M21×1）、总伤害>0。golden runtime 新增 `initialTuningMarks` 播种与 `tuningMarkConsumeByActionId` 投影；normal-attack 分段时长回退到 attackInputSegments。
+- **消耗语义修正**：`applyMarkConsumption` 的默认消耗量改为 `maximum ?? minimum`（consumeLayerMaxNum 缺省=0 时只消耗 consumeLayerNum=1 层），修复 109001362 类判断在持有 2 层时误耗全部的问题（A4/追击/招架同族修正）。
+- 包 hash `b9a2b9a4…`（file sha `b0f108ca…`）；fixtures/baseline/cycle/loadout 验收报告、FROZEN、migration/replay/package/coverage/workbench/canonicalTrace 单测期望全部重基线；功能阻断 1204→1197（golden 覆盖生效）。
+
+### 验证
+
+- 全套 Vitest 1445/1449（仅 4 条已知 process-heavy 并行超时，单独通过）；11 项审计 clean；build 通过。
+
+### 下一步
+
+1. M6：10900101 sub1（璀璨普攻变体）选择语义（待产品确认）。
+2. M8/M15/M23：残响（201/701）登记为客户端未接线中间状态（与 M10/M11/M16 同口径）。
+3. 待产品确认后走 M12-C 前置验收（视觉签收/optimization-ready）。
+
 ## R8 分析（2026-08-08，M6 璀璨普攻变体核对）
 
 ### 现状
