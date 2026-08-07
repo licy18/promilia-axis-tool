@@ -90,7 +90,7 @@
     {
       "transitionIdentity": "han-normal-five-inputs:segment:3->4",
       "ownerId": 101003,
-      "sourcePublicActionIdentity": "actor|101003|10100301|0|10100303",
+      "sourcePublicActionIdentity": "actor|101003|10100301|0|10100303|normal-attack",
       "sourceActionKind": "normal-attack",
       "sourceControlSkillId": 10100303,
       "sourceSubSkillIndex": 0,
@@ -164,7 +164,7 @@
   ],
   "publicActionCoverage": [
     {
-      "publicActionIdentity": "actor|101003|10100301|0|10100303",
+      "publicActionIdentity": "actor|101003|10100301|0|10100303|normal-attack",
       "actionKind": "normal-attack",
       "sourceSkillId": 10100301,
       "controlSkillId": 10100303,
@@ -179,7 +179,7 @@
       "sourceIdentity": "characters.items[id=101003].skillSlots[group=backup,skillId=10100303]"
     },
     {
-      "publicActionIdentity": "actor|101003|10100301|1|10100310",
+      "publicActionIdentity": "actor|101003|10100301|1|10100310|charged-attack",
       "actionKind": "charged-attack",
       "sourceSkillId": 10100301,
       "controlSkillId": 10100310,
@@ -194,7 +194,7 @@
       "sourceIdentity": "characters.items[id=101003].skillSlots[group=ground,slot=2]"
     },
     {
-      "publicActionIdentity": "actor|101003|10100301|5|10100315",
+      "publicActionIdentity": "actor|101003|10100301|5|10100315|dodge-attack",
       "actionKind": "dodge-attack",
       "sourceSkillId": 10100301,
       "controlSkillId": 10100315,
@@ -209,7 +209,7 @@
       "sourceIdentity": "characters.items[id=101003].skillSlots[group=ground,slot=204]"
     },
     {
-      "publicActionIdentity": "actor|101003|10100301|6|10100311",
+      "publicActionIdentity": "actor|101003|10100301|6|10100311|plunging-attack",
       "actionKind": "plunging-attack",
       "sourceSkillId": 10100301,
       "controlSkillId": 10100311,
@@ -224,7 +224,7 @@
       "sourceIdentity": "characters.items[id=101003].skillSlots[group=aerial,slot=301]"
     },
     {
-      "publicActionIdentity": "actor|101003|10100312|0|10100312",
+      "publicActionIdentity": "actor|101003|10100312|0|10100312|star-skill",
       "actionKind": "star-skill",
       "sourceSkillId": 10100312,
       "controlSkillId": 10100312,
@@ -239,7 +239,7 @@
       "sourceIdentity": "characters.items[id=101003].skillSlots[group=ground,slot=3]"
     },
     {
-      "publicActionIdentity": "actor|101003|10100312|1|10100326",
+      "publicActionIdentity": "actor|101003|10100312|1|10100326|star-combo",
       "actionKind": "star-combo",
       "sourceSkillId": 10100312,
       "controlSkillId": 10100326,
@@ -254,7 +254,7 @@
       "sourceIdentity": "characters.items[id=101003].skillSlots[group=ground,slot=208]"
     },
     {
-      "publicActionIdentity": "actor|101003|10100313|0|10100313",
+      "publicActionIdentity": "actor|101003|10100313|0|10100313|ultimate",
       "actionKind": "ultimate",
       "sourceSkillId": 10100313,
       "controlSkillId": 10100313,
@@ -269,7 +269,7 @@
       "sourceIdentity": "characters.items[id=101003].skillSlots[group=ground,slot=4]"
     },
     {
-      "publicActionIdentity": "actor|101003|10100322|0|10100322",
+      "publicActionIdentity": "actor|101003|10100322|0|10100322|star-carry",
       "actionKind": "star-carry",
       "sourceSkillId": 10100322,
       "controlSkillId": 10100322,
@@ -284,7 +284,7 @@
       "sourceIdentity": "characters.items[id=101003].skillSlots[skillId=10100322]"
     },
     {
-      "publicActionIdentity": "actor|101003|10100322|1|10100325",
+      "publicActionIdentity": "actor|101003|10100322|1|10100325|limit-counter",
       "actionKind": "limit-counter",
       "sourceSkillId": 10100322,
       "controlSkillId": 10100325,
@@ -299,7 +299,7 @@
       "sourceIdentity": "characters.items[id=101003].skillSlots[group=ground,slot=207]"
     },
     {
-      "publicActionIdentity": "actor|101003|10100322|2|10100327",
+      "publicActionIdentity": "actor|101003|10100322|2|10100327|perfect-parry",
       "actionKind": "perfect-parry",
       "sourceSkillId": 10100322,
       "controlSkillId": 10100327,
@@ -2413,5 +2413,5 @@
       "runtimeStatus": "not-runtime-transition"
     }
   ],
-  "profileHash": "4bcfdcb22f0b776b630f33378aadba19b4164e26ecf16ed8cbe05954acc1e4ee"
+  "profileHash": "ae79ac733287e3efef8fc4cdadf72e8a3dc3bf547a39acc91bba23979b7500b3"
 }

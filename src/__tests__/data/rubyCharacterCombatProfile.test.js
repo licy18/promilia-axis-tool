@@ -225,8 +225,10 @@ describe('M10-B1 Ruby character combat profile', () => {
   });
 
   it('settles Star Skill and Star Combo from their own public-form evidence', () => {
-    const starSkillActionIdentity = 'actor|103002|10300212|0|10300212';
-    const starComboActionIdentity = 'actor|103002|10300212|1|10300226';
+    const starSkillActionIdentity =
+      'actor|103002|10300212|0|10300212|star-skill';
+    const starComboActionIdentity =
+      'actor|103002|10300212|1|10300226|star-combo';
     const starSkillRow = runtimeCoverage.actionRows.find(
       row => row.actionIdentity === starSkillActionIdentity
     );

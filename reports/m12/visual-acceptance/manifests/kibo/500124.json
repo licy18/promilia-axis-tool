@@ -29,15 +29,19 @@
       ],
       "elementClass": "single",
       "stage": "成长期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": {
         "signature": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
-        "active": {
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
+        },
+        "active": {
+          "runtimeStatus": null,
+          "closureClass": null
         },
         "break": {
           "runtimeStatus": "runnable",
@@ -96,7 +100,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "018611642f0d61a2"
+      "acceptanceIdentity": "04de64e98d17852c"
     }
   },
   "matrix": {
@@ -197,5 +201,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "d835a764ff885bd8"
+  "manifestHash": "71bdfcdfb07c5146"
 }

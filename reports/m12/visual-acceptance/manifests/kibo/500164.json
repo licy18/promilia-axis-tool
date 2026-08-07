@@ -29,15 +29,19 @@
       ],
       "elementClass": "single",
       "stage": "幼年期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": {
         "signature": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
-        "active": {
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
+        },
+        "active": {
+          "runtimeStatus": null,
+          "closureClass": null
         },
         "break": {
           "runtimeStatus": "runnable",
@@ -96,7 +100,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "87f9a4c0fa33e1bd"
+      "acceptanceIdentity": "2456c8ed05f07213"
     }
   },
   "matrix": {
@@ -197,5 +201,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "e29f63707f40bb40"
+  "manifestHash": "884277115004345e"
 }

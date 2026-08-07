@@ -22,7 +22,7 @@
       "bytes": 93563,
       "status": "verified"
     },
-    "displaySummary": "风 · 超限体 · 侵扰 · 暴风旋引 · 风龙卷 · 伊欧利安-合击",
+    "displaySummary": "风 · 超限体 · 侵扰 · 暴风旋引 · 召风凝场 · 风龙卷 · 伊欧利安-合击",
     "binding": {
       "elements": [
         "风"
@@ -32,6 +32,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -96,7 +100,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "9cc5462b52aafca7"
+      "acceptanceIdentity": "0056dc2ec7630158"
     }
   },
   "matrix": {
@@ -197,5 +201,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "54f5e48fe6cf3667"
+  "manifestHash": "7a3bd2ea24c13962"
 }

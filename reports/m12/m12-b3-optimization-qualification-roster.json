@@ -8,48 +8,48 @@
     "files": {
       "characters": {
         "path": "src/data/generated/characters.json",
-        "sha256": "4a73f5e393f7410f5af80a811cac604d97ca6bf74ca8e0be66445ca932fb5052",
+        "sha256": "eddd0616c72711bf45c56020768e52f656d41ed596bcc6a7c1528aae5b0c61a0",
         "bytes": 406703
       },
       "kibos": {
         "path": "src/data/generated/kibos.json",
-        "sha256": "1cca2e3d0d1cb5a0a984164ab0c6b05ef0b6c5416b0e9872f0c8ab36394519c4",
-        "bytes": 855418
+        "sha256": "62924087a58001de0216110a07c4a7e13954f0c0d90ad13a1861b4a4701522f0",
+        "bytes": 999016
       },
       "equipment": {
         "path": "src/data/generated/equipment.json",
-        "sha256": "d718604a7b28f84163c175f7f7d0b4d26f891606bb18acf22939e2ef16eaf593",
+        "sha256": "1a0b4c8879f9560aacadf0647a615cd04c3a6f6505d8e25334c7c506ad6647c9",
         "bytes": 115457
       },
       "soulessences": {
         "path": "src/data/generated/soulessences.json",
-        "sha256": "385dbb96cf0feca4b42c7d3d63040c506c310beeb62ed7f9f37ac68fd012dcbe",
+        "sha256": "cd455e6cab217c5898e35e290b7d7e9d65b42a20bd0f71250a90377dfb93badd",
         "bytes": 73284
       },
       "verifiedMechanics": {
         "path": "src/data/generated/verified-combat-mechanics-package.json",
-        "sha256": "a501f5cd1b8c32314e29643fa61ceecdb876e5e7659786143beda9f904ad780e",
-        "bytes": 100605601
+        "sha256": "9eba8df1697a64bc6666d98959bb852e8854fb437cccfa79a9a5720de24cdbaf",
+        "bytes": 115901475
       },
       "characterAcceptance": {
         "path": "src/data/generated/character-acceptance-catalog.json",
-        "sha256": "431b8d6ae2a350bda4aa8a4ef9ca289716f7ce7da9e2dcf01cfafb2147e2059c",
+        "sha256": "380fbcdda8764579975f806069dc38032a731998149e5f0e4626d68d941e6209",
         "bytes": 2872
       },
       "visualAcceptance": {
         "path": "src/data/generated/m12-b3-visual-acceptance-catalog.json",
-        "sha256": "e148741a9bbfd4f9497288a3ed9261f2c5bed0b939f548dc763042392193644f",
-        "bytes": 195950
+        "sha256": "5e6a48a361ff7c8cedb6e2a71ca5858e6ef29432e6a37c51ec55f21fd9f4dcf4",
+        "bytes": 201556
       },
       "kiboPassives": {
         "path": "src/data/generated/kibo-passive-mechanics.json",
-        "sha256": "9f88a3a1ed299871c92acb4b566972ff2970547c188179001ce4d97c6521df78",
+        "sha256": "72cb12610d58d08bee1a6b7ce555227f4bb53409976886b89ed6e43f6187e284",
         "bytes": 331019
       },
       "kiboMaturity": {
         "path": "reports/kibo-headless/kibo-maturity-matrix.json",
-        "sha256": "6449bd61c67855ba4431df77ee956a4f61e8fdd1922026c57f938538618bc0dd",
-        "bytes": 907569
+        "sha256": "76650a352c0da82367c5a340484e6e72470d05fac686e6e7aec8fb3345912b97",
+        "bytes": 1072913
       },
       "newTable:accessory.json": {
         "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/accessory.json",
@@ -3958,7 +3958,7 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "9db681b8ed021a14"
+    "sourceSnapshotHash": "5f8c6621ef29fa40"
   },
   "filterContract": {
     "characterElements": [
@@ -4269,17 +4269,12 @@
       "elementClass": "dual",
       "race": "幻生类·精怪族",
       "stage": "幼年期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50004302,
           "actionKind": "signature",
           "name": "蝶磷粉"
-        },
-        {
-          "publicActionId": 504012,
-          "actionKind": "active",
-          "name": "小风弹"
         },
         {
           "publicActionId": 50004305,
@@ -4300,17 +4295,12 @@
       "elementClass": "dual",
       "race": "幻生类·精怪族",
       "stage": "成长期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50004401,
           "actionKind": "signature",
           "name": "浮蝶磷粉"
-        },
-        {
-          "publicActionId": 504012,
-          "actionKind": "active",
-          "name": "小风弹"
         },
         {
           "publicActionId": 50004404,
@@ -4362,17 +4352,12 @@
       "elementClass": "dual",
       "race": "异生类·兽形族",
       "stage": "幼年期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50005701,
           "actionKind": "signature",
           "name": "猪突猛进"
-        },
-        {
-          "publicActionId": 507001,
-          "actionKind": "active",
-          "name": "雷球"
         },
         {
           "publicActionId": 50005704,
@@ -4392,17 +4377,12 @@
       "elementClass": "single",
       "race": "异生类·羽形族",
       "stage": "幼年期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50006401,
           "actionKind": "signature",
           "name": "柔风飞刃"
-        },
-        {
-          "publicActionId": 504001,
-          "actionKind": "active",
-          "name": "风刃"
         },
         {
           "publicActionId": 50006404,
@@ -4513,17 +4493,12 @@
       "elementClass": "single",
       "race": "幻生类·精怪族",
       "stage": "幼年期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50012302,
           "actionKind": "signature",
           "name": "飞绒风苞"
-        },
-        {
-          "publicActionId": 504012,
-          "actionKind": "active",
-          "name": "小风弹"
         },
         {
           "publicActionId": 50012304,
@@ -4543,17 +4518,12 @@
       "elementClass": "single",
       "race": "幻生类·精怪族",
       "stage": "成长期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50012402,
           "actionKind": "signature",
           "name": "飞绒风域"
-        },
-        {
-          "publicActionId": 504012,
-          "actionKind": "active",
-          "name": "小风弹"
         },
         {
           "publicActionId": 50012404,
@@ -4603,17 +4573,12 @@
       "elementClass": "single",
       "race": "幻生类·元素族",
       "stage": "幼年期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50012602,
           "actionKind": "signature",
           "name": "烈风"
-        },
-        {
-          "publicActionId": 504012,
-          "actionKind": "active",
-          "name": "小风弹"
         },
         {
           "publicActionId": 50012604,
@@ -4633,17 +4598,12 @@
       "elementClass": "single",
       "race": "幻生类·元素族",
       "stage": "成长期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50012702,
           "actionKind": "signature",
           "name": "灵偶烈风"
-        },
-        {
-          "publicActionId": 504012,
-          "actionKind": "active",
-          "name": "小风弹"
         },
         {
           "publicActionId": 50012704,
@@ -4693,17 +4653,12 @@
       "elementClass": "single",
       "race": "异生类·兽形族",
       "stage": "幼年期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50012901,
           "actionKind": "signature",
           "name": "稚猴抓"
-        },
-        {
-          "publicActionId": 507001,
-          "actionKind": "active",
-          "name": "雷球"
         },
         {
           "publicActionId": 50012903,
@@ -4783,17 +4738,12 @@
       "elementClass": "single",
       "race": "幻生类·精怪族",
       "stage": "幼年期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50016402,
           "actionKind": "signature",
           "name": "雷灵旋律"
-        },
-        {
-          "publicActionId": 507012,
-          "actionKind": "active",
-          "name": "电能子弹"
         },
         {
           "publicActionId": 50016404,
@@ -4873,17 +4823,12 @@
       "elementClass": "single",
       "race": "幻生类·元素族",
       "stage": "幼年期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50017302,
           "actionKind": "signature",
           "name": "雷环"
-        },
-        {
-          "publicActionId": 507012,
-          "actionKind": "active",
-          "name": "电能子弹"
         },
         {
           "publicActionId": 50017304,
@@ -5088,17 +5033,12 @@
       "elementClass": "dual",
       "race": "异生类·羽形族",
       "stage": "幼年期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50030401,
           "actionKind": "signature",
           "name": "风旋"
-        },
-        {
-          "publicActionId": 504012,
-          "actionKind": "active",
-          "name": "小风弹"
         },
         {
           "publicActionId": 50030404,
@@ -5180,17 +5120,12 @@
       "elementClass": "single",
       "race": "异生类·鳞形族",
       "stage": "幼年期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50032201,
           "actionKind": "signature",
           "name": "卷风呼啸"
-        },
-        {
-          "publicActionId": 504001,
-          "actionKind": "active",
-          "name": "风刃"
         },
         {
           "publicActionId": 50032204,
@@ -5271,17 +5206,12 @@
       "elementClass": "dual",
       "race": "幻生类·精怪族",
       "stage": "幼年期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50035701,
           "actionKind": "signature",
           "name": "迅愈之风"
-        },
-        {
-          "publicActionId": 504012,
-          "actionKind": "active",
-          "name": "小风弹"
         },
         {
           "publicActionId": 50035704,
@@ -5364,17 +5294,12 @@
       "elementClass": "dual",
       "race": "异生类·蜕形族",
       "stage": "幼年期",
-      "actionCount": 3,
+      "actionCount": 2,
       "actions": [
         {
           "publicActionId": 50036801,
           "actionKind": "signature",
           "name": "符之乐声"
-        },
-        {
-          "publicActionId": 504012,
-          "actionKind": "active",
-          "name": "小风弹"
         },
         {
           "publicActionId": 50036803,
@@ -29216,5 +29141,5 @@
       ]
     }
   },
-  "rosterHash": "b0deeb5322665305"
+  "rosterHash": "22d0c76f613afd9b"
 }

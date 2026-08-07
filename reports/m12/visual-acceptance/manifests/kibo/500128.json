@@ -22,7 +22,7 @@
       "bytes": 65505,
       "status": "verified"
     },
-    "displaySummary": "风 · 成熟期 · 侵扰 · 激岚烈风 · 风刃扩张 · 岚灵偶-合击",
+    "displaySummary": "风 · 成熟期 · 侵扰 · 激岚烈风 · 小风弹 · 风刃扩张 · 岚灵偶-合击",
     "binding": {
       "elements": [
         "风"
@@ -32,6 +32,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -96,7 +100,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "fb4987e0e58448e5"
+      "acceptanceIdentity": "e222dbc50a4d529e"
     }
   },
   "matrix": {
@@ -197,5 +201,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "fe5521c25955ae9b"
+  "manifestHash": "efca9d63c3c8b878"
 }

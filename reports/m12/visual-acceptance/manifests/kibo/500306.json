@@ -22,7 +22,7 @@
       "bytes": 60645,
       "status": "verified"
     },
-    "displaySummary": "风、水 · 成熟期 · 侵扰 · 与风共舞 · 风龙卷 · 库库尔克-合击",
+    "displaySummary": "风、水 · 成熟期 · 侵扰 · 与风共舞 · 连续风刃 · 风龙卷 · 库库尔克-合击",
     "binding": {
       "elements": [
         "风",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "3e1a75b866d6860f"
+      "acceptanceIdentity": "c2fbcd015f81c148"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "e36ec4433f3830cf"
+  "manifestHash": "05d82fcfc11f859b"
 }

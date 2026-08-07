@@ -99,6 +99,21 @@
       "edgeIdentity": "coverage-edge:10c86b5e0b3b7be1"
     },
     {
+      "requirementIdentity": "contract:action-form:actor|101010|10101021|1|10101025|limit-counter:default",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-limit-counter",
+      "selector": {
+        "controlSkillId": 10101025,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "3abbc043539f185f",
+      "traceProjectionHash": "f58518e83d37bd05",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:12c834318e8f3782"
+    },
+    {
       "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "trace-resource:machine-resource:m11-d-101010-visual-acceptance:0",
@@ -155,21 +170,6 @@
       "edgeIdentity": "coverage-edge:26d3183f97dccdd5"
     },
     {
-      "requirementIdentity": "contract:action-form:actor|101010|10101021|1|10101025:default",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-limit-counter",
-      "selector": {
-        "controlSkillId": 10101025,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "3abbc043539f185f",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:276d2cd600f105f4"
-    },
-    {
       "requirementIdentity": "contract:hit:10101001|1|elements|2|-393717411505334080|65|9",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "trace-hit:machine-hit:m11-d-101010-visual-acceptance:25",
@@ -209,6 +209,21 @@
       "edgeIdentity": "coverage-edge:2d3a3d7cd40ebbee"
     },
     {
+      "requirementIdentity": "contract:public-action:actor|101010|10101013|0|10101013|ultimate",
+      "scenarioIdentity": "m11-d-101010-visual-acceptance",
+      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-101010-visual-acceptance:xiaoyu-ultimate",
+      "selector": {
+        "controlSkillId": 10101013,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "c8130f941b6c32dc",
+      "traceProjectionHash": "c53458c12b0717f3",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3051c51f18e30186"
+    },
+    {
       "requirementIdentity": "contract:hit:10101013|0|elements|2|-6429706496330270988|136|1",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "trace-hit:machine-hit:m11-d-101010-visual-acceptance:5",
@@ -246,21 +261,6 @@
       "traceProjectionHash": "f58518e83d37bd05",
       "status": "verified",
       "edgeIdentity": "coverage-edge:37a07095c2d14242"
-    },
-    {
-      "requirementIdentity": "contract:action-form:actor|101010|10101012|0|10101012:default",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-star-skill",
-      "selector": {
-        "controlSkillId": 10101012,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "ecccb8628c3c8861",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:37e668718fdcf1e0"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
@@ -316,6 +316,36 @@
       "traceProjectionHash": "c53458c12b0717f3",
       "status": "verified",
       "edgeIdentity": "coverage-edge:3c86baa2c9b78a81"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|101010|10101012|0|10101012|star-skill",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-star-skill",
+      "selector": {
+        "controlSkillId": 10101012,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "ecccb8628c3c8861",
+      "traceProjectionHash": "f58518e83d37bd05",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3d35e22474b5de88"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|101010|10101001|2|10101010|charged-attack",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-charged",
+      "selector": {
+        "controlSkillId": 10101010,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "394d2f81d232e438",
+      "traceProjectionHash": "f58518e83d37bd05",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:47c3746afc1bddcc"
     },
     {
       "requirementIdentity": "protocol:101010:critical-integer-threshold-boundary",
@@ -384,7 +414,22 @@
       "edgeIdentity": "coverage-edge:53961d6f01603d22"
     },
     {
-      "requirementIdentity": "contract:action-form:actor|101010|10101013|0|10101013:default",
+      "requirementIdentity": "contract:action-form:actor|101010|10101013|0|10101013|ultimate:default",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-refresh",
+      "selector": {
+        "controlSkillId": 10101013,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "160ea6eb08a92172",
+      "traceProjectionHash": "f58518e83d37bd05",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:578380bc82b20682"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|101010|10101013|0|10101013|ultimate:default",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "trace-action-form:machine-action-form:m11-d-101010-visual-acceptance:xiaoyu-ultimate",
       "selector": {
@@ -396,7 +441,7 @@
       "assertionHash": "c8130f941b6c32dc",
       "traceProjectionHash": "c53458c12b0717f3",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:54aad57ea2f30897"
+      "edgeIdentity": "coverage-edge:5ad944a9516b57b8"
     },
     {
       "requirementIdentity": "protocol:101010:save-import-replay",
@@ -508,6 +553,21 @@
       "edgeIdentity": "coverage-edge:65662613767e9ab6"
     },
     {
+      "requirementIdentity": "contract:action-form:actor|101010|10101012|0|10101012|star-skill:default",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-star-skill",
+      "selector": {
+        "controlSkillId": 10101012,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "ecccb8628c3c8861",
+      "traceProjectionHash": "f58518e83d37bd05",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:6916f327347033c6"
+    },
+    {
       "requirementIdentity": "protocol:101010:critical-expected-no-random-side-effect",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "critical:expectedNoCriticalEvent",
@@ -604,6 +664,21 @@
       "edgeIdentity": "coverage-edge:79bad397b71dd92b"
     },
     {
+      "requirementIdentity": "contract:public-action:actor|101010|10101021|1|10101025|limit-counter",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-limit-counter",
+      "selector": {
+        "controlSkillId": 10101025,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "3abbc043539f185f",
+      "traceProjectionHash": "f58518e83d37bd05",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:7ad18b0943135916"
+    },
+    {
       "requirementIdentity": "protocol:101010:buff-apply-refresh-stack-expire",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
       "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
@@ -646,21 +721,6 @@
       "edgeIdentity": "coverage-edge:891fb806c20626ca"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101001|0|10101003",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a3",
-      "selector": {
-        "controlSkillId": 10101003,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "e7c668b8a5ab58d4",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:894f36d13198bb38"
-    },
-    {
       "requirementIdentity": "contract:hit:10101013|0|elements|4|8275426223765851682|237|9",
       "scenarioIdentity": "m11-d-101010-visual-acceptance",
       "assertionIdentity": "trace-hit:machine-hit:m11-d-101010-visual-acceptance:13",
@@ -685,21 +745,6 @@
       "traceProjectionHash": "c53458c12b0717f3",
       "status": "verified",
       "edgeIdentity": "coverage-edge:912d33f98f2e8f9f"
-    },
-    {
-      "requirementIdentity": "contract:action-form:actor|101010|10101013|0|10101013:default",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-refresh",
-      "selector": {
-        "controlSkillId": 10101013,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "160ea6eb08a92172",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:91bdbcf8c047d11f"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
@@ -740,21 +785,6 @@
       "traceProjectionHash": "c53458c12b0717f3",
       "status": "verified",
       "edgeIdentity": "coverage-edge:9466110959f8c864"
-    },
-    {
-      "requirementIdentity": "contract:public-action:actor|101010|10101021|0|10101021",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:switch-back-to-xiaoyu--on-enter--actor-101010--star-carry",
-      "selector": {
-        "controlSkillId": 10101021,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "d0f549770332d265",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:98c15416e4fa4fcd"
     },
     {
       "requirementIdentity": "contract:hit:10101001|0|elements|0|-2245783402811878012|12|1",
@@ -837,21 +867,6 @@
       "traceProjectionHash": "c53458c12b0717f3",
       "status": "verified",
       "edgeIdentity": "coverage-edge:a2e9768a76e6d0fa"
-    },
-    {
-      "requirementIdentity": "contract:public-action:actor|101010|10101021|1|10101025",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-limit-counter",
-      "selector": {
-        "controlSkillId": 10101025,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "3abbc043539f185f",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:a32509b5703336a4"
     },
     {
       "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:5",
@@ -961,21 +976,6 @@
       "traceProjectionHash": "f58518e83d37bd05",
       "status": "verified",
       "edgeIdentity": "coverage-edge:b974d2e6d7700d87"
-    },
-    {
-      "requirementIdentity": "contract:public-action:actor|101010|10101013|0|10101013",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-refresh",
-      "selector": {
-        "controlSkillId": 10101013,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "160ea6eb08a92172",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:b985f2ea6a89553f"
     },
     {
       "requirementIdentity": "contract:action-form:actor:101010:charged-attack:xiaoyu-enhanced-special-charged",
@@ -1120,6 +1120,21 @@
       "edgeIdentity": "coverage-edge:d55a448e2dff13f0"
     },
     {
+      "requirementIdentity": "contract:public-action:actor|101010|10101013|0|10101013|ultimate",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-refresh",
+      "selector": {
+        "controlSkillId": 10101013,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "160ea6eb08a92172",
+      "traceProjectionHash": "f58518e83d37bd05",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:d8a193c2f1a7a71c"
+    },
+    {
       "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
       "assertionIdentity": "trace-resource:golden-resource:m10-a:101010:120s-three-actor-golden:8",
@@ -1259,6 +1274,21 @@
       "edgeIdentity": "coverage-edge:e8b64c7d51fb6b31"
     },
     {
+      "requirementIdentity": "contract:public-action:actor|101010|10101021|0|10101021|star-carry",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:switch-back-to-xiaoyu--on-enter--actor-101010--star-carry",
+      "selector": {
+        "controlSkillId": 10101021,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "d0f549770332d265",
+      "traceProjectionHash": "f58518e83d37bd05",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ea9e74c66642fee5"
+    },
+    {
       "requirementIdentity": "contract:action-form:xiaoyu-normal-default-five-inputs:segment:1",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
       "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a1",
@@ -1301,36 +1331,6 @@
       "edgeIdentity": "coverage-edge:ed6e9832ee791564"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101012|0|10101012",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:jade-star-skill",
-      "selector": {
-        "controlSkillId": 10101012,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "ecccb8628c3c8861",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:edb32eedabedb114"
-    },
-    {
-      "requirementIdentity": "contract:public-action:actor|101010|10101001|2|10101010",
-      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:threshold-charged",
-      "selector": {
-        "controlSkillId": 10101010,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "394d2f81d232e438",
-      "traceProjectionHash": "f58518e83d37bd05",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:ee9ae1966a3c9f95"
-    },
-    {
       "requirementIdentity": "contract:action-form:actor:101010:charged-attack:xiaoyu-enhanced-special-charged",
       "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
       "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:ultimate-enhanced-special-charged",
@@ -1344,6 +1344,21 @@
       "traceProjectionHash": "f58518e83d37bd05",
       "status": "verified",
       "edgeIdentity": "coverage-edge:f09fec4d903961a5"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|101010|10101001|0|10101003|normal-attack",
+      "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-a:101010:120s-three-actor-golden:normal-a3",
+      "selector": {
+        "controlSkillId": 10101003,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "e7c668b8a5ab58d4",
+      "traceProjectionHash": "f58518e83d37bd05",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:f1442f6e61415a2e"
     },
     {
       "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
@@ -1414,21 +1429,6 @@
       "traceProjectionHash": "f58518e83d37bd05",
       "status": "verified",
       "edgeIdentity": "coverage-edge:f540a7a03ce53339"
-    },
-    {
-      "requirementIdentity": "contract:public-action:actor|101010|10101013|0|10101013",
-      "scenarioIdentity": "m11-d-101010-visual-acceptance",
-      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-101010-visual-acceptance:xiaoyu-ultimate",
-      "selector": {
-        "controlSkillId": 10101013,
-        "kind": "action-form",
-        "ownerId": 101010,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "c8130f941b6c32dc",
-      "traceProjectionHash": "c53458c12b0717f3",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:f7e267fda3fa186b"
     }
   ],
   "denominator": {
@@ -1471,5 +1471,5 @@
       "m11-d-101010-visual-acceptance": 55
     }
   },
-  "coverageHash": "f26657b2e2961da0"
+  "coverageHash": "ed5b2f76bcb12b68"
 }

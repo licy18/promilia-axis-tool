@@ -22,7 +22,7 @@
       "bytes": 36917,
       "status": "verified"
     },
-    "displaySummary": "风、木 · 成熟期 · 缓冲 · 复苏季风 · 森之守护 · 绒绒云-合击",
+    "displaySummary": "风、木 · 成熟期 · 缓冲 · 复苏季风 · 风龙卷 · 森之守护 · 绒绒云-合击",
     "binding": {
       "elements": [
         "风",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "1fe57ade40418cdb"
+      "acceptanceIdentity": "ae5b92620ccd0df7"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "ec9a3960834d36d6"
+  "manifestHash": "c73e8cf50608df0d"
 }

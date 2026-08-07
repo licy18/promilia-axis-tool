@@ -53,7 +53,7 @@ describe('workbench action assets', () => {
       .map(action => ({ skillId: action.skillId, icon: action.icon }));
 
     expect(roleActions.length).toBeGreaterThan(0);
-    expect(kiboActions).toHaveLength(366);
+    expect(kiboActions).toHaveLength(448);
     expect(missing).toEqual([]);
   });
 
@@ -68,7 +68,7 @@ describe('workbench action assets', () => {
         cooldown: expect.stringContaining('skillsub_logic.json'),
       },
     });
-    expect(kiboActions).toHaveLength(366);
+    expect(kiboActions).toHaveLength(448);
     expect(kiboActions.every(action => action.cooldownMs > 0)).toBe(true);
     expect(
       kiboActions.find(

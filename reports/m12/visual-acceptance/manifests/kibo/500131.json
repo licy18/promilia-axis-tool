@@ -22,7 +22,7 @@
       "bytes": 80235,
       "status": "verified"
     },
-    "displaySummary": "雷 · 成熟期 · 独猎 · 环影连击 · 落雷 · 环影猴-合击",
+    "displaySummary": "雷 · 成熟期 · 独猎 · 环影连击 · 雷球叠发 · 落雷 · 环影猴-合击",
     "binding": {
       "elements": [
         "雷"
@@ -32,6 +32,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -96,7 +100,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "694556daf4233796"
+      "acceptanceIdentity": "60bd0e491b62edf7"
     }
   },
   "matrix": {
@@ -197,5 +201,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "78d05da178c90644"
+  "manifestHash": "e5e91d802d5464c2"
 }

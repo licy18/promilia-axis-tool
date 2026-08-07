@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 101003,
-  "sourcePackageHash": "09967130129cdcd8e7c9e2b38ab3236f359031238ead79116e66eb48ec398fff",
+  "sourcePackageHash": "cd9948d1b89869c8503ce400331dc053c8d386bf1ecdce2f2412eb4b03c81d20",
   "actionRows": [
     {
-      "actionIdentity": "actor|101003|10100301|0|10100303",
+      "actionIdentity": "actor|101003|10100301|0|10100303|normal-attack",
       "actionKind": "normal-attack",
       "sourceSkillId": 10100301,
       "controlSkillIds": [
@@ -25,7 +25,7 @@
       "settlementStatus": "applied",
       "publicFormSettlements": [
         {
-          "actionIdentity": "actor|101003|10100301|0|10100303",
+          "actionIdentity": "actor|101003|10100301|0|10100303|normal-attack",
           "publicFormId": "han-normal-five-inputs:segment:1",
           "actionKind": "normal-attack",
           "sourceSkillId": 10100301,
@@ -54,7 +54,7 @@
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-4295862534287682589__-4295862534287682589.json#behaviorlineControl[0].behaviorList[pathId=-5538885314074078237]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-5538885314074078237__-5538885314074078237.json"
         },
         {
-          "actionIdentity": "actor|101003|10100301|0|10100303",
+          "actionIdentity": "actor|101003|10100301|0|10100303|normal-attack",
           "publicFormId": "han-normal-five-inputs:segment:2",
           "actionKind": "normal-attack",
           "sourceSkillId": 10100301,
@@ -84,7 +84,7 @@
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_7765764241533702659__7765764241533702659.json#behaviorlineControl[0].behaviorList[pathId=5305701981963162115]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_5305701981963162115__5305701981963162115.json"
         },
         {
-          "actionIdentity": "actor|101003|10100301|0|10100303",
+          "actionIdentity": "actor|101003|10100301|0|10100303|normal-attack",
           "publicFormId": "han-normal-five-inputs:segment:3",
           "actionKind": "normal-attack",
           "sourceSkillId": 10100301,
@@ -115,7 +115,7 @@
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_1357598574432023696__1357598574432023696.json#behaviorlineControl[0].behaviorList[pathId=2093885213480907920]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_2093885213480907920__2093885213480907920.json"
         },
         {
-          "actionIdentity": "actor|101003|10100301|0|10100303",
+          "actionIdentity": "actor|101003|10100301|0|10100303|normal-attack",
           "publicFormId": "han-normal-five-inputs:segment:4",
           "actionKind": "normal-attack",
           "sourceSkillId": 10100301,
@@ -147,7 +147,7 @@
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_1399648220630438031__1399648220630438031.json#behaviorlineControl[0].behaviorList[pathId=1121532120759685263]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_1121532120759685263__1121532120759685263.json"
         },
         {
-          "actionIdentity": "actor|101003|10100301|0|10100303",
+          "actionIdentity": "actor|101003|10100301|0|10100303|normal-attack",
           "publicFormId": "han-normal-five-inputs:segment:5",
           "actionKind": "normal-attack",
           "sourceSkillId": 10100301,
@@ -198,7 +198,7 @@
       ]
     },
     {
-      "actionIdentity": "actor|101003|10100301|1|10100310",
+      "actionIdentity": "actor|101003|10100301|1|10100310|charged-attack",
       "actionKind": "charged-attack",
       "sourceSkillId": 10100301,
       "controlSkillIds": [
@@ -214,8 +214,8 @@
       "settlementStatus": "applied",
       "publicFormSettlements": [
         {
-          "actionIdentity": "actor|101003|10100301|1|10100310",
-          "publicFormId": "actor|101003|10100301|1|10100310:default",
+          "actionIdentity": "actor|101003|10100301|1|10100310|charged-attack",
+          "publicFormId": "actor|101003|10100301|1|10100310|charged-attack:default",
           "actionKind": "charged-attack",
           "sourceSkillId": 10100301,
           "executionControlSkillId": 10100310,
@@ -278,7 +278,7 @@
       ]
     },
     {
-      "actionIdentity": "actor|101003|10100301|5|10100315",
+      "actionIdentity": "actor|101003|10100301|5|10100315|dodge-attack",
       "actionKind": "dodge-attack",
       "sourceSkillId": 10100301,
       "controlSkillIds": [
@@ -294,8 +294,8 @@
       "settlementStatus": "applied",
       "publicFormSettlements": [
         {
-          "actionIdentity": "actor|101003|10100301|5|10100315",
-          "publicFormId": "actor|101003|10100301|5|10100315:default",
+          "actionIdentity": "actor|101003|10100301|5|10100315|dodge-attack",
+          "publicFormId": "actor|101003|10100301|5|10100315|dodge-attack:default",
           "actionKind": "dodge-attack",
           "sourceSkillId": 10100301,
           "executionControlSkillId": 10100315,
@@ -347,7 +347,7 @@
       "reasons": []
     },
     {
-      "actionIdentity": "actor|101003|10100301|6|10100311",
+      "actionIdentity": "actor|101003|10100301|6|10100311|plunging-attack",
       "actionKind": "plunging-attack",
       "sourceSkillId": 10100301,
       "controlSkillIds": [
@@ -363,8 +363,8 @@
       "settlementStatus": "applied",
       "publicFormSettlements": [
         {
-          "actionIdentity": "actor|101003|10100301|6|10100311",
-          "publicFormId": "actor|101003|10100301|6|10100311:default",
+          "actionIdentity": "actor|101003|10100301|6|10100311|plunging-attack",
+          "publicFormId": "actor|101003|10100301|6|10100311|plunging-attack:default",
           "actionKind": "plunging-attack",
           "sourceSkillId": 10100301,
           "executionControlSkillId": 10100311,
@@ -415,7 +415,7 @@
       "reasons": []
     },
     {
-      "actionIdentity": "actor|101003|10100312|0|10100312",
+      "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
       "actionKind": "star-skill",
       "sourceSkillId": 10100312,
       "controlSkillIds": [
@@ -431,7 +431,7 @@
       "settlementStatus": "applied",
       "publicFormSettlements": [
         {
-          "actionIdentity": "actor|101003|10100312|0|10100312",
+          "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
           "publicFormId": "actor:101003:star-skill:han-star-skill-main",
           "actionKind": "star-skill",
           "sourceSkillId": 10100312,
@@ -487,7 +487,7 @@
       "reasons": []
     },
     {
-      "actionIdentity": "actor|101003|10100312|1|10100326",
+      "actionIdentity": "actor|101003|10100312|1|10100326|star-combo",
       "actionKind": "star-combo",
       "sourceSkillId": 10100312,
       "controlSkillIds": [
@@ -503,8 +503,8 @@
       "settlementStatus": "applied",
       "publicFormSettlements": [
         {
-          "actionIdentity": "actor|101003|10100312|1|10100326",
-          "publicFormId": "actor|101003|10100312|1|10100326:default",
+          "actionIdentity": "actor|101003|10100312|1|10100326|star-combo",
+          "publicFormId": "actor|101003|10100312|1|10100326|star-combo:default",
           "actionKind": "star-combo",
           "sourceSkillId": 10100312,
           "executionControlSkillId": 10100326,
@@ -553,7 +553,7 @@
       "reasons": []
     },
     {
-      "actionIdentity": "actor|101003|10100313|0|10100313",
+      "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
       "actionKind": "ultimate",
       "sourceSkillId": 10100313,
       "controlSkillIds": [
@@ -569,8 +569,8 @@
       "settlementStatus": "applied",
       "publicFormSettlements": [
         {
-          "actionIdentity": "actor|101003|10100313|0|10100313",
-          "publicFormId": "actor|101003|10100313|0|10100313:default",
+          "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
+          "publicFormId": "actor|101003|10100313|0|10100313|ultimate:default",
           "actionKind": "ultimate",
           "sourceSkillId": 10100313,
           "executionControlSkillId": 10100313,
@@ -629,7 +629,7 @@
       ]
     },
     {
-      "actionIdentity": "actor|101003|10100322|0|10100322",
+      "actionIdentity": "actor|101003|10100322|0|10100322|star-carry",
       "actionKind": "star-carry",
       "sourceSkillId": 10100322,
       "controlSkillIds": [
@@ -645,8 +645,8 @@
       "settlementStatus": "applied",
       "publicFormSettlements": [
         {
-          "actionIdentity": "actor|101003|10100322|0|10100322",
-          "publicFormId": "actor|101003|10100322|0|10100322:default",
+          "actionIdentity": "actor|101003|10100322|0|10100322|star-carry",
+          "publicFormId": "actor|101003|10100322|0|10100322|star-carry:default",
           "actionKind": "star-carry",
           "sourceSkillId": 10100322,
           "executionControlSkillId": 10100322,
@@ -703,7 +703,7 @@
       ]
     },
     {
-      "actionIdentity": "actor|101003|10100322|1|10100325",
+      "actionIdentity": "actor|101003|10100322|1|10100325|limit-counter",
       "actionKind": "limit-counter",
       "sourceSkillId": 10100322,
       "controlSkillIds": [
@@ -719,8 +719,8 @@
       "settlementStatus": "applied",
       "publicFormSettlements": [
         {
-          "actionIdentity": "actor|101003|10100322|1|10100325",
-          "publicFormId": "actor|101003|10100322|1|10100325:default",
+          "actionIdentity": "actor|101003|10100322|1|10100325|limit-counter",
+          "publicFormId": "actor|101003|10100322|1|10100325|limit-counter:default",
           "actionKind": "limit-counter",
           "sourceSkillId": 10100322,
           "executionControlSkillId": 10100325,
@@ -773,7 +773,7 @@
       ]
     },
     {
-      "actionIdentity": "actor|101003|10100322|2|10100327",
+      "actionIdentity": "actor|101003|10100322|2|10100327|perfect-parry",
       "actionKind": "perfect-parry",
       "sourceSkillId": 10100322,
       "controlSkillIds": [
@@ -789,7 +789,7 @@
       "settlementStatus": "applied",
       "publicFormSettlements": [
         {
-          "actionIdentity": "actor|101003|10100322|2|10100327",
+          "actionIdentity": "actor|101003|10100322|2|10100327|perfect-parry",
           "publicFormId": "actor:101003:perfect-parry:han-focus-dodge-counter",
           "actionKind": "perfect-parry",
           "sourceSkillId": 10100322,
@@ -862,5 +862,5 @@
       "static-evidence-gap": 7
     }
   },
-  "profileHash": "4bcfdcb22f0b776b630f33378aadba19b4164e26ecf16ed8cbe05954acc1e4ee"
+  "profileHash": "ae79ac733287e3efef8fc4cdadf72e8a3dc3bf547a39acc91bba23979b7500b3"
 }

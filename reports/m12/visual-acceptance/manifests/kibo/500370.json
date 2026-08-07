@@ -22,7 +22,7 @@
       "bytes": 77069,
       "status": "verified"
     },
-    "displaySummary": "风、雷 · 成熟期 · 侵扰 · 风暴音域 · 落雷 · 音霸蛙-合击",
+    "displaySummary": "风、雷 · 成熟期 · 侵扰 · 风暴音域 · 多重风压 · 落雷 · 音霸蛙-合击",
     "binding": {
       "elements": [
         "风",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "3c3154db1a1186a3"
+      "acceptanceIdentity": "9bd216f7d710d4f0"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "fb58a2aa50cac459"
+  "manifestHash": "0027e696ee7a943a"
 }

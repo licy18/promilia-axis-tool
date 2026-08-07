@@ -74,7 +74,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "09967130129cdcd8e7c9e2b38ab3236f359031238ead79116e66eb48ec398fff",
+    "packageHash": "cd9948d1b89869c8503ce400331dc053c8d386bf1ecdce2f2412eb4b03c81d20",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -102,7 +102,7 @@
   "contracts": {
     "publicActions": [
       {
-        "identity": "actor|103002|10300201|0|10300203",
+        "identity": "actor|103002|10300201|0|10300203|normal-attack",
         "ownerKind": "actor",
         "ownerId": 103002,
         "ownerName": "红宝石",
@@ -1542,7 +1542,7 @@
         "attackInputChainStatus": "verified-attack-input-chain-classified",
         "attackInputSegments": [
           {
-            "identity": "actor|103002|10300201|0|10300201|attack-input-1",
+            "identity": "actor|103002|10300201|0|10300201|normal-attack|attack-input-1",
             "sequenceIndex": 1,
             "sequenceTotal": 3,
             "label": "A1",
@@ -4438,7 +4438,7 @@
             "attackInputChainIdentity": "ruby-normal-default-three-inputs"
           },
           {
-            "identity": "actor|103002|10300201|0|10300202|attack-input-2",
+            "identity": "actor|103002|10300201|0|10300202|normal-attack|attack-input-2",
             "sequenceIndex": 2,
             "sequenceTotal": 3,
             "label": "A2",
@@ -7416,7 +7416,7 @@
             "attackInputChainIdentity": "ruby-normal-default-three-inputs"
           },
           {
-            "identity": "actor|103002|10300201|0|10300203|attack-input-3",
+            "identity": "actor|103002|10300201|0|10300203|normal-attack|attack-input-3",
             "sequenceIndex": 3,
             "sequenceTotal": 3,
             "label": "A3",
@@ -10372,7 +10372,7 @@
         "attackInputUnresolvedSegmentCount": 0,
         "attackInputSourceSegments": [
           {
-            "identity": "actor|103002|10300201|0|10300201|attack-input-1",
+            "identity": "actor|103002|10300201|0|10300201|normal-attack|attack-input-1",
             "sequenceIndex": 1,
             "sequenceTotal": 5,
             "label": "A1",
@@ -13266,7 +13266,7 @@
             "sourceIdentity": "workbench-seed.gameData.skills[id=10300201]|NewTable/skillsub_logic.rows[skillId=10300201].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json"
           },
           {
-            "identity": "actor|103002|10300201|0|10300202|attack-input-2",
+            "identity": "actor|103002|10300201|0|10300202|normal-attack|attack-input-2",
             "sequenceIndex": 2,
             "sequenceTotal": 5,
             "label": "A2",
@@ -16242,7 +16242,7 @@
             "sourceIdentity": "characters.items[id=103002].skillSlots[group=backup,skillId=10300202]|NewTable/skillsub_logic.rows[skillId=10300202].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/skill_control_10300202__5284438624671987443.json"
           },
           {
-            "identity": "actor|103002|10300201|0|10300203|attack-input-3",
+            "identity": "actor|103002|10300201|0|10300203|normal-attack|attack-input-3",
             "sequenceIndex": 3,
             "sequenceTotal": 5,
             "label": "A3",
@@ -19191,7 +19191,7 @@
             "sourceIdentity": "characters.items[id=103002].skillSlots[group=backup,skillId=10300203]|NewTable/skillsub_logic.rows[skillId=10300203].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json"
           },
           {
-            "identity": "actor|103002|10300201|0|10300204|attack-input-4",
+            "identity": "actor|103002|10300201|0|10300204|normal-attack|attack-input-4",
             "sequenceIndex": 4,
             "sequenceTotal": 5,
             "label": "A4",
@@ -22628,7 +22628,7 @@
             "sourceIdentity": "characters.items[id=103002].skillSlots[group=backup,skillId=10300204]|NewTable/skillsub_logic.rows[skillId=10300204].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json"
           },
           {
-            "identity": "actor|103002|10300201|0|10300205|attack-input-5",
+            "identity": "actor|103002|10300201|0|10300205|normal-attack|attack-input-5",
             "sequenceIndex": 5,
             "sequenceTotal": 5,
             "label": "A5",
@@ -24233,7 +24233,7 @@
         "attackInputPhaseSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_933726118132111140__933726118132111140.json#behaviorlineControl[0].behaviorList[pathId=6653198106543576868]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_6653198106543576868__6653198106543576868.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/MonoBehaviour_-6983764574992807404__-6983764574992807404.json#behaviorlineControl[0].behaviorList[pathId=5703270005922187796]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/MonoBehaviour_5703270005922187796__5703270005922187796.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/MonoBehaviour_-7975651946598953528__-7975651946598953528.json#behaviorlineControl[0].behaviorList[pathId=-4993419876487459384]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/MonoBehaviour_-4993419876487459384__-4993419876487459384.json"
       },
       {
-        "identity": "actor|103002|10300201|1|10300210",
+        "identity": "actor|103002|10300201|1|10300210|charged-attack",
         "ownerKind": "actor",
         "ownerId": 103002,
         "ownerName": "红宝石",
@@ -25097,7 +25097,7 @@
         }
       },
       {
-        "identity": "actor|103002|10300201|2|10300215",
+        "identity": "actor|103002|10300201|2|10300215|dodge-attack",
         "ownerKind": "actor",
         "ownerId": 103002,
         "ownerName": "红宝石",
@@ -25521,7 +25521,7 @@
         }
       },
       {
-        "identity": "actor|103002|10300201|3|10300211",
+        "identity": "actor|103002|10300201|3|10300211|plunging-attack",
         "ownerKind": "actor",
         "ownerId": 103002,
         "ownerName": "红宝石",
@@ -25969,7 +25969,7 @@
         }
       },
       {
-        "identity": "actor|103002|10300212|0|10300212",
+        "identity": "actor|103002|10300212|0|10300212|star-skill",
         "ownerKind": "actor",
         "ownerId": 103002,
         "ownerName": "红宝石",
@@ -26479,7 +26479,7 @@
         }
       },
       {
-        "identity": "actor|103002|10300212|1|10300226",
+        "identity": "actor|103002|10300212|1|10300226|star-combo",
         "ownerKind": "actor",
         "ownerId": 103002,
         "ownerName": "红宝石",
@@ -26867,7 +26867,7 @@
         }
       },
       {
-        "identity": "actor|103002|10300213|0|10300213",
+        "identity": "actor|103002|10300213|0|10300213|ultimate",
         "ownerKind": "actor",
         "ownerId": 103002,
         "ownerName": "红宝石",
@@ -27782,7 +27782,7 @@
         }
       },
       {
-        "identity": "actor|103002|10300221|0|10300221",
+        "identity": "actor|103002|10300221|0|10300221|star-carry",
         "ownerKind": "actor",
         "ownerId": 103002,
         "ownerName": "红宝石",
@@ -28300,7 +28300,7 @@
         }
       },
       {
-        "identity": "actor|103002|10300221|1|10300225",
+        "identity": "actor|103002|10300221|1|10300225|limit-counter",
         "ownerKind": "actor",
         "ownerId": 103002,
         "ownerName": "红宝石",
@@ -29274,7 +29274,7 @@
         }
       },
       {
-        "identity": "actor|103002|10300221|2|10300227",
+        "identity": "actor|103002|10300221|2|10300227|perfect-parry",
         "ownerKind": "actor",
         "ownerId": 103002,
         "ownerName": "红宝石",
@@ -29789,9 +29789,9 @@
         "applied": true
       },
       {
-        "formIdentity": "actor|103002|10300201|1|10300210:default",
+        "formIdentity": "actor|103002|10300201|1|10300210|charged-attack:default",
         "ownerId": 103002,
-        "publicActionIdentity": "actor|103002|10300201|1|10300210",
+        "publicActionIdentity": "actor|103002|10300201|1|10300210|charged-attack",
         "publicActionKind": "charged-attack",
         "actionKind": "charged-attack",
         "sourceSkillId": 10300201,
@@ -29807,9 +29807,9 @@
         "reasons": []
       },
       {
-        "formIdentity": "actor|103002|10300201|2|10300215:default",
+        "formIdentity": "actor|103002|10300201|2|10300215|dodge-attack:default",
         "ownerId": 103002,
-        "publicActionIdentity": "actor|103002|10300201|2|10300215",
+        "publicActionIdentity": "actor|103002|10300201|2|10300215|dodge-attack",
         "publicActionKind": "dodge-attack",
         "actionKind": "dodge-attack",
         "sourceSkillId": 10300201,
@@ -29825,9 +29825,9 @@
         "reasons": []
       },
       {
-        "formIdentity": "actor|103002|10300201|3|10300211:default",
+        "formIdentity": "actor|103002|10300201|3|10300211|plunging-attack:default",
         "ownerId": 103002,
-        "publicActionIdentity": "actor|103002|10300201|3|10300211",
+        "publicActionIdentity": "actor|103002|10300201|3|10300211|plunging-attack",
         "publicActionKind": "plunging-attack",
         "actionKind": "plunging-attack",
         "sourceSkillId": 10300201,
@@ -29843,9 +29843,9 @@
         "reasons": []
       },
       {
-        "formIdentity": "actor|103002|10300212|0|10300212:default",
+        "formIdentity": "actor|103002|10300212|0|10300212|star-skill:default",
         "ownerId": 103002,
-        "publicActionIdentity": "actor|103002|10300212|0|10300212",
+        "publicActionIdentity": "actor|103002|10300212|0|10300212|star-skill",
         "publicActionKind": "star-skill",
         "actionKind": "star-skill",
         "sourceSkillId": 10300212,
@@ -29861,9 +29861,9 @@
         "reasons": []
       },
       {
-        "formIdentity": "actor|103002|10300212|1|10300226:default",
+        "formIdentity": "actor|103002|10300212|1|10300226|star-combo:default",
         "ownerId": 103002,
-        "publicActionIdentity": "actor|103002|10300212|1|10300226",
+        "publicActionIdentity": "actor|103002|10300212|1|10300226|star-combo",
         "publicActionKind": "star-combo",
         "actionKind": "star-combo",
         "sourceSkillId": 10300212,
@@ -29879,9 +29879,9 @@
         "reasons": []
       },
       {
-        "formIdentity": "actor|103002|10300213|0|10300213:default",
+        "formIdentity": "actor|103002|10300213|0|10300213|ultimate:default",
         "ownerId": 103002,
-        "publicActionIdentity": "actor|103002|10300213|0|10300213",
+        "publicActionIdentity": "actor|103002|10300213|0|10300213|ultimate",
         "publicActionKind": "ultimate",
         "actionKind": "ultimate",
         "sourceSkillId": 10300213,
@@ -29897,9 +29897,9 @@
         "reasons": []
       },
       {
-        "formIdentity": "actor|103002|10300221|0|10300221:default",
+        "formIdentity": "actor|103002|10300221|0|10300221|star-carry:default",
         "ownerId": 103002,
-        "publicActionIdentity": "actor|103002|10300221|0|10300221",
+        "publicActionIdentity": "actor|103002|10300221|0|10300221|star-carry",
         "publicActionKind": "star-carry",
         "actionKind": "star-carry",
         "sourceSkillId": 10300221,
@@ -29915,9 +29915,9 @@
         "reasons": []
       },
       {
-        "formIdentity": "actor|103002|10300221|1|10300225:default",
+        "formIdentity": "actor|103002|10300221|1|10300225|limit-counter:default",
         "ownerId": 103002,
-        "publicActionIdentity": "actor|103002|10300221|1|10300225",
+        "publicActionIdentity": "actor|103002|10300221|1|10300225|limit-counter",
         "publicActionKind": "limit-counter",
         "actionKind": "limit-counter",
         "sourceSkillId": 10300221,
@@ -136590,7 +136590,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|0|10300203",
+              "actionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -136746,7 +136746,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|0|10300203",
+              "actionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -136911,7 +136911,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|0|10300203",
+              "actionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -137071,7 +137071,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|0|10300203",
+              "actionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -137241,7 +137241,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|0|10300203",
+              "actionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -137407,7 +137407,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|0|10300203",
+              "actionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -137572,7 +137572,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|0|10300203",
+              "actionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -137732,7 +137732,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|0|10300203",
+              "actionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -137897,7 +137897,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|0|10300203",
+              "actionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -138057,7 +138057,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|0|10300203",
+              "actionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -138222,7 +138222,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|0|10300203",
+              "actionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -138382,7 +138382,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|0|10300203",
+              "actionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -138554,7 +138554,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|1|10300210",
+              "actionIdentity": "actor|103002|10300201|1|10300210|charged-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -138719,7 +138719,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|1|10300210",
+              "actionIdentity": "actor|103002|10300201|1|10300210|charged-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -138879,7 +138879,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|1|10300210",
+              "actionIdentity": "actor|103002|10300201|1|10300210|charged-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -139044,7 +139044,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|1|10300210",
+              "actionIdentity": "actor|103002|10300201|1|10300210|charged-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -139204,7 +139204,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|1|10300210",
+              "actionIdentity": "actor|103002|10300201|1|10300210|charged-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -139362,7 +139362,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300201|3|10300211",
+              "actionIdentity": "actor|103002|10300201|3|10300211|plunging-attack",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -139537,7 +139537,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300212|0|10300212",
+              "actionIdentity": "actor|103002|10300212|0|10300212|star-skill",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -139702,7 +139702,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300212|0|10300212",
+              "actionIdentity": "actor|103002|10300212|0|10300212|star-skill",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -139862,7 +139862,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300212|0|10300212",
+              "actionIdentity": "actor|103002|10300212|0|10300212|star-skill",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -140030,7 +140030,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300212|0|10300212",
+              "actionIdentity": "actor|103002|10300212|0|10300212|star-skill",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -140206,7 +140206,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300212|0|10300212",
+              "actionIdentity": "actor|103002|10300212|0|10300212|star-skill",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -140372,7 +140372,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300212|0|10300212",
+              "actionIdentity": "actor|103002|10300212|0|10300212|star-skill",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -140537,7 +140537,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300212|0|10300212",
+              "actionIdentity": "actor|103002|10300212|0|10300212|star-skill",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -140697,7 +140697,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300212|0|10300212",
+              "actionIdentity": "actor|103002|10300212|0|10300212|star-skill",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -140869,7 +140869,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300212|0|10300212",
+              "actionIdentity": "actor|103002|10300212|0|10300212|star-skill",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -141048,7 +141048,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -141227,7 +141227,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -141400,7 +141400,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -141573,7 +141573,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -141742,7 +141742,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -141906,7 +141906,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -142092,7 +142092,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -142278,7 +142278,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -142464,7 +142464,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -142650,7 +142650,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -142817,7 +142817,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -142984,7 +142984,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -143149,7 +143149,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -143309,7 +143309,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -143485,7 +143485,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -143662,7 +143662,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -143833,7 +143833,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -143998,7 +143998,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -144158,7 +144158,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -144340,7 +144340,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -144522,7 +144522,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -144694,7 +144694,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -144871,7 +144871,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -145048,7 +145048,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300213|0|10300213",
+              "actionIdentity": "actor|103002|10300213|0|10300213|ultimate",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -145226,7 +145226,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300221|0|10300221",
+              "actionIdentity": "actor|103002|10300221|0|10300221|star-carry",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -145394,7 +145394,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300221|0|10300221",
+              "actionIdentity": "actor|103002|10300221|0|10300221|star-carry",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -145570,7 +145570,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300221|0|10300221",
+              "actionIdentity": "actor|103002|10300221|0|10300221|star-carry",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -145737,7 +145737,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300221|0|10300221",
+              "actionIdentity": "actor|103002|10300221|0|10300221|star-carry",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -145915,7 +145915,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300221|0|10300221",
+              "actionIdentity": "actor|103002|10300221|0|10300221|star-carry",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -146083,7 +146083,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300221|0|10300221",
+              "actionIdentity": "actor|103002|10300221|0|10300221|star-carry",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -146241,7 +146241,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300221|1|10300225",
+              "actionIdentity": "actor|103002|10300221|1|10300225|limit-counter",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -146399,7 +146399,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300221|1|10300225",
+              "actionIdentity": "actor|103002|10300221|1|10300225|limit-counter",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -146571,7 +146571,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300221|2|10300227",
+              "actionIdentity": "actor|103002|10300221|2|10300227|perfect-parry",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -146739,7 +146739,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300221|2|10300227",
+              "actionIdentity": "actor|103002|10300221|2|10300227|perfect-parry",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -146907,7 +146907,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300221|2|10300227",
+              "actionIdentity": "actor|103002|10300221|2|10300227|perfect-parry",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -147069,7 +147069,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|103002|10300221|2|10300227",
+              "actionIdentity": "actor|103002|10300221|2|10300227|perfect-parry",
               "ownerKind": "actor",
               "ownerId": 103002,
               "ownerName": "红宝石",
@@ -147337,7 +147337,7 @@
         "triggerLabel": "入场",
         "skillSlot": 203,
         "sourceSkillId": 10300221,
-        "starCarryActionIdentity": "actor|103002|10300221|0|10300221",
+        "starCarryActionIdentity": "actor|103002|10300221|0|10300221|star-carry",
         "controlSkillId": 10300221,
         "actionVariantIndex": 0,
         "triggerFrameOffset": 0,
@@ -147493,9 +147493,9 @@
       "compilerVersion": 3,
       "recipeIdentity": "actor:103002:character-combat-recipe:v1",
       "recipeHash": "4bd83a1f4cb55c16143080c3680af707b7d2647fac6df2ef38f5ecf489bf93da",
-      "compilerInputHash": "b973547907d950f0bb26fbcea9435c963b238084a3cef333b3e9199bc00d15c8",
+      "compilerInputHash": "8cbf3477d0338e4f18ade4c810dd41034fd0ac6456ddb2666047e84da0952fb4",
       "recipeContractHash": "096511dd196f6bf80c95b5c311b993faa384cfe0687064230ea8c25c49606d0b",
-      "ownerContractHash": "d5c5128150ecbf73e2ae54f5d1f5781e8748d5d588fedc3aaeb6eddd5a8c3c3f"
+      "ownerContractHash": "f243a6528334b4c6928902ccb8de5099c04a716dd931eff6893755a7da8afcba"
     },
     "operators": [
       "public-action-binding",
@@ -147516,13 +147516,13 @@
         "packagePath": "actionMappings",
         "operator": "public-action-binding",
         "recordCount": 10,
-        "recordsHash": "a375ffd3cf905e0e14fde3af7375fede9405d434e1edfa491180af7964b87cfc"
+        "recordsHash": "6f7243f896b389a7370ee0f718d1f8f22c3493887f317281525b7bc0677ffe82"
       },
       {
         "packagePath": "actionVariantGraph.publicActionForms",
         "operator": "action-form-resolution",
         "recordCount": 24,
-        "recordsHash": "f76caa92f745bc349b5f179f9d5e388ff8e931aed61472c07e85bd0b982988bc"
+        "recordsHash": "8369509c7dfbbb3397bf8c03372751a33d4a30964f8470339e8c3e5df561b430"
       },
       {
         "packagePath": "actionVariantGraph.contextEdges",
@@ -147576,7 +147576,7 @@
         "packagePath": "switchTriggerCatalog.profiles",
         "operator": "switch-trigger",
         "recordCount": 1,
-        "recordsHash": "2129d2ba7f2b6633372d8571f7e95fd0127241bc3f87cd1189d08abfa30030a2"
+        "recordsHash": "98076eb42a96345f138edae7b016c8683746062fb2508ad96eb4fdb2520bacc3"
       },
       {
         "packagePath": "staticPropertyCatalog",
@@ -147585,7 +147585,7 @@
         "recordsHash": "24a5afcba0117b5350220c1f6ce50f4b616689a8866de1f147872c9c08a8c58a"
       }
     ],
-    "contractHash": "fb6461333c7570682f848bfcebd3d58758a17e3351daa47390b1946af890a286"
+    "contractHash": "01757d91bff8df7e854c3878bb51dc9369d7f64d8cec2c3c02223b363e94da69"
   },
   "coverage": [
     {
@@ -147595,16 +147595,16 @@
       "appliedCount": 10,
       "unresolvedCount": 0,
       "sourceIdentities": [
-        "actor|103002|10300201|0|10300203",
-        "actor|103002|10300201|1|10300210",
-        "actor|103002|10300201|2|10300215",
-        "actor|103002|10300201|3|10300211",
-        "actor|103002|10300212|0|10300212",
-        "actor|103002|10300212|1|10300226",
-        "actor|103002|10300213|0|10300213",
-        "actor|103002|10300221|0|10300221",
-        "actor|103002|10300221|1|10300225",
-        "actor|103002|10300221|2|10300227"
+        "actor|103002|10300201|0|10300203|normal-attack",
+        "actor|103002|10300201|1|10300210|charged-attack",
+        "actor|103002|10300201|2|10300215|dodge-attack",
+        "actor|103002|10300201|3|10300211|plunging-attack",
+        "actor|103002|10300212|0|10300212|star-skill",
+        "actor|103002|10300212|1|10300226|star-combo",
+        "actor|103002|10300213|0|10300213|ultimate",
+        "actor|103002|10300221|0|10300221|star-carry",
+        "actor|103002|10300221|1|10300225|limit-counter",
+        "actor|103002|10300221|2|10300227|perfect-parry"
       ]
     },
     {
@@ -147631,14 +147631,14 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_4206067780507775816__4206067780507775816.json#behaviorlineControl[0].behaviorList[pathId=6873435528338322248]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_6873435528338322248__6873435528338322248.json",
         "NewTable/character_skill.rows[characterId=103002,slot=normal-attack]|NewTable/skillsub_logic.rows[skillId=10300201]|skill_control_10300210.asset#reload-control",
         "actor:103002:perfect-parry:ruby-focus-dodge-counter",
-        "actor|103002|10300201|1|10300210:default",
-        "actor|103002|10300201|2|10300215:default",
-        "actor|103002|10300201|3|10300211:default",
-        "actor|103002|10300212|0|10300212:default",
-        "actor|103002|10300212|1|10300226:default",
-        "actor|103002|10300213|0|10300213:default",
-        "actor|103002|10300221|0|10300221:default",
-        "actor|103002|10300221|1|10300225:default",
+        "actor|103002|10300201|1|10300210|charged-attack:default",
+        "actor|103002|10300201|2|10300215|dodge-attack:default",
+        "actor|103002|10300201|3|10300211|plunging-attack:default",
+        "actor|103002|10300212|0|10300212|star-skill:default",
+        "actor|103002|10300212|1|10300226|star-combo:default",
+        "actor|103002|10300213|0|10300213|ultimate:default",
+        "actor|103002|10300221|0|10300221|star-carry:default",
+        "actor|103002|10300221|1|10300225|limit-counter:default",
         "characters.items[id=103002].skillSlots[group=aerial,slot=301]",
         "characters.items[id=103002].skillSlots[group=ground,slot=204]",
         "characters.items[id=103002].skillSlots[group=ground,slot=207]",
@@ -147699,14 +147699,14 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_4206067780507775816__4206067780507775816.json#behaviorlineControl[0].behaviorList[pathId=6873435528338322248]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_6873435528338322248__6873435528338322248.json",
         "NewTable/character_skill.rows[characterId=103002,slot=normal-attack]|NewTable/skillsub_logic.rows[skillId=10300201]|skill_control_10300210.asset#reload-control",
         "actor:103002:perfect-parry:ruby-focus-dodge-counter",
-        "actor|103002|10300201|1|10300210:default",
-        "actor|103002|10300201|2|10300215:default",
-        "actor|103002|10300201|3|10300211:default",
-        "actor|103002|10300212|0|10300212:default",
-        "actor|103002|10300212|1|10300226:default",
-        "actor|103002|10300213|0|10300213:default",
-        "actor|103002|10300221|0|10300221:default",
-        "actor|103002|10300221|1|10300225:default",
+        "actor|103002|10300201|1|10300210|charged-attack:default",
+        "actor|103002|10300201|2|10300215|dodge-attack:default",
+        "actor|103002|10300201|3|10300211|plunging-attack:default",
+        "actor|103002|10300212|0|10300212|star-skill:default",
+        "actor|103002|10300212|1|10300226|star-combo:default",
+        "actor|103002|10300213|0|10300213|ultimate:default",
+        "actor|103002|10300221|0|10300221|star-carry:default",
+        "actor|103002|10300221|1|10300225|limit-counter:default",
         "characters.items[id=103002].skillSlots[group=aerial,slot=301]",
         "characters.items[id=103002].skillSlots[group=ground,slot=204]",
         "characters.items[id=103002].skillSlots[group=ground,slot=207]",
@@ -147997,16 +147997,16 @@
       "verifiedZeroCount": 0,
       "unresolvedCount": 115,
       "sourceIdentities": [
-        "actor|103002|10300201|0|10300203",
-        "actor|103002|10300201|1|10300210",
-        "actor|103002|10300201|2|10300215",
-        "actor|103002|10300201|3|10300211",
-        "actor|103002|10300212|0|10300212",
-        "actor|103002|10300212|1|10300226",
-        "actor|103002|10300213|0|10300213",
-        "actor|103002|10300221|0|10300221",
-        "actor|103002|10300221|1|10300225",
-        "actor|103002|10300221|2|10300227"
+        "actor|103002|10300201|0|10300203|normal-attack",
+        "actor|103002|10300201|1|10300210|charged-attack",
+        "actor|103002|10300201|2|10300215|dodge-attack",
+        "actor|103002|10300201|3|10300211|plunging-attack",
+        "actor|103002|10300212|0|10300212|star-skill",
+        "actor|103002|10300212|1|10300226|star-combo",
+        "actor|103002|10300213|0|10300213|ultimate",
+        "actor|103002|10300221|0|10300221|star-carry",
+        "actor|103002|10300221|1|10300225|limit-counter",
+        "actor|103002|10300221|2|10300227|perfect-parry"
       ]
     },
     {
@@ -148017,16 +148017,16 @@
       "verifiedZeroCount": 0,
       "unresolvedCount": 115,
       "sourceIdentities": [
-        "actor|103002|10300201|0|10300203",
-        "actor|103002|10300201|1|10300210",
-        "actor|103002|10300201|2|10300215",
-        "actor|103002|10300201|3|10300211",
-        "actor|103002|10300212|0|10300212",
-        "actor|103002|10300212|1|10300226",
-        "actor|103002|10300213|0|10300213",
-        "actor|103002|10300221|0|10300221",
-        "actor|103002|10300221|1|10300225",
-        "actor|103002|10300221|2|10300227"
+        "actor|103002|10300201|0|10300203|normal-attack",
+        "actor|103002|10300201|1|10300210|charged-attack",
+        "actor|103002|10300201|2|10300215|dodge-attack",
+        "actor|103002|10300201|3|10300211|plunging-attack",
+        "actor|103002|10300212|0|10300212|star-skill",
+        "actor|103002|10300212|1|10300226|star-combo",
+        "actor|103002|10300213|0|10300213|ultimate",
+        "actor|103002|10300221|0|10300221|star-carry",
+        "actor|103002|10300221|1|10300225|limit-counter",
+        "actor|103002|10300221|2|10300227|perfect-parry"
       ]
     },
     {
@@ -148037,16 +148037,16 @@
       "verifiedZeroCount": 7,
       "unresolvedCount": 115,
       "sourceIdentities": [
-        "actor|103002|10300201|0|10300203",
-        "actor|103002|10300201|1|10300210",
-        "actor|103002|10300201|2|10300215",
-        "actor|103002|10300201|3|10300211",
-        "actor|103002|10300212|0|10300212",
-        "actor|103002|10300212|1|10300226",
-        "actor|103002|10300213|0|10300213",
-        "actor|103002|10300221|0|10300221",
-        "actor|103002|10300221|1|10300225",
-        "actor|103002|10300221|2|10300227"
+        "actor|103002|10300201|0|10300203|normal-attack",
+        "actor|103002|10300201|1|10300210|charged-attack",
+        "actor|103002|10300201|2|10300215|dodge-attack",
+        "actor|103002|10300201|3|10300211|plunging-attack",
+        "actor|103002|10300212|0|10300212|star-skill",
+        "actor|103002|10300212|1|10300226|star-combo",
+        "actor|103002|10300213|0|10300213|ultimate",
+        "actor|103002|10300221|0|10300221|star-carry",
+        "actor|103002|10300221|1|10300225|limit-counter",
+        "actor|103002|10300221|2|10300227|perfect-parry"
       ]
     },
     {
@@ -148057,16 +148057,16 @@
       "verifiedZeroCount": 7,
       "unresolvedCount": 115,
       "sourceIdentities": [
-        "actor|103002|10300201|0|10300203",
-        "actor|103002|10300201|1|10300210",
-        "actor|103002|10300201|2|10300215",
-        "actor|103002|10300201|3|10300211",
-        "actor|103002|10300212|0|10300212",
-        "actor|103002|10300212|1|10300226",
-        "actor|103002|10300213|0|10300213",
-        "actor|103002|10300221|0|10300221",
-        "actor|103002|10300221|1|10300225",
-        "actor|103002|10300221|2|10300227"
+        "actor|103002|10300201|0|10300203|normal-attack",
+        "actor|103002|10300201|1|10300210|charged-attack",
+        "actor|103002|10300201|2|10300215|dodge-attack",
+        "actor|103002|10300201|3|10300211|plunging-attack",
+        "actor|103002|10300212|0|10300212|star-skill",
+        "actor|103002|10300212|1|10300226|star-combo",
+        "actor|103002|10300213|0|10300213|ultimate",
+        "actor|103002|10300221|0|10300221|star-carry",
+        "actor|103002|10300221|1|10300225|limit-counter",
+        "actor|103002|10300221|2|10300227|perfect-parry"
       ]
     },
     {
@@ -157910,7 +157910,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "74d6856ea3128bdf84219a00c005940c71593740dcb8f803b4f74afd2a24a8f1"
+    "deterministicInputHash": "f39b359420929354ee170f9ea50f70b2d456b7969860e6db01afa64ac3337eaf"
   },
-  "profileHash": "dd86b7d5b45e03b50929d9557196fa8280f24d69f59e78a096933144ab474809"
+  "profileHash": "8ef09b255047d88cd6a5adff47dd55df054f9ffb90cf8e6c672f50d7d6394be6"
 }

@@ -9400,6 +9400,7 @@ function normalizeKiboActionEntryInput(input, kiboId, actorCharacterId) {
   const mapping = getVerifiedCombatActionMapping({
     type: ACTION_TYPES.KIBO_EVENT,
     skillId: entry.skillId,
+    actionKind: input?.kind ?? input?.eventType ?? null,
     actionVariantIndex: entry.actionVariantIndex,
     kiboId: entry.kiboId,
     actor: {

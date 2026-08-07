@@ -6,7 +6,7 @@
   "ownerName": "寒悠悠",
   "recipeIdentity": "actor:101003:character-combat-recipe:v1",
   "recipeHash": "99ac8cb756c71edcda688f71ac3b2bc221d661cceab4b2dab4b168c617bfb476",
-  "compilerInputHash": "ac6d0e098ad80bd28ae962858200cc073074c3a84c4c8a9a34c8bd56f68a910d",
+  "compilerInputHash": "7481edcee6955e28bca84e6f3f155fbda850ab7c3409501796dbae2062fd5b6e",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": true,
   "reachableControlSkillIds": [
@@ -50,7 +50,7 @@
   "contracts": {
     "publicActions": [
       {
-        "identity": "actor|101003|10100301|0|10100303",
+        "identity": "actor|101003|10100301|0|10100303|normal-attack",
         "ownerKind": "actor",
         "ownerId": 101003,
         "ownerName": "寒悠悠",
@@ -181,7 +181,7 @@
         "attackInputChainStatus": "verified-attack-input-chain-classified",
         "attackInputSegments": [
           {
-            "identity": "actor|101003|10100301|0|10100301|attack-input-1",
+            "identity": "actor|101003|10100301|0|10100301|normal-attack|attack-input-1",
             "sequenceIndex": 1,
             "sequenceTotal": 5,
             "label": "A1",
@@ -799,7 +799,7 @@
             "attackInputChainIdentity": "han-normal-five-inputs"
           },
           {
-            "identity": "actor|101003|10100301|0|10100302|attack-input-2",
+            "identity": "actor|101003|10100301|0|10100302|normal-attack|attack-input-2",
             "sequenceIndex": 2,
             "sequenceTotal": 5,
             "label": "A2",
@@ -1451,7 +1451,7 @@
             "attackInputChainIdentity": "han-normal-five-inputs"
           },
           {
-            "identity": "actor|101003|10100301|0|10100303|attack-input-3",
+            "identity": "actor|101003|10100301|0|10100303|normal-attack|attack-input-3",
             "sequenceIndex": 3,
             "sequenceTotal": 5,
             "label": "A3",
@@ -2131,7 +2131,7 @@
             "attackInputChainIdentity": "han-normal-five-inputs"
           },
           {
-            "identity": "actor|101003|10100301|0|10100304|attack-input-4",
+            "identity": "actor|101003|10100301|0|10100304|normal-attack|attack-input-4",
             "sequenceIndex": 4,
             "sequenceTotal": 5,
             "label": "A4",
@@ -2782,7 +2782,7 @@
             "attackInputChainIdentity": "han-normal-five-inputs"
           },
           {
-            "identity": "actor|101003|10100301|0|10100305|attack-input-5",
+            "identity": "actor|101003|10100301|0|10100305|normal-attack|attack-input-5",
             "sequenceIndex": 5,
             "sequenceTotal": 5,
             "label": "A5",
@@ -3460,7 +3460,7 @@
         "attackInputUnresolvedSegmentCount": 0,
         "attackInputSourceSegments": [
           {
-            "identity": "actor|101003|10100301|0|10100301|attack-input-1",
+            "identity": "actor|101003|10100301|0|10100301|normal-attack|attack-input-1",
             "sequenceIndex": 1,
             "sequenceTotal": 5,
             "label": "A1",
@@ -4076,7 +4076,7 @@
             "sourceIdentity": "workbench-seed.gameData.skills[id=10100301]|NewTable/skillsub_logic.rows[skillId=10100301].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/skill_control_10100301__-276954067279815344.json"
           },
           {
-            "identity": "actor|101003|10100301|0|10100302|attack-input-2",
+            "identity": "actor|101003|10100301|0|10100302|normal-attack|attack-input-2",
             "sequenceIndex": 2,
             "sequenceTotal": 5,
             "label": "A2",
@@ -4726,7 +4726,7 @@
             "sourceIdentity": "characters.items[id=101003].skillSlots[group=backup,skillId=10100302]|NewTable/skillsub_logic.rows[skillId=10100302].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/skill_control_10100302__-8127689057717090926.json"
           },
           {
-            "identity": "actor|101003|10100301|0|10100303|attack-input-3",
+            "identity": "actor|101003|10100301|0|10100303|normal-attack|attack-input-3",
             "sequenceIndex": 3,
             "sequenceTotal": 5,
             "label": "A3",
@@ -5404,7 +5404,7 @@
             "sourceIdentity": "characters.items[id=101003].skillSlots[group=backup,skillId=10100303]|NewTable/skillsub_logic.rows[skillId=10100303].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/skill_control_10100303__7781262165039100404.json"
           },
           {
-            "identity": "actor|101003|10100301|0|10100304|attack-input-4",
+            "identity": "actor|101003|10100301|0|10100304|normal-attack|attack-input-4",
             "sequenceIndex": 4,
             "sequenceTotal": 5,
             "label": "A4",
@@ -6053,7 +6053,7 @@
             "sourceIdentity": "characters.items[id=101003].skillSlots[group=backup,skillId=10100304]|NewTable/skillsub_logic.rows[skillId=10100304].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/skill_control_10100304__4894114298932612681.json"
           },
           {
-            "identity": "actor|101003|10100301|0|10100305|attack-input-5",
+            "identity": "actor|101003|10100301|0|10100305|normal-attack|attack-input-5",
             "sequenceIndex": 5,
             "sequenceTotal": 5,
             "label": "A5",
@@ -6729,7 +6729,7 @@
         "attackInputPhaseSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-4295862534287682589__-4295862534287682589.json#behaviorlineControl[0].behaviorList[pathId=-5538885314074078237]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-5538885314074078237__-5538885314074078237.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_7765764241533702659__7765764241533702659.json#behaviorlineControl[0].behaviorList[pathId=5305701981963162115]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_5305701981963162115__5305701981963162115.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_1357598574432023696__1357598574432023696.json#behaviorlineControl[0].behaviorList[pathId=2093885213480907920]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_2093885213480907920__2093885213480907920.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_1399648220630438031__1399648220630438031.json#behaviorlineControl[0].behaviorList[pathId=1121532120759685263]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_1121532120759685263__1121532120759685263.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_9116679090060427562__9116679090060427562.json#behaviorlineControl[0].behaviorList[pathId=7367241230325547306]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_7367241230325547306__7367241230325547306.json"
       },
       {
-        "identity": "actor|101003|10100301|1|10100310",
+        "identity": "actor|101003|10100301|1|10100310|charged-attack",
         "ownerKind": "actor",
         "ownerId": 101003,
         "ownerName": "寒悠悠",
@@ -7300,7 +7300,7 @@
         }
       },
       {
-        "identity": "actor|101003|10100301|5|10100315",
+        "identity": "actor|101003|10100301|5|10100315|dodge-attack",
         "ownerKind": "actor",
         "ownerId": 101003,
         "ownerName": "寒悠悠",
@@ -7849,7 +7849,7 @@
         }
       },
       {
-        "identity": "actor|101003|10100301|6|10100311",
+        "identity": "actor|101003|10100301|6|10100311|plunging-attack",
         "ownerKind": "actor",
         "ownerId": 101003,
         "ownerName": "寒悠悠",
@@ -8331,7 +8331,7 @@
         }
       },
       {
-        "identity": "actor|101003|10100312|0|10100312",
+        "identity": "actor|101003|10100312|0|10100312|star-skill",
         "ownerKind": "actor",
         "ownerId": 101003,
         "ownerName": "寒悠悠",
@@ -8900,7 +8900,7 @@
         "publicActionExecutionStatus": "verified-public-action-execution-form-ready"
       },
       {
-        "identity": "actor|101003|10100312|1|10100326",
+        "identity": "actor|101003|10100312|1|10100326|star-combo",
         "ownerKind": "actor",
         "ownerId": 101003,
         "ownerName": "寒悠悠",
@@ -9242,7 +9242,7 @@
         }
       },
       {
-        "identity": "actor|101003|10100313|0|10100313",
+        "identity": "actor|101003|10100313|0|10100313|ultimate",
         "ownerKind": "actor",
         "ownerId": 101003,
         "ownerName": "寒悠悠",
@@ -9813,7 +9813,7 @@
         }
       },
       {
-        "identity": "actor|101003|10100322|0|10100322",
+        "identity": "actor|101003|10100322|0|10100322|star-carry",
         "ownerKind": "actor",
         "ownerId": 101003,
         "ownerName": "寒悠悠",
@@ -10155,7 +10155,7 @@
         }
       },
       {
-        "identity": "actor|101003|10100322|1|10100325",
+        "identity": "actor|101003|10100322|1|10100325|limit-counter",
         "ownerKind": "actor",
         "ownerId": 101003,
         "ownerName": "寒悠悠",
@@ -10573,7 +10573,7 @@
         }
       },
       {
-        "identity": "actor|101003|10100322|2|10100327",
+        "identity": "actor|101003|10100322|2|10100327|perfect-parry",
         "ownerKind": "actor",
         "ownerId": 101003,
         "ownerName": "寒悠悠",
@@ -11143,9 +11143,9 @@
         "applied": true
       },
       {
-        "formIdentity": "actor|101003|10100301|1|10100310:default",
+        "formIdentity": "actor|101003|10100301|1|10100310|charged-attack:default",
         "ownerId": 101003,
-        "publicActionIdentity": "actor|101003|10100301|1|10100310",
+        "publicActionIdentity": "actor|101003|10100301|1|10100310|charged-attack",
         "publicActionKind": "charged-attack",
         "actionKind": "charged-attack",
         "sourceSkillId": 10100301,
@@ -11161,9 +11161,9 @@
         "reasons": []
       },
       {
-        "formIdentity": "actor|101003|10100301|5|10100315:default",
+        "formIdentity": "actor|101003|10100301|5|10100315|dodge-attack:default",
         "ownerId": 101003,
-        "publicActionIdentity": "actor|101003|10100301|5|10100315",
+        "publicActionIdentity": "actor|101003|10100301|5|10100315|dodge-attack",
         "publicActionKind": "dodge-attack",
         "actionKind": "dodge-attack",
         "sourceSkillId": 10100301,
@@ -11179,9 +11179,9 @@
         "reasons": []
       },
       {
-        "formIdentity": "actor|101003|10100301|6|10100311:default",
+        "formIdentity": "actor|101003|10100301|6|10100311|plunging-attack:default",
         "ownerId": 101003,
-        "publicActionIdentity": "actor|101003|10100301|6|10100311",
+        "publicActionIdentity": "actor|101003|10100301|6|10100311|plunging-attack",
         "publicActionKind": "plunging-attack",
         "actionKind": "plunging-attack",
         "sourceSkillId": 10100301,
@@ -11197,9 +11197,9 @@
         "reasons": []
       },
       {
-        "formIdentity": "actor|101003|10100312|1|10100326:default",
+        "formIdentity": "actor|101003|10100312|1|10100326|star-combo:default",
         "ownerId": 101003,
-        "publicActionIdentity": "actor|101003|10100312|1|10100326",
+        "publicActionIdentity": "actor|101003|10100312|1|10100326|star-combo",
         "publicActionKind": "star-combo",
         "actionKind": "star-combo",
         "sourceSkillId": 10100312,
@@ -11215,9 +11215,9 @@
         "reasons": []
       },
       {
-        "formIdentity": "actor|101003|10100313|0|10100313:default",
+        "formIdentity": "actor|101003|10100313|0|10100313|ultimate:default",
         "ownerId": 101003,
-        "publicActionIdentity": "actor|101003|10100313|0|10100313",
+        "publicActionIdentity": "actor|101003|10100313|0|10100313|ultimate",
         "publicActionKind": "ultimate",
         "actionKind": "ultimate",
         "sourceSkillId": 10100313,
@@ -11233,9 +11233,9 @@
         "reasons": []
       },
       {
-        "formIdentity": "actor|101003|10100322|0|10100322:default",
+        "formIdentity": "actor|101003|10100322|0|10100322|star-carry:default",
         "ownerId": 101003,
-        "publicActionIdentity": "actor|101003|10100322|0|10100322",
+        "publicActionIdentity": "actor|101003|10100322|0|10100322|star-carry",
         "publicActionKind": "star-carry",
         "actionKind": "star-carry",
         "sourceSkillId": 10100322,
@@ -11251,9 +11251,9 @@
         "reasons": []
       },
       {
-        "formIdentity": "actor|101003|10100322|1|10100325:default",
+        "formIdentity": "actor|101003|10100322|1|10100325|limit-counter:default",
         "ownerId": 101003,
-        "publicActionIdentity": "actor|101003|10100322|1|10100325",
+        "publicActionIdentity": "actor|101003|10100322|1|10100325|limit-counter",
         "publicActionKind": "limit-counter",
         "actionKind": "limit-counter",
         "sourceSkillId": 10100322,
@@ -45083,7 +45083,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100301|6|10100311",
+              "actionIdentity": "actor|101003|10100301|6|10100311|plunging-attack",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -45259,7 +45259,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -45435,7 +45435,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -45599,7 +45599,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -45763,7 +45763,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -45927,7 +45927,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -46091,7 +46091,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -46255,7 +46255,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -46419,7 +46419,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -46583,7 +46583,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -46760,7 +46760,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -46937,7 +46937,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -47103,7 +47103,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -47272,7 +47272,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -47441,7 +47441,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100312|0|10100312",
+              "actionIdentity": "actor|101003|10100312|0|10100312|star-skill",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -47603,7 +47603,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -47779,7 +47779,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -47955,7 +47955,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -48131,7 +48131,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -48312,7 +48312,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -48479,7 +48479,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -48651,7 +48651,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -48819,7 +48819,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -48988,7 +48988,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -49164,7 +49164,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -49340,7 +49340,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -49516,7 +49516,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -49682,7 +49682,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -49850,7 +49850,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -50018,7 +50018,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -50186,7 +50186,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100313|0|10100313",
+              "actionIdentity": "actor|101003|10100313|0|10100313|ultimate",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -50358,7 +50358,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100322|0|10100322",
+              "actionIdentity": "actor|101003|10100322|0|10100322|star-carry",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -50526,7 +50526,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100322|0|10100322",
+              "actionIdentity": "actor|101003|10100322|0|10100322|star-carry",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -50700,7 +50700,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100322|0|10100322",
+              "actionIdentity": "actor|101003|10100322|0|10100322|star-carry",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -50872,7 +50872,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100322|0|10100322",
+              "actionIdentity": "actor|101003|10100322|0|10100322|star-carry",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -51040,7 +51040,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100322|0|10100322",
+              "actionIdentity": "actor|101003|10100322|0|10100322|star-carry",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -51214,7 +51214,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100322|0|10100322",
+              "actionIdentity": "actor|101003|10100322|0|10100322|star-carry",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -51380,7 +51380,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100322|0|10100322",
+              "actionIdentity": "actor|101003|10100322|0|10100322|star-carry",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -51546,7 +51546,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100322|0|10100322",
+              "actionIdentity": "actor|101003|10100322|0|10100322|star-carry",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -51708,7 +51708,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100322|0|10100322",
+              "actionIdentity": "actor|101003|10100322|0|10100322|star-carry",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -51880,7 +51880,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100322|2|10100327",
+              "actionIdentity": "actor|101003|10100322|2|10100327|perfect-parry",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -52048,7 +52048,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100322|2|10100327",
+              "actionIdentity": "actor|101003|10100322|2|10100327|perfect-parry",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -52216,7 +52216,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100322|2|10100327",
+              "actionIdentity": "actor|101003|10100322|2|10100327|perfect-parry",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -52378,7 +52378,7 @@
           ],
           "publicActions": [
             {
-              "actionIdentity": "actor|101003|10100322|2|10100327",
+              "actionIdentity": "actor|101003|10100322|2|10100327|perfect-parry",
               "ownerKind": "actor",
               "ownerId": 101003,
               "ownerName": "寒悠悠",
@@ -52471,7 +52471,7 @@
         "triggerLabel": "退场",
         "skillSlot": 201,
         "sourceSkillId": 10100322,
-        "starCarryActionIdentity": "actor|101003|10100322|0|10100322",
+        "starCarryActionIdentity": "actor|101003|10100322|0|10100322|star-carry",
         "controlSkillId": 10100322,
         "actionVariantIndex": 0,
         "triggerFrameOffset": 0,
@@ -52656,7 +52656,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=101003].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003#attributeID=1;function=3;A=1000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_1011852803228526128__1011852803228526128.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2749505792865494576__2749505792865494576.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6060088285417807340__6060088285417807340.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-5652413049857383353|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=-5652413049857383353|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6215383830795215380__-6215383830795215380.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_2700200137312345580__2700200137312345580.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6998348329063063020__6998348329063063020.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-15343624725538709|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-15343624725538709|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-7141218965533365560|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-7141218965533365560|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/MonoBehaviour_2119769922617281174__2119769922617281174.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/skill_control_10100327__739140358862992778.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-1732209689403186369|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/skill_control_10100327__739140358862992778.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-1732209689403186369"
     }
   },
-  "contractHash": "ae6507c3e24e7ce10e27dff6772be3b59f31f32f34be327a2f899fe428200cd6",
+  "contractHash": "b53ca54a9d9c3421acda5f03cb839d0ac8b18a2368be97b8e11013f035acc5dd",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 1,

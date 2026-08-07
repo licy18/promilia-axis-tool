@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-08T03:35:51.289Z",
+  "generatedAt": "2026-08-07T01:33:36.678Z",
   "source": "C:/PC2/Codex/AzPr/BWiki/data/local-kibo-forms/all.local-kibo-forms.json",
   "count": 122,
   "items": [
@@ -72,6 +72,44 @@
           "sourceDurationMs": 1416.666667,
           "durationMs": 1416.666667,
           "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50000102.asset/MonoBehaviour/skill_control_50000102__6660105417009556084.json",
+          "appliedToCalculators": false
+        },
+        {
+          "name": "风牙",
+          "icon": "tex_icon_petskill_504003.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "攻击前方区域内敌人，造成41.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "攻击前方区域内敌人，造成57.6%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "攻击前方区域内敌人，造成74.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "攻击前方区域内敌人，造成90.5%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "攻击前方区域内敌人，造成107%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504003,
+          "kind": "normal-attack",
+          "sourceFrameCount": 150,
+          "durationFrames": 150,
+          "sourceFps": 60,
+          "sourceDurationMs": 2500,
+          "durationMs": 2500,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504003.asset/MonoBehaviour/skill_control_504003__7872468241824079411.json",
           "appliedToCalculators": false
         },
         {
@@ -153,6 +191,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50000102,
+        "normalSkillId": 504003,
         "activeSkillId": 504004,
         "breakSkillId": 50000112,
         "fixedSkillIds": [
@@ -272,7 +311,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 502015,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -322,7 +361,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50000202,
-        "activeSkillId": 502015,
+        "normalSkillId": 502015,
+        "activeSkillId": null,
         "breakSkillId": 50000203,
         "fixedSkillIds": [
           50000201,
@@ -410,6 +450,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "水弹连射",
+          "icon": "tex_icon_petskill_502015.png",
+          "element": "水",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚水弹，对命中的敌人造成9.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚水弹，对命中的敌人造成12.8%攻击力的水属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚水弹，对命中的敌人造成16.5%攻击力的水属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚水弹，对命中的敌人造成20.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚水弹，对命中的敌人造成23.8%攻击力的水属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 502015,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502015.asset/MonoBehaviour/skill_control_502015__-2550768661376762626.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "漂浮水泡",
           "icon": "tex_icon_petskill_502019.png",
           "element": "水",
@@ -488,6 +566,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50000302,
+        "normalSkillId": 502015,
         "activeSkillId": 502019,
         "breakSkillId": 50000303,
         "fixedSkillIds": [
@@ -576,6 +655,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "水弹连射",
+          "icon": "tex_icon_petskill_502015.png",
+          "element": "水",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚水弹，对命中的敌人造成9.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚水弹，对命中的敌人造成12.8%攻击力的水属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚水弹，对命中的敌人造成16.5%攻击力的水属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚水弹，对命中的敌人造成20.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚水弹，对命中的敌人造成23.8%攻击力的水属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 502015,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502015.asset/MonoBehaviour/skill_control_502015__-2550768661376762626.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "大海浪",
           "icon": "tex_icon_petskill_502016.png",
           "element": "水",
@@ -654,6 +771,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50000404,
+        "normalSkillId": 502015,
         "activeSkillId": 502016,
         "breakSkillId": 50000417,
         "fixedSkillIds": [
@@ -770,7 +888,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 501014,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -820,7 +938,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50000502,
-        "activeSkillId": 501014,
+        "normalSkillId": 501014,
+        "activeSkillId": null,
         "breakSkillId": 50000504,
         "fixedSkillIds": [
           50000503,
@@ -909,6 +1028,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "火球连射",
+          "icon": "tex_icon_petskill_501014.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成6.9%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成9.6%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成12.3%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成15.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成17.8%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501014,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501014.asset/MonoBehaviour/skill_control_501014__-7003811919143631843.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "空降之焰",
           "icon": "tex_icon_petskill_501017.png",
           "element": "火",
@@ -987,6 +1144,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50000602,
+        "normalSkillId": 501014,
         "activeSkillId": 501017,
         "breakSkillId": 50000604,
         "fixedSkillIds": [
@@ -1076,6 +1234,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "火球连射",
+          "icon": "tex_icon_petskill_501014.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成6.9%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成9.6%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成12.3%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成15.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成17.8%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501014,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501014.asset/MonoBehaviour/skill_control_501014__-7003811919143631843.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "分裂之焰",
           "icon": "tex_icon_petskill_501016.png",
           "element": "火",
@@ -1154,6 +1350,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50000702,
+        "normalSkillId": 501014,
         "activeSkillId": 501016,
         "breakSkillId": 50000715,
         "fixedSkillIds": [
@@ -1271,7 +1468,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 503001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 185,
           "durationFrames": 185,
           "sourceFps": 60,
@@ -1321,7 +1518,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50002001,
-        "activeSkillId": 503001,
+        "normalSkillId": 503001,
+        "activeSkillId": null,
         "breakSkillId": 50002004,
         "fixedSkillIds": [
           50002003,
@@ -1408,6 +1606,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "冰锥",
+          "icon": "tex_icon_petskill_503001.png",
+          "element": "冰",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚冰锥，对命中的敌人造成9.1%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚冰锥，对命中的敌人造成12.8%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚冰锥，对命中的敌人造成16.5%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚冰锥，对命中的敌人造成20.1%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚冰锥，对命中的敌人造成23.8%攻击力的冰属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 503001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 185,
+          "durationFrames": 185,
+          "sourceFps": 60,
+          "sourceDurationMs": 3083.333333,
+          "durationMs": 3083.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_503001.asset/MonoBehaviour/skill_control_503001__-8338150876766710764.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "寒冰碎片",
           "icon": "tex_icon_petskill_503006.png",
           "element": "冰",
@@ -1486,6 +1722,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50002102,
+        "normalSkillId": 503001,
         "activeSkillId": 503006,
         "breakSkillId": 50002104,
         "fixedSkillIds": [
@@ -1573,6 +1810,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "寒冰碎片",
+          "icon": "tex_icon_petskill_503006.png",
+          "element": "冰",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方发射5枚冰锥，每枚冰锥对命中的敌人造成26.7%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方发射5枚冰锥，每枚冰锥对命中的敌人造成37.3%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方发射5枚冰锥，每枚冰锥对命中的敌人造成48%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方发射5枚冰锥，每枚冰锥对命中的敌人造成58.7%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方发射5枚冰锥，每枚冰锥对命中的敌人造成69.3%攻击力的冰属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 503006,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_503006.asset/MonoBehaviour/skill_control_503006__4121381304724262562.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "冰矛连射",
           "icon": "tex_icon_petskill_503004.png",
           "element": "冰",
@@ -1651,6 +1926,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50002201,
+        "normalSkillId": 503006,
         "activeSkillId": 503004,
         "breakSkillId": 50002204,
         "fixedSkillIds": [
@@ -1769,7 +2045,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 505013,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -1819,7 +2095,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50002304,
-        "activeSkillId": 505013,
+        "normalSkillId": 505013,
+        "activeSkillId": null,
         "breakSkillId": 50002305,
         "fixedSkillIds": [
           50002303,
@@ -1909,6 +2186,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "林涛蔓涌",
+          "icon": "tex_icon_petskill_505005.png",
+          "element": "木",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方冲撞，对前方区域的敌人造成41.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方冲撞，对前方区域的敌人造成57.6%攻击力的木属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方冲撞，对前方区域的敌人造成74.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方冲撞，对前方区域的敌人造成90.5%攻击力的木属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方冲撞，对前方区域的敌人造成107%攻击力的木属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 505005,
+          "kind": "normal-attack",
+          "sourceFrameCount": 150,
+          "durationFrames": 150,
+          "sourceFps": 60,
+          "sourceDurationMs": 2500,
+          "durationMs": 2500,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_505005.asset/MonoBehaviour/skill_control_505005__4508179045688473020.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "灵木繁星",
           "icon": "tex_icon_petskill_505006.png",
           "element": "木",
@@ -1987,6 +2302,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50002404,
+        "normalSkillId": 505005,
         "activeSkillId": 505006,
         "breakSkillId": 50002415,
         "fixedSkillIds": [
@@ -2079,6 +2395,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "岩石滚撞",
+          "icon": "tex_icon_petskill_506004.png",
+          "element": "地",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方滚撞，对前方区域内的敌人造成41.1%攻击力的地属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方滚撞，对前方区域内的敌人造成57.6%攻击力的地属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方滚撞，对前方区域内的敌人造成74.1%攻击力的地属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方滚撞，对前方区域内的敌人造成90.5%攻击力的地属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方滚撞，对前方区域内的敌人造成107%攻击力的地属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 506004,
+          "kind": "normal-attack",
+          "sourceFrameCount": 150,
+          "durationFrames": 150,
+          "sourceFps": 60,
+          "sourceDurationMs": 2500,
+          "durationMs": 2500,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_506004.asset/MonoBehaviour/skill_control_506004__-6581599909565010646.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "落雷",
           "icon": "tex_icon_petskill_507003.png",
           "element": "雷",
@@ -2157,6 +2511,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50002504,
+        "normalSkillId": 506004,
         "activeSkillId": 507003,
         "breakSkillId": 50002515,
         "fixedSkillIds": [
@@ -2252,6 +2607,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "泡泡攻击",
+          "icon": "tex_icon_petskill_502007.png",
+          "element": "水",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成35.6%攻击力的水属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成49.8%攻击力的水属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成64%攻击力的水属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成78.2%攻击力的水属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成92.4%攻击力的水属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 502007,
+          "kind": "normal-attack",
+          "sourceFrameCount": 175,
+          "durationFrames": 175,
+          "sourceFps": 60,
+          "sourceDurationMs": 2916.666667,
+          "durationMs": 2916.666667,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502007.asset/MonoBehaviour/skill_control_502007__3922358866133135678.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "灵木繁星",
           "icon": "tex_icon_petskill_505006.png",
           "element": "木",
@@ -2330,6 +2723,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50002616,
+        "normalSkillId": 502007,
         "activeSkillId": 505006,
         "breakSkillId": 50002612,
         "fixedSkillIds": [
@@ -2421,6 +2815,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "灵木弹",
+          "icon": "tex_icon_petskill_505001.png",
+          "element": "木",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚灵木弹，对命中的敌人造成9.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚灵木弹，对命中的敌人造成12.8%攻击力的木属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚灵木弹，对命中的敌人造成16.5%攻击力的木属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚灵木弹，对命中的敌人造成20.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚灵木弹，对命中的敌人造成23.8%攻击力的木属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 505001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_505001.asset/MonoBehaviour/skill_control_505001__7080916626750427751.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "株连灵木",
           "icon": "tex_icon_petskill_505004.png",
           "element": "木",
@@ -2499,6 +2931,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50003503,
+        "normalSkillId": 505001,
         "activeSkillId": 505004,
         "breakSkillId": 50003501,
         "fixedSkillIds": [
@@ -2615,7 +3048,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 501001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 185,
           "durationFrames": 185,
           "sourceFps": 60,
@@ -2665,7 +3098,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50003701,
-        "activeSkillId": 501001,
+        "normalSkillId": 501001,
+        "activeSkillId": null,
         "breakSkillId": 50003704,
         "fixedSkillIds": [
           50003703,
@@ -2753,6 +3187,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "炽焰冲锋",
+          "icon": "tex_icon_petskill_501002.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "周身包裹火焰，向目标冲锋，对路径上的敌人造成85.3%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "周身包裹火焰，向目标冲锋，对路径上的敌人造成119.5%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "周身包裹火焰，向目标冲锋，对路径上的敌人造成153.6%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "周身包裹火焰，向目标冲锋，对路径上的敌人造成187.7%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "周身包裹火焰，向目标冲锋，对路径上的敌人造成221.9%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501002,
+          "kind": "normal-attack",
+          "sourceFrameCount": 210,
+          "durationFrames": 210,
+          "sourceFps": 60,
+          "sourceDurationMs": 3500,
+          "durationMs": 3500,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501002.asset/MonoBehaviour/skill_control_501002__5047645459870993488.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "烈焰弹",
           "icon": "tex_icon_petskill_501003.png",
           "element": "火",
@@ -2831,6 +3303,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50003801,
+        "normalSkillId": 501002,
         "activeSkillId": 501003,
         "breakSkillId": 50003804,
         "fixedSkillIds": [
@@ -2921,6 +3394,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "炽焰冲锋",
+          "icon": "tex_icon_petskill_501002.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "周身包裹火焰，向目标冲锋，对路径上的敌人造成85.3%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "周身包裹火焰，向目标冲锋，对路径上的敌人造成119.5%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "周身包裹火焰，向目标冲锋，对路径上的敌人造成153.6%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "周身包裹火焰，向目标冲锋，对路径上的敌人造成187.7%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "周身包裹火焰，向目标冲锋，对路径上的敌人造成221.9%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501002,
+          "kind": "normal-attack",
+          "sourceFrameCount": 210,
+          "durationFrames": 210,
+          "sourceFps": 60,
+          "sourceDurationMs": 3500,
+          "durationMs": 3500,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501002.asset/MonoBehaviour/skill_control_501002__5047645459870993488.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "烈焰弹",
           "icon": "tex_icon_petskill_501003.png",
           "element": "火",
@@ -2999,6 +3510,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50003901,
+        "normalSkillId": 501002,
         "activeSkillId": 501003,
         "breakSkillId": 50003904,
         "fixedSkillIds": [
@@ -3114,7 +3626,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 506001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 165,
           "durationFrames": 165,
           "sourceFps": 60,
@@ -3164,7 +3676,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50004002,
-        "activeSkillId": 506001,
+        "normalSkillId": 506001,
+        "activeSkillId": null,
         "breakSkillId": 50004004,
         "fixedSkillIds": [
           50004003,
@@ -3251,6 +3764,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "岩韧斩",
+          "icon": "tex_icon_petskill_506002.png",
+          "element": "地",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "斩击前方，对前方扇形区域内的敌人造成13.7%攻击力的地属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "斩击前方，对前方扇形区域内的敌人造成19.2%攻击力的地属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "斩击前方，对前方扇形区域内的敌人造成24.7%攻击力的地属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "斩击前方，对前方扇形区域内的敌人造成30.2%攻击力的地属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "斩击前方，对前方扇形区域内的敌人造成35.7%攻击力的地属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 506002,
+          "kind": "normal-attack",
+          "sourceFrameCount": 160,
+          "durationFrames": 160,
+          "sourceFps": 60,
+          "sourceDurationMs": 2666.666667,
+          "durationMs": 2666.666667,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_506002.asset/MonoBehaviour/skill_control_506002__7177377741421455341.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "岩锥",
           "icon": "tex_icon_petskill_506001.png",
           "element": "地",
@@ -3329,6 +3880,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50004102,
+        "normalSkillId": 506002,
         "activeSkillId": 506001,
         "breakSkillId": 50004104,
         "fixedSkillIds": [
@@ -3420,6 +3972,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "岩锥散射",
+          "icon": "tex_icon_petskill_506007.png",
+          "element": "地",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方扇形区域发射五枚岩锥，每枚岩锥对命中的敌人造成21.3%攻击力的地属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方扇形区域发射五枚岩锥，每枚岩锥对命中的敌人造成29.9%攻击力的地属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方扇形区域发射五枚岩锥，每枚岩锥对命中的敌人造成38.4%攻击力的地属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方扇形区域发射五枚岩锥，每枚岩锥对命中的敌人造成46.9%攻击力的地属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方扇形区域发射五枚岩锥，每枚岩锥对命中的敌人造成55.5%攻击力的地属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 506007,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_506007.asset/MonoBehaviour/skill_control_506007__-758743517045677021.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "裂地岩突",
           "icon": "tex_icon_petskill_506006.png",
           "element": "地",
@@ -3498,6 +4088,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50004202,
+        "normalSkillId": 506007,
         "activeSkillId": 506006,
         "breakSkillId": 50004204,
         "fixedSkillIds": [
@@ -3613,7 +4204,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 504012,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -3663,7 +4254,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50004302,
-        "activeSkillId": 504012,
+        "normalSkillId": 504012,
+        "activeSkillId": null,
         "breakSkillId": 50004305,
         "fixedSkillIds": [
           50004304,
@@ -3781,7 +4373,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 504012,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -3831,7 +4423,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50004401,
-        "activeSkillId": 504012,
+        "normalSkillId": 504012,
+        "activeSkillId": null,
         "breakSkillId": 50004404,
         "fixedSkillIds": [
           50004403,
@@ -3920,6 +4513,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "小风弹",
+          "icon": "tex_icon_petskill_504018.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成9.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成12.8%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成16.5%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成20.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成23.8%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504012,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504012.asset/MonoBehaviour/skill_control_504012__-5717745054587871223.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "旋风回旋镖",
           "icon": "tex_icon_petskill_504020.png",
           "element": "风",
@@ -3998,6 +4629,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50004501,
+        "normalSkillId": 504012,
         "activeSkillId": 504020,
         "breakSkillId": 50004504,
         "fixedSkillIds": [
@@ -4115,7 +4747,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 505013,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -4165,7 +4797,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50004604,
-        "activeSkillId": 505013,
+        "normalSkillId": 505013,
+        "activeSkillId": null,
         "breakSkillId": 50004602,
         "fixedSkillIds": [
           50004605,
@@ -4253,6 +4886,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "种子飞弹",
+          "icon": "tex_icon_petskill_505011.png",
+          "element": "木",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成9.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成12.8%攻击力的木属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成16.5%攻击力的木属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成20.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成23.8%攻击力的木属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 505013,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_505013.asset/MonoBehaviour/skill_control_505013__1208653193878441324.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "花绽飞弹",
           "icon": "tex_icon_petskill_505020.png",
           "element": "木",
@@ -4331,6 +5002,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50004705,
+        "normalSkillId": 505013,
         "activeSkillId": 505014,
         "breakSkillId": 50004703,
         "fixedSkillIds": [
@@ -4419,6 +5091,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "种子飞弹",
+          "icon": "tex_icon_petskill_505011.png",
+          "element": "木",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成9.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成12.8%攻击力的木属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成16.5%攻击力的木属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成20.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成23.8%攻击力的木属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 505013,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_505013.asset/MonoBehaviour/skill_control_505013__1208653193878441324.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "种子风暴",
           "icon": "tex_icon_petskill_505018.png",
           "element": "木",
@@ -4497,6 +5207,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50004805,
+        "normalSkillId": 505013,
         "activeSkillId": 505018,
         "breakSkillId": 50004804,
         "fixedSkillIds": [
@@ -4612,7 +5323,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 506001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 165,
           "durationFrames": 165,
           "sourceFps": 60,
@@ -4662,7 +5373,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50005102,
-        "activeSkillId": 506001,
+        "normalSkillId": 506001,
+        "activeSkillId": null,
         "breakSkillId": 50005104,
         "fixedSkillIds": [
           50005103,
@@ -4749,6 +5461,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "岩锥",
+          "icon": "tex_icon_petskill_506001.png",
+          "element": "地",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射一枚岩锥，对命中的敌人造成27.4%攻击力的地属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射一枚岩锥，对命中的敌人造成38.4%攻击力的地属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射一枚岩锥，对命中的敌人造成49.4%攻击力的地属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射一枚岩锥，对命中的敌人造成60.3%攻击力的地属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射一枚岩锥，对命中的敌人造成71.3%攻击力的地属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 506001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_506001.asset/MonoBehaviour/skill_control_506001__-4860508336322494238.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "岩固之盾",
           "icon": "tex_icon_petskill_506008.png",
           "element": "地",
@@ -4827,6 +5577,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50005202,
+        "normalSkillId": 506001,
         "activeSkillId": 506008,
         "breakSkillId": 50005204,
         "fixedSkillIds": [
@@ -4914,6 +5665,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "岩锥散射",
+          "icon": "tex_icon_petskill_506007.png",
+          "element": "地",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方扇形区域发射五枚岩锥，每枚岩锥对命中的敌人造成21.3%攻击力的地属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方扇形区域发射五枚岩锥，每枚岩锥对命中的敌人造成29.9%攻击力的地属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方扇形区域发射五枚岩锥，每枚岩锥对命中的敌人造成38.4%攻击力的地属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方扇形区域发射五枚岩锥，每枚岩锥对命中的敌人造成46.9%攻击力的地属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方扇形区域发射五枚岩锥，每枚岩锥对命中的敌人造成55.5%攻击力的地属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 506007,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_506007.asset/MonoBehaviour/skill_control_506007__-758743517045677021.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "岩固之盾",
           "icon": "tex_icon_petskill_506008.png",
           "element": "地",
@@ -4992,6 +5781,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50005302,
+        "normalSkillId": 506007,
         "activeSkillId": 506008,
         "breakSkillId": 50005304,
         "fixedSkillIds": [
@@ -5108,7 +5898,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 507001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 185,
           "durationFrames": 185,
           "sourceFps": 60,
@@ -5158,7 +5948,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50005701,
-        "activeSkillId": 507001,
+        "normalSkillId": 507001,
+        "activeSkillId": null,
         "breakSkillId": 50005704,
         "fixedSkillIds": [
           50005703,
@@ -5247,6 +6038,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "火球",
+          "icon": "tex_icon_petskill_501001.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚火球，造成9.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚火球，造成12.8%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚火球，造成16.5%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚火球，造成20.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚火球，造成23.8%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 185,
+          "durationFrames": 185,
+          "sourceFps": 60,
+          "sourceDurationMs": 3083.333333,
+          "durationMs": 3083.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501001.asset/MonoBehaviour/skill_control_501001__-1936757557212010518.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "炽焰冲锋",
           "icon": "tex_icon_petskill_501002.png",
           "element": "火",
@@ -5325,6 +6154,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50005801,
+        "normalSkillId": 501001,
         "activeSkillId": 501002,
         "breakSkillId": 50005804,
         "fixedSkillIds": [
@@ -5441,7 +6271,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 504001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 165,
           "durationFrames": 165,
           "sourceFps": 60,
@@ -5491,7 +6321,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50006401,
-        "activeSkillId": 504001,
+        "normalSkillId": 504001,
+        "activeSkillId": null,
         "breakSkillId": 50006404,
         "fixedSkillIds": [
           50006403,
@@ -5579,6 +6410,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "连续风刃",
+          "icon": "tex_icon_petskill_504005.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成17.8%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成24.9%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成32%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成39.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成46.2%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504005,
+          "kind": "normal-attack",
+          "sourceFrameCount": 225,
+          "durationFrames": 225,
+          "sourceFps": 60,
+          "sourceDurationMs": 3750,
+          "durationMs": 3750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504005.asset/MonoBehaviour/skill_control_504005__4592433805548077516.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "凛风斩",
           "icon": "tex_icon_petskill_504002.png",
           "element": "风",
@@ -5657,6 +6526,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50006501,
+        "normalSkillId": 504005,
         "activeSkillId": 504002,
         "breakSkillId": 50006504,
         "fixedSkillIds": [
@@ -5769,6 +6639,44 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 502004,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502004.asset/MonoBehaviour/skill_control_502004__3277679916060157055.json",
+          "appliedToCalculators": false
+        },
+        {
+          "name": "毒液弹",
+          "icon": "tex_icon_petskill_502004.png",
+          "element": "水",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射毒液子弹，对命中的敌人造成20.6%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成4.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射毒液子弹，对命中的敌人造成28.8%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成5.8%攻击力的水属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射毒液子弹，对命中的敌人造成37%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成7.4%攻击力的水属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射毒液子弹，对命中的敌人造成45.3%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成9.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射毒液子弹，对命中的敌人造成53.5%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成10.7%攻击力的水属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 502004,
           "kind": "active",
           "sourceFrameCount": 165,
           "durationFrames": 165,
@@ -5819,6 +6727,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50006601,
+        "normalSkillId": 502004,
         "activeSkillId": 502004,
         "breakSkillId": 50006604,
         "fixedSkillIds": [
@@ -5907,6 +6816,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "毒液弹",
+          "icon": "tex_icon_petskill_502004.png",
+          "element": "水",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射毒液子弹，对命中的敌人造成20.6%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成4.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射毒液子弹，对命中的敌人造成28.8%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成5.8%攻击力的水属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射毒液子弹，对命中的敌人造成37%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成7.4%攻击力的水属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射毒液子弹，对命中的敌人造成45.3%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成9.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射毒液子弹，对命中的敌人造成53.5%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成10.7%攻击力的水属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 502004,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502004.asset/MonoBehaviour/skill_control_502004__3277679916060157055.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "水弹散射",
           "icon": "tex_icon_petskill_502006.png",
           "element": "水",
@@ -5985,6 +6932,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50006701,
+        "normalSkillId": 502004,
         "activeSkillId": 502006,
         "breakSkillId": 50006704,
         "fixedSkillIds": [
@@ -6073,6 +7021,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "毒液弹",
+          "icon": "tex_icon_petskill_502004.png",
+          "element": "水",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射毒液子弹，对命中的敌人造成20.6%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成4.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射毒液子弹，对命中的敌人造成28.8%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成5.8%攻击力的水属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射毒液子弹，对命中的敌人造成37%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成7.4%攻击力的水属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射毒液子弹，对命中的敌人造成45.3%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成9.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射毒液子弹，对命中的敌人造成53.5%攻击力的水属性伤害，并使敌人陷入持续10秒的【中毒】效果。\n中毒：每2秒造成10.7%攻击力的水属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 502004,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502004.asset/MonoBehaviour/skill_control_502004__3277679916060157055.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "爆裂水球",
           "icon": "tex_icon_petskill_502003.png",
           "element": "水",
@@ -6151,6 +7137,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50006801,
+        "normalSkillId": 502004,
         "activeSkillId": 502003,
         "breakSkillId": 50006804,
         "fixedSkillIds": [
@@ -6238,6 +7225,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "寒冰碎片",
+          "icon": "tex_icon_petskill_503006.png",
+          "element": "冰",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方发射5枚冰锥，每枚冰锥对命中的敌人造成26.7%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方发射5枚冰锥，每枚冰锥对命中的敌人造成37.3%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方发射5枚冰锥，每枚冰锥对命中的敌人造成48%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方发射5枚冰锥，每枚冰锥对命中的敌人造成58.7%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方发射5枚冰锥，每枚冰锥对命中的敌人造成69.3%攻击力的冰属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 503006,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_503006.asset/MonoBehaviour/skill_control_503006__4121381304724262562.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "冰矛连射",
           "icon": "tex_icon_petskill_503004.png",
           "element": "冰",
@@ -6316,6 +7341,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50007201,
+        "normalSkillId": 503006,
         "activeSkillId": 503004,
         "breakSkillId": 50007204,
         "fixedSkillIds": [
@@ -6404,6 +7430,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "冰矛连射",
+          "icon": "tex_icon_petskill_503004.png",
+          "element": "冰",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射14枚冰锥，每枚冰锥对命中的敌人造成7.6%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射14枚冰锥，每枚冰锥对命中的敌人造成10.7%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射14枚冰锥，每枚冰锥对命中的敌人造成13.7%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射14枚冰锥，每枚冰锥对命中的敌人造成16.8%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射14枚冰锥，每枚冰锥对命中的敌人造成19.8%攻击力的冰属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 503004,
+          "kind": "normal-attack",
+          "sourceFrameCount": 235,
+          "durationFrames": 235,
+          "sourceFps": 60,
+          "sourceDurationMs": 3916.666667,
+          "durationMs": 3916.666667,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_503004.asset/MonoBehaviour/skill_control_503004__1529485944535726846.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "凛冬矛击",
           "icon": "tex_icon_petskill_503007.png",
           "element": "冰",
@@ -6482,6 +7546,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50008102,
+        "normalSkillId": 503004,
         "activeSkillId": 503007,
         "breakSkillId": 50008104,
         "fixedSkillIds": [
@@ -6573,6 +7638,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "落雷",
+          "icon": "tex_icon_petskill_507003.png",
+          "element": "雷",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标区域降下落雷，对目标区域的敌人造成35.6%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标区域降下落雷，对目标区域的敌人造成49.8%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标区域降下落雷，对目标区域的敌人造成64%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标区域降下落雷，对目标区域的敌人造成78.2%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标区域降下落雷，对目标区域的敌人造成92.4%攻击力的雷属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 507003,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_507003.asset/MonoBehaviour/skill_control_507003__-8054368595962412324.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "滚滚落雷",
           "icon": "tex_icon_petskill_507008.png",
           "element": "雷",
@@ -6651,6 +7754,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50008201,
+        "normalSkillId": 507003,
         "activeSkillId": 507008,
         "breakSkillId": 50008204,
         "fixedSkillIds": [
@@ -6769,7 +7873,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 501001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 185,
           "durationFrames": 185,
           "sourceFps": 60,
@@ -6819,7 +7923,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50008303,
-        "activeSkillId": 501001,
+        "normalSkillId": 501001,
+        "activeSkillId": null,
         "breakSkillId": 50008304,
         "fixedSkillIds": [
           50008301,
@@ -6909,6 +8014,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "火球",
+          "icon": "tex_icon_petskill_501001.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚火球，造成9.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚火球，造成12.8%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚火球，造成16.5%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚火球，造成20.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚火球，造成23.8%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 185,
+          "durationFrames": 185,
+          "sourceFps": 60,
+          "sourceDurationMs": 3083.333333,
+          "durationMs": 3083.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501001.asset/MonoBehaviour/skill_control_501001__-1936757557212010518.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "岩石滚撞",
           "icon": "tex_icon_petskill_506004.png",
           "element": "地",
@@ -6987,6 +8130,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50008403,
+        "normalSkillId": 501001,
         "activeSkillId": 506004,
         "breakSkillId": 50008404,
         "fixedSkillIds": [
@@ -7079,6 +8223,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "焰弹连发",
+          "icon": "tex_icon_petskill_501005.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成21.3%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成29.9%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成38.4%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成46.9%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成55.5%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501005,
+          "kind": "normal-attack",
+          "sourceFrameCount": 270,
+          "durationFrames": 270,
+          "sourceFps": 60,
+          "sourceDurationMs": 4500,
+          "durationMs": 4500,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501005.asset/MonoBehaviour/skill_control_501005__8436403334962385989.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "裂地岩突",
           "icon": "tex_icon_petskill_506006.png",
           "element": "地",
@@ -7157,6 +8339,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50008503,
+        "normalSkillId": 501005,
         "activeSkillId": 506006,
         "breakSkillId": 50008504,
         "fixedSkillIds": [
@@ -7276,7 +8459,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 508004,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 150,
           "durationFrames": 150,
           "sourceFps": 60,
@@ -7326,7 +8509,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50009305,
-        "activeSkillId": 508004,
+        "normalSkillId": 508004,
+        "activeSkillId": null,
         "breakSkillId": 50009304,
         "fixedSkillIds": [
           50009303,
@@ -7442,7 +8626,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 509001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 165,
           "durationFrames": 165,
           "sourceFps": 60,
@@ -7492,7 +8676,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50009501,
-        "activeSkillId": 509001,
+        "normalSkillId": 509001,
+        "activeSkillId": null,
         "breakSkillId": 50009504,
         "fixedSkillIds": [
           50009503,
@@ -7580,6 +8765,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "暗魂影",
+          "icon": "tex_icon_petskill_509001.png",
+          "element": "暗",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成27.4%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成38.4%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成49.4%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成60.3%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成71.3%攻击力的暗属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 509001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_509001.asset/MonoBehaviour/skill_control_509001__-6866132403268025911.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "暗魂影爆阵",
           "icon": "tex_icon_petskill_509002.png",
           "element": "暗",
@@ -7658,6 +8881,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50009601,
+        "normalSkillId": 509001,
         "activeSkillId": 509002,
         "breakSkillId": 50009604,
         "fixedSkillIds": [
@@ -7746,6 +8970,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "水潮冲击",
+          "icon": "tex_icon_petskill_502002.png",
+          "element": "水",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方发起冲击，对前方区域的敌人造成41.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方发起冲击，对前方区域的敌人造成57.6%攻击力的水属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方发起冲击，对前方区域的敌人造成74.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方发起冲击，对前方区域的敌人造成90.5%攻击力的水属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方发起冲击，对前方区域的敌人造成107%攻击力的水属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 502002,
+          "kind": "normal-attack",
+          "sourceFrameCount": 140,
+          "durationFrames": 140,
+          "sourceFps": 60,
+          "sourceDurationMs": 2333.333333,
+          "durationMs": 2333.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502002.asset/MonoBehaviour/skill_control_502002__7051923040784231964.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "唤潮",
           "icon": "tex_icon_petskill_502010.png",
           "element": "水",
@@ -7824,6 +9086,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50009701,
+        "normalSkillId": 502002,
         "activeSkillId": 502010,
         "breakSkillId": 50009704,
         "fixedSkillIds": [
@@ -7912,6 +9175,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "水潮冲击",
+          "icon": "tex_icon_petskill_502002.png",
+          "element": "水",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方发起冲击，对前方区域的敌人造成41.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方发起冲击，对前方区域的敌人造成57.6%攻击力的水属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方发起冲击，对前方区域的敌人造成74.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方发起冲击，对前方区域的敌人造成90.5%攻击力的水属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方发起冲击，对前方区域的敌人造成107%攻击力的水属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 502002,
+          "kind": "normal-attack",
+          "sourceFrameCount": 140,
+          "durationFrames": 140,
+          "sourceFps": 60,
+          "sourceDurationMs": 2333.333333,
+          "durationMs": 2333.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502002.asset/MonoBehaviour/skill_control_502002__7051923040784231964.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "唤潮",
           "icon": "tex_icon_petskill_502010.png",
           "element": "水",
@@ -7990,6 +9291,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50009801,
+        "normalSkillId": 502002,
         "activeSkillId": 502010,
         "breakSkillId": 50009804,
         "fixedSkillIds": [
@@ -8077,6 +9379,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "水弹",
+          "icon": "tex_icon_petskill_502001.png",
+          "element": "水",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚水弹，对命中的敌人造成9.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚水弹，对命中的敌人造成12.8%攻击力的水属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚水弹，对命中的敌人造成16.5%攻击力的水属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚水弹，对命中的敌人造成20.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚水弹，对命中的敌人造成23.8%攻击力的水属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 502001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 185,
+          "durationFrames": 185,
+          "sourceFps": 60,
+          "sourceDurationMs": 3083.333333,
+          "durationMs": 3083.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502001.asset/MonoBehaviour/skill_control_502001__-7884478572300192035.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "灵木弹",
           "icon": "tex_icon_petskill_505001.png",
           "element": "木",
@@ -8155,6 +9495,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50011001,
+        "normalSkillId": 502001,
         "activeSkillId": 505001,
         "breakSkillId": 50011004,
         "fixedSkillIds": [
@@ -8273,7 +9614,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 503009,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -8323,7 +9664,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50011402,
-        "activeSkillId": 503009,
+        "normalSkillId": 503009,
+        "activeSkillId": null,
         "breakSkillId": 50011404,
         "fixedSkillIds": [
           50011403,
@@ -8411,6 +9753,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "冰晶弹",
+          "icon": "tex_icon_petskill_503001.png",
+          "element": "冰",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方依次发射4枚冰锥，每枚冰锥对命中的敌人造成9.1%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方依次发射4枚冰锥，每枚冰锥对命中的敌人造成12.8%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方依次发射4枚冰锥，每枚冰锥对命中的敌人造成16.5%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方依次发射4枚冰锥，每枚冰锥对命中的敌人造成20.1%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方依次发射4枚冰锥，每枚冰锥对命中的敌人造成23.8%攻击力的冰属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 503009,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_503009.asset/MonoBehaviour/skill_control_503009__6013872948064625213.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "冰晶散射",
           "icon": "tex_icon_petskill_503001.png",
           "element": "冰",
@@ -8489,6 +9869,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50011502,
+        "normalSkillId": 503009,
         "activeSkillId": 503010,
         "breakSkillId": 50011504,
         "fixedSkillIds": [
@@ -8577,6 +9958,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "冰晶弹",
+          "icon": "tex_icon_petskill_503001.png",
+          "element": "冰",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方依次发射4枚冰锥，每枚冰锥对命中的敌人造成9.1%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方依次发射4枚冰锥，每枚冰锥对命中的敌人造成12.8%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方依次发射4枚冰锥，每枚冰锥对命中的敌人造成16.5%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方依次发射4枚冰锥，每枚冰锥对命中的敌人造成20.1%攻击力的冰属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方依次发射4枚冰锥，每枚冰锥对命中的敌人造成23.8%攻击力的冰属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 503009,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_503009.asset/MonoBehaviour/skill_control_503009__6013872948064625213.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "寒冰之罚",
           "icon": "tex_icon_petskill_503018.png",
           "element": "冰",
@@ -8655,6 +10074,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50011602,
+        "normalSkillId": 503009,
         "activeSkillId": 503018,
         "breakSkillId": 50011604,
         "fixedSkillIds": [
@@ -8743,6 +10163,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "凛风斩",
+          "icon": "tex_icon_petskill_504002.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "斩击前方，对前方扇形区域的敌人造成3次13.7%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "斩击前方，对前方扇形区域的敌人造成3次19.2%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "斩击前方，对前方扇形区域的敌人造成3次24.7%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "斩击前方，对前方扇形区域的敌人造成3次30.2%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "斩击前方，对前方扇形区域的敌人造成3次35.7%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504002,
+          "kind": "normal-attack",
+          "sourceFrameCount": 160,
+          "durationFrames": 160,
+          "sourceFps": 60,
+          "sourceDurationMs": 2666.666667,
+          "durationMs": 2666.666667,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504002.asset/MonoBehaviour/skill_control_504002__3194699559502623601.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "风刃",
           "icon": "tex_icon_petskill_504001.png",
           "element": "风",
@@ -8821,6 +10279,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50012002,
+        "normalSkillId": 504002,
         "activeSkillId": 504001,
         "breakSkillId": 50012004,
         "fixedSkillIds": [
@@ -8936,7 +10395,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 504012,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -8986,7 +10445,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50012302,
-        "activeSkillId": 504012,
+        "normalSkillId": 504012,
+        "activeSkillId": null,
         "breakSkillId": 50012304,
         "fixedSkillIds": [
           50012301,
@@ -9102,7 +10562,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 504012,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -9152,7 +10612,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50012402,
-        "activeSkillId": 504012,
+        "normalSkillId": 504012,
+        "activeSkillId": null,
         "breakSkillId": 50012404,
         "fixedSkillIds": [
           50012401,
@@ -9240,6 +10701,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "小风弹",
+          "icon": "tex_icon_petskill_504018.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成9.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成12.8%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成16.5%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成20.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成23.8%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504012,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504012.asset/MonoBehaviour/skill_control_504012__-5717745054587871223.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "风刃扩张",
           "icon": "tex_icon_petskill_504014.png",
           "element": "风",
@@ -9318,6 +10817,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50012502,
+        "normalSkillId": 504012,
         "activeSkillId": 504014,
         "breakSkillId": 50012504,
         "fixedSkillIds": [
@@ -9434,7 +10934,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 504012,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -9484,7 +10984,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50012602,
-        "activeSkillId": 504012,
+        "normalSkillId": 504012,
+        "activeSkillId": null,
         "breakSkillId": 50012604,
         "fixedSkillIds": [
           50012603,
@@ -9600,7 +11101,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 504012,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -9650,7 +11151,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50012702,
-        "activeSkillId": 504012,
+        "normalSkillId": 504012,
+        "activeSkillId": null,
         "breakSkillId": 50012704,
         "fixedSkillIds": [
           50012703,
@@ -9738,6 +11240,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "小风弹",
+          "icon": "tex_icon_petskill_504018.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成9.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成12.8%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成16.5%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成20.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成23.8%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504012,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504012.asset/MonoBehaviour/skill_control_504012__-5717745054587871223.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "风刃扩张",
           "icon": "tex_icon_petskill_504014.png",
           "element": "风",
@@ -9816,6 +11356,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50012802,
+        "normalSkillId": 504012,
         "activeSkillId": 504014,
         "breakSkillId": 50012804,
         "fixedSkillIds": [
@@ -9931,7 +11472,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 507001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 185,
           "durationFrames": 185,
           "sourceFps": 60,
@@ -9981,7 +11522,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50012901,
-        "activeSkillId": 507001,
+        "normalSkillId": 507001,
+        "activeSkillId": null,
         "breakSkillId": 50012903,
         "fixedSkillIds": [
           50012902,
@@ -10068,6 +11610,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "雷球",
+          "icon": "tex_icon_petskill_507001.png",
+          "element": "雷",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚雷球，对命中的敌人造成9.1%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚雷球，对命中的敌人造成12.8%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚雷球，对命中的敌人造成16.5%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚雷球，对命中的敌人造成20.1%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚雷球，对命中的敌人造成23.8%攻击力的雷属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 507001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 185,
+          "durationFrames": 185,
+          "sourceFps": 60,
+          "sourceDurationMs": 3083.333333,
+          "durationMs": 3083.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_507001.asset/MonoBehaviour/skill_control_507001__5534970244630095510.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "落雷",
           "icon": "tex_icon_petskill_507003.png",
           "element": "雷",
@@ -10146,6 +11726,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50013001,
+        "normalSkillId": 507001,
         "activeSkillId": 507003,
         "breakSkillId": 50013003,
         "fixedSkillIds": [
@@ -10233,6 +11814,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "雷球叠发",
+          "icon": "tex_icon_petskill_507005.png",
+          "element": "雷",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射4枚连续的雷球，对命中的敌人造成26.7%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射4枚连续的雷球，对命中的敌人造成37.3%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射4枚连续的雷球，对命中的敌人造成48%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射4枚连续的雷球，对命中的敌人造成58.7%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射4枚连续的雷球，对命中的敌人造成69.3%攻击力的雷属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 507005,
+          "kind": "normal-attack",
+          "sourceFrameCount": 210,
+          "durationFrames": 210,
+          "sourceFps": 60,
+          "sourceDurationMs": 3500,
+          "durationMs": 3500,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_507005.asset/MonoBehaviour/skill_control_507005__-3364015932934423104.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "落雷",
           "icon": "tex_icon_petskill_507003.png",
           "element": "雷",
@@ -10311,6 +11930,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50013101,
+        "normalSkillId": 507005,
         "activeSkillId": 507003,
         "breakSkillId": 50013103,
         "fixedSkillIds": [
@@ -10427,7 +12047,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 506004,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 150,
           "durationFrames": 150,
           "sourceFps": 60,
@@ -10477,7 +12097,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50013202,
-        "activeSkillId": 506004,
+        "normalSkillId": 506004,
+        "activeSkillId": null,
         "breakSkillId": 50013204,
         "fixedSkillIds": [
           50013203,
@@ -10593,7 +12214,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 506001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 165,
           "durationFrames": 165,
           "sourceFps": 60,
@@ -10643,7 +12264,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50013302,
-        "activeSkillId": 506001,
+        "normalSkillId": 506001,
+        "activeSkillId": null,
         "breakSkillId": 50013304,
         "fixedSkillIds": [
           50013303,
@@ -10732,6 +12354,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "岩石滚撞",
+          "icon": "tex_icon_petskill_506004.png",
+          "element": "地",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方滚撞，对前方区域内的敌人造成41.1%攻击力的地属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方滚撞，对前方区域内的敌人造成57.6%攻击力的地属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方滚撞，对前方区域内的敌人造成74.1%攻击力的地属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方滚撞，对前方区域内的敌人造成90.5%攻击力的地属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方滚撞，对前方区域内的敌人造成107%攻击力的地属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 506004,
+          "kind": "normal-attack",
+          "sourceFrameCount": 150,
+          "durationFrames": 150,
+          "sourceFps": 60,
+          "sourceDurationMs": 2500,
+          "durationMs": 2500,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_506004.asset/MonoBehaviour/skill_control_506004__-6581599909565010646.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "裂地岩突",
           "icon": "tex_icon_petskill_506006.png",
           "element": "地",
@@ -10810,6 +12470,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50013402,
+        "normalSkillId": 506004,
         "activeSkillId": 506006,
         "breakSkillId": 50013404,
         "fixedSkillIds": [
@@ -10926,7 +12587,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 501001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 185,
           "durationFrames": 185,
           "sourceFps": 60,
@@ -10976,7 +12637,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50013801,
-        "activeSkillId": 501001,
+        "normalSkillId": 501001,
+        "activeSkillId": null,
         "breakSkillId": 50013804,
         "fixedSkillIds": [
           50013803,
@@ -11066,6 +12728,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "火球",
+          "icon": "tex_icon_petskill_501001.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚火球，造成9.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚火球，造成12.8%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚火球，造成16.5%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚火球，造成20.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚火球，造成23.8%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 185,
+          "durationFrames": 185,
+          "sourceFps": 60,
+          "sourceDurationMs": 3083.333333,
+          "durationMs": 3083.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501001.asset/MonoBehaviour/skill_control_501001__-1936757557212010518.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "巨石投掷",
           "icon": "tex_icon_petskill_506005.png",
           "element": "地",
@@ -11144,6 +12844,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50013901,
+        "normalSkillId": 501001,
         "activeSkillId": 506005,
         "breakSkillId": 50013904,
         "fixedSkillIds": [
@@ -11234,6 +12935,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "焰弹连发",
+          "icon": "tex_icon_petskill_501005.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成21.3%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成29.9%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成38.4%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成46.9%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成55.5%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501005,
+          "kind": "normal-attack",
+          "sourceFrameCount": 270,
+          "durationFrames": 270,
+          "sourceFps": 60,
+          "sourceDurationMs": 4500,
+          "durationMs": 4500,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501005.asset/MonoBehaviour/skill_control_501005__8436403334962385989.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "巨石投掷",
           "icon": "tex_icon_petskill_506005.png",
           "element": "地",
@@ -11312,6 +13051,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50014001,
+        "normalSkillId": 501005,
         "activeSkillId": 506005,
         "breakSkillId": 50014004,
         "fixedSkillIds": [
@@ -11430,7 +13170,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 505013,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -11480,7 +13220,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50014701,
-        "activeSkillId": 505013,
+        "normalSkillId": 505013,
+        "activeSkillId": null,
         "breakSkillId": 50014704,
         "fixedSkillIds": [
           50014703,
@@ -11568,6 +13309,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "种子飞弹",
+          "icon": "tex_icon_petskill_505011.png",
+          "element": "木",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成9.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成12.8%攻击力的木属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成16.5%攻击力的木属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成20.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成23.8%攻击力的木属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 505013,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_505013.asset/MonoBehaviour/skill_control_505013__1208653193878441324.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "花绽飞弹",
           "icon": "tex_icon_petskill_505020.png",
           "element": "木",
@@ -11646,6 +13425,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50014801,
+        "normalSkillId": 505013,
         "activeSkillId": 505014,
         "breakSkillId": 50014804,
         "fixedSkillIds": [
@@ -11734,6 +13514,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "种子飞弹",
+          "icon": "tex_icon_petskill_505011.png",
+          "element": "木",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成9.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成12.8%攻击力的木属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成16.5%攻击力的木属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成20.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚种子飞弹，对命中的敌人造成23.8%攻击力的木属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 505013,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_505013.asset/MonoBehaviour/skill_control_505013__1208653193878441324.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "地蔓突击",
           "icon": "tex_icon_petskill_505017.png",
           "element": "木",
@@ -11812,6 +13630,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50014901,
+        "normalSkillId": 505013,
         "activeSkillId": 505017,
         "breakSkillId": 50014904,
         "fixedSkillIds": [
@@ -11929,7 +13748,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 501001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 185,
           "durationFrames": 185,
           "sourceFps": 60,
@@ -11979,7 +13798,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50015602,
-        "activeSkillId": 501001,
+        "normalSkillId": 501001,
+        "activeSkillId": null,
         "breakSkillId": 50015604,
         "fixedSkillIds": [
           50015603,
@@ -12068,6 +13888,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "火球",
+          "icon": "tex_icon_petskill_501001.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚火球，造成9.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚火球，造成12.8%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚火球，造成16.5%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚火球，造成20.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚火球，造成23.8%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 185,
+          "durationFrames": 185,
+          "sourceFps": 60,
+          "sourceDurationMs": 3083.333333,
+          "durationMs": 3083.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501001.asset/MonoBehaviour/skill_control_501001__-1936757557212010518.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "焰弹连发",
           "icon": "tex_icon_petskill_501005.png",
           "element": "火",
@@ -12146,6 +14004,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50015702,
+        "normalSkillId": 501001,
         "activeSkillId": 501005,
         "breakSkillId": 50015704,
         "fixedSkillIds": [
@@ -12235,6 +14094,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "烈焰弹",
+          "icon": "tex_icon_petskill_501003.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射一枚烈焰火球，对敌人造成71.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射一枚烈焰火球，对敌人造成99.6%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射一枚烈焰火球，对敌人造成128%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射一枚烈焰火球，对敌人造成156.4%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射一枚烈焰火球，对敌人造成184.9%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501003,
+          "kind": "normal-attack",
+          "sourceFrameCount": 200,
+          "durationFrames": 200,
+          "sourceFps": 60,
+          "sourceDurationMs": 3333.333333,
+          "durationMs": 3333.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501003.asset/MonoBehaviour/skill_control_501003__-4851711205906957151.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "焰弹连发",
           "icon": "tex_icon_petskill_501005.png",
           "element": "火",
@@ -12313,6 +14210,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50015802,
+        "normalSkillId": 501003,
         "activeSkillId": 501005,
         "breakSkillId": 50015804,
         "fixedSkillIds": [
@@ -12428,7 +14326,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 507012,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -12478,7 +14376,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50016402,
-        "activeSkillId": 507012,
+        "normalSkillId": 507012,
+        "activeSkillId": null,
         "breakSkillId": 50016404,
         "fixedSkillIds": [
           50016401,
@@ -12566,6 +14465,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "电能子弹",
+          "icon": "tex_icon_petskill_507021.png",
+          "element": "雷",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射4枚雷球，对命中的敌人造成6.9%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射4枚雷球，对命中的敌人造成9.6%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射4枚雷球，对命中的敌人造成12.3%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射4枚雷球，对命中的敌人造成15.1%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射4枚雷球，对命中的敌人造成17.8%攻击力的雷属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 507012,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_507012.asset/MonoBehaviour/skill_control_507012__5848590746942772046.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "连锁雷暴",
           "icon": "tex_icon_petskill_507020.png",
           "element": "雷",
@@ -12644,6 +14581,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50016502,
+        "normalSkillId": 507012,
         "activeSkillId": 507020,
         "breakSkillId": 50016504,
         "fixedSkillIds": [
@@ -12732,6 +14670,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "电能子弹",
+          "icon": "tex_icon_petskill_507021.png",
+          "element": "雷",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射4枚雷球，对命中的敌人造成6.9%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射4枚雷球，对命中的敌人造成9.6%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射4枚雷球，对命中的敌人造成12.3%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射4枚雷球，对命中的敌人造成15.1%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射4枚雷球，对命中的敌人造成17.8%攻击力的雷属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 507012,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_507012.asset/MonoBehaviour/skill_control_507012__5848590746942772046.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "雷电惩戒",
           "icon": "tex_icon_petskill_507019.png",
           "element": "雷",
@@ -12810,6 +14786,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50016602,
+        "normalSkillId": 507012,
         "activeSkillId": 507019,
         "breakSkillId": 50016604,
         "fixedSkillIds": [
@@ -12925,7 +14902,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 507012,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -12975,7 +14952,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50017302,
-        "activeSkillId": 507012,
+        "normalSkillId": 507012,
+        "activeSkillId": null,
         "breakSkillId": 50017304,
         "fixedSkillIds": [
           50017303,
@@ -13062,6 +15040,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "电能子弹",
+          "icon": "tex_icon_petskill_507021.png",
+          "element": "雷",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射4枚雷球，对命中的敌人造成6.9%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射4枚雷球，对命中的敌人造成9.6%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射4枚雷球，对命中的敌人造成12.3%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射4枚雷球，对命中的敌人造成15.1%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射4枚雷球，对命中的敌人造成17.8%攻击力的雷属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 507012,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_507012.asset/MonoBehaviour/skill_control_507012__5848590746942772046.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "连锁雷暴",
           "icon": "tex_icon_petskill_507020.png",
           "element": "雷",
@@ -13140,6 +15156,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50017402,
+        "normalSkillId": 507012,
         "activeSkillId": 507020,
         "breakSkillId": 50017404,
         "fixedSkillIds": [
@@ -13227,6 +15244,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "电能子弹",
+          "icon": "tex_icon_petskill_507021.png",
+          "element": "雷",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射4枚雷球，对命中的敌人造成6.9%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射4枚雷球，对命中的敌人造成9.6%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射4枚雷球，对命中的敌人造成12.3%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射4枚雷球，对命中的敌人造成15.1%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射4枚雷球，对命中的敌人造成17.8%攻击力的雷属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 507012,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_507012.asset/MonoBehaviour/skill_control_507012__5848590746942772046.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "镭射",
           "icon": "tex_icon_petskill_507022.png",
           "element": "雷",
@@ -13305,6 +15360,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50017502,
+        "normalSkillId": 507012,
         "activeSkillId": 507013,
         "breakSkillId": 50017504,
         "fixedSkillIds": [
@@ -13421,7 +15477,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 509001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 165,
           "durationFrames": 165,
           "sourceFps": 60,
@@ -13471,7 +15527,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50017901,
-        "activeSkillId": 509001,
+        "normalSkillId": 509001,
+        "activeSkillId": null,
         "breakSkillId": 50017904,
         "fixedSkillIds": [
           50017903,
@@ -13559,6 +15616,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "暗魂影",
+          "icon": "tex_icon_petskill_509001.png",
+          "element": "暗",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成27.4%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成38.4%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成49.4%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成60.3%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成71.3%攻击力的暗属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 509001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_509001.asset/MonoBehaviour/skill_control_509001__-6866132403268025911.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "暗魂影爆阵",
           "icon": "tex_icon_petskill_509002.png",
           "element": "暗",
@@ -13637,6 +15732,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50018001,
+        "normalSkillId": 509001,
         "activeSkillId": 509002,
         "breakSkillId": 50018004,
         "fixedSkillIds": [
@@ -13725,6 +15821,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "暗魂影",
+          "icon": "tex_icon_petskill_509001.png",
+          "element": "暗",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成27.4%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成38.4%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成49.4%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成60.3%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成71.3%攻击力的暗属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 509001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_509001.asset/MonoBehaviour/skill_control_509001__-6866132403268025911.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "暗魂影爆阵",
           "icon": "tex_icon_petskill_509002.png",
           "element": "暗",
@@ -13803,6 +15937,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50018101,
+        "normalSkillId": 509001,
         "activeSkillId": 509002,
         "breakSkillId": 50018104,
         "fixedSkillIds": [
@@ -13894,6 +16029,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "辉光四射",
+          "icon": "tex_icon_petskill_508003.png",
+          "element": "光",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射7枚可以追踪的辉光球，每个辉光球对命中的敌人造成15.2%攻击力的光属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射7枚可以追踪的辉光球，每个辉光球对命中的敌人造成21.3%攻击力的光属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射7枚可以追踪的辉光球，每个辉光球对命中的敌人造成27.4%攻击力的光属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射7枚可以追踪的辉光球，每个辉光球对命中的敌人造成33.5%攻击力的光属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射7枚可以追踪的辉光球，每个辉光球对命中的敌人造成39.6%攻击力的光属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 508003,
+          "kind": "normal-attack",
+          "sourceFrameCount": 260,
+          "durationFrames": 260,
+          "sourceFps": 60,
+          "sourceDurationMs": 4333.333333,
+          "durationMs": 4333.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_508003.asset/MonoBehaviour/skill_control_508003__-6839668635787986479.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "旋风涡流",
           "icon": "tex_icon_petskill_504009.png",
           "element": "风",
@@ -13972,6 +16145,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50018502,
+        "normalSkillId": 508003,
         "activeSkillId": 504009,
         "breakSkillId": 50018504,
         "fixedSkillIds": [
@@ -14089,7 +16263,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 502001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 185,
           "durationFrames": 185,
           "sourceFps": 60,
@@ -14139,7 +16313,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50018602,
-        "activeSkillId": 502001,
+        "normalSkillId": 502001,
+        "activeSkillId": null,
         "breakSkillId": 50018604,
         "fixedSkillIds": [
           50018603,
@@ -14226,6 +16401,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "狂浪斩",
+          "icon": "tex_icon_petskill_502011.png",
+          "element": "水",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "斩击前方，对攻击范围内敌人造成3次13.7%攻击力的水属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "斩击前方，对攻击范围内敌人造成3次19.2%攻击力的水属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "斩击前方，对攻击范围内敌人造成3次24.7%攻击力的水属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "斩击前方，对攻击范围内敌人造成3次30.2%攻击力的水属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "斩击前方，对攻击范围内敌人造成3次35.7%攻击力的水属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 502011,
+          "kind": "normal-attack",
+          "sourceFrameCount": 160,
+          "durationFrames": 160,
+          "sourceFps": 60,
+          "sourceDurationMs": 2666.666667,
+          "durationMs": 2666.666667,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502011.asset/MonoBehaviour/skill_control_502011__9121864822029193915.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "泡泡攻击",
           "icon": "tex_icon_petskill_502007.png",
           "element": "水",
@@ -14304,6 +16517,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50018702,
+        "normalSkillId": 502011,
         "activeSkillId": 502007,
         "breakSkillId": 50018704,
         "fixedSkillIds": [
@@ -14391,6 +16605,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "辉光球",
+          "icon": "tex_icon_petskill_508001.png",
+          "element": "光",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射2枚辉光球，对命中的敌人造成13.7%攻击力的光属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射2枚辉光球，对命中的敌人造成19.2%攻击力的光属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射2枚辉光球，对命中的敌人造成24.7%攻击力的光属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射2枚辉光球，对命中的敌人造成30.2%攻击力的光属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射2枚辉光球，对命中的敌人造成35.7%攻击力的光属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 508001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_508001.asset/MonoBehaviour/skill_control_508001__-3956136321699106206.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "辉光熠熠",
           "icon": "tex_icon_petskill_508002.png",
           "element": "光",
@@ -14469,6 +16721,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50020601,
+        "normalSkillId": 508001,
         "activeSkillId": 508002,
         "breakSkillId": 50020604,
         "fixedSkillIds": [
@@ -14556,6 +16809,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "地刺",
+          "icon": "tex_icon_petskill_506003.png",
+          "element": "地",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "在目标位置的地面生成地刺，对该位置的敌人造成71.1%攻击力的地属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "在目标位置的地面生成地刺，对该位置的敌人造成99.6%攻击力的地属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "在目标位置的地面生成地刺，对该位置的敌人造成128%攻击力的地属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "在目标位置的地面生成地刺，对该位置的敌人造成156.4%攻击力的地属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "在目标位置的地面生成地刺，对该位置的敌人造成184.9%攻击力的地属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 506003,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_506003.asset/MonoBehaviour/skill_control_506003__-8583750735687461982.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "飘叶散射",
           "icon": "tex_icon_petskill_505002.png",
           "element": "木",
@@ -14634,6 +16925,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50020901,
+        "normalSkillId": 506003,
         "activeSkillId": 505002,
         "breakSkillId": 50020904,
         "fixedSkillIds": [
@@ -14749,7 +17041,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 509001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 165,
           "durationFrames": 165,
           "sourceFps": 60,
@@ -14799,7 +17091,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50021301,
-        "activeSkillId": 509001,
+        "normalSkillId": 509001,
+        "activeSkillId": null,
         "breakSkillId": 50021304,
         "fixedSkillIds": [
           50021303,
@@ -14888,6 +17181,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "烈焰散射",
+          "icon": "tex_icon_petskill_501004.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方扇形区域发射10枚小型火焰弹，每枚火焰弹对命中的敌人造成11.9%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方扇形区域发射10枚小型火焰弹，每枚火焰弹对命中的敌人造成16.6%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方扇形区域发射10枚小型火焰弹，每枚火焰弹对命中的敌人造成21.3%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方扇形区域发射10枚小型火焰弹，每枚火焰弹对命中的敌人造成26.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方扇形区域发射10枚小型火焰弹，每枚火焰弹对命中的敌人造成30.8%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501004,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501004.asset/MonoBehaviour/skill_control_501004__314612795022213339.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "烈焰斩",
           "icon": "tex_icon_petskill_501009.png",
           "element": "火",
@@ -14966,6 +17297,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50021601,
+        "normalSkillId": 501004,
         "activeSkillId": 501009,
         "breakSkillId": 50021604,
         "fixedSkillIds": [
@@ -15057,6 +17389,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "暗星飞射",
+          "icon": "tex_icon_petskill_509008.png",
+          "element": "暗",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射5枚暗星弹，对命中的敌人造成8.2%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射5枚暗星弹，对命中的敌人造成11.5%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射5枚暗星弹，对命中的敌人造成14.8%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射5枚暗星弹，对命中的敌人造成18.1%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射5枚暗星弹，对命中的敌人造成21.4%攻击力的暗属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 509008,
+          "kind": "normal-attack",
+          "sourceFrameCount": 88,
+          "durationFrames": 88,
+          "sourceFps": 60,
+          "sourceDurationMs": 1466.666667,
+          "durationMs": 1466.666667,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_509008.asset/MonoBehaviour/skill_control_509008__-6794913088880763532.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "暗影连袭",
           "icon": "tex_icon_petskill_509010.png",
           "element": "暗",
@@ -15135,6 +17505,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50022001,
+        "normalSkillId": 509008,
         "activeSkillId": 509010,
         "breakSkillId": 50022004,
         "fixedSkillIds": [
@@ -15228,6 +17599,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "惊雷闪击",
+          "icon": "tex_icon_petskill_507002.png",
+          "element": "雷",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方发起冲击，对区域内的敌人造成41.1%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方发起冲击，对区域内的敌人造成57.6%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方发起冲击，对区域内的敌人造成74.1%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方发起冲击，对区域内的敌人造成90.5%攻击力的雷属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方发起冲击，对区域内的敌人造成107%攻击力的雷属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 507002,
+          "kind": "normal-attack",
+          "sourceFrameCount": 150,
+          "durationFrames": 150,
+          "sourceFps": 60,
+          "sourceDurationMs": 2500,
+          "durationMs": 2500,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_507002.asset/MonoBehaviour/skill_control_507002__-4732667819076642145.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "落雷",
           "icon": "tex_icon_petskill_507003.png",
           "element": "雷",
@@ -15306,6 +17715,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50023101,
+        "normalSkillId": 507002,
         "activeSkillId": 507003,
         "breakSkillId": 50023104,
         "fixedSkillIds": [
@@ -15424,7 +17834,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 501001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 185,
           "durationFrames": 185,
           "sourceFps": 60,
@@ -15474,7 +17884,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50024401,
-        "activeSkillId": 501001,
+        "normalSkillId": 501001,
+        "activeSkillId": null,
         "breakSkillId": 50024404,
         "fixedSkillIds": [
           50024403,
@@ -15562,6 +17973,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "火球",
+          "icon": "tex_icon_petskill_501001.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚火球，造成9.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚火球，造成12.8%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚火球，造成16.5%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚火球，造成20.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚火球，造成23.8%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 185,
+          "durationFrames": 185,
+          "sourceFps": 60,
+          "sourceDurationMs": 3083.333333,
+          "durationMs": 3083.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501001.asset/MonoBehaviour/skill_control_501001__-1936757557212010518.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "火焰冲撞",
           "icon": "tex_icon_petskill_501010.png",
           "element": "火",
@@ -15640,6 +18089,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50024501,
+        "normalSkillId": 501001,
         "activeSkillId": 501010,
         "breakSkillId": 50024504,
         "fixedSkillIds": [
@@ -15728,6 +18178,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "焰弹连发",
+          "icon": "tex_icon_petskill_501005.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成21.3%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成29.9%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成38.4%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成46.9%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射5枚火焰弹，每枚火焰弹对命中的敌人造成55.5%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501005,
+          "kind": "normal-attack",
+          "sourceFrameCount": 270,
+          "durationFrames": 270,
+          "sourceFps": 60,
+          "sourceDurationMs": 4500,
+          "durationMs": 4500,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501005.asset/MonoBehaviour/skill_control_501005__8436403334962385989.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "火焰冲撞",
           "icon": "tex_icon_petskill_501010.png",
           "element": "火",
@@ -15806,6 +18294,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50024601,
+        "normalSkillId": 501005,
         "activeSkillId": 501010,
         "breakSkillId": 50024604,
         "fixedSkillIds": [
@@ -15922,7 +18411,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 505001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 165,
           "durationFrames": 165,
           "sourceFps": 60,
@@ -15972,7 +18461,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50025801,
-        "activeSkillId": 505001,
+        "normalSkillId": 505001,
+        "activeSkillId": null,
         "breakSkillId": 50025804,
         "fixedSkillIds": [
           50025803,
@@ -16060,6 +18550,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "灵木弹",
+          "icon": "tex_icon_petskill_505001.png",
+          "element": "木",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚灵木弹，对命中的敌人造成9.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚灵木弹，对命中的敌人造成12.8%攻击力的木属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚灵木弹，对命中的敌人造成16.5%攻击力的木属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚灵木弹，对命中的敌人造成20.1%攻击力的木属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚灵木弹，对命中的敌人造成23.8%攻击力的木属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 505001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_505001.asset/MonoBehaviour/skill_control_505001__7080916626750427751.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "飘叶散射",
           "icon": "tex_icon_petskill_505002.png",
           "element": "木",
@@ -16138,6 +18666,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50025901,
+        "normalSkillId": 505001,
         "activeSkillId": 505002,
         "breakSkillId": 50025904,
         "fixedSkillIds": [
@@ -16226,6 +18755,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "灵木繁星",
+          "icon": "tex_icon_petskill_505006.png",
+          "element": "木",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射10枚灵木弹，每枚灵木弹对命中的敌人造成10.7%攻击力的木属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射10枚灵木弹，每枚灵木弹对命中的敌人造成14.9%攻击力的木属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射10枚灵木弹，每枚灵木弹对命中的敌人造成19.2%攻击力的木属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射10枚灵木弹，每枚灵木弹对命中的敌人造成23.5%攻击力的木属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射10枚灵木弹，每枚灵木弹对命中的敌人造成27.7%攻击力的木属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 505006,
+          "kind": "normal-attack",
+          "sourceFrameCount": 255,
+          "durationFrames": 255,
+          "sourceFps": 60,
+          "sourceDurationMs": 4250,
+          "durationMs": 4250,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_505006.asset/MonoBehaviour/skill_control_505006__1109845336752863462.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "飘叶散射",
           "icon": "tex_icon_petskill_505002.png",
           "element": "木",
@@ -16304,6 +18871,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50026001,
+        "normalSkillId": 505006,
         "activeSkillId": 505002,
         "breakSkillId": 50026004,
         "fixedSkillIds": [
@@ -16420,7 +18988,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 502001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 185,
           "durationFrames": 185,
           "sourceFps": 60,
@@ -16470,7 +19038,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50026102,
-        "activeSkillId": 502001,
+        "normalSkillId": 502001,
+        "activeSkillId": null,
         "breakSkillId": 50026104,
         "fixedSkillIds": [
           50026103,
@@ -16558,6 +19127,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "泡泡攻击",
+          "icon": "tex_icon_petskill_502007.png",
+          "element": "水",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成35.6%攻击力的水属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成49.8%攻击力的水属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成64%攻击力的水属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成78.2%攻击力的水属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成92.4%攻击力的水属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 502007,
+          "kind": "normal-attack",
+          "sourceFrameCount": 175,
+          "durationFrames": 175,
+          "sourceFps": 60,
+          "sourceDurationMs": 2916.666667,
+          "durationMs": 2916.666667,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502007.asset/MonoBehaviour/skill_control_502007__3922358866133135678.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "水弹",
           "icon": "tex_icon_petskill_502001.png",
           "element": "水",
@@ -16636,6 +19243,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50026202,
+        "normalSkillId": 502007,
         "activeSkillId": 502001,
         "breakSkillId": 50026204,
         "fixedSkillIds": [
@@ -16724,6 +19332,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "泡泡攻击",
+          "icon": "tex_icon_petskill_502007.png",
+          "element": "水",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成35.6%攻击力的水属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成49.8%攻击力的水属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成64%攻击力的水属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成78.2%攻击力的水属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射3枚泡泡，每枚泡泡对命中的敌人造成92.4%攻击力的水属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 502007,
+          "kind": "normal-attack",
+          "sourceFrameCount": 175,
+          "durationFrames": 175,
+          "sourceFps": 60,
+          "sourceDurationMs": 2916.666667,
+          "durationMs": 2916.666667,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502007.asset/MonoBehaviour/skill_control_502007__3922358866133135678.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "浪袭",
           "icon": "tex_icon_petskill_502005.png",
           "element": "水",
@@ -16802,6 +19448,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50026302,
+        "normalSkillId": 502007,
         "activeSkillId": 502005,
         "breakSkillId": 50026304,
         "fixedSkillIds": [
@@ -16889,6 +19536,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "连续风刃",
+          "icon": "tex_icon_petskill_504005.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成17.8%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成24.9%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成32%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成39.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成46.2%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504005,
+          "kind": "normal-attack",
+          "sourceFrameCount": 225,
+          "durationFrames": 225,
+          "sourceFps": 60,
+          "sourceDurationMs": 3750,
+          "durationMs": 3750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504005.asset/MonoBehaviour/skill_control_504005__4592433805548077516.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "凛风斩",
           "icon": "tex_icon_petskill_504002.png",
           "element": "风",
@@ -16967,6 +19652,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50029601,
+        "normalSkillId": 504005,
         "activeSkillId": 504002,
         "breakSkillId": 50029604,
         "fixedSkillIds": [
@@ -17084,7 +19770,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 504012,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -17134,7 +19820,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50030401,
-        "activeSkillId": 504012,
+        "normalSkillId": 504012,
+        "activeSkillId": null,
         "breakSkillId": 50030404,
         "fixedSkillIds": [
           50030403,
@@ -17223,6 +19910,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "小风弹",
+          "icon": "tex_icon_petskill_504018.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成9.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成12.8%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成16.5%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成20.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射3枚小风弹，每枚风弹对命中的敌人造成23.8%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504012,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504012.asset/MonoBehaviour/skill_control_504012__-5717745054587871223.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "旋风回旋镖",
           "icon": "tex_icon_petskill_504020.png",
           "element": "风",
@@ -17301,6 +20026,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50030501,
+        "normalSkillId": 504012,
         "activeSkillId": 504020,
         "breakSkillId": 50030504,
         "fixedSkillIds": [
@@ -17390,6 +20116,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "连续风刃",
+          "icon": "tex_icon_petskill_504005.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成17.8%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成24.9%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成32%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成39.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成46.2%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504005,
+          "kind": "normal-attack",
+          "sourceFrameCount": 225,
+          "durationFrames": 225,
+          "sourceFps": 60,
+          "sourceDurationMs": 3750,
+          "durationMs": 3750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504005.asset/MonoBehaviour/skill_control_504005__4592433805548077516.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "风龙卷",
           "icon": "tex_icon_petskill_504006.png",
           "element": "风",
@@ -17468,6 +20232,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50030601,
+        "normalSkillId": 504005,
         "activeSkillId": 504006,
         "breakSkillId": 50030604,
         "fixedSkillIds": [
@@ -17561,6 +20326,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "火球连射",
+          "icon": "tex_icon_petskill_501014.png",
+          "element": "火",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成6.9%攻击力的火属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成9.6%攻击力的火属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成12.3%攻击力的火属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成15.1%攻击力的火属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方依次发射4枚火球，每个火球对命中的敌人造成17.8%攻击力的火属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 501014,
+          "kind": "normal-attack",
+          "sourceFrameCount": 50,
+          "durationFrames": 50,
+          "sourceFps": 60,
+          "sourceDurationMs": 833.333333,
+          "durationMs": 833.333333,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_501014.asset/MonoBehaviour/skill_control_501014__-7003811919143631843.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "分裂之焰",
           "icon": "tex_icon_petskill_501016.png",
           "element": "火",
@@ -17639,6 +20442,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50031302,
+        "normalSkillId": 501014,
         "activeSkillId": 501016,
         "breakSkillId": 50031304,
         "fixedSkillIds": [
@@ -17759,7 +20563,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 504001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 165,
           "durationFrames": 165,
           "sourceFps": 60,
@@ -17809,7 +20613,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50032201,
-        "activeSkillId": 504001,
+        "normalSkillId": 504001,
+        "activeSkillId": null,
         "breakSkillId": 50032204,
         "fixedSkillIds": [
           50032203,
@@ -17900,6 +20705,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "风刃",
+          "icon": "tex_icon_petskill_504001.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射风刃，对命中的敌人造成35.6%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射风刃，对命中的敌人造成49.8%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射风刃，对命中的敌人造成64%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射风刃，对命中的敌人造成78.2%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射风刃，对命中的敌人造成92.4%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504001.asset/MonoBehaviour/skill_control_504001__-7607036278277112106.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "召风凝场",
           "icon": "tex_icon_petskill_504008.png",
           "element": "风",
@@ -17978,6 +20821,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50032301,
+        "normalSkillId": 504001,
         "activeSkillId": 504008,
         "breakSkillId": 50032304,
         "fixedSkillIds": [
@@ -18069,6 +20913,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "召风凝场",
+          "icon": "tex_icon_petskill_504008.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "在自身前方形成风属性区域，每0.5秒对区域内敌人造成24%攻击力的风属性伤害，持续3秒。"
+            },
+            {
+              "level": 2,
+              "description": "在自身前方形成风属性区域，每0.5秒对区域内敌人造成33.6%攻击力的风属性伤害，持续3秒。"
+            },
+            {
+              "level": 3,
+              "description": "在自身前方形成风属性区域，每0.5秒对区域内敌人造成43.2%攻击力的风属性伤害，持续3秒。"
+            },
+            {
+              "level": 4,
+              "description": "在自身前方形成风属性区域，每0.5秒对区域内敌人造成52.8%攻击力的风属性伤害，持续3秒。"
+            },
+            {
+              "level": 5,
+              "description": "在自身前方形成风属性区域，每0.5秒对区域内敌人造成62.4%攻击力的风属性伤害，持续3秒。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504008,
+          "kind": "normal-attack",
+          "sourceFrameCount": 345,
+          "durationFrames": 345,
+          "sourceFps": 60,
+          "sourceDurationMs": 5750,
+          "durationMs": 5750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504008.asset/MonoBehaviour/skill_control_504008__-6182322411424794134.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "风龙卷",
           "icon": "tex_icon_petskill_504006.png",
           "element": "风",
@@ -18147,6 +21029,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50032401,
+        "normalSkillId": 504008,
         "activeSkillId": 504006,
         "breakSkillId": 50032404,
         "fixedSkillIds": [
@@ -18263,7 +21146,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 509001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 165,
           "durationFrames": 165,
           "sourceFps": 60,
@@ -18313,7 +21196,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50035401,
-        "activeSkillId": 509001,
+        "normalSkillId": 509001,
+        "activeSkillId": null,
         "breakSkillId": 50035404,
         "fixedSkillIds": [
           50035403,
@@ -18401,6 +21285,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "暗魂影",
+          "icon": "tex_icon_petskill_509001.png",
+          "element": "暗",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成27.4%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成38.4%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成49.4%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成60.3%攻击力的暗属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射一道暗魂影，对命中的敌人造成71.3%攻击力的暗属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 509001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_509001.asset/MonoBehaviour/skill_control_509001__-6866132403268025911.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "暗魂影爆阵",
           "icon": "tex_icon_petskill_509002.png",
           "element": "暗",
@@ -18479,6 +21401,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50035501,
+        "normalSkillId": 509001,
         "activeSkillId": 509002,
         "breakSkillId": 50035504,
         "fixedSkillIds": [
@@ -18594,7 +21517,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 504012,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -18644,7 +21567,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50035701,
-        "activeSkillId": 504012,
+        "normalSkillId": 504012,
+        "activeSkillId": null,
         "breakSkillId": 50035704,
         "fixedSkillIds": [
           50035703,
@@ -18733,6 +21657,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "风龙卷",
+          "icon": "tex_icon_petskill_504006.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方发射龙卷风，对龙卷风行进路径上的敌人每次造成40%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方发射龙卷风，对龙卷风行进路径上的敌人每次造成56%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方发射龙卷风，对龙卷风行进路径上的敌人每次造成72%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方发射龙卷风，对龙卷风行进路径上的敌人每次造成88%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方发射龙卷风，对龙卷风行进路径上的敌人每次造成104%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504006,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504006.asset/MonoBehaviour/skill_control_504006__-7878810815495228405.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "森之守护",
           "icon": "tex_icon_petskill_505021.png",
           "element": "木",
@@ -18811,6 +21773,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50035801,
+        "normalSkillId": 504006,
         "activeSkillId": 505011,
         "breakSkillId": 50035804,
         "fixedSkillIds": [
@@ -18905,6 +21868,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "连续风刃",
+          "icon": "tex_icon_petskill_504005.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成17.8%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成24.9%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成32%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成39.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标连续发射6枚风刃，每枚风刃对命中的敌人造成46.2%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504005,
+          "kind": "normal-attack",
+          "sourceFrameCount": 225,
+          "durationFrames": 225,
+          "sourceFps": 60,
+          "sourceDurationMs": 3750,
+          "durationMs": 3750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504005.asset/MonoBehaviour/skill_control_504005__4592433805548077516.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "暗魂影爆阵",
           "icon": "tex_icon_petskill_509002.png",
           "element": "暗",
@@ -18983,6 +21984,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50036001,
+        "normalSkillId": 504005,
         "activeSkillId": 509002,
         "breakSkillId": 50036003,
         "fixedSkillIds": [
@@ -19100,7 +22102,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 504012,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 50,
           "durationFrames": 50,
           "sourceFps": 60,
@@ -19150,7 +22152,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50036801,
-        "activeSkillId": 504012,
+        "normalSkillId": 504012,
+        "activeSkillId": null,
         "breakSkillId": 50036803,
         "fixedSkillIds": [
           50036802,
@@ -19239,6 +22242,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "风压",
+          "icon": "tex_icon_petskill_504008.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "在自身前方形成风属性区域，对区域内敌人造成11.9%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "在自身前方形成风属性区域，对区域内敌人造成16.6%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "在自身前方形成风属性区域，对区域内敌人造成21.3%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "在自身前方形成风属性区域，对区域内敌人造成26.1%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "在自身前方形成风属性区域，对区域内敌人造成30.8%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504024,
+          "kind": "normal-attack",
+          "sourceFrameCount": 195,
+          "durationFrames": 195,
+          "sourceFps": 60,
+          "sourceDurationMs": 3250,
+          "durationMs": 3250,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504024.asset/MonoBehaviour/skill_control_504024__8777087675396622562.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "落雷",
           "icon": "tex_icon_petskill_507003.png",
           "element": "雷",
@@ -19317,6 +22358,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50036901,
+        "normalSkillId": 504024,
         "activeSkillId": 507003,
         "breakSkillId": 50036903,
         "fixedSkillIds": [
@@ -19406,6 +22448,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "多重风压",
+          "icon": "tex_icon_petskill_504008.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "在自身前方形成风属性区域，持续对区域内敌人造成13.3%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "在自身前方形成风属性区域，持续对区域内敌人造成18.7%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "在自身前方形成风属性区域，持续对区域内敌人造成24%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "在自身前方形成风属性区域，持续对区域内敌人造成29.3%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "在自身前方形成风属性区域，持续对区域内敌人造成34.7%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504023,
+          "kind": "normal-attack",
+          "sourceFrameCount": 255,
+          "durationFrames": 255,
+          "sourceFps": 60,
+          "sourceDurationMs": 4250,
+          "durationMs": 4250,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504023.asset/MonoBehaviour/skill_control_504023__-918528490951175909.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "落雷",
           "icon": "tex_icon_petskill_507003.png",
           "element": "雷",
@@ -19484,6 +22564,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50037001,
+        "normalSkillId": 504023,
         "activeSkillId": 507003,
         "breakSkillId": 50037003,
         "fixedSkillIds": [
@@ -19573,6 +22654,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "水弹散射",
+          "icon": "tex_icon_petskill_502006.png",
+          "element": "水",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方扇形区域内同时发出9枚水弹，每枚水弹对命中的敌人造成11.9%攻击力的水属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方扇形区域内同时发出9枚水弹，每枚水弹对命中的敌人造成16.6%攻击力的水属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方扇形区域内同时发出9枚水弹，每枚水弹对命中的敌人造成21.3%攻击力的水属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方扇形区域内同时发出9枚水弹，每枚水弹对命中的敌人造成26.1%攻击力的水属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方扇形区域内同时发出9枚水弹，每枚水弹对命中的敌人造成30.8%攻击力的水属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 502006,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_502006.asset/MonoBehaviour/skill_control_502006__-6240797991321103817.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "泡泡攻击",
           "icon": "tex_icon_petskill_502007.png",
           "element": "水",
@@ -19651,6 +22770,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50039901,
+        "normalSkillId": 502006,
         "activeSkillId": 502007,
         "breakSkillId": 50039903,
         "fixedSkillIds": [
@@ -19766,7 +22886,7 @@
           "needsTimingData": false,
           "timingSource": "azpr-unity-skill-control-root",
           "skillId": 506001,
-          "kind": "active",
+          "kind": "normal-attack",
           "sourceFrameCount": 165,
           "durationFrames": 165,
           "sourceFps": 60,
@@ -19816,7 +22936,8 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50046701,
-        "activeSkillId": 506001,
+        "normalSkillId": 506001,
+        "activeSkillId": null,
         "breakSkillId": 50046704,
         "fixedSkillIds": [
           50046703,
@@ -19903,6 +23024,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "岩锥",
+          "icon": "tex_icon_petskill_506001.png",
+          "element": "地",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射一枚岩锥，对命中的敌人造成27.4%攻击力的地属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射一枚岩锥，对命中的敌人造成38.4%攻击力的地属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射一枚岩锥，对命中的敌人造成49.4%攻击力的地属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射一枚岩锥，对命中的敌人造成60.3%攻击力的地属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射一枚岩锥，对命中的敌人造成71.3%攻击力的地属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 506001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_506001.asset/MonoBehaviour/skill_control_506001__-4860508336322494238.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "裂地岩突",
           "icon": "tex_icon_petskill_506006.png",
           "element": "地",
@@ -19981,6 +23140,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50046801,
+        "normalSkillId": 506001,
         "activeSkillId": 506006,
         "breakSkillId": 50046804,
         "fixedSkillIds": [
@@ -20068,6 +23228,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "风刃",
+          "icon": "tex_icon_petskill_504001.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向目标发射风刃，对命中的敌人造成35.6%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向目标发射风刃，对命中的敌人造成49.8%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向目标发射风刃，对命中的敌人造成64%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向目标发射风刃，对命中的敌人造成78.2%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向目标发射风刃，对命中的敌人造成92.4%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504001,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504001.asset/MonoBehaviour/skill_control_504001__-7607036278277112106.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "岩韧斩",
           "icon": "tex_icon_petskill_506002.png",
           "element": "地",
@@ -20146,6 +23344,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50046903,
+        "normalSkillId": 504001,
         "activeSkillId": 506002,
         "breakSkillId": 50046907,
         "fixedSkillIds": [
@@ -20235,6 +23434,44 @@
           "appliedToCalculators": false
         },
         {
+          "name": "散射风刃",
+          "icon": "tex_icon_petskill_504007.png",
+          "element": "风",
+          "descriptionsByLevel": [
+            {
+              "level": 1,
+              "description": "向前方扇形区域发射3枚风刃，每枚风刃对命中的敌人造成106.7%攻击力的风属性伤害。"
+            },
+            {
+              "level": 2,
+              "description": "向前方扇形区域发射3枚风刃，每枚风刃对命中的敌人造成149.3%攻击力的风属性伤害。"
+            },
+            {
+              "level": 3,
+              "description": "向前方扇形区域发射3枚风刃，每枚风刃对命中的敌人造成192%攻击力的风属性伤害。"
+            },
+            {
+              "level": 4,
+              "description": "向前方扇形区域发射3枚风刃，每枚风刃对命中的敌人造成234.7%攻击力的风属性伤害。"
+            },
+            {
+              "level": 5,
+              "description": "向前方扇形区域发射3枚风刃，每枚风刃对命中的敌人造成277.3%攻击力的风属性伤害。"
+            }
+          ],
+          "needsTimingData": false,
+          "timingSource": "azpr-unity-skill-control-root",
+          "skillId": 504007,
+          "kind": "normal-attack",
+          "sourceFrameCount": 165,
+          "durationFrames": 165,
+          "sourceFps": 60,
+          "sourceDurationMs": 2750,
+          "durationMs": 2750,
+          "timingSourceFile": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_504007.asset/MonoBehaviour/skill_control_504007__3979284255941543055.json",
+          "appliedToCalculators": false
+        },
+        {
           "name": "岩韧斩",
           "icon": "tex_icon_petskill_506002.png",
           "element": "地",
@@ -20313,6 +23550,7 @@
       ],
       "sourceSkills": {
         "signatureSkillId": 50047001,
+        "normalSkillId": 504007,
         "activeSkillId": 506002,
         "breakSkillId": 50047007,
         "fixedSkillIds": [

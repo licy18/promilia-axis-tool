@@ -31,21 +31,6 @@
       "edgeIdentity": "coverage-edge:03e615c46dc9d16a"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|103002|10300212|0|10300212",
-      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-star-skill",
-      "selector": {
-        "controlSkillId": 10300212,
-        "kind": "action-form",
-        "ownerId": 103002,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "aba006896df201af",
-      "traceProjectionHash": "b1db76d30c0babf4",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:0621f65ceba5ab01"
-    },
-    {
       "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
       "scenarioIdentity": "m11-d-103002-visual-acceptance",
       "assertionIdentity": "trace-resource:machine-resource:m11-d-103002-visual-acceptance:0",
@@ -57,21 +42,6 @@
       "traceProjectionHash": "a10c0b0e8788b6d2",
       "status": "verified",
       "edgeIdentity": "coverage-edge:0d7a276b2bd5acd2"
-    },
-    {
-      "requirementIdentity": "contract:public-action:actor|103002|10300201|1|10300210",
-      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-reload",
-      "selector": {
-        "controlSkillId": 10300210,
-        "kind": "action-form",
-        "ownerId": 103002,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "6c1cf072dbf72502",
-      "traceProjectionHash": "b1db76d30c0babf4",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:1bc50f5919d7a3fe"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
@@ -128,6 +98,21 @@
       "edgeIdentity": "coverage-edge:2589ea9b48ba06c6"
     },
     {
+      "requirementIdentity": "contract:public-action:actor|103002|10300212|0|10300212|star-skill",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-star-skill",
+      "selector": {
+        "controlSkillId": 10300212,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "aba006896df201af",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:27ccbe1e405af093"
+    },
+    {
       "requirementIdentity": "protocol:103002:critical-sampled-same-seed",
       "scenarioIdentity": "m11-d-103002-visual-acceptance",
       "assertionIdentity": "critical:sameSeedReplay",
@@ -142,7 +127,7 @@
       "edgeIdentity": "coverage-edge:3664d2050c78c687"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|103002|10300221|0|10300221",
+      "requirementIdentity": "contract:action-form:actor|103002|10300221|0|10300221|star-carry:default",
       "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
       "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:switch-back-to-ruby--on-enter--actor-103002--star-carry",
       "selector": {
@@ -154,7 +139,7 @@
       "assertionHash": "6c776da9f3bd0b21",
       "traceProjectionHash": "b1db76d30c0babf4",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:3798e0d7ab10e2f1"
+      "edgeIdentity": "coverage-edge:375433f5a336f647"
     },
     {
       "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:4",
@@ -200,6 +185,21 @@
       "edgeIdentity": "coverage-edge:3eaefc213bd04839"
     },
     {
+      "requirementIdentity": "contract:action-form:actor|103002|10300212|0|10300212|star-skill:default",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-star-skill",
+      "selector": {
+        "controlSkillId": 10300212,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "aba006896df201af",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3ef7354b8ec652f9"
+    },
+    {
       "requirementIdentity": "protocol:103002:hit-landed-and-miss",
       "scenarioIdentity": "m11-d-103002-visual-acceptance",
       "assertionIdentity": "scenario-fact:critical:missSuppressesHit",
@@ -227,6 +227,21 @@
       "traceProjectionHash": "a10c0b0e8788b6d2",
       "status": "verified",
       "edgeIdentity": "coverage-edge:3f8e644b684f1eb4"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|103002|10300213|0|10300213|ultimate",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-ultimate",
+      "selector": {
+        "controlSkillId": 10300213,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "be848496354693c9",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:461b9da4d975a3c1"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
@@ -299,36 +314,6 @@
       "edgeIdentity": "coverage-edge:4c4cc885182218a5"
     },
     {
-      "requirementIdentity": "contract:action-form:actor|103002|10300213|0|10300213:default",
-      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-ultimate",
-      "selector": {
-        "controlSkillId": 10300213,
-        "kind": "action-form",
-        "ownerId": 103002,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "be848496354693c9",
-      "traceProjectionHash": "b1db76d30c0babf4",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:4d552dbb0dadb85e"
-    },
-    {
-      "requirementIdentity": "contract:action-form:actor|103002|10300201|1|10300210:default",
-      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-reload",
-      "selector": {
-        "controlSkillId": 10300210,
-        "kind": "action-form",
-        "ownerId": 103002,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "6c1cf072dbf72502",
-      "traceProjectionHash": "b1db76d30c0babf4",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:52c03040b024b87e"
-    },
-    {
       "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
       "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
       "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:10",
@@ -355,6 +340,21 @@
       "traceProjectionHash": "a10c0b0e8788b6d2",
       "status": "verified",
       "edgeIdentity": "coverage-edge:5b42209fea1031f8"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|103002|10300221|1|10300225|limit-counter:default",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-limit-counter",
+      "selector": {
+        "controlSkillId": 10300225,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "b475d58d093fd557",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:635116cf506786a9"
     },
     {
       "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:1",
@@ -397,6 +397,21 @@
       "traceProjectionHash": "b1db76d30c0babf4",
       "status": "verified",
       "edgeIdentity": "coverage-edge:6be38f9a03a05d63"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|103002|10300213|0|10300213|ultimate:default",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-ultimate",
+      "selector": {
+        "controlSkillId": 10300213,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "be848496354693c9",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:6fe4e19f77a27517"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
@@ -450,6 +465,21 @@
       "traceProjectionHash": "b1db76d30c0babf4",
       "status": "verified",
       "edgeIdentity": "coverage-edge:82d6afc90b0a2b1e"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|103002|10300201|0|10300203|normal-attack",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
+      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a3",
+      "selector": {
+        "controlSkillId": 10300203,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "fe954dc281c4a9cd",
+      "traceProjectionHash": "a10c0b0e8788b6d2",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:881dbeac7ff8df1d"
     },
     {
       "requirementIdentity": "protocol:103002:critical-miss-coexistence",
@@ -509,21 +539,6 @@
       "traceProjectionHash": "a10c0b0e8788b6d2",
       "status": "verified",
       "edgeIdentity": "coverage-edge:98c132e51875e999"
-    },
-    {
-      "requirementIdentity": "contract:public-action:actor|103002|10300201|0|10300203",
-      "scenarioIdentity": "m11-d-103002-visual-acceptance",
-      "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:ruby-chain-a3",
-      "selector": {
-        "controlSkillId": 10300203,
-        "kind": "action-form",
-        "ownerId": 103002,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "fe954dc281c4a9cd",
-      "traceProjectionHash": "a10c0b0e8788b6d2",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:9b770033c3383747"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
@@ -648,34 +663,19 @@
       "edgeIdentity": "coverage-edge:a97df50e4ca9a0cf"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|103002|10300221|1|10300225",
+      "requirementIdentity": "contract:action-form:actor|103002|10300201|1|10300210|charged-attack:default",
       "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-limit-counter",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-reload",
       "selector": {
-        "controlSkillId": 10300225,
+        "controlSkillId": 10300210,
         "kind": "action-form",
         "ownerId": 103002,
         "subSkillIndex": 0
       },
-      "assertionHash": "b475d58d093fd557",
+      "assertionHash": "6c1cf072dbf72502",
       "traceProjectionHash": "b1db76d30c0babf4",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:ad244722fa67a5f7"
-    },
-    {
-      "requirementIdentity": "contract:public-action:actor|103002|10300213|0|10300213",
-      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-ultimate",
-      "selector": {
-        "controlSkillId": 10300213,
-        "kind": "action-form",
-        "ownerId": 103002,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "be848496354693c9",
-      "traceProjectionHash": "b1db76d30c0babf4",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:b3e61f5d73364eaa"
+      "edgeIdentity": "coverage-edge:b156468393591eed"
     },
     {
       "requirementIdentity": "contract:hit:10300201|1|elements|33|6530960959018090325|26|3",
@@ -735,21 +735,6 @@
       "edgeIdentity": "coverage-edge:bb7d6a9eb0f8d07f"
     },
     {
-      "requirementIdentity": "contract:action-form:actor|103002|10300221|0|10300221:default",
-      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:switch-back-to-ruby--on-enter--actor-103002--star-carry",
-      "selector": {
-        "controlSkillId": 10300221,
-        "kind": "action-form",
-        "ownerId": 103002,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "6c776da9f3bd0b21",
-      "traceProjectionHash": "b1db76d30c0babf4",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:bce3508b103b8455"
-    },
-    {
       "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
       "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
       "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:8",
@@ -761,6 +746,21 @@
       "traceProjectionHash": "b1db76d30c0babf4",
       "status": "verified",
       "edgeIdentity": "coverage-edge:c159bfc12f1b14c2"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|103002|10300201|1|10300210|charged-attack",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-reload",
+      "selector": {
+        "controlSkillId": 10300210,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "6c1cf072dbf72502",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c1d5a52959403d1f"
     },
     {
       "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:2",
@@ -833,6 +833,21 @@
       "edgeIdentity": "coverage-edge:ce75805423ea4c8f"
     },
     {
+      "requirementIdentity": "contract:public-action:actor|103002|10300221|1|10300225|limit-counter",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-limit-counter",
+      "selector": {
+        "controlSkillId": 10300225,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "b475d58d093fd557",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:cf0639e491628d25"
+    },
+    {
       "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
       "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
       "assertionIdentity": "trace-resource:golden-resource:m10-b1:103002:120s-three-actor-golden:0",
@@ -900,21 +915,6 @@
       "edgeIdentity": "coverage-edge:d6677e4d0831246d"
     },
     {
-      "requirementIdentity": "contract:action-form:actor|103002|10300212|0|10300212:default",
-      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-star-skill",
-      "selector": {
-        "controlSkillId": 10300212,
-        "kind": "action-form",
-        "ownerId": 103002,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "aba006896df201af",
-      "traceProjectionHash": "b1db76d30c0babf4",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:d8cbb2540045a569"
-    },
-    {
       "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:1",
       "scenarioIdentity": "m11-d-103002-visual-acceptance",
       "assertionIdentity": "trace-action-form:machine-action-form:m11-d-103002-visual-acceptance:103002-critical-expected",
@@ -928,6 +928,21 @@
       "traceProjectionHash": "a10c0b0e8788b6d2",
       "status": "verified",
       "edgeIdentity": "coverage-edge:d993432bedd95323"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|103002|10300221|0|10300221|star-carry",
+      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:switch-back-to-ruby--on-enter--actor-103002--star-carry",
+      "selector": {
+        "controlSkillId": 10300221,
+        "kind": "action-form",
+        "ownerId": 103002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "6c776da9f3bd0b21",
+      "traceProjectionHash": "b1db76d30c0babf4",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:e582f1a6483261e9"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:103002:element:103002047",
@@ -983,21 +998,6 @@
       "traceProjectionHash": "b1db76d30c0babf4",
       "status": "verified",
       "edgeIdentity": "coverage-edge:ee74de82382cda05"
-    },
-    {
-      "requirementIdentity": "contract:action-form:actor|103002|10300221|1|10300225:default",
-      "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
-      "assertionIdentity": "trace-action-form:golden-action-form:m10-b1:103002:120s-three-actor-golden:ruby-limit-counter",
-      "selector": {
-        "controlSkillId": 10300225,
-        "kind": "action-form",
-        "ownerId": 103002,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "b475d58d093fd557",
-      "traceProjectionHash": "b1db76d30c0babf4",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:ef76c3d7c4f63cb7"
     },
     {
       "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
@@ -1066,5 +1066,5 @@
       "m11-d-103002-visual-acceptance": 30
     }
   },
-  "coverageHash": "03f22ecb56388d64"
+  "coverageHash": "51126f5151e4587d"
 }

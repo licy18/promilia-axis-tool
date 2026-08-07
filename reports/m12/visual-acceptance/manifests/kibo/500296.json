@@ -22,7 +22,7 @@
       "bytes": 75882,
       "status": "verified"
     },
-    "displaySummary": "雷、风 · 成熟期 · 猛袭 · 雷霆穿梭 · 凛风斩 · 帕莫拉-合击",
+    "displaySummary": "雷、风 · 成熟期 · 猛袭 · 雷霆穿梭 · 连续风刃 · 凛风斩 · 帕莫拉-合击",
     "binding": {
       "elements": [
         "雷",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "7f0dc5a97779cc03"
+      "acceptanceIdentity": "25f4521d9ae2adfa"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "2d9662da45702e38"
+  "manifestHash": "aa9db1bfd559b837"
 }

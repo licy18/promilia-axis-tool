@@ -1,7 +1,7 @@
 {
   "schemaVersion": 25,
-    "phase": "M12-B3-E16",
-    "status": "b3-e16-implemented",
+  "phase": "M12-B3-E16",
+  "status": "b3-e16-implemented",
   "baseCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
@@ -578,10 +578,10 @@
       10078
     ],
     "contracts": {
+      "10078": "root 19004600 and 1100ms attr21 leaf 19004601 are indexed, but defaultPropertyTags [302,303] remain fail-closed because native multi-tag match semantics are not source-closed",
       "10084": "root 19006000 periodically refreshes finite leaf 19006001 on Self; attr8 affects verified critical damage only while the 1100ms right-open leaf is active",
       "10152": "root 19004901 requires both source conditions, then refreshes 1200ms attr222 leaf 19004902 on Self; first-hit toughness changes only while active",
-      "10197": "root 19007701 has no explicit condition and targets GetSelfPet; finite 2300ms attr21 leaf 19007702 changes only the equipped actor's Kibo damage",
-      "10078": "root 19004600 and 1100ms attr21 leaf 19004601 are indexed, but defaultPropertyTags [302,303] remain fail-closed because native multi-tag match semantics are not source-closed"
+      "10197": "root 19007701 has no explicit condition and targets GetSelfPet; finite 2300ms attr21 leaf 19007702 changes only the equipped actor's Kibo damage"
     },
     "formulaIdentity": "all star values are resolved from skillsub_ele_value and evaluated through the shared verified formula registry; 19004902 uses baseFunctionId 5",
     "sourceSequence": "actor/loadout/control/map/root/tick/leaf provenance; descriptor enumeration order is non-semantic",
@@ -1058,11 +1058,11 @@
       "equipment": 137,
       "setSkills": 12
     },
-  "blockingUniqueGapCount": 35,
-  "blockingByCategory": {
-   "not-implemented": 22,
-   "evidence-insufficient": 13
-  },
+    "blockingUniqueGapCount": 35,
+    "blockingByCategory": {
+      "not-implemented": 22,
+      "evidence-insufficient": 13
+    },
     "formalAdmissions": {
       "characters": 0,
       "kibos": 0,
@@ -1072,23 +1072,23 @@
     }
   },
   "hashes": {
-  "sourceSnapshotHash": "9db681b8ed021a14",
-  "rosterHash": "b0deeb5322665305",
-  "manifestsHash": "67c797e2fcd7e263",
-  "ledgerHash": "1ec02a75ab31da00",
-  "bindingMatrixHash": "986e84a90e4d4818",
-  "qualificationCatalogHash": "ca8e3fd40caef034",
+    "sourceSnapshotHash": "5f8c6621ef29fa40",
+    "rosterHash": "22d0c76f613afd9b",
+    "manifestsHash": "451433c8801b4296",
+    "ledgerHash": "930fb89c1653acd8",
+    "bindingMatrixHash": "caed3995768a916f",
+    "qualificationCatalogHash": "6226d601699d691b",
     "dynamicLoadoutEffectCensusHash": "be211ee0a556b51a",
     "soulEssenceEffectCatalogHash": "82a85a401e26c7cf",
     "soulEssenceSourceSnapshotHash": "c45c2e01a48684d7",
     "battlePropertyTagContractHash": "fc3806b1efc60e56",
     "soulEssenceTriggerContractHash": "a91689fc08ebd4c2",
- "verifiedMechanicsPackageHash": "9c319770f8ae63dcc9ff24c9263363c648f313b1076aa1a2c714587719067f75",
- "verifiedMechanicsFileSha256": "8fb766285845e1aff36daac9e00625efc17de055d08671b3947af58a926aeaa3",
+    "verifiedMechanicsPackageHash": "ea9c9048ebca55b007ee7a4fd7af8ce7234b21db57107b9ea075b64ff71c26d0",
+    "verifiedMechanicsFileSha256": "9eba8df1697a64bc6666d98959bb852e8854fb437cccfa79a9a5720de24cdbaf",
     "machineAxisCanonicalHashes": {
-  "input": "1c383b0496821da0",
-  "data": "e50711968e6c9cb5",
-  "trace": "8fd73d143ec97d1a",
+      "input": "4e1aeb54cf5bf357",
+      "data": "fffb2c531c6e121d",
+      "trace": "9076ad824a1fcfc0",
       "evaluation": "0b410dc9255d2654"
     }
   },

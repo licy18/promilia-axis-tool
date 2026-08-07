@@ -22,7 +22,7 @@
       "bytes": 82757,
       "status": "verified"
     },
-    "displaySummary": "雷、地 · 超限体 · 侵扰 · 雷冠之力 · 滚滚落雷 · 雷冠牦-合击",
+    "displaySummary": "雷、地 · 超限体 · 侵扰 · 雷冠之力 · 落雷 · 滚滚落雷 · 雷冠牦-合击",
     "binding": {
       "elements": [
         "雷",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "ef17a7a6d72bd8c2"
+      "acceptanceIdentity": "6636997a0d67024b"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "481431c9c77919e3"
+  "manifestHash": "f52e7961081c8a82"
 }

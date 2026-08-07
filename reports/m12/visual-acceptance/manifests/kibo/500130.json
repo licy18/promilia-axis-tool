@@ -22,7 +22,7 @@
       "bytes": 71188,
       "status": "verified"
     },
-    "displaySummary": "雷 · 成长期 · 独猎 · 连抓带扫 · 落雷 · 环尾猴-合击",
+    "displaySummary": "雷 · 成长期 · 独猎 · 连抓带扫 · 雷球 · 落雷 · 环尾猴-合击",
     "binding": {
       "elements": [
         "雷"
@@ -32,6 +32,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -96,7 +100,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "d6d330dfc1ef8983"
+      "acceptanceIdentity": "080b4458264527e5"
     }
   },
   "matrix": {
@@ -197,5 +201,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "00bf00b59f82471d"
+  "manifestHash": "33f40468313e18d5"
 }

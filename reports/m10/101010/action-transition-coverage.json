@@ -139,7 +139,7 @@
     {
       "transitionIdentity": "xiaoyu-normal-default-five-inputs:segment:3->4",
       "ownerId": 101010,
-      "sourcePublicActionIdentity": "actor|101010|10101001|0|10101003",
+      "sourcePublicActionIdentity": "actor|101010|10101001|0|10101003|normal-attack",
       "sourceActionKind": "normal-attack",
       "sourceControlSkillId": 10101003,
       "sourceSubSkillIndex": 0,
@@ -315,7 +315,7 @@
     {
       "transitionIdentity": "actor:101010|control:10101013|sub:0->actor:101010|control:10101001|sub:1->-7925467506314946685->272",
       "ownerId": 101010,
-      "sourcePublicActionIdentity": "actor|101010|10101013|0|10101013",
+      "sourcePublicActionIdentity": "actor|101010|10101013|0|10101013|ultimate",
       "sourceActionKind": "ultimate",
       "sourceControlSkillId": 10101013,
       "sourceSubSkillIndex": 0,
@@ -375,7 +375,7 @@
   ],
   "publicActionCoverage": [
     {
-      "publicActionIdentity": "actor|101010|10101001|0|10101003",
+      "publicActionIdentity": "actor|101010|10101001|0|10101003|normal-attack",
       "actionKind": "normal-attack",
       "sourceSkillId": 10101001,
       "controlSkillId": 10101003,
@@ -390,7 +390,7 @@
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=backup,skillId=10101003]"
     },
     {
-      "publicActionIdentity": "actor|101010|10101001|2|10101010",
+      "publicActionIdentity": "actor|101010|10101001|2|10101010|charged-attack",
       "actionKind": "charged-attack",
       "sourceSkillId": 10101001,
       "controlSkillId": 10101010,
@@ -405,7 +405,7 @@
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=2]"
     },
     {
-      "publicActionIdentity": "actor|101010|10101001|6|10101015",
+      "publicActionIdentity": "actor|101010|10101001|6|10101015|dodge-attack",
       "actionKind": "dodge-attack",
       "sourceSkillId": 10101001,
       "controlSkillId": 10101015,
@@ -420,7 +420,7 @@
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=204]"
     },
     {
-      "publicActionIdentity": "actor|101010|10101001|7|10101011",
+      "publicActionIdentity": "actor|101010|10101001|7|10101011|plunging-attack",
       "actionKind": "plunging-attack",
       "sourceSkillId": 10101001,
       "controlSkillId": 10101011,
@@ -435,7 +435,7 @@
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=aerial,slot=301]"
     },
     {
-      "publicActionIdentity": "actor|101010|10101012|0|10101012",
+      "publicActionIdentity": "actor|101010|10101012|0|10101012|star-skill",
       "actionKind": "star-skill",
       "sourceSkillId": 10101012,
       "controlSkillId": 10101012,
@@ -450,7 +450,7 @@
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=3]"
     },
     {
-      "publicActionIdentity": "actor|101010|10101012|1|10101026",
+      "publicActionIdentity": "actor|101010|10101012|1|10101026|star-combo",
       "actionKind": "star-combo",
       "sourceSkillId": 10101012,
       "controlSkillId": 10101026,
@@ -465,7 +465,7 @@
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=208]"
     },
     {
-      "publicActionIdentity": "actor|101010|10101013|0|10101013",
+      "publicActionIdentity": "actor|101010|10101013|0|10101013|ultimate",
       "actionKind": "ultimate",
       "sourceSkillId": 10101013,
       "controlSkillId": 10101013,
@@ -480,7 +480,7 @@
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=4]"
     },
     {
-      "publicActionIdentity": "actor|101010|10101021|0|10101021",
+      "publicActionIdentity": "actor|101010|10101021|0|10101021|star-carry",
       "actionKind": "star-carry",
       "sourceSkillId": 10101021,
       "controlSkillId": 10101021,
@@ -495,7 +495,7 @@
       "sourceIdentity": "characters.items[id=101010].skillSlots[skillId=10101021]"
     },
     {
-      "publicActionIdentity": "actor|101010|10101021|1|10101025",
+      "publicActionIdentity": "actor|101010|10101021|1|10101025|limit-counter",
       "actionKind": "limit-counter",
       "sourceSkillId": 10101021,
       "controlSkillId": 10101025,
@@ -510,7 +510,7 @@
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=207]"
     },
     {
-      "publicActionIdentity": "actor|101010|10101021|2|10101027",
+      "publicActionIdentity": "actor|101010|10101021|2|10101027|perfect-parry",
       "actionKind": "perfect-parry",
       "sourceSkillId": 10101021,
       "controlSkillId": 10101027,
@@ -3999,5 +3999,5 @@
       "runtimeStatus": "not-runtime-transition"
     }
   ],
-  "profileHash": "42d513387a1e17ffdff125b3abfd49707aa05f8620cfe611ae7de82387af0168"
+  "profileHash": "9c5d2140c67541effe4c968f075114adbed5508ff171a45b9155f1b13fc658eb"
 }

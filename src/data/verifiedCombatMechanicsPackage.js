@@ -171,7 +171,7 @@ export function getVerifiedDerivedControlContractForAction(action = {}) {
   const mapping = getVerifiedCombatActionMapping(action);
   if (!mapping) return null;
   const controlSkillId =
-    mapping.actionKind === 'normal-attack'
+    mapping.actionKind === 'normal-attack' && mapping.ownerKind !== 'kibo'
       ? Number(action.attackInput?.controlSkillId)
       : Number(mapping.controlSkillId);
   return getVerifiedDerivedControlContract({
@@ -699,14 +699,19 @@ export function createVerifiedCombatActionBindingIdentity({
   sourceSkillId,
   actionVariantIndex,
   controlSkillId,
+  actionKind,
 } = {}) {
-  return [
+  const identity = [
     ownerKind ?? 'unknown',
     Number(ownerId) || 0,
     Number(sourceSkillId) || 0,
     Math.max(0, Number(actionVariantIndex) || 0),
     controlSkillId == null ? '' : Number(controlSkillId) || 0,
-  ].join('|');
+  ];
+  if (actionKind != null && String(actionKind) !== '') {
+    identity.push(String(actionKind));
+  }
+  return identity.join('|');
 }
 
 export function validateVerifiedCombatMechanicsPackage(value) {
@@ -1068,13 +1073,29 @@ function findActionMappings(action, owner = resolveActionOwner(action)) {
     controlSkillId: null,
   });
   const prefix = identity.slice(0, identity.lastIndexOf('|') + 1);
-  return installedPackage.actionMappings.filter(mapping =>
+  const matches = installedPackage.actionMappings.filter(mapping =>
     mapping.identity.startsWith(prefix)
   );
+  const requestedKind = String(
+    action.actionKind ??
+      action.eventType ??
+      action.intent?.actionKind ??
+      ''
+  ).trim();
+  if (!requestedKind || matches.length <= 1) {
+    return matches;
+  }
+  const kindMatches = matches.filter(
+    mapping => String(mapping.actionKind) === requestedKind
+  );
+  return kindMatches.length === 1 ? kindMatches : matches;
 }
 
 function resolveActionBinding(actionMapping, action) {
-  if (actionMapping?.actionKind !== 'normal-attack') {
+  if (
+    actionMapping?.actionKind !== 'normal-attack' ||
+    actionMapping?.ownerKind === 'kibo'
+  ) {
     return { binding: actionMapping };
   }
   const segmentIdentity = String(action.attackInput?.identity ?? '').trim();
@@ -1131,7 +1152,8 @@ function resolveActionBinding(actionMapping, action) {
 
 function hasValidAttackInputChains(value) {
   const normalMappings = (value?.actionMappings ?? []).filter(
-    mapping => mapping.actionKind === 'normal-attack'
+    mapping =>
+      mapping.actionKind === 'normal-attack' && mapping.ownerKind !== 'kibo'
   );
   if (!normalMappings.length) return false;
   const controlIds = new Set(

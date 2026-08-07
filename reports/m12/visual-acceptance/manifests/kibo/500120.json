@@ -22,7 +22,7 @@
       "bytes": 50284,
       "status": "verified"
     },
-    "displaySummary": "风 · 成熟期 · 独猎 · 哈加冲锋 · 风刃 · 哈加-合击",
+    "displaySummary": "风 · 成熟期 · 独猎 · 哈加冲锋 · 凛风斩 · 风刃 · 哈加-合击",
     "binding": {
       "elements": [
         "风"
@@ -32,6 +32,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -96,7 +100,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "2f40c2bf62af292f"
+      "acceptanceIdentity": "a1b2126e5c9e3d14"
     }
   },
   "matrix": {
@@ -197,5 +201,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "b97bc67765351e88"
+  "manifestHash": "7c7f636ddced8856"
 }

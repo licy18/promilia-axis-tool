@@ -463,9 +463,12 @@ export async function createVisualAcceptanceArtifacts() {
     const maturity = kiboMaturityById.get(id);
     const icon = await readIconAsset(detail?.icon ?? null);
     const actionByKind = maturity?.actions ?? {};
-    const actionsRunnable = ['signature', 'active', 'break'].every(
-      kind => actionByKind[kind]?.runnable === true
-    );
+    const actionsRunnable =
+      ['signature', 'normal-attack', 'break'].every(
+        kind => actionByKind[kind]?.runnable === true
+      ) &&
+      (actionByKind.active == null ||
+        actionByKind.active?.runnable === true);
     const maturityReady = maturity?.machineOptimizationReady === true;
     const staticAuditReady =
       maturity?.staticAttributes?.closureClass === 'evidence-closed';

@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "09409efa108c9900931d089d6524523745eaca15b9b6828188a24d08a6ba14d5",
+  "packageHash": "ea9c9048ebca55b007ee7a4fd7af8ce7234b21db57107b9ea075b64ff71c26d0",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
@@ -1270,14 +1270,14 @@
     ]
   },
   "sourceCoverage": {
-    "candidateActionCount": 563,
-    "classifiedActionCount": 563,
-    "foundControlCount": 620,
-    "indexedElementPathCount": 2232,
-    "appliedActionBindingCount": 611,
-    "appliedHitBindingCount": 2758,
-    "uniqueControlBindingCount": 566,
-    "uniqueControlHitBindingCount": 4618,
+    "candidateActionCount": 645,
+    "classifiedActionCount": 645,
+    "foundControlCount": 636,
+    "indexedElementPathCount": 2248,
+    "appliedActionBindingCount": 693,
+    "appliedHitBindingCount": 3449,
+    "uniqueControlBindingCount": 582,
+    "uniqueControlHitBindingCount": 5769,
     "appliedEffectBindingCount": 1799,
     "verifiedZeroEffectBindingCount": 12,
     "unresolvedEffectBindingCount": 1976,
@@ -1285,10 +1285,10 @@
     "enemyProfileCount": 208,
     "appliedEnemyProfileCount": 204,
     "appliedHitDamageTypeCounts": {
-      "1": 1563,
+      "1": 1605,
       "2": 293,
-      "3": 2264,
-      "4": 486,
+      "3": 2773,
+      "4": 1086,
       "7": 7,
       "8": 5
     }
@@ -1296,7 +1296,7 @@
   "requiredAcceptanceBindings": {
     "pangpang": {
       "ready": true,
-      "identity": "actor|101007|10100701|0|10100703|attack-input-3",
+      "identity": "actor|101007|10100701|0|10100703|normal-attack|attack-input-3",
       "controlSkillId": 10100703,
       "elementIds": [
         101007012
@@ -1304,7 +1304,7 @@
     },
     "heavyRockHoof": {
       "ready": true,
-      "identity": "kibo|500469|50046903|0|50046903",
+      "identity": "kibo|500469|50046903|0|50046903|signature",
       "controlSkillId": 50046903,
       "elementIds": [
         500469062,
@@ -1317,7 +1317,7 @@
   },
   "unresolvedBindings": [
     {
-      "identity": "actor|107001|10700101|6|10700115",
+      "identity": "actor|107001|10700101|6|10700115|dodge-attack",
       "ownerKind": "actor",
       "ownerId": 107001,
       "sourceSkillId": 10700101,
@@ -1334,7 +1334,7 @@
       "applied": false
     },
     {
-      "identity": "actor|107001|10700121|0|10700121",
+      "identity": "actor|107001|10700121|0|10700121|star-carry",
       "ownerKind": "actor",
       "ownerId": 107001,
       "sourceSkillId": 10700121,
@@ -1348,7 +1348,7 @@
       "applied": false
     },
     {
-      "identity": "actor|107002|10700201|2|10700215",
+      "identity": "actor|107002|10700201|2|10700215|dodge-attack",
       "ownerKind": "actor",
       "ownerId": 107002,
       "sourceSkillId": 10700201,
@@ -1362,7 +1362,7 @@
       "applied": false
     },
     {
-      "identity": "actor|108001|10800101|1|10800110",
+      "identity": "actor|108001|10800101|1|10800110|charged-attack",
       "ownerKind": "actor",
       "ownerId": 108001,
       "sourceSkillId": 10800101,
@@ -1375,7 +1375,7 @@
       "applied": false
     },
     {
-      "identity": "actor|108002|10800201|1|10800210",
+      "identity": "actor|108002|10800201|1|10800210|charged-attack",
       "ownerKind": "actor",
       "ownerId": 108002,
       "sourceSkillId": 10800201,
@@ -1391,7 +1391,7 @@
       "applied": false
     },
     {
-      "identity": "actor|108002|10800222|0|10800222",
+      "identity": "actor|108002|10800222|0|10800222|star-carry",
       "ownerKind": "actor",
       "ownerId": 108002,
       "sourceSkillId": 10800222,
@@ -1404,7 +1404,7 @@
       "applied": false
     },
     {
-      "identity": "actor|108003|10800301|1|10800310",
+      "identity": "actor|108003|10800301|1|10800310|charged-attack",
       "ownerKind": "actor",
       "ownerId": 108003,
       "sourceSkillId": 10800301,
@@ -1417,7 +1417,7 @@
       "applied": false
     },
     {
-      "identity": "actor|108003|10800301|6|10800315",
+      "identity": "actor|108003|10800301|6|10800315|dodge-attack",
       "ownerKind": "actor",
       "ownerId": 108003,
       "sourceSkillId": 10800301,
@@ -1431,7 +1431,7 @@
       "applied": false
     },
     {
-      "identity": "actor|112002|11200201|0|11200203",
+      "identity": "actor|112002|11200201|0|11200203|normal-attack",
       "ownerKind": "actor",
       "ownerId": 112002,
       "sourceSkillId": 11200201,
@@ -1449,7 +1449,7 @@
       "applied": false
     },
     {
-      "identity": "actor|112002|11200201|1|11200210",
+      "identity": "actor|112002|11200201|1|11200210|charged-attack",
       "ownerKind": "actor",
       "ownerId": 112002,
       "sourceSkillId": 11200201,
@@ -1463,7 +1463,7 @@
       "applied": false
     },
     {
-      "identity": "actor|112002|11200201|3|11200215",
+      "identity": "actor|112002|11200201|3|11200215|dodge-attack",
       "ownerKind": "actor",
       "ownerId": 112002,
       "sourceSkillId": 11200201,
@@ -1477,7 +1477,7 @@
       "applied": false
     },
     {
-      "identity": "actor|112002|11200222|1|11200225",
+      "identity": "actor|112002|11200222|1|11200225|limit-counter",
       "ownerKind": "actor",
       "ownerId": 112002,
       "sourceSkillId": 11200222,
@@ -1491,7 +1491,7 @@
       "applied": false
     },
     {
-      "identity": "actor|199003|19900301|1|19900310",
+      "identity": "actor|199003|19900301|1|19900310|charged-attack",
       "ownerKind": "actor",
       "ownerId": 199003,
       "sourceSkillId": 19900301,

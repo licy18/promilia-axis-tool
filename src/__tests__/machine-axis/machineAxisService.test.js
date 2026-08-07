@@ -160,16 +160,18 @@ describe('Machine Axis service', () => {
 
     expect(catalog.summary).toMatchObject({
       kiboCount: 122,
-      kiboActionCount: 366,
+      kiboActionCount: 448,
       kiboActionCountByKind: {
         signature: 122,
-        active: 122,
+        active: 82,
         break: 122,
+        'normal-attack': 122,
       },
     });
     expect(machineActions).toEqual(sourceActions);
     for (const [publicActionId, actionKind] of [
       [50000102, 'signature'],
+      [504003, 'normal-attack'],
       [504004, 'active'],
       [50000112, 'break'],
     ]) {

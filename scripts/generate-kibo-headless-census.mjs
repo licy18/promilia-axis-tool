@@ -10,7 +10,7 @@ const DEFAULT_EXTRACTOR_ROOT =
 
 const EXPECTED_DENOMINATORS = Object.freeze({
   kiboCount: 122,
-  publicActionCount: 366,
+  publicActionCount: 448,
   fixedSkillUniqueCount: 172,
 });
 
@@ -5587,9 +5587,13 @@ function createMaturityMatrix({
     const passiveReady =
       pveRows.length > 0 &&
       pveRows.every(row => row.runtimeStatus === 'runtime-ready');
-    const actionsReady = ['signature', 'active', 'break'].every(
-      kind => actionByKind[kind]?.closureClass === 'evidence-closed'
-    );
+    const hasActive = actions.some(action => action.actionKind === 'active');
+    const actionsReady =
+      ['signature', 'normal-attack', 'break'].every(
+        kind => actionByKind[kind]?.closureClass === 'evidence-closed'
+      ) &&
+      (!hasActive ||
+        actionByKind.active?.closureClass === 'evidence-closed');
     const fixedClassified = fixedRows.every(
       row => row.closureClass === 'evidence-closed'
     );
@@ -5640,6 +5644,7 @@ function createMaturityMatrix({
       },
       actions: {
         signature: actionByKind.signature ?? null,
+        'normal-attack': actionByKind['normal-attack'] ?? null,
         active: actionByKind.active ?? null,
         break: actionByKind.break ?? null,
       },

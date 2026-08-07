@@ -6,7 +6,7 @@ export const MACHINE_AXIS_SEARCH_GENERATOR_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_SEARCH_GENERATOR_CONTRACT =
   'AzPrMachineAxisSearchGenerator';
 
-const KIBO_ACTION_KINDS = new Set(['signature', 'active', 'break']);
+const KIBO_ACTION_KINDS = new Set(['signature', 'break']);
 const CHARACTER_ACTION_KINDS = new Set([
   'normal-attack',
   'charged-attack',
@@ -354,6 +354,7 @@ function hasVerifiedKiboDuration(entry, kiboId, characterId) {
   const mapping = getVerifiedCombatActionMapping({
     type: ACTION_TYPES.KIBO_EVENT,
     skillId: entry.publicActionId,
+    actionKind: entry.actionKind,
     actionVariantIndex: 0,
     kiboId,
     actor: { characterId, loadout: { kiboId } },

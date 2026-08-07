@@ -338,7 +338,7 @@ const ACTOR_CONTROL_SLOT_BY_ACTION_KIND = Object.freeze({
   'perfect-parry': ['ground', 209],
 });
 const M9_PRODUCT_DENOMINATOR = Object.freeze({
-  publicActionCount: 563,
+  publicActionCount: 645,
   actorOwnerCount: 20,
   kiboOwnerCount: 122,
 });
@@ -916,6 +916,7 @@ export async function createVerifiedCombatMechanicsBuild({
     effectCoverage,
     actionVariantResourceCoverage,
     characterCombatArtifacts,
+    kiboCatalog,
   });
 
   const outputs = [
@@ -3616,6 +3617,7 @@ function createActionCandidates({
         candidate.ownerKind,
         candidate.ownerId,
         candidate.sourceSkillId,
+        candidate.actionKind,
         candidate.actionVariantIndex,
         candidate.controlSkillId,
       ].join('|')
@@ -3667,6 +3669,7 @@ function resolveActorAttackInputControls(character, variant, skillLogicById) {
 function resolveKiboControlVariantSource(petRow, action) {
   const fieldByKind = {
     signature: 'signatureSkillList',
+    'normal-attack': 'skillList',
     active: 'skillList',
     break: 'breakSkillList',
   };
@@ -3675,7 +3678,12 @@ function resolveKiboControlVariantSource(petRow, action) {
   const matches = entries.filter(
     entry => Number(entry.skillId) === Number(action.skillId)
   );
-  const selected = action.kind === 'active' ? matches.at(-1) : matches.at(0);
+  const selected =
+    action.kind === 'normal-attack'
+      ? matches.find(entry => entry.slot === 1) ?? matches.at(0)
+      : action.kind === 'active'
+        ? matches.find(entry => entry.slot === 2) ?? matches.at(-1)
+        : matches.at(0);
   return {
     skillLevel: integerOrNull(selected?.skillLevel),
     sourceIdentity: field
@@ -8476,7 +8484,10 @@ function createPackage({
       }),
       variantConditionDiscovery,
     });
-    if (candidate.actionKind !== 'normal-attack') {
+    if (
+      candidate.actionKind !== 'normal-attack' ||
+      candidate.ownerKind !== 'actor'
+    ) {
       const withTiming = attachActionTimingContract(
         mechanicsMapping,
         createPublicActionTimingContract({
@@ -8526,8 +8537,10 @@ function createPackage({
     };
   });
   const actionBindings = actionMappings.flatMap(mapping => {
+    const isActorNormalAttack =
+      mapping.actionKind === 'normal-attack' && mapping.ownerKind !== 'kibo';
     const runtimeBindings =
-      mapping.actionKind === 'normal-attack'
+      isActorNormalAttack
         ? (mapping.attackInputSegments ?? []).filter(
             segment => segment.classification === 'applied'
           )
@@ -8537,7 +8550,7 @@ function createPackage({
     return runtimeBindings.map(binding => ({
       identity: binding.identity,
       aggregateIdentity:
-        mapping.actionKind === 'normal-attack' ? mapping.identity : null,
+        isActorNormalAttack ? mapping.identity : null,
       ownerKind: mapping.ownerKind,
       ownerId: mapping.ownerId,
       ownerName: mapping.ownerName,
@@ -8549,7 +8562,7 @@ function createPackage({
       controlSkillId: binding.controlSkillId,
       selectedSubSkillIndex: binding.selectedSubSkillIndex,
       bindingKind:
-        mapping.actionKind === 'normal-attack'
+        isActorNormalAttack
           ? 'hero-normal-attack-input-control'
           : mapping.bindingKind,
       bindingSourceIdentity:
@@ -8566,7 +8579,7 @@ function createPackage({
         binding.selectedEffectIdentities ??
         mapping.selectedEffectIdentities ??
         [],
-      ...(mapping.actionKind === 'normal-attack'
+      ...(isActorNormalAttack
         ? {
             attackSequenceIndex: binding.sequenceIndex,
             attackSequenceTotal: binding.sequenceTotal,
@@ -8833,7 +8846,9 @@ function createPackage({
         binding => binding.ownerKind === 'kibo'
       ).length,
       attackInputChainCount: actionMappings.filter(
-        mapping => mapping.actionKind === 'normal-attack'
+        mapping =>
+          mapping.actionKind === 'normal-attack' &&
+          mapping.ownerKind !== 'kibo'
       ).length,
       attackInputSegmentCount: actionMappings.reduce(
         (sum, mapping) => sum + (mapping.attackInputSegments?.length ?? 0),
@@ -12771,7 +12786,11 @@ function createActionCoverageReport({
         }))
     );
   const attackInputChains = packageValue.actionMappings
-    .filter(mapping => mapping.actionKind === 'normal-attack')
+    .filter(
+      mapping =>
+        mapping.actionKind === 'normal-attack' &&
+        mapping.ownerKind !== 'kibo'
+    )
     .map(mapping => {
       const segments = getAuditAttackInputSegments(mapping);
       return {
@@ -13593,6 +13612,7 @@ function createPublicRuntimeCoverageReport({
   effectCoverage,
   actionVariantResourceCoverage,
   characterCombatArtifacts,
+  kiboCatalog,
 }) {
   const timingByAction = new Map(
     timingCoverage.actions.map(action => [action.identity, action])
@@ -13760,11 +13780,29 @@ function createPublicRuntimeCoverageReport({
     action =>
       action.ownerKind === 'actor' && requiredActorKinds.has(action.actionKind)
   );
-  const requiredKiboKinds = new Set(['active', 'break', 'signature']);
-  const kiboCoreActions = actions.filter(
-    action =>
-      action.ownerKind === 'kibo' && requiredKiboKinds.has(action.actionKind)
+  const expectedKiboActionKindsByOwner = new Map(
+    (kiboCatalog?.items ?? []).map(item => [
+      Number(item.kiboId),
+      new Set((item.actions ?? []).map(action => String(action.kind))),
+    ])
   );
+  const kiboActionsByOwner = groupBy(
+    actions.filter(action => action.ownerKind === 'kibo'),
+    action => Number(action.ownerId)
+  );
+  const kiboRequiredActionsPresent =
+    kiboActionsByOwner.size === M9_PRODUCT_DENOMINATOR.kiboOwnerCount &&
+    [...expectedKiboActionKindsByOwner.entries()].every(
+      ([kiboId, expectedKinds]) => {
+        const actualKinds = new Set(
+          (kiboActionsByOwner.get(kiboId) ?? []).map(action => action.actionKind)
+        );
+        return (
+          actualKinds.size === expectedKinds.size &&
+          [...expectedKinds].every(kind => actualKinds.has(kind))
+        );
+      }
+    );
   const recoveryCoverage = actionCoverage.nonzeroRecoveryCoverage.map(item => {
     const reason = item.reasons?.[0] ?? null;
     const productScope =
@@ -13829,9 +13867,7 @@ function createPublicRuntimeCoverageReport({
       actorCoreActions.length ===
         M9_PRODUCT_DENOMINATOR.actorOwnerCount * requiredActorKinds.size &&
       actionCoverage.missingRequiredActorActions.length === 0,
-    requiredKiboActionsPresent:
-      kiboCoreActions.length ===
-      M9_PRODUCT_DENOMINATOR.kiboOwnerCount * requiredKiboKinds.size,
+    requiredKiboActionsPresent: kiboRequiredActionsPresent,
     everyUnresolvedActionExplained: unclassifiedUnresolvedActions.length === 0,
     everyNonzeroRecoveryElementScoped:
       recoveryCoverage.length ===
@@ -13842,6 +13878,23 @@ function createPublicRuntimeCoverageReport({
   };
   const gatePassed = Object.values(gateChecks).every(Boolean);
   if (!gatePassed) {
+    const kiboMismatches = [...expectedKiboActionKindsByOwner.entries()]
+      .map(([kiboId, expectedKinds]) => {
+        const actualKinds = new Set(
+          (kiboActionsByOwner.get(kiboId) ?? []).map(action => action.actionKind)
+        );
+        return {
+          kiboId,
+          expected: [...expectedKinds].sort(),
+          actual: [...actualKinds].sort(),
+          actualCount: (kiboActionsByOwner.get(kiboId) ?? []).length,
+        };
+      })
+      .filter(
+        row =>
+          row.expected.length !== row.actual.length ||
+          row.expected.some(kind => !row.actual.includes(kind))
+      );
     const unclassifiedSummary = unclassifiedUnresolvedActions
       .slice(0, 8)
       .map(action => `${action.identity}:${action.reasons.join('|')}`)
@@ -13850,7 +13903,24 @@ function createPublicRuntimeCoverageReport({
       `M9 public runtime coverage gate failed: ${Object.entries(gateChecks)
         .filter(([, passed]) => !passed)
         .map(([name]) => name)
-        .join(', ')}${unclassifiedSummary ? ` [${unclassifiedSummary}]` : ''}`
+        .join(', ')} [actions=${actions.length}/expected=${
+          M9_PRODUCT_DENOMINATOR.publicActionCount
+        }, actorOwners=${actorOwnerCount}, kiboOwners=${
+          kiboActionsByOwner.size
+        }/${M9_PRODUCT_DENOMINATOR.kiboOwnerCount}, kiboKinds=${
+          kiboActionsByOwner.size
+            ? JSON.stringify(
+                [...kiboActionsByOwner.entries()]
+                  .slice(0, 5)
+                  .map(([ownerId, rows]) => ({
+                    ownerId,
+                    kinds: [...new Set(rows.map(row => row.actionKind))].sort(),
+                  }))
+              )
+            : 'none'
+        }, kiboMismatches=${JSON.stringify(kiboMismatches.slice(0, 8))}]${
+          unclassifiedSummary ? ` [${unclassifiedSummary}]` : ''
+        }`
     );
   }
   return {
@@ -13891,9 +13961,19 @@ function createPublicRuntimeCoverageReport({
       actorCoreActionCount: actorCoreActions.length,
       actorCoreRunnableCount: actorCoreActions.filter(action => action.runnable)
         .length,
-      kiboCoreActionCount: kiboCoreActions.length,
-      kiboCoreRunnableCount: kiboCoreActions.filter(action => action.runnable)
-        .length,
+      kiboCoreActionCount: kiboActionsByOwner.size
+        ? [...kiboActionsByOwner.values()].reduce(
+            (sum, rows) => sum + rows.length,
+            0
+          )
+        : 0,
+      kiboCoreRunnableCount: kiboActionsByOwner.size
+        ? [...kiboActionsByOwner.values()].reduce(
+            (sum, rows) =>
+              sum + rows.filter(action => action.runnable).length,
+            0
+          )
+        : 0,
       nonzeroRecoveryElementCount: recoveryCoverage.length,
       recoveryScopeCounts,
       actionDimensions: actionCoverage.summary.dimensions,
@@ -13910,7 +13990,7 @@ function createPublicRuntimeCoverageReport({
     },
     byOwnerActionKind,
     actorCoreActions,
-    kiboCoreActions,
+    kiboCoreActions: [...kiboActionsByOwner.values()].flat(),
     actions,
     unresolvedActions,
     recoveryCoverage,
@@ -14204,6 +14284,7 @@ function createBindingIdentity(candidate) {
     candidate.sourceSkillId,
     candidate.actionVariantIndex,
     candidate.controlSkillId,
+    candidate.actionKind,
   ].join('|');
 }
 

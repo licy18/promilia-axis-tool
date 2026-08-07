@@ -93,14 +93,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:action-form:actor|103002|10300201|1|10300210:default",
+      "requirementIdentity": "contract:action-form:actor|103002|10300201|1|10300210|charged-attack:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|103002|10300201|1|10300210:default",
+      "subjectIdentity": "actor|103002|10300201|1|10300210|charged-attack:default",
       "required": true,
       "status": "passed",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
-      "sourceRecordHash": "f1d8ae6ee715cf0e",
+      "sourceRecordHash": "290135b6de804da2",
       "coverageSelector": {
         "controlSkillId": 10300210,
         "kind": "action-form",
@@ -108,7 +108,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:52c03040b024b87e"
+        "coverage-edge:b156468393591eed"
       ],
       "evidenceScenarioIds": [
         "m10-b1:103002:120s-three-actor-golden"
@@ -119,14 +119,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:action-form:actor|103002|10300201|2|10300215:default",
+      "requirementIdentity": "contract:action-form:actor|103002|10300201|2|10300215|dodge-attack:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|103002|10300201|2|10300215:default",
+      "subjectIdentity": "actor|103002|10300201|2|10300215|dodge-attack:default",
       "required": true,
       "status": "blocked",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
-      "sourceRecordHash": "adddd581e77eb2b7",
+      "sourceRecordHash": "023a2e3223c86289",
       "coverageSelector": {
         "controlSkillId": 10300215,
         "kind": "action-form",
@@ -143,14 +143,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:action-form:actor|103002|10300201|3|10300211:default",
+      "requirementIdentity": "contract:action-form:actor|103002|10300201|3|10300211|plunging-attack:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|103002|10300201|3|10300211:default",
+      "subjectIdentity": "actor|103002|10300201|3|10300211|plunging-attack:default",
       "required": true,
       "status": "blocked",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
-      "sourceRecordHash": "c4cdd143beb5aa6a",
+      "sourceRecordHash": "0841f444886f3d12",
       "coverageSelector": {
         "controlSkillId": 10300211,
         "kind": "action-form",
@@ -167,14 +167,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:action-form:actor|103002|10300212|0|10300212:default",
+      "requirementIdentity": "contract:action-form:actor|103002|10300212|0|10300212|star-skill:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|103002|10300212|0|10300212:default",
+      "subjectIdentity": "actor|103002|10300212|0|10300212|star-skill:default",
       "required": true,
       "status": "passed",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
-      "sourceRecordHash": "87a6e10cd36f2231",
+      "sourceRecordHash": "5b9926f2ce9d94e3",
       "coverageSelector": {
         "controlSkillId": 10300212,
         "kind": "action-form",
@@ -182,7 +182,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:d8cbb2540045a569"
+        "coverage-edge:3ef7354b8ec652f9"
       ],
       "evidenceScenarioIds": [
         "m10-b1:103002:120s-three-actor-golden"
@@ -193,14 +193,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:action-form:actor|103002|10300212|1|10300226:default",
+      "requirementIdentity": "contract:action-form:actor|103002|10300212|1|10300226|star-combo:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|103002|10300212|1|10300226:default",
+      "subjectIdentity": "actor|103002|10300212|1|10300226|star-combo:default",
       "required": true,
       "status": "blocked",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
-      "sourceRecordHash": "60f907415b2c2fb9",
+      "sourceRecordHash": "4ce6c0667b93450b",
       "coverageSelector": {
         "controlSkillId": 10300226,
         "kind": "action-form",
@@ -217,14 +217,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:action-form:actor|103002|10300213|0|10300213:default",
+      "requirementIdentity": "contract:action-form:actor|103002|10300213|0|10300213|ultimate:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|103002|10300213|0|10300213:default",
+      "subjectIdentity": "actor|103002|10300213|0|10300213|ultimate:default",
       "required": true,
       "status": "passed",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
-      "sourceRecordHash": "043092a86220977f",
+      "sourceRecordHash": "f125ff4ea8ef0e55",
       "coverageSelector": {
         "controlSkillId": 10300213,
         "kind": "action-form",
@@ -232,7 +232,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:4d552dbb0dadb85e"
+        "coverage-edge:6fe4e19f77a27517"
       ],
       "evidenceScenarioIds": [
         "m10-b1:103002:120s-three-actor-golden"
@@ -243,14 +243,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:action-form:actor|103002|10300221|0|10300221:default",
+      "requirementIdentity": "contract:action-form:actor|103002|10300221|0|10300221|star-carry:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|103002|10300221|0|10300221:default",
+      "subjectIdentity": "actor|103002|10300221|0|10300221|star-carry:default",
       "required": true,
       "status": "passed",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
-      "sourceRecordHash": "6f80f83352424e8e",
+      "sourceRecordHash": "3f01831ad84973a2",
       "coverageSelector": {
         "controlSkillId": 10300221,
         "kind": "action-form",
@@ -258,7 +258,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:bce3508b103b8455"
+        "coverage-edge:375433f5a336f647"
       ],
       "evidenceScenarioIds": [
         "m10-b1:103002:120s-three-actor-golden"
@@ -269,14 +269,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:action-form:actor|103002|10300221|1|10300225:default",
+      "requirementIdentity": "contract:action-form:actor|103002|10300221|1|10300225|limit-counter:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|103002|10300221|1|10300225:default",
+      "subjectIdentity": "actor|103002|10300221|1|10300225|limit-counter:default",
       "required": true,
       "status": "passed",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
-      "sourceRecordHash": "6a8ac1f022dd1ce9",
+      "sourceRecordHash": "3809076da6144e91",
       "coverageSelector": {
         "controlSkillId": 10300225,
         "kind": "action-form",
@@ -284,7 +284,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:ef76c3d7c4f63cb7"
+        "coverage-edge:635116cf506786a9"
       ],
       "evidenceScenarioIds": [
         "m10-b1:103002:120s-three-actor-golden"
@@ -3741,14 +3741,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:0:3eff7a78be7b9c36",
+      "requirementIdentity": "contract:effect:effect:0:a2de5d22da8b89d8",
       "dimension": "effect",
-      "subjectIdentity": "effect:0:3eff7a78be7b9c36",
+      "subjectIdentity": "effect:0:a2de5d22da8b89d8",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "c4edf03ca69de959",
+      "sourceRecordHash": "adf907e3732128f1",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002275",
         "kind": "effect"
@@ -3765,14 +3765,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:1:61fc7db6546e41ea",
+      "requirementIdentity": "contract:effect:effect:1:b20a4d9257d00664",
       "dimension": "effect",
-      "subjectIdentity": "effect:1:61fc7db6546e41ea",
+      "subjectIdentity": "effect:1:b20a4d9257d00664",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "e04c420160679649",
+      "sourceRecordHash": "3959dbf6cf001639",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002279",
         "kind": "effect"
@@ -3789,14 +3789,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:10:3195394f75ed675d",
+      "requirementIdentity": "contract:effect:effect:10:d78c8a4fa59b521f",
       "dimension": "effect",
-      "subjectIdentity": "effect:10:3195394f75ed675d",
+      "subjectIdentity": "effect:10:d78c8a4fa59b521f",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "3ce899ae29247fad",
+      "sourceRecordHash": "2aba5cf951eb3c5d",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002087",
         "kind": "effect"
@@ -3813,14 +3813,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:11:0bd6c4cc50bce273",
+      "requirementIdentity": "contract:effect:effect:11:1530c94386f16ebd",
       "dimension": "effect",
-      "subjectIdentity": "effect:11:0bd6c4cc50bce273",
+      "subjectIdentity": "effect:11:1530c94386f16ebd",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "1b2868e85c29d60d",
+      "sourceRecordHash": "8c2621c02246ecf5",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002087",
         "kind": "effect"
@@ -3838,14 +3838,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:12:c8ced88a54edfe19",
+      "requirementIdentity": "contract:effect:effect:12:dfc58ac9a08f27d8",
       "dimension": "effect",
-      "subjectIdentity": "effect:12:c8ced88a54edfe19",
+      "subjectIdentity": "effect:12:dfc58ac9a08f27d8",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "5375f5d4c86382c5",
+      "sourceRecordHash": "c6197c6f404a41e9",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002244",
         "kind": "effect"
@@ -3862,14 +3862,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:13:c78af90e70577847",
+      "requirementIdentity": "contract:effect:effect:13:2cb817d9f5df4c36",
       "dimension": "effect",
-      "subjectIdentity": "effect:13:c78af90e70577847",
+      "subjectIdentity": "effect:13:2cb817d9f5df4c36",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "3f13cdc9b30bca3a",
+      "sourceRecordHash": "7c12e9f62cc09df8",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002047",
         "kind": "effect"
@@ -3886,14 +3886,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:14:71d9353bde8ed4c8",
+      "requirementIdentity": "contract:effect:effect:14:6d4d38c602ee2e75",
       "dimension": "effect",
-      "subjectIdentity": "effect:14:71d9353bde8ed4c8",
+      "subjectIdentity": "effect:14:6d4d38c602ee2e75",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "cb8c8b8a2dda9b33",
+      "sourceRecordHash": "071be510c4ad63e3",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002047",
         "kind": "effect"
@@ -3911,14 +3911,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:15:9f1e92ce7dafc61c",
+      "requirementIdentity": "contract:effect:effect:15:1a3f7a707d29bdf5",
       "dimension": "effect",
-      "subjectIdentity": "effect:15:9f1e92ce7dafc61c",
+      "subjectIdentity": "effect:15:1a3f7a707d29bdf5",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "83ccde544c121b3b",
+      "sourceRecordHash": "7826081f48bf98fb",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002087",
         "kind": "effect"
@@ -3935,14 +3935,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:16:3fe9034ae753acfd",
+      "requirementIdentity": "contract:effect:effect:16:ce1809ae52386944",
       "dimension": "effect",
-      "subjectIdentity": "effect:16:3fe9034ae753acfd",
+      "subjectIdentity": "effect:16:ce1809ae52386944",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "7528bf0d749fc20f",
+      "sourceRecordHash": "467a07ef1d51726f",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002087",
         "kind": "effect"
@@ -3960,14 +3960,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:17:0fd53793fdd7b251",
+      "requirementIdentity": "contract:effect:effect:17:141bc8b33377c76c",
       "dimension": "effect",
-      "subjectIdentity": "effect:17:0fd53793fdd7b251",
+      "subjectIdentity": "effect:17:141bc8b33377c76c",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "21964b37f562cfe4",
+      "sourceRecordHash": "1596d8787ed333a6",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002084",
         "kind": "effect"
@@ -3984,14 +3984,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:18:e36cdcb16ea3ec6e",
+      "requirementIdentity": "contract:effect:effect:18:6cda56c2ac4b3224",
       "dimension": "effect",
-      "subjectIdentity": "effect:18:e36cdcb16ea3ec6e",
+      "subjectIdentity": "effect:18:6cda56c2ac4b3224",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "d272ba51373946e1",
+      "sourceRecordHash": "d3c6cd7050409475",
       "coverageSelector": {
         "effectIdentity": "battle-element:150",
         "kind": "effect"
@@ -4008,14 +4008,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:19:ab2d9bba8c9c2af8",
+      "requirementIdentity": "contract:effect:effect:19:cc450b6454095da6",
       "dimension": "effect",
-      "subjectIdentity": "effect:19:ab2d9bba8c9c2af8",
+      "subjectIdentity": "effect:19:cc450b6454095da6",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "b30a7214146726f9",
+      "sourceRecordHash": "0388b47fa8bde03d",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002047",
         "kind": "effect"
@@ -4032,14 +4032,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:2:f370cf4895639eb4",
+      "requirementIdentity": "contract:effect:effect:2:21c888244c722a0e",
       "dimension": "effect",
-      "subjectIdentity": "effect:2:f370cf4895639eb4",
+      "subjectIdentity": "effect:2:21c888244c722a0e",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "96b736ad4f9543d7",
+      "sourceRecordHash": "e075ae0ff3fc346f",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002047",
         "kind": "effect"
@@ -4056,14 +4056,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:2411be0279381265",
+      "requirementIdentity": "contract:effect:effect:20:a0d53b73d9990363",
       "dimension": "effect",
-      "subjectIdentity": "effect:20:2411be0279381265",
+      "subjectIdentity": "effect:20:a0d53b73d9990363",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "702df487b167e130",
+      "sourceRecordHash": "901a1b06a55452f0",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002047",
         "kind": "effect"
@@ -4081,14 +4081,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:21:3be3c355d3301fb9",
+      "requirementIdentity": "contract:effect:effect:21:917a64258cb40cd7",
       "dimension": "effect",
-      "subjectIdentity": "effect:21:3be3c355d3301fb9",
+      "subjectIdentity": "effect:21:917a64258cb40cd7",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "1ba2aabffa934519",
+      "sourceRecordHash": "98a6f11b1110cd55",
       "coverageSelector": {
         "effectIdentity": "battle-element:152",
         "kind": "effect"
@@ -4105,14 +4105,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:22:bb8b70b1536a6865",
+      "requirementIdentity": "contract:effect:effect:22:7ca5d281418d3807",
       "dimension": "effect",
-      "subjectIdentity": "effect:22:bb8b70b1536a6865",
+      "subjectIdentity": "effect:22:7ca5d281418d3807",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "914fa09511d47181",
+      "sourceRecordHash": "18b846c928790a9d",
       "coverageSelector": {
         "effectIdentity": "battle-element:151",
         "kind": "effect"
@@ -4129,14 +4129,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:23:143e8804cd7f0614",
+      "requirementIdentity": "contract:effect:effect:23:1890ffdd2800b2fe",
       "dimension": "effect",
-      "subjectIdentity": "effect:23:143e8804cd7f0614",
+      "subjectIdentity": "effect:23:1890ffdd2800b2fe",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "eafa61ae937369dc",
+      "sourceRecordHash": "cce433fae962519a",
       "coverageSelector": {
         "effectIdentity": "battle-element:151",
         "kind": "effect"
@@ -4153,14 +4153,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:24:317c4576ca834f3d",
+      "requirementIdentity": "contract:effect:effect:24:785216f01793e203",
       "dimension": "effect",
-      "subjectIdentity": "effect:24:317c4576ca834f3d",
+      "subjectIdentity": "effect:24:785216f01793e203",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "4a6d6d7b9471367c",
+      "sourceRecordHash": "1c55d19a495f801a",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002087",
         "kind": "effect"
@@ -4177,14 +4177,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:25:4623d0cdee664140",
+      "requirementIdentity": "contract:effect:effect:25:2bb122f6407977e6",
       "dimension": "effect",
-      "subjectIdentity": "effect:25:4623d0cdee664140",
+      "subjectIdentity": "effect:25:2bb122f6407977e6",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "5a5a226f64487022",
+      "sourceRecordHash": "94ee060326f76a6a",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002087",
         "kind": "effect"
@@ -4202,14 +4202,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:26:ab080dc310d4e95e",
+      "requirementIdentity": "contract:effect:effect:26:9d1e62abb89d4e4a",
       "dimension": "effect",
-      "subjectIdentity": "effect:26:ab080dc310d4e95e",
+      "subjectIdentity": "effect:26:9d1e62abb89d4e4a",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "06f4acc97d210199",
+      "sourceRecordHash": "656f81bd9997602f",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002048",
         "kind": "effect"
@@ -4226,14 +4226,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:27:5c304c74795438d6",
+      "requirementIdentity": "contract:effect:effect:27:af2f7b1ca86f4089",
       "dimension": "effect",
-      "subjectIdentity": "effect:27:5c304c74795438d6",
+      "subjectIdentity": "effect:27:af2f7b1ca86f4089",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "3c49791884e8fb68",
+      "sourceRecordHash": "3502d17cb0a2c068",
       "coverageSelector": {
         "effectIdentity": "battle-element:196",
         "kind": "effect"
@@ -4251,14 +4251,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:28:ffd22a1c815d2c0e",
+      "requirementIdentity": "contract:effect:effect:28:4a830b1df56032b7",
       "dimension": "effect",
-      "subjectIdentity": "effect:28:ffd22a1c815d2c0e",
+      "subjectIdentity": "effect:28:4a830b1df56032b7",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "571d2241f5a9461e",
+      "sourceRecordHash": "c6d4921ee3c574f2",
       "coverageSelector": {
         "effectIdentity": "battle-element:196",
         "kind": "effect"
@@ -4276,14 +4276,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:29:b99fc6c43681d6f4",
+      "requirementIdentity": "contract:effect:effect:29:66e43b63c51bdfd1",
       "dimension": "effect",
-      "subjectIdentity": "effect:29:b99fc6c43681d6f4",
+      "subjectIdentity": "effect:29:66e43b63c51bdfd1",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "6ca0b1aa8d9069a2",
+      "sourceRecordHash": "7beadb313bdc0ccc",
       "coverageSelector": {
         "effectIdentity": "battle-element:296",
         "kind": "effect"
@@ -4301,14 +4301,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:3:563a278da6057830",
+      "requirementIdentity": "contract:effect:effect:3:bb7d05734633c556",
       "dimension": "effect",
-      "subjectIdentity": "effect:3:563a278da6057830",
+      "subjectIdentity": "effect:3:bb7d05734633c556",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "06d22d8f68145af3",
+      "sourceRecordHash": "21f6c7c4940a28e9",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002047",
         "kind": "effect"
@@ -4326,14 +4326,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:30:21873b84f01e8972",
+      "requirementIdentity": "contract:effect:effect:30:f7efca149f8bafcf",
       "dimension": "effect",
-      "subjectIdentity": "effect:30:21873b84f01e8972",
+      "subjectIdentity": "effect:30:f7efca149f8bafcf",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "38a2db2213b2cb5e",
+      "sourceRecordHash": "7936ffd35090fca8",
       "coverageSelector": {
         "effectIdentity": "battle-element:296",
         "kind": "effect"
@@ -4351,14 +4351,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:31:309fc9db24bca646",
+      "requirementIdentity": "contract:effect:effect:31:bf45a6a9a8c707db",
       "dimension": "effect",
-      "subjectIdentity": "effect:31:309fc9db24bca646",
+      "subjectIdentity": "effect:31:bf45a6a9a8c707db",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "f2a5be29883d5d70",
+      "sourceRecordHash": "f8ca19b77cd45c30",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002275",
         "kind": "effect"
@@ -4375,14 +4375,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:32:88ca0a4c28e064b6",
+      "requirementIdentity": "contract:effect:effect:32:91aa5aaaec7ab2f7",
       "dimension": "effect",
-      "subjectIdentity": "effect:32:88ca0a4c28e064b6",
+      "subjectIdentity": "effect:32:91aa5aaaec7ab2f7",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "1398cd7b331b2368",
+      "sourceRecordHash": "008cd1c595b4fa70",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002275",
         "kind": "effect"
@@ -4400,14 +4400,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:33:4e8f1342a92dc53e",
+      "requirementIdentity": "contract:effect:effect:33:a313cd3a4da32383",
       "dimension": "effect",
-      "subjectIdentity": "effect:33:4e8f1342a92dc53e",
+      "subjectIdentity": "effect:33:a313cd3a4da32383",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "c6d5f6fedf74fd10",
+      "sourceRecordHash": "c758fccff90b175c",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002274",
         "kind": "effect"
@@ -4425,14 +4425,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:34:5f3a8e5c3ef9957e",
+      "requirementIdentity": "contract:effect:effect:34:48347fd674f6ad39",
       "dimension": "effect",
-      "subjectIdentity": "effect:34:5f3a8e5c3ef9957e",
+      "subjectIdentity": "effect:34:48347fd674f6ad39",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "44ac4b27f9473960",
+      "sourceRecordHash": "0684316d2c985466",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002274",
         "kind": "effect"
@@ -4450,14 +4450,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:35:08d2ca3521c68fe2",
+      "requirementIdentity": "contract:effect:effect:35:f14aeda8be639301",
       "dimension": "effect",
-      "subjectIdentity": "effect:35:08d2ca3521c68fe2",
+      "subjectIdentity": "effect:35:f14aeda8be639301",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "028ae030baa1922a",
+      "sourceRecordHash": "0352999f717b2da2",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002273",
         "kind": "effect"
@@ -4475,14 +4475,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:36:3ce4f49e5083b270",
+      "requirementIdentity": "contract:effect:effect:36:e450a5b1d2e3bdeb",
       "dimension": "effect",
-      "subjectIdentity": "effect:36:3ce4f49e5083b270",
+      "subjectIdentity": "effect:36:e450a5b1d2e3bdeb",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "94635462992500e8",
+      "sourceRecordHash": "274fee333061f7a8",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002273",
         "kind": "effect"
@@ -4500,14 +4500,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:37:844c9ce023e6d33c",
+      "requirementIdentity": "contract:effect:effect:37:6b63ebdb87f0bebd",
       "dimension": "effect",
-      "subjectIdentity": "effect:37:844c9ce023e6d33c",
+      "subjectIdentity": "effect:37:6b63ebdb87f0bebd",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "abd4475b208e6338",
+      "sourceRecordHash": "68a10476a56d7940",
       "coverageSelector": {
         "effectIdentity": "battle-element:199",
         "kind": "effect"
@@ -4524,14 +4524,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:38:6fc398698c0d7ae6",
+      "requirementIdentity": "contract:effect:effect:38:711153fe5c83c4d5",
       "dimension": "effect",
-      "subjectIdentity": "effect:38:6fc398698c0d7ae6",
+      "subjectIdentity": "effect:38:711153fe5c83c4d5",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "ae6a303696140a62",
+      "sourceRecordHash": "ff09b9ee715ca78a",
       "coverageSelector": {
         "effectIdentity": "battle-element:199",
         "kind": "effect"
@@ -4548,14 +4548,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:39:1885e46a08edbf04",
+      "requirementIdentity": "contract:effect:effect:39:fa9b7b3ddf2af3b1",
       "dimension": "effect",
-      "subjectIdentity": "effect:39:1885e46a08edbf04",
+      "subjectIdentity": "effect:39:fa9b7b3ddf2af3b1",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "1cdc054c6fbec6db",
+      "sourceRecordHash": "d383045c110bbe67",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002047",
         "kind": "effect"
@@ -4572,14 +4572,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:4:8c1b2510e44716c6",
+      "requirementIdentity": "contract:effect:effect:4:885bf92056976020",
       "dimension": "effect",
-      "subjectIdentity": "effect:4:8c1b2510e44716c6",
+      "subjectIdentity": "effect:4:885bf92056976020",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "54f30ba038715b80",
+      "sourceRecordHash": "e71f9a5ed6ecc38a",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002276",
         "kind": "effect"
@@ -4596,14 +4596,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:40:980e9c8fa2bed434",
+      "requirementIdentity": "contract:effect:effect:40:4926b94836b484b1",
       "dimension": "effect",
-      "subjectIdentity": "effect:40:980e9c8fa2bed434",
+      "subjectIdentity": "effect:40:4926b94836b484b1",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "434142510b49ba71",
+      "sourceRecordHash": "786ce097e3d1ddcb",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002047",
         "kind": "effect"
@@ -4621,14 +4621,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:41:0e6c75e4644e8e4e",
+      "requirementIdentity": "contract:effect:effect:41:b922c5816bbf3bb7",
       "dimension": "effect",
-      "subjectIdentity": "effect:41:0e6c75e4644e8e4e",
+      "subjectIdentity": "effect:41:b922c5816bbf3bb7",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "7047564dd6559301",
+      "sourceRecordHash": "66da07e9b37fdd21",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002276",
         "kind": "effect"
@@ -4645,14 +4645,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:42:f6171e7f1ac56f5b",
+      "requirementIdentity": "contract:effect:effect:42:242d06f552b792e6",
       "dimension": "effect",
-      "subjectIdentity": "effect:42:f6171e7f1ac56f5b",
+      "subjectIdentity": "effect:42:242d06f552b792e6",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "24681ddf91ee2330",
+      "sourceRecordHash": "91ef028599309e60",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002276",
         "kind": "effect"
@@ -4670,14 +4670,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:43:1506f51e7c502a85",
+      "requirementIdentity": "contract:effect:effect:43:bddbe3362b35da7e",
       "dimension": "effect",
-      "subjectIdentity": "effect:43:1506f51e7c502a85",
+      "subjectIdentity": "effect:43:bddbe3362b35da7e",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "4b0244f21414c54d",
+      "sourceRecordHash": "d8770cae3e7047f5",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002255",
         "kind": "effect"
@@ -4694,14 +4694,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:44:4172ebebda049c2d",
+      "requirementIdentity": "contract:effect:effect:44:bb204defc8e85310",
       "dimension": "effect",
-      "subjectIdentity": "effect:44:4172ebebda049c2d",
+      "subjectIdentity": "effect:44:bb204defc8e85310",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "c1c5cb7a2ffed254",
+      "sourceRecordHash": "bb0f61541d6afe94",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002087",
         "kind": "effect"
@@ -4718,14 +4718,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:45:6ca954e4af335863",
+      "requirementIdentity": "contract:effect:effect:45:4acd4cb1435488d4",
       "dimension": "effect",
-      "subjectIdentity": "effect:45:6ca954e4af335863",
+      "subjectIdentity": "effect:45:4acd4cb1435488d4",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "3cf0d5e11d2be1f4",
+      "sourceRecordHash": "04b078dcbc6b7ba4",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002087",
         "kind": "effect"
@@ -4743,14 +4743,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:46:dc6aa556b7eaaf42",
+      "requirementIdentity": "contract:effect:effect:46:dbd70acc12970a8b",
       "dimension": "effect",
-      "subjectIdentity": "effect:46:dc6aa556b7eaaf42",
+      "subjectIdentity": "effect:46:dbd70acc12970a8b",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "d11983ecf397e09e",
+      "sourceRecordHash": "a763a365dd6c175e",
       "coverageSelector": {
         "effectIdentity": "battle-element:197",
         "kind": "effect"
@@ -4767,14 +4767,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:47:a808cfc2b296ee6a",
+      "requirementIdentity": "contract:effect:effect:47:8524189da99eb21d",
       "dimension": "effect",
-      "subjectIdentity": "effect:47:a808cfc2b296ee6a",
+      "subjectIdentity": "effect:47:8524189da99eb21d",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "63fb60a56a5a56c0",
+      "sourceRecordHash": "01d2a1ffe0ed7854",
       "coverageSelector": {
         "effectIdentity": "battle-element:197",
         "kind": "effect"
@@ -4791,14 +4791,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:48:7263a3fe41688788",
+      "requirementIdentity": "contract:effect:effect:48:d643b279005d0511",
       "dimension": "effect",
-      "subjectIdentity": "effect:48:7263a3fe41688788",
+      "subjectIdentity": "effect:48:d643b279005d0511",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "f0358fdcca3aead3",
+      "sourceRecordHash": "799a23efbd5122f3",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002048",
         "kind": "effect"
@@ -4815,14 +4815,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:49:2f77b278747e8719",
+      "requirementIdentity": "contract:effect:effect:49:96306bd95c9d5806",
       "dimension": "effect",
-      "subjectIdentity": "effect:49:2f77b278747e8719",
+      "subjectIdentity": "effect:49:96306bd95c9d5806",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "cc87c2c2448bbcc6",
+      "sourceRecordHash": "7f2c785db4615416",
       "coverageSelector": {
         "effectIdentity": "battle-element:198",
         "kind": "effect"
@@ -4840,14 +4840,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:5:a53744bae69e606a",
+      "requirementIdentity": "contract:effect:effect:5:832c9629b3cfb000",
       "dimension": "effect",
-      "subjectIdentity": "effect:5:a53744bae69e606a",
+      "subjectIdentity": "effect:5:832c9629b3cfb000",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "11472c6932339a9a",
+      "sourceRecordHash": "e5193977636e8032",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002276",
         "kind": "effect"
@@ -4864,14 +4864,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:50:114ac700b18ea55b",
+      "requirementIdentity": "contract:effect:effect:50:956586670a7d36be",
       "dimension": "effect",
-      "subjectIdentity": "effect:50:114ac700b18ea55b",
+      "subjectIdentity": "effect:50:956586670a7d36be",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "966d500854ab3ecc",
+      "sourceRecordHash": "2d9062b495db46b0",
       "coverageSelector": {
         "effectIdentity": "battle-element:198",
         "kind": "effect"
@@ -4889,14 +4889,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:51:104416d530e217dd",
+      "requirementIdentity": "contract:effect:effect:51:eb7b561201a56ac5",
       "dimension": "effect",
-      "subjectIdentity": "effect:51:104416d530e217dd",
+      "subjectIdentity": "effect:51:eb7b561201a56ac5",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "68058d3fd28245f4",
+      "sourceRecordHash": "d60cee3673365dd8",
       "coverageSelector": {
         "effectIdentity": "battle-element:253",
         "kind": "effect"
@@ -4913,14 +4913,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:52:e871555618a3b69e",
+      "requirementIdentity": "contract:effect:effect:52:c6182c3f5c52fe76",
       "dimension": "effect",
-      "subjectIdentity": "effect:52:e871555618a3b69e",
+      "subjectIdentity": "effect:52:c6182c3f5c52fe76",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "a45b46ce0e93d99a",
+      "sourceRecordHash": "9a2b4e887b3a57a6",
       "coverageSelector": {
         "effectIdentity": "battle-element:253",
         "kind": "effect"
@@ -4937,14 +4937,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:53:e4c5a5a53126b3b5",
+      "requirementIdentity": "contract:effect:effect:53:f459fd290550005b",
       "dimension": "effect",
-      "subjectIdentity": "effect:53:e4c5a5a53126b3b5",
+      "subjectIdentity": "effect:53:f459fd290550005b",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "eac0fa16e6b5f6c3",
+      "sourceRecordHash": "8120b61230b5e0eb",
       "coverageSelector": {
         "effectIdentity": "battle-element:250",
         "kind": "effect"
@@ -4961,14 +4961,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:54:c30a2f2224edbbf9",
+      "requirementIdentity": "contract:effect:effect:54:814cf08768aafe51",
       "dimension": "effect",
-      "subjectIdentity": "effect:54:c30a2f2224edbbf9",
+      "subjectIdentity": "effect:54:814cf08768aafe51",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "bbdb30ae7ec4bb94",
+      "sourceRecordHash": "d65ea7effb06e98a",
       "coverageSelector": {
         "effectIdentity": "battle-element:251",
         "kind": "effect"
@@ -4985,14 +4985,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:55:eb64c4d98b26e3b3",
+      "requirementIdentity": "contract:effect:effect:55:c5541ea74fe9486b",
       "dimension": "effect",
-      "subjectIdentity": "effect:55:eb64c4d98b26e3b3",
+      "subjectIdentity": "effect:55:c5541ea74fe9486b",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "5a168804230e5f55",
+      "sourceRecordHash": "66d7c7a4b627b405",
       "coverageSelector": {
         "effectIdentity": "battle-element:252",
         "kind": "effect"
@@ -5009,14 +5009,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:56:116ca63b5cbc28dc",
+      "requirementIdentity": "contract:effect:effect:56:d81a90a4fd5f3b9e",
       "dimension": "effect",
-      "subjectIdentity": "effect:56:116ca63b5cbc28dc",
+      "subjectIdentity": "effect:56:d81a90a4fd5f3b9e",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "b043be101da26c84",
+      "sourceRecordHash": "bb095b3c2ea41902",
       "coverageSelector": {
         "effectIdentity": "battle-element:252",
         "kind": "effect"
@@ -5033,14 +5033,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:57:ed1340249b361ce6",
+      "requirementIdentity": "contract:effect:effect:57:f42cba6ddd9d9c50",
       "dimension": "effect",
-      "subjectIdentity": "effect:57:ed1340249b361ce6",
+      "subjectIdentity": "effect:57:f42cba6ddd9d9c50",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "2881cef0752b0aba",
+      "sourceRecordHash": "c1ca29ce97963d92",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002047",
         "kind": "effect"
@@ -5057,14 +5057,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:58:5ceaff57b306eec0",
+      "requirementIdentity": "contract:effect:effect:58:1f1aed047302e66a",
       "dimension": "effect",
-      "subjectIdentity": "effect:58:5ceaff57b306eec0",
+      "subjectIdentity": "effect:58:1f1aed047302e66a",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "913948a43e7aaea2",
+      "sourceRecordHash": "1f11a369157449f6",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002087",
         "kind": "effect"
@@ -5081,14 +5081,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:59:dd03d3a3d0721634",
+      "requirementIdentity": "contract:effect:effect:59:62b48c473997c832",
       "dimension": "effect",
-      "subjectIdentity": "effect:59:dd03d3a3d0721634",
+      "subjectIdentity": "effect:59:62b48c473997c832",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "3a6eecada8cd4025",
+      "sourceRecordHash": "d01353de3e558777",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002019",
         "kind": "effect"
@@ -5105,14 +5105,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:6:ad6a7ffa5b6aa825",
+      "requirementIdentity": "contract:effect:effect:6:1d5a2e65f7c7db7b",
       "dimension": "effect",
-      "subjectIdentity": "effect:6:ad6a7ffa5b6aa825",
+      "subjectIdentity": "effect:6:1d5a2e65f7c7db7b",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "3e6afc7d3df1bd0a",
+      "sourceRecordHash": "9865f454fc38f506",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002087",
         "kind": "effect"
@@ -5129,14 +5129,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:60:a7156018949d79ed",
+      "requirementIdentity": "contract:effect:effect:60:8565d707404304e7",
       "dimension": "effect",
-      "subjectIdentity": "effect:60:a7156018949d79ed",
+      "subjectIdentity": "effect:60:8565d707404304e7",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "71728e807d21c965",
+      "sourceRecordHash": "d33fe187eae4dd4b",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002019",
         "kind": "effect"
@@ -5153,14 +5153,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:61:30dd5b0d6b4d81c6",
+      "requirementIdentity": "contract:effect:effect:61:c7d9d98e8d7d1b38",
       "dimension": "effect",
-      "subjectIdentity": "effect:61:30dd5b0d6b4d81c6",
+      "subjectIdentity": "effect:61:c7d9d98e8d7d1b38",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "e20d0a5ceb5ef79b",
+      "sourceRecordHash": "3d9890c7e864bd87",
       "coverageSelector": {
         "effectIdentity": "battle-element:102001093",
         "kind": "effect"
@@ -5177,14 +5177,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:62:5a54370c3e581afe",
+      "requirementIdentity": "contract:effect:effect:62:99caf8c042cc32dc",
       "dimension": "effect",
-      "subjectIdentity": "effect:62:5a54370c3e581afe",
+      "subjectIdentity": "effect:62:99caf8c042cc32dc",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "ae15276370519069",
+      "sourceRecordHash": "ed376b9bc4180d41",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002018",
         "kind": "effect"
@@ -5201,14 +5201,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:7:b33a0e49b57dbee9",
+      "requirementIdentity": "contract:effect:effect:7:3826fe8ba2d2322f",
       "dimension": "effect",
-      "subjectIdentity": "effect:7:b33a0e49b57dbee9",
+      "subjectIdentity": "effect:7:3826fe8ba2d2322f",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "4015a9ce2cbd092b",
+      "sourceRecordHash": "a008ea854c1bd1bf",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002087",
         "kind": "effect"
@@ -5226,14 +5226,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:8:3a4ddfc4f8b8ffe2",
+      "requirementIdentity": "contract:effect:effect:8:0c59ff3b828165ac",
       "dimension": "effect",
-      "subjectIdentity": "effect:8:3a4ddfc4f8b8ffe2",
+      "subjectIdentity": "effect:8:0c59ff3b828165ac",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "738814ccd7cc346a",
+      "sourceRecordHash": "e33fc95dbd42cf62",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002047",
         "kind": "effect"
@@ -5250,14 +5250,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:9:e88861968e1ccf34",
+      "requirementIdentity": "contract:effect:effect:9:4bc41fc4c6de60a2",
       "dimension": "effect",
-      "subjectIdentity": "effect:9:e88861968e1ccf34",
+      "subjectIdentity": "effect:9:4bc41fc4c6de60a2",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "gap",
-      "sourceRecordHash": "ec5a938bf6ef5779",
+      "sourceRecordHash": "5ef54e4357b4da65",
       "coverageSelector": {
         "effectIdentity": "battle-element:103002047",
         "kind": "effect"
@@ -8047,14 +8047,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:public-action:actor|103002|10300201|0|10300203",
+      "requirementIdentity": "contract:public-action:actor|103002|10300201|0|10300203|normal-attack",
       "dimension": "public-action",
-      "subjectIdentity": "actor|103002|10300201|0|10300203",
+      "subjectIdentity": "actor|103002|10300201|0|10300203|normal-attack",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "d648098da9a9bb88",
+      "sourceRecordHash": "d17e576d02ac3fec",
       "coverageSelector": {
         "controlSkillId": 10300203,
         "kind": "action-form",
@@ -8062,7 +8062,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:9b770033c3383747"
+        "coverage-edge:881dbeac7ff8df1d"
       ],
       "evidenceScenarioIds": [
         "m11-d-103002-visual-acceptance"
@@ -8071,14 +8071,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:public-action:actor|103002|10300201|1|10300210",
+      "requirementIdentity": "contract:public-action:actor|103002|10300201|1|10300210|charged-attack",
       "dimension": "public-action",
-      "subjectIdentity": "actor|103002|10300201|1|10300210",
+      "subjectIdentity": "actor|103002|10300201|1|10300210|charged-attack",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "da4f320fddc090d6",
+      "sourceRecordHash": "4ae0ac49014c0b46",
       "coverageSelector": {
         "controlSkillId": 10300210,
         "kind": "action-form",
@@ -8086,7 +8086,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:1bc50f5919d7a3fe"
+        "coverage-edge:c1d5a52959403d1f"
       ],
       "evidenceScenarioIds": [
         "m10-b1:103002:120s-three-actor-golden"
@@ -8095,14 +8095,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:public-action:actor|103002|10300201|2|10300215",
+      "requirementIdentity": "contract:public-action:actor|103002|10300201|2|10300215|dodge-attack",
       "dimension": "public-action",
-      "subjectIdentity": "actor|103002|10300201|2|10300215",
+      "subjectIdentity": "actor|103002|10300201|2|10300215|dodge-attack",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "fd871ded8a0c6aa9",
+      "sourceRecordHash": "f4fd22296a40f9b9",
       "coverageSelector": {
         "controlSkillId": 10300215,
         "kind": "action-form",
@@ -8117,14 +8117,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:public-action:actor|103002|10300201|3|10300211",
+      "requirementIdentity": "contract:public-action:actor|103002|10300201|3|10300211|plunging-attack",
       "dimension": "public-action",
-      "subjectIdentity": "actor|103002|10300201|3|10300211",
+      "subjectIdentity": "actor|103002|10300201|3|10300211|plunging-attack",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "9cf49bbc731a7c5b",
+      "sourceRecordHash": "3f51eec24dc9e96d",
       "coverageSelector": {
         "controlSkillId": 10300211,
         "kind": "action-form",
@@ -8139,14 +8139,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:public-action:actor|103002|10300212|0|10300212",
+      "requirementIdentity": "contract:public-action:actor|103002|10300212|0|10300212|star-skill",
       "dimension": "public-action",
-      "subjectIdentity": "actor|103002|10300212|0|10300212",
+      "subjectIdentity": "actor|103002|10300212|0|10300212|star-skill",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "0bce4e5a5708f4ee",
+      "sourceRecordHash": "6310294c6e1cb47c",
       "coverageSelector": {
         "controlSkillId": 10300212,
         "kind": "action-form",
@@ -8154,7 +8154,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:0621f65ceba5ab01"
+        "coverage-edge:27ccbe1e405af093"
       ],
       "evidenceScenarioIds": [
         "m10-b1:103002:120s-three-actor-golden"
@@ -8163,14 +8163,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:public-action:actor|103002|10300212|1|10300226",
+      "requirementIdentity": "contract:public-action:actor|103002|10300212|1|10300226|star-combo",
       "dimension": "public-action",
-      "subjectIdentity": "actor|103002|10300212|1|10300226",
+      "subjectIdentity": "actor|103002|10300212|1|10300226|star-combo",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "417484e29ba3cfa5",
+      "sourceRecordHash": "ad99b8914fa416cf",
       "coverageSelector": {
         "controlSkillId": 10300226,
         "kind": "action-form",
@@ -8185,14 +8185,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:public-action:actor|103002|10300213|0|10300213",
+      "requirementIdentity": "contract:public-action:actor|103002|10300213|0|10300213|ultimate",
       "dimension": "public-action",
-      "subjectIdentity": "actor|103002|10300213|0|10300213",
+      "subjectIdentity": "actor|103002|10300213|0|10300213|ultimate",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "83bd6218d415219d",
+      "sourceRecordHash": "2359223a9eb1dcdf",
       "coverageSelector": {
         "controlSkillId": 10300213,
         "kind": "action-form",
@@ -8200,7 +8200,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:b3e61f5d73364eaa"
+        "coverage-edge:461b9da4d975a3c1"
       ],
       "evidenceScenarioIds": [
         "m10-b1:103002:120s-three-actor-golden"
@@ -8209,14 +8209,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:public-action:actor|103002|10300221|0|10300221",
+      "requirementIdentity": "contract:public-action:actor|103002|10300221|0|10300221|star-carry",
       "dimension": "public-action",
-      "subjectIdentity": "actor|103002|10300221|0|10300221",
+      "subjectIdentity": "actor|103002|10300221|0|10300221|star-carry",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "44f13d58d5e7d9bc",
+      "sourceRecordHash": "7d14c50c6c2215f6",
       "coverageSelector": {
         "controlSkillId": 10300221,
         "kind": "action-form",
@@ -8224,7 +8224,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:3798e0d7ab10e2f1"
+        "coverage-edge:e582f1a6483261e9"
       ],
       "evidenceScenarioIds": [
         "m10-b1:103002:120s-three-actor-golden"
@@ -8233,14 +8233,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:public-action:actor|103002|10300221|1|10300225",
+      "requirementIdentity": "contract:public-action:actor|103002|10300221|1|10300225|limit-counter",
       "dimension": "public-action",
-      "subjectIdentity": "actor|103002|10300221|1|10300225",
+      "subjectIdentity": "actor|103002|10300221|1|10300225|limit-counter",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "485d22edf3e71d5e",
+      "sourceRecordHash": "3fb9c7a500f08a3a",
       "coverageSelector": {
         "controlSkillId": 10300225,
         "kind": "action-form",
@@ -8248,7 +8248,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:ad244722fa67a5f7"
+        "coverage-edge:cf0639e491628d25"
       ],
       "evidenceScenarioIds": [
         "m10-b1:103002:120s-three-actor-golden"
@@ -8257,14 +8257,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:public-action:actor|103002|10300221|2|10300227",
+      "requirementIdentity": "contract:public-action:actor|103002|10300221|2|10300227|perfect-parry",
       "dimension": "public-action",
-      "subjectIdentity": "actor|103002|10300221|2|10300227",
+      "subjectIdentity": "actor|103002|10300221|2|10300227|perfect-parry",
       "required": true,
       "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "dfcd358843667d56",
+      "sourceRecordHash": "a8d58c91f3e62426",
       "coverageSelector": {
         "controlSkillId": 10300227,
         "kind": "action-form",
@@ -14775,5 +14775,5 @@
       "window-boundary": 1
     }
   },
-  "matrixHash": "fe7a8005a894d715"
+  "matrixHash": "c699004e4291de80"
 }

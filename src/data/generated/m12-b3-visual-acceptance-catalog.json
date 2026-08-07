@@ -4856,7 +4856,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "02f7073ec746c6ea",
+      "manifestHash": "a86c6b582a790c38",
       "evidence": {
         "iconSha256": "169176555bea2fadee74e3cdad350d2e51a487e760c3427e41878c981ef7cb87",
         "binding": {
@@ -4868,6 +4868,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -4898,7 +4902,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "28490a3ed77f50fe",
+      "manifestHash": "ceb085d34a3a76d3",
       "evidence": {
         "iconSha256": "1419a65625c36ffc9f63ff048c5160882d877f5dfb854180d99ae8ca517f5c49",
         "binding": {
@@ -4911,6 +4915,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -4941,7 +4949,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "48372da6fd63b4e4",
+      "manifestHash": "c09508842ae6390f",
       "evidence": {
         "iconSha256": "4b8324549bd1e2d587932643948e207ddf4c807e3068806bf448704545c3dfb0",
         "binding": {
@@ -4951,15 +4959,19 @@
           ],
           "elementClass": "dual",
           "stage": "幼年期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -4984,7 +4996,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "483713416c9049e6",
+      "manifestHash": "3ab43bb7cbbf139e",
       "evidence": {
         "iconSha256": "69a60f93447196bc9c9d8fbac29a77e99f2656bdc760e6a66532630f86446170",
         "binding": {
@@ -4994,15 +5006,19 @@
           ],
           "elementClass": "dual",
           "stage": "成长期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5027,7 +5043,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "4ceb0822e4bfd3bc",
+      "manifestHash": "86cdbb8681c22df3",
       "evidence": {
         "iconSha256": "2de00973d8eacf1a509398e84de0c95fbf34827daefb99366273f5da4514c1e1",
         "binding": {
@@ -5040,6 +5056,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5070,7 +5090,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "596f7a8d2020a81f",
+      "manifestHash": "d8787360faa9b929",
       "evidence": {
         "iconSha256": "b750b8a030672facf82ef5061c4f36828055b3bbfbcd1c40f765622369a56db4",
         "binding": {
@@ -5080,15 +5100,19 @@
           ],
           "elementClass": "dual",
           "stage": "幼年期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5113,7 +5137,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "b2397a2f2bd31309",
+      "manifestHash": "797b2ab5652d267d",
       "evidence": {
         "iconSha256": "d7b523df7c044a4f904505a480048fb61dff710fdc731b13c03fd00763f37df2",
         "binding": {
@@ -5122,15 +5146,19 @@
           ],
           "elementClass": "single",
           "stage": "幼年期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5155,7 +5183,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "7322c5e5911b2148",
+      "manifestHash": "1ade662de7848eb7",
       "evidence": {
         "iconSha256": "9c6d424bb33fa57311c344bdc5bd874724d64c1c008e6aa74672f42c538d5341",
         "binding": {
@@ -5167,6 +5195,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5197,7 +5229,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "481431c9c77919e3",
+      "manifestHash": "f52e7961081c8a82",
       "evidence": {
         "iconSha256": "9322c754c52852e35cba8d4e8ef1561512052b375d6aa26bd1dc21c44ef55b75",
         "binding": {
@@ -5210,6 +5242,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5240,7 +5276,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "b97bc67765351e88",
+      "manifestHash": "7c7f636ddced8856",
       "evidence": {
         "iconSha256": "0550b6592df61e44142fef07080f45bd1eb47a9e133edba9a997018d19a61e90",
         "binding": {
@@ -5252,6 +5288,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5282,7 +5322,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "4a412a7967a07daf",
+      "manifestHash": "cfc4aa28aff8ed8c",
       "evidence": {
         "iconSha256": "dc3f695d8f626c53b4d649ae43f4dd3ae08158ad4164cd99ece8288fda5b0df9",
         "binding": {
@@ -5291,15 +5331,19 @@
           ],
           "elementClass": "single",
           "stage": "幼年期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5324,7 +5368,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "d835a764ff885bd8",
+      "manifestHash": "71bdfcdfb07c5146",
       "evidence": {
         "iconSha256": "1b9585841b8cc067d2aab0f447bcb1a32931c0e333290e205addcbf09cf5631b",
         "binding": {
@@ -5333,15 +5377,19 @@
           ],
           "elementClass": "single",
           "stage": "成长期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5366,7 +5414,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "63cb8192429f175c",
+      "manifestHash": "f7ea0dbd4737795f",
       "evidence": {
         "iconSha256": "f32d637161254284be6855c1997fd768bcbb660fb3798a4d5c62f8a2f68b039a",
         "binding": {
@@ -5378,6 +5426,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5408,7 +5460,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "34bef71036cff4ee",
+      "manifestHash": "bd77070f8a627db3",
       "evidence": {
         "iconSha256": "3456b384d4436e7a714b97d347af2b4fc4e36898302380d71582496ccbd7f22c",
         "binding": {
@@ -5417,15 +5469,19 @@
           ],
           "elementClass": "single",
           "stage": "幼年期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5450,7 +5506,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "2b211823c01964e2",
+      "manifestHash": "df39e96bec71080d",
       "evidence": {
         "iconSha256": "987ab4c74fa78882e79cb9c281ade479b5f72aca582715b5bae4e59a3deee2bb",
         "binding": {
@@ -5459,15 +5515,19 @@
           ],
           "elementClass": "single",
           "stage": "成长期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5492,7 +5552,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "fe5521c25955ae9b",
+      "manifestHash": "efca9d63c3c8b878",
       "evidence": {
         "iconSha256": "317f4fccf7e33b3f261b1510eb73ffb3a6bce19882bb17acc53f57ac5ca05ecd",
         "binding": {
@@ -5504,6 +5564,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5534,7 +5598,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "1ac774b926bab82f",
+      "manifestHash": "a463acac52afcabf",
       "evidence": {
         "iconSha256": "3ec9d7eef8f033e935f42150454ca504a877989454e0d6355daf9c80ce8f2c1f",
         "binding": {
@@ -5543,15 +5607,19 @@
           ],
           "elementClass": "single",
           "stage": "幼年期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5576,7 +5644,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "00bf00b59f82471d",
+      "manifestHash": "33f40468313e18d5",
       "evidence": {
         "iconSha256": "49ae17a72be2459ff0181aadff276505986c918ae312bb2b37f126829bb11988",
         "binding": {
@@ -5588,6 +5656,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5618,7 +5690,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "78d05da178c90644",
+      "manifestHash": "e5e91d802d5464c2",
       "evidence": {
         "iconSha256": "34cb1971db44b76d49fc044ee264680ce0abbcd7f2f8bbfff0a3c2206477ce9d",
         "binding": {
@@ -5630,6 +5702,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5660,7 +5736,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "e29f63707f40bb40",
+      "manifestHash": "884277115004345e",
       "evidence": {
         "iconSha256": "a87f928537c669631f9d030c47601ce6022845338d969f5827e0270ec02ca5cb",
         "binding": {
@@ -5669,15 +5745,19 @@
           ],
           "elementClass": "single",
           "stage": "幼年期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5702,7 +5782,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "2c61f89dacba5e71",
+      "manifestHash": "991db89191034b2d",
       "evidence": {
         "iconSha256": "6c62f796e1038e1278791164aaa68a0c9e527fdeda63e2b9bf0a0409425fcbcd",
         "binding": {
@@ -5714,6 +5794,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5744,7 +5828,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "36e751a2e8e29d20",
+      "manifestHash": "0f491c0413f9c832",
       "evidence": {
         "iconSha256": "61c0a08039714b01b7b0eae31273a4f7851598b6e563631325586c23e023fc77",
         "binding": {
@@ -5756,6 +5840,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5786,7 +5874,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "43ddeb8ae4f37525",
+      "manifestHash": "14871f7476344b29",
       "evidence": {
         "iconSha256": "5f03cccb010157da9860011c1ec468a11100c51f68fb3bbdf6d174e92ad3beee",
         "binding": {
@@ -5795,15 +5883,19 @@
           ],
           "elementClass": "single",
           "stage": "幼年期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -5828,7 +5920,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "06ad78ab42216930",
+      "manifestHash": "ff4b4525517e17d4",
       "evidence": {
         "iconSha256": "ea326714135af4c741dd0110f9eea146b48b89cec462e308b5cbdf4c135577a9",
         "binding": {
@@ -5840,6 +5932,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5870,7 +5966,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "fd6f9a1f8f744e91",
+      "manifestHash": "103e8450b90f75ba",
       "evidence": {
         "iconSha256": "9f6b45aebfddad807b67f2e866124ca62bd778245af4bf0671ccd61511be72e8",
         "binding": {
@@ -5882,6 +5978,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5912,7 +6012,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "c6ca377156c2ae05",
+      "manifestHash": "9ac96b6186e533f9",
       "evidence": {
         "iconSha256": "a3b23f7b579ee6e5c1531dbdd437fc268c2024ba4248731da787f504e33f03d7",
         "binding": {
@@ -5925,6 +6025,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5955,7 +6059,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "e2eda7196a5623fe",
+      "manifestHash": "7d3836dd11365a06",
       "evidence": {
         "iconSha256": "423bf2eb6b479eb1ba9f6fcfb41d5bf6c8c4590fbb1cce753b1ac4a18a0c4778",
         "binding": {
@@ -5968,6 +6072,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -5998,7 +6106,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "66f53aedffb569da",
+      "manifestHash": "d2c34936525a342c",
       "evidence": {
         "iconSha256": "bfa0e8c791a7e8ae5a34b95e18f229f73aa5a65bbe55e945ecf19e32ccb18c58",
         "binding": {
@@ -6011,6 +6119,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -6041,7 +6153,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "2d9662da45702e38",
+      "manifestHash": "aa9db1bfd559b837",
       "evidence": {
         "iconSha256": "dc1c00734dca8a465897ad2278217ad16493e7dc879c92e6b86d39c97ac62a57",
         "binding": {
@@ -6054,6 +6166,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -6084,7 +6200,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "1685ed057e0b5d5d",
+      "manifestHash": "1d49b03fb4d827d1",
       "evidence": {
         "iconSha256": "d34c5603fadd8500d6882454e59b2d0f7002053e89b57184aa3c6f92db343a88",
         "binding": {
@@ -6094,15 +6210,19 @@
           ],
           "elementClass": "dual",
           "stage": "幼年期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6127,7 +6247,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "cee08ac171cbf80e",
+      "manifestHash": "5bb74bc52044865c",
       "evidence": {
         "iconSha256": "b8111777dfa56d5ee366c19b8fc62b3f7a2f05197afd685bc4ccefa76b210de0",
         "binding": {
@@ -6140,6 +6260,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -6170,7 +6294,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "e36ec4433f3830cf",
+      "manifestHash": "05d82fcfc11f859b",
       "evidence": {
         "iconSha256": "c6b2f1e7f0f97f234a62c27b15dcb62c8d943e3dfd7e1f4deedf7ae2f9759a48",
         "binding": {
@@ -6183,6 +6307,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -6213,7 +6341,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "9717ca6d4b9b9215",
+      "manifestHash": "3c78800ccb7deac9",
       "evidence": {
         "iconSha256": "83a132b2994ab9c66170232bca4a4b3907bb6fc69bc5158d577e46ae7ac77b5c",
         "binding": {
@@ -6222,15 +6350,19 @@
           ],
           "elementClass": "single",
           "stage": "幼年期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6255,7 +6387,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "31f3c1a213a984a8",
+      "manifestHash": "4a4915e5c61d7190",
       "evidence": {
         "iconSha256": "416290f8e413dc86b54767aa196483c6892b084803a91c6ae3f02f197b3f71e9",
         "binding": {
@@ -6267,6 +6399,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -6297,7 +6433,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "54f5e48fe6cf3667",
+      "manifestHash": "7a3bd2ea24c13962",
       "evidence": {
         "iconSha256": "f497ed9646db5b465eedd977633abfc9e38b099b139af46c66a7d2c3bea59969",
         "binding": {
@@ -6309,6 +6445,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -6339,7 +6479,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "82b23623c7293d1f",
+      "manifestHash": "fcf133a9c261f673",
       "evidence": {
         "iconSha256": "84e8024701c256d037a33e6be99bbb89138a1a624ef35448115c144d271a06b0",
         "binding": {
@@ -6349,15 +6489,19 @@
           ],
           "elementClass": "dual",
           "stage": "幼年期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6382,7 +6526,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "ec9a3960834d36d6",
+      "manifestHash": "c73e8cf50608df0d",
       "evidence": {
         "iconSha256": "56cb14df8efdf0938e80a6bc0092bb0ea600f5191b8814c6213ae6ca9817c832",
         "binding": {
@@ -6395,6 +6539,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -6425,7 +6573,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "d11f626ff1d629bc",
+      "manifestHash": "ba613bea1eb7b0b3",
       "evidence": {
         "iconSha256": "2669a2abb9eca97a0601a843f517ab2f94e626d48e751ec2f69d50fb481bc136",
         "binding": {
@@ -6438,6 +6586,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -6468,7 +6620,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "797c29068da04b1e",
+      "manifestHash": "18dc97275e0b13b7",
       "evidence": {
         "iconSha256": "a0a5ae0d6d698cfd1c6fc063c23834685d87d13fd5b9163184982af1dbd3208e",
         "binding": {
@@ -6478,15 +6630,19 @@
           ],
           "elementClass": "dual",
           "stage": "幼年期",
-          "actionCount": 3,
+          "actionCount": 2,
           "actions": {
             "signature": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
-            "active": {
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
+            },
+            "active": {
+              "runtimeStatus": null,
+              "closureClass": null
             },
             "break": {
               "runtimeStatus": "runnable",
@@ -6511,7 +6667,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "a47b5448db4c64f3",
+      "manifestHash": "855c957c568a83c2",
       "evidence": {
         "iconSha256": "d26ddd9ef35935372e0983f7f50be9736d529ee6204b16a6107b7c3a5d9bbdec",
         "binding": {
@@ -6524,6 +6680,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -6554,7 +6714,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "fb58a2aa50cac459",
+      "manifestHash": "0027e696ee7a943a",
       "evidence": {
         "iconSha256": "9d0ed3ee1fe3e54b588065a9d929f3e8f03919823e3d1dd9887759cc14b631e5",
         "binding": {
@@ -6567,6 +6727,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -6597,7 +6761,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "710453305313bb07",
+      "manifestHash": "b7bbe43882b072d6",
       "evidence": {
         "iconSha256": "fb01b4717143b2a71834b4d1328942412ac60be382b2bb802ffbe7c963d30d62",
         "binding": {
@@ -6610,6 +6774,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -6640,7 +6808,7 @@
       ],
       "optimizationReady": true,
       "blockers": [],
-      "manifestHash": "4e5f74a7d5bcb336",
+      "manifestHash": "86bed71f7e4a67a8",
       "evidence": {
         "iconSha256": "a1a3a43c690733d30f48e72f53dd5f29b117675561574c70ec5dea8ad79e15d7",
         "binding": {
@@ -6653,6 +6821,10 @@
           "actionCount": 3,
           "actions": {
             "signature": {
+              "runtimeStatus": "runnable",
+              "closureClass": "evidence-closed"
+            },
+            "normal-attack": {
               "runtimeStatus": "runnable",
               "closureClass": "evidence-closed"
             },
@@ -6961,5 +7133,5 @@
       }
     }
   ],
-  "catalogHash": "75817c3c6e607ee0"
+  "catalogHash": "080ae2ee71ebf524"
 }

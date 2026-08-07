@@ -22,7 +22,7 @@
       "bytes": 70322,
       "status": "verified"
     },
-    "displaySummary": "风、地 · 幼年期 · 猛袭 · 旋转镰刃 · 岩韧斩 · 跳跳稻草人-合击",
+    "displaySummary": "风、地 · 幼年期 · 猛袭 · 旋转镰刃 · 风刃 · 岩韧斩 · 跳跳稻草人-合击",
     "binding": {
       "elements": [
         "风",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "412f41c79db6bdc4"
+      "acceptanceIdentity": "c666ae5ef718ce63"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "710453305313bb07"
+  "manifestHash": "b7bbe43882b072d6"
 }

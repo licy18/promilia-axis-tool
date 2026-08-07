@@ -22,7 +22,7 @@
       "bytes": 67506,
       "status": "verified"
     },
-    "displaySummary": "雷 · 成熟期 · 侵扰 · 雷音乐章 · 雷电惩戒 · 电音花-合击",
+    "displaySummary": "雷 · 成熟期 · 侵扰 · 雷音乐章 · 电能子弹 · 雷电惩戒 · 电音花-合击",
     "binding": {
       "elements": [
         "雷"
@@ -32,6 +32,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -96,7 +100,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "c4c18ed13a460b59"
+      "acceptanceIdentity": "d5526b7a64775b50"
     }
   },
   "matrix": {
@@ -197,5 +201,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "36e751a2e8e29d20"
+  "manifestHash": "0f491c0413f9c832"
 }

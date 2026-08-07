@@ -22,7 +22,7 @@
       "bytes": 74978,
       "status": "verified"
     },
-    "displaySummary": "雷、地 · 超限体 · 侵扰 · 霸主奔袭 · 落雷 · 铁鬃霸主-合击",
+    "displaySummary": "雷、地 · 超限体 · 侵扰 · 霸主奔袭 · 惊雷闪击 · 落雷 · 铁鬃霸主-合击",
     "binding": {
       "elements": [
         "雷",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "327460acd9ff5dce"
+      "acceptanceIdentity": "10da4201d69c4a1c"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "66f53aedffb569da"
+  "manifestHash": "d2c34936525a342c"
 }

@@ -179,7 +179,8 @@ describe('verified combat mechanics runtime', () => {
       ready: true,
       packageId: 'azpr-tc-2026-07-18',
       actionBinding: {
-        identity: 'actor|101007|10100701|0|10100703|attack-input-3',
+        identity:
+          'actor|101007|10100701|0|10100703|normal-attack|attack-input-3',
         controlSkillId: 10100703,
       },
     });
@@ -193,7 +194,7 @@ describe('verified combat mechanics runtime', () => {
     expect(kiboResolution).toMatchObject({
       ready: true,
       actionBinding: {
-        identity: 'kibo|500469|50046903|0|50046903',
+        identity: 'kibo|500469|50046903|0|50046903|signature',
         controlSkillId: 50046903,
       },
     });

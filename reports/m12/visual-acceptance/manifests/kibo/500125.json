@@ -22,7 +22,7 @@
       "bytes": 77860,
       "status": "verified"
     },
-    "displaySummary": "风 · 成熟期 · 协同 · 飞绒漫舞 · 风刃扩张 · 岚音花-合击",
+    "displaySummary": "风 · 成熟期 · 协同 · 飞绒漫舞 · 小风弹 · 风刃扩张 · 岚音花-合击",
     "binding": {
       "elements": [
         "风"
@@ -32,6 +32,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -96,7 +100,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "50beee21685a961a"
+      "acceptanceIdentity": "7d0ed8aec1f88d93"
     }
   },
   "matrix": {
@@ -197,5 +201,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "63cb8192429f175c"
+  "manifestHash": "f7ea0dbd4737795f"
 }

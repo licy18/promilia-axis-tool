@@ -136,9 +136,9 @@
       "sourceRecordHash": "d0afbb1b2d4a15a0"
     },
     {
-      "requirementIdentity": "contract:action-form:actor|101010|10101001|6|10101015:default",
+      "requirementIdentity": "contract:action-form:actor|101010|10101001|6|10101015|dodge-attack:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|101010|10101001|6|10101015:default",
+      "subjectIdentity": "actor|101010|10101001|6|10101015|dodge-attack:default",
       "sourceDisposition": "applied",
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
@@ -152,12 +152,12 @@
         "characters.items[id=101010].skillSlots[group=ground,slot=204]"
       ],
       "reasons": [],
-      "sourceRecordHash": "edbb7acf63237c0c"
+      "sourceRecordHash": "fae3318055ac1e8e"
     },
     {
-      "requirementIdentity": "contract:action-form:actor|101010|10101001|7|10101011:default",
+      "requirementIdentity": "contract:action-form:actor|101010|10101001|7|10101011|plunging-attack:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|101010|10101001|7|10101011:default",
+      "subjectIdentity": "actor|101010|10101001|7|10101011|plunging-attack:default",
       "sourceDisposition": "applied",
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
@@ -171,12 +171,12 @@
         "characters.items[id=101010].skillSlots[group=aerial,slot=301]"
       ],
       "reasons": [],
-      "sourceRecordHash": "ea4441e29cf60871"
+      "sourceRecordHash": "e04960fe00560e79"
     },
     {
-      "requirementIdentity": "contract:action-form:actor|101010|10101012|0|10101012:default",
+      "requirementIdentity": "contract:action-form:actor|101010|10101012|0|10101012|star-skill:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|101010|10101012|0|10101012:default",
+      "subjectIdentity": "actor|101010|10101012|0|10101012|star-skill:default",
       "sourceDisposition": "applied",
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
@@ -190,12 +190,12 @@
         "characters.items[id=101010].skillSlots[group=ground,slot=3]"
       ],
       "reasons": [],
-      "sourceRecordHash": "b4cfa64e103ce6b2"
+      "sourceRecordHash": "a620b39ccc120fe8"
     },
     {
-      "requirementIdentity": "contract:action-form:actor|101010|10101012|1|10101026:default",
+      "requirementIdentity": "contract:action-form:actor|101010|10101012|1|10101026|star-combo:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|101010|10101012|1|10101026:default",
+      "subjectIdentity": "actor|101010|10101012|1|10101026|star-combo:default",
       "sourceDisposition": "applied",
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
@@ -209,12 +209,12 @@
         "characters.items[id=101010].skillSlots[group=ground,slot=208]"
       ],
       "reasons": [],
-      "sourceRecordHash": "525042cd1534c586"
+      "sourceRecordHash": "f72ddd27e21b9f48"
     },
     {
-      "requirementIdentity": "contract:action-form:actor|101010|10101013|0|10101013:default",
+      "requirementIdentity": "contract:action-form:actor|101010|10101013|0|10101013|ultimate:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|101010|10101013|0|10101013:default",
+      "subjectIdentity": "actor|101010|10101013|0|10101013|ultimate:default",
       "sourceDisposition": "applied",
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
@@ -228,12 +228,12 @@
         "characters.items[id=101010].skillSlots[group=ground,slot=4]"
       ],
       "reasons": [],
-      "sourceRecordHash": "1766c622092a8648"
+      "sourceRecordHash": "6386607740c2d89e"
     },
     {
-      "requirementIdentity": "contract:action-form:actor|101010|10101021|1|10101025:default",
+      "requirementIdentity": "contract:action-form:actor|101010|10101021|1|10101025|limit-counter:default",
       "dimension": "action-form",
-      "subjectIdentity": "actor|101010|10101021|1|10101025:default",
+      "subjectIdentity": "actor|101010|10101021|1|10101025|limit-counter:default",
       "sourceDisposition": "applied",
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
@@ -247,7 +247,7 @@
         "characters.items[id=101010].skillSlots[group=ground,slot=207]"
       ],
       "reasons": [],
-      "sourceRecordHash": "86f29b394283f46a"
+      "sourceRecordHash": "6f29e3317ced2a02"
     },
     {
       "requirementIdentity": "contract:action-form:xiaoyu-burst-three-inputs:segment:1",
@@ -1760,9 +1760,9 @@
       "sourceRecordHash": "17ca0173297ff0b5"
     },
     {
-      "requirementIdentity": "contract:effect:effect:0:f14244bedcddece0",
+      "requirementIdentity": "contract:effect:effect:0:4268a8d979e45416",
       "dimension": "effect",
-      "subjectIdentity": "effect:0:f14244bedcddece0",
+      "subjectIdentity": "effect:0:4268a8d979e45416",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -1778,12 +1778,12 @@
         "runtime-target-from-projectile-collision",
         "runtime-trigger-projectile-collision-frame"
       ],
-      "sourceRecordHash": "a1437014ef2f3dec"
+      "sourceRecordHash": "4df5f0632b750e8e"
     },
     {
-      "requirementIdentity": "contract:effect:effect:1:10ee95e89a0dd8bd",
+      "requirementIdentity": "contract:effect:effect:1:9b989e89bfcdda47",
       "dimension": "effect",
-      "subjectIdentity": "effect:1:10ee95e89a0dd8bd",
+      "subjectIdentity": "effect:1:9b989e89bfcdda47",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -1799,12 +1799,12 @@
         "effect-target-static-evidence-gap",
         "effect-trigger-frame-static-evidence-gap"
       ],
-      "sourceRecordHash": "7f8ece7a866ba22b"
+      "sourceRecordHash": "f42bce1becf919af"
     },
     {
-      "requirementIdentity": "contract:effect:effect:10:25c0958da2aae19d",
+      "requirementIdentity": "contract:effect:effect:10:b5dcbbefec864fc6",
       "dimension": "effect",
-      "subjectIdentity": "effect:10:25c0958da2aae19d",
+      "subjectIdentity": "effect:10:b5dcbbefec864fc6",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -1820,12 +1820,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "6852eaa76af7f750"
+      "sourceRecordHash": "f8b9eed076a87328"
     },
     {
-      "requirementIdentity": "contract:effect:effect:100:ba5279bc4a021fbb",
+      "requirementIdentity": "contract:effect:effect:100:02def47f364b2213",
       "dimension": "effect",
-      "subjectIdentity": "effect:100:ba5279bc4a021fbb",
+      "subjectIdentity": "effect:100:02def47f364b2213",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -1841,12 +1841,12 @@
         "runtime-target-from-projectile-collision",
         "runtime-trigger-projectile-collision-frame"
       ],
-      "sourceRecordHash": "8f4d22356ef61a38"
+      "sourceRecordHash": "77832dc9f200c088"
     },
     {
-      "requirementIdentity": "contract:effect:effect:101:2538275526641c24",
+      "requirementIdentity": "contract:effect:effect:101:cd7b5aa8fb633e2e",
       "dimension": "effect",
-      "subjectIdentity": "effect:101:2538275526641c24",
+      "subjectIdentity": "effect:101:cd7b5aa8fb633e2e",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -1867,12 +1867,12 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "bacc91af7571009b"
+      "sourceRecordHash": "5ceec78659f62e8b"
     },
     {
-      "requirementIdentity": "contract:effect:effect:102:9e4a3a760fb016d5",
+      "requirementIdentity": "contract:effect:effect:102:5d10ca6911f5aadd",
       "dimension": "effect",
-      "subjectIdentity": "effect:102:9e4a3a760fb016d5",
+      "subjectIdentity": "effect:102:5d10ca6911f5aadd",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -1893,12 +1893,12 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "c84de602b650eb94"
+      "sourceRecordHash": "f572e35c11b59694"
     },
     {
-      "requirementIdentity": "contract:effect:effect:103:97aac3b6031f948a",
+      "requirementIdentity": "contract:effect:effect:103:d5de509931b9e3c2",
       "dimension": "effect",
-      "subjectIdentity": "effect:103:97aac3b6031f948a",
+      "subjectIdentity": "effect:103:d5de509931b9e3c2",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -1914,12 +1914,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "390e3ca723985338"
+      "sourceRecordHash": "aa00b5ba8791e8cc"
     },
     {
-      "requirementIdentity": "contract:effect:effect:104:766340bdd02d96ee",
+      "requirementIdentity": "contract:effect:effect:104:9baaff5b9356c31c",
       "dimension": "effect",
-      "subjectIdentity": "effect:104:766340bdd02d96ee",
+      "subjectIdentity": "effect:104:9baaff5b9356c31c",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -1935,12 +1935,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "3e25948b93e20e31"
+      "sourceRecordHash": "feba0fbc767f6e91"
     },
     {
-      "requirementIdentity": "contract:effect:effect:105:4451f4a7c41faf24",
+      "requirementIdentity": "contract:effect:effect:105:56c40cd3c8a76d7e",
       "dimension": "effect",
-      "subjectIdentity": "effect:105:4451f4a7c41faf24",
+      "subjectIdentity": "effect:105:56c40cd3c8a76d7e",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -1956,12 +1956,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "be229720470c0589"
+      "sourceRecordHash": "ea3c7ab27520324d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:106:eabdb5a473f30f07",
+      "requirementIdentity": "contract:effect:effect:106:f0861018863acc69",
       "dimension": "effect",
-      "subjectIdentity": "effect:106:eabdb5a473f30f07",
+      "subjectIdentity": "effect:106:f0861018863acc69",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -1977,12 +1977,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "d8898072e7810495"
+      "sourceRecordHash": "45746f8fa19d8e2d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:107:89fe735c1bdf7d3b",
+      "requirementIdentity": "contract:effect:effect:107:8346342162c509a5",
       "dimension": "effect",
-      "subjectIdentity": "effect:107:89fe735c1bdf7d3b",
+      "subjectIdentity": "effect:107:8346342162c509a5",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -1998,12 +1998,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "6f9703e26337f91b"
+      "sourceRecordHash": "ef81fbf0d933f1e3"
     },
     {
-      "requirementIdentity": "contract:effect:effect:108:60dedac2ca11aafb",
+      "requirementIdentity": "contract:effect:effect:108:917bc6277dde5309",
       "dimension": "effect",
-      "subjectIdentity": "effect:108:60dedac2ca11aafb",
+      "subjectIdentity": "effect:108:917bc6277dde5309",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2019,12 +2019,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "70c3134797e409bd"
+      "sourceRecordHash": "f803b50608a5b40d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:109:42b8076c29d2e164",
+      "requirementIdentity": "contract:effect:effect:109:3f42c56d21b6890e",
       "dimension": "effect",
-      "subjectIdentity": "effect:109:42b8076c29d2e164",
+      "subjectIdentity": "effect:109:3f42c56d21b6890e",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2040,12 +2040,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "b42fb98234cb059d"
+      "sourceRecordHash": "07e00aa63a5aa41d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:11:9e5165a146b49cf9",
+      "requirementIdentity": "contract:effect:effect:11:82c32ecb29953378",
       "dimension": "effect",
-      "subjectIdentity": "effect:11:9e5165a146b49cf9",
+      "subjectIdentity": "effect:11:82c32ecb29953378",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2061,12 +2061,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "14bd55bbd3645b5c"
+      "sourceRecordHash": "d3b8a8cfc651cd78"
     },
     {
-      "requirementIdentity": "contract:effect:effect:110:64896c79f3fa38e2",
+      "requirementIdentity": "contract:effect:effect:110:197376bbaf816198",
       "dimension": "effect",
-      "subjectIdentity": "effect:110:64896c79f3fa38e2",
+      "subjectIdentity": "effect:110:197376bbaf816198",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2082,12 +2082,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "8d290870fc1ab087"
+      "sourceRecordHash": "4d6514e0880e1547"
     },
     {
-      "requirementIdentity": "contract:effect:effect:111:cc23ca96734ee53d",
+      "requirementIdentity": "contract:effect:effect:111:97aa34667c53f5c3",
       "dimension": "effect",
-      "subjectIdentity": "effect:111:cc23ca96734ee53d",
+      "subjectIdentity": "effect:111:97aa34667c53f5c3",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2103,12 +2103,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "bd0d8547347e6fd9"
+      "sourceRecordHash": "72500dc904fb2fb9"
     },
     {
-      "requirementIdentity": "contract:effect:effect:112:d0539ada7b053bd1",
+      "requirementIdentity": "contract:effect:effect:112:a3db6b17b04ada0f",
       "dimension": "effect",
-      "subjectIdentity": "effect:112:d0539ada7b053bd1",
+      "subjectIdentity": "effect:112:a3db6b17b04ada0f",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2125,12 +2125,12 @@
         "effect-trigger-frame-static-evidence-gap",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "d4f5dca25bb20a27"
+      "sourceRecordHash": "937ca19f01062fe7"
     },
     {
-      "requirementIdentity": "contract:effect:effect:113:fc27e6de35916fb9",
+      "requirementIdentity": "contract:effect:effect:113:1aa74bd367b96da7",
       "dimension": "effect",
-      "subjectIdentity": "effect:113:fc27e6de35916fb9",
+      "subjectIdentity": "effect:113:1aa74bd367b96da7",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2146,12 +2146,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "76d88e13875ea222"
+      "sourceRecordHash": "7336f8bd95b50f6a"
     },
     {
-      "requirementIdentity": "contract:effect:effect:114:6c522c549f79be13",
+      "requirementIdentity": "contract:effect:effect:114:889f7e4815280e55",
       "dimension": "effect",
-      "subjectIdentity": "effect:114:6c522c549f79be13",
+      "subjectIdentity": "effect:114:889f7e4815280e55",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2167,12 +2167,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "08f5ae42cd274c7e"
+      "sourceRecordHash": "0187a1a452f5f272"
     },
     {
-      "requirementIdentity": "contract:effect:effect:115:ce530969f5ed2188",
+      "requirementIdentity": "contract:effect:effect:115:7bf3f2476ef28eea",
       "dimension": "effect",
-      "subjectIdentity": "effect:115:ce530969f5ed2188",
+      "subjectIdentity": "effect:115:7bf3f2476ef28eea",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2188,12 +2188,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "644e05437b3d0b06"
+      "sourceRecordHash": "5720f8fc94f234f2"
     },
     {
-      "requirementIdentity": "contract:effect:effect:116:beb521f39ef81d1c",
+      "requirementIdentity": "contract:effect:effect:116:1c4c4e23dc646c46",
       "dimension": "effect",
-      "subjectIdentity": "effect:116:beb521f39ef81d1c",
+      "subjectIdentity": "effect:116:1c4c4e23dc646c46",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2209,12 +2209,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "f7426af2688f82e8"
+      "sourceRecordHash": "f7c07185b2cb3040"
     },
     {
-      "requirementIdentity": "contract:effect:effect:117:508dafd2dbb8cb60",
+      "requirementIdentity": "contract:effect:effect:117:c99fe29e992d8f6e",
       "dimension": "effect",
-      "subjectIdentity": "effect:117:508dafd2dbb8cb60",
+      "subjectIdentity": "effect:117:c99fe29e992d8f6e",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2230,12 +2230,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "dd54523c647aaeae"
+      "sourceRecordHash": "d225201045e6306e"
     },
     {
-      "requirementIdentity": "contract:effect:effect:118:e843f2c2fad6ae93",
+      "requirementIdentity": "contract:effect:effect:118:e950d4583ed4f715",
       "dimension": "effect",
-      "subjectIdentity": "effect:118:e843f2c2fad6ae93",
+      "subjectIdentity": "effect:118:e950d4583ed4f715",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2251,12 +2251,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "67220ffed2095e1a"
+      "sourceRecordHash": "476d628bb2f9e4fe"
     },
     {
-      "requirementIdentity": "contract:effect:effect:119:e0dc2eedfc5b57b1",
+      "requirementIdentity": "contract:effect:effect:119:87ad5134ffed6cdf",
       "dimension": "effect",
-      "subjectIdentity": "effect:119:e0dc2eedfc5b57b1",
+      "subjectIdentity": "effect:119:87ad5134ffed6cdf",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2272,12 +2272,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "3d9af063df28f7b4"
+      "sourceRecordHash": "bf0d9dc40f6cc5fc"
     },
     {
-      "requirementIdentity": "contract:effect:effect:12:4ca5f78559605f93",
+      "requirementIdentity": "contract:effect:effect:12:609ae8a933d3b4f6",
       "dimension": "effect",
-      "subjectIdentity": "effect:12:4ca5f78559605f93",
+      "subjectIdentity": "effect:12:609ae8a933d3b4f6",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2293,12 +2293,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "e32ae184113cb0dc"
+      "sourceRecordHash": "123cc6930883e178"
     },
     {
-      "requirementIdentity": "contract:effect:effect:120:651936b24c3155a2",
+      "requirementIdentity": "contract:effect:effect:120:d024ec2359ef06b0",
       "dimension": "effect",
-      "subjectIdentity": "effect:120:651936b24c3155a2",
+      "subjectIdentity": "effect:120:d024ec2359ef06b0",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2314,12 +2314,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "d24a749633cfbbca"
+      "sourceRecordHash": "b686932c537a9486"
     },
     {
-      "requirementIdentity": "contract:effect:effect:121:ccc34f21c36b6eff",
+      "requirementIdentity": "contract:effect:effect:121:57cb112387bccd4d",
       "dimension": "effect",
-      "subjectIdentity": "effect:121:ccc34f21c36b6eff",
+      "subjectIdentity": "effect:121:57cb112387bccd4d",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2333,12 +2333,12 @@
         "battle-element-assets.jsonl#path_id=-2035055823451510697"
       ],
       "reasons": [],
-      "sourceRecordHash": "9c77a026a4ab21cc"
+      "sourceRecordHash": "56037a60ff364610"
     },
     {
-      "requirementIdentity": "contract:effect:effect:122:1d18eb85fff34094",
+      "requirementIdentity": "contract:effect:effect:122:d52845b8adc57fa2",
       "dimension": "effect",
-      "subjectIdentity": "effect:122:1d18eb85fff34094",
+      "subjectIdentity": "effect:122:d52845b8adc57fa2",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2354,12 +2354,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "f01b8d744c124fdc"
+      "sourceRecordHash": "d711b33ed6589318"
     },
     {
-      "requirementIdentity": "contract:effect:effect:123:5690269dbc6e32bf",
+      "requirementIdentity": "contract:effect:effect:123:528e70ca3c039cbd",
       "dimension": "effect",
-      "subjectIdentity": "effect:123:5690269dbc6e32bf",
+      "subjectIdentity": "effect:123:528e70ca3c039cbd",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2373,12 +2373,12 @@
         "battle-element-assets.jsonl#path_id=4277244978079165007"
       ],
       "reasons": [],
-      "sourceRecordHash": "35e0f2b8606bd9d6"
+      "sourceRecordHash": "63e22842bb30e082"
     },
     {
-      "requirementIdentity": "contract:effect:effect:124:a2f00f74cd9b97ed",
+      "requirementIdentity": "contract:effect:effect:124:e254bf9ab0ab6527",
       "dimension": "effect",
-      "subjectIdentity": "effect:124:a2f00f74cd9b97ed",
+      "subjectIdentity": "effect:124:e254bf9ab0ab6527",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2394,12 +2394,12 @@
         "effect-target-static-evidence-gap",
         "effect-trigger-frame-static-evidence-gap"
       ],
-      "sourceRecordHash": "91f101347799f0a9"
+      "sourceRecordHash": "6c42c8be77b3f459"
     },
     {
-      "requirementIdentity": "contract:effect:effect:13:048ac1a11019eb59",
+      "requirementIdentity": "contract:effect:effect:13:042e96d84d266812",
       "dimension": "effect",
-      "subjectIdentity": "effect:13:048ac1a11019eb59",
+      "subjectIdentity": "effect:13:042e96d84d266812",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2416,12 +2416,12 @@
         "runtime-trigger-projectile-collision-frame",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "045e3312b539361d"
+      "sourceRecordHash": "c2554083dd9ad445"
     },
     {
-      "requirementIdentity": "contract:effect:effect:14:27c672f25cc110d5",
+      "requirementIdentity": "contract:effect:effect:14:51135bdce3e4ad02",
       "dimension": "effect",
-      "subjectIdentity": "effect:14:27c672f25cc110d5",
+      "subjectIdentity": "effect:14:51135bdce3e4ad02",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2435,12 +2435,12 @@
         "battle-element-assets.jsonl#path_id=-3124965708053832775"
       ],
       "reasons": [],
-      "sourceRecordHash": "18fde8964171d284"
+      "sourceRecordHash": "1c11ec17f1fbca58"
     },
     {
-      "requirementIdentity": "contract:effect:effect:15:be426c199bcbc071",
+      "requirementIdentity": "contract:effect:effect:15:c1d6e31b8fdba1fc",
       "dimension": "effect",
-      "subjectIdentity": "effect:15:be426c199bcbc071",
+      "subjectIdentity": "effect:15:c1d6e31b8fdba1fc",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2456,12 +2456,12 @@
         "effect-target-static-evidence-gap",
         "effect-trigger-frame-static-evidence-gap"
       ],
-      "sourceRecordHash": "ae8ba6b56ff81926"
+      "sourceRecordHash": "e0f23bfb13f1d8dc"
     },
     {
-      "requirementIdentity": "contract:effect:effect:16:5cc6c045f9b33d4c",
+      "requirementIdentity": "contract:effect:effect:16:f23644cd40d29669",
       "dimension": "effect",
-      "subjectIdentity": "effect:16:5cc6c045f9b33d4c",
+      "subjectIdentity": "effect:16:f23644cd40d29669",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2477,12 +2477,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "d5cf792f210f708f"
+      "sourceRecordHash": "2597059435912f57"
     },
     {
-      "requirementIdentity": "contract:effect:effect:17:a256c96f13a678b5",
+      "requirementIdentity": "contract:effect:effect:17:48ef5b91b1955198",
       "dimension": "effect",
-      "subjectIdentity": "effect:17:a256c96f13a678b5",
+      "subjectIdentity": "effect:17:48ef5b91b1955198",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2498,12 +2498,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "1707ef58efd08e7b"
+      "sourceRecordHash": "b305ecfd5a567683"
     },
     {
-      "requirementIdentity": "contract:effect:effect:18:4d329564ef28cc57",
+      "requirementIdentity": "contract:effect:effect:18:e937be7da69f3b7a",
       "dimension": "effect",
-      "subjectIdentity": "effect:18:4d329564ef28cc57",
+      "subjectIdentity": "effect:18:e937be7da69f3b7a",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2519,12 +2519,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "1d91ccc1a55781c3"
+      "sourceRecordHash": "ada44508d25e03f3"
     },
     {
-      "requirementIdentity": "contract:effect:effect:19:495b5287b55abf53",
+      "requirementIdentity": "contract:effect:effect:19:fb4882cbf73f7fdc",
       "dimension": "effect",
-      "subjectIdentity": "effect:19:495b5287b55abf53",
+      "subjectIdentity": "effect:19:fb4882cbf73f7fdc",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2540,12 +2540,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "580766e39d5c42c5"
+      "sourceRecordHash": "3383902f62105b19"
     },
     {
-      "requirementIdentity": "contract:effect:effect:2:707126234949a912",
+      "requirementIdentity": "contract:effect:effect:2:b24e45fbe39abc3c",
       "dimension": "effect",
-      "subjectIdentity": "effect:2:707126234949a912",
+      "subjectIdentity": "effect:2:b24e45fbe39abc3c",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2559,12 +2559,12 @@
         "battle-element-assets.jsonl#path_id=-4529113272733101309"
       ],
       "reasons": [],
-      "sourceRecordHash": "4b9a51e735842796"
+      "sourceRecordHash": "aa73202dc77bc7ba"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:3fc6c117b579a551",
+      "requirementIdentity": "contract:effect:effect:20:55b9791aa9e04eee",
       "dimension": "effect",
-      "subjectIdentity": "effect:20:3fc6c117b579a551",
+      "subjectIdentity": "effect:20:55b9791aa9e04eee",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2580,12 +2580,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "094e875c8982af0b"
+      "sourceRecordHash": "57eb73f95a90bf2b"
     },
     {
-      "requirementIdentity": "contract:effect:effect:21:3845b9286f827c9f",
+      "requirementIdentity": "contract:effect:effect:21:e1c4d8ac910c0caa",
       "dimension": "effect",
-      "subjectIdentity": "effect:21:3845b9286f827c9f",
+      "subjectIdentity": "effect:21:e1c4d8ac910c0caa",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2602,12 +2602,12 @@
         "runtime-trigger-projectile-collision-frame",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "ce5036d42829f6e8"
+      "sourceRecordHash": "e9844984d38bef80"
     },
     {
-      "requirementIdentity": "contract:effect:effect:22:ee46d607242dcf4c",
+      "requirementIdentity": "contract:effect:effect:22:02ac8f6b50be37d9",
       "dimension": "effect",
-      "subjectIdentity": "effect:22:ee46d607242dcf4c",
+      "subjectIdentity": "effect:22:02ac8f6b50be37d9",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2624,12 +2624,12 @@
         "runtime-trigger-projectile-collision-frame",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "3c63b7a54ed70e7b"
+      "sourceRecordHash": "df95c3f54a76767f"
     },
     {
-      "requirementIdentity": "contract:effect:effect:23:f72dc6033cf829c5",
+      "requirementIdentity": "contract:effect:effect:23:495397f8f5775476",
       "dimension": "effect",
-      "subjectIdentity": "effect:23:f72dc6033cf829c5",
+      "subjectIdentity": "effect:23:495397f8f5775476",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2646,12 +2646,12 @@
         "effect-trigger-frame-static-evidence-gap",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "71cc0972f440f34a"
+      "sourceRecordHash": "22ee804ca2bb8956"
     },
     {
-      "requirementIdentity": "contract:effect:effect:24:ddbe709ba7f0dfb3",
+      "requirementIdentity": "contract:effect:effect:24:8ad551c23df9f908",
       "dimension": "effect",
-      "subjectIdentity": "effect:24:ddbe709ba7f0dfb3",
+      "subjectIdentity": "effect:24:8ad551c23df9f908",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2667,12 +2667,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "c024f22d4a31dad0"
+      "sourceRecordHash": "c89186a2b43dcf38"
     },
     {
-      "requirementIdentity": "contract:effect:effect:25:8cd8cd0f1362f254",
+      "requirementIdentity": "contract:effect:effect:25:3cf5278ba22305dd",
       "dimension": "effect",
-      "subjectIdentity": "effect:25:8cd8cd0f1362f254",
+      "subjectIdentity": "effect:25:3cf5278ba22305dd",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2688,12 +2688,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "813c7f3766a3eead"
+      "sourceRecordHash": "2a235b8fb03ee25d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:26:47417a2d1b389829",
+      "requirementIdentity": "contract:effect:effect:26:20a8cd16bba5616d",
       "dimension": "effect",
-      "subjectIdentity": "effect:26:47417a2d1b389829",
+      "subjectIdentity": "effect:26:20a8cd16bba5616d",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2710,12 +2710,12 @@
         "nested-damage-runtime-family-unimplemented",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "ce18279a21a6147f"
+      "sourceRecordHash": "098b6c115f3cbd3f"
     },
     {
-      "requirementIdentity": "contract:effect:effect:27:074796a5deffa710",
+      "requirementIdentity": "contract:effect:effect:27:40a65738e0842b04",
       "dimension": "effect",
-      "subjectIdentity": "effect:27:074796a5deffa710",
+      "subjectIdentity": "effect:27:40a65738e0842b04",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2732,12 +2732,12 @@
         "effect-trigger-frame-static-evidence-gap",
         "nested-damage-runtime-family-unimplemented"
       ],
-      "sourceRecordHash": "ed75f81733059602"
+      "sourceRecordHash": "6307d43f0930112e"
     },
     {
-      "requirementIdentity": "contract:effect:effect:28:fae6d03ffff6895b",
+      "requirementIdentity": "contract:effect:effect:28:ddd1615dd9809f5d",
       "dimension": "effect",
-      "subjectIdentity": "effect:28:fae6d03ffff6895b",
+      "subjectIdentity": "effect:28:ddd1615dd9809f5d",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2754,12 +2754,12 @@
         "judgment-condition-runtime-unimplemented",
         "semantic-condition-not-standalone-gameplay-effect"
       ],
-      "sourceRecordHash": "04cd99b2e86579b1"
+      "sourceRecordHash": "a2f1122912012231"
     },
     {
-      "requirementIdentity": "contract:effect:effect:29:22d0f7b1442372a5",
+      "requirementIdentity": "contract:effect:effect:29:2fcdc2aea26f53d7",
       "dimension": "effect",
-      "subjectIdentity": "effect:29:22d0f7b1442372a5",
+      "subjectIdentity": "effect:29:2fcdc2aea26f53d7",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2773,12 +2773,12 @@
         "battle-element-assets.jsonl#path_id=1781318263043700654"
       ],
       "reasons": [],
-      "sourceRecordHash": "d1188a20ef3b165d"
+      "sourceRecordHash": "ea2230d9efe3a141"
     },
     {
-      "requirementIdentity": "contract:effect:effect:3:d64fc3cae7abf620",
+      "requirementIdentity": "contract:effect:effect:3:62f4fe1095d424ce",
       "dimension": "effect",
-      "subjectIdentity": "effect:3:d64fc3cae7abf620",
+      "subjectIdentity": "effect:3:62f4fe1095d424ce",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2794,12 +2794,12 @@
         "effect-target-static-evidence-gap",
         "effect-trigger-frame-static-evidence-gap"
       ],
-      "sourceRecordHash": "79338fd5398e01c8"
+      "sourceRecordHash": "4c334ec8f9132b60"
     },
     {
-      "requirementIdentity": "contract:effect:effect:30:cd1fcfaf7d188102",
+      "requirementIdentity": "contract:effect:effect:30:c11e70069fb47adc",
       "dimension": "effect",
-      "subjectIdentity": "effect:30:cd1fcfaf7d188102",
+      "subjectIdentity": "effect:30:c11e70069fb47adc",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2819,12 +2819,12 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "4e701f8da95510c7"
+      "sourceRecordHash": "3e3f9aee17e2362b"
     },
     {
-      "requirementIdentity": "contract:effect:effect:31:b935724a4a91efaf",
+      "requirementIdentity": "contract:effect:effect:31:b49522c6e820480f",
       "dimension": "effect",
-      "subjectIdentity": "effect:31:b935724a4a91efaf",
+      "subjectIdentity": "effect:31:b49522c6e820480f",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2841,12 +2841,12 @@
         "nested-damage-runtime-family-unimplemented",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "3b5fa19dd16254e0"
+      "sourceRecordHash": "873156cb9ddcdac0"
     },
     {
-      "requirementIdentity": "contract:effect:effect:32:75bdabe3b2821d2c",
+      "requirementIdentity": "contract:effect:effect:32:029d44094d49adac",
       "dimension": "effect",
-      "subjectIdentity": "effect:32:75bdabe3b2821d2c",
+      "subjectIdentity": "effect:32:029d44094d49adac",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2863,12 +2863,12 @@
         "effect-trigger-frame-static-evidence-gap",
         "nested-damage-runtime-family-unimplemented"
       ],
-      "sourceRecordHash": "85ababb1ac9234b9"
+      "sourceRecordHash": "cab29bd8b08c5dc1"
     },
     {
-      "requirementIdentity": "contract:effect:effect:33:e7f4907ce760cb9d",
+      "requirementIdentity": "contract:effect:effect:33:24aeac6d6f50cc6c",
       "dimension": "effect",
-      "subjectIdentity": "effect:33:e7f4907ce760cb9d",
+      "subjectIdentity": "effect:33:24aeac6d6f50cc6c",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2885,12 +2885,12 @@
         "semantic-wrapper-not-gameplay-effect",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "8eda3707e77ed305"
+      "sourceRecordHash": "957a43549b9941f3"
     },
     {
-      "requirementIdentity": "contract:effect:effect:34:bce91b4b92577b7e",
+      "requirementIdentity": "contract:effect:effect:34:7e684db1f7c1d565",
       "dimension": "effect",
-      "subjectIdentity": "effect:34:bce91b4b92577b7e",
+      "subjectIdentity": "effect:34:7e684db1f7c1d565",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2907,12 +2907,12 @@
         "semantic-wrapper-not-gameplay-effect",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "313995f471fe33f5"
+      "sourceRecordHash": "ea0dfbb1792617b5"
     },
     {
-      "requirementIdentity": "contract:effect:effect:35:40da88e9c91e46d0",
+      "requirementIdentity": "contract:effect:effect:35:fa707f69a87ed405",
       "dimension": "effect",
-      "subjectIdentity": "effect:35:40da88e9c91e46d0",
+      "subjectIdentity": "effect:35:fa707f69a87ed405",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2929,12 +2929,12 @@
         "semantic-wrapper-not-gameplay-effect",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "86e679e64ba1f71d"
+      "sourceRecordHash": "15e90f6e682a58ef"
     },
     {
-      "requirementIdentity": "contract:effect:effect:36:2494579e21dd3420",
+      "requirementIdentity": "contract:effect:effect:36:8450221422283e5d",
       "dimension": "effect",
-      "subjectIdentity": "effect:36:2494579e21dd3420",
+      "subjectIdentity": "effect:36:8450221422283e5d",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2952,12 +2952,12 @@
         "effect-trigger-frame-static-evidence-gap",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "c47fd9d0a5cc4411"
+      "sourceRecordHash": "9306db316dca899d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:37:ab26713345db3576",
+      "requirementIdentity": "contract:effect:effect:37:9ae88585f9536c07",
       "dimension": "effect",
-      "subjectIdentity": "effect:37:ab26713345db3576",
+      "subjectIdentity": "effect:37:9ae88585f9536c07",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2974,12 +2974,12 @@
         "effect-combine-semantics-unresolved",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "1057a35aef5c47a7"
+      "sourceRecordHash": "6ef171bc4a6af6cf"
     },
     {
-      "requirementIdentity": "contract:effect:effect:38:825bbec2460d326c",
+      "requirementIdentity": "contract:effect:effect:38:1a22ab7b96719cb1",
       "dimension": "effect",
-      "subjectIdentity": "effect:38:825bbec2460d326c",
+      "subjectIdentity": "effect:38:1a22ab7b96719cb1",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2996,12 +2996,12 @@
         "effect-combine-semantics-unresolved",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "4743b257bfa9d7bb"
+      "sourceRecordHash": "81fefa75fa8153e7"
     },
     {
-      "requirementIdentity": "contract:effect:effect:39:5e793bb3a7bd4dca",
+      "requirementIdentity": "contract:effect:effect:39:98ca30515f9ece4f",
       "dimension": "effect",
-      "subjectIdentity": "effect:39:5e793bb3a7bd4dca",
+      "subjectIdentity": "effect:39:98ca30515f9ece4f",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3018,12 +3018,12 @@
         "sp-formula-not-literal-function-5",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "c528d46e8124357f"
+      "sourceRecordHash": "d5c320d470563d3d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:4:989420fb846fd611",
+      "requirementIdentity": "contract:effect:effect:4:f88dfad5eed96123",
       "dimension": "effect",
-      "subjectIdentity": "effect:4:989420fb846fd611",
+      "subjectIdentity": "effect:4:f88dfad5eed96123",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3037,12 +3037,12 @@
         "battle-element-assets.jsonl#path_id=-8148787786042882084"
       ],
       "reasons": [],
-      "sourceRecordHash": "e7be7f08c844cc2e"
+      "sourceRecordHash": "43bb0db5344c4bbe"
     },
     {
-      "requirementIdentity": "contract:effect:effect:40:7591c87a8ab271c5",
+      "requirementIdentity": "contract:effect:effect:40:7cd5842294b71d62",
       "dimension": "effect",
-      "subjectIdentity": "effect:40:7591c87a8ab271c5",
+      "subjectIdentity": "effect:40:7cd5842294b71d62",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3059,12 +3059,12 @@
         "sp-formula-not-literal-function-5",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "63cc7e0294331117"
+      "sourceRecordHash": "531e49f405e1d7b7"
     },
     {
-      "requirementIdentity": "contract:effect:effect:41:4c1623c88df4b72b",
+      "requirementIdentity": "contract:effect:effect:41:7ea9e29c6da76222",
       "dimension": "effect",
-      "subjectIdentity": "effect:41:4c1623c88df4b72b",
+      "subjectIdentity": "effect:41:7ea9e29c6da76222",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3081,12 +3081,12 @@
         "sp-formula-not-literal-function-5",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "af9a78ee47852e97"
+      "sourceRecordHash": "18977d3cbb65428f"
     },
     {
-      "requirementIdentity": "contract:effect:effect:42:7f1e0a998152c578",
+      "requirementIdentity": "contract:effect:effect:42:52935bed8a5331b9",
       "dimension": "effect",
-      "subjectIdentity": "effect:42:7f1e0a998152c578",
+      "subjectIdentity": "effect:42:52935bed8a5331b9",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3105,12 +3105,12 @@
         "effect-trigger-frame-static-evidence-gap",
         "sp-formula-not-literal-function-5"
       ],
-      "sourceRecordHash": "b03c91ebc06b9418"
+      "sourceRecordHash": "ea8236c70cd5b8a0"
     },
     {
-      "requirementIdentity": "contract:effect:effect:43:03972ab9bce1df83",
+      "requirementIdentity": "contract:effect:effect:43:5a973bd251e0e7e8",
       "dimension": "effect",
-      "subjectIdentity": "effect:43:03972ab9bce1df83",
+      "subjectIdentity": "effect:43:5a973bd251e0e7e8",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3127,12 +3127,12 @@
         "nested-damage-runtime-family-unimplemented",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "a5570cfdf7f946ad"
+      "sourceRecordHash": "447b24522f647f1d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:44:f8493bf6bb32c513",
+      "requirementIdentity": "contract:effect:effect:44:0dc642d0c5d80814",
       "dimension": "effect",
-      "subjectIdentity": "effect:44:f8493bf6bb32c513",
+      "subjectIdentity": "effect:44:0dc642d0c5d80814",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3149,12 +3149,12 @@
         "nested-damage-runtime-family-unimplemented",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "cf8c32bf229164c1"
+      "sourceRecordHash": "c498fea2b998d415"
     },
     {
-      "requirementIdentity": "contract:effect:effect:45:de97c622e5f9dffa",
+      "requirementIdentity": "contract:effect:effect:45:c02d051b7d8bff63",
       "dimension": "effect",
-      "subjectIdentity": "effect:45:de97c622e5f9dffa",
+      "subjectIdentity": "effect:45:c02d051b7d8bff63",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3171,12 +3171,12 @@
         "nested-damage-runtime-family-unimplemented",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "0462a852a4041547"
+      "sourceRecordHash": "f26491178676855f"
     },
     {
-      "requirementIdentity": "contract:effect:effect:46:b0705a9a66786398",
+      "requirementIdentity": "contract:effect:effect:46:24f39e6c38eb1533",
       "dimension": "effect",
-      "subjectIdentity": "effect:46:b0705a9a66786398",
+      "subjectIdentity": "effect:46:24f39e6c38eb1533",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3193,12 +3193,12 @@
         "effect-trigger-frame-static-evidence-gap",
         "nested-damage-runtime-family-unimplemented"
       ],
-      "sourceRecordHash": "9bd69ea74ade78bd"
+      "sourceRecordHash": "3008bab8f3b3483d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:47:db50eab10dc84e6d",
+      "requirementIdentity": "contract:effect:effect:47:14a71236918b950e",
       "dimension": "effect",
-      "subjectIdentity": "effect:47:db50eab10dc84e6d",
+      "subjectIdentity": "effect:47:14a71236918b950e",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3212,12 +3212,12 @@
         "battle-element-assets.jsonl#path_id=-3124965708053832775"
       ],
       "reasons": [],
-      "sourceRecordHash": "d5b7c9a419ad55cf"
+      "sourceRecordHash": "30a883abc4a0427b"
     },
     {
-      "requirementIdentity": "contract:effect:effect:48:69d02adf40622a78",
+      "requirementIdentity": "contract:effect:effect:48:6c0d2815ffa98941",
       "dimension": "effect",
-      "subjectIdentity": "effect:48:69d02adf40622a78",
+      "subjectIdentity": "effect:48:6c0d2815ffa98941",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3233,12 +3233,12 @@
         "effect-target-static-evidence-gap",
         "effect-trigger-frame-static-evidence-gap"
       ],
-      "sourceRecordHash": "75000f6ea565b3be"
+      "sourceRecordHash": "435795328863cce0"
     },
     {
-      "requirementIdentity": "contract:effect:effect:49:dbcecc10f9fa7f98",
+      "requirementIdentity": "contract:effect:effect:49:09b7447083c6ae6b",
       "dimension": "effect",
-      "subjectIdentity": "effect:49:dbcecc10f9fa7f98",
+      "subjectIdentity": "effect:49:09b7447083c6ae6b",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3252,12 +3252,12 @@
         "battle-element-assets.jsonl#path_id=-4529113272733101309"
       ],
       "reasons": [],
-      "sourceRecordHash": "349e0b44158bc004"
+      "sourceRecordHash": "84b4a968ef208300"
     },
     {
-      "requirementIdentity": "contract:effect:effect:5:27da2f38ed70292b",
+      "requirementIdentity": "contract:effect:effect:5:8436167682a7ad0d",
       "dimension": "effect",
-      "subjectIdentity": "effect:5:27da2f38ed70292b",
+      "subjectIdentity": "effect:5:8436167682a7ad0d",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3271,12 +3271,12 @@
         "battle-element-assets.jsonl#path_id=1474042154774785480"
       ],
       "reasons": [],
-      "sourceRecordHash": "6cf72f10e0a446d7"
+      "sourceRecordHash": "4bf5b3f66fa982f7"
     },
     {
-      "requirementIdentity": "contract:effect:effect:50:0fa8b15deaaf4fec",
+      "requirementIdentity": "contract:effect:effect:50:227ec225c10906c9",
       "dimension": "effect",
-      "subjectIdentity": "effect:50:0fa8b15deaaf4fec",
+      "subjectIdentity": "effect:50:227ec225c10906c9",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3290,12 +3290,12 @@
         "battle-element-assets.jsonl#path_id=-4529113272733101309"
       ],
       "reasons": [],
-      "sourceRecordHash": "080c3dc5718b349c"
+      "sourceRecordHash": "73ad73f7add0f610"
     },
     {
-      "requirementIdentity": "contract:effect:effect:51:04a7978d909df4ff",
+      "requirementIdentity": "contract:effect:effect:51:29c5c6d8e8ef32d0",
       "dimension": "effect",
-      "subjectIdentity": "effect:51:04a7978d909df4ff",
+      "subjectIdentity": "effect:51:29c5c6d8e8ef32d0",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3312,12 +3312,12 @@
         "effect-target-static-evidence-gap",
         "effect-trigger-frame-static-evidence-gap"
       ],
-      "sourceRecordHash": "234d20792b1bc2a3"
+      "sourceRecordHash": "f94837aa9f9ba511"
     },
     {
-      "requirementIdentity": "contract:effect:effect:52:7f18c49f0a8d4816",
+      "requirementIdentity": "contract:effect:effect:52:5ecd559ca774cdeb",
       "dimension": "effect",
-      "subjectIdentity": "effect:52:7f18c49f0a8d4816",
+      "subjectIdentity": "effect:52:5ecd559ca774cdeb",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3334,12 +3334,12 @@
         "judgment-condition-runtime-unimplemented",
         "semantic-condition-not-standalone-gameplay-effect"
       ],
-      "sourceRecordHash": "9c22385a7a07742a"
+      "sourceRecordHash": "4ecd5ccc5c5914be"
     },
     {
-      "requirementIdentity": "contract:effect:effect:53:31723cd523a8a7a1",
+      "requirementIdentity": "contract:effect:effect:53:6072dc1599617256",
       "dimension": "effect",
-      "subjectIdentity": "effect:53:31723cd523a8a7a1",
+      "subjectIdentity": "effect:53:6072dc1599617256",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3356,12 +3356,12 @@
         "judgment-condition-runtime-unimplemented",
         "semantic-condition-not-standalone-gameplay-effect"
       ],
-      "sourceRecordHash": "accea6e44d5941c8"
+      "sourceRecordHash": "ba8a4ad41ddf9f12"
     },
     {
-      "requirementIdentity": "contract:effect:effect:54:938c4c47a62dc4eb",
+      "requirementIdentity": "contract:effect:effect:54:05223e4408103072",
       "dimension": "effect",
-      "subjectIdentity": "effect:54:938c4c47a62dc4eb",
+      "subjectIdentity": "effect:54:05223e4408103072",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3378,12 +3378,12 @@
         "judgment-condition-runtime-unimplemented",
         "semantic-condition-not-standalone-gameplay-effect"
       ],
-      "sourceRecordHash": "1a21b22df17d1e66"
+      "sourceRecordHash": "daa18f1257b12f26"
     },
     {
-      "requirementIdentity": "contract:effect:effect:55:fee9a95b812ce6b4",
+      "requirementIdentity": "contract:effect:effect:55:c8111da376bd7c1d",
       "dimension": "effect",
-      "subjectIdentity": "effect:55:fee9a95b812ce6b4",
+      "subjectIdentity": "effect:55:c8111da376bd7c1d",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3400,12 +3400,12 @@
         "nested-damage-runtime-family-unimplemented",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "aa083655b385138d"
+      "sourceRecordHash": "82293951021f362b"
     },
     {
-      "requirementIdentity": "contract:effect:effect:56:cbb3b4e70e1106b5",
+      "requirementIdentity": "contract:effect:effect:56:580a6a4c5520da72",
       "dimension": "effect",
-      "subjectIdentity": "effect:56:cbb3b4e70e1106b5",
+      "subjectIdentity": "effect:56:580a6a4c5520da72",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3422,12 +3422,12 @@
         "nested-damage-runtime-family-unimplemented",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "735f4f9e64f2aec9"
+      "sourceRecordHash": "e953cad593f1e2c5"
     },
     {
-      "requirementIdentity": "contract:effect:effect:57:5730d9df0c8f2a71",
+      "requirementIdentity": "contract:effect:effect:57:f7f73fe4e686049c",
       "dimension": "effect",
-      "subjectIdentity": "effect:57:5730d9df0c8f2a71",
+      "subjectIdentity": "effect:57:f7f73fe4e686049c",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3444,12 +3444,12 @@
         "nested-damage-runtime-family-unimplemented",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "d1e59e9615e45497"
+      "sourceRecordHash": "339bd0ca59a9d7f5"
     },
     {
-      "requirementIdentity": "contract:effect:effect:58:19a83fbe4bbc69f6",
+      "requirementIdentity": "contract:effect:effect:58:0ed4b5c2d443a98d",
       "dimension": "effect",
-      "subjectIdentity": "effect:58:19a83fbe4bbc69f6",
+      "subjectIdentity": "effect:58:0ed4b5c2d443a98d",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3466,12 +3466,12 @@
         "effect-trigger-frame-static-evidence-gap",
         "nested-damage-runtime-family-unimplemented"
       ],
-      "sourceRecordHash": "c80844e48c32ed43"
+      "sourceRecordHash": "d68eb103f1b0775b"
     },
     {
-      "requirementIdentity": "contract:effect:effect:59:ef642f95faf296b9",
+      "requirementIdentity": "contract:effect:effect:59:d317053f919cc862",
       "dimension": "effect",
-      "subjectIdentity": "effect:59:ef642f95faf296b9",
+      "subjectIdentity": "effect:59:d317053f919cc862",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3485,12 +3485,12 @@
         "battle-element-assets.jsonl#path_id=-8148787786042882084"
       ],
       "reasons": [],
-      "sourceRecordHash": "03b6e21f4aba7ed8"
+      "sourceRecordHash": "c559c56202119d3c"
     },
     {
-      "requirementIdentity": "contract:effect:effect:6:6046623db0204fe8",
+      "requirementIdentity": "contract:effect:effect:6:d393be0363e19117",
       "dimension": "effect",
-      "subjectIdentity": "effect:6:6046623db0204fe8",
+      "subjectIdentity": "effect:6:d393be0363e19117",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3506,12 +3506,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "e3291d4ba19b681f"
+      "sourceRecordHash": "774fa593c16dc2ef"
     },
     {
-      "requirementIdentity": "contract:effect:effect:60:6b017c7b379d186d",
+      "requirementIdentity": "contract:effect:effect:60:231badd5a6ff1b24",
       "dimension": "effect",
-      "subjectIdentity": "effect:60:6b017c7b379d186d",
+      "subjectIdentity": "effect:60:231badd5a6ff1b24",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3525,12 +3525,12 @@
         "battle-element-assets.jsonl#path_id=-8148787786042882084"
       ],
       "reasons": [],
-      "sourceRecordHash": "38921552976556a8"
+      "sourceRecordHash": "ee49dcfca8882f10"
     },
     {
-      "requirementIdentity": "contract:effect:effect:61:f943c7634822407a",
+      "requirementIdentity": "contract:effect:effect:61:8e4790995e268de7",
       "dimension": "effect",
-      "subjectIdentity": "effect:61:f943c7634822407a",
+      "subjectIdentity": "effect:61:8e4790995e268de7",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3546,12 +3546,12 @@
         "effect-target-static-evidence-gap",
         "effect-trigger-frame-static-evidence-gap"
       ],
-      "sourceRecordHash": "fa76072331059b48"
+      "sourceRecordHash": "358e9d769abb4d9c"
     },
     {
-      "requirementIdentity": "contract:effect:effect:62:25381d1c162e2edb",
+      "requirementIdentity": "contract:effect:effect:62:03a1ed43dd884418",
       "dimension": "effect",
-      "subjectIdentity": "effect:62:25381d1c162e2edb",
+      "subjectIdentity": "effect:62:03a1ed43dd884418",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3568,12 +3568,12 @@
         "judgment-condition-runtime-unimplemented",
         "semantic-condition-not-standalone-gameplay-effect"
       ],
-      "sourceRecordHash": "993b055158bac2ff"
+      "sourceRecordHash": "69a78b0f9b312b3f"
     },
     {
-      "requirementIdentity": "contract:effect:effect:63:6e92299fb828cdff",
+      "requirementIdentity": "contract:effect:effect:63:ea82d026f5989918",
       "dimension": "effect",
-      "subjectIdentity": "effect:63:6e92299fb828cdff",
+      "subjectIdentity": "effect:63:ea82d026f5989918",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3590,12 +3590,12 @@
         "judgment-condition-runtime-unimplemented",
         "semantic-condition-not-standalone-gameplay-effect"
       ],
-      "sourceRecordHash": "1d40fd3b674f2113"
+      "sourceRecordHash": "84780a46f8681b23"
     },
     {
-      "requirementIdentity": "contract:effect:effect:64:777e84386f8cc136",
+      "requirementIdentity": "contract:effect:effect:64:f04bf25a033d7ac3",
       "dimension": "effect",
-      "subjectIdentity": "effect:64:777e84386f8cc136",
+      "subjectIdentity": "effect:64:f04bf25a033d7ac3",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3612,12 +3612,12 @@
         "judgment-condition-runtime-unimplemented",
         "semantic-condition-not-standalone-gameplay-effect"
       ],
-      "sourceRecordHash": "2e89a3525f3a44c9"
+      "sourceRecordHash": "8457fde643930605"
     },
     {
-      "requirementIdentity": "contract:effect:effect:65:0d918b755c77ced3",
+      "requirementIdentity": "contract:effect:effect:65:1cacb1c00eed6bc4",
       "dimension": "effect",
-      "subjectIdentity": "effect:65:0d918b755c77ced3",
+      "subjectIdentity": "effect:65:1cacb1c00eed6bc4",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3634,12 +3634,12 @@
         "effect-target-static-evidence-gap",
         "tuning-mark-relation-notDelElementDataList-unresolved"
       ],
-      "sourceRecordHash": "e968b8bf252aadc0"
+      "sourceRecordHash": "93b6eb224c3d79f8"
     },
     {
-      "requirementIdentity": "contract:effect:effect:66:231e03e28c53a0c4",
+      "requirementIdentity": "contract:effect:effect:66:3bedbde105231739",
       "dimension": "effect",
-      "subjectIdentity": "effect:66:231e03e28c53a0c4",
+      "subjectIdentity": "effect:66:3bedbde105231739",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3657,12 +3657,12 @@
         "tuning-mark-relation-elementDataList-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved"
       ],
-      "sourceRecordHash": "cab0a4b99270b7d1"
+      "sourceRecordHash": "385e0c36608c5081"
     },
     {
-      "requirementIdentity": "contract:effect:effect:67:1f9b150fe26c9159",
+      "requirementIdentity": "contract:effect:effect:67:1239600bca436774",
       "dimension": "effect",
-      "subjectIdentity": "effect:67:1f9b150fe26c9159",
+      "subjectIdentity": "effect:67:1239600bca436774",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3678,12 +3678,12 @@
         "effect-target-static-evidence-gap",
         "effect-trigger-frame-static-evidence-gap"
       ],
-      "sourceRecordHash": "5e775da54564d135"
+      "sourceRecordHash": "ec156db084492b21"
     },
     {
-      "requirementIdentity": "contract:effect:effect:68:9470e87c5216cd07",
+      "requirementIdentity": "contract:effect:effect:68:dd344b592585a612",
       "dimension": "effect",
-      "subjectIdentity": "effect:68:9470e87c5216cd07",
+      "subjectIdentity": "effect:68:dd344b592585a612",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3697,12 +3697,12 @@
         "battle-element-assets.jsonl#path_id=1781318263043700654"
       ],
       "reasons": [],
-      "sourceRecordHash": "2e91d5a9042b7103"
+      "sourceRecordHash": "afcb2cdff3f0e97f"
     },
     {
-      "requirementIdentity": "contract:effect:effect:69:e103aaaee80d4d8f",
+      "requirementIdentity": "contract:effect:effect:69:42effb358cd029de",
       "dimension": "effect",
-      "subjectIdentity": "effect:69:e103aaaee80d4d8f",
+      "subjectIdentity": "effect:69:42effb358cd029de",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3716,12 +3716,12 @@
         "battle-element-assets.jsonl#path_id=1781318263043700654"
       ],
       "reasons": [],
-      "sourceRecordHash": "56fa51e5478f4a83"
+      "sourceRecordHash": "ea6d7ffbb9e7cad7"
     },
     {
-      "requirementIdentity": "contract:effect:effect:7:af2d51be40bdc308",
+      "requirementIdentity": "contract:effect:effect:7:142a03c7c33fd63f",
       "dimension": "effect",
-      "subjectIdentity": "effect:7:af2d51be40bdc308",
+      "subjectIdentity": "effect:7:142a03c7c33fd63f",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3737,12 +3737,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "8720d37bb24a598b"
+      "sourceRecordHash": "4c89d87a66aa9c1d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:70:ac295ecc7e323930",
+      "requirementIdentity": "contract:effect:effect:70:ec7438e9520f4697",
       "dimension": "effect",
-      "subjectIdentity": "effect:70:ac295ecc7e323930",
+      "subjectIdentity": "effect:70:ec7438e9520f4697",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3756,12 +3756,12 @@
         "battle-element-assets.jsonl#path_id=1781318263043700654"
       ],
       "reasons": [],
-      "sourceRecordHash": "fef41453402211b7"
+      "sourceRecordHash": "af2f360fb9a1111b"
     },
     {
-      "requirementIdentity": "contract:effect:effect:71:7073ed4eebbae042",
+      "requirementIdentity": "contract:effect:effect:71:10da966af72a0223",
       "dimension": "effect",
-      "subjectIdentity": "effect:71:7073ed4eebbae042",
+      "subjectIdentity": "effect:71:10da966af72a0223",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3781,12 +3781,12 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "b54dbc97f4815d26"
+      "sourceRecordHash": "5171982edf46897a"
     },
     {
-      "requirementIdentity": "contract:effect:effect:72:c41bcd7070d2f652",
+      "requirementIdentity": "contract:effect:effect:72:f4c5dbbe99d1d4d5",
       "dimension": "effect",
-      "subjectIdentity": "effect:72:c41bcd7070d2f652",
+      "subjectIdentity": "effect:72:f4c5dbbe99d1d4d5",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3802,12 +3802,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "214980ad9e40fa95"
+      "sourceRecordHash": "b18d5f7f42ef6e63"
     },
     {
-      "requirementIdentity": "contract:effect:effect:73:bcab654c7f4a541c",
+      "requirementIdentity": "contract:effect:effect:73:fc4040b1eaf3c701",
       "dimension": "effect",
-      "subjectIdentity": "effect:73:bcab654c7f4a541c",
+      "subjectIdentity": "effect:73:fc4040b1eaf3c701",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3823,12 +3823,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "5723ca6a6b4e7bb1"
+      "sourceRecordHash": "90da7ad2938f8f4f"
     },
     {
-      "requirementIdentity": "contract:effect:effect:74:16975a21d5b1c6e5",
+      "requirementIdentity": "contract:effect:effect:74:17935fcd38f70a34",
       "dimension": "effect",
-      "subjectIdentity": "effect:74:16975a21d5b1c6e5",
+      "subjectIdentity": "effect:74:17935fcd38f70a34",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3846,12 +3846,12 @@
         "effect-trigger-frame-static-evidence-gap",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "a2bfa16cd717b39c"
+      "sourceRecordHash": "6610f82e8f7c42d0"
     },
     {
-      "requirementIdentity": "contract:effect:effect:75:f4a4b69acab1380e",
+      "requirementIdentity": "contract:effect:effect:75:8ba2a86b8e757cbd",
       "dimension": "effect",
-      "subjectIdentity": "effect:75:f4a4b69acab1380e",
+      "subjectIdentity": "effect:75:8ba2a86b8e757cbd",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3865,12 +3865,12 @@
         "battle-element-assets.jsonl#path_id=4731523060341306954"
       ],
       "reasons": [],
-      "sourceRecordHash": "4108305cb7a78b52"
+      "sourceRecordHash": "2d7de4a2af62810a"
     },
     {
-      "requirementIdentity": "contract:effect:effect:76:3bdf48593396ca3d",
+      "requirementIdentity": "contract:effect:effect:76:73a943fb2b0f803c",
       "dimension": "effect",
-      "subjectIdentity": "effect:76:3bdf48593396ca3d",
+      "subjectIdentity": "effect:76:73a943fb2b0f803c",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3884,12 +3884,12 @@
         "battle-element-assets.jsonl#path_id=4731523060341306954"
       ],
       "reasons": [],
-      "sourceRecordHash": "149e37ba512f332a"
+      "sourceRecordHash": "f758726d533c8c9a"
     },
     {
-      "requirementIdentity": "contract:effect:effect:77:6cc41b7ac4e4676b",
+      "requirementIdentity": "contract:effect:effect:77:61cba58929333870",
       "dimension": "effect",
-      "subjectIdentity": "effect:77:6cc41b7ac4e4676b",
+      "subjectIdentity": "effect:77:61cba58929333870",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3903,12 +3903,12 @@
         "battle-element-assets.jsonl#path_id=4731523060341306954"
       ],
       "reasons": [],
-      "sourceRecordHash": "014045f8a0871bea"
+      "sourceRecordHash": "bb735939299039da"
     },
     {
-      "requirementIdentity": "contract:effect:effect:78:b0a9cf8511b1f333",
+      "requirementIdentity": "contract:effect:effect:78:7067ddb967938be2",
       "dimension": "effect",
-      "subjectIdentity": "effect:78:b0a9cf8511b1f333",
+      "subjectIdentity": "effect:78:7067ddb967938be2",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3928,12 +3928,12 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "835b311f6c4773ed"
+      "sourceRecordHash": "65dea612c5e3e643"
     },
     {
-      "requirementIdentity": "contract:effect:effect:79:ca7e7a417dec1d75",
+      "requirementIdentity": "contract:effect:effect:79:4a58eb5e456f72e2",
       "dimension": "effect",
-      "subjectIdentity": "effect:79:ca7e7a417dec1d75",
+      "subjectIdentity": "effect:79:4a58eb5e456f72e2",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3949,12 +3949,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "9caec46ff5a16e2b"
+      "sourceRecordHash": "2f366e30c39687ef"
     },
     {
-      "requirementIdentity": "contract:effect:effect:8:1970bfad3f2e8aac",
+      "requirementIdentity": "contract:effect:effect:8:68f6dc5246132713",
       "dimension": "effect",
-      "subjectIdentity": "effect:8:1970bfad3f2e8aac",
+      "subjectIdentity": "effect:8:68f6dc5246132713",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3970,12 +3970,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "d96363d1e6ce4dae"
+      "sourceRecordHash": "3ad41fe5511c56d6"
     },
     {
-      "requirementIdentity": "contract:effect:effect:80:71be316ce6881969",
+      "requirementIdentity": "contract:effect:effect:80:65bd05479aa1a980",
       "dimension": "effect",
-      "subjectIdentity": "effect:80:71be316ce6881969",
+      "subjectIdentity": "effect:80:65bd05479aa1a980",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -3992,12 +3992,12 @@
         "nested-damage-runtime-family-unimplemented",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "2b4d9d29b51c9036"
+      "sourceRecordHash": "c0253e30f0799650"
     },
     {
-      "requirementIdentity": "contract:effect:effect:81:cf3425bce0f5300d",
+      "requirementIdentity": "contract:effect:effect:81:6b9203fa46a03a30",
       "dimension": "effect",
-      "subjectIdentity": "effect:81:cf3425bce0f5300d",
+      "subjectIdentity": "effect:81:6b9203fa46a03a30",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4014,12 +4014,12 @@
         "nested-damage-runtime-family-unimplemented",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "e9affaa1a224eabe"
+      "sourceRecordHash": "8f11d21c9852f93e"
     },
     {
-      "requirementIdentity": "contract:effect:effect:82:2e94a1dc63a1f2de",
+      "requirementIdentity": "contract:effect:effect:82:efaec88499a48199",
       "dimension": "effect",
-      "subjectIdentity": "effect:82:2e94a1dc63a1f2de",
+      "subjectIdentity": "effect:82:efaec88499a48199",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4036,12 +4036,12 @@
         "nested-damage-runtime-family-unimplemented",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "276cba21444df59a"
+      "sourceRecordHash": "3df0a3d8761aab04"
     },
     {
-      "requirementIdentity": "contract:effect:effect:83:fd17b3ff7bee3d60",
+      "requirementIdentity": "contract:effect:effect:83:1497f0f4b1137205",
       "dimension": "effect",
-      "subjectIdentity": "effect:83:fd17b3ff7bee3d60",
+      "subjectIdentity": "effect:83:1497f0f4b1137205",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4058,12 +4058,12 @@
         "effect-trigger-frame-static-evidence-gap",
         "nested-damage-runtime-family-unimplemented"
       ],
-      "sourceRecordHash": "d6aa2170e1c4c1e4"
+      "sourceRecordHash": "7e6910fecf0ffbd0"
     },
     {
-      "requirementIdentity": "contract:effect:effect:84:5a4297210d970682",
+      "requirementIdentity": "contract:effect:effect:84:fc91fe081a1e00ca",
       "dimension": "effect",
-      "subjectIdentity": "effect:84:5a4297210d970682",
+      "subjectIdentity": "effect:84:fc91fe081a1e00ca",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4080,12 +4080,12 @@
         "runtime-trigger-projectile-collision-frame",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "45386d12877d2cb4"
+      "sourceRecordHash": "3c271f9a0fcf0d70"
     },
     {
-      "requirementIdentity": "contract:effect:effect:85:a559ac89ba31e6e3",
+      "requirementIdentity": "contract:effect:effect:85:416effd6755ecc7b",
       "dimension": "effect",
-      "subjectIdentity": "effect:85:a559ac89ba31e6e3",
+      "subjectIdentity": "effect:85:416effd6755ecc7b",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4103,12 +4103,12 @@
         "semantic-wrapper-not-gameplay-effect",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "0baffd54d811398a"
+      "sourceRecordHash": "fc5d7094abfa3f7a"
     },
     {
-      "requirementIdentity": "contract:effect:effect:86:f4209a010bfb6f88",
+      "requirementIdentity": "contract:effect:effect:86:98f2684d9465ef42",
       "dimension": "effect",
-      "subjectIdentity": "effect:86:f4209a010bfb6f88",
+      "subjectIdentity": "effect:86:98f2684d9465ef42",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4125,12 +4125,12 @@
         "runtime-trigger-projectile-collision-frame",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "9d6e7380a11e1522"
+      "sourceRecordHash": "755d66e2e05c65a2"
     },
     {
-      "requirementIdentity": "contract:effect:effect:87:4cba926a14541c3a",
+      "requirementIdentity": "contract:effect:effect:87:779486c4e2a4fc22",
       "dimension": "effect",
-      "subjectIdentity": "effect:87:4cba926a14541c3a",
+      "subjectIdentity": "effect:87:779486c4e2a4fc22",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4150,12 +4150,12 @@
         "semantic-wrapper-not-gameplay-effect",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "8331e8c58fdaef93"
+      "sourceRecordHash": "4e2cb158fc3a04fb"
     },
     {
-      "requirementIdentity": "contract:effect:effect:88:d660ffbd1db22d22",
+      "requirementIdentity": "contract:effect:effect:88:61016ac235939dfa",
       "dimension": "effect",
-      "subjectIdentity": "effect:88:d660ffbd1db22d22",
+      "subjectIdentity": "effect:88:61016ac235939dfa",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4172,12 +4172,12 @@
         "runtime-trigger-projectile-collision-frame",
         "sp-formula-not-literal-function-5"
       ],
-      "sourceRecordHash": "30e5568a36b82c38"
+      "sourceRecordHash": "f9a82563e52af0c4"
     },
     {
-      "requirementIdentity": "contract:effect:effect:89:07067bdf2bcc1ad1",
+      "requirementIdentity": "contract:effect:effect:89:aeac2cd1735911db",
       "dimension": "effect",
-      "subjectIdentity": "effect:89:07067bdf2bcc1ad1",
+      "subjectIdentity": "effect:89:aeac2cd1735911db",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4194,12 +4194,12 @@
         "runtime-trigger-projectile-collision-frame",
         "sp-formula-not-literal-function-5"
       ],
-      "sourceRecordHash": "7432040572f0ef37"
+      "sourceRecordHash": "a8bbddd2a521018f"
     },
     {
-      "requirementIdentity": "contract:effect:effect:9:21da81e2e9d6d44b",
+      "requirementIdentity": "contract:effect:effect:9:ff402f0b862cf4ac",
       "dimension": "effect",
-      "subjectIdentity": "effect:9:21da81e2e9d6d44b",
+      "subjectIdentity": "effect:9:ff402f0b862cf4ac",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4215,12 +4215,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "dae7c957a9c48996"
+      "sourceRecordHash": "54a96248c2027152"
     },
     {
-      "requirementIdentity": "contract:effect:effect:90:adb244947a335d5b",
+      "requirementIdentity": "contract:effect:effect:90:de29663b3ddc2d5d",
       "dimension": "effect",
-      "subjectIdentity": "effect:90:adb244947a335d5b",
+      "subjectIdentity": "effect:90:de29663b3ddc2d5d",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4238,12 +4238,12 @@
         "sp-formula-not-literal-function-5",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "ff782315d9143f7c"
+      "sourceRecordHash": "98cdf6f22e344e78"
     },
     {
-      "requirementIdentity": "contract:effect:effect:91:46ff79dc5b2cc962",
+      "requirementIdentity": "contract:effect:effect:91:095c48bfb21117a4",
       "dimension": "effect",
-      "subjectIdentity": "effect:91:46ff79dc5b2cc962",
+      "subjectIdentity": "effect:91:095c48bfb21117a4",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4260,12 +4260,12 @@
         "runtime-trigger-projectile-collision-frame",
         "sp-formula-not-literal-function-5"
       ],
-      "sourceRecordHash": "abda83b46eab423e"
+      "sourceRecordHash": "fa5b1945b75d5ff6"
     },
     {
-      "requirementIdentity": "contract:effect:effect:92:feba43ecf23244e4",
+      "requirementIdentity": "contract:effect:effect:92:d81cfddecd9e89ca",
       "dimension": "effect",
-      "subjectIdentity": "effect:92:feba43ecf23244e4",
+      "subjectIdentity": "effect:92:d81cfddecd9e89ca",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4286,12 +4286,12 @@
         "sp-formula-not-literal-function-5",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "008e06aa34ed580e"
+      "sourceRecordHash": "47508e28ecb1cfde"
     },
     {
-      "requirementIdentity": "contract:effect:effect:93:753ce860c5ff18a8",
+      "requirementIdentity": "contract:effect:effect:93:b8e96edd0b4a14e0",
       "dimension": "effect",
-      "subjectIdentity": "effect:93:753ce860c5ff18a8",
+      "subjectIdentity": "effect:93:b8e96edd0b4a14e0",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4305,12 +4305,12 @@
         "battle-element-assets.jsonl#path_id=-3124965708053832775"
       ],
       "reasons": [],
-      "sourceRecordHash": "00570980ea857bb2"
+      "sourceRecordHash": "acfcf28481300140"
     },
     {
-      "requirementIdentity": "contract:effect:effect:94:3073f76e4c6c06c8",
+      "requirementIdentity": "contract:effect:effect:94:256f91d2a059cec0",
       "dimension": "effect",
-      "subjectIdentity": "effect:94:3073f76e4c6c06c8",
+      "subjectIdentity": "effect:94:256f91d2a059cec0",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4326,12 +4326,12 @@
         "effect-target-static-evidence-gap",
         "effect-trigger-frame-static-evidence-gap"
       ],
-      "sourceRecordHash": "c0b9e752f6cd99d2"
+      "sourceRecordHash": "77f967b3938ed97e"
     },
     {
-      "requirementIdentity": "contract:effect:effect:95:f286b37ce783e926",
+      "requirementIdentity": "contract:effect:effect:95:d925a5ec4633dd1e",
       "dimension": "effect",
-      "subjectIdentity": "effect:95:f286b37ce783e926",
+      "subjectIdentity": "effect:95:d925a5ec4633dd1e",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4349,12 +4349,12 @@
         "runtime-trigger-projectile-collision-frame",
         "semantic-condition-not-standalone-gameplay-effect"
       ],
-      "sourceRecordHash": "1ee248a9e7daebad"
+      "sourceRecordHash": "aa13d0f9e119c0f9"
     },
     {
-      "requirementIdentity": "contract:effect:effect:96:d42539b5410d36c8",
+      "requirementIdentity": "contract:effect:effect:96:f4523889516f0202",
       "dimension": "effect",
-      "subjectIdentity": "effect:96:d42539b5410d36c8",
+      "subjectIdentity": "effect:96:f4523889516f0202",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4372,12 +4372,12 @@
         "judgment-condition-runtime-unimplemented",
         "semantic-condition-not-standalone-gameplay-effect"
       ],
-      "sourceRecordHash": "a1834bc0c05fb920"
+      "sourceRecordHash": "1b2ff33066c7f620"
     },
     {
-      "requirementIdentity": "contract:effect:effect:97:dfc7093662e1b4c6",
+      "requirementIdentity": "contract:effect:effect:97:43783e75d41dffbe",
       "dimension": "effect",
-      "subjectIdentity": "effect:97:dfc7093662e1b4c6",
+      "subjectIdentity": "effect:97:43783e75d41dffbe",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4395,12 +4395,12 @@
         "runtime-trigger-projectile-collision-frame",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "ffce75119a50afca"
+      "sourceRecordHash": "7ce01b96c3fc5ff2"
     },
     {
-      "requirementIdentity": "contract:effect:effect:98:83d99acf58e90009",
+      "requirementIdentity": "contract:effect:effect:98:1054d4fd09d0a6fb",
       "dimension": "effect",
-      "subjectIdentity": "effect:98:83d99acf58e90009",
+      "subjectIdentity": "effect:98:1054d4fd09d0a6fb",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4417,12 +4417,12 @@
         "runtime-target-from-projectile-collision",
         "runtime-trigger-projectile-collision-frame"
       ],
-      "sourceRecordHash": "0e17cd3da58d4ade"
+      "sourceRecordHash": "a28d600805dda5ea"
     },
     {
-      "requirementIdentity": "contract:effect:effect:99:2464648ab39928c4",
+      "requirementIdentity": "contract:effect:effect:99:eb234e4720a01576",
       "dimension": "effect",
-      "subjectIdentity": "effect:99:2464648ab39928c4",
+      "subjectIdentity": "effect:99:eb234e4720a01576",
       "sourceDisposition": "gap",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -4441,7 +4441,7 @@
         "nested-damage-runtime-family-unimplemented",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "f4624131884ce32b"
+      "sourceRecordHash": "893210c61ff71aad"
     },
     {
       "requirementIdentity": "contract:hit:10101001|0|elements|0|-2245783402811878012|12|1",
@@ -6291,9 +6291,9 @@
       "sourceRecordHash": "d699e09b880fceab"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101001|0|10101003",
+      "requirementIdentity": "contract:public-action:actor|101010|10101001|0|10101003|normal-attack",
       "dimension": "public-action",
-      "subjectIdentity": "actor|101010|10101001|0|10101003",
+      "subjectIdentity": "actor|101010|10101001|0|10101003|normal-attack",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6305,12 +6305,12 @@
       },
       "sourceIdentities": [],
       "reasons": [],
-      "sourceRecordHash": "fc65fd06b2b8f5be"
+      "sourceRecordHash": "dbd0cd53ff348d9e"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101001|2|10101010",
+      "requirementIdentity": "contract:public-action:actor|101010|10101001|2|10101010|charged-attack",
       "dimension": "public-action",
-      "subjectIdentity": "actor|101010|10101001|2|10101010",
+      "subjectIdentity": "actor|101010|10101001|2|10101010|charged-attack",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6322,12 +6322,12 @@
       },
       "sourceIdentities": [],
       "reasons": [],
-      "sourceRecordHash": "a99ad25ec1125d3a"
+      "sourceRecordHash": "c891961a6f9c6c66"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101001|6|10101015",
+      "requirementIdentity": "contract:public-action:actor|101010|10101001|6|10101015|dodge-attack",
       "dimension": "public-action",
-      "subjectIdentity": "actor|101010|10101001|6|10101015",
+      "subjectIdentity": "actor|101010|10101001|6|10101015|dodge-attack",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6339,12 +6339,12 @@
       },
       "sourceIdentities": [],
       "reasons": [],
-      "sourceRecordHash": "1a9018df927cd98b"
+      "sourceRecordHash": "ac3d4a1829854061"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101001|7|10101011",
+      "requirementIdentity": "contract:public-action:actor|101010|10101001|7|10101011|plunging-attack",
       "dimension": "public-action",
-      "subjectIdentity": "actor|101010|10101001|7|10101011",
+      "subjectIdentity": "actor|101010|10101001|7|10101011|plunging-attack",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6356,12 +6356,12 @@
       },
       "sourceIdentities": [],
       "reasons": [],
-      "sourceRecordHash": "e3b82516c00575e1"
+      "sourceRecordHash": "590cd2f15f247a37"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101012|0|10101012",
+      "requirementIdentity": "contract:public-action:actor|101010|10101012|0|10101012|star-skill",
       "dimension": "public-action",
-      "subjectIdentity": "actor|101010|10101012|0|10101012",
+      "subjectIdentity": "actor|101010|10101012|0|10101012|star-skill",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6373,12 +6373,12 @@
       },
       "sourceIdentities": [],
       "reasons": [],
-      "sourceRecordHash": "3ac6feb0ad140e50"
+      "sourceRecordHash": "ecbc8c2c7c4ec6a0"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101012|1|10101026",
+      "requirementIdentity": "contract:public-action:actor|101010|10101012|1|10101026|star-combo",
       "dimension": "public-action",
-      "subjectIdentity": "actor|101010|10101012|1|10101026",
+      "subjectIdentity": "actor|101010|10101012|1|10101026|star-combo",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6390,12 +6390,12 @@
       },
       "sourceIdentities": [],
       "reasons": [],
-      "sourceRecordHash": "d5608832c7eac84f"
+      "sourceRecordHash": "1bea3c69ac66467f"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101013|0|10101013",
+      "requirementIdentity": "contract:public-action:actor|101010|10101013|0|10101013|ultimate",
       "dimension": "public-action",
-      "subjectIdentity": "actor|101010|10101013|0|10101013",
+      "subjectIdentity": "actor|101010|10101013|0|10101013|ultimate",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6407,12 +6407,12 @@
       },
       "sourceIdentities": [],
       "reasons": [],
-      "sourceRecordHash": "291ea119098c42f7"
+      "sourceRecordHash": "bc66072e2189cadf"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101021|0|10101021",
+      "requirementIdentity": "contract:public-action:actor|101010|10101021|0|10101021|star-carry",
       "dimension": "public-action",
-      "subjectIdentity": "actor|101010|10101021|0|10101021",
+      "subjectIdentity": "actor|101010|10101021|0|10101021|star-carry",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6424,12 +6424,12 @@
       },
       "sourceIdentities": [],
       "reasons": [],
-      "sourceRecordHash": "88fabe7a75b63996"
+      "sourceRecordHash": "6755a574648ed9e6"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101021|1|10101025",
+      "requirementIdentity": "contract:public-action:actor|101010|10101021|1|10101025|limit-counter",
       "dimension": "public-action",
-      "subjectIdentity": "actor|101010|10101021|1|10101025",
+      "subjectIdentity": "actor|101010|10101021|1|10101025|limit-counter",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6441,12 +6441,12 @@
       },
       "sourceIdentities": [],
       "reasons": [],
-      "sourceRecordHash": "6a62cd5caf82c7cc"
+      "sourceRecordHash": "7010c00fefc64e0c"
     },
     {
-      "requirementIdentity": "contract:public-action:actor|101010|10101021|2|10101027",
+      "requirementIdentity": "contract:public-action:actor|101010|10101021|2|10101027|perfect-parry",
       "dimension": "public-action",
-      "subjectIdentity": "actor|101010|10101021|2|10101027",
+      "subjectIdentity": "actor|101010|10101021|2|10101027|perfect-parry",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6458,7 +6458,7 @@
       },
       "sourceIdentities": [],
       "reasons": [],
-      "sourceRecordHash": "d0af0de9d273ee88"
+      "sourceRecordHash": "663dc4041b57ef80"
     },
     {
       "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
@@ -7360,5 +7360,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "ea8118677a668b9d"
+  "inventoryHash": "3824b8d6487a12fc"
 }

@@ -219,6 +219,7 @@ function createKiboUnlimitedAfterDamageEnvelope() {
     kiboId: 500261,
     kiboName: '河狸仔',
     publicActionId: 502001,
+    actionKind: 'normal-attack',
     warmupFrames: [60],
   });
 }
@@ -1119,11 +1120,11 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.metrics.loopHpDamage).toBe(22.59375);
     expect(report.metrics.cycleDps).toBe(4.51875);
     expect(report.hashes).toMatchObject({
-      input: '5bd15ea1e598786f',
-      data: '9ae64ae975e1b0fd',
-      trace: 'fb5236f1c1986ebd',
+      input: 'fb7026c9ca6ad954',
+      data: 'a4e25bc2cf674d7d',
+      trace: '4ba71bd33a16952b',
       evaluation: '13fc3bf3db5aeb9d',
-      cycle: '5363822937d06760',
+      cycle: 'c4013a2fba5ec96f',
     });
     expect(report.sampleStatistics.loopHpDamage.variance).toBeGreaterThan(0);
     for (const dimension of ['byActor', 'byAction', 'byHit']) {

@@ -38,10 +38,10 @@ describe('verified combat mechanics package', () => {
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
-        candidateActionCount: 563,
-        classifiedActionCount: 563,
-        appliedActionBindingCount: 611,
-        appliedHitBindingCount: 2758,
+        candidateActionCount: 645,
+        classifiedActionCount: 645,
+        appliedActionBindingCount: 693,
+        appliedHitBindingCount: 3449,
         appliedEffectBindingCount: 1799,
         verifiedZeroEffectBindingCount: 12,
         unresolvedEffectBindingCount: 1976,
@@ -53,7 +53,7 @@ describe('verified combat mechanics package', () => {
         switchTriggerProfileCount: 20,
         appliedSwitchTriggerProfileCount: 17,
         unresolvedSwitchTriggerProfileCount: 3,
-        battleEffectNodeCount: 3699,
+        battleEffectNodeCount: 3731,
         unresolvedActionCount: 13,
         actorProfileCount: 20,
         kiboProfileCount: 122,
@@ -124,10 +124,10 @@ describe('verified combat mechanics package', () => {
       battleEffectCatalog: {
         status: 'verified-battle-effect-node-catalog-ready',
         summary: {
-          nodeCount: 3699,
+          nodeCount: 3731,
           appliedNodeCount: 997,
-          verifiedZeroNodeCount: 863,
-          unresolvedNodeCount: 1839,
+          verifiedZeroNodeCount: 879,
+          unresolvedNodeCount: 1855,
         },
       },
       semanticEffectCatalog: {
@@ -234,7 +234,11 @@ describe('verified combat mechanics package', () => {
     });
     expect(
       mechanicsPackage.actionBindings
-        .filter(binding => binding.actionKind === 'normal-attack')
+        .filter(
+          binding =>
+            binding.actionKind === 'normal-attack' &&
+            binding.ownerKind === 'actor'
+        )
         .every(binding => binding.attackSequenceIndex != null)
     ).toBe(true);
     const verifiedChargedInput = mechanicsPackage.actionMappings.find(
@@ -531,16 +535,16 @@ describe('verified combat mechanics package', () => {
     expect(actionTimingCoverage).toMatchObject({
       status: 'verified-combat-action-timing-coverage-ready',
       sourceDenominator: {
-        publicActionCount: 563,
-        publicVariantCount: 593,
+        publicActionCount: 645,
+        publicVariantCount: 675,
         normalAttackInputSegmentCount: 95,
       },
       summary: {
-        appliedActionCount: 552,
+        appliedActionCount: 634,
         unresolvedActionCount: 11,
         appliedAttackInputSegmentCount: 78,
         unresolvedAttackInputSegmentCount: 17,
-        exactSelectedVariantOccupancyCount: 625,
+        exactSelectedVariantOccupancyCount: 707,
         sourceAnimationPlanningDurationCount: 27,
         genericPlanningDurationCount: 1,
         variantConditionFocusCount: 23,
@@ -671,12 +675,12 @@ describe('verified combat mechanics package', () => {
       ownerCount: 142,
       nodeCount: 689,
       modeledOwnerCount: 4,
-      conditionDiscoveryCount: 155,
+      conditionDiscoveryCount: 216,
       conditionDiscoveryStatusCounts: {
         'partially-resolved': 6,
         resolved: 2,
         'static-evidence-gap': 4,
-        'variant-condition-not-yet-modeled': 143,
+        'variant-condition-not-yet-modeled': 204,
       },
     });
     expect(
@@ -875,9 +879,9 @@ describe('verified combat mechanics package', () => {
         sourceWindowInterval: '[start,end)',
       },
       summary: {
-        publicTimingSourceCount: 1157,
-        verifiedWindowCount: 1363,
-        resolvedInputSemanticsCount: 1326,
+        publicTimingSourceCount: 1549,
+        verifiedWindowCount: 1735,
+        resolvedInputSemanticsCount: 1698,
         unresolvedInputSemanticsCount: 37,
         xiaoyuPublicExecutionFormCount: 21,
         xiaoyuWindowAuditRowCount: 89,
@@ -1312,11 +1316,11 @@ describe('verified combat mechanics package', () => {
     ).toBe(false);
 
     const representativeIdentities = [
-      'actor|101007|10100701|1|10100710',
-      'actor|101003|10100312|0|10100312',
-      'actor|101003|10100313|0|10100313',
-      'actor|101003|10100312|1|10100326',
-      'kibo|500001|504004|0|504004',
+      'actor|101007|10100701|1|10100710|charged-attack',
+      'actor|101003|10100312|0|10100312|star-skill',
+      'actor|101003|10100313|0|10100313|ultimate',
+      'actor|101003|10100312|1|10100326|star-combo',
+      'kibo|500001|504004|0|504004|active',
     ];
     for (const identity of representativeIdentities) {
       const mapping = mechanicsPackage.actionMappings.find(
@@ -1335,7 +1339,8 @@ describe('verified combat mechanics package', () => {
       expect(mapping.actionTiming.occupancy.durationFrames).toBeGreaterThan(1);
     }
     const starSkill = mechanicsPackage.actionMappings.find(
-      action => action.identity === 'actor|101003|10100312|0|10100312'
+      action =>
+        action.identity === 'actor|101003|10100312|0|10100312|star-skill'
     );
     expect(starSkill.actionTiming).toMatchObject({
       occupancy: { durationFrames: 93 },
@@ -1352,17 +1357,17 @@ describe('verified combat mechanics package', () => {
       sourceDenominator: {
         actorOwnerCount: 20,
         kiboOwnerCount: 122,
-        actionCount: 563,
+        actionCount: 645,
       },
       summary: {
-        directoryActionCount: 563,
-        classifiedActionCount: 563,
+        directoryActionCount: 645,
+        classifiedActionCount: 645,
         attackInputChainCount: 20,
         attackInputSegmentCount: 95,
       },
       missingRequiredActorActions: [],
     });
-    expect(mechanicsPackage.actionMappings).toHaveLength(563);
+    expect(mechanicsPackage.actionMappings).toHaveLength(645);
     expect(
       mechanicsPackage.actionMappings.every(mapping =>
         ['applied', 'verified-zero', 'unresolved'].includes(
@@ -1414,7 +1419,7 @@ describe('verified combat mechanics package', () => {
       actionCoverage.byOwner
         .filter(item => item.ownerKind === 'kibo')
         .reduce((sum, owner) => sum + owner.directoryActionCount, 0)
-    ).toBe(366);
+    ).toBe(448);
     expect(actionCoverage.attackInputChains).toHaveLength(20);
     expect(
       actionCoverage.attackInputChains.every(
@@ -1511,7 +1516,8 @@ describe('verified combat mechanics package', () => {
     ).toHaveLength(3);
 
     const mixedMapping = mechanicsPackage.actionMappings.find(
-      mapping => mapping.identity === 'actor|111001|11100121|0|11100121'
+      mapping =>
+        mapping.identity === 'actor|111001|11100121|0|11100121|star-carry'
     );
     const mixed = resolveVerifiedCombatActionMechanics({
       id: 'falanta-mixed-hit',

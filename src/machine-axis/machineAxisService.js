@@ -86,7 +86,7 @@ export function createMachineAxisService({
       })),
     }));
     const kiboActionCountByKind = Object.fromEntries(
-      ['signature', 'active', 'break'].map(kind => [
+      ['signature', 'active', 'break', 'normal-attack'].map(kind => [
         kind,
         kibos.reduce(
           (count, kibo) =>
@@ -1345,6 +1345,7 @@ function createKiboActionTemplate({
   const mapping = getVerifiedCombatActionMapping({
     type: ACTION_TYPES.KIBO_EVENT,
     skillId: publicAction.skillId,
+    actionKind: publicAction.kind,
     actionVariantIndex: 0,
     kiboId,
     actor: {

@@ -39,7 +39,7 @@ export function projectWorkbenchKiboActionCatalog(catalog) {
         const actionIdentity = `${kiboId}:${kind}:${skillId}`;
         if (
           !skillId ||
-          !['signature', 'active', 'break'].includes(kind) ||
+          !['signature', 'active', 'break', 'normal-attack'].includes(kind) ||
           seenActions.has(actionIdentity)
         ) {
           throw new Error(

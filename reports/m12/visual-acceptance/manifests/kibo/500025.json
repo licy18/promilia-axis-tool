@@ -22,7 +22,7 @@
       "bytes": 72253,
       "status": "verified"
     },
-    "displaySummary": "雷、地 · 成熟期 · 独猎 · 拉加冲锋 · 落雷 · 拉加野猪-合击",
+    "displaySummary": "雷、地 · 成熟期 · 独猎 · 拉加冲锋 · 岩石滚撞 · 落雷 · 拉加野猪-合击",
     "binding": {
       "elements": [
         "雷",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "dc044a49096f0f28"
+      "acceptanceIdentity": "1c1b5e64d2191385"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "28490a3ed77f50fe"
+  "manifestHash": "ceb085d34a3a76d3"
 }

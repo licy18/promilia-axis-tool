@@ -22,7 +22,7 @@
       "bytes": 76649,
       "status": "verified"
     },
-    "displaySummary": "风 · 成熟期 · 侵扰 · 风锐翼展 · 凛风斩 · 风剪鹰-合击",
+    "displaySummary": "风 · 成熟期 · 侵扰 · 风锐翼展 · 连续风刃 · 凛风斩 · 风剪鹰-合击",
     "binding": {
       "elements": [
         "风"
@@ -32,6 +32,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -96,7 +100,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "68c035c10a341e92"
+      "acceptanceIdentity": "a19e200fe8f4ac7f"
     }
   },
   "matrix": {
@@ -197,5 +201,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "7322c5e5911b2148"
+  "manifestHash": "1ade662de7848eb7"
 }

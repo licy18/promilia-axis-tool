@@ -648,7 +648,7 @@
     {
       "transitionIdentity": "ruby-normal-default-three-inputs:phase-transition:ruby-enhanced-twelve-inputs",
       "ownerId": 103002,
-      "sourcePublicActionIdentity": "actor|103002|10300201|0|10300203",
+      "sourcePublicActionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
       "sourceActionKind": "normal-attack",
       "sourceControlSkillId": 10300203,
       "sourceSubSkillIndex": 0,
@@ -1204,7 +1204,7 @@
     {
       "transitionIdentity": "actor:103002|control:10300210|sub:0->actor:103002|control:10300201|sub:1->-4356077336397377105->24",
       "ownerId": 103002,
-      "sourcePublicActionIdentity": "actor|103002|10300201|1|10300210",
+      "sourcePublicActionIdentity": "actor|103002|10300201|1|10300210|charged-attack",
       "sourceActionKind": "charged-attack",
       "sourceControlSkillId": 10300210,
       "sourceSubSkillIndex": 0,
@@ -1249,7 +1249,7 @@
     {
       "transitionIdentity": "ruby-reload-quick-enhanced-entry",
       "ownerId": 103002,
-      "sourcePublicActionIdentity": "actor|103002|10300201|1|10300210",
+      "sourcePublicActionIdentity": "actor|103002|10300201|1|10300210|charged-attack",
       "sourceActionKind": "charged-attack",
       "sourceControlSkillId": 10300210,
       "sourceSubSkillIndex": 0,
@@ -1421,7 +1421,7 @@
     {
       "transitionIdentity": "ruby-star-skill-quick-enhanced-entry",
       "ownerId": 103002,
-      "sourcePublicActionIdentity": "actor|103002|10300212|0|10300212",
+      "sourcePublicActionIdentity": "actor|103002|10300212|0|10300212|star-skill",
       "sourceActionKind": "star-skill",
       "sourceControlSkillId": 10300212,
       "sourceSubSkillIndex": 0,
@@ -1474,7 +1474,7 @@
     {
       "transitionIdentity": "actor:103002|control:10300213|sub:0->actor:103002|control:10300201|sub:1->-4356077336397377105->297",
       "ownerId": 103002,
-      "sourcePublicActionIdentity": "actor|103002|10300213|0|10300213",
+      "sourcePublicActionIdentity": "actor|103002|10300213|0|10300213|ultimate",
       "sourceActionKind": "ultimate",
       "sourceControlSkillId": 10300213,
       "sourceSubSkillIndex": 0,
@@ -1527,7 +1527,7 @@
     {
       "transitionIdentity": "ruby-ultimate-end-quick-enhanced-entry",
       "ownerId": 103002,
-      "sourcePublicActionIdentity": "actor|103002|10300213|0|10300213",
+      "sourcePublicActionIdentity": "actor|103002|10300213|0|10300213|ultimate",
       "sourceActionKind": "ultimate",
       "sourceControlSkillId": 10300213,
       "sourceSubSkillIndex": 0,
@@ -1580,7 +1580,7 @@
     {
       "transitionIdentity": "ruby-enhanced-dodge-chain-continuity",
       "ownerId": 103002,
-      "sourcePublicActionIdentity": "actor|103002|10300201|2|10300215",
+      "sourcePublicActionIdentity": "actor|103002|10300201|2|10300215|dodge-attack",
       "sourceActionKind": "dodge-attack",
       "sourceControlSkillId": 10300215,
       "sourceSubSkillIndex": 0,
@@ -1619,7 +1619,7 @@
     {
       "transitionIdentity": "ruby-star-carry-direct-enhanced-entry",
       "ownerId": 103002,
-      "sourcePublicActionIdentity": "actor|103002|10300221|0|10300221",
+      "sourcePublicActionIdentity": "actor|103002|10300221|0|10300221|star-carry",
       "sourceActionKind": "star-carry",
       "sourceControlSkillId": 10300221,
       "sourceSubSkillIndex": 0,
@@ -1664,7 +1664,7 @@
     {
       "transitionIdentity": "actor:103002|control:10300226|sub:0->actor:103002|control:10300201|sub:1->-4356077336397377105->35",
       "ownerId": 103002,
-      "sourcePublicActionIdentity": "actor|103002|10300212|1|10300226",
+      "sourcePublicActionIdentity": "actor|103002|10300212|1|10300226|star-combo",
       "sourceActionKind": "star-combo",
       "sourceControlSkillId": 10300226,
       "sourceSubSkillIndex": 0,
@@ -1701,7 +1701,7 @@
   ],
   "publicActionCoverage": [
     {
-      "publicActionIdentity": "actor|103002|10300201|0|10300203",
+      "publicActionIdentity": "actor|103002|10300201|0|10300203|normal-attack",
       "actionKind": "normal-attack",
       "sourceSkillId": 10300201,
       "controlSkillId": 10300203,
@@ -1716,7 +1716,7 @@
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=backup,skillId=10300203]"
     },
     {
-      "publicActionIdentity": "actor|103002|10300201|1|10300210",
+      "publicActionIdentity": "actor|103002|10300201|1|10300210|charged-attack",
       "actionKind": "charged-attack",
       "sourceSkillId": 10300201,
       "controlSkillId": 10300210,
@@ -1731,7 +1731,7 @@
       "sourceIdentity": "NewTable/character_skill.rows[characterId=103002,slot=normal-attack]|NewTable/skillsub_logic.rows[skillId=10300201]|skill_control_10300210.asset#reload-control"
     },
     {
-      "publicActionIdentity": "actor|103002|10300201|2|10300215",
+      "publicActionIdentity": "actor|103002|10300201|2|10300215|dodge-attack",
       "actionKind": "dodge-attack",
       "sourceSkillId": 10300201,
       "controlSkillId": 10300215,
@@ -1746,7 +1746,7 @@
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=204]"
     },
     {
-      "publicActionIdentity": "actor|103002|10300201|3|10300211",
+      "publicActionIdentity": "actor|103002|10300201|3|10300211|plunging-attack",
       "actionKind": "plunging-attack",
       "sourceSkillId": 10300201,
       "controlSkillId": 10300211,
@@ -1761,7 +1761,7 @@
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=aerial,slot=301]"
     },
     {
-      "publicActionIdentity": "actor|103002|10300212|0|10300212",
+      "publicActionIdentity": "actor|103002|10300212|0|10300212|star-skill",
       "actionKind": "star-skill",
       "sourceSkillId": 10300212,
       "controlSkillId": 10300212,
@@ -1776,7 +1776,7 @@
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
     },
     {
-      "publicActionIdentity": "actor|103002|10300212|1|10300226",
+      "publicActionIdentity": "actor|103002|10300212|1|10300226|star-combo",
       "actionKind": "star-combo",
       "sourceSkillId": 10300212,
       "controlSkillId": 10300226,
@@ -1791,7 +1791,7 @@
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=208]"
     },
     {
-      "publicActionIdentity": "actor|103002|10300213|0|10300213",
+      "publicActionIdentity": "actor|103002|10300213|0|10300213|ultimate",
       "actionKind": "ultimate",
       "sourceSkillId": 10300213,
       "controlSkillId": 10300213,
@@ -1806,7 +1806,7 @@
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=4]"
     },
     {
-      "publicActionIdentity": "actor|103002|10300221|0|10300221",
+      "publicActionIdentity": "actor|103002|10300221|0|10300221|star-carry",
       "actionKind": "star-carry",
       "sourceSkillId": 10300221,
       "controlSkillId": 10300221,
@@ -1821,7 +1821,7 @@
       "sourceIdentity": "characters.items[id=103002].skillSlots[skillId=10300221]"
     },
     {
-      "publicActionIdentity": "actor|103002|10300221|1|10300225",
+      "publicActionIdentity": "actor|103002|10300221|1|10300225|limit-counter",
       "actionKind": "limit-counter",
       "sourceSkillId": 10300221,
       "controlSkillId": 10300225,
@@ -1836,7 +1836,7 @@
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=207]"
     },
     {
-      "publicActionIdentity": "actor|103002|10300221|2|10300227",
+      "publicActionIdentity": "actor|103002|10300221|2|10300227|perfect-parry",
       "actionKind": "perfect-parry",
       "sourceSkillId": 10300221,
       "controlSkillId": 10300227,
@@ -7635,5 +7635,5 @@
       "runtimeStatus": "not-runtime-transition"
     }
   ],
-  "profileHash": "dd86b7d5b45e03b50929d9557196fa8280f24d69f59e78a096933144ab474809"
+  "profileHash": "8ef09b255047d88cd6a5adff47dd55df054f9ffb90cf8e6c672f50d7d6394be6"
 }

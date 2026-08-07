@@ -4,7 +4,7 @@ import coverage from '../../../reports/verified-public-runtime-coverage.json';
 describe('M9 public runtime coverage', () => {
   it('guards the fixed public action, actor, and kibo denominator', () => {
     expect(coverage.fixedProductDenominator).toEqual({
-      publicActionCount: 563,
+      publicActionCount: 645,
       actorOwnerCount: 20,
       kiboOwnerCount: 122,
     });
@@ -22,20 +22,20 @@ describe('M9 public runtime coverage', () => {
         everyNonzeroRecoveryElementScoped: true,
       }),
     });
-    expect(coverage.actions).toHaveLength(563);
+    expect(coverage.actions).toHaveLength(645);
     expect(new Set(coverage.actions.map(action => action.identity)).size).toBe(
-      563
+      645
     );
     expect(coverage.actorCoreActions).toHaveLength(60);
-    expect(coverage.kiboCoreActions).toHaveLength(366);
+    expect(coverage.kiboCoreActions).toHaveLength(448);
   });
 
   it('keeps every unresolved public action explicit and source-scoped', () => {
     expect(coverage.summary).toMatchObject({
-      runnableActionCount: 550,
-      sourceAppliedActionCount: 441,
-      sourceRuntimeDependentActionCount: 109,
-      scenarioResolvedActionCount: 504,
+      runnableActionCount: 632,
+      sourceAppliedActionCount: 459,
+      sourceRuntimeDependentActionCount: 173,
+      scenarioResolvedActionCount: 586,
       verifiedZeroActionCount: 0,
       unresolvedActionCount: 13,
       unclassifiedUnresolvedActionCount: 0,
@@ -71,7 +71,7 @@ describe('M9 public runtime coverage', () => {
     expect(
       coverage.actions.find(
         action =>
-          action.identity === 'actor|103002|10300221|2|10300227'
+          action.identity === 'actor|103002|10300221|2|10300227|perfect-parry'
       )
     ).toMatchObject({
       ownerId: 103002,

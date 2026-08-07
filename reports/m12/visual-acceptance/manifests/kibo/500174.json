@@ -22,7 +22,7 @@
       "bytes": 61018,
       "status": "verified"
     },
-    "displaySummary": "雷 · 成长期 · 独猎 · 灵偶雷环 · 连锁雷暴 · 雷灵偶-合击",
+    "displaySummary": "雷 · 成长期 · 独猎 · 灵偶雷环 · 电能子弹 · 连锁雷暴 · 雷灵偶-合击",
     "binding": {
       "elements": [
         "雷"
@@ -32,6 +32,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -96,7 +100,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "58efcb67d2e0f33a"
+      "acceptanceIdentity": "fa9f402f5a216c9f"
     }
   },
   "matrix": {
@@ -197,5 +201,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "06ad78ab42216930"
+  "manifestHash": "ff4b4525517e17d4"
 }

@@ -1272,6 +1272,11 @@ function buildWorkbenchKiboActionCatalog(kibos, skillsubLogicTable) {
           kiboVersusCooldownDefaultMs: nonNegativeNumberOrNull(
             logic?.kiBoCoolDownDefault
           ),
+          selfCooldownMs: positiveNumberOrNull(logic?.selfCD),
+          selfCooldownGroup: positiveNumberOrNull(logic?.selfCDGroup),
+          gcdMs: positiveNumberOrNull(logic?.GCD),
+          petSkillLogicTag: String(logic?.petSkillLogicTag ?? ''),
+          aiToken: positiveNumberOrNull(logic?.aiToken),
         };
       }),
     })),
@@ -7989,11 +7994,19 @@ function mapKibos(kiboForms, petTable, skillControlTimings = new Map()) {
       const id = numberOrNull(fields.get('id') ?? form.main?.localId);
       const petRow = petRowsById.get(Number(id));
       const actionSpecs = createKiboActionSpecs(petRow);
-      const formSkills = [
-        mapFormSkill(fields, '固定技能'),
-        mapFormSkill(fields, '技能1'),
-        mapFormSkill(fields, '合击技能'),
-      ];
+      const hasSlot2 = parseSkillSlotList(
+        petRow?.skillList,
+        'skillList'
+      ).some(entry => entry.slot === 2);
+      const formSkillPrefixByGroup = {
+        signature: '固定技能',
+        'normal-attack': hasSlot2 ? '技能2' : '技能1',
+        active: '技能1',
+        break: '合击技能',
+      };
+      const formSkills = actionSpecs.map(spec =>
+        spec ? mapFormSkill(fields, formSkillPrefixByGroup[spec.group]) : null
+      );
       return {
         id,
         name: fields.get('名称') ?? form.title,
@@ -8022,8 +8035,9 @@ function mapKibos(kiboForms, petTable, skillControlTimings = new Map()) {
           .filter(Boolean),
         sourceSkills: {
           signatureSkillId: actionSpecs[0]?.skillId ?? null,
-          activeSkillId: actionSpecs[1]?.skillId ?? null,
-          breakSkillId: actionSpecs[2]?.skillId ?? null,
+          normalSkillId: actionSpecs[1]?.skillId ?? null,
+          activeSkillId: actionSpecs[2]?.skillId ?? null,
+          breakSkillId: actionSpecs[3]?.skillId ?? null,
           fixedSkillIds: parseSkillSlotList(
             petRow?.fixedSkillList,
             'fixed'
@@ -8058,13 +8072,21 @@ async function buildKiboSkillControlTimingIndex(petTable) {
 }
 
 function createKiboActionSpecs(petRow = {}) {
-  const signature = parseSkillSlotList(
+  const signatureEntry = parseSkillSlotList(
     petRow?.signatureSkillList,
     'signature'
   )[0];
-  const active = parseSkillSlotList(petRow?.skillList, 'active').at(-1);
-  const breakSkill = parseSkillSlotList(petRow?.breakSkillList, 'break')[0];
-  return [signature, active, breakSkill];
+  const skillEntries = parseSkillSlotList(petRow?.skillList, 'skillList');
+  const normalEntry =
+    skillEntries.find(entry => entry.slot === 1) ?? skillEntries[0] ?? null;
+  const activeEntry = skillEntries.find(entry => entry.slot === 2) ?? null;
+  const breakEntry = parseSkillSlotList(petRow?.breakSkillList, 'break')[0];
+  return [
+    signatureEntry ? { ...signatureEntry, group: 'signature' } : null,
+    normalEntry ? { ...normalEntry, group: 'normal-attack' } : null,
+    activeEntry ? { ...activeEntry, group: 'active' } : null,
+    breakEntry ? { ...breakEntry, group: 'break' } : null,
+  ];
 }
 
 async function readKiboSkillControlTiming(skillId) {

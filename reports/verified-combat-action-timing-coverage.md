@@ -1,17 +1,17 @@
 # M9-A 全动作时长与输入占轴审计
 
 - 包：`azpr-tc-2026-07-18`
-- 公开动作：563（来源占轴已确认 552，尚未确认 11；公开动作均按独立 schedulable 合同判断）
-- 公开变体：593（来源占轴已确认 551，尚未确认 42）
+- 公开动作：645（来源占轴已确认 634，尚未确认 11；公开动作均按独立 schedulable 合同判断）
+- 公开变体：675（来源占轴已确认 633，尚未确认 42）
 - 普攻输入段：95（输入占轴已确认 78，尚未确认 17）
-- SkillControl/player 变体：1042
+- SkillControl/player 变体：1434
 - 一帧占轴：0
 - 异常长占轴（>600f）：5
-- 精确选中变体占轴：625
+- 精确选中变体占轴：707
 - 来源动画规划长度：27
 - 通用规划长度：1
 - control 身份未解析：1
-- 变体条件发现：partially-resolved 6 / resolved 2 / static-evidence-gap 4 / variant-condition-not-yet-modeled 143
+- 变体条件发现：partially-resolved 6 / resolved 2 / static-evidence-gap 4 / variant-condition-not-yet-modeled 204
 
 ## Owner / 动作类型 / 来源状态
 
@@ -45,8 +45,9 @@
 | actor | ultimate | skill-control-player-action-range | applied | 17 |
 | actor | ultimate | verified-specific-input-window | applied | 1 |
 | actor | ultimate | verified-unconditional-attack-reopen-window | applied | 2 |
-| kibo | active | skill-control-player-action-range | applied | 122 |
+| kibo | active | skill-control-player-action-range | applied | 82 |
 | kibo | break | skill-control-player-action-range | applied | 122 |
+| kibo | normal-attack | skill-control-player-action-range | applied | 122 |
 | kibo | signature | skill-control-player-action-range | applied | 122 |
 
 ## 多变体条件发现
@@ -81,41 +82,41 @@
 
 ## 尚未确认的输入占轴
 
-- `actor|101003|10100322|0|10100322`：verified-action-effective-occupancy-window-unresolved
-- `actor|101007|10100701|0|10100703`：normal-attack-input-segment-duration-unresolved
-- `actor|103002|10300201|0|10300203`：normal-attack-input-segment-duration-unresolved
-- `actor|103002|10300201|2|10300215`：verified-action-effective-occupancy-window-unresolved
-- `actor|103002|10300212|0|10300212`：verified-action-effective-occupancy-window-unresolved
-- `actor|107001|10700101|0|10700103`：normal-attack-input-segment-duration-unresolved
-- `actor|107002|10700201|0|10700203`：normal-attack-input-segment-duration-unresolved
-- `actor|107003|10700301|0|10700303`：normal-attack-input-segment-duration-unresolved
-- `actor|108002|10800201|0|10800203`：normal-attack-input-segment-duration-unresolved
-- `actor|109002|10900201|0|10900203`：normal-attack-input-segment-duration-unresolved
-- `actor|112002|11200201|0|11200203`：normal-attack-input-segment-duration-unresolved
-- `actor|101007|10100701|0|10100701|attack-input-1`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|103002|10300201|0|10300203|attack-input-3`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|103002|10300201|0|10300204|attack-input-4`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|107001|10700101|0|10700102|attack-input-2`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|107001|10700101|0|10700103|attack-input-3`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|107001|10700101|0|10700104|attack-input-4`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|107001|10700101|0|10700105|attack-input-5`：selected-control-player-variant-duration-unresolved、attack-reopen-event-bridge-window-unavailable
-- `actor|107002|10700201|0|10700204|attack-input-4`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|107002|10700201|0|10700205|attack-input-5`：skill-control-player-variant-missing
-- `actor|107003|10700301|0|10700304|attack-input-4`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|108002|10800201|0|10800203|attack-input-3`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|108002|10800201|0|10800204|attack-input-4`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|108002|10800201|0|10800205|attack-input-5`：selected-control-player-variant-duration-unresolved、attack-reopen-event-bridge-window-unavailable
-- `actor|109002|10900201|0|10900202|attack-input-2`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|112002|11200201|0|11200203|attack-input-3`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|112002|11200201|0|11200204|attack-input-4`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
-- `actor|112002|11200201|0|11200205|attack-input-5`：selected-control-player-variant-duration-unresolved、attack-reopen-event-bridge-window-unavailable
+- `actor|101003|10100322|0|10100322|star-carry`：verified-action-effective-occupancy-window-unresolved
+- `actor|101007|10100701|0|10100703|normal-attack`：normal-attack-input-segment-duration-unresolved
+- `actor|103002|10300201|0|10300203|normal-attack`：normal-attack-input-segment-duration-unresolved
+- `actor|103002|10300201|2|10300215|dodge-attack`：verified-action-effective-occupancy-window-unresolved
+- `actor|103002|10300212|0|10300212|star-skill`：verified-action-effective-occupancy-window-unresolved
+- `actor|107001|10700101|0|10700103|normal-attack`：normal-attack-input-segment-duration-unresolved
+- `actor|107002|10700201|0|10700203|normal-attack`：normal-attack-input-segment-duration-unresolved
+- `actor|107003|10700301|0|10700303|normal-attack`：normal-attack-input-segment-duration-unresolved
+- `actor|108002|10800201|0|10800203|normal-attack`：normal-attack-input-segment-duration-unresolved
+- `actor|109002|10900201|0|10900203|normal-attack`：normal-attack-input-segment-duration-unresolved
+- `actor|112002|11200201|0|11200203|normal-attack`：normal-attack-input-segment-duration-unresolved
+- `actor|101007|10100701|0|10100701|normal-attack|attack-input-1`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
+- `actor|103002|10300201|0|10300203|normal-attack|attack-input-3`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
+- `actor|103002|10300201|0|10300204|normal-attack|attack-input-4`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
+- `actor|107001|10700101|0|10700102|normal-attack|attack-input-2`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
+- `actor|107001|10700101|0|10700103|normal-attack|attack-input-3`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
+- `actor|107001|10700101|0|10700104|normal-attack|attack-input-4`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
+- `actor|107001|10700101|0|10700105|normal-attack|attack-input-5`：selected-control-player-variant-duration-unresolved、attack-reopen-event-bridge-window-unavailable
+- `actor|107002|10700201|0|10700204|normal-attack|attack-input-4`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
+- `actor|107002|10700201|0|10700205|normal-attack|attack-input-5`：skill-control-player-variant-missing
+- `actor|107003|10700301|0|10700304|normal-attack|attack-input-4`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
+- `actor|108002|10800201|0|10800203|normal-attack|attack-input-3`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
+- `actor|108002|10800201|0|10800204|normal-attack|attack-input-4`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
+- `actor|108002|10800201|0|10800205|normal-attack|attack-input-5`：selected-control-player-variant-duration-unresolved、attack-reopen-event-bridge-window-unavailable
+- `actor|109002|10900201|0|10900202|normal-attack|attack-input-2`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
+- `actor|112002|11200201|0|11200203|normal-attack|attack-input-3`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
+- `actor|112002|11200201|0|11200204|normal-attack|attack-input-4`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable
+- `actor|112002|11200201|0|11200205|normal-attack|attack-input-5`：selected-control-player-variant-duration-unresolved、attack-reopen-event-bridge-window-unavailable
 
 ## 一帧与异常长占轴
 
-- 异常长：`kibo|500306|50030601|0|50030601`，640f（C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50030601.asset/MonoBehaviour/skill_control_50030601__1513569702707447185.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]）
-- 异常长：`kibo|500399|50039901|0|50039901`，721f（C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50039901.asset/MonoBehaviour/skill_control_50039901__6413601887178913939.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]）
-- 异常长：`kibo|500306|50030601|0|50030601|control-variant-0`，640f（C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50030601.asset/MonoBehaviour/skill_control_50030601__1513569702707447185.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]）
-- 异常长：`kibo|500360|50036003|0|50036003|control-variant-1`，639f（C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036003.asset/MonoBehaviour/skill_control_50036003__-5586573623708219583.json#skillControlData.skillPlayers[1]|skillResourceMaps[1].frameCountDict[key=0]）
-- 异常长：`kibo|500399|50039901|0|50039901|control-variant-0`，721f（C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50039901.asset/MonoBehaviour/skill_control_50039901__6413601887178913939.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]）
+- 异常长：`kibo|500306|50030601|0|50030601|signature`，640f（C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50030601.asset/MonoBehaviour/skill_control_50030601__1513569702707447185.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]）
+- 异常长：`kibo|500399|50039901|0|50039901|signature`，721f（C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50039901.asset/MonoBehaviour/skill_control_50039901__6413601887178913939.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]）
+- 异常长：`kibo|500306|50030601|0|50030601|signature|control-variant-0`，640f（C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50030601.asset/MonoBehaviour/skill_control_50030601__1513569702707447185.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]）
+- 异常长：`kibo|500360|50036003|0|50036003|break|control-variant-1`，639f（C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50036003.asset/MonoBehaviour/skill_control_50036003__-5586573623708219583.json#skillControlData.skillPlayers[1]|skillResourceMaps[1].frameCountDict[key=0]）
+- 异常长：`kibo|500399|50039901|0|50039901|signature|control-variant-0`，721f（C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_50039901.asset/MonoBehaviour/skill_control_50039901__6413601887178913939.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]）
 
 > 动作占轴、动画、命中、输入/派生窗口和冷却分别记录；命中帧与冷却不得作为动作块时长兜底。

@@ -22,7 +22,7 @@
       "bytes": 90331,
       "status": "verified"
     },
-    "displaySummary": "风、光 · 成熟期 · 侵扰 · 幻蝶磷粉 · 旋风回旋镖 · 幻蝶-合击",
+    "displaySummary": "风、光 · 成熟期 · 侵扰 · 幻蝶磷粉 · 小风弹 · 旋风回旋镖 · 幻蝶-合击",
     "binding": {
       "elements": [
         "风",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "21ea9beae342cef2"
+      "acceptanceIdentity": "f688ba7d0647207f"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "4ceb0822e4bfd3bc"
+  "manifestHash": "86cdbb8681c22df3"
 }

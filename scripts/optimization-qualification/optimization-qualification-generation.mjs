@@ -64,13 +64,13 @@ export const OPTIMIZATION_QUALIFICATION_GENERATED_AT =
 
 export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   characters:
-    '4a73f5e393f7410f5af80a811cac604d97ca6bf74ca8e0be66445ca932fb5052',
-  kibos: '1cca2e3d0d1cb5a0a984164ab0c6b05ef0b6c5416b0e9872f0c8ab36394519c4',
-  equipment: 'd718604a7b28f84163c175f7f7d0b4d26f891606bb18acf22939e2ef16eaf593',
+    'eddd0616c72711bf45c56020768e52f656d41ed596bcc6a7c1528aae5b0c61a0',
+  kibos: '62924087a58001de0216110a07c4a7e13954f0c0d90ad13a1861b4a4701522f0',
+  equipment: '1a0b4c8879f9560aacadf0647a615cd04c3a6f6505d8e25334c7c506ad6647c9',
   soulessences:
-    '385dbb96cf0feca4b42c7d3d63040c506c310beeb62ed7f9f37ac68fd012dcbe',
+    'cd455e6cab217c5898e35e290b7d7e9d65b42a20bd0f71250a90377dfb93badd',
   verifiedMechanics:
-    'a501f5cd1b8c32314e29643fa61ceecdb876e5e7659786143beda9f904ad780e',
+    '9eba8df1697a64bc6666d98959bb852e8854fb437cccfa79a9a5720de24cdbaf',
   'newTable:accessory.json':
     '449ed58b7e0d034c7c1fb48114468078810a97e4a61fe596cea53c19208c4b39',
   'newTable:accessory_customed.json':

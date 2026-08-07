@@ -22,7 +22,7 @@
       "bytes": 102222,
       "status": "verified"
     },
-    "displaySummary": "暗、风 · 超限体 · 独猎 · 血噬暗影 · 暗魂影爆阵 · 怯影之翼-合击",
+    "displaySummary": "暗、风 · 超限体 · 独猎 · 血噬暗影 · 连续风刃 · 暗魂影爆阵 · 怯影之翼-合击",
     "binding": {
       "elements": [
         "暗",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "39d7da12d3a42c02"
+      "acceptanceIdentity": "6b1ed500c83a91c9"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "d11f626ff1d629bc"
+  "manifestHash": "ba613bea1eb7b0b3"
 }

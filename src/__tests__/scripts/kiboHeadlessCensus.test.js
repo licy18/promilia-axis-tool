@@ -38,7 +38,7 @@ describe('kibo headless census', () => {
 
     expect(outputs.census.denominators).toEqual({
       kiboCount: 122,
-      publicActionCount: 366,
+      publicActionCount: 448,
       fixedSkillUniqueCount: 172,
       pvePassiveOccurrenceCount: 133,
       pvePassiveUniqueCount: 44,
@@ -62,7 +62,7 @@ describe('kibo headless census', () => {
         unresolved: 0,
       },
       publicActionClosure: {
-        evidenceClosed: 366,
+        evidenceClosed: 448,
         scenarioAssumed: 0,
         unresolved: 0,
       },
@@ -105,9 +105,15 @@ describe('kibo headless census', () => {
     expect(outputs.maturityMatrix.rows).toHaveLength(122);
     expect(
       outputs.maturityMatrix.rows.every(
-        row => row.actions.signature && row.actions.active && row.actions.break
+        row =>
+          row.actions.signature &&
+          row.actions['normal-attack'] &&
+          row.actions.break
       )
     ).toBe(true);
+    expect(
+      outputs.maturityMatrix.rows.filter(row => row.actions.active).length
+    ).toBe(82);
     expect(outputs.maturityMatrix.summary.machineOptimizationReadyCount).toBe(
       122
     );

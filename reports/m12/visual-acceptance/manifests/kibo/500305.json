@@ -22,7 +22,7 @@
       "bytes": 46784,
       "status": "verified"
     },
-    "displaySummary": "风、水 · 成长期 · 侵扰 · 大风旋 · 旋风回旋镖 · 库库尔-合击",
+    "displaySummary": "风、水 · 成长期 · 侵扰 · 大风旋 · 小风弹 · 旋风回旋镖 · 库库尔-合击",
     "binding": {
       "elements": [
         "风",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "46f0a6722aaa9d55"
+      "acceptanceIdentity": "5fc8d305aae3c6b0"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "cee08ac171cbf80e"
+  "manifestHash": "5bb74bc52044865c"
 }

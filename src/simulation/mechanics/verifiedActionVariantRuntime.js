@@ -1236,6 +1236,7 @@ function resolveAttackInputChainAction({
 }) {
   if (
     mapping?.actionKind !== 'normal-attack' ||
+    mapping?.ownerKind === 'kibo' ||
     !actorState ||
     !Number.isInteger(Number(action?.attackSequenceIndex))
   ) {
@@ -2071,7 +2072,10 @@ function createSpecialResourceCurves({
 }
 
 function resolveActionControlSkillId(action, mapping) {
-  if (mapping?.actionKind === 'normal-attack') {
+  if (
+    mapping?.actionKind === 'normal-attack' &&
+    mapping?.ownerKind !== 'kibo'
+  ) {
     const controlSkillId = Number(action.attackInput?.controlSkillId);
     return Number.isInteger(controlSkillId) ? controlSkillId : null;
   }

@@ -1,9 +1,9 @@
 # M12-B3-E16 PVE Passive Evidence And Receive-Damage Channel
 
 - Status: `b3-e16-implemented`
-- Source snapshot: `9db681b8ed021a14`
-- Roster: `b0deeb5322665305`
-- Catalog: `ca8e3fd40caef034`
+- Source snapshot: `5f8c6621ef29fa40`
+- Roster: `22d0c76f613afd9b`
+- Catalog: `6226d601699d691b`
 - Denominators: characters 11, Kibo 43, soul essence 62, equipment 137, set skills 12
 - Optimization ready: characters 0, Kibo 0, soul essence 62, equipment 137, set skills 11
 - Blocking gaps: not implemented 22, evidence insufficient 13

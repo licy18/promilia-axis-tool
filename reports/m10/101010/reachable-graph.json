@@ -60,106 +60,106 @@
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101001|0|10101003",
+      "nodeIdentity": "actor|101010|10101001|0|10101003|normal-attack",
       "nodeKind": "public-action",
       "actionKind": "normal-attack",
       "sourceSkillId": 10101001,
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101001|2|10101010",
+      "nodeIdentity": "actor|101010|10101001|2|10101010|charged-attack",
       "nodeKind": "public-action",
       "actionKind": "charged-attack",
       "sourceSkillId": 10101001,
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101001|6|10101015",
+      "nodeIdentity": "actor|101010|10101001|6|10101015|dodge-attack",
       "nodeKind": "public-action",
       "actionKind": "dodge-attack",
       "sourceSkillId": 10101001,
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101001|6|10101015:default",
+      "nodeIdentity": "actor|101010|10101001|6|10101015|dodge-attack:default",
       "nodeKind": "action-form",
       "semanticName": "闪击",
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101001|7|10101011",
+      "nodeIdentity": "actor|101010|10101001|7|10101011|plunging-attack",
       "nodeKind": "public-action",
       "actionKind": "plunging-attack",
       "sourceSkillId": 10101001,
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101001|7|10101011:default",
+      "nodeIdentity": "actor|101010|10101001|7|10101011|plunging-attack:default",
       "nodeKind": "action-form",
       "semanticName": "跃击",
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101012|0|10101012",
+      "nodeIdentity": "actor|101010|10101012|0|10101012|star-skill",
       "nodeKind": "public-action",
       "actionKind": "star-skill",
       "sourceSkillId": 10101012,
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101012|0|10101012:default",
+      "nodeIdentity": "actor|101010|10101012|0|10101012|star-skill:default",
       "nodeKind": "action-form",
       "semanticName": "星鸣技",
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101012|1|10101026",
+      "nodeIdentity": "actor|101010|10101012|1|10101026|star-combo",
       "nodeKind": "public-action",
       "actionKind": "star-combo",
       "sourceSkillId": 10101012,
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101012|1|10101026:default",
+      "nodeIdentity": "actor|101010|10101012|1|10101026|star-combo:default",
       "nodeKind": "action-form",
       "semanticName": "星结合击",
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101013|0|10101013",
+      "nodeIdentity": "actor|101010|10101013|0|10101013|ultimate",
       "nodeKind": "public-action",
       "actionKind": "ultimate",
       "sourceSkillId": 10101013,
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101013|0|10101013:default",
+      "nodeIdentity": "actor|101010|10101013|0|10101013|ultimate:default",
       "nodeKind": "action-form",
       "semanticName": "星决技",
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101021|0|10101021",
+      "nodeIdentity": "actor|101010|10101021|0|10101021|star-carry",
       "nodeKind": "public-action",
       "actionKind": "star-carry",
       "sourceSkillId": 10101021,
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101021|1|10101025",
+      "nodeIdentity": "actor|101010|10101021|1|10101025|limit-counter",
       "nodeKind": "public-action",
       "actionKind": "limit-counter",
       "sourceSkillId": 10101021,
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101021|1|10101025:default",
+      "nodeIdentity": "actor|101010|10101021|1|10101025|limit-counter:default",
       "nodeKind": "action-form",
       "semanticName": "极限反击",
       "status": "applied"
     },
     {
-      "nodeIdentity": "actor|101010|10101021|2|10101027",
+      "nodeIdentity": "actor|101010|10101021|2|10101027|perfect-parry",
       "nodeKind": "public-action",
       "actionKind": "perfect-parry",
       "sourceSkillId": 10101021,
@@ -1672,134 +1672,134 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-731372582710671704|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6673499874988910762__-6673499874988910762.json#startFrame|directInjectTargetType"
     },
     {
-      "edgeIdentity": "actor|101010|10101001|0|10101003->executes-control->control:10101003",
-      "from": "actor|101010|10101001|0|10101003",
+      "edgeIdentity": "actor|101010|10101001|0|10101003|normal-attack->executes-control->control:10101003",
+      "from": "actor|101010|10101001|0|10101003|normal-attack",
       "to": "control:10101003",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101001|2|10101010->executes-control->control:10101010",
-      "from": "actor|101010|10101001|2|10101010",
+      "edgeIdentity": "actor|101010|10101001|2|10101010|charged-attack->executes-control->control:10101010",
+      "from": "actor|101010|10101001|2|10101010|charged-attack",
       "to": "control:10101010",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101001|6|10101015->executes-control->control:10101015",
-      "from": "actor|101010|10101001|6|10101015",
+      "edgeIdentity": "actor|101010|10101001|6|10101015|dodge-attack->executes-control->control:10101015",
+      "from": "actor|101010|10101001|6|10101015|dodge-attack",
       "to": "control:10101015",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101001|6|10101015->has-form->actor|101010|10101001|6|10101015:default",
-      "from": "actor|101010|10101001|6|10101015",
-      "to": "actor|101010|10101001|6|10101015:default",
+      "edgeIdentity": "actor|101010|10101001|6|10101015|dodge-attack->has-form->actor|101010|10101001|6|10101015|dodge-attack:default",
+      "from": "actor|101010|10101001|6|10101015|dodge-attack",
+      "to": "actor|101010|10101001|6|10101015|dodge-attack:default",
       "relation": "has-form"
     },
     {
-      "edgeIdentity": "actor|101010|10101001|6|10101015:default->executes-control->control:10101015",
-      "from": "actor|101010|10101001|6|10101015:default",
+      "edgeIdentity": "actor|101010|10101001|6|10101015|dodge-attack:default->executes-control->control:10101015",
+      "from": "actor|101010|10101001|6|10101015|dodge-attack:default",
       "to": "control:10101015",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101001|7|10101011->executes-control->control:10101011",
-      "from": "actor|101010|10101001|7|10101011",
+      "edgeIdentity": "actor|101010|10101001|7|10101011|plunging-attack->executes-control->control:10101011",
+      "from": "actor|101010|10101001|7|10101011|plunging-attack",
       "to": "control:10101011",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101001|7|10101011->has-form->actor|101010|10101001|7|10101011:default",
-      "from": "actor|101010|10101001|7|10101011",
-      "to": "actor|101010|10101001|7|10101011:default",
+      "edgeIdentity": "actor|101010|10101001|7|10101011|plunging-attack->has-form->actor|101010|10101001|7|10101011|plunging-attack:default",
+      "from": "actor|101010|10101001|7|10101011|plunging-attack",
+      "to": "actor|101010|10101001|7|10101011|plunging-attack:default",
       "relation": "has-form"
     },
     {
-      "edgeIdentity": "actor|101010|10101001|7|10101011:default->executes-control->control:10101011",
-      "from": "actor|101010|10101001|7|10101011:default",
+      "edgeIdentity": "actor|101010|10101001|7|10101011|plunging-attack:default->executes-control->control:10101011",
+      "from": "actor|101010|10101001|7|10101011|plunging-attack:default",
       "to": "control:10101011",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101012|0|10101012->executes-control->control:10101012",
-      "from": "actor|101010|10101012|0|10101012",
+      "edgeIdentity": "actor|101010|10101012|0|10101012|star-skill->executes-control->control:10101012",
+      "from": "actor|101010|10101012|0|10101012|star-skill",
       "to": "control:10101012",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101012|0|10101012->has-form->actor|101010|10101012|0|10101012:default",
-      "from": "actor|101010|10101012|0|10101012",
-      "to": "actor|101010|10101012|0|10101012:default",
+      "edgeIdentity": "actor|101010|10101012|0|10101012|star-skill->has-form->actor|101010|10101012|0|10101012|star-skill:default",
+      "from": "actor|101010|10101012|0|10101012|star-skill",
+      "to": "actor|101010|10101012|0|10101012|star-skill:default",
       "relation": "has-form"
     },
     {
-      "edgeIdentity": "actor|101010|10101012|0|10101012:default->executes-control->control:10101012",
-      "from": "actor|101010|10101012|0|10101012:default",
+      "edgeIdentity": "actor|101010|10101012|0|10101012|star-skill:default->executes-control->control:10101012",
+      "from": "actor|101010|10101012|0|10101012|star-skill:default",
       "to": "control:10101012",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101012|1|10101026->executes-control->control:10101026",
-      "from": "actor|101010|10101012|1|10101026",
+      "edgeIdentity": "actor|101010|10101012|1|10101026|star-combo->executes-control->control:10101026",
+      "from": "actor|101010|10101012|1|10101026|star-combo",
       "to": "control:10101026",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101012|1|10101026->has-form->actor|101010|10101012|1|10101026:default",
-      "from": "actor|101010|10101012|1|10101026",
-      "to": "actor|101010|10101012|1|10101026:default",
+      "edgeIdentity": "actor|101010|10101012|1|10101026|star-combo->has-form->actor|101010|10101012|1|10101026|star-combo:default",
+      "from": "actor|101010|10101012|1|10101026|star-combo",
+      "to": "actor|101010|10101012|1|10101026|star-combo:default",
       "relation": "has-form"
     },
     {
-      "edgeIdentity": "actor|101010|10101012|1|10101026:default->executes-control->control:10101026",
-      "from": "actor|101010|10101012|1|10101026:default",
+      "edgeIdentity": "actor|101010|10101012|1|10101026|star-combo:default->executes-control->control:10101026",
+      "from": "actor|101010|10101012|1|10101026|star-combo:default",
       "to": "control:10101026",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101013|0|10101013->executes-control->control:10101013",
-      "from": "actor|101010|10101013|0|10101013",
+      "edgeIdentity": "actor|101010|10101013|0|10101013|ultimate->executes-control->control:10101013",
+      "from": "actor|101010|10101013|0|10101013|ultimate",
       "to": "control:10101013",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101013|0|10101013->has-form->actor|101010|10101013|0|10101013:default",
-      "from": "actor|101010|10101013|0|10101013",
-      "to": "actor|101010|10101013|0|10101013:default",
+      "edgeIdentity": "actor|101010|10101013|0|10101013|ultimate->has-form->actor|101010|10101013|0|10101013|ultimate:default",
+      "from": "actor|101010|10101013|0|10101013|ultimate",
+      "to": "actor|101010|10101013|0|10101013|ultimate:default",
       "relation": "has-form"
     },
     {
-      "edgeIdentity": "actor|101010|10101013|0|10101013:default->executes-control->control:10101013",
-      "from": "actor|101010|10101013|0|10101013:default",
+      "edgeIdentity": "actor|101010|10101013|0|10101013|ultimate:default->executes-control->control:10101013",
+      "from": "actor|101010|10101013|0|10101013|ultimate:default",
       "to": "control:10101013",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101021|0|10101021->executes-control->control:10101021",
-      "from": "actor|101010|10101021|0|10101021",
+      "edgeIdentity": "actor|101010|10101021|0|10101021|star-carry->executes-control->control:10101021",
+      "from": "actor|101010|10101021|0|10101021|star-carry",
       "to": "control:10101021",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101021|1|10101025->executes-control->control:10101025",
-      "from": "actor|101010|10101021|1|10101025",
+      "edgeIdentity": "actor|101010|10101021|1|10101025|limit-counter->executes-control->control:10101025",
+      "from": "actor|101010|10101021|1|10101025|limit-counter",
       "to": "control:10101025",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101021|1|10101025->has-form->actor|101010|10101021|1|10101025:default",
-      "from": "actor|101010|10101021|1|10101025",
-      "to": "actor|101010|10101021|1|10101025:default",
+      "edgeIdentity": "actor|101010|10101021|1|10101025|limit-counter->has-form->actor|101010|10101021|1|10101025|limit-counter:default",
+      "from": "actor|101010|10101021|1|10101025|limit-counter",
+      "to": "actor|101010|10101021|1|10101025|limit-counter:default",
       "relation": "has-form"
     },
     {
-      "edgeIdentity": "actor|101010|10101021|1|10101025:default->executes-control->control:10101025",
-      "from": "actor|101010|10101021|1|10101025:default",
+      "edgeIdentity": "actor|101010|10101021|1|10101025|limit-counter:default->executes-control->control:10101025",
+      "from": "actor|101010|10101021|1|10101025|limit-counter:default",
       "to": "control:10101025",
       "relation": "executes-control"
     },
     {
-      "edgeIdentity": "actor|101010|10101021|2|10101027->executes-control->control:10101027",
-      "from": "actor|101010|10101021|2|10101027",
+      "edgeIdentity": "actor|101010|10101021|2|10101027|perfect-parry->executes-control->control:10101027",
+      "from": "actor|101010|10101021|2|10101027|perfect-parry",
       "to": "control:10101027",
       "relation": "executes-control"
     },
@@ -3141,9 +3141,9 @@
       "relation": "has-subskill"
     },
     {
-      "edgeIdentity": "switch-trigger:101010:on-enter->derives-star-carry->actor|101010|10101021|0|10101021",
+      "edgeIdentity": "switch-trigger:101010:on-enter->derives-star-carry->actor|101010|10101021|0|10101021|star-carry",
       "from": "switch-trigger:101010:on-enter",
-      "to": "actor|101010|10101021|0|10101021",
+      "to": "actor|101010|10101021|0|10101021|star-carry",
       "relation": "derives-star-carry",
       "status": "applied"
     },
@@ -3272,5 +3272,5 @@
       "triggers-passive": 8
     }
   },
-  "profileHash": "42d513387a1e17ffdff125b3abfd49707aa05f8620cfe611ae7de82387af0168"
+  "profileHash": "9c5d2140c67541effe4c968f075114adbed5508ff171a45b9155f1b13fc658eb"
 }

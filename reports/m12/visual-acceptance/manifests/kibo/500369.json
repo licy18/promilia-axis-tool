@@ -22,7 +22,7 @@
       "bytes": 82803,
       "status": "verified"
     },
-    "displaySummary": "风、雷 · 成长期 · 侵扰 · 呱乐演奏 · 落雷 · 乐乐蛙-合击",
+    "displaySummary": "风、雷 · 成长期 · 侵扰 · 呱乐演奏 · 风压 · 落雷 · 乐乐蛙-合击",
     "binding": {
       "elements": [
         "风",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "f5cf4d12eef0f76a"
+      "acceptanceIdentity": "f7b1902d079aefa5"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "a47b5448db4c64f3"
+  "manifestHash": "855c957c568a83c2"
 }

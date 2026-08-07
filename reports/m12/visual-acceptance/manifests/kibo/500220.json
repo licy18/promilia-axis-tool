@@ -22,7 +22,7 @@
       "bytes": 85839,
       "status": "verified"
     },
-    "displaySummary": "暗、雷 · 成熟期 · 猛袭 · 星云连射 · 暗影连袭 · 星云伊欧-合击",
+    "displaySummary": "暗、雷 · 成熟期 · 猛袭 · 星云连射 · 暗星飞射 · 暗影连袭 · 星云伊欧-合击",
     "binding": {
       "elements": [
         "暗",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "56f9335647413058"
+      "acceptanceIdentity": "838312f9d807ac88"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "e2eda7196a5623fe"
+  "manifestHash": "7d3836dd11365a06"
 }

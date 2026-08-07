@@ -22,7 +22,7 @@
       "bytes": 73244,
       "status": "verified"
     },
-    "displaySummary": "风、地 · 成熟期 · 猛袭 · 镰舞风暴 · 岩韧斩 · 秋日守望者-合击",
+    "displaySummary": "风、地 · 成熟期 · 猛袭 · 镰舞风暴 · 散射风刃 · 岩韧斩 · 秋日守望者-合击",
     "binding": {
       "elements": [
         "风",
@@ -33,6 +33,10 @@
       "actionCount": 3,
       "actions": {
         "signature": {
+          "runtimeStatus": "runnable",
+          "closureClass": "evidence-closed"
+        },
+        "normal-attack": {
           "runtimeStatus": "runnable",
           "closureClass": "evidence-closed"
         },
@@ -97,7 +101,7 @@
       "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
       "acceptanceMode": "automated-icon-and-display-evidence",
       "bindingStatus": "verified",
-      "acceptanceIdentity": "187da6f17a2ed8cc"
+      "acceptanceIdentity": "14d4404d3774a23c"
     }
   },
   "matrix": {
@@ -198,5 +202,5 @@
     "status": "m12-b3-visual-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "4e5f74a7d5bcb336"
+  "manifestHash": "86bed71f7e4a67a8"
 }

@@ -150,7 +150,8 @@ describe('generated action status runtime', () => {
     ).toMatchObject({
       resolutionStatus: 'suppressed-cooldown-active',
       materializationStatus: 'not-materialized',
-      starCarryActionIdentity: 'actor|101003|10100322|0|10100322',
+      starCarryActionIdentity:
+        'actor|101003|10100322|0|10100322|star-carry',
       applied: false,
     });
     expect(result.effectTimeline.input.summary).toMatchObject({
