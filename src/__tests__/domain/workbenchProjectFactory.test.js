@@ -731,17 +731,17 @@ describe('workbench project actor configuration', () => {
       toughnessMultiplier: 2,
       initialToughnessRatio: 0.25,
       stats: {
-        maxToughness: 13334,
-        initialToughness: 3333.5,
+        maxToughness: 53644.0154,
+        initialToughness: 13411.00385,
       },
       toughness: {
-        sourceKind: 'azpr-enemy-WEAKNESS_POINT_MAX',
-        sourceStatus: 'toughness-config-derived-from-enemy-base-attribute',
-        baseMax: 6667,
+        sourceKind: 'azpr-client-level-grown-WEAKNESS_POINT_MAX',
+        sourceStatus: 'toughness-config-derived-from-client-level-growth',
+        baseMax: 26822.0077,
         maxMultiplier: 2,
         initialRatio: 0.25,
-        maxValue: 13334,
-        initialValue: 3333.5,
+        maxValue: 53644.0154,
+        initialValue: 13411.00385,
         applied: true,
       },
     });
@@ -764,7 +764,7 @@ describe('workbench project actor configuration', () => {
     );
 
     expect(scenario.enemy.elementDefenseConfig).toMatchObject({
-      sourceStatus: 'element-defense-config-derived-from-enemy-base-attributes',
+      sourceStatus: 'element-defense-config-derived-from-client-level-growth',
       overrideCount: 1,
       formulaStatus: 'project-config-only',
       appliedToDamage: false,
@@ -784,7 +784,7 @@ describe('workbench project actor configuration', () => {
       baseValue: 0,
       overrideValue: null,
       effectiveValue: 0,
-      sourceStatus: 'azpr-enemy-base-attribute',
+      sourceStatus: 'azpr-client-level-grown-attribute',
     });
   });
 

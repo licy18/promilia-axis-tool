@@ -106,6 +106,12 @@
     "projectile": {
       "targetDistance": 0,
       "defaultWillHit": true
+    },
+    "target": {
+      "hpMode": "infinite",
+      "toughnessMode": "disabled",
+      "breakMode": "disabled",
+      "deathTruncation": "disabled"
     }
   },
   "actions": [

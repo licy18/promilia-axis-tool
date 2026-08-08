@@ -1844,15 +1844,15 @@ describe('first vertical slice simulation', () => {
           targetId: 'enemy-300032',
           enemyId: 300032,
           stats: expect.objectContaining({
-            physicalDefense: 9000,
-            magicalDefense: 9000,
-            maxToughness: 6667,
-            initialToughness: 6667,
+            physicalDefense: 810,
+            magicalDefense: 810,
+            maxToughness: 26822.0077,
+            initialToughness: 26822.0077,
           }),
           toughness: expect.objectContaining({
-            baseMax: 6667,
-            maxValue: 6667,
-            initialValue: 6667,
+            baseMax: 26822.0077,
+            maxValue: 26822.0077,
+            initialValue: 26822.0077,
           }),
           elementDefenses: expect.arrayContaining([
             expect.objectContaining({
@@ -1988,15 +1988,15 @@ describe('first vertical slice simulation', () => {
         toughnessDelta: 0,
         baseline: {
           hp: {
-            initialValue: 8628,
-            baseValue: 8628,
+            initialValue: 86778.6984,
+            baseValue: 86778.6984,
             multiplier: 1,
             sourceStatus: 'baseline-derived-from-scenario-enemy-max-hp',
           },
           toughness: {
-            initialValue: 6667,
-            maxValue: 6667,
-            baseValue: 6667,
+            initialValue: 26822.0077,
+            maxValue: 26822.0077,
+            baseValue: 26822.0077,
             multiplier: 1,
             sourceStatus:
               'baseline-derived-from-scenario-enemy-WEAKNESS_POINT_MAX',
@@ -2004,17 +2004,17 @@ describe('first vertical slice simulation', () => {
         },
         stateMetrics: {
           hp: {
-            initialValue: 8628,
+            initialValue: 86778.6984,
             delta: 12461,
-            currentValue: 0,
-            overrunValue: 3833,
+            currentValue: 74317.6984,
+            overrunValue: 0,
             stateLabel: '剩余',
             baselineConfirmed: true,
           },
           toughness: {
-            initialValue: 6667,
-            maxValue: 6667,
-            currentValue: 6667,
+            initialValue: 26822.0077,
+            maxValue: 26822.0077,
+            currentValue: 26822.0077,
             stateLabel: '剩余',
             baselineConfirmed: true,
           },
@@ -2055,11 +2055,11 @@ describe('first vertical slice simulation', () => {
         enemyStatePointCount: 1,
         stateCurvePointCount: 1,
         selfEnergyPointCount: 0,
-        enemyHpInitial: 8628,
-        enemyHpRemaining: 0,
+        enemyHpInitial: 86778.6984,
+        enemyHpRemaining: 74317.6984,
         enemyHpBaselineStatus: 'baseline-derived-from-scenario-enemy-max-hp',
-        enemyToughnessInitial: 6667,
-        enemyToughnessRemaining: 6667,
+        enemyToughnessInitial: 26822.0077,
+        enemyToughnessRemaining: 26822.0077,
         enemyToughnessBaselineStatus:
           'baseline-derived-from-scenario-enemy-WEAKNESS_POINT_MAX',
         simLogCount: 1,
@@ -2252,10 +2252,10 @@ describe('first vertical slice simulation', () => {
       selfEnergyDelta: 0,
       stateCurvePointCount: 1,
       simLogCount: 1,
-      enemyHpInitial: 8628,
-      enemyHpRemaining: 0,
-      enemyToughnessInitial: 6667,
-      enemyToughnessRemaining: 6667,
+      enemyHpInitial: 86778.6984,
+      enemyHpRemaining: 74317.6984,
+      enemyToughnessInitial: 26822.0077,
+      enemyToughnessRemaining: 26822.0077,
       enemyToughnessBaselineStatus:
         'baseline-derived-from-scenario-enemy-WEAKNESS_POINT_MAX',
       calculatorCount: 1,
@@ -3444,8 +3444,8 @@ describe('first vertical slice simulation', () => {
     });
     expect(result.threeValueRuntimeProjection.enemyStateCurve).toMatchObject({
       toughnessDelta: 70,
-      toughnessInitial: 6667,
-      toughnessRemaining: 6597,
+      toughnessInitial: 26822.0077,
+      toughnessRemaining: 26752.0077,
       pointCount: 2,
     });
   });

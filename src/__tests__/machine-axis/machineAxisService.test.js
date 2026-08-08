@@ -7,6 +7,7 @@ import {
   createMachineAxisService,
   MachineAxisValidationError,
 } from '../../machine-axis/machineAxisService';
+import { createSearchStateSnapshot } from '../../machine-axis/machineAxisSearchState';
 
 const PANGPANG_A3_HIT = '10100703|0|elements|0|-9212100609153088879|14|1';
 
@@ -305,6 +306,43 @@ describe('Machine Axis service', () => {
     const actionsById = new Map(
       run.trace.actions.map(action => [action.id, action])
     );
+    const hpDamageByAction = new Map(
+      run.evaluation.byAction.map(action => [action.identity, action.hpDamage])
+    );
+    const enemyState = createSearchStateSnapshot({
+      run,
+      contract: fixture,
+    }).enemy;
+
+    expect(run.contract.scenario.target).toEqual({
+      hpMode: 'infinite',
+      toughnessMode: 'disabled',
+      breakMode: 'disabled',
+      deathTruncation: 'disabled',
+    });
+    expect(run.contract.scenario.enemy).toMatchObject({
+      enemyId: 300032,
+      level: 1,
+      hpMultiplier: 1,
+    });
+    expect(run.trace.state.initial.enemy.maxHp).toBeCloseTo(690.24, 6);
+    expect(run.trace.state.final.enemy.maxHp).toBeCloseTo(690.24, 6);
+    expect(enemyState).toMatchObject({
+      hp: 690.24,
+      maxHp: 690.24,
+      defeated: false,
+    });
+    for (const actionId of [
+      'xunlang-signature',
+      'a3-expected',
+      'xiaoyu-charged',
+      'ruby-enhanced-e1-intent',
+    ]) {
+      expect(hpDamageByAction.get(actionId), actionId).toBeGreaterThan(0);
+    }
+    const lastDamage = run.trace.damage.at(-1);
+    expect(lastDamage.absoluteFrame).toBeGreaterThan(6000);
+    expect(lastDamage.rawDamage).toBeGreaterThan(0);
 
     expect(actionsById.get('a3-inherit')).toMatchObject({
       actorId: 'actor-101007',
@@ -343,7 +381,9 @@ describe('Machine Axis service', () => {
         }),
       })
     );
-    expect(integratedBaseline.machineAxis.canonicalHashes).toEqual(run.hashes);
+    expect(run.hashes).toEqual(
+      integratedBaseline.machineAxis.canonicalHashes
+    );
   });
 
   it('removes all real hit transactions when landed is miss', () => {

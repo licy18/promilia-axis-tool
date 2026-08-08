@@ -7,6 +7,8 @@
     "characters": "C:\\PC2\\Codex\\AzPr\\BWiki\\data\\hero-modules\\local-all",
     "skills": "C:\\PC2\\Codex\\AzPr\\BWiki\\data\\hero-modules\\local-all",
     "enemies": "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\enemy.json",
+    "enemyPacks": "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\enemy_pack.json",
+    "enemyLevelProfiles": "C:\\PC2\\Codex\\AzPr\\Assets\\ResourcesAssets\\Config\\NewTable\\template_value.json",
     "elements": "C:\\PC2\\Codex\\AzPr\\BWiki\\data\\local-element-system\\element-system.local.json",
     "equipment": "C:\\PC2\\Codex\\AzPr\\BWiki\\data\\local-accessory-forms\\all.local-accessory-forms.json",
     "kibos": "C:\\PC2\\Codex\\AzPr\\BWiki\\data\\local-kibo-forms\\all.local-kibo-forms.json",
@@ -13752,6 +13754,18 @@
           2
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 300032,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1019,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 300032,
           "exists": true,
@@ -13873,6 +13887,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 300071,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1019,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 300071,
           "exists": true,
@@ -13994,6 +14020,18 @@
           5
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 300081,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1023,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 300081,
           "exists": true,
@@ -14115,6 +14153,18 @@
           5
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 300082,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1026,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 300082,
           "exists": true,
@@ -14236,6 +14286,18 @@
           6
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 300111,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1015,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 300111,
           "exists": true,
@@ -14357,6 +14419,18 @@
           6
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 300112,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 300112,
           "exists": true,
@@ -14478,6 +14552,18 @@
           6
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 300113,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 300113,
           "exists": true,
@@ -14599,6 +14685,18 @@
           1
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 300121,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1015,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 300121,
           "exists": true,
@@ -14720,6 +14818,18 @@
           1
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 300122,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 300122,
           "exists": true,
@@ -14841,6 +14951,18 @@
           1
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 300123,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 300123,
           "exists": true,
@@ -14962,6 +15084,18 @@
           9
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310001,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1025,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310001,
           "exists": true,
@@ -15083,6 +15217,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310002,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310002,
           "exists": true,
@@ -15204,6 +15350,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310003,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1019,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310003,
           "exists": true,
@@ -15325,6 +15483,18 @@
           4
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310004,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1021,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310004,
           "exists": true,
@@ -15446,6 +15616,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310005,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1022,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310005,
           "exists": true,
@@ -15567,6 +15749,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310006,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1025,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310006,
           "exists": true,
@@ -15688,6 +15882,18 @@
           3
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310007,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1016,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310007,
           "exists": false,
@@ -15703,6 +15909,18 @@
           1
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310008,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1026,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310008,
           "exists": true,
@@ -15824,6 +16042,18 @@
           9
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310010,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1025,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310010,
           "exists": true,
@@ -15945,6 +16175,18 @@
           1
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310011,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1019,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310011,
           "exists": true,
@@ -16066,6 +16308,18 @@
           1
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310012,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1022,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310012,
           "exists": true,
@@ -16187,6 +16441,18 @@
           1
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310013,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1025,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310013,
           "exists": true,
@@ -16309,6 +16575,18 @@
           8
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310014,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1022,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310014,
           "exists": true,
@@ -16431,6 +16709,18 @@
           8
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310015,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1025,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310015,
           "exists": true,
@@ -16553,6 +16843,18 @@
           8
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310016,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1029,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310016,
           "exists": true,
@@ -16674,6 +16976,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310022,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1015,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310022,
           "exists": true,
@@ -16795,6 +17109,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310023,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310023,
           "exists": true,
@@ -16916,6 +17242,18 @@
           3
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310024,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1026,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310024,
           "exists": true,
@@ -17038,6 +17376,18 @@
           4
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310025,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1029,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310025,
           "exists": true,
@@ -17159,6 +17509,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310026,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1016,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310026,
           "exists": true,
@@ -17281,6 +17643,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310027,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1022,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310027,
           "exists": true,
@@ -17402,6 +17776,18 @@
           9
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310029,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1027,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310029,
           "exists": true,
@@ -17523,6 +17909,18 @@
           5
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310030,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310030,
           "exists": true,
@@ -17644,6 +18042,18 @@
           2
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310031,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310031,
           "exists": true,
@@ -17765,6 +18175,18 @@
           2
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310032,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1026,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310032,
           "exists": true,
@@ -17886,6 +18308,18 @@
           6
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310033,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1018,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310033,
           "exists": true,
@@ -18007,6 +18441,18 @@
           6
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310034,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310034,
           "exists": true,
@@ -18128,6 +18574,18 @@
           6
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310035,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1022,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310035,
           "exists": true,
@@ -18249,6 +18707,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310036,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1022,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310036,
           "exists": true,
@@ -18371,6 +18841,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310047,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1027,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310047,
           "exists": true,
@@ -18492,6 +18974,18 @@
           5
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310053,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1027,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310053,
           "exists": true,
@@ -18614,6 +19108,18 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310054,
+          "templateId": 3,
+          "profileId": "azpr-enemy-level-template-3",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 1,
+          "levelParameter": 1060,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310054,
           "exists": true,
@@ -18736,6 +19242,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310055,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310055,
           "exists": true,
@@ -18858,6 +19376,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310056,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1023,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310056,
           "exists": true,
@@ -18980,6 +19510,18 @@
           3
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310057,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1026,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310057,
           "exists": true,
@@ -19101,6 +19643,18 @@
           8
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310064,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1016,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310064,
           "exists": true,
@@ -19222,6 +19776,18 @@
           9
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310066,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1021,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310066,
           "exists": true,
@@ -19343,6 +19909,18 @@
           9
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310067,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1024,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310067,
           "exists": true,
@@ -19464,6 +20042,18 @@
           6
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310068,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310068,
           "exists": true,
@@ -19585,6 +20175,18 @@
           6
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310069,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1023,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310069,
           "exists": true,
@@ -19707,6 +20309,14 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 3
+        },
         "property": {
           "id": 310080,
           "exists": false,
@@ -19722,6 +20332,18 @@
           5
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310085,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1015,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310085,
           "exists": true,
@@ -19843,6 +20465,18 @@
           5
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310086,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310086,
           "exists": true,
@@ -19964,6 +20598,18 @@
           5
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310087,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310087,
           "exists": true,
@@ -20085,6 +20731,18 @@
           2
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310091,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310091,
           "exists": true,
@@ -20206,6 +20864,18 @@
           2
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310094,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310094,
           "exists": true,
@@ -20327,6 +20997,18 @@
           2
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310095,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1019,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310095,
           "exists": true,
@@ -20448,6 +21130,18 @@
           2
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310096,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1021,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310096,
           "exists": true,
@@ -20569,6 +21263,18 @@
           2
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310097,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1015,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310097,
           "exists": true,
@@ -20690,6 +21396,18 @@
           2
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310098,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310098,
           "exists": true,
@@ -20811,6 +21529,18 @@
           2
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310099,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310099,
           "exists": true,
@@ -20932,6 +21662,18 @@
           7
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310100,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310100,
           "exists": true,
@@ -21053,6 +21795,18 @@
           7
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310101,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1023,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310101,
           "exists": true,
@@ -21174,6 +21928,18 @@
           7
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310102,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1026,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310102,
           "exists": true,
@@ -21295,6 +22061,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310103,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1015,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310103,
           "exists": true,
@@ -21416,6 +22194,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310104,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1022,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310104,
           "exists": true,
@@ -21537,6 +22327,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310105,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310105,
           "exists": true,
@@ -21659,6 +22461,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310109,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1018,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310109,
           "exists": true,
@@ -21781,6 +22595,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310110,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1021,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310110,
           "exists": true,
@@ -21903,6 +22729,18 @@
           3
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310111,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1024,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310111,
           "exists": true,
@@ -22024,6 +22862,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310118,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1015,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310118,
           "exists": true,
@@ -22145,6 +22995,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310119,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310119,
           "exists": true,
@@ -22266,6 +23128,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310120,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310120,
           "exists": true,
@@ -22387,6 +23261,18 @@
           1
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310127,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310127,
           "exists": true,
@@ -22508,6 +23394,18 @@
           1
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310128,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1023,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310128,
           "exists": true,
@@ -22629,6 +23527,18 @@
           1
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310129,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1026,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310129,
           "exists": true,
@@ -22750,6 +23660,18 @@
           7
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310135,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310135,
           "exists": true,
@@ -22871,6 +23793,18 @@
           7
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310136,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1019,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310136,
           "exists": true,
@@ -22992,6 +23926,18 @@
           7
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310137,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1021,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310137,
           "exists": true,
@@ -23113,6 +24059,18 @@
           7
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310144,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1015,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310144,
           "exists": true,
@@ -23234,6 +24192,18 @@
           7
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310145,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310145,
           "exists": true,
@@ -23355,6 +24325,18 @@
           7
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310146,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310146,
           "exists": true,
@@ -23476,6 +24458,18 @@
           9
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310150,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310150,
           "exists": true,
@@ -23597,6 +24591,18 @@
           9
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310151,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1022,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310151,
           "exists": true,
@@ -23718,6 +24724,18 @@
           9
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310152,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1025,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310152,
           "exists": true,
@@ -23839,6 +24857,18 @@
           6
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310157,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1023,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310157,
           "exists": true,
@@ -23960,6 +24990,18 @@
           6
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310158,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1026,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310158,
           "exists": true,
@@ -24081,6 +25123,14 @@
           1
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 2
+        },
         "property": {
           "id": 310160,
           "exists": true,
@@ -24202,6 +25252,14 @@
           6
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 2
+        },
         "property": {
           "id": 310161,
           "exists": true,
@@ -24323,6 +25381,14 @@
           5
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 2
+        },
         "property": {
           "id": 310162,
           "exists": true,
@@ -24444,6 +25510,14 @@
           2
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 2
+        },
         "property": {
           "id": 310163,
           "exists": true,
@@ -24565,6 +25639,14 @@
           4
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 2
+        },
         "property": {
           "id": 310164,
           "exists": true,
@@ -24686,6 +25768,14 @@
           3
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 2
+        },
         "property": {
           "id": 310165,
           "exists": true,
@@ -24807,6 +25897,14 @@
           7
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 2
+        },
         "property": {
           "id": 310166,
           "exists": true,
@@ -24928,6 +26026,14 @@
           8
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 2
+        },
         "property": {
           "id": 310167,
           "exists": true,
@@ -25049,6 +26155,14 @@
           9
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 2
+        },
         "property": {
           "id": 310168,
           "exists": true,
@@ -25170,6 +26284,14 @@
           0
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 2
+        },
         "property": {
           "id": 310169,
           "exists": true,
@@ -25291,6 +26413,14 @@
           0
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 2
+        },
         "property": {
           "id": 310170,
           "exists": true,
@@ -25412,6 +26542,14 @@
           0
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 2
+        },
         "property": {
           "id": 310171,
           "exists": true,
@@ -25427,6 +26565,18 @@
           9
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310172,
+          "templateId": 4,
+          "profileId": "azpr-enemy-level-template-4",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 2,
+          "levelParameter": 1,
+          "levelPressureType": 0
+        },
         "property": {
           "id": 310172,
           "exists": true,
@@ -25548,6 +26698,14 @@
           5
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 3
+        },
         "property": {
           "id": 310283,
           "exists": true,
@@ -25669,6 +26827,18 @@
           8
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310285,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1023,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310285,
           "exists": true,
@@ -25790,6 +26960,18 @@
           4
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310288,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1026,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310288,
           "exists": true,
@@ -25911,6 +27093,18 @@
           9
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310292,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310292,
           "exists": true,
@@ -26032,6 +27226,18 @@
           1
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310295,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1027,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310295,
           "exists": true,
@@ -26154,6 +27360,18 @@
           7
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310299,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1055,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310299,
           "exists": true,
@@ -26275,6 +27493,18 @@
           0
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310306,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1025,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310306,
           "exists": true,
@@ -26396,6 +27626,18 @@
           1
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310316,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310316,
           "exists": true,
@@ -26517,6 +27759,18 @@
           1
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310317,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310317,
           "exists": true,
@@ -26638,6 +27892,18 @@
           1
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310318,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310318,
           "exists": true,
@@ -26759,6 +28025,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310330,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310330,
           "exists": true,
@@ -26880,6 +28158,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310331,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310331,
           "exists": true,
@@ -27001,6 +28291,18 @@
           4
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310332,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310332,
           "exists": true,
@@ -27122,6 +28424,18 @@
           6
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310333,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310333,
           "exists": true,
@@ -27243,6 +28557,18 @@
           6
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310334,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310334,
           "exists": true,
@@ -27364,6 +28690,18 @@
           6
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310335,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310335,
           "exists": true,
@@ -27485,6 +28823,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310369,
+          "templateId": 4,
+          "profileId": "azpr-enemy-level-template-4",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1001,
+          "levelPressureType": 0
+        },
         "property": {
           "id": 310026,
           "exists": true,
@@ -27606,6 +28956,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310370,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1019,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310370,
           "exists": true,
@@ -27728,6 +29090,18 @@
           6
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310376,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1025,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310376,
           "exists": true,
@@ -27850,6 +29224,18 @@
           6
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310377,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1027,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310377,
           "exists": true,
@@ -27972,6 +29358,18 @@
           6
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310378,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1029,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310378,
           "exists": true,
@@ -28094,6 +29492,18 @@
           1
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310385,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1040,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310385,
           "exists": true,
@@ -28215,6 +29625,18 @@
           9
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310426,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310426,
           "exists": true,
@@ -28336,6 +29758,18 @@
           9
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310427,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310427,
           "exists": true,
@@ -28458,6 +29892,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310429,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1023,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310429,
           "exists": true,
@@ -28580,6 +30026,18 @@
           4
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310430,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1026,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310430,
           "exists": true,
@@ -28702,6 +30160,18 @@
           7
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310438,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1019,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310438,
           "exists": true,
@@ -28824,6 +30294,18 @@
           7
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310439,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1021,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310439,
           "exists": true,
@@ -28946,6 +30428,18 @@
           7
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310440,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1024,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310440,
           "exists": true,
@@ -29067,6 +30561,18 @@
           6
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310467,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1023,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310467,
           "exists": true,
@@ -29188,6 +30694,18 @@
           0
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310494,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1027,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310494,
           "exists": true,
@@ -29309,6 +30827,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310535,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1017,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310535,
           "exists": true,
@@ -29430,6 +30960,18 @@
           3
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310536,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1022,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310536,
           "exists": true,
@@ -29552,6 +31094,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310537,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1020,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310537,
           "exists": true,
@@ -29674,6 +31228,18 @@
           3
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310538,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1022,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310538,
           "exists": true,
@@ -29795,6 +31361,18 @@
           9
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310606,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1025,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310606,
           "exists": true,
@@ -29916,6 +31494,18 @@
           9
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310621,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1025,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310621,
           "exists": true,
@@ -30037,6 +31627,18 @@
           9
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310622,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1025,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310622,
           "exists": true,
@@ -30158,6 +31760,18 @@
           9
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310623,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1027,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310623,
           "exists": true,
@@ -30279,6 +31893,18 @@
           9
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310624,
+          "templateId": 4,
+          "profileId": "azpr-enemy-level-template-4",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 2,
+          "levelParameter": 1,
+          "levelPressureType": 0
+        },
         "property": {
           "id": 310624,
           "exists": true,
@@ -30401,6 +32027,18 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310681,
+          "templateId": 9,
+          "profileId": "azpr-enemy-level-template-9",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 4,
+          "levelParameter": 1050,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310681,
           "exists": true,
@@ -30522,6 +32160,18 @@
           9
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310684,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1028,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310684,
           "exists": true,
@@ -30643,6 +32293,18 @@
           9
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310687,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 1,
+          "levelParameter": 1025,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310687,
           "exists": true,
@@ -30764,6 +32426,18 @@
           9
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310690,
+          "templateId": 3,
+          "profileId": "azpr-enemy-level-template-3",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 1,
+          "levelParameter": 1029,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310690,
           "exists": true,
@@ -30885,6 +32559,18 @@
           9
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310691,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1027,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310691,
           "exists": true,
@@ -31006,6 +32692,18 @@
           9
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310697,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1025,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310335,
           "exists": true,
@@ -31127,6 +32825,14 @@
           0
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 3
+        },
         "property": {
           "id": 310749,
           "exists": true,
@@ -31248,6 +32954,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310771,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 4,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310771,
           "exists": true,
@@ -31369,6 +33087,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310772,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 4,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310772,
           "exists": true,
@@ -31490,6 +33220,18 @@
           5
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310773,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 4,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310773,
           "exists": true,
@@ -31611,6 +33353,18 @@
           3
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310774,
+          "templateId": 1,
+          "profileId": "azpr-enemy-level-template-1",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 4,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310774,
           "exists": true,
@@ -31732,6 +33486,18 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310775,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 4,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310775,
           "exists": true,
@@ -31853,6 +33619,18 @@
           0
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310777,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 4,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310777,
           "exists": true,
@@ -31975,6 +33753,18 @@
           8
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310778,
+          "templateId": 3,
+          "profileId": "azpr-enemy-level-template-3",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 4,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310778,
           "exists": true,
@@ -32097,6 +33887,18 @@
           2
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310779,
+          "templateId": 3,
+          "profileId": "azpr-enemy-level-template-3",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 4,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310779,
           "exists": true,
@@ -32219,6 +34021,18 @@
           2
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310780,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 4,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310780,
           "exists": true,
@@ -32340,6 +34154,18 @@
           1
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310781,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 4,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310781,
           "exists": true,
@@ -32461,6 +34287,18 @@
           5
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310784,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 3,
+          "levelPolicy": 4,
+          "levelParameter": 1032,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310784,
           "exists": true,
@@ -32582,6 +34420,18 @@
           9
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310785,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 4,
+          "levelParameter": 1038,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310785,
           "exists": true,
@@ -32703,6 +34553,18 @@
           4
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310846,
+          "templateId": 12,
+          "profileId": "azpr-enemy-level-template-12",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 3,
+          "levelParameter": 5,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310846,
           "exists": true,
@@ -32824,6 +34686,18 @@
           2
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310847,
+          "templateId": 12,
+          "profileId": "azpr-enemy-level-template-12",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 3,
+          "levelParameter": 5,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310847,
           "exists": true,
@@ -32945,6 +34819,18 @@
           1
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310848,
+          "templateId": 12,
+          "profileId": "azpr-enemy-level-template-12",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 3,
+          "levelParameter": 5,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310848,
           "exists": true,
@@ -33066,6 +34952,18 @@
           9
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310849,
+          "templateId": 12,
+          "profileId": "azpr-enemy-level-template-12",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 3,
+          "levelParameter": 5,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310849,
           "exists": true,
@@ -33187,6 +35085,18 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310850,
+          "templateId": 12,
+          "profileId": "azpr-enemy-level-template-12",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 3,
+          "levelParameter": 5,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310850,
           "exists": true,
@@ -33308,6 +35218,18 @@
           5
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310851,
+          "templateId": 12,
+          "profileId": "azpr-enemy-level-template-12",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 3,
+          "levelParameter": 5,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310851,
           "exists": true,
@@ -33429,6 +35351,18 @@
           1
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310852,
+          "templateId": 12,
+          "profileId": "azpr-enemy-level-template-12",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 3,
+          "levelParameter": 5,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310852,
           "exists": true,
@@ -33550,6 +35484,18 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310853,
+          "templateId": 12,
+          "profileId": "azpr-enemy-level-template-12",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 3,
+          "levelParameter": 5,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310853,
           "exists": true,
@@ -33672,6 +35618,18 @@
           4
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310854,
+          "templateId": 12,
+          "profileId": "azpr-enemy-level-template-12",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 3,
+          "levelParameter": 5,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310854,
           "exists": true,
@@ -33793,6 +35751,18 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310855,
+          "templateId": 12,
+          "profileId": "azpr-enemy-level-template-12",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 3,
+          "levelParameter": 5,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310855,
           "exists": true,
@@ -33915,6 +35885,18 @@
           8
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310856,
+          "templateId": 12,
+          "profileId": "azpr-enemy-level-template-12",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 3,
+          "levelParameter": 5,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310856,
           "exists": true,
@@ -34036,6 +36018,18 @@
           4
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 310857,
+          "templateId": 12,
+          "profileId": "azpr-enemy-level-template-12",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 3,
+          "levelParameter": 5,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 310857,
           "exists": true,
@@ -34157,6 +36151,14 @@
           2
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 3
+        },
         "property": {
           "id": 320001,
           "exists": false,
@@ -34172,6 +36174,14 @@
           4
         ],
         "enemyType": 3,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 3
+        },
         "property": {
           "id": 320002,
           "exists": false,
@@ -34187,6 +36197,14 @@
           1
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 2
+        },
         "property": {
           "id": 320003,
           "exists": false,
@@ -34202,6 +36220,18 @@
           9
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 350000,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 4,
+          "levelParameter": 1038,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 350000,
           "exists": true,
@@ -34324,6 +36354,18 @@
           1
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400011,
+          "templateId": 3,
+          "profileId": "azpr-enemy-level-template-3",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 1,
+          "levelParameter": 1060,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400011,
           "exists": true,
@@ -34446,6 +36488,18 @@
           3
         ],
         "enemyType": 2,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400061,
+          "templateId": 2,
+          "profileId": "azpr-enemy-level-template-2",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 2,
+          "levelPolicy": 1,
+          "levelParameter": 1029,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400061,
           "exists": true,
@@ -34568,6 +36622,18 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400062,
+          "templateId": 3,
+          "profileId": "azpr-enemy-level-template-3",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 1,
+          "levelParameter": 1030,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400062,
           "exists": true,
@@ -34690,6 +36756,18 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400063,
+          "templateId": 3,
+          "profileId": "azpr-enemy-level-template-3",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 1,
+          "levelParameter": 1030,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400063,
           "exists": false,
@@ -34705,6 +36783,18 @@
           5
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400064,
+          "templateId": 3,
+          "profileId": "azpr-enemy-level-template-3",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 1,
+          "levelParameter": 1055,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400064,
           "exists": true,
@@ -34827,6 +36917,18 @@
           8
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400065,
+          "templateId": 3,
+          "profileId": "azpr-enemy-level-template-3",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 1,
+          "levelParameter": 1050,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400065,
           "exists": true,
@@ -34949,6 +37051,18 @@
           1
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400068,
+          "templateId": 5,
+          "profileId": "azpr-enemy-level-template-5",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 2,
+          "levelParameter": 50,
+          "levelPressureType": 0
+        },
         "property": {
           "id": 400068,
           "exists": true,
@@ -35070,6 +37184,18 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400069,
+          "templateId": 3,
+          "profileId": "azpr-enemy-level-template-3",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 1,
+          "levelParameter": 1040,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400069,
           "exists": true,
@@ -35192,6 +37318,18 @@
           2
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400070,
+          "templateId": 3,
+          "profileId": "azpr-enemy-level-template-3",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 1,
+          "levelParameter": 1060,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400070,
           "exists": true,
@@ -35313,6 +37451,14 @@
           9
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400075,
           "exists": false,
@@ -35328,6 +37474,18 @@
           5
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400076,
+          "templateId": 9,
+          "profileId": "azpr-enemy-level-template-9",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 4,
+          "levelParameter": 1050,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400076,
           "exists": true,
@@ -35449,6 +37607,18 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400077,
+          "templateId": 9,
+          "profileId": "azpr-enemy-level-template-9",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 4,
+          "levelParameter": 1040,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400077,
           "exists": true,
@@ -35571,6 +37741,18 @@
           8
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400078,
+          "templateId": 9,
+          "profileId": "azpr-enemy-level-template-9",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 4,
+          "levelParameter": 1055,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400078,
           "exists": true,
@@ -35693,6 +37875,18 @@
           2
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400079,
+          "templateId": 9,
+          "profileId": "azpr-enemy-level-template-9",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 4,
+          "levelParameter": 1060,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400079,
           "exists": true,
@@ -35815,6 +38009,18 @@
           1
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400080,
+          "templateId": 9,
+          "profileId": "azpr-enemy-level-template-9",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 4,
+          "levelParameter": 1060,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400080,
           "exists": true,
@@ -35937,6 +38143,14 @@
           2
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400081,
           "exists": false,
@@ -35953,6 +38167,14 @@
           8
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400082,
           "exists": false,
@@ -35968,6 +38190,18 @@
           5
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "ready",
+          "enemyPackId": 400084,
+          "templateId": 9,
+          "profileId": "azpr-enemy-level-template-9",
+          "templateIdSource": "enemy-pack-template-id",
+          "fallbackEnemyType": 1,
+          "levelPolicy": 4,
+          "levelParameter": 1050,
+          "levelPressureType": 1
+        },
         "property": {
           "id": 400084,
           "exists": true,
@@ -36089,6 +38323,14 @@
           0
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400069,
           "exists": true,
@@ -36211,6 +38453,14 @@
           1
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400011,
           "exists": true,
@@ -36333,6 +38583,14 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400062,
           "exists": true,
@@ -36454,6 +38712,14 @@
           5
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400064,
           "exists": true,
@@ -36576,6 +38842,14 @@
           8
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400065,
           "exists": true,
@@ -36697,6 +38971,14 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400069,
           "exists": true,
@@ -36819,6 +39101,14 @@
           2
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400070,
           "exists": true,
@@ -36941,6 +39231,14 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 310054,
           "exists": true,
@@ -37062,6 +39360,14 @@
           0
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400011,
           "exists": true,
@@ -37183,6 +39489,14 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400069,
           "exists": true,
@@ -37305,6 +39619,14 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 310054,
           "exists": true,
@@ -37427,6 +39749,14 @@
           3
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400062,
           "exists": true,
@@ -37549,6 +39879,14 @@
           8
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400065,
           "exists": true,
@@ -37671,6 +40009,14 @@
           2
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400070,
           "exists": true,
@@ -37792,6 +40138,14 @@
           5
         ],
         "enemyType": 1,
+        "levelProfile": {
+          "schemaVersion": 1,
+          "status": "missing-default-enemy-pack",
+          "enemyPackId": null,
+          "templateId": null,
+          "templateIdSource": null,
+          "fallbackEnemyType": 1
+        },
         "property": {
           "id": 400064,
           "exists": true,

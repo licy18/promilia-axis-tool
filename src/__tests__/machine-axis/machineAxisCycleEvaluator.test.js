@@ -1137,57 +1137,57 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       sampleCount: 64,
       loopHpDamage: {
         count: 64,
-        mean: 22.59375,
-        variance: 1.07043651,
+        mean: 214,
+        variance: 158.98412698,
         quantiles: {
-          p5: 22,
-          p25: 22,
-          p50: 22,
-          p75: 24,
-          p95: 24,
+          p5: 207,
+          p25: 207,
+          p50: 207,
+          p75: 225,
+          p95: 235,
         },
       },
       cycleDps: {
         count: 64,
-        mean: 4.51875,
-        variance: 0.04281746,
+        mean: 42.8,
+        variance: 6.35936508,
         quantiles: {
-          p5: 4.4,
-          p25: 4.4,
-          p50: 4.4,
-          p75: 4.8,
-          p95: 4.8,
+          p5: 41.4,
+          p25: 41.4,
+          p50: 41.4,
+          p75: 45,
+          p95: 47,
         },
       },
       contributionConservation: {
         byActor: {
-          sampleMean: 22.59375,
-          contributionMean: 22.59375,
+          sampleMean: 214,
+          contributionMean: 214,
           difference: 0,
           conserved: true,
         },
         byAction: {
-          sampleMean: 22.59375,
-          contributionMean: 22.59375,
+          sampleMean: 214,
+          contributionMean: 214,
           difference: 0,
           conserved: true,
         },
         byHit: {
-          sampleMean: 22.59375,
-          contributionMean: 22.59375,
+          sampleMean: 214,
+          contributionMean: 214,
           difference: 0,
           conserved: true,
         },
       },
     });
-    expect(report.metrics.loopHpDamage).toBe(22.59375);
-    expect(report.metrics.cycleDps).toBe(4.51875);
+    expect(report.metrics.loopHpDamage).toBe(214);
+    expect(report.metrics.cycleDps).toBe(42.8);
     expect(report.hashes).toMatchObject({
-      input: '85dbe21f5b72666e',
+      input: 'c2937fd024bcebb9',
       data: '3ff810bea0cdbafd',
-      trace: 'ef420a0463632bef',
-      evaluation: '13fc3bf3db5aeb9d',
-      cycle: '2c22582e45d321a9',
+      trace: '7274a6876e6aed61',
+      evaluation: 'f5b33471d4ab338f',
+      cycle: '89707262782be1d1',
     });
     expect(report.sampleStatistics.loopHpDamage.variance).toBeGreaterThan(0);
     for (const dimension of ['byActor', 'byAction', 'byHit']) {
@@ -1309,9 +1309,24 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
 
     expect(report.valid).toBe(true);
     expect(report.metrics).toMatchObject({
-      loopHpDamage: 93.17999268,
+      loopHpDamage: 928.85993958,
       combatHitCount: 6,
     });
+    const closure = report.stateClosure[0];
+    expect(report.metrics.loopHpDamage).toBeGreaterThan(
+      closure.start.enemy.maxHp
+    );
+    for (const enemyState of [
+      closure.start.enemy,
+      closure.firstEnd.enemy,
+      closure.secondEnd.enemy,
+    ]) {
+      expect(enemyState).toMatchObject({
+        hp: 690.24,
+        maxHp: 690.24,
+        defeated: false,
+      });
+    }
     expect(passive).toMatchObject({
       skillId: 520082,
       triggerLifetime: 'unlimited',

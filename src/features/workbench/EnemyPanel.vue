@@ -34,28 +34,45 @@
       </div>
     </div>
 
+    <div
+      class="level-source-status"
+      :data-level-source-status="enemy.levelScaling?.status"
+      data-testid="workbench-enemy-level-source-status"
+    >
+      <strong>{{ levelSourceLabel(enemy.levelScaling) }}</strong>
+      <span>{{ levelSourceDetail(enemy.levelScaling) }}</span>
+    </div>
+
     <div class="stat-grid">
       <div>
-        <span>生命</span>
-        <strong>{{ formatNumber(enemy.stats?.maxHp) }}</strong>
+        <span>攻击</span>
+        <strong>{{ formatNumber(enemy.effectiveStats?.attack) }}</strong>
       </div>
       <div>
-        <span>物防</span>
-        <strong>{{ formatNumber(enemy.stats?.physicalDefense) }}</strong>
+        <span>有效生命</span>
+        <strong>{{ formatNumber(enemy.effectiveStats?.maxHp) }}</strong>
       </div>
       <div>
-        <span>魔防</span>
-        <strong>{{ formatNumber(enemy.stats?.magicalDefense) }}</strong>
+        <span>有效物防</span>
+        <strong>{{
+          formatNumber(enemy.effectiveStats?.physicalDefense)
+        }}</strong>
+      </div>
+      <div>
+        <span>有效魔防</span>
+        <strong>{{
+          formatNumber(enemy.effectiveStats?.magicalDefense)
+        }}</strong>
       </div>
       <div
         :data-toughness-source-status="enemy.toughness?.sourceStatus"
         data-testid="workbench-enemy-toughness-stat"
       >
         <span>韧性 初始 / 上限</span>
-        <strong>{{ formatToughnessState(enemy.stats) }}</strong>
+        <strong>{{ formatToughnessState(enemy.effectiveStats) }}</strong>
       </div>
       <div>
-        <span>倍率</span>
+        <span>最终倍率（生命 / 防御）</span>
         <strong
           >{{ enemy.hpMultiplier }}x / {{ enemy.defenseMultiplier }}x</strong
         >
@@ -133,7 +150,7 @@
     >
       <div class="element-defense-header">
         <strong>元素伤害减免</strong>
-        <span>表值</span>
+        <span>等级后值</span>
         <span>项目值</span>
       </div>
       <div class="element-defense-grid">
@@ -229,7 +246,24 @@ function emitElementDefensePatch(attributeKey, value) {
 }
 
 function formatNumber(value) {
-  return Math.round(Number(value) || 0).toLocaleString('zh-CN');
+  if (!Number.isFinite(value)) {
+    return '暂无有效值';
+  }
+  return Math.round(Number(value)).toLocaleString('zh-CN');
+}
+
+function levelSourceLabel(levelScaling = {}) {
+  return levelScaling.status === 'ready'
+    ? '客户端等级属性已应用'
+    : '等级属性证据不足，已停止投影';
+}
+
+function levelSourceDetail(levelScaling = {}) {
+  if (levelScaling.status !== 'ready') {
+    return levelScaling.status || 'missing-enemy-level-profile';
+  }
+  const source = levelScaling.source ?? {};
+  return `敌人包 ${source.enemyPackId} · 模板 ${source.templateId} · template_value ${source.templateValueId}`;
 }
 
 function formatToughnessState(stats = {}) {
@@ -287,6 +321,7 @@ h2 {
 }
 
 .enemy-summary,
+.level-source-status,
 .stat-grid,
 .control-grid,
 .element-defense-editor {
@@ -308,6 +343,15 @@ h2 {
 
 .stat-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.level-source-status {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: #b8c4cc;
+}
+
+.level-source-status strong {
+  color: #79c7b9;
 }
 
 .stat-grid div {

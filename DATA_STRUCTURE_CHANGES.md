@@ -27790,3 +27790,46 @@ Old projects without `combatScenario.critical` normalize to explicit `non-critic
 暴击分支在命中时读取来源 `CRI` 与目标属性 102 `CRI_DEFENSE`，并按 `clamp(CRI - CRI_DEFENSE, 0, 10000)` 生成 `criticalThreshold`。分支 trace 保留 `sourceCriticalRate`、`sourceCriticalRateBasisPoints`、`targetCriticalRateDefense`、`targetCriticalRateDefenseBasisPoints`、`criticalThreshold`、roll 与 stream index，便于重放和解释命中时动态属性变化。
 
 Workbench 分析报告复现通过 `WORKBENCH_HEADLESS_COMBAT_CORE` 重建并保存 canonical input/trace hash、暴击 policy 与 seed，不再直接调用底层 `compileProject` 或 `simulateScenario`。报告的 action source bindings 只冻结带 `actionId` 的动作交易；自动回能等系统交易仍完整保留在 canonical trace，避免把系统事件错误归入某个动作来源。
+
+## 457. 敌人等级属性 Profile / Enemy Level Stat Construction
+
+生成目录新增 `enemy-level-profiles.json`（kind `azpr-enemy-level-profile-catalog`）。该文件由 `enemy_pack.json`、`enemy.json`、`unit_property.json`、`template_value.json` 与 `template_difficulty.json` 投影，保存客户端运行时所需的最小结构：
+
+```text
+EnemyLevelProfileCatalog
+  attributeDefinitions[]
+    key / attributeId / divisor
+  profiles[]
+    templateId / source
+    levels[]
+      level / templateValueId / coefficients[]
+  templateDifficultyLinks[]
+  evidence
+
+Enemy.levelProfile
+  status
+  enemyPackId / templateId / levelPolicy / levelParameter
+  profileId / source
+```
+
+`attributeDefinitions` 固定覆盖 `ATK / MAXHP / DEF / MDEF / WEAKNESS_POINT_MAX` 和 10 项元素抗性。GameAssembly 的 `FormulaUtility.CalculateAttribute` 证明属性 ID `1/3/4/5/201/229` 使用除数 `10000`，其他属性使用除数 `1`。`Enemy.levelProfile.status` 只有在默认 enemy pack、template 与生成 profile 均可唯一解析时为 `ready`；缺失时保留精确状态，不任意选择同敌人的其他 pack。
+
+`resolveEnemyLevelStats({ enemy, level, enemyLevelProfiles })` 是 compiler/headless/Workbench 的公共纯解析入口。它要求精确等级行，输出：
+
+```text
+EnemyLevelStatResolution
+  status / ready
+  rawTemplateStats
+  stats
+  attributeAudit[]
+    baseValue / coefficient / divisor / finalValue
+  source
+    enemyPackId / templateId / templateValueId
+    levelPolicy / levelParameter
+    targetLevelAppliedToStats = false
+    sceneAttributeScaleApplied = false
+```
+
+编译后 `levelScaling.stats` 保存完整客户端等级成长基线。为兼容既有 runtime 合同，`scenario.enemy.stats` 的 HP/双防仍是等级成长基线，由 verified runtime 再应用 `hpMultiplier / defenseMultiplier`；韧性上限和初始值则继续在编译时应用 `toughnessMultiplier`。新增 `effectiveStats` 统一表示最终 Workbench 面板：HP、双防和韧性均已应用各自最终倍率。`effectiveStats` 只供面板与审计消费，不重复进入伤害结算。
+
+`scenario.enemy.level` 同时保留为 verified damage runtime 的 `targetLevel`；它对防御因子与等级压制的影响和属性成长是两条独立消费链。缺 profile、缺默认 pack 或等级越界时，解析器令 `stats / effectiveStats` 的各数值字段为 `null`，Workbench 显示缺证据状态，compiler 不回退原始模板面板、不插值、不外推。WorkbenchProjectFile schemaVersion 不升级；项目仍只持久化 enemy ID、level 与最终倍率，profile 由生成 game data 在导入、canonical、Machine Axis、cycle 和草稿 round-trip 时重新解析。

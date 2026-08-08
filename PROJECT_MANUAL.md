@@ -2149,3 +2149,9 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - 生成器当前给出 requirement `207`、required/pass/N/A/blocked=`138/138/69/0`；ledger source/acceptance/non-blocking=`0/0/13`；2 个场景均执行通过，1097/1098 assertion 通过，唯一未通过 assertion 是产品视觉身份。109001 仍为 `runtime-integrated`，唯一 blocker=`acceptance-product-visual-signoff-pending`。
 - 当前 verified package hash `ed65d281dc63732353605142ee3f8ebebd7329618def661d8477b48d266e6e7e`，文件 SHA-256 `1f3ed08b56ebf56c48ecf1f7909dbd537d172918253b0f6871b3048540f44aa0`，109001 golden replay hash `1d6b5ad18b084a625ec571af96ae3252f123b0e56453e2a0b4d6fbb95b4ed724`。资格为 `9/43/62/137/12`，source/roster/manifests/ledger/binding/catalog=`0a4b69e0716de917/a3edc962effdcba0/1cb4029bc8a8c91f/c70e8c978317e184/8d6ae083ad89db3b/4346c39d4d818730`；全局 16 个 blocker 全是角色项，M12-C/formal search 继续锁定。
 - 最终串行 Vitest `192/192` 文件、`1472/1472` 用例通过；verified-combat、character-combat、scenario-policy、character-acceptance、visual-acceptance、optimization-qualification、production-imports、Workbench data、action-status、applied-source-bindings 与 Kibo headless 均 deterministic clean，production build 1878 modules 通过。最终仍停在末音产品视觉复验点；未经签收不开始米蒂、E20-3、M12-C 或正式搜索。
+
+### M12-B3 敌人等级数值产品验收与合并（2026-08-08）
+
+- 产品已接受敌人等级基线 `d1587a8800b23bd848e267ae0baf219ab92fc96a`，closeout 为 `ae3be2f04d6e478abf8a52dad5495a81daf969c1`。运行时依据 `enemy_pack.templateID`、等级模板值与 `FormulaUtility.CalculateAttribute`结算 ATK/MAXHP/DEF/MDEF/韧性，缺 pack、template 或精确等级行时 fail closed。
+- 迅狼 `300032` Lv80 已由原始 `MAXHP=8628 / DEF=MDEF=9000` 纠正为等级成长后 `MAXHP=86778.6984 / DEF=MDEF=810 / maxToughness=26822.0077`。有限面板数值与试点 `hpMode=infinite`执行政策分层保存，无限 HP 不再通过放大 hpMultiplier 伪造。
+- `enemy-level-profiles.json`、`resolveEnemyLevelStats`、compiler、canonical headless、Machine Axis 与 Workbench 共用同一来源链。结构化证据见 `reports/m12/m12-b3-enemy-level-evidence-20260808.json`，任务记录见 `work/m12-b3-enemy-level/STATE.md`。
