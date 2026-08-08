@@ -1,8 +1,26 @@
 {
   "schemaVersion": 1,
   "kind": "azpr-enemy-level-runtime-evidence",
-  "status": "client-runtime-chain-verified",
+  "status": "product-accepted",
+  "evidenceStatus": "client-runtime-chain-verified",
   "scope": "M12-B3 enemy level stat construction only; no M12-C search",
+  "productAcceptance": {
+    "acceptedBaselineCommit": "d1587a8800b23bd848e267ae0baf219ab92fc96a",
+    "acceptedOn": "2026-08-08",
+    "closeoutReport": "reports/m12/m12-b3-enemy-level-r1-baseline-sync-20260808.json",
+    "finiteEnemyPanel": {
+      "enemyId": 300032,
+      "level": 1,
+      "maxHp": 690.24
+    },
+    "trialTargetPolicy": {
+      "hpMode": "infinite",
+      "toughnessMode": "disabled",
+      "breakMode": "disabled",
+      "deathTruncation": "disabled",
+      "overwritesEnemyMaxHp": false
+    }
+  },
   "clientBuild": {
     "gameAssembly": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
     "dump": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",

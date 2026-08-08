@@ -1,10 +1,47 @@
 {
   "schemaVersion": 1,
   "kind": "azpr-enemy-level-machine-axis-baseline-sync",
-  "status": "verification-complete-post-commit-package-handoff",
+  "status": "product-accepted",
   "scope": "M12-B3 enemy-level R1 fixture, baseline, reporting, and deterministic gates only",
   "runtimeChanged": false,
   "fixtureChanged": true,
+  "productAcceptance": {
+    "state": "product-accepted",
+    "acceptedBaselineCommit": "d1587a8800b23bd848e267ae0baf219ab92fc96a",
+    "acceptedOn": "2026-08-08",
+    "independentRecheck": {
+      "worktreeClean": true,
+      "diffCheck": "2d6093659203af754cd9995b7f45e925d55fd241..d1587a8800b23bd848e267ae0baf219ab92fc96a clean",
+      "command": "npm test -- --run src/__tests__/machine-axis/machineAxisService.test.js -t \"runs the acceptance fixture as a real three-actor plus kibo axis\" --testTimeout=30000",
+      "testsPassed": 1,
+      "testsSkipped": 13,
+      "durationSeconds": 7.53
+    },
+    "boundaryColumns": {
+      "finiteEnemyPanel": {
+        "role": "real level-derived enemy panel and percentage/display denominator",
+        "enemyId": 300032,
+        "level": 1,
+        "maxHp": 690.24,
+        "hpMultiplier": 1,
+        "finiteValuePreserved": true
+      },
+      "trialTargetPolicy": {
+        "role": "frozen trial execution policy; does not replace or inflate the finite panel",
+        "hpMode": "infinite",
+        "toughnessMode": "disabled",
+        "breakMode": "disabled",
+        "deathTruncation": "disabled",
+        "overwritesEnemyMaxHp": false
+      }
+    },
+    "closeoutScope": [
+      "report, STATE, and project manual status only",
+      "no runtime or compiler changes",
+      "no main B3 merge",
+      "stop at product recheck point"
+    ]
+  },
   "reproduction": {
     "command": "npm test -- --run src/__tests__/machine-axis/machineAxisService.test.js -t \"runs the acceptance fixture as a real three-actor plus kibo axis\" --testTimeout=30000",
     "resultBeforeR1": {

@@ -2163,5 +2163,12 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - 隔离边界：完整 `audit:verified-combat` 已证明新链进入角色权威运行时，但旧角色 golden 仍锁定原始敌人模板结果（首个反例 101003：总 HP 伤害期望 `78149`，新链 `160349`）。本分支不重写末音、米蒂或其他角色机制/golden，留待上游在合并敌人数值后统一重基线。包体守门在基线已超预算，本阶段没有提高预算；Workbench gzip `533194→564225`，总 JS gzip `1064031→1095318`，作为发布边界单列。
 - R1 集成基线同步：产品复验先暴露 M11 integrated report 与当前 canonical 服务不一致，随后又证明不能把有限 HP 运行的后段零伤害机械写成 golden。Lv1 迅狼真实 `maxHp=690.24`，有限目标在 333–400ms 被前四段 `225+225+225+15=690` 耗尽，导致 120 秒总伤害仅 690、A3 expected 虽有 `preShieldRaw=9683008` 却结算为 0；该未提交的 0 golden 已撤回。M11 fixture 现显式采用冻结试点 target policy：`hpMode=infinite / toughnessMode=disabled / breakMode=disabled / deathTruncation=disabled`，仍保持 `level=1 / hpMultiplier=1 / maxHp=690.24`、0 距离投射物和无敌方动作，不用超大 HP 倍率冒充无限生命。service 与强制重建 CLI 的最终哈希为 `input=74466fb0f55b90c9 / data=73456783a3dd342d / trace=b6d899957b7dc240 / evaluation=6b1817db45d140ab`；120 秒总伤害为 `27762.79998779297`，A3 expected 恢复为非暴击 `72`、暴击 `108`、加权 `73.79998779296875`，6890F 末段仍有 765 伤害。R1 只改 fixture、baseline、trace/search golden、报告和外部审计包派生哈希，敌人等级 compiler/headless/runtime 未改。Machine Axis 集成基线由 R1 闭合；角色 `audit:verified-combat` 的 character golden 仍留给上游独立重基线，二者不得合并表述。
 - R1 验证：指定 exact 为 `1 passed / 13 skipped`；6 文件/165 聚焦与 7 文件/64 canonical/cycle/adapter/round-trip 全过；四项确定性审计、production build、Machine Axis CLI build、`git diff --check` 全过。默认并发完整 Machine Axis 目录的最终结果为 13 文件/163 项中 153 passed、8 skipped、2 process-timeout，另 1 个 `beforeAll` hook timeout；数值断言失败为 0。资源争抢路径分别单跑：search state `8/8`、CLI process `9/9`、CLI search `1 passed / 31 skipped`，不把并发超时冒充全目录通过，也不为性能问题放宽断言。
+- 产品接受 closeout：基线 `d1587a8800b23bd848e267ae0baf219ab92fc96a` 已通过独立产品复验（工作树 clean、`2d609365..d1587a88` diff check clean、精确 Machine Axis 用例 `1/1 passed`、`13 skipped`、`7.53s`），状态更新为 `product-accepted`。本次 closeout 只同步报告/STATE/手册，不改 runtime/compiler、不合并主 B3，并停在产品复验点。
+
+| 边界栏 | 有限敌人面板 | 冻结试点执行政策 |
+| --- | --- | --- |
+| 负责语义 | 等级来源的真实面板、百分比和显示分母 | 试点战斗如何持续结算 |
+| 固定值 | 迅狼 `300032`，`Lv1`，`maxHp=690.24`，`hpMultiplier=1` | `hpMode=infinite`、`toughnessMode=disabled`、`breakMode=disabled`、`deathTruncation=disabled` |
+| 互不覆盖 | 保持有限真实数值 | 不覆盖、不放大 `enemy.maxHp` |
 
 结构化证据与 RVA、属性 ID、默认数值反例、排除路径见 `reports/m12/m12-b3-enemy-level-evidence-20260808.json`；生成资料见 `src/data/generated/enemy-level-profiles.json`。

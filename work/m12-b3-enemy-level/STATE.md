@@ -41,9 +41,8 @@
 
 ## 下一步
 
-1. 完成 R1：同步 M11 integrated baseline、canonical trace view golden 与外部审计包派生哈希；不改已验收敌人等级 runtime。
-2. 重跑产品指定单测、完整 Machine Axis、6 文件/165 聚焦、canonical/cycle、四项审计、build 与 diff check。
-3. 单提交并确认工作树 clean；不合并主线，不进入 M12-C 正式搜索；角色 golden 统一重基线由上游另行安排。
+1. 产品已接受基线 `d1587a8800b23bd848e267ae0baf219ab92fc96a`；完成本次文档 closeout 后停止。
+2. 不合并主 B3，不进入 M12-C，不修改敌人等级 runtime/compiler；等待上游独立安排角色 golden 重基线。
 
 ## R1 产品复验纠偏（2026-08-08）
 
@@ -57,4 +56,12 @@
 - 最终聚焦：exact `1/1`（13 skipped）；敌人/Workbench `6 files / 165 tests`；canonical/cycle/adapter/round-trip `7 files / 64 tests`。
 - 默认并发 Machine Axis 目录：13 文件/163 项，153 passed、8 因 hook timeout skipped、2 process timeout；数值断言失败 0。单跑 search state `8/8`、CLI process `9/9`、CLI search `1/1`（31 skipped）均通过；按产品调整不再重跑整目录。
 - production imports、Workbench data、action status、applied source bindings 四审计 clean；production/CLI build 与 diff check 通过。
-- 下一步仅提交 R1，随后在 clean final commit 上生成 M11 外部审计包并停在产品复验点。
+- R1 已提交为 `d1587a8800b23bd848e267ae0baf219ab92fc96a`，并在 clean final commit 上生成、验证 M11 外部审计包。
+
+## 产品接受 closeout（2026-08-08）
+
+- 状态：`product-accepted`；接受基线 `d1587a8800b23bd848e267ae0baf219ab92fc96a`。
+- 独立复验：工作树 clean，`2d609365..d1587a88` diff check clean；精确 Machine Axis 反例 `1/1 passed`、`13 skipped`、`7.53s`。
+- 有限敌人面板栏：迅狼 `300032`、`Lv1`、真实 `maxHp=690.24`、`hpMultiplier=1`；该值继续作为面板、百分比与显示分母。
+- 试点执行政策栏：`hpMode=infinite`、`toughnessMode=disabled`、`breakMode=disabled`、`deathTruncation=disabled`；只控制试点结算，不覆盖或放大真实 `maxHp`。
+- closeout 仅更新报告、STATE 与手册；runtime/compiler 零改动，不合并主 B3，停在产品复验点。
