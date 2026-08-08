@@ -122,6 +122,29 @@ describe('verified target-state runtime', () => {
       value: 2,
     });
     expect(
+      result.effectCommands.find(
+        command =>
+          command.sourceActionId === 'gain' &&
+          command.effectId === 'battle-element:9000'
+      )
+    ).toMatchObject({
+      sourceStatus: 'verified-target-state-effect-generated',
+      appliedToCalculators: true,
+      sourceIdentity: {
+        packageId: 'synthetic-target-state-package',
+        packageHash: 'synthetic-target-state-hash',
+        elementId: 9000,
+      },
+      modifiers: [
+        {
+          kind: 'battle-property',
+          attributeId: 3,
+          bucket: 'dynamicPercent',
+          valueRaw: -1000,
+        },
+      ],
+    });
+    expect(
       result.effectCommands.some(
         command =>
           command.effectId === 'battle-element:9004' &&
@@ -213,7 +236,7 @@ describe('verified target-state runtime', () => {
 
     const sameFrameCommands = result.effectCommands.filter(
       command =>
-        command.effectId === 'battle-element:undefined' &&
+        command.effectId === 'battle-element:9000' &&
         command.timeMs === 83.333333
     );
     expect(sameFrameCommands).toHaveLength(2);
@@ -933,6 +956,83 @@ describe('verified target-state runtime', () => {
       expect(failure).toMatchObject({ code });
     }
   });
+
+  it('orders a hit-gated calculator state after its triggering hit', () => {
+    const mechanicsPackage = createMechanicsPackage();
+    mechanicsPackage.actionVariantGraph.targetStateTransactions[0] = {
+      ...mechanicsPackage.actionVariantGraph.targetStateTransactions[0],
+      hitSettlementOrder: 'after-hit',
+    };
+    const requiredHit = {
+      ...createHit(9001, 5),
+      hitIdentity: 'synthetic-ordered-hit',
+      hitIndex: 6,
+    };
+    const resolution = createResolution({
+      controlSkillId: 424201,
+      hits: [requiredHit],
+    });
+    resolution.allHits = [requiredHit];
+    const action = {
+      ...createAction('gain-after-hit', 0),
+      sourceSequenceIndex: 4,
+      sourceSequencePath: [4],
+    };
+
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 12000 },
+        actors: [{ id: 'actor-1', characterId: 424242 }],
+        enemy: { id: 'enemy-1' },
+        actions: [action],
+      },
+      actionResolutionById: new Map([['gain-after-hit', resolution]]),
+      mechanicsPackage,
+    });
+
+    expect(result.effectCommands[0]).toMatchObject({
+      sourceSequencePath: [4, 6, 2],
+      sourceIdentity: {
+        sameFrameVisibility: 'strict-source-sequence',
+        triggerSequencePath: [4, 6, 2],
+      },
+      appliedToCalculators: true,
+    });
+  });
+
+  it('does not apply or refresh a hit-gated state when the required hit is overridden to miss', () => {
+    const requiredHit = {
+      ...createHit(9001, 5),
+      hitIdentity: 'synthetic-required-hit',
+    };
+    const resolution = createResolution({
+      controlSkillId: 424201,
+      hits: [requiredHit],
+    });
+    resolution.allHits = [requiredHit];
+    const action = createAction('gain-missed', 0);
+    action.hitOverrides = {
+      'synthetic-required-hit': { willHit: false },
+    };
+
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 12000 },
+        actors: [{ id: 'actor-1', characterId: 424242 }],
+        enemy: { id: 'enemy-1' },
+        actions: [action],
+      },
+      actionResolutionById: new Map([['gain-missed', resolution]]),
+      mechanicsPackage: createMechanicsPackage(),
+    });
+
+    expect(result.events).toEqual([]);
+    expect(result.effectCommands).toEqual([]);
+    expect(result.finalState[0]).toMatchObject({
+      stateIdentity: 'enemy:synthetic-firework',
+      currentValue: 0,
+    });
+  });
 });
 
 function createMechanicsPackage() {
@@ -946,8 +1046,18 @@ function createMechanicsPackage() {
           stateIdentity: 'enemy:synthetic-firework',
           name: 'Synthetic Firework',
           targetKind: 'enemy',
+          elementId: 9000,
           durationMs: 10000,
           maxStacks: 3,
+          modifiers: [
+            {
+              kind: 'battle-property',
+              attributeId: 3,
+              bucket: 'dynamicPercent',
+              valueRaw: -1000,
+              sourceIdentity: 'fixture:synthetic-target-state-defense',
+            },
+          ],
           applied: true,
         },
       ],

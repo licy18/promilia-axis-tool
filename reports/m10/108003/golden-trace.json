@@ -6,14 +6,14 @@
   "scenarioIdentity": "m12-b3-e20-2-108003-s1:120s-canonical-mechanics-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "53ca71ba9e6d84698574b79de736adef3236743c860531d29735a220292b48ce",
+  "sourcePackageHash": "25fa12ec08ed8a5b82bf357b00ac9f7cf39e5225045accb69ca52563709dc219",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "f25e2cdd20b7ae61",
-    "traceHash": "bbc36bef59327040",
-    "dataHash": "cf0e178e5b0bf5e2",
+    "inputHash": "61c10ef69eafc4ae",
+    "traceHash": "1b53db91ae1bb443",
+    "dataHash": "614db9f11bca8a9b",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -478,6 +478,7 @@
           "totalToughnessDamage": 2412
         }
       },
+      "ownerDirectHealSummaryByActionId": {},
       "ownerHitTotalHpDamage": 13452,
       "ownerHitTotalToughnessDamage": 10899,
       "selectedHpDamageByActionId": {
@@ -2264,6 +2265,47 @@
         }
       },
       "ownerKiboSpTransactionsByActionId": {},
+      "directSpSummaryByActionId": {
+        "miti-star-skill-1": {
+          "eventCount": 26,
+          "targetEventCount": 6,
+          "shareAllEventCount": 20,
+          "targetActorIds": [
+            "actor-108003"
+          ],
+          "sharedActorIds": [
+            "actor-101010",
+            "actor-103002"
+          ],
+          "totalChange": 52
+        },
+        "miti-star-skill-2-exact-cooldown": {
+          "eventCount": 31,
+          "targetEventCount": 11,
+          "shareAllEventCount": 20,
+          "targetActorIds": [
+            "actor-108003"
+          ],
+          "sharedActorIds": [
+            "actor-101010",
+            "actor-103002"
+          ],
+          "totalChange": 65
+        }
+      },
+      "pickupSummary": {
+        "profileCount": 4,
+        "bindingCount": 12,
+        "spawnedEntityCount": 0,
+        "collectedEntityCount": 0,
+        "capacityRejectedCount": 0,
+        "directHpEventCount": 0,
+        "directSpEventCount": 0,
+        "tuningEffectCommandCount": 0,
+        "unresolvedCount": 0,
+        "applied": true
+      },
+      "pickupSummaryByIdentity": {},
       "specialResourceTrace": [],
       "tuningMarkTrace": [
         {
@@ -2454,6 +2496,17 @@
         }
       },
       "tuningMarkConsumeByActionId": {},
+      "tuningMarkUnresolvedByActionId": {
+        "miti-switch-out-star-carry--on-enter--actor-101010--star-carry": {
+          "eventCount": 1,
+          "kinds": [
+            "tuning-consume-insufficient-marks"
+          ],
+          "statuses": [
+            "verified-tuning-consume-not-executed"
+          ]
+        }
+      },
       "targetStateTrace": [
         {
           "eventId": null,
@@ -2585,7 +2638,7 @@
         "suppressedActionEffectConditionCount": 0,
         "appliedActionHitConditionCount": 0,
         "suppressedActionHitConditionCount": 0,
-        "effectCommandCount": 11,
+        "effectCommandCount": 10,
         "directSpEventCount": 22
       },
       "ownerDirectSp": {
@@ -2602,7 +2655,33 @@
       "passiveMaxStacks": 0,
       "firstPassiveMaxStackFrame": null,
       "burstTrace": [],
-      "selectedEffectSummaryByElementId": {},
+      "selectedEffectSummaryByElementId": {
+        "108003118": {
+          "effectId": "battle-element:108003118",
+          "effectNames": [
+            "蓄电"
+          ],
+          "targetKinds": [
+            "actor"
+          ],
+          "targetIds": [
+            "actor-108003"
+          ],
+          "appliedEventCount": 3,
+          "blockedEventCount": 0,
+          "transferredEventCount": 0,
+          "expiredEventCount": 1,
+          "firstAppliedFrame": 380,
+          "firstExpiredFrame": 2420,
+          "firstAppliedSourceSequencePath": null,
+          "sameFrameVisibilityModes": [],
+          "maxStacks": 1,
+          "attributeIds": [],
+          "modifierSignatures": [],
+          "formulaFamilies": [],
+          "formulaValues": []
+        }
+      },
       "inheritanceTransferCountByEffectId": {},
       "inheritanceTransfers": [],
       "burstTransitions": []
@@ -6201,6 +6280,8 @@
           "kiboSpRecovery": null
         }
       ],
+      "directHeals": [],
+      "pickups": [],
       "specialResources": [],
       "tuningMarks": [
         {
@@ -6497,11 +6578,15 @@
       "effects": [
         {
           "eventId": "actor/actor-108003/battle-element:108003143/verified-calculator|EFFECT_APPLIED|5016.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "miti-star-skill-1",
           "frame": 301,
           "effectId": "battle-element:108003143",
           "runtimeEffectId": "battle-element:108003143",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "破穹之翼·全队攻击力+8%",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -6530,11 +6615,15 @@
         },
         {
           "eventId": "actor/actor-108003/battle-element:108003118|EFFECT_APPLIED|6333.333|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "miti-star-skill-1",
           "frame": 380,
           "effectId": "battle-element:108003118",
           "runtimeEffectId": "battle-element:108003118",
-          "sourceElementId": null,
+          "sourceElementId": 108003118,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "蓄电",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -6554,11 +6643,15 @@
         },
         {
           "eventId": "actor/actor-108003/battle-element:108003118|EFFECT_REFRESHED|10233.333|2",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "miti-ultimate",
           "frame": 614,
           "effectId": "battle-element:108003118",
           "runtimeEffectId": "battle-element:108003118",
-          "sourceElementId": null,
+          "sourceElementId": 108003118,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "蓄电",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -6578,11 +6671,15 @@
         },
         {
           "eventId": "actor/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|10700|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "miti-ultimate",
           "frame": 642,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -6619,11 +6716,15 @@
         },
         {
           "eventId": "kibo/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|10700|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "miti-ultimate",
           "frame": 642,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-108003",
@@ -6660,11 +6761,15 @@
         },
         {
           "eventId": "actor/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|12050|2",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "miti-full-charge-electrified-on",
           "frame": 723,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -6701,11 +6806,15 @@
         },
         {
           "eventId": "actor/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|12050|3",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "miti-full-charge-electrified-on",
           "frame": 723,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -6742,11 +6851,15 @@
         },
         {
           "eventId": "kibo/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|12050|2",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "miti-full-charge-electrified-on",
           "frame": 723,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-108003",
@@ -6783,11 +6896,15 @@
         },
         {
           "eventId": "kibo/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|12050|3",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "miti-full-charge-electrified-on",
           "frame": 723,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-108003",
@@ -6824,11 +6941,15 @@
         },
         {
           "eventId": "actor/actor-108003/battle-element:108003118|EFFECT_REMOVED|12066.667|2",
+          "eventType": "EFFECT_REMOVED",
+          "status": "effect-runtime-removed",
           "actionId": "miti-full-charge-electrified-on",
           "frame": 724,
           "effectId": "battle-element:108003118",
           "runtimeEffectId": "battle-element:108003118",
-          "sourceElementId": null,
+          "sourceElementId": 108003118,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "蓄电",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -6848,11 +6969,15 @@
         },
         {
           "eventId": "actor/actor-108003/battle-element:108003143/verified-calculator|EFFECT_APPLIED|29016.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "miti-star-skill-2-exact-cooldown",
           "frame": 1741,
           "effectId": "battle-element:108003143",
           "runtimeEffectId": "battle-element:108003143",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "破穹之翼·全队攻击力+8%",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -6881,11 +7006,15 @@
         },
         {
           "eventId": "actor/actor-108003/battle-element:108003143/verified-calculator|EFFECT_EXPIRED|29016.667|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "miti-star-skill-1",
           "frame": 1741,
           "effectId": "battle-element:108003143",
           "runtimeEffectId": "battle-element:108003143",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "破穹之翼·全队攻击力+8%",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -6914,11 +7043,15 @@
         },
         {
           "eventId": "actor/actor-108003/battle-element:108003118|EFFECT_APPLIED|30333.333|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "miti-star-skill-2-exact-cooldown",
           "frame": 1820,
           "effectId": "battle-element:108003118",
           "runtimeEffectId": "battle-element:108003118",
-          "sourceElementId": null,
+          "sourceElementId": 108003118,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "蓄电",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -6938,11 +7071,15 @@
         },
         {
           "eventId": "actor/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|38950|4",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "miti-ultimate",
           "frame": 2337,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -6979,11 +7116,15 @@
         },
         {
           "eventId": "kibo/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|38950|4",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "miti-ultimate",
           "frame": 2337,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-108003",
@@ -7020,11 +7161,15 @@
         },
         {
           "eventId": "actor/actor-108003/battle-element:108003118|EFFECT_EXPIRED|40333.333|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "miti-star-skill-2-exact-cooldown",
           "frame": 2420,
           "effectId": "battle-element:108003118",
           "runtimeEffectId": "battle-element:108003118",
-          "sourceElementId": null,
+          "sourceElementId": 108003118,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "蓄电",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -7044,11 +7189,15 @@
         },
         {
           "eventId": "actor/actor-108003/battle-element:108003143/verified-calculator|EFFECT_EXPIRED|53016.667|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "miti-star-skill-2-exact-cooldown",
           "frame": 3181,
           "effectId": "battle-element:108003143",
           "runtimeEffectId": "battle-element:108003143",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "破穹之翼·全队攻击力+8%",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -7077,11 +7226,15 @@
         },
         {
           "eventId": "actor/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|58950|5",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "miti-ultimate",
           "frame": 3537,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -7118,11 +7271,15 @@
         },
         {
           "eventId": "kibo/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|58950|5",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "miti-ultimate",
           "frame": 3537,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-108003",
@@ -7159,11 +7316,15 @@
         },
         {
           "eventId": "actor/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|78950|6",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "miti-full-charge-electrified-on",
           "frame": 4737,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -7200,11 +7361,15 @@
         },
         {
           "eventId": "kibo/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|78950|6",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "miti-full-charge-electrified-on",
           "frame": 4737,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-108003",
@@ -7241,11 +7406,15 @@
         },
         {
           "eventId": "actor/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|98950|7",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "miti-full-charge-electrified-on",
           "frame": 5937,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -7282,11 +7451,15 @@
         },
         {
           "eventId": "kibo/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|98950|7",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "miti-full-charge-electrified-on",
           "frame": 5937,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-108003",
@@ -7323,11 +7496,15 @@
         },
         {
           "eventId": "actor/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|118950|7",
+          "eventType": "EFFECT_REMOVED",
+          "status": "effect-runtime-removed",
           "actionId": "miti-full-charge-electrified-on",
           "frame": 7137,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-108003",
@@ -7364,11 +7541,15 @@
         },
         {
           "eventId": "kibo/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|118950|7",
+          "eventType": "EFFECT_REMOVED",
+          "status": "effect-runtime-removed",
           "actionId": "miti-full-charge-electrified-on",
           "frame": 7137,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-108003",
@@ -7465,7 +7646,7 @@
         }
       ]
     },
-    "summaryHash": "8594bf14f40bd9dafcf1b12d94fd87a9643339fa830c71a93873e78cd29bdc74"
+    "summaryHash": "ce187909b4e200b05c22ee2e5d783ac6bd8d279eb8c165d13616c9c01998daab"
   },
   "expected": {
     "exact": {
@@ -7617,6 +7798,6 @@
       }
     ]
   },
-  "replayHash": "1237867300f7f5485c4746ff973993daa124ba0de2ef6e89e30a937ea8f2cc70",
-  "profileHash": "4ee7d3c91187edb53ec38bfae44f574bca89142df500c0611075550c51fabf3e"
+  "replayHash": "75c96578f74de7afb54d5823b9fb9c24b672aebaffe6611137f8386c850e3b4a",
+  "profileHash": "f29503d90cd202aef79e4552756fcf68417f3c631efe0dc203842ef9c0982d89"
 }

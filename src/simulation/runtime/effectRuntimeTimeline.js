@@ -588,6 +588,7 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
       'verified-passive-effect-generated',
       'verified-tuning-mark-generated',
       'verified-loadout-effect-generated',
+      'verified-target-state-effect-generated',
     ].includes(command.sourceStatus) &&
     command.appliedToCalculators === true;
   const sourceActionId = command.sourceActionId ?? action?.id ?? null;
@@ -640,6 +641,14 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
     stackMode: command.stackMode,
     stackDelta: positiveIntegerOrDefault(command.stackDelta, 1),
     maxStacks: positiveIntegerOrDefault(command.maxStacks, 1),
+    expiryMode:
+      command.expiryMode === 'independent-layer'
+        ? 'independent-layer'
+        : 'shared-instance',
+    atCapacityPolicy:
+      command.atCapacityPolicy === 'ignore-new-no-refresh'
+        ? 'ignore-new-no-refresh'
+        : 'refresh-instance',
     tags: uniqueValues(command.tags),
     sourceStatus: command.sourceStatus ?? 'project-configured-effect-command',
     icon: command.icon ?? null,
@@ -747,6 +756,25 @@ function applyRuntimeEffectCommand({
         after: existing,
         scenario,
         status: 'effect-runtime-blocked-active-instance',
+      })
+    );
+    return;
+  }
+
+  if (
+    command.stackMode === EFFECT_STACK_MODES.STACK &&
+    command.expiryMode === 'independent-layer' &&
+    command.atCapacityPolicy === 'ignore-new-no-refresh' &&
+    existing.stacks >= Math.max(existing.maxStacks, command.maxStacks)
+  ) {
+    emitEvent(
+      createEffectRuntimeEvent({
+        type: EFFECT_RUNTIME_EVENT_TYPES.BLOCKED,
+        command,
+        before: existing,
+        after: existing,
+        scenario,
+        status: 'effect-runtime-capacity-ignored-no-refresh',
       })
     );
     return;
@@ -953,13 +981,45 @@ function expireRuntimeEffects({
   scenario,
   emitEvent,
 }) {
-  const dueEffects = sortEffectStates(
-    [...activeByInstanceKey.values()].filter(
-      effect => effect.expiresAtMs != null && effect.expiresAtMs <= timeMs
-    )
-  );
-  for (const effect of dueEffects) {
-    if (activeByInstanceKey.get(effect.instanceKey) !== effect) {
+  while (true) {
+    const effect = sortEffectStates(
+      [...activeByInstanceKey.values()].filter(
+        candidate =>
+          candidate.expiresAtMs != null && candidate.expiresAtMs <= timeMs
+      )
+    )[0];
+    if (!effect) return;
+    if (effect.expiryMode === 'independent-layer') {
+      const expiryTimeMs = effect.expiresAtMs;
+      const remainingLayers = (effect.layerExpiries ?? []).filter(
+        layer => Number(layer.expiresAtMs) > Number(expiryTimeMs)
+      );
+      const after =
+        remainingLayers.length > 0
+          ? {
+              ...effect,
+              updatedAtMs: expiryTimeMs,
+              expiresAtMs: remainingLayers[0].expiresAtMs,
+              stacks: remainingLayers.length,
+              layerExpiries: remainingLayers,
+              revision: effect.revision + 1,
+            }
+          : null;
+      if (after) activeByInstanceKey.set(effect.instanceKey, after);
+      else activeByInstanceKey.delete(effect.instanceKey);
+      emitEvent(
+        createEffectRuntimeEvent({
+          type: EFFECT_RUNTIME_EVENT_TYPES.EXPIRED,
+          command: null,
+          before: effect,
+          after,
+          scenario,
+          timeMs: expiryTimeMs,
+          status: after
+            ? 'effect-runtime-independent-layer-expired'
+            : 'effect-runtime-expired',
+        })
+      );
       continue;
     }
     activeByInstanceKey.delete(effect.instanceKey);
@@ -979,6 +1039,16 @@ function expireRuntimeEffects({
 
 function createRuntimeEffectState(command) {
   const stacks = Math.min(command.maxStacks, command.stackDelta);
+  const layerExpiries =
+    command.expiryMode === 'independent-layer'
+      ? createIndependentLayerExpiries({
+          count: stacks,
+          timeMs: command.timeMs,
+          durationMs: command.durationMs,
+          commandId: command.commandId,
+          startSequence: 0,
+        })
+      : [];
   return {
     schemaVersion: 1,
     sourceKind: 'azpr-runtime-active-effect',
@@ -999,11 +1069,15 @@ function createRuntimeEffectState(command) {
     clearType: command.clearType,
     clearTypeFlags: command.clearTypeFlags,
     expiresAtMs:
-      command.durationMs == null
+      layerExpiries[0]?.expiresAtMs ??
+      (command.durationMs == null
         ? null
-        : roundEffectValue(command.timeMs + command.durationMs),
+        : roundEffectValue(command.timeMs + command.durationMs)),
     stacks,
     maxStacks: command.maxStacks,
+    expiryMode: command.expiryMode,
+    atCapacityPolicy: command.atCapacityPolicy,
+    layerExpiries,
     refreshCount: 0,
     revision: 1,
     tags: command.tags,
@@ -1037,7 +1111,14 @@ function createRuntimeEffectState(command) {
 function refreshRuntimeEffectState(existing, command) {
   const maxStacks = Math.max(existing.maxStacks, command.maxStacks);
   const stacks = resolveRefreshedEffectStacks(existing, command, maxStacks);
-  const expiresAtMs = resolveRefreshedEffectExpiry(existing, command);
+  const layerExpiries = resolveRefreshedLayerExpiries({
+    existing,
+    command,
+    stacks,
+  });
+  const expiresAtMs =
+    layerExpiries[0]?.expiresAtMs ??
+    resolveRefreshedEffectExpiry(existing, command);
   return {
     ...existing,
     effectName: command.effectName || existing.effectName,
@@ -1060,6 +1141,10 @@ function refreshRuntimeEffectState(existing, command) {
     expiresAtMs,
     stacks,
     maxStacks,
+    expiryMode: command.expiryMode ?? existing.expiryMode,
+    atCapacityPolicy:
+      command.atCapacityPolicy ?? existing.atCapacityPolicy,
+    layerExpiries,
     refreshCount: existing.refreshCount + 1,
     revision: existing.revision + 1,
     tags: uniqueValues([...existing.tags, ...command.tags]),
@@ -1128,6 +1213,60 @@ function resolveRefreshedEffectExpiry(existing, command) {
     return existing.expiresAtMs;
   }
   return roundEffectValue(command.timeMs + command.durationMs);
+}
+
+function resolveRefreshedLayerExpiries({ existing, command, stacks }) {
+  if (
+    existing.expiryMode !== 'independent-layer' &&
+    command.expiryMode !== 'independent-layer'
+  ) {
+    return existing.layerExpiries ?? [];
+  }
+  if (command.stackMode !== EFFECT_STACK_MODES.STACK) {
+    return createIndependentLayerExpiries({
+      count: stacks,
+      timeMs: command.timeMs,
+      durationMs: command.durationMs,
+      commandId: command.commandId,
+      startSequence: 0,
+    });
+  }
+  const previous = [...(existing.layerExpiries ?? [])];
+  const addedCount = Math.max(0, stacks - previous.length);
+  return [
+    ...previous,
+    ...createIndependentLayerExpiries({
+      count: addedCount,
+      timeMs: command.timeMs,
+      durationMs: command.durationMs,
+      commandId: command.commandId,
+      startSequence: previous.length,
+    }),
+  ].sort(
+    (left, right) =>
+      Number(left.expiresAtMs) - Number(right.expiresAtMs) ||
+      Number(left.sequence) - Number(right.sequence) ||
+      String(left.layerId).localeCompare(String(right.layerId))
+  );
+}
+
+function createIndependentLayerExpiries({
+  count,
+  timeMs,
+  durationMs,
+  commandId,
+  startSequence,
+}) {
+  if (!(Number(durationMs) >= 0)) return [];
+  return Array.from(
+    { length: Math.max(0, Number(count) || 0) },
+    (_, index) => ({
+      layerId: `${commandId}|layer|${startSequence + index + 1}`,
+      sequence: startSequence + index,
+      appliedAtMs: roundEffectValue(timeMs),
+      expiresAtMs: roundEffectValue(Number(timeMs) + Number(durationMs)),
+    })
+  );
 }
 
 function createEffectRuntimeEvent({

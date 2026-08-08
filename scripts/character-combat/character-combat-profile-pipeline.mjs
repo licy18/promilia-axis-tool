@@ -437,6 +437,9 @@ export function createCharacterCombatOwnerArtifacts({
   const attackInputChains = sortByIdentity(
     compiledContracts.attackInputChains ?? []
   );
+  const attackInputMechanicWindows = sortByIdentity(
+    compiledContracts.attackInputMechanicWindows ?? []
+  );
   const controlTransitionWindows = sortByIdentity(
     compiledContracts.controlTransitionWindows ?? []
   );
@@ -460,6 +463,18 @@ export function createCharacterCombatOwnerArtifacts({
   );
   const runtimeEffectBindings = sortByIdentity(
     compiledContracts.runtimeEffectBindings ?? []
+  );
+  const rawDirectEffectBindings = sortByIdentity(
+    compiledContracts.rawDirectEffectBindings ?? []
+  );
+  const pickupProfiles = sortByIdentity(
+    compiledContracts.pickupProfiles ?? []
+  );
+  const pickupSpawnBindings = sortByIdentity(
+    compiledContracts.pickupSpawnBindings ?? []
+  );
+  const scenarioOutOfScopeActions = sortByIdentity(
+    compiledContracts.scenarioOutOfScopeActions ?? []
   );
   const actionForms = sortByIdentity(compiledContracts.actionForms ?? []);
   const specialResourceProfiles = sortByIdentity(
@@ -559,6 +574,7 @@ export function createCharacterCombatOwnerArtifacts({
       ownerContextEdges,
       ownerVariantEdges,
       attackInputChains,
+      attackInputMechanicWindows,
       controlTransitionWindows,
       variantWindowBindings,
       actionEffectBindings,
@@ -570,6 +586,10 @@ export function createCharacterCombatOwnerArtifacts({
       conditionalHitGroups,
       tuningMarkConditionalDamageGroups,
       runtimeEffectBindings,
+      rawDirectEffectBindings,
+      pickupProfiles,
+      pickupSpawnBindings,
+      scenarioOutOfScopeActions,
       passives,
       switchTriggers,
       semanticEffects,
@@ -591,6 +611,10 @@ export function createCharacterCombatOwnerArtifacts({
     conditionalHitGroups,
     tuningMarkConditionalDamageGroups,
     runtimeEffectBindings,
+    rawDirectEffectBindings,
+    pickupProfiles,
+    pickupSpawnBindings,
+    scenarioOutOfScopeActions,
     passives,
     switchTriggers,
     hits,
@@ -676,6 +700,7 @@ export function createCharacterCombatOwnerArtifacts({
     timingInputEdges: ownerContextEdges,
     variantEdges: ownerVariantEdges,
     attackInputChains,
+    attackInputMechanicWindows,
     controlTransitionWindows,
     variantWindowBindings,
     actionEffectBindings,
@@ -688,6 +713,10 @@ export function createCharacterCombatOwnerArtifacts({
     conditionalHitGroups,
     tuningMarkConditionalDamageGroups,
     runtimeEffectBindings,
+    rawDirectEffectBindings,
+    pickupProfiles,
+    pickupSpawnBindings,
+    scenarioOutOfScopeActions,
     effects: {
       raw: rawEffects,
       semantic: semanticEffects,

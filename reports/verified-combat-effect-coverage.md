@@ -25,6 +25,7 @@
 - literal-a-direct: 15
 - literal-a-with-common-ratio: 719
 - source-atk-ratio-heal: 7
+- source-max-hp-ratio-heal: 17
 - source-tuning-ratio-with-common-ratio: 1
 - unsupported-0-0: 10
 - unsupported-1-0: 76
@@ -32,7 +33,7 @@
 - unsupported-1-3: 359
 - unsupported-1-4: 23
 - unsupported-1-101: 2
-- unsupported-1-104: 19
+- unsupported-1-104: 2
 - unsupported-1-108: 10
 - unsupported-1-110: 6
 - unsupported-1-111: 6
@@ -55,8 +56,8 @@
 
 ## 原始边审计
 
-- 效果绑定：3120
-- 可计算：1785
+- 效果绑定：3132
+- 可计算：1797
 - 明确零：12
 - 未解析：1304
 

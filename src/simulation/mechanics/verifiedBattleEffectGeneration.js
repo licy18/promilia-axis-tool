@@ -14,6 +14,7 @@ import {
   VERIFIED_EFFECT_SOURCE_SEQUENCE_CONTRACT_NAME,
   createVerifiedEffectSourceSequencePath,
 } from '../../domain/verifiedEffectSourceSequence';
+import { resolveActionHitWillHit } from '../../domain/actionHitOverrides';
 
 export const VERIFIED_BATTLE_EFFECT_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedBattleEffectGeneration';
@@ -217,11 +218,18 @@ export function createVerifiedBattleEffectGeneration({
       });
     actionResolutionById.set(action.id, resolution);
     if (!resolution.ready) continue;
-    for (const effect of resolution.semanticEffects ??
-      resolution.effects ??
-      []) {
+    const runtimeEffects = [
+      ...(resolution.semanticEffects ?? []),
+      ...(resolution.effects ?? []).filter(
+        effect => effect.runtimeGenerationMode === 'raw-direct-effect'
+      ),
+    ];
+    for (const effect of runtimeEffects) {
       if (effect.role && effect.role !== 'gameplay-effect') continue;
       if (effect.tuningMark || effect.tuningOverlimit) continue;
+      if (!isHitBoundEffectEnabled({ action, effect, resolution })) {
+        continue;
+      }
       if (
         Number.isFinite(Number(effect.trigger?.startFrame)) &&
         !isActionFrameWithinContextualOccupancy(
@@ -393,6 +401,23 @@ export function createVerifiedBattleEffectGeneration({
   };
 }
 
+function isHitBoundEffectEnabled({ action, effect, resolution }) {
+  const behaviorPathId = String(effect.trigger?.behaviorPathId ?? '');
+  if (!behaviorPathId) return true;
+  const hit = (resolution.allHits ?? resolution.hits ?? []).find(
+    candidate =>
+      String(candidate.trigger?.behaviorPathId ?? '') === behaviorPathId &&
+      Number(candidate.trigger?.startFrame) ===
+        Number(effect.trigger?.startFrame)
+  );
+  if (!hit) return true;
+  return resolveActionHitWillHit(
+    action,
+    hit.hitIdentity ?? hit.semanticIdentity ?? hit.effectIdentity,
+    (resolution.hits ?? []).includes(hit)
+  );
+}
+
 function createPropertyEffectCommand({
   action,
   effect,
@@ -403,6 +428,12 @@ function createPropertyEffectCommand({
   resolution,
 }) {
   const effectIdentity = resolveEffectIdentity(effect);
+  const triggerSequencePath =
+    resolveStrictSameFrameEffectSequencePath({
+      action,
+      effect,
+      resolution,
+    });
   const effectDisplay = createBattlePropertyEffectDisplayLabel({
     sourceText: effect.displayLabel ?? effect.name,
     effectKind: effect.kind,
@@ -446,7 +477,14 @@ function createPropertyEffectCommand({
         : null,
       pathId: effect.pathId ?? null,
       sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities ?? null,
+      ...(triggerSequencePath
+        ? {
+            sameFrameVisibility: 'strict-source-sequence',
+            triggerSequencePath,
+          }
+        : {}),
     },
+    ...(triggerSequencePath ? { sourceSequencePath: triggerSequencePath } : {}),
     inheritOnControlledActorSwitch:
       effect.lifecycle?.inheritance?.inheritOnControlledActorSwitch === true,
     inheritType: effect.lifecycle?.inheritance?.inheritType ?? null,
@@ -476,6 +514,35 @@ function createPropertyEffectCommand({
     appliedToCalculators: true,
     generatedVerified: true,
   };
+}
+
+function resolveStrictSameFrameEffectSequencePath({
+  action,
+  effect,
+  resolution,
+}) {
+  if (effect.hitSettlementOrder !== 'after-hit') return null;
+  const effectElementIndex = Number(effect.sourceOrder?.elementIndex);
+  if (!Number.isInteger(effectElementIndex)) return null;
+  const hasEarlierSamePacketHit = (
+    resolution.allHits ??
+    resolution.hits ??
+    []
+  ).some(
+    hit =>
+      String(hit.trigger?.behaviorPathId ?? '') ===
+        String(effect.trigger?.behaviorPathId ?? '') &&
+      Number(hit.trigger?.startFrame) ===
+        Number(effect.trigger?.startFrame) &&
+      Number.isInteger(Number(hit.elementIndex)) &&
+      Number(hit.elementIndex) < effectElementIndex
+  );
+  if (!hasEarlierSamePacketHit) return null;
+  return createVerifiedEffectSourceSequencePath({
+    action,
+    effect,
+    phase: 'after',
+  });
 }
 
 function createRuntimeEffectId(action, effect) {

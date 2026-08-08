@@ -1,0 +1,574 @@
+{
+  "schemaVersion": 1,
+  "kind": "m12-b3-character-evidence-sidecar-contract",
+  "status": "accepted-evidence-with-s1-implementation-scope",
+  "character": {
+    "id": 107002,
+    "name": "米砂"
+  },
+  "frozenBaselineCommit": "140eefcd233cd9c1d136728f1c94b91aff632278",
+  "artifactReproducibility": {
+    "coreArtifacts": [
+      "resource-graph-excerpt.json",
+      "runtime-evidence-excerpt.json"
+    ],
+    "frozenProductionBaselineCommit": "140eefcd233cd9c1d136728f1c94b91aff632278",
+    "allowedEvidenceCarrierPrefix": "work/m12-b3/parallel-evidence-107002/",
+    "allowedImplementationPaths": [
+      "fixtures/character-acceptance/107002-visual.json",
+      "reports/m10/107002/**",
+      "scripts/character-acceptance/acceptance-recipes/107002.json",
+      "scripts/character-combat/character-combat-contract-compiler.mjs",
+      "scripts/character-combat/character-combat-golden-runtime.mjs",
+      "scripts/character-combat/character-combat-production-orchestrator.mjs",
+      "scripts/character-combat/character-combat-profile-pipeline.mjs",
+      "scripts/character-combat/profile-recipes/107002.json",
+      "scripts/sync-verified-combat-mechanics.mjs",
+      "src/__tests__/data/misaCharacterCombatProfile.test.js",
+      "src/__tests__/simulation/actionRuleDiagnostics.test.js",
+      "src/__tests__/simulation/effectRuntimeTimeline.test.js",
+      "src/__tests__/simulation/verifiedBattleEffectFormulaRuntime.test.js",
+      "src/__tests__/simulation/verifiedPickupEntityGeneration.test.js",
+      "src/__tests__/simulation/verifiedTargetStateRuntime.test.js",
+      "src/__tests__/simulation/verifiedTuningMarkRuntime.test.js",
+      "src/data/generated/character-combat-owner-contracts/107002.json",
+      "src/data/generated/character-combat-profiles/107002.json",
+      "src/simulation/engine/simulateScenario.js",
+      "src/simulation/mechanics/verifiedBattleEffectFormulaRuntime.js",
+      "src/simulation/mechanics/verifiedBattleEffectGeneration.js",
+      "src/simulation/mechanics/verifiedCombatRuntime.js",
+      "src/simulation/mechanics/verifiedPickupEntityGeneration.js",
+      "src/simulation/mechanics/verifiedTargetStateRuntime.js",
+      "src/simulation/mechanics/verifiedTuningMarkGeneration.js",
+      "src/simulation/projection/projectSimulationResult.js",
+      "src/simulation/runtime/effectRuntimeTimeline.js"
+    ],
+    "carrierCommitEmbedded": false,
+    "serialization": "utf8-json-pretty-2-lf",
+    "postCommitGate": "--assert-clean-byte-compare-working-recomputed-and-head",
+    "dynamicSnapshotsExcluded": [
+      "integration-conflict-snapshot.json"
+    ]
+  },
+  "productScenario": {
+    "id": "m12c-zero-distance-passive-boss-v1",
+    "distance": 0,
+    "projectileImpact": "immediate",
+    "bossMovement": "stationary",
+    "bossAttacks": false
+  },
+  "frozenBoundaries": {
+    "formalRosterDenominator": 9,
+    "kiboDna": [],
+    "heroRank": "unimplemented-dead-config",
+    "formalAdmissionClaim": false,
+    "optimizationReadyClaim": false,
+    "m12cSearchAllowed": false,
+    "productionImplementationAllowed": true,
+    "productionImplementationScope": "frozen-s1-allowlist-only"
+  },
+  "sourcePrecedence": [
+    "runtime binary and enum evidence",
+    "raw Unity control and battle-element graph",
+    "NewTable runtime logic and formula rows",
+    "generated compiler projection",
+    "public skill description"
+  ],
+  "optimizationSurface": {
+    "required": [
+      {
+        "family": "normal-chain-shell",
+        "controls": [10700201, 10700202, 10700203, 10700204, 10700205],
+        "scope": "A3 seed creation and A4 hit-confirmed DEF debuff; A1/A2/A5 remain upstream action-shell dependencies"
+      },
+      {
+        "family": "charged-hit-debuff",
+        "controls": [10700210],
+        "scope": "charged hit-confirmed DEF debuff"
+      },
+      {
+        "family": "star-skill",
+        "controls": [10700212, 10700226],
+        "scope": "SP pickup creation, mark selection and consumption, overlimit, 30s elemental damage buff, independent wind mark"
+      },
+      {
+        "family": "ultimate",
+        "controls": [10700213],
+        "scope": "five team heals, HP/SP pickup creation, two wood marks"
+      },
+      {
+        "family": "star-carry",
+        "controls": [10700222],
+        "scope": "four team heals and raw cooldown"
+      },
+      {
+        "family": "pickup-and-passive",
+        "controls": [48004101, 48004102, 48004201, 48004202, 10700261],
+        "scope": "entity lifecycle, collision routing, one-shot reward, passive gate and tuning-intensity layers"
+      },
+      {
+        "family": "action-resource-cooldown",
+        "controls": [10700210, 10700212, 10700213, 10700222],
+        "scope": "runtime action occupancy, cooldown and SP cost"
+      }
+    ],
+    "scenarioOutOfScopeNA": [
+      {
+        "control": 10700215,
+        "action": "闪击/闪避",
+        "reason": "requires dedicated dodge semantics outside the frozen passive-boss product scenario"
+      },
+      {
+        "control": 10700211,
+        "action": "跃击/跳跃/下落",
+        "reason": "requires airborne or fall state outside the frozen product scenario"
+      },
+      {
+        "control": 10700225,
+        "action": "极限反击",
+        "reason": "requires a Boss attack event, which the frozen scenario forbids"
+      },
+      {
+        "control": 10700227,
+        "action": "完美格挡/招架/专注闪避",
+        "reason": "requires a Boss attack event, which the frozen scenario forbids"
+      }
+    ]
+  },
+  "mechanismFamilies": [
+    {
+      "id": "action-shell-and-resources",
+      "classification": "required",
+      "facts": {
+        "normalChain": [
+          {"label": "A1", "control": 10700201, "durationFrames": 14},
+          {"label": "A2", "control": 10700202, "durationFrames": 93},
+          {"label": "A3", "control": 10700203, "durationFrames": 100, "hitFrames": [40, 46, 52, 58, 64, 70, 76, 82, 88, 94, 100]},
+          {"label": "A4", "control": 10700204, "durationFrames": null, "hitFrames": [49, 56, 63, 70, 77, 84, 90, 96, 102]},
+          {"label": "A5", "control": 10700205, "durationFrames": null}
+        ],
+        "actions": [
+          {"action": "charged", "control": 10700210, "occupancyFrames": 330, "holdTriggerMs": 250, "cooldownMs": 100, "spCost": 0},
+          {"action": "star", "control": 10700212, "occupancyFrames": 336, "cooldownMs": 24000, "spCost": 0},
+          {"action": "star-combo", "control": 10700226, "subSkillIndex": 0, "occupancyFrames": 218},
+          {"action": "ultimate", "control": 10700213, "occupancyFrames": 298, "cooldownMs": 0, "spCost": 100},
+          {"action": "star-carry", "control": 10700222, "occupancyFrames": 150, "cooldownMs": 24000, "spCost": 0}
+        ]
+      },
+      "sourceConflict": {
+        "field": "cooldown",
+        "publicProjection": {"starMs": 12000, "ultimateMs": 30000},
+        "runtimeSkillSubLogic": {"starMs": 24000, "ultimateMs": 0},
+        "implementationRule": "use runtime skillsub_logic values for optimization execution and retain the public discrepancy as an audit finding"
+      },
+      "unresolved": [
+        "A4 selected control-player duration",
+        "A5 selected variant and duration",
+        "complete normal-chain scheduling"
+      ]
+    },
+    {
+      "id": "a3-hp-pickup",
+      "classification": "required",
+      "creation": {
+        "control": 10700203,
+        "qualifyingHitFrames": [40, 46, 52, 58, 64, 70],
+        "nonCreatingHitFrames": [76, 82, 88, 94, 100],
+        "summonElement": {"elementId": 107002220, "pathId": "3434452943307337244"},
+        "unitId": 480042,
+        "count": 1,
+        "lifetimeMs": 15000,
+        "maxCount": 6,
+        "countType": 2,
+        "countTypeName": "SummonTempData",
+        "summonPointType": 2,
+        "positionType": 1,
+        "requiresHit": true
+      },
+      "pickup": {
+        "collisionTarget": "Target",
+        "collisionTargetType": 2,
+        "collisionTargetTypeName": "Ally",
+        "rewardElement": {"elementId": 107002216, "pathId": "-8742085360987801148"},
+        "healFormula": 104,
+        "healFormulaExpression": "(self.MAXHP[0] * A) / 10000",
+        "healBasisPoints": 300,
+        "healPercent": 3,
+        "directAllHero": false,
+        "shareAll": false,
+        "publicTextSaysAllTeam": true,
+        "implementationRule": "apply the heal to the collision Target only; do not synthesize team propagation without new runtime evidence"
+      },
+      "sameFrameOrder": ["pickup visual placeholder", "passive tuning-intensity gate", "3% HP heal"],
+      "capPolicy": {
+        "proven": "entity pool max is six under SummonTempData countType",
+        "notProven": "runtime replacement or rejection behavior when a seventh creation is requested",
+        "failClosedImplementation": "reject the new creation at cap; never grant a reward for an entity that was not created"
+      }
+    },
+    {
+      "id": "a4-or-charged-def-debuff",
+      "classification": "required",
+      "triggers": [
+        {
+          "control": 10700204,
+          "frame": 84,
+          "hitBehaviorPathId": "-1291223460462752175",
+          "orderedElementBaseDataPathIds": ["1159803510611510720", "-5490397539017617711", "7790264186762117375"],
+          "laterHitFramesThatObserveDebuff": [90, 96, 102]
+        },
+        {
+          "control": 10700210,
+          "frame": 76,
+          "hitBehaviorPathId": "6704838959614714036",
+          "orderedElementBaseDataPathIds": ["-1320777497519764210", "-1211965369219084289", "7790264186762117375"],
+          "laterHitFramesThatObserveDebuff": [83, 90]
+        }
+      ],
+      "effect": {
+        "wrapper": {"elementId": 107002256, "pathId": "7790264186762117375", "combineType": 3, "combineTypeName": "Cover", "lifecycleMs": 24000},
+        "physicalDef": {"elementId": 107002258, "pathId": "-3902053340404252506", "attributeId": 3, "calculateType": 2, "basisPoints": -1000},
+        "magicDef": {"elementId": 107002257, "pathId": "1466117413664505892", "attributeId": 4, "calculateType": 2, "basisPoints": -1000}
+      },
+      "semantics": {
+        "requiresHit": true,
+        "missDoesNotApply": true,
+        "triggeringHitUsesPreDebuffDef": true,
+        "laterHitsUseDebuffedDef": true,
+        "activeInterval": "[applyMs, applyMs + 24000)",
+        "rightBoundaryActive": false,
+        "reapply": "Cover replaces or refreshes the wrapper lifetime"
+      }
+    },
+    {
+      "id": "star-skill-mark-consume-overlimit-and-sp-pickup",
+      "classification": "required",
+      "action": {
+        "control": 10700212,
+        "hitFrames": [74, 82, 90, 99, 107, 114],
+        "spPickupCreationFrames": [74, 82, 90, 99],
+        "nonCreatingHitFrames": [107, 114],
+        "spSummon": {"elementId": 107002214, "pathId": "513582975064864872", "unitId": 480041, "count": 1, "lifetimeMs": 15000, "maxCount": 6, "countType": 2},
+        "alternateUnselectedControl": {"control": 10700212, "subSkillIndex": 1, "spPickupCreationFrame": 28},
+        "selectedStarComboControl": {"control": 10700226, "subSkillIndex": 0}
+      },
+      "frame82": {
+        "hitBehaviorPathId": "3929844140260263526",
+        "orderedElementBaseDataPathIds": ["6857014326835818730", "-3883846112050479707", "-2174275479014567856", "-6104701335743815286"],
+        "orderLabels": ["damage", "energy", "non-consuming availability judgment", "consuming priority judgment"],
+        "nonConsumingJudgment": {
+          "elementId": 107002272,
+          "pathId": "-2174275479014567856",
+          "checkTarget": 1,
+          "checkTargetName": "Self",
+          "executeTarget": 2,
+          "executeTargetName": "Source",
+          "consume": 0,
+          "consumeLayerNum": 1,
+          "candidateElementIds": [550, 750],
+          "injectElementPathId": "3375530858005333853"
+        },
+        "consumingJudgment": {
+          "elementId": 107002264,
+          "pathId": "-6104701335743815286",
+          "checkTarget": 1,
+          "checkTargetName": "Self",
+          "executeTarget": 0,
+          "executeTargetName": "Target",
+          "consumeLayerNum": 1,
+          "consumeMode": 0,
+          "consumeModeName": "Priority",
+          "candidateElementIds": [550, 750],
+          "selectedPacketByElementId": {"550": "2120617582505955581", "750": "4731523060341306954"}
+        },
+        "runtimeExecuteOrder": ["CalculateConsumeCount", "CastPassiveSkill", "DoConsume", "DoInject"],
+        "selectionRule": "first candidate in [550, 750] with at least one layer; no sufficient candidate means no consume and no inject"
+      },
+      "elementalDamageBuff": {
+        "wrapper": {"elementId": 107002265, "pathId": "3375530858005333853", "lifecycleMs": 30000},
+        "wood": {"elementId": 107002266, "pathId": "623176689467243005", "attributeId": 55, "calculateType": 1, "percent": 5},
+        "wind": {"elementId": 107002267, "pathId": "1913468686735845945", "attributeId": 53, "calculateType": 1, "percent": 5},
+        "rawExecuteTarget": "Source",
+        "directAllHero": false,
+        "publicTextSaysAllTeam": true,
+        "activeInterval": "[applyMs, applyMs + 30000)",
+        "implementationRule": "apply to raw Source route only; do not broadcast to the roster without new runtime evidence"
+      },
+      "overlimit": {
+        "woodConsumePacketElementId": 599,
+        "woodConsumePacketPathId": "2120617582505955581",
+        "windConsumePacketElementId": 799,
+        "windConsumePacketPathId": "4731523060341306954",
+        "requiresSuccessfulSelection": true
+      },
+      "frame90IndependentWindMark": {
+        "hitBehaviorPathId": "304217500998239846",
+        "orderedToOwnElementPathIds": ["1474042154774785480", "513582975064864872"],
+        "orderLabels": ["gain one wind mark 750", "create SP pickup"],
+        "elementId": 750,
+        "maxLayers": 5,
+        "lifecycleMs": 20000,
+        "cannotPayCurrentCastFrame82Consume": true
+      },
+      "spPickupReward": {
+        "collisionTargetType": 2,
+        "collisionTargetTypeName": "Ally",
+        "spElement": {"elementId": 107002215, "pathId": "-5003344262624947112", "value": 1, "shareType": 2, "shareTypeName": "ShareAll"},
+        "routing": "collecting Target receives SP and the SP element shares all to background heroes"
+      }
+    },
+    {
+      "id": "ultimate-multihit-team-heal-seeds-and-marks",
+      "classification": "required",
+      "control": 10700213,
+      "heals": {
+        "element": {"elementId": 107002022, "pathId": "-3930384060379573910"},
+        "frames": [143, 155, 167, 181, 193],
+        "eventCount": 5,
+        "directInjectTarget": 3,
+        "directInjectTargetName": "AllHero",
+        "formula": 104,
+        "formulaExpression": "(self.MAXHP[0] * A) / 10000",
+        "perLevelBasisPoints": [600, 660, 720, 780, 840, 900, 960, 1020, 1080, 1140, 1200, 1260]
+      },
+      "marks": [
+        {"frame": 144, "elementId": 550, "layers": 1},
+        {"frame": 150, "elementId": 550, "layers": 1}
+      ],
+      "pickupCreation": {
+        "frame": 135,
+        "sourceTrackOrder": [
+          {"sourceArrayIndex": 20, "trackIndex": 23, "kind": "HP", "unitId": 480042, "summonElementPathId": "5308513824935950819", "count": 3, "maxCount": 6, "countType": 1, "countTypeName": "SummonId", "lifetimeMs": 15000},
+          {"sourceArrayIndex": 21, "trackIndex": 24, "kind": "SP", "unitId": 480041, "summonElementPathId": "-2302479272537638429", "count": 3, "maxCount": 6, "countType": 1, "countTypeName": "SummonId", "lifetimeMs": 15000}
+        ],
+        "separateFromNormalPool": true,
+        "separatePoolMeaning": "SummonId countType is distinct from the normal SummonTempData pool; each ultimate unit-id pool still has max six",
+        "earliestCollisionFrameAtZeroDistance": 137,
+        "canRewardBeforeFirstTeamHealFrame143": true
+      }
+    },
+    {
+      "id": "star-carry-team-heal",
+      "classification": "required",
+      "control": 10700222,
+      "heal": {
+        "element": {"elementId": 107002240, "pathId": "3069733526995086666"},
+        "frames": [46, 61, 79, 98],
+        "eventCount": 4,
+        "directInjectTarget": 3,
+        "directInjectTargetName": "AllHero",
+        "formula": 104,
+        "perLevelBasisPoints": [200, 220, 240, 260, 280, 300, 320, 340, 360, 380, 400, 420]
+      }
+    },
+    {
+      "id": "pickup-lifecycle-routing-and-tuning-intensity",
+      "classification": "required",
+      "battlefieldItems": [
+        {"unitId": 480041, "kind": "SP", "controlSlots": [48004101, 48004102]},
+        {"unitId": 480042, "kind": "HP", "controlSlots": [48004201, 48004202]}
+      ],
+      "graph": {
+        "startBehavior": "find nearest allied camp entity, set SkillPosition to that entity, and cast slot 1",
+        "configuredDelaySeconds": 0.1,
+        "delayControlEdgeProven": false,
+        "implementationRule": "do not delay pickup eligibility by 0.1s unless a control edge or runtime trace proves it",
+        "death": "broadcast event value 1 routes to TransmitDie"
+      },
+      "lifecycle": {
+        "controlFrameCount": 920,
+        "collisionWindowFrames": "[spawn + 2, spawn + 902)",
+        "summonLifetimeFramesAt60Hz": 900,
+        "effectiveEligibilityWindowFrames": "[spawn + 2, spawn + 900)",
+        "exactLifetimeBoundaryEligible": false,
+        "frameBeforeOpenEligible": false,
+        "collisionRadius": 0.6,
+        "collisionIntervalMs": 99999,
+        "toOwnMaxCount": 1,
+        "oneEntityRewardsAtMostOnce": true,
+        "distinctEntitiesMayEachRewardOnce": true,
+        "collectedDestroyBroadcastFrame": {"HP": 25, "SP": 30}
+      },
+      "zeroDistanceReachability": {
+        "reachable": true,
+        "reason": "the item graph relocates the pickup skill to the nearest ally and opens collision at child frame 2; a passive stationary Boss does not gate collection"
+      },
+      "passiveGate": {
+        "control": 10700261,
+        "externalTrackPathId": "-2651181542894854447",
+        "markerElement": {"elementId": 107002271, "pathId": "7643301625766811642", "combineType": 3, "lifecycleMs": -1},
+        "gateFormula": 1006,
+        "gateExpression": "IF(target.ELEMENT_LAYERS[F] > I, G, 0)",
+        "gateParameters": {"F": 107002271, "I": 0, "G": 10000},
+        "gateTarget": "collision Target",
+        "directAllHero": false,
+        "shareAll": false
+      },
+      "tuningIntensity": {
+        "element": {"elementId": 480041002, "pathId": "-5253142493209012449"},
+        "attributeId": 229,
+        "calculateType": 2,
+        "basisPointsPerLayer": 600,
+        "percentPerLayer": 6,
+        "combineType": 4,
+        "combineTypeName": "Overlying",
+        "maxLayers": 4,
+        "lifecycleMsPerLayer": 24000,
+        "layerInterval": "[applyMs, applyMs + 24000)",
+        "rightBoundaryActive": false,
+        "publicTextSaysAllTeam": true,
+        "implementationRule": "apply to collision Target only; model independent layers; at cap ignore the new layer and do not refresh existing layers until replacement behavior has binary proof",
+        "policyEvidence": {
+          "proven": ["6 percent value", "four-layer cap", "24 second lifetime", "Overlying combine type"],
+          "conservativeNotRuntimeProven": ["independent expiry implementation", "ignore-at-cap", "no refresh at cap"]
+        }
+      },
+      "rewardOrder": {
+        "SP": ["SP +1 ShareAll", "visual placeholder", "passive tuning-intensity gate"],
+        "HP": ["visual placeholder", "passive tuning-intensity gate", "3% Target heal"]
+      }
+    }
+  ],
+  "crossCuttingSemantics": {
+    "hit": {
+      "positive": "a qualifying enemy hit executes its ordered hit/effect/to-own list",
+      "negative": "a miss executes none of the hit-bound debuff, consume, buff, overlimit, mark or pickup creation entries"
+    },
+    "sameFrame": {
+      "rule": "preserve serialized list order within a behavior and stable source track order between same-frame behaviors",
+      "consumePackExecuteOrder": ["CalculateConsumeCount", "CastPassiveSkill", "DoConsume", "DoInject"]
+    },
+    "rightOpen": {
+      "rule": "effects and collision eligibility use [start, end); exact end is inactive",
+      "durationsMs": {"defDebuff": 24000, "elementalDamageBuff": 30000, "tuningIntensityLayer": 24000, "pickupLifetime": 15000, "windMark": 20000}
+    },
+    "cooldown": {
+      "positive": "action may start at nowMs >= readyAtMs",
+      "negative": "action cannot start at nowMs < readyAtMs"
+    },
+    "resource": {
+      "ultimateSpCost": 100,
+      "negative": "insufficient SP blocks ultimate start and must not commit action-side events"
+    }
+  },
+  "implementationSplit": {
+    "reuseExistingPrimitives": [
+      {
+        "primitive": "profile compiler action/effect/resource binding",
+        "files": ["scripts/character-combat/character-combat-contract-compiler.mjs"]
+      },
+      {
+        "primitive": "hit-confirmed target-state transaction with requiresHitElementId",
+        "files": ["scripts/character-combat/character-combat-contract-compiler.mjs", "src/simulation/mechanics/verifiedTargetStateRuntime.js"]
+      },
+      {
+        "primitive": "mark acquire, priority consume, overlimit and layer expiry",
+        "files": ["src/simulation/mechanics/verifiedTuningMarkGeneration.js"]
+      },
+      {
+        "primitive": "heal, SP and property event generation plus explicit target routing scaffolding",
+        "files": ["src/simulation/mechanics/verifiedBattleEffectGeneration.js", "src/simulation/mechanics/verifiedCombatRuntime.js"]
+      },
+      {
+        "primitive": "effect apply, refresh, stack and expiry timeline",
+        "files": ["src/simulation/runtime/effectRuntimeTimeline.js"]
+      },
+      {
+        "primitive": "action cooldown and resource gates",
+        "files": ["src/simulation/runtime/actionCooldownEvaluation.js", "src/simulation/engine/actionExecutionPlan.js"]
+      },
+      {
+        "primitive": "direct AllHero and SP ShareAll routing where explicitly sourced",
+        "files": ["src/simulation/mechanics/verifiedBattleEffectGeneration.js"]
+      }
+    ],
+    "implementedGenericPrimitives": [
+      {
+        "primitive": "summoned pickup entity ledger",
+        "files": ["src/simulation/mechanics/verifiedPickupEntityGeneration.js"],
+        "status": "implemented-source-driven-no-character-id-branch"
+      },
+      {
+        "primitive": "pickup collision and once-only collection",
+        "files": ["src/simulation/mechanics/verifiedPickupEntityGeneration.js"],
+        "status": "implemented-source-driven-no-character-id-branch"
+      },
+      {
+        "primitive": "pickup reward routing",
+        "files": ["src/simulation/mechanics/verifiedPickupEntityGeneration.js", "src/simulation/mechanics/verifiedCombatRuntime.js"],
+        "status": "implemented-explicit-target-shareall-allhero-routes"
+      },
+      {
+        "primitive": "stable same-frame entity-event scheduler",
+        "files": ["src/simulation/mechanics/verifiedPickupEntityGeneration.js", "src/simulation/mechanics/verifiedTargetStateRuntime.js", "src/simulation/mechanics/verifiedTuningMarkGeneration.js"],
+        "status": "implemented-strict-source-sequence"
+      },
+      {
+        "primitive": "generic direct-heal formula 104 evaluator",
+        "files": ["src/simulation/mechanics/verifiedBattleEffectFormulaRuntime.js", "src/simulation/mechanics/verifiedCombatRuntime.js", "scripts/sync-verified-combat-mechanics.mjs"],
+        "status": "implemented-source-owner-maxhp-q16.16"
+      },
+      {
+        "primitive": "direct-SP ShareAll compiler binding",
+        "files": ["scripts/character-combat/character-combat-contract-compiler.mjs", "src/simulation/mechanics/verifiedBattleEffectGeneration.js", "src/simulation/mechanics/verifiedCombatRuntime.js"],
+        "status": "implemented-source-sharetype-preserved"
+      },
+      {
+        "primitive": "independent-layer expiry and ignore-at-cap no-refresh",
+        "files": ["src/simulation/runtime/effectRuntimeTimeline.js"],
+        "status": "implemented-conservative-policy"
+      },
+      {
+        "primitive": "focused normal-attack mechanic window without full occupancy claim",
+        "files": ["scripts/character-combat/character-combat-contract-compiler.mjs"],
+        "status": "implemented-source-hit-envelope-validated"
+      }
+    ],
+    "genuinelyMissingGenericPrimitives": [],
+    "remainingConservativeOrSourceGaps": [
+      "A5 and complete normal-chain occupancy",
+      "seventh pickup replacement or refresh policy",
+      "fifth tuning-intensity layer replacement or refresh policy",
+      "hidden team propagation beyond raw Target, ShareAll and AllHero routes"
+    ],
+    "characterSpecificRecipe": "scripts/character-combat/profile-recipes/107002.json"
+  },
+  "potentialIntegrationConflicts": {
+    "sharedFiles": [
+      "scripts/character-combat/character-combat-contract-compiler.mjs",
+      "scripts/character-combat/character-combat-product-boundaries.mjs",
+      "scripts/sync-verified-combat-mechanics.mjs",
+      "src/simulation/mechanics/verifiedActionVariantRuntime.js",
+      "src/simulation/mechanics/verifiedCombatRuntime.js",
+      "src/simulation/mechanics/verifiedDamageEventGeneration.js",
+      "src/simulation/mechanics/verifiedTargetStateRuntime.js",
+      "src/simulation/mechanics/verifiedTuningMarkGeneration.js",
+      "src/simulation/mechanics/verifiedBattleEffectGeneration.js",
+      "src/simulation/mechanics/verifiedBattleEffectFormulaRuntime.js",
+      "src/simulation/runtime/effectRuntimeTimeline.js",
+      "src/simulation/runtime/actionCooldownEvaluation.js",
+      "src/simulation/engine/actionExecutionPlan.js",
+      "src/__tests__/data/characterCombatProductBoundaries.test.js",
+      "src/__tests__/simulation/verifiedTargetStateRuntime.test.js",
+      "src/__tests__/simulation/verifiedBattleEffectFormulaRuntime.test.js"
+    ],
+    "characterUniqueFile": "scripts/character-combat/profile-recipes/107002.json",
+    "integrationLineOnlyRegeneration": [
+      "src/data/generated/**",
+      "reports/** global summaries, catalogs, qualification and binding matrices",
+      "global character-acceptance summaries and indexes"
+    ],
+    "knownParallelCharacters": [
+      {"character": "米蒂", "id": 108003, "risk": "shared compiler/runtime/tests and global regeneration"},
+      {"character": "西芙莉雅", "id": 107001, "risk": "shared compiler, sync generator, action/combat/damage/tuning runtime and later global regeneration"},
+      {"character": "莉莉", "id": 102001, "risk": "shared compiler/product-boundary/runtime tests and global regeneration"}
+    ]
+  },
+  "unresolvedEvidenceGaps": [
+    "A5 normal-chain runtime variant and complete normal-chain schedule",
+    "runtime overflow behavior for a seventh SummonTempData or SummonId pickup",
+    "runtime replacement or refresh behavior when a fifth tuning-intensity layer is requested",
+    "any hidden propagation that would reconcile public all-team wording with raw Target or Source routes",
+    "whether battlefield-item param Delay#0.1 affects execution despite the missing control edge"
+  ]
+}

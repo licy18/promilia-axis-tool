@@ -25,10 +25,17 @@ export function applyVerifiedTargetStateRuntime({
 } = {}) {
   const graph = mechanicsPackage?.actionVariantGraph;
   const relevantOwnerIds = collectRelevantRuntimeOwnerIds(scenario);
+  const activeOwnerIds = new Set(
+    [...actionResolutionById.values()]
+      .map(resolution => Number(resolution?.actionBinding?.ownerId))
+      .filter(Number.isInteger)
+  );
   const profiles = (graph?.targetStateProfiles ?? []).filter(
     profile =>
       profile.applied &&
-      isRuntimeContractOwnerRelevant(profile, relevantOwnerIds)
+      isRuntimeContractOwnerRelevant(profile, relevantOwnerIds) &&
+      (profile.activationScope !== 'owner-actions-only' ||
+        activeOwnerIds.has(Number(profile.ownerId)))
   );
   const runtimeBindings = (graph?.runtimeEffectBindings ?? []).filter(
     binding =>
@@ -302,6 +309,7 @@ export function applyVerifiedTargetStateRuntime({
       stateByIdentity,
       timeMs: descriptor.timeMs,
       scenario,
+      mechanicsPackage,
       events,
       effectCommands,
       eventSequenceRef: {
@@ -318,6 +326,7 @@ export function applyVerifiedTargetStateRuntime({
         descriptor,
         stateByIdentity,
         scenario,
+        mechanicsPackage,
         events,
         effectCommands,
         nextSequence: () => eventSequence++,
@@ -362,6 +371,7 @@ export function applyVerifiedTargetStateRuntime({
         descriptor,
         stateByIdentity,
         scenario,
+        mechanicsPackage,
         events,
         effectCommands,
         nextSequence: () => eventSequence++,
@@ -519,6 +529,7 @@ export function applyVerifiedTargetStateRuntime({
     stateByIdentity,
     timeMs: Number(scenario?.time?.durationMs) || 0,
     scenario,
+    mechanicsPackage,
     events,
     effectCommands,
     eventSequenceRef: {
@@ -750,14 +761,20 @@ function isRuntimeContractOwnerRelevant(contract, relevantOwnerIds) {
 
 function hasRequiredHit(resolution, transaction, action, scenario) {
   if (transaction.requiresHitElementId == null) return true;
-  return (resolution.hits ?? []).some(
-    hit =>
-      Number(hit.elementId) === Number(transaction.requiresHitElementId) &&
-      Number(hit.trigger?.startFrame) === Number(transaction.triggerFrame) &&
+  const hit = (resolution.allHits ?? resolution.hits ?? []).find(
+    candidate =>
+      Number(candidate.elementId) ===
+        Number(transaction.requiresHitElementId) &&
+      Number(candidate.trigger?.startFrame) ===
+        Number(transaction.triggerFrame)
+  );
+  return Boolean(
+    hit &&
       resolveActionHitWillHit(
         action,
-        hit.hitIdentity,
-        resolveScenarioDefaultWillHit(scenario)
+        hit.hitIdentity ?? hit.semanticIdentity ?? hit.effectIdentity,
+        (resolution.hits ?? []).includes(hit) &&
+          resolveScenarioDefaultWillHit(scenario)
       )
   );
 }
@@ -766,12 +783,19 @@ function applyTargetStateTransaction({
   descriptor,
   stateByIdentity,
   scenario,
+  mechanicsPackage,
   events,
   effectCommands,
   nextSequence,
 }) {
   const state = stateByIdentity.get(descriptor.transaction.stateIdentity);
   if (!state) return;
+  const transactionSourceSequencePath =
+    resolveTargetStateTransactionSourceSequencePath(descriptor);
+  const strictSameFrameVisibility =
+    descriptor.transaction.operation === 'gain' &&
+    descriptor.transaction.hitSettlementOrder === 'after-hit' &&
+    Array.isArray(transactionSourceSequencePath);
   const before = state.layers.length;
   if (descriptor.transaction.operation === 'consume') {
     const amount = Math.min(before, descriptor.transaction.amount);
@@ -810,7 +834,8 @@ function applyTargetStateTransaction({
         descriptor.timeMs + descriptor.transaction.durationMs
       ),
       sourceActionId: descriptor.action.id,
-      sourceSequencePath: getActionSourceSequencePath(descriptor.action),
+      sourceSequencePath: transactionSourceSequencePath,
+      strictSameFrameVisibility,
       sourceIdentity: descriptor.transaction.sourceIdentity,
     });
     state.layers.sort(compareLayers);
@@ -822,7 +847,10 @@ function applyTargetStateTransaction({
       before,
       after: state.layers.length,
       sourceIdentity: descriptor.transaction.sourceIdentity,
+      sourceSequencePath: transactionSourceSequencePath,
+      strictSameFrameVisibility,
       scenario,
+      mechanicsPackage,
       events,
       effectCommands,
       sequence: nextSequence(),
@@ -837,7 +865,8 @@ function applyTargetStateTransaction({
         descriptor.timeMs + descriptor.transaction.durationMs
       ),
       sourceActionId: descriptor.action.id,
-      sourceSequencePath: getActionSourceSequencePath(descriptor.action),
+      sourceSequencePath: transactionSourceSequencePath,
+      strictSameFrameVisibility,
       sourceIdentity: descriptor.transaction.sourceIdentity,
     });
   }
@@ -851,7 +880,10 @@ function applyTargetStateTransaction({
     before,
     after: state.layers.length,
     sourceIdentity: descriptor.transaction.sourceIdentity,
+    sourceSequencePath: transactionSourceSequencePath,
+    strictSameFrameVisibility,
     scenario,
+    mechanicsPackage,
     events,
     effectCommands,
     sequence: nextSequence(),
@@ -1076,6 +1108,7 @@ function applyConditionalHitGroup({
   descriptor,
   stateByIdentity,
   scenario,
+  mechanicsPackage,
   events,
   effectCommands,
   nextSequence,
@@ -1104,6 +1137,7 @@ function applyConditionalHitGroup({
         after: state.layers.length,
         sourceIdentity: band?.sourceIdentity ?? descriptor.group.sourceIdentity,
         scenario,
+        mechanicsPackage,
         events,
         effectCommands,
         sequence: nextSequence(),
@@ -1194,6 +1228,7 @@ function expireTargetStates({
   stateByIdentity,
   timeMs,
   scenario,
+  mechanicsPackage,
   events,
   effectCommands,
   eventSequenceRef,
@@ -1225,6 +1260,7 @@ function expireTargetStates({
           ? [...expired[0].sourceSequencePath, 90]
           : null,
         scenario,
+        mechanicsPackage,
         events,
         effectCommands,
         sequence: eventSequenceRef.value++,
@@ -1242,7 +1278,9 @@ function emitStateChange({
   after,
   sourceIdentity,
   sourceSequencePath = null,
+  strictSameFrameVisibility = false,
   scenario,
+  mechanicsPackage,
   events,
   effectCommands,
   sequence,
@@ -1279,22 +1317,26 @@ function emitStateChange({
       maxValue: state.profile.maxStacks,
       sourceIdentity,
       appliedToActionVariantRuntime: true,
-      appliedToCalculators: false,
+      appliedToCalculators: (state.profile.modifiers ?? []).length > 0,
     },
   });
-  effectCommands.push(
-    createTargetStateEffectCommand({
-      state,
-      action,
-      targetId,
-      timeMs,
-      operation,
-      after,
-      sourceIdentity,
-      sourceSequencePath: resolvedSourceSequencePath,
-      sequence,
-    })
-  );
+  if (!(operation === 'expire' && after <= 0)) {
+    effectCommands.push(
+      createTargetStateEffectCommand({
+        state,
+        action,
+        targetId,
+        timeMs,
+        operation,
+        after,
+        sourceIdentity,
+        sourceSequencePath: resolvedSourceSequencePath,
+        strictSameFrameVisibility,
+        mechanicsPackage,
+        sequence,
+      })
+    );
+  }
 }
 
 function createTargetStateEffectCommand({
@@ -1306,9 +1348,15 @@ function createTargetStateEffectCommand({
   after,
   sourceIdentity,
   sourceSequencePath,
+  strictSameFrameVisibility,
+  mechanicsPackage,
   sequence,
 }) {
   const nextExpiryMs = state.layers[0]?.expiresAtMs ?? null;
+  const modifiers = (state.profile.modifiers ?? []).map(modifier => ({
+    ...modifier,
+  }));
+  const calculatorApplied = modifiers.length > 0;
   return {
     ...createActionSourceSequenceFields(action),
     ...(Array.isArray(sourceSequencePath)
@@ -1338,20 +1386,52 @@ function createTargetStateEffectCommand({
     stackDelta: Math.max(1, after),
     maxStacks: state.profile.maxStacks,
     tags: ['target-state', `target-state:${state.profile.stateIdentity}`],
-    sourceStatus: 'verified-action-state-generated',
+    sourceStatus: calculatorApplied
+      ? 'verified-target-state-effect-generated'
+      : 'verified-action-state-generated',
     confidence: 'high',
     trackingStatus: 'applied',
     sourceIdentity: {
+      packageId: mechanicsPackage?.packageId ?? null,
+      packageHash: mechanicsPackage?.packageHash ?? null,
       actionBindingIdentity: state.profile.stateIdentity,
       effectIdentity: state.profile.stateIdentity,
+      elementId: Number(state.profile.elementId),
       sourceIdentity: [state.profile.sourceIdentity, sourceIdentity]
         .filter(Boolean)
         .join('|'),
+      ...(strictSameFrameVisibility && Array.isArray(sourceSequencePath)
+        ? {
+            sameFrameVisibility: 'strict-source-sequence',
+            triggerSequencePath: sourceSequencePath,
+          }
+        : {}),
     },
-    modifiers: [],
-    appliedToCalculators: false,
+    modifiers,
+    appliedToCalculators: calculatorApplied,
     generatedVerified: true,
   };
+}
+
+function resolveTargetStateTransactionSourceSequencePath(descriptor) {
+  const actionPath = getActionSourceSequencePath(descriptor.action);
+  if (
+    descriptor.transaction.hitSettlementOrder !== 'after-hit' ||
+    !Array.isArray(actionPath)
+  ) {
+    return actionPath;
+  }
+  const requiredHit = (descriptor.resolution.allHits ?? descriptor.resolution.hits ?? []).find(
+    hit =>
+      Number(hit.elementId) ===
+        Number(descriptor.transaction.requiresHitElementId) &&
+      Number(hit.trigger?.startFrame) ===
+        Number(descriptor.transaction.triggerFrame)
+  );
+  const hitIndex = Number(requiredHit?.hitIndex);
+  return Number.isInteger(hitIndex) && hitIndex >= 0
+    ? [...actionPath, hitIndex, 2]
+    : actionPath;
 }
 
 function emitRuntimeBinding({

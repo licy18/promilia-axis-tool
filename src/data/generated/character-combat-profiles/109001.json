@@ -66,7 +66,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "53ca71ba9e6d84698574b79de736adef3236743c860531d29735a220292b48ce",
+    "packageHash": "25fa12ec08ed8a5b82bf357b00ac9f7cf39e5225045accb69ca52563709dc219",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -21845,6 +21845,7 @@
       }
     ],
     "attackInputChains": [],
+    "attackInputMechanicWindows": [],
     "controlTransitionWindows": [
       {
         "windowIdentity": "actor:109001|control:10900101|sub:0|0-29|target:80102/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_3193724838459064732__3193724838459064732.json#behaviorlineControl[0].behaviorList[pathId=-267993664874561124]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_-267993664874561124__-267993664874561124.json",
@@ -23716,6 +23717,8 @@
         "ownerId": 109001,
         "controlSkillId": 10900104,
         "subSkillIndex": 0,
+        "sourceControlSkillId": 10900104,
+        "sourceSubSkillIndex": 0,
         "mapIndex": 0,
         "elementId": 109001362,
         "triggerFrame": 29,
@@ -23723,10 +23726,12 @@
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001362.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#elementConfigId=109001362@29F|Battle/Element/ast_109001362.asset#consume-element-250-layer-1-after-brilliant-condition",
         "bindingKind": "activation-condition",
         "tuningMark": null,
+        "tuningConsumeSuccessEffect": null,
         "lifecycleStackDelta": null,
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "hitSettlementOrder": null,
         "targetStateActivationCondition": {
           "kind": "element-layer-formula-activation-condition",
           "commonFunctionId": 102100,
@@ -23759,6 +23764,8 @@
         "ownerId": 109001,
         "controlSkillId": 10900105,
         "subSkillIndex": 0,
+        "sourceControlSkillId": 10900105,
+        "sourceSubSkillIndex": 0,
         "mapIndex": 0,
         "elementId": 250,
         "triggerFrame": 47,
@@ -23905,10 +23912,12 @@
           "stackDelta": 2,
           "occurrenceIdentity": "action-effect-binding:moyin-a5-thunder-mark"
         },
+        "tuningConsumeSuccessEffect": null,
         "lifecycleStackDelta": null,
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "hitSettlementOrder": null,
         "targetStateActivationCondition": {
           "kind": "element-layer-formula-activation-condition",
           "commonFunctionId": 102100,
@@ -28996,6 +29005,8 @@
         "runtimeOwnerScope": null,
         "expiryMode": "independent-layer",
         "atCapacityPolicy": "refresh-oldest",
+        "activationScope": "global-runtime-profile",
+        "modifiers": [],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#time=8000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#combineNumber=-1|declared-capacity-override=1|Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1",
         "status": "verified-target-state-profile-ready",
         "applied": true
@@ -29014,6 +29025,7 @@
         "amount": 1,
         "durationMs": 8000,
         "requiresHitElementId": null,
+        "hitSettlementOrder": null,
         "passiveSkillId": null,
         "priority": 0,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900125.asset/MonoBehaviour/MonoBehaviour_7308935574334620133__7308935574334620133.json#brilliant-buff@31F",
@@ -29032,6 +29044,7 @@
         "amount": 1,
         "durationMs": 8000,
         "requiresHitElementId": null,
+        "hitSettlementOrder": null,
         "passiveSkillId": null,
         "priority": 0,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
@@ -29042,6 +29055,10 @@
     "conditionalHitGroups": [],
     "tuningMarkConditionalDamageGroups": [],
     "runtimeEffectBindings": [],
+    "rawDirectEffectBindings": [],
+    "pickupProfiles": [],
+    "pickupSpawnBindings": [],
+    "scenarioOutOfScopeActions": [],
     "effects": {
       "raw": [
         {
@@ -34057,6 +34074,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -34231,6 +34250,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "enemy",
             "code": 250,
@@ -34427,6 +34448,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -34604,6 +34627,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "team-tuning-pool",
             "code": 250,
@@ -34793,6 +34818,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -34967,6 +34994,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -35137,6 +35166,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -35314,6 +35345,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900110.asset/MonoBehaviour/MonoBehaviour_-5619192640262567577__-5619192640262567577.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "source-owner",
             "code": null,
@@ -35490,6 +35523,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900110.asset/MonoBehaviour/MonoBehaviour_-6793160401530779289__-6793160401530779289.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "source-owner",
             "code": null,
@@ -35666,6 +35701,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900110.asset/MonoBehaviour/MonoBehaviour_-8332496925969938073__-8332496925969938073.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "source-owner",
             "code": null,
@@ -35835,6 +35872,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900110.asset/MonoBehaviour/MonoBehaviour_-5619192640262567577__-5619192640262567577.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -36023,6 +36062,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900110.asset/MonoBehaviour/MonoBehaviour_-6793160401530779289__-6793160401530779289.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -36211,6 +36252,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900110.asset/MonoBehaviour/MonoBehaviour_-8332496925969938073__-8332496925969938073.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -36400,6 +36443,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900111.asset/MonoBehaviour/MonoBehaviour_-3278714981477366908__-3278714981477366908.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 0,
             "kind": "source-owner",
@@ -36572,6 +36617,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour/MonoBehaviour_8524185735560706053__8524185735560706053.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -36734,6 +36781,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour/MonoBehaviour_8585149925539854341__8585149925539854341.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "source-owner",
             "code": null,
@@ -36933,6 +36982,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour/MonoBehaviour_8524185735560706053__8524185735560706053.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "source-owner",
             "code": null,
@@ -37117,6 +37168,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour/MonoBehaviour_8524185735560706053__8524185735560706053.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -37304,6 +37357,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour/MonoBehaviour_8524185735560706053__8524185735560706053.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -37478,6 +37533,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour/MonoBehaviour_8524185735560706053__8524185735560706053.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "enemy",
             "code": 250,
@@ -37669,6 +37726,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour/MonoBehaviour_8524185735560706053__8524185735560706053.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "enemy",
             "code": null,
@@ -37829,6 +37888,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour/MonoBehaviour_8524185735560706053__8524185735560706053.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "unresolved",
             "code": null,
@@ -38018,6 +38079,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900125.asset/MonoBehaviour/MonoBehaviour_7308935574334620133__7308935574334620133.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 0,
             "kind": "source-owner",
@@ -38184,6 +38247,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900127.asset/MonoBehaviour/MonoBehaviour_8340818065355282527__8340818065355282527.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 0,
             "kind": "source-owner",
@@ -38353,6 +38418,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900127.asset/MonoBehaviour/MonoBehaviour_8340818065355282527__8340818065355282527.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 0,
             "kind": "source-owner",
@@ -38519,6 +38586,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900127.asset/MonoBehaviour/MonoBehaviour_8340818065355282527__8340818065355282527.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 0,
             "kind": "source-owner",
@@ -38791,9 +38860,9 @@
       "compilerVersion": 5,
       "recipeIdentity": "actor:109001:character-combat-recipe:v1",
       "recipeHash": "5375a1af3e956798ee9304dd197b4eb25d89f64e7e58a3a44fec92e69bca2be9",
-      "compilerInputHash": "04d2c48ed65b64a028e3dfb6f29452e5cda21833fe7d0b31133b37c98075aa69",
-      "recipeContractHash": "ace6d93efc1af8b9a4a9a1879d6cd222f0a4e3aeff2640ac3cc8f6046e475b58",
-      "ownerContractHash": "253b8300c979e26ee30e76b9e0b56d21b2b3fc1e8ca510efeaa1741b473b40a2"
+      "compilerInputHash": "a17f040f72ff1948b502c0de859b2aba65f8e02f099e89a94150984c8ebea4c1",
+      "recipeContractHash": "2266d895b667c19d37baf4a593a4a15b2d84c1882e4f9902095c9614f4f2a8ca",
+      "ownerContractHash": "6758ace873e16eeeb786ab5d26f37361f3a69a26a2cd6c8a17bc6822d41a8e74"
     },
     "operators": [
       "public-action-binding",
@@ -39622,7 +39691,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "8e9d5df8a746be0a358865a255cf0cdd05c9236a512562484f9ab97f828bafd1"
+    "deterministicInputHash": "d716a83ab7ebfee0c4e81edb91967bdda757e18016f3be0859fde5d21035b382"
   },
-  "profileHash": "c2a926a3c3f58b9cdfddcbe77c2563cb1f6df6d0ce858399bf92336212002500"
+  "profileHash": "0d503f6936db63381ef424727bcd085c2fc6924218b7f1d93fe23aecf0f75d07"
 }

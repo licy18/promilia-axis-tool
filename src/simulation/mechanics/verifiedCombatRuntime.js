@@ -2972,15 +2972,29 @@ function resolveDirectHealFormula({ descriptor, state }) {
     formulaContract?.sourceRawA ?? directEvent.formulaResult?.sourceRawA
   );
   const targetMaximumHp = Number(targetVital?.maximumHp);
-  const usesMaximumHpRatioFormula = baseFunctionId === 108;
+  const sourceMaximumHpResolution = resolveFriendlyMaximumHpAt({
+    state,
+    target: sourceTarget,
+    timeMs: descriptor.timeMs,
+  });
+  const sourceMaximumHp = sourceMaximumHpResolution?.ready
+    ? Number(sourceMaximumHpResolution.value)
+    : Number.NaN;
+  const usesTargetMaximumHpRatioFormula = baseFunctionId === 108;
+  const usesSourceMaximumHpRatioFormula = baseFunctionId === 104;
+  const usesMaximumHpRatioFormula =
+    usesTargetMaximumHpRatioFormula || usesSourceMaximumHpRatioFormula;
+  const formulaMaximumHp = usesSourceMaximumHpRatioFormula
+    ? Number(sourceMaximumHp)
+    : targetMaximumHp;
   const baseFormulaReady = usesMaximumHpRatioFormula
     ? commonFunctionId === 1 &&
       Number.isFinite(sourceRawA) &&
-      Number.isFinite(targetMaximumHp)
+      Number.isFinite(formulaMaximumHp)
     : Number.isFinite(Number(directEvent.value));
   const baseRaw = usesMaximumHpRatioFormula
     ? baseFormulaReady
-      ? qMul(qFromFloat(targetMaximumHp), qFromFloat(sourceRawA / 10000))
+      ? qMul(qFromFloat(formulaMaximumHp), qFromFloat(sourceRawA / 10000))
       : qFromInt(0)
     : qFromFloat(Number(directEvent.value));
   const baseRequestedChange = qToNumber(baseRaw);
@@ -3013,6 +3027,15 @@ function resolveDirectHealFormula({ descriptor, state }) {
       targetMaximumHp: Number.isFinite(targetMaximumHp)
         ? roundValue(targetMaximumHp)
         : null,
+      sourceMaximumHp: Number.isFinite(sourceMaximumHp)
+        ? roundValue(sourceMaximumHp)
+        : null,
+      maximumHpSubject:
+        usesSourceMaximumHpRatioFormula
+          ? 'source-actor'
+          : usesTargetMaximumHpRatioFormula
+            ? 'target-actor'
+            : null,
       baseExpression: formulaContract?.baseExpression ?? null,
       baseRequestedChange: roundValue(baseRequestedChange),
       sourceShootHealUpRaw: roundValue(sourceShootHealUpRaw),
@@ -3027,6 +3050,10 @@ function resolveDirectHealFormula({ descriptor, state }) {
         targetMaximumRaw: Number.isFinite(targetMaximumHp)
           ? qFromFloat(targetMaximumHp).toString()
           : null,
+        sourceMaximumRaw: Number.isFinite(sourceMaximumHp)
+          ? qFromFloat(sourceMaximumHp).toString()
+          : null,
+        sourceMaximumHpResolution,
         sourceRatioRaw: Number.isFinite(sourceRawA)
           ? qFromFloat(sourceRawA / 10000).toString()
           : null,

@@ -5,6 +5,7 @@ import {
   applyCharacterCombatActionEffectBindings,
   applyCharacterCombatActionHitBindings,
   applyCharacterCombatResourceOperationBindings,
+  applyCharacterCombatRawDirectEffectBindings,
   compileCharacterCombatRecipeContracts,
   createCharacterCombatOwnerRuntimeContracts,
   mergeCharacterCombatOwnerCompilations,
@@ -288,6 +289,10 @@ export async function createCharacterCombatProductionBuild({
     compilations: ownerCompilations,
   });
   applyCharacterCombatResourceOperationBindings({
+    controls: compilerEvidence?.controls ?? [],
+    compilations: ownerCompilations,
+  });
+  applyCharacterCombatRawDirectEffectBindings({
     controls: compilerEvidence?.controls ?? [],
     compilations: ownerCompilations,
   });

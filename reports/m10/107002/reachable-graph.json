@@ -1,0 +1,1602 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-reachable-graph",
+  "ownerId": 107002,
+  "nodes": [
+    {
+      "nodeIdentity": "actor:107002:star-skill:misa-star-main-combo",
+      "nodeKind": "action-form",
+      "semanticName": "星鸣技",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700201|0|10700203|normal-attack",
+      "nodeKind": "public-action",
+      "actionKind": "normal-attack",
+      "sourceSkillId": 10700201,
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700201|0|10700203|normal-attack:default",
+      "nodeKind": "action-form",
+      "semanticName": "普攻",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700201|1|10700210|charged-attack",
+      "nodeKind": "public-action",
+      "actionKind": "charged-attack",
+      "sourceSkillId": 10700201,
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700201|1|10700210|charged-attack:default",
+      "nodeKind": "action-form",
+      "semanticName": "重击",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700201|2|10700215|dodge-attack",
+      "nodeKind": "public-action",
+      "actionKind": "dodge-attack",
+      "sourceSkillId": 10700201,
+      "status": "static-evidence-gap"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700201|2|10700215|dodge-attack:default",
+      "nodeKind": "action-form",
+      "semanticName": "闪击",
+      "status": "static-evidence-gap"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700201|3|10700211|plunging-attack",
+      "nodeKind": "public-action",
+      "actionKind": "plunging-attack",
+      "sourceSkillId": 10700201,
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700201|3|10700211|plunging-attack:default",
+      "nodeKind": "action-form",
+      "semanticName": "跃击",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700212|0|10700212|star-skill",
+      "nodeKind": "public-action",
+      "actionKind": "star-skill",
+      "sourceSkillId": 10700212,
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700212|1|10700226|star-combo",
+      "nodeKind": "public-action",
+      "actionKind": "star-combo",
+      "sourceSkillId": 10700212,
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700212|1|10700226|star-combo:default",
+      "nodeKind": "action-form",
+      "semanticName": "星结合击",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700213|0|10700213|ultimate",
+      "nodeKind": "public-action",
+      "actionKind": "ultimate",
+      "sourceSkillId": 10700213,
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700213|0|10700213|ultimate:default",
+      "nodeKind": "action-form",
+      "semanticName": "星决技",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700222|0|10700222|star-carry",
+      "nodeKind": "public-action",
+      "actionKind": "star-carry",
+      "sourceSkillId": 10700222,
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700222|0|10700222|star-carry:default",
+      "nodeKind": "action-form",
+      "semanticName": "星携技",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700222|1|10700225|limit-counter",
+      "nodeKind": "public-action",
+      "actionKind": "limit-counter",
+      "sourceSkillId": 10700222,
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700222|1|10700225|limit-counter:default",
+      "nodeKind": "action-form",
+      "semanticName": "极限反击",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700222|2|10700227|perfect-parry",
+      "nodeKind": "public-action",
+      "actionKind": "perfect-parry",
+      "sourceSkillId": 10700222,
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "actor|107002|10700222|2|10700227|perfect-parry:default",
+      "nodeKind": "action-form",
+      "semanticName": "集中闪避",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700201",
+      "nodeKind": "control",
+      "controlSkillId": 10700201,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700201.asset/MonoBehaviour/skill_control_10700201__-3645463137003009339.json",
+      "status": "static-evidence-gap"
+    },
+    {
+      "nodeIdentity": "control:10700201:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700201,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700201.asset/MonoBehaviour/skill_control_10700201__-3645463137003009339.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700202",
+      "nodeKind": "control",
+      "controlSkillId": 10700202,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json",
+      "status": "static-evidence-gap"
+    },
+    {
+      "nodeIdentity": "control:10700202:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700202,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700203",
+      "nodeKind": "control",
+      "controlSkillId": 10700203,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/skill_control_10700203__-6295467121592260922.json",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700203:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700203,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/skill_control_10700203__-6295467121592260922.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700204",
+      "nodeKind": "control",
+      "controlSkillId": 10700204,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700204:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700204,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700205",
+      "nodeKind": "control",
+      "controlSkillId": 10700205,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700205.asset/MonoBehaviour/skill_control_10700205__-7801380578610854635.json",
+      "status": "static-evidence-gap"
+    },
+    {
+      "nodeIdentity": "control:10700210",
+      "nodeKind": "control",
+      "controlSkillId": 10700210,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700210:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700210,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700211",
+      "nodeKind": "control",
+      "controlSkillId": 10700211,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700211.asset/MonoBehaviour/skill_control_10700211__7921564081191678992.json",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700211:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700211,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700211.asset/MonoBehaviour/skill_control_10700211__7921564081191678992.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700212",
+      "nodeKind": "control",
+      "controlSkillId": 10700212,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700212:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700212,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700212:sub:1",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700212,
+      "subSkillIndex": 1,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700213",
+      "nodeKind": "control",
+      "controlSkillId": 10700213,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700213:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700213,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700215",
+      "nodeKind": "control",
+      "controlSkillId": 10700215,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700215.asset/MonoBehaviour/skill_control_10700215__1845575835391833097.json",
+      "status": "static-evidence-gap"
+    },
+    {
+      "nodeIdentity": "control:10700215:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700215,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700215.asset/MonoBehaviour/skill_control_10700215__1845575835391833097.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700215:sub:1",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700215,
+      "subSkillIndex": 1,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700215.asset/MonoBehaviour/skill_control_10700215__1845575835391833097.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700222",
+      "nodeKind": "control",
+      "controlSkillId": 10700222,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/skill_control_10700222__-3103898746845288998.json",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700222:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700222,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/skill_control_10700222__-3103898746845288998.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700225",
+      "nodeKind": "control",
+      "controlSkillId": 10700225,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700225.asset/MonoBehaviour/skill_control_10700225__-1910066322289321860.json",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700225:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700225,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700225.asset/MonoBehaviour/skill_control_10700225__-1910066322289321860.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700225:sub:1",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700225,
+      "subSkillIndex": 1,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700225.asset/MonoBehaviour/skill_control_10700225__-1910066322289321860.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700226",
+      "nodeKind": "control",
+      "controlSkillId": 10700226,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700226:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700226,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700226:sub:1",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700226,
+      "subSkillIndex": 1,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700227",
+      "nodeKind": "control",
+      "controlSkillId": 10700227,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700227.asset/MonoBehaviour/skill_control_10700227__-4499558189561410934.json",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700227:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700227,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700227.asset/MonoBehaviour/skill_control_10700227__-4499558189561410934.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "control:10700261",
+      "nodeKind": "control",
+      "controlSkillId": 10700261,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700261.asset/MonoBehaviour/skill_control_10700261__-1811589296711041965.json",
+      "status": "static-evidence-gap"
+    },
+    {
+      "nodeIdentity": "control:10700261:sub:0",
+      "nodeKind": "control-variant",
+      "controlSkillId": 10700261,
+      "subSkillIndex": 0,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700261.asset/MonoBehaviour/skill_control_10700261__-1811589296711041965.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "status": "applied"
+    },
+    {
+      "nodeIdentity": "hit:10700203|0|elements|2|-1404469563182445209|100|11",
+      "nodeKind": "hit",
+      "controlSkillId": 10700203,
+      "frame": 100,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/skill_control_10700203__-6295467121592260922.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700203|0|elements|2|-1404469563182445209|40|1",
+      "nodeKind": "hit",
+      "controlSkillId": 10700203,
+      "frame": 40,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/skill_control_10700203__-6295467121592260922.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700203|0|elements|2|-1404469563182445209|46|2",
+      "nodeKind": "hit",
+      "controlSkillId": 10700203,
+      "frame": 46,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/skill_control_10700203__-6295467121592260922.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700203|0|elements|2|-1404469563182445209|52|3",
+      "nodeKind": "hit",
+      "controlSkillId": 10700203,
+      "frame": 52,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/skill_control_10700203__-6295467121592260922.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700203|0|elements|2|-1404469563182445209|58|4",
+      "nodeKind": "hit",
+      "controlSkillId": 10700203,
+      "frame": 58,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/skill_control_10700203__-6295467121592260922.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700203|0|elements|2|-1404469563182445209|64|5",
+      "nodeKind": "hit",
+      "controlSkillId": 10700203,
+      "frame": 64,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/skill_control_10700203__-6295467121592260922.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700203|0|elements|2|-1404469563182445209|70|6",
+      "nodeKind": "hit",
+      "controlSkillId": 10700203,
+      "frame": 70,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/skill_control_10700203__-6295467121592260922.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700203|0|elements|2|-1404469563182445209|76|7",
+      "nodeKind": "hit",
+      "controlSkillId": 10700203,
+      "frame": 76,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/skill_control_10700203__-6295467121592260922.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700203|0|elements|2|-1404469563182445209|82|8",
+      "nodeKind": "hit",
+      "controlSkillId": 10700203,
+      "frame": 82,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/skill_control_10700203__-6295467121592260922.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700203|0|elements|2|-1404469563182445209|88|9",
+      "nodeKind": "hit",
+      "controlSkillId": 10700203,
+      "frame": 88,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/skill_control_10700203__-6295467121592260922.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700203|0|elements|2|-1404469563182445209|94|10",
+      "nodeKind": "hit",
+      "controlSkillId": 10700203,
+      "frame": 94,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/skill_control_10700203__-6295467121592260922.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700204|0|elements|0|353925495509830930|102|9",
+      "nodeKind": "hit",
+      "controlSkillId": 10700204,
+      "frame": 102,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=353925495509830930"
+    },
+    {
+      "nodeIdentity": "hit:10700204|0|elements|0|353925495509830930|49|1",
+      "nodeKind": "hit",
+      "controlSkillId": 10700204,
+      "frame": 49,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=353925495509830930"
+    },
+    {
+      "nodeIdentity": "hit:10700204|0|elements|0|353925495509830930|56|2",
+      "nodeKind": "hit",
+      "controlSkillId": 10700204,
+      "frame": 56,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=353925495509830930"
+    },
+    {
+      "nodeIdentity": "hit:10700204|0|elements|0|353925495509830930|63|3",
+      "nodeKind": "hit",
+      "controlSkillId": 10700204,
+      "frame": 63,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=353925495509830930"
+    },
+    {
+      "nodeIdentity": "hit:10700204|0|elements|0|353925495509830930|70|4",
+      "nodeKind": "hit",
+      "controlSkillId": 10700204,
+      "frame": 70,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=353925495509830930"
+    },
+    {
+      "nodeIdentity": "hit:10700204|0|elements|0|353925495509830930|77|5",
+      "nodeKind": "hit",
+      "controlSkillId": 10700204,
+      "frame": 77,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=353925495509830930"
+    },
+    {
+      "nodeIdentity": "hit:10700204|0|elements|0|353925495509830930|90|7",
+      "nodeKind": "hit",
+      "controlSkillId": 10700204,
+      "frame": 90,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=353925495509830930"
+    },
+    {
+      "nodeIdentity": "hit:10700204|0|elements|0|353925495509830930|96|8",
+      "nodeKind": "hit",
+      "controlSkillId": 10700204,
+      "frame": 96,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=353925495509830930"
+    },
+    {
+      "nodeIdentity": "hit:10700204|0|elements|1|1159803510611510720|84|6",
+      "nodeKind": "hit",
+      "controlSkillId": 10700204,
+      "frame": 84,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=1159803510611510720"
+    },
+    {
+      "nodeIdentity": "hit:10700210|0|elements|2|-1211965369219084289|48|1",
+      "nodeKind": "hit",
+      "controlSkillId": 10700210,
+      "frame": 48,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1211965369219084289"
+    },
+    {
+      "nodeIdentity": "hit:10700210|0|elements|2|-1211965369219084289|51|2",
+      "nodeKind": "hit",
+      "controlSkillId": 10700210,
+      "frame": 51,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1211965369219084289"
+    },
+    {
+      "nodeIdentity": "hit:10700210|0|elements|2|-1211965369219084289|63|3",
+      "nodeKind": "hit",
+      "controlSkillId": 10700210,
+      "frame": 63,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1211965369219084289"
+    },
+    {
+      "nodeIdentity": "hit:10700210|0|elements|2|-1211965369219084289|69|4",
+      "nodeKind": "hit",
+      "controlSkillId": 10700210,
+      "frame": 69,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1211965369219084289"
+    },
+    {
+      "nodeIdentity": "hit:10700210|0|elements|2|-1211965369219084289|76|5",
+      "nodeKind": "hit",
+      "controlSkillId": 10700210,
+      "frame": 76,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1211965369219084289"
+    },
+    {
+      "nodeIdentity": "hit:10700210|0|elements|2|-1211965369219084289|83|6",
+      "nodeKind": "hit",
+      "controlSkillId": 10700210,
+      "frame": 83,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1211965369219084289"
+    },
+    {
+      "nodeIdentity": "hit:10700210|0|elements|2|-1211965369219084289|90|7",
+      "nodeKind": "hit",
+      "controlSkillId": 10700210,
+      "frame": 90,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1211965369219084289"
+    },
+    {
+      "nodeIdentity": "hit:10700211|0|elements|0|-5519795801939917140|37|1",
+      "nodeKind": "hit",
+      "controlSkillId": 10700211,
+      "frame": 37,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700211.asset/MonoBehaviour/skill_control_10700211__7921564081191678992.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-5519795801939917140"
+    },
+    {
+      "nodeIdentity": "hit:10700212|0|elements|1|-3883846112050479707|107|5",
+      "nodeKind": "hit",
+      "controlSkillId": 10700212,
+      "frame": 107,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
+    },
+    {
+      "nodeIdentity": "hit:10700212|0|elements|1|-3883846112050479707|114|6",
+      "nodeKind": "hit",
+      "controlSkillId": 10700212,
+      "frame": 114,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
+    },
+    {
+      "nodeIdentity": "hit:10700212|0|elements|1|-3883846112050479707|74|1",
+      "nodeKind": "hit",
+      "controlSkillId": 10700212,
+      "frame": 74,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
+    },
+    {
+      "nodeIdentity": "hit:10700212|0|elements|1|-3883846112050479707|82|2",
+      "nodeKind": "hit",
+      "controlSkillId": 10700212,
+      "frame": 82,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
+    },
+    {
+      "nodeIdentity": "hit:10700212|0|elements|1|-3883846112050479707|90|3",
+      "nodeKind": "hit",
+      "controlSkillId": 10700212,
+      "frame": 90,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
+    },
+    {
+      "nodeIdentity": "hit:10700212|0|elements|1|-3883846112050479707|99|4",
+      "nodeKind": "hit",
+      "controlSkillId": 10700212,
+      "frame": 99,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
+    },
+    {
+      "nodeIdentity": "hit:10700212|1|elements|1|-1404469563182445209|28|1",
+      "nodeKind": "hit",
+      "controlSkillId": 10700212,
+      "frame": 28,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700212|1|elements|1|-1404469563182445209|37|2",
+      "nodeKind": "hit",
+      "controlSkillId": 10700212,
+      "frame": 37,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700212|1|elements|1|-1404469563182445209|48|3",
+      "nodeKind": "hit",
+      "controlSkillId": 10700212,
+      "frame": 48,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700212|1|elements|1|-1404469563182445209|57|4",
+      "nodeKind": "hit",
+      "controlSkillId": 10700212,
+      "frame": 57,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700212|1|elements|1|-1404469563182445209|66|5",
+      "nodeKind": "hit",
+      "controlSkillId": 10700212,
+      "frame": 66,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700212|1|elements|1|-1404469563182445209|75|6",
+      "nodeKind": "hit",
+      "controlSkillId": 10700212,
+      "frame": 75,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700212|1|elements|1|-1404469563182445209|83|7",
+      "nodeKind": "hit",
+      "controlSkillId": 10700212,
+      "frame": 83,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
+    },
+    {
+      "nodeIdentity": "hit:10700225|0|elements|0|5593300562289576764|15|1",
+      "nodeKind": "hit",
+      "controlSkillId": 10700225,
+      "frame": 15,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700225.asset/MonoBehaviour/skill_control_10700225__-1910066322289321860.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=5593300562289576764"
+    },
+    {
+      "nodeIdentity": "hit:10700225|0|elements|0|5593300562289576764|22|2",
+      "nodeKind": "hit",
+      "controlSkillId": 10700225,
+      "frame": 22,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700225.asset/MonoBehaviour/skill_control_10700225__-1910066322289321860.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=5593300562289576764"
+    },
+    {
+      "nodeIdentity": "hit:10700225|0|elements|0|5593300562289576764|29|3",
+      "nodeKind": "hit",
+      "controlSkillId": 10700225,
+      "frame": 29,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700225.asset/MonoBehaviour/skill_control_10700225__-1910066322289321860.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=5593300562289576764"
+    },
+    {
+      "nodeIdentity": "hit:10700225|0|elements|0|5593300562289576764|36|4",
+      "nodeKind": "hit",
+      "controlSkillId": 10700225,
+      "frame": 36,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700225.asset/MonoBehaviour/skill_control_10700225__-1910066322289321860.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=5593300562289576764"
+    },
+    {
+      "nodeIdentity": "hit:10700225|1|elements|0|5593300562289576764|15|1",
+      "nodeKind": "hit",
+      "controlSkillId": 10700225,
+      "frame": 15,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700225.asset/MonoBehaviour/skill_control_10700225__-1910066322289321860.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=5593300562289576764"
+    },
+    {
+      "nodeIdentity": "hit:10700225|1|elements|0|5593300562289576764|22|2",
+      "nodeKind": "hit",
+      "controlSkillId": 10700225,
+      "frame": 22,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700225.asset/MonoBehaviour/skill_control_10700225__-1910066322289321860.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=5593300562289576764"
+    },
+    {
+      "nodeIdentity": "hit:10700225|1|elements|0|5593300562289576764|29|3",
+      "nodeKind": "hit",
+      "controlSkillId": 10700225,
+      "frame": 29,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700225.asset/MonoBehaviour/skill_control_10700225__-1910066322289321860.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=5593300562289576764"
+    },
+    {
+      "nodeIdentity": "hit:10700225|1|elements|0|5593300562289576764|36|4",
+      "nodeKind": "hit",
+      "controlSkillId": 10700225,
+      "frame": 36,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700225.asset/MonoBehaviour/skill_control_10700225__-1910066322289321860.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=5593300562289576764"
+    },
+    {
+      "nodeIdentity": "hit:10700225|1|elements|0|5593300562289576764|43|5",
+      "nodeKind": "hit",
+      "controlSkillId": 10700225,
+      "frame": 43,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700225.asset/MonoBehaviour/skill_control_10700225__-1910066322289321860.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=5593300562289576764"
+    },
+    {
+      "nodeIdentity": "hit:10700226|0|elements|1|-3883846112050479707|107|5",
+      "nodeKind": "hit",
+      "controlSkillId": 10700226,
+      "frame": 107,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0"
+    },
+    {
+      "nodeIdentity": "hit:10700226|0|elements|1|-3883846112050479707|114|6",
+      "nodeKind": "hit",
+      "controlSkillId": 10700226,
+      "frame": 114,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0"
+    },
+    {
+      "nodeIdentity": "hit:10700226|0|elements|1|-3883846112050479707|74|1",
+      "nodeKind": "hit",
+      "controlSkillId": 10700226,
+      "frame": 74,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0"
+    },
+    {
+      "nodeIdentity": "hit:10700226|0|elements|1|-3883846112050479707|82|2",
+      "nodeKind": "hit",
+      "controlSkillId": 10700226,
+      "frame": 82,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0"
+    },
+    {
+      "nodeIdentity": "hit:10700226|0|elements|1|-3883846112050479707|90|3",
+      "nodeKind": "hit",
+      "controlSkillId": 10700226,
+      "frame": 90,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0"
+    },
+    {
+      "nodeIdentity": "hit:10700226|0|elements|1|-3883846112050479707|99|4",
+      "nodeKind": "hit",
+      "controlSkillId": 10700226,
+      "frame": 99,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0"
+    },
+    {
+      "nodeIdentity": "hit:10700226|1|elements|0|-1477398542504158327|40|1",
+      "nodeKind": "hit",
+      "controlSkillId": 10700226,
+      "frame": 40,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-1477398542504158327"
+    },
+    {
+      "nodeIdentity": "switch-trigger:107002:on-exit",
+      "nodeKind": "switch-trigger",
+      "triggerPhase": "on-exit",
+      "status": "applied",
+      "sourceIdentity": "characters.items[id=107002].skillSlots[slot=201,skillId=10700222]"
+    },
+    {
+      "nodeIdentity": "target-state:misa-def-down",
+      "nodeKind": "target-state",
+      "targetKind": "enemy",
+      "durationMs": 24000,
+      "capacity": 1,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002256.asset/MonoBehaviour/ast_107002256__7790264186762117375.json#elementConfigId=107002256|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002256.asset/MonoBehaviour/ast_107002256__7790264186762117375.json#elementConfigId=107002256#time=24000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002256.asset/MonoBehaviour/ast_107002256__7790264186762117375.json#elementConfigId=107002256|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002256.asset/MonoBehaviour/ast_107002256__7790264186762117375.json#elementConfigId=107002256#combineNumber=-1|declared-capacity-override=1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002258.asset/MonoBehaviour/ast_107002258__-3902053340404252506.json#elementConfigId=107002258#attributeID=3;function=3;A=-1000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002257.asset/MonoBehaviour/ast_107002257__1466117413664505892.json#elementConfigId=107002257#attributeID=4;function=3;A=-1000|Battle/Element/ast_107002256.asset#Cover;time=24000|children=107002257,107002258"
+    }
+  ],
+  "edges": [
+    {
+      "edgeIdentity": "actor:107002:star-skill:misa-star-main-combo->executes-control->control:10700226",
+      "from": "actor:107002:star-skill:misa-star-main-combo",
+      "to": "control:10700226",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700201|0|10700203|normal-attack->executes-control->control:10700203",
+      "from": "actor|107002|10700201|0|10700203|normal-attack",
+      "to": "control:10700203",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700201|0|10700203|normal-attack->has-form->actor|107002|10700201|0|10700203|normal-attack:default",
+      "from": "actor|107002|10700201|0|10700203|normal-attack",
+      "to": "actor|107002|10700201|0|10700203|normal-attack:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700201|0|10700203|normal-attack:default->executes-control->control:10700203",
+      "from": "actor|107002|10700201|0|10700203|normal-attack:default",
+      "to": "control:10700203",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700201|1|10700210|charged-attack->executes-control->control:10700210",
+      "from": "actor|107002|10700201|1|10700210|charged-attack",
+      "to": "control:10700210",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700201|1|10700210|charged-attack->has-form->actor|107002|10700201|1|10700210|charged-attack:default",
+      "from": "actor|107002|10700201|1|10700210|charged-attack",
+      "to": "actor|107002|10700201|1|10700210|charged-attack:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700201|1|10700210|charged-attack:default->executes-control->control:10700210",
+      "from": "actor|107002|10700201|1|10700210|charged-attack:default",
+      "to": "control:10700210",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700201|2|10700215|dodge-attack->executes-control->control:10700215",
+      "from": "actor|107002|10700201|2|10700215|dodge-attack",
+      "to": "control:10700215",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700201|2|10700215|dodge-attack->has-form->actor|107002|10700201|2|10700215|dodge-attack:default",
+      "from": "actor|107002|10700201|2|10700215|dodge-attack",
+      "to": "actor|107002|10700201|2|10700215|dodge-attack:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700201|2|10700215|dodge-attack:default->executes-control->control:10700215",
+      "from": "actor|107002|10700201|2|10700215|dodge-attack:default",
+      "to": "control:10700215",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700201|3|10700211|plunging-attack->executes-control->control:10700211",
+      "from": "actor|107002|10700201|3|10700211|plunging-attack",
+      "to": "control:10700211",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700201|3|10700211|plunging-attack->has-form->actor|107002|10700201|3|10700211|plunging-attack:default",
+      "from": "actor|107002|10700201|3|10700211|plunging-attack",
+      "to": "actor|107002|10700201|3|10700211|plunging-attack:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700201|3|10700211|plunging-attack:default->executes-control->control:10700211",
+      "from": "actor|107002|10700201|3|10700211|plunging-attack:default",
+      "to": "control:10700211",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700212|0|10700212|star-skill->executes-control->control:10700212",
+      "from": "actor|107002|10700212|0|10700212|star-skill",
+      "to": "control:10700212",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700212|1|10700226|star-combo->executes-control->control:10700226",
+      "from": "actor|107002|10700212|1|10700226|star-combo",
+      "to": "control:10700226",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700212|1|10700226|star-combo->has-form->actor|107002|10700212|1|10700226|star-combo:default",
+      "from": "actor|107002|10700212|1|10700226|star-combo",
+      "to": "actor|107002|10700212|1|10700226|star-combo:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700212|1|10700226|star-combo:default->executes-control->control:10700226",
+      "from": "actor|107002|10700212|1|10700226|star-combo:default",
+      "to": "control:10700226",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700213|0|10700213|ultimate->executes-control->control:10700213",
+      "from": "actor|107002|10700213|0|10700213|ultimate",
+      "to": "control:10700213",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700213|0|10700213|ultimate->has-form->actor|107002|10700213|0|10700213|ultimate:default",
+      "from": "actor|107002|10700213|0|10700213|ultimate",
+      "to": "actor|107002|10700213|0|10700213|ultimate:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700213|0|10700213|ultimate:default->executes-control->control:10700213",
+      "from": "actor|107002|10700213|0|10700213|ultimate:default",
+      "to": "control:10700213",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700222|0|10700222|star-carry->executes-control->control:10700222",
+      "from": "actor|107002|10700222|0|10700222|star-carry",
+      "to": "control:10700222",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700222|0|10700222|star-carry->has-form->actor|107002|10700222|0|10700222|star-carry:default",
+      "from": "actor|107002|10700222|0|10700222|star-carry",
+      "to": "actor|107002|10700222|0|10700222|star-carry:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700222|0|10700222|star-carry:default->executes-control->control:10700222",
+      "from": "actor|107002|10700222|0|10700222|star-carry:default",
+      "to": "control:10700222",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700222|1|10700225|limit-counter->executes-control->control:10700225",
+      "from": "actor|107002|10700222|1|10700225|limit-counter",
+      "to": "control:10700225",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700222|1|10700225|limit-counter->has-form->actor|107002|10700222|1|10700225|limit-counter:default",
+      "from": "actor|107002|10700222|1|10700225|limit-counter",
+      "to": "actor|107002|10700222|1|10700225|limit-counter:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700222|1|10700225|limit-counter:default->executes-control->control:10700225",
+      "from": "actor|107002|10700222|1|10700225|limit-counter:default",
+      "to": "control:10700225",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700222|2|10700227|perfect-parry->executes-control->control:10700227",
+      "from": "actor|107002|10700222|2|10700227|perfect-parry",
+      "to": "control:10700227",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700222|2|10700227|perfect-parry->has-form->actor|107002|10700222|2|10700227|perfect-parry:default",
+      "from": "actor|107002|10700222|2|10700227|perfect-parry",
+      "to": "actor|107002|10700222|2|10700227|perfect-parry:default",
+      "relation": "has-form"
+    },
+    {
+      "edgeIdentity": "actor|107002|10700222|2|10700227|perfect-parry:default->executes-control->control:10700227",
+      "from": "actor|107002|10700222|2|10700227|perfect-parry:default",
+      "to": "control:10700227",
+      "relation": "executes-control"
+    },
+    {
+      "edgeIdentity": "control:10700201->has-subskill->control:10700201:sub:0",
+      "from": "control:10700201",
+      "to": "control:10700201:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700202->has-subskill->control:10700202:sub:0",
+      "from": "control:10700202",
+      "to": "control:10700202:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700203->has-subskill->control:10700203:sub:0",
+      "from": "control:10700203",
+      "to": "control:10700203:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700203:sub:0->emits-hit->hit:10700203|0|elements|2|-1404469563182445209|100|11",
+      "from": "control:10700203:sub:0",
+      "to": "hit:10700203|0|elements|2|-1404469563182445209|100|11",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700203:sub:0->emits-hit->hit:10700203|0|elements|2|-1404469563182445209|40|1",
+      "from": "control:10700203:sub:0",
+      "to": "hit:10700203|0|elements|2|-1404469563182445209|40|1",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700203:sub:0->emits-hit->hit:10700203|0|elements|2|-1404469563182445209|46|2",
+      "from": "control:10700203:sub:0",
+      "to": "hit:10700203|0|elements|2|-1404469563182445209|46|2",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700203:sub:0->emits-hit->hit:10700203|0|elements|2|-1404469563182445209|52|3",
+      "from": "control:10700203:sub:0",
+      "to": "hit:10700203|0|elements|2|-1404469563182445209|52|3",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700203:sub:0->emits-hit->hit:10700203|0|elements|2|-1404469563182445209|58|4",
+      "from": "control:10700203:sub:0",
+      "to": "hit:10700203|0|elements|2|-1404469563182445209|58|4",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700203:sub:0->emits-hit->hit:10700203|0|elements|2|-1404469563182445209|64|5",
+      "from": "control:10700203:sub:0",
+      "to": "hit:10700203|0|elements|2|-1404469563182445209|64|5",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700203:sub:0->emits-hit->hit:10700203|0|elements|2|-1404469563182445209|70|6",
+      "from": "control:10700203:sub:0",
+      "to": "hit:10700203|0|elements|2|-1404469563182445209|70|6",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700203:sub:0->emits-hit->hit:10700203|0|elements|2|-1404469563182445209|76|7",
+      "from": "control:10700203:sub:0",
+      "to": "hit:10700203|0|elements|2|-1404469563182445209|76|7",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700203:sub:0->emits-hit->hit:10700203|0|elements|2|-1404469563182445209|82|8",
+      "from": "control:10700203:sub:0",
+      "to": "hit:10700203|0|elements|2|-1404469563182445209|82|8",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700203:sub:0->emits-hit->hit:10700203|0|elements|2|-1404469563182445209|88|9",
+      "from": "control:10700203:sub:0",
+      "to": "hit:10700203|0|elements|2|-1404469563182445209|88|9",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700203:sub:0->emits-hit->hit:10700203|0|elements|2|-1404469563182445209|94|10",
+      "from": "control:10700203:sub:0",
+      "to": "hit:10700203|0|elements|2|-1404469563182445209|94|10",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700204->has-subskill->control:10700204:sub:0",
+      "from": "control:10700204",
+      "to": "control:10700204:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700204:sub:0->emits-hit->hit:10700204|0|elements|0|353925495509830930|102|9",
+      "from": "control:10700204:sub:0",
+      "to": "hit:10700204|0|elements|0|353925495509830930|102|9",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700204:sub:0->emits-hit->hit:10700204|0|elements|0|353925495509830930|49|1",
+      "from": "control:10700204:sub:0",
+      "to": "hit:10700204|0|elements|0|353925495509830930|49|1",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700204:sub:0->emits-hit->hit:10700204|0|elements|0|353925495509830930|56|2",
+      "from": "control:10700204:sub:0",
+      "to": "hit:10700204|0|elements|0|353925495509830930|56|2",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700204:sub:0->emits-hit->hit:10700204|0|elements|0|353925495509830930|63|3",
+      "from": "control:10700204:sub:0",
+      "to": "hit:10700204|0|elements|0|353925495509830930|63|3",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700204:sub:0->emits-hit->hit:10700204|0|elements|0|353925495509830930|70|4",
+      "from": "control:10700204:sub:0",
+      "to": "hit:10700204|0|elements|0|353925495509830930|70|4",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700204:sub:0->emits-hit->hit:10700204|0|elements|0|353925495509830930|77|5",
+      "from": "control:10700204:sub:0",
+      "to": "hit:10700204|0|elements|0|353925495509830930|77|5",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700204:sub:0->emits-hit->hit:10700204|0|elements|0|353925495509830930|90|7",
+      "from": "control:10700204:sub:0",
+      "to": "hit:10700204|0|elements|0|353925495509830930|90|7",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700204:sub:0->emits-hit->hit:10700204|0|elements|0|353925495509830930|96|8",
+      "from": "control:10700204:sub:0",
+      "to": "hit:10700204|0|elements|0|353925495509830930|96|8",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700204:sub:0->emits-hit->hit:10700204|0|elements|1|1159803510611510720|84|6",
+      "from": "control:10700204:sub:0",
+      "to": "hit:10700204|0|elements|1|1159803510611510720|84|6",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700204:sub:0->target-state-gain->target-state:misa-def-down",
+      "from": "control:10700204:sub:0",
+      "to": "target-state:misa-def-down",
+      "relation": "target-state-gain",
+      "triggerFrame": 84,
+      "amount": 1,
+      "requiresHitElementId": 107002242,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002256.asset/MonoBehaviour/ast_107002256__7790264186762117375.json#elementConfigId=107002256|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=1159803510611510720|skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#84F-hit-ordered-damage-energy-def-wrapper"
+    },
+    {
+      "edgeIdentity": "control:10700210->has-subskill->control:10700210:sub:0",
+      "from": "control:10700210",
+      "to": "control:10700210:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700210:sub:0->emits-hit->hit:10700210|0|elements|2|-1211965369219084289|48|1",
+      "from": "control:10700210:sub:0",
+      "to": "hit:10700210|0|elements|2|-1211965369219084289|48|1",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700210:sub:0->emits-hit->hit:10700210|0|elements|2|-1211965369219084289|51|2",
+      "from": "control:10700210:sub:0",
+      "to": "hit:10700210|0|elements|2|-1211965369219084289|51|2",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700210:sub:0->emits-hit->hit:10700210|0|elements|2|-1211965369219084289|63|3",
+      "from": "control:10700210:sub:0",
+      "to": "hit:10700210|0|elements|2|-1211965369219084289|63|3",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700210:sub:0->emits-hit->hit:10700210|0|elements|2|-1211965369219084289|69|4",
+      "from": "control:10700210:sub:0",
+      "to": "hit:10700210|0|elements|2|-1211965369219084289|69|4",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700210:sub:0->emits-hit->hit:10700210|0|elements|2|-1211965369219084289|76|5",
+      "from": "control:10700210:sub:0",
+      "to": "hit:10700210|0|elements|2|-1211965369219084289|76|5",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700210:sub:0->emits-hit->hit:10700210|0|elements|2|-1211965369219084289|83|6",
+      "from": "control:10700210:sub:0",
+      "to": "hit:10700210|0|elements|2|-1211965369219084289|83|6",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700210:sub:0->emits-hit->hit:10700210|0|elements|2|-1211965369219084289|90|7",
+      "from": "control:10700210:sub:0",
+      "to": "hit:10700210|0|elements|2|-1211965369219084289|90|7",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700210:sub:0->target-state-gain->target-state:misa-def-down",
+      "from": "control:10700210:sub:0",
+      "to": "target-state:misa-def-down",
+      "relation": "target-state-gain",
+      "triggerFrame": 76,
+      "amount": 1,
+      "requiresHitElementId": 107002224,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002256.asset/MonoBehaviour/ast_107002256__7790264186762117375.json#elementConfigId=107002256|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-1211965369219084289|skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#76F-hit-ordered-damage-energy-def-wrapper"
+    },
+    {
+      "edgeIdentity": "control:10700211->has-subskill->control:10700211:sub:0",
+      "from": "control:10700211",
+      "to": "control:10700211:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700211:sub:0->emits-hit->hit:10700211|0|elements|0|-5519795801939917140|37|1",
+      "from": "control:10700211:sub:0",
+      "to": "hit:10700211|0|elements|0|-5519795801939917140|37|1",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700212->has-subskill->control:10700212:sub:0",
+      "from": "control:10700212",
+      "to": "control:10700212:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700212->has-subskill->control:10700212:sub:1",
+      "from": "control:10700212",
+      "to": "control:10700212:sub:1",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700212:sub:0->emits-hit->hit:10700212|0|elements|1|-3883846112050479707|107|5",
+      "from": "control:10700212:sub:0",
+      "to": "hit:10700212|0|elements|1|-3883846112050479707|107|5",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700212:sub:0->emits-hit->hit:10700212|0|elements|1|-3883846112050479707|114|6",
+      "from": "control:10700212:sub:0",
+      "to": "hit:10700212|0|elements|1|-3883846112050479707|114|6",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700212:sub:0->emits-hit->hit:10700212|0|elements|1|-3883846112050479707|74|1",
+      "from": "control:10700212:sub:0",
+      "to": "hit:10700212|0|elements|1|-3883846112050479707|74|1",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700212:sub:0->emits-hit->hit:10700212|0|elements|1|-3883846112050479707|82|2",
+      "from": "control:10700212:sub:0",
+      "to": "hit:10700212|0|elements|1|-3883846112050479707|82|2",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700212:sub:0->emits-hit->hit:10700212|0|elements|1|-3883846112050479707|90|3",
+      "from": "control:10700212:sub:0",
+      "to": "hit:10700212|0|elements|1|-3883846112050479707|90|3",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700212:sub:0->emits-hit->hit:10700212|0|elements|1|-3883846112050479707|99|4",
+      "from": "control:10700212:sub:0",
+      "to": "hit:10700212|0|elements|1|-3883846112050479707|99|4",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700212:sub:1->emits-hit->hit:10700212|1|elements|1|-1404469563182445209|28|1",
+      "from": "control:10700212:sub:1",
+      "to": "hit:10700212|1|elements|1|-1404469563182445209|28|1",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700212:sub:1->emits-hit->hit:10700212|1|elements|1|-1404469563182445209|37|2",
+      "from": "control:10700212:sub:1",
+      "to": "hit:10700212|1|elements|1|-1404469563182445209|37|2",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700212:sub:1->emits-hit->hit:10700212|1|elements|1|-1404469563182445209|48|3",
+      "from": "control:10700212:sub:1",
+      "to": "hit:10700212|1|elements|1|-1404469563182445209|48|3",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700212:sub:1->emits-hit->hit:10700212|1|elements|1|-1404469563182445209|57|4",
+      "from": "control:10700212:sub:1",
+      "to": "hit:10700212|1|elements|1|-1404469563182445209|57|4",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700212:sub:1->emits-hit->hit:10700212|1|elements|1|-1404469563182445209|66|5",
+      "from": "control:10700212:sub:1",
+      "to": "hit:10700212|1|elements|1|-1404469563182445209|66|5",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700212:sub:1->emits-hit->hit:10700212|1|elements|1|-1404469563182445209|75|6",
+      "from": "control:10700212:sub:1",
+      "to": "hit:10700212|1|elements|1|-1404469563182445209|75|6",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700212:sub:1->emits-hit->hit:10700212|1|elements|1|-1404469563182445209|83|7",
+      "from": "control:10700212:sub:1",
+      "to": "hit:10700212|1|elements|1|-1404469563182445209|83|7",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700213->has-subskill->control:10700213:sub:0",
+      "from": "control:10700213",
+      "to": "control:10700213:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700215->has-subskill->control:10700215:sub:0",
+      "from": "control:10700215",
+      "to": "control:10700215:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700215->has-subskill->control:10700215:sub:1",
+      "from": "control:10700215",
+      "to": "control:10700215:sub:1",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700222->has-subskill->control:10700222:sub:0",
+      "from": "control:10700222",
+      "to": "control:10700222:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700225->has-subskill->control:10700225:sub:0",
+      "from": "control:10700225",
+      "to": "control:10700225:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700225->has-subskill->control:10700225:sub:1",
+      "from": "control:10700225",
+      "to": "control:10700225:sub:1",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700225:sub:0->emits-hit->hit:10700225|0|elements|0|5593300562289576764|15|1",
+      "from": "control:10700225:sub:0",
+      "to": "hit:10700225|0|elements|0|5593300562289576764|15|1",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700225:sub:0->emits-hit->hit:10700225|0|elements|0|5593300562289576764|22|2",
+      "from": "control:10700225:sub:0",
+      "to": "hit:10700225|0|elements|0|5593300562289576764|22|2",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700225:sub:0->emits-hit->hit:10700225|0|elements|0|5593300562289576764|29|3",
+      "from": "control:10700225:sub:0",
+      "to": "hit:10700225|0|elements|0|5593300562289576764|29|3",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700225:sub:0->emits-hit->hit:10700225|0|elements|0|5593300562289576764|36|4",
+      "from": "control:10700225:sub:0",
+      "to": "hit:10700225|0|elements|0|5593300562289576764|36|4",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700225:sub:1->emits-hit->hit:10700225|1|elements|0|5593300562289576764|15|1",
+      "from": "control:10700225:sub:1",
+      "to": "hit:10700225|1|elements|0|5593300562289576764|15|1",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700225:sub:1->emits-hit->hit:10700225|1|elements|0|5593300562289576764|22|2",
+      "from": "control:10700225:sub:1",
+      "to": "hit:10700225|1|elements|0|5593300562289576764|22|2",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700225:sub:1->emits-hit->hit:10700225|1|elements|0|5593300562289576764|29|3",
+      "from": "control:10700225:sub:1",
+      "to": "hit:10700225|1|elements|0|5593300562289576764|29|3",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700225:sub:1->emits-hit->hit:10700225|1|elements|0|5593300562289576764|36|4",
+      "from": "control:10700225:sub:1",
+      "to": "hit:10700225|1|elements|0|5593300562289576764|36|4",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700225:sub:1->emits-hit->hit:10700225|1|elements|0|5593300562289576764|43|5",
+      "from": "control:10700225:sub:1",
+      "to": "hit:10700225|1|elements|0|5593300562289576764|43|5",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700226->has-subskill->control:10700226:sub:0",
+      "from": "control:10700226",
+      "to": "control:10700226:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700226->has-subskill->control:10700226:sub:1",
+      "from": "control:10700226",
+      "to": "control:10700226:sub:1",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700226:sub:0->emits-hit->hit:10700226|0|elements|1|-3883846112050479707|107|5",
+      "from": "control:10700226:sub:0",
+      "to": "hit:10700226|0|elements|1|-3883846112050479707|107|5",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700226:sub:0->emits-hit->hit:10700226|0|elements|1|-3883846112050479707|114|6",
+      "from": "control:10700226:sub:0",
+      "to": "hit:10700226|0|elements|1|-3883846112050479707|114|6",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700226:sub:0->emits-hit->hit:10700226|0|elements|1|-3883846112050479707|74|1",
+      "from": "control:10700226:sub:0",
+      "to": "hit:10700226|0|elements|1|-3883846112050479707|74|1",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700226:sub:0->emits-hit->hit:10700226|0|elements|1|-3883846112050479707|82|2",
+      "from": "control:10700226:sub:0",
+      "to": "hit:10700226|0|elements|1|-3883846112050479707|82|2",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700226:sub:0->emits-hit->hit:10700226|0|elements|1|-3883846112050479707|90|3",
+      "from": "control:10700226:sub:0",
+      "to": "hit:10700226|0|elements|1|-3883846112050479707|90|3",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700226:sub:0->emits-hit->hit:10700226|0|elements|1|-3883846112050479707|99|4",
+      "from": "control:10700226:sub:0",
+      "to": "hit:10700226|0|elements|1|-3883846112050479707|99|4",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700226:sub:1->emits-hit->hit:10700226|1|elements|0|-1477398542504158327|40|1",
+      "from": "control:10700226:sub:1",
+      "to": "hit:10700226|1|elements|0|-1477398542504158327|40|1",
+      "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10700227->has-subskill->control:10700227:sub:0",
+      "from": "control:10700227",
+      "to": "control:10700227:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "control:10700261->has-subskill->control:10700261:sub:0",
+      "from": "control:10700261",
+      "to": "control:10700261:sub:0",
+      "relation": "has-subskill"
+    },
+    {
+      "edgeIdentity": "switch-trigger:107002:on-exit->derives-star-carry->actor|107002|10700222|0|10700222|star-carry",
+      "from": "switch-trigger:107002:on-exit",
+      "to": "actor|107002|10700222|0|10700222|star-carry",
+      "relation": "derives-star-carry",
+      "status": "applied"
+    }
+  ],
+  "exclusions": [
+    {
+      "ownerId": 107002,
+      "controlSkillId": 10700241,
+      "sourceIdentity": "characters.items[id=107002].skillSlots[group=backup,skillId=10700241]",
+      "status": "not-applicable",
+      "exclusionReason": "backup-control-not-reachable-from-public-action-or-verified-runtime-edge"
+    },
+    {
+      "ownerId": 107002,
+      "controlSkillId": 10700242,
+      "sourceIdentity": "characters.items[id=107002].skillSlots[group=backup,skillId=10700242]",
+      "status": "not-applicable",
+      "exclusionReason": "backup-control-not-reachable-from-public-action-or-verified-runtime-edge"
+    },
+    {
+      "ownerId": 107002,
+      "controlSkillId": 10700243,
+      "sourceIdentity": "characters.items[id=107002].skillSlots[group=backup,skillId=10700243]",
+      "status": "not-applicable",
+      "exclusionReason": "backup-control-not-reachable-from-public-action-or-verified-runtime-edge"
+    },
+    {
+      "ownerId": 107002,
+      "controlSkillId": 10700244,
+      "sourceIdentity": "characters.items[id=107002].skillSlots[group=backup,skillId=10700244]",
+      "status": "not-applicable",
+      "exclusionReason": "backup-control-not-reachable-from-public-action-or-verified-runtime-edge"
+    },
+    {
+      "ownerId": 107002,
+      "controlSkillId": 10700245,
+      "sourceIdentity": "characters.items[id=107002].skillSlots[group=backup,skillId=10700245]",
+      "status": "not-applicable",
+      "exclusionReason": "backup-control-not-reachable-from-public-action-or-verified-runtime-edge"
+    },
+    {
+      "ownerId": 107002,
+      "controlSkillId": 10700246,
+      "sourceIdentity": "characters.items[id=107002].skillSlots[group=backup,skillId=10700246]",
+      "status": "not-applicable",
+      "exclusionReason": "backup-control-not-reachable-from-public-action-or-verified-runtime-edge"
+    },
+    {
+      "ownerId": 107002,
+      "controlSkillId": 10700247,
+      "sourceIdentity": "characters.items[id=107002].skillSlots[group=backup,skillId=10700247]",
+      "status": "not-applicable",
+      "exclusionReason": "backup-control-not-reachable-from-public-action-or-verified-runtime-edge"
+    },
+    {
+      "ownerId": 107002,
+      "controlSkillId": 10700248,
+      "sourceIdentity": "characters.items[id=107002].skillSlots[group=backup,skillId=10700248]",
+      "status": "not-applicable",
+      "exclusionReason": "backup-control-not-reachable-from-public-action-or-verified-runtime-edge"
+    },
+    {
+      "ownerId": 107002,
+      "controlSkillId": 10700249,
+      "sourceIdentity": "characters.items[id=107002].skillSlots[group=backup,skillId=10700249]",
+      "status": "not-applicable",
+      "exclusionReason": "backup-control-not-reachable-from-public-action-or-verified-runtime-edge"
+    }
+  ],
+  "summary": {
+    "nodeCount": 112,
+    "edgeCount": 107,
+    "controlCount": 15,
+    "exclusionCount": 9,
+    "nodeKindCounts": {
+      "action-form": 10,
+      "control": 15,
+      "control-variant": 18,
+      "hit": 57,
+      "public-action": 10,
+      "switch-trigger": 1,
+      "target-state": 1
+    },
+    "edgeRelationCounts": {
+      "derives-star-carry": 1,
+      "emits-hit": 57,
+      "executes-control": 20,
+      "has-form": 9,
+      "has-subskill": 18,
+      "target-state-gain": 2
+    }
+  },
+  "profileHash": "f6eec495783b56210902a5f3fbc804e712847b95a92d8f251d129b36c01cb1f2"
+}

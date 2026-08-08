@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "53ca71ba9e6d84698574b79de736adef3236743c860531d29735a220292b48ce",
+  "sourcePackageHash": "25fa12ec08ed8a5b82bf357b00ac9f7cf39e5225045accb69ca52563709dc219",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "1e521162ee7297c2927ed89aff61465c2bbcd10e3f84aa4f35c9d934cdcf52eb"
+      "profileHash": "78671604d680eec4a44ec1039a168eb66a819cc2038440e2700212c9660a3b3a"
     },
     {
       "ownerId": 103002,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "6b59ae574db380243bf01b3f11f9b9871e580f82aec1a8a92240f5892c0e304e"
+      "profileHash": "0ade13484079d51c65ac169a08b15a0bc5125d9be33e46cfd411284530d0b39a"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "f990d5142692f2d9ea4e748876725841ad70076ee753dcbe7e53084c6a942ec5"
+      "profileHash": "4a761a55cbd2ac6c0e5ad7e7c8b53c9d95c6daeae2039070f642cb3d5877298f"
     },
     {
       "ownerId": 101007,
@@ -274,7 +274,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:102001:character-combat-profile:v1",
-      "profileHash": "54a761b0257d3fb95e7d76ec83e6e838441831471a7c2b75acc9fe59b8602939"
+      "profileHash": "c48f830f32a3255c1a165978158623bbb13c9cc671380d860dec5fe504f0d50a"
     },
     {
       "ownerId": 107001,
@@ -325,7 +325,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:107001:character-combat-profile:v1",
-      "profileHash": "294ba6ec55740d1ff91d3eaeae2d6bca83c95c5cbff2d9d0ffcc20c3f37814fb"
+      "profileHash": "3469f5994d16d547d2fce5b2f7b786bdc65a7473a588b84791fbf2fb6912118e"
     },
     {
       "ownerId": 107002,
@@ -337,14 +337,14 @@
         "静态缺口"
       ],
       "estimatedWorkUnits": 1,
-      "progressState": "evidence-indexed",
-      "targetPipelineMaturity": "ui-verified",
-      "combatCoverageState": "evidence-required",
+      "progressState": "runtime-applied",
+      "targetPipelineMaturity": "profile-compiled",
+      "combatCoverageState": "partial",
       "characterComplete": false,
       "zeroDistanceSimulationComplete": false,
       "realClientEvidenceComplete": false,
       "publicActionCount": 10,
-      "reachableFormCount": 22,
+      "reachableFormCount": 23,
       "indexedControlCount": 14,
       "specialResourceCount": 0,
       "stateMachineCount": 0,
@@ -366,8 +366,8 @@
       "mechanismTypes": [
         "switch-trigger"
       ],
-      "profileIdentity": null,
-      "profileHash": null
+      "profileIdentity": "actor:107002:character-combat-profile:v1",
+      "profileHash": "f6eec495783b56210902a5f3fbc804e712847b95a92d8f251d129b36c01cb1f2"
     },
     {
       "ownerId": 107003,
@@ -537,7 +537,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:108003:character-combat-profile:v1",
-      "profileHash": "4ee7d3c91187edb53ec38bfae44f574bca89142df500c0611075550c51fabf3e"
+      "profileHash": "f29503d90cd202aef79e4552756fcf68417f3c631efe0dc203842ef9c0982d89"
     },
     {
       "ownerId": 108005,
@@ -623,7 +623,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:109001:character-combat-profile:v1",
-      "profileHash": "c2a926a3c3f58b9cdfddcbe77c2563cb1f6df6d0ce858399bf92336212002500"
+      "profileHash": "0d503f6936db63381ef424727bcd085c2fc6924218b7f1d93fe23aecf0f75d07"
     },
     {
       "ownerId": 109002,
@@ -920,8 +920,8 @@
   "summary": {
     "characterCount": 20,
     "progressStateCounts": {
-      "evidence-indexed": 13,
-      "runtime-applied": 7
+      "evidence-indexed": 12,
+      "runtime-applied": 8
     },
     "totalPublicActionCount": 198,
     "totalRuntimeReadyActionCount": 186,

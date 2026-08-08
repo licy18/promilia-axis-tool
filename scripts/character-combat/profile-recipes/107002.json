@@ -1,0 +1,1280 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-profile-recipe",
+  "ownerId": 107002,
+  "characterId": 107002,
+  "sourceBaseline": "140eefcd233cd9c1d136728f1c94b91aff632278",
+  "productScenario": "m12c-zero-distance-passive-boss-v1",
+  "formalAdmissionClaim": false,
+  "optimizationReadyClaim": false,
+  "targetPipelineMaturity": "profile-compiled",
+  "goldStandard": false,
+  "coveragePolicies": {
+    "semanticTransitionClosureSupersedesRawCandidateGaps": true
+  },
+  "simulationScopeRequirements": {
+    "zeroDistance": {
+      "projectileImpactPolicy": "scenario-assumed-zero-distance",
+      "requiredResourceIdentities": [],
+      "requiredActionEffectBindingIdentities": [
+        "misa-star-wood-priority-consume",
+        "misa-star-independent-wind-mark"
+      ],
+      "requiredPassiveIdentities": []
+    }
+  },
+  "mechanicsDiscovery": {
+    "ownerId": 107002,
+    "normalAttackSkillId": 10700201,
+    "chargedAttackControlSkillId": 10700210,
+    "starSkillControlSkillId": 10700212,
+    "ultimateControlSkillId": 10700213,
+    "starCarryControlSkillId": 10700222,
+    "limitCounterControlSkillId": 10700225,
+    "perfectParryControlSkillId": 10700227,
+    "passiveSkillIds": [10700261]
+  },
+  "runtimePolicies": {
+    "defaultControlPolicy": {
+      "behaviorTriggerScope": "skill-player",
+      "sourceIdentity": "character-combat-recipe:107002#runtimePolicies.defaultControlPolicy.behaviorTriggerScope=skill-player"
+    }
+  },
+  "compiler": {
+    "timingPolicy": "standalone-animation",
+    "reachableControlSkillIds": [
+      10700201,
+      10700202,
+      10700203,
+      10700204,
+      10700205,
+      10700210,
+      10700211,
+      10700212,
+      10700213,
+      10700215,
+      10700222,
+      10700225,
+      10700226,
+      10700227,
+      10700261
+    ],
+    "contextInputEdges": [],
+    "publicActionDeclarations": [],
+    "publicActionForms": [
+      {
+        "publicActionKind": "star-skill",
+        "publicControlSkillId": 10700212,
+        "executionControlSkillId": 10700226,
+        "executionSubSkillIndex": 0,
+        "semanticIdentity": "misa-star-main-combo",
+        "semanticName": "星鸣技",
+        "selectionKind": "wrapper-derived-execution",
+        "replaceSelectedEffectIdentities": true,
+        "executionOccupancy": {
+          "durationFrames": 218,
+          "frameRate": 60,
+          "sourceKind": "declared-wrapper-derived-execution-occupancy",
+          "sourceIdentity": "skill_control_10700226.asset#sub0-selected-main-combo|animation-occupancy=218F"
+        },
+        "condition": {
+          "kind": "always"
+        }
+      }
+    ],
+    "attackInputChains": [],
+    "attackInputMechanicWindows": [
+      {
+        "bindingIdentity": "misa-a4-focused-mechanic-window",
+        "sourceSkillId": 10700201,
+        "actionKind": "normal-attack",
+        "sequenceIndex": 4,
+        "controlSkillId": 10700204,
+        "subSkillIndex": 0,
+        "lastCoveredHitFrame": 102,
+        "durationFrames": 103,
+        "sourceIdentity": "skill_control_10700204.asset#last-hit=102F;focused-mechanic-window=[0,103F);full-chain-occupancy-unresolved"
+      }
+    ],
+    "inputVariantSelectors": [],
+    "variantWindowBindings": [],
+    "targetStateProfiles": [
+      {
+        "stateIdentity": "misa-def-down",
+        "name": "米砂物理及法术防御降低",
+        "targetKind": "enemy",
+        "elementId": 107002256,
+        "capacityElementId": 107002256,
+        "expectedDurationMs": 24000,
+        "expectedMaxStacks": 1,
+        "expiryMode": "shared-instance",
+        "atCapacityPolicy": "refresh-oldest",
+        "activationScope": "owner-actions-only",
+        "modifierElements": [
+          {
+            "elementId": 107002258,
+            "expectedAttributeId": 3,
+            "expectedBucket": "dynamicPercent",
+            "expectedValueRaw": -1000
+          },
+          {
+            "elementId": 107002257,
+            "expectedAttributeId": 4,
+            "expectedBucket": "dynamicPercent",
+            "expectedValueRaw": -1000
+          }
+        ],
+        "sourceIdentity": "Battle/Element/ast_107002256.asset#Cover;time=24000|children=107002257,107002258"
+      }
+    ],
+    "targetStateTransactions": [
+      {
+        "transactionIdentity": "misa-a4-hit-confirmed-def-down",
+        "stateIdentity": "misa-def-down",
+        "controlSkillId": 10700204,
+        "subSkillIndex": 0,
+        "triggerFrame": 84,
+        "amount": 1,
+        "requiresHitElementId": 107002242,
+        "hitSettlementOrder": "after-hit",
+        "transactionElementId": 107002256,
+        "sourceIdentity": "skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#84F-hit-ordered-damage-energy-def-wrapper"
+      },
+      {
+        "transactionIdentity": "misa-charged-hit-confirmed-def-down",
+        "stateIdentity": "misa-def-down",
+        "controlSkillId": 10700210,
+        "subSkillIndex": 0,
+        "triggerFrame": 76,
+        "amount": 1,
+        "requiresHitElementId": 107002224,
+        "hitSettlementOrder": "after-hit",
+        "transactionElementId": 107002256,
+        "sourceIdentity": "skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#76F-hit-ordered-damage-energy-def-wrapper"
+      }
+    ],
+    "actionHitBindings": [
+      {
+        "bindingIdentity": "misa-star-main-combo-hits",
+        "controlSkillId": 10700226,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 10700212,
+        "sourceSubSkillIndex": 0,
+        "elementId": 107002253,
+        "triggerFrames": [74, 82, 90, 99, 107, 114],
+        "replaceTargetSubSkillElements": true,
+        "preserveSourceTriggerIdentity": true,
+        "sourceIdentity": "skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0"
+      }
+    ],
+    "actionEffectBindings": [
+      {
+        "bindingIdentity": "misa-a4-def-down-after-hit-order",
+        "controlSkillId": 10700204,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 107002256,
+        "triggerFrame": 84,
+        "frameCount": 1,
+        "projectionOnly": true,
+        "activationConditionScope": "matched-effect-subtree",
+        "hitSettlementOrder": "after-hit",
+        "sourceIdentity": "skill_control_10700204.asset#elements[1]=damage-energy;elements[3]=107002256-def-wrapper@84F"
+      },
+      {
+        "bindingIdentity": "misa-charged-def-down-after-hit-order",
+        "controlSkillId": 10700210,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 107002256,
+        "triggerFrame": 76,
+        "frameCount": 1,
+        "projectionOnly": true,
+        "activationConditionScope": "matched-effect-subtree",
+        "hitSettlementOrder": "after-hit",
+        "sourceIdentity": "skill_control_10700210.asset#elements[2]=damage-energy;elements[4]=107002256-def-wrapper@76F"
+      },
+      {
+        "bindingIdentity": "misa-star-independent-wind-mark",
+        "controlSkillId": 10700226,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 10700212,
+        "sourceSubSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 750,
+        "triggerFrame": 90,
+        "frameCount": 1,
+        "projectionOnly": true,
+        "hitSettlementOrder": "after-hit",
+        "sourceIdentity": "skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#90F-toOwn-wind-mark-before-SP-summon"
+      },
+      {
+        "bindingIdentity": "misa-star-wood-priority-consume",
+        "controlSkillId": 10700226,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 10700212,
+        "sourceSubSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 599,
+        "triggerFrame": 82,
+        "frameCount": 1,
+        "hitSettlementOrder": "after-hit",
+        "tuningConsumeSuccessEffect": {
+          "availabilityElementId": 107002272,
+          "wrapperElementId": 107002265,
+          "propertyElementIds": [107002266, 107002267],
+          "expectedCandidateMarkIds": [550, 750],
+          "expectedAttributeIds": [55, 53],
+          "expectedBuckets": ["dynamicExtra", "dynamicExtra"],
+          "expectedValueRaws": [5, 5],
+          "expectedDurationMs": 30000,
+          "targetKind": "source-owner",
+          "sourceIdentity": "Battle/Element/ast_107002272.asset#consume=0;Source;[550,750]|ast_107002265.asset#time=30000"
+        },
+        "sourceIdentity": "skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599"
+      }
+    ],
+    "conditionalHitGroups": [],
+    "runtimeEffectBindings": [],
+    "rawDirectEffectBindings": [
+      {
+        "bindingIdentity": "misa-ultimate-allhero-heal",
+        "controlSkillId": 10700213,
+        "subSkillIndex": 0,
+        "elementId": 107002022,
+        "triggerFrames": [143, 155, 167, 181, 193],
+        "effectKind": "heal",
+        "expectedTargetKind": "team-actors",
+        "sourceIdentity": "skill_control_10700213.asset#143,155,167,181,193F-directInjectTargetType=3;heal=107002022"
+      },
+      {
+        "bindingIdentity": "misa-star-carry-allhero-heal",
+        "controlSkillId": 10700222,
+        "subSkillIndex": 0,
+        "elementId": 107002240,
+        "triggerFrames": [46, 61, 79, 98],
+        "effectKind": "heal",
+        "expectedTargetKind": "team-actors",
+        "sourceIdentity": "skill_control_10700222.asset#46,61,79,98F-directInjectTargetType=3;heal=107002240"
+      }
+    ],
+    "pickupProfiles": [
+      {
+        "pickupIdentity": "misa-a3-hp-pickup",
+        "name": "米砂 A3 HP 拾取物",
+        "unitId": 480042,
+        "poolKey": "summon-temp:107002220",
+        "countType": "SummonTempData",
+        "summonElementId": 107002220,
+        "lifetimeFrames": 900,
+        "collisionDelayFrames": 2,
+        "collisionRadius": 0.6,
+        "maxCount": 6,
+        "rewardKind": "direct-heal",
+        "rewardElementId": 107002216,
+        "expectedHealBasisPoints": 300,
+        "passiveMarkerElementId": 107002271,
+        "ownerActiveAtBattleEnter": true,
+        "tuningElementId": 480041002,
+        "expectedTuningAttributeId": 229,
+        "expectedTuningBucket": "dynamicPercent",
+        "expectedTuningValueRaw": 600,
+        "expectedTuningDurationMs": 24000,
+        "expectedTuningMaxStacks": 4,
+        "sourceIdentity": "Battle/Element/ast_107002220.asset#unit=480042;life=15000;max=6;countType=2|battle-item:480042#collision=[spawn+2,spawn+900);radius=0.6;Target"
+      },
+      {
+        "pickupIdentity": "misa-star-sp-pickup",
+        "name": "米砂星鸣 SP 拾取物",
+        "unitId": 480041,
+        "poolKey": "summon-temp:107002214",
+        "countType": "SummonTempData",
+        "summonElementId": 107002214,
+        "lifetimeFrames": 900,
+        "collisionDelayFrames": 2,
+        "collisionRadius": 0.6,
+        "maxCount": 6,
+        "rewardKind": "direct-sp",
+        "rewardElementId": 107002215,
+        "expectedDirectSpValue": 1,
+        "expectedDirectSpShareType": 2,
+        "passiveMarkerElementId": 107002271,
+        "ownerActiveAtBattleEnter": true,
+        "tuningElementId": 480041002,
+        "expectedTuningAttributeId": 229,
+        "expectedTuningBucket": "dynamicPercent",
+        "expectedTuningValueRaw": 600,
+        "expectedTuningDurationMs": 24000,
+        "expectedTuningMaxStacks": 4,
+        "sourceIdentity": "Battle/Element/ast_107002214.asset#unit=480041;life=15000;max=6;countType=2|Battle/Element/ast_107002215.asset#A=10000;shareType=2"
+      },
+      {
+        "pickupIdentity": "misa-ultimate-hp-pickup",
+        "name": "米砂星决 HP 拾取物",
+        "unitId": 480042,
+        "poolKey": "summon-id:480042",
+        "countType": "SummonId",
+        "lifetimeFrames": 900,
+        "collisionDelayFrames": 2,
+        "collisionRadius": 0.6,
+        "maxCount": 6,
+        "rewardKind": "direct-heal",
+        "rewardElementId": 107002216,
+        "expectedHealBasisPoints": 300,
+        "passiveMarkerElementId": 107002271,
+        "ownerActiveAtBattleEnter": true,
+        "tuningElementId": 480041002,
+        "expectedTuningAttributeId": 229,
+        "expectedTuningBucket": "dynamicPercent",
+        "expectedTuningValueRaw": 600,
+        "expectedTuningDurationMs": 24000,
+        "expectedTuningMaxStacks": 4,
+        "sourceIdentity": "skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_5308513824935950819__5308513824935950819.json#135F;unit=480042;count=3;life=15000;max=6;countType=1"
+      },
+      {
+        "pickupIdentity": "misa-ultimate-sp-pickup",
+        "name": "米砂星决 SP 拾取物",
+        "unitId": 480041,
+        "poolKey": "summon-id:480041",
+        "countType": "SummonId",
+        "lifetimeFrames": 900,
+        "collisionDelayFrames": 2,
+        "collisionRadius": 0.6,
+        "maxCount": 6,
+        "rewardKind": "direct-sp",
+        "rewardElementId": 107002215,
+        "expectedDirectSpValue": 1,
+        "expectedDirectSpShareType": 2,
+        "passiveMarkerElementId": 107002271,
+        "ownerActiveAtBattleEnter": true,
+        "tuningElementId": 480041002,
+        "expectedTuningAttributeId": 229,
+        "expectedTuningBucket": "dynamicPercent",
+        "expectedTuningValueRaw": 600,
+        "expectedTuningDurationMs": 24000,
+        "expectedTuningMaxStacks": 4,
+        "sourceIdentity": "skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-2302479272537638429__-2302479272537638429.json#135F;unit=480041;count=3;life=15000;max=6;countType=1"
+      }
+    ],
+    "pickupSpawnBindings": [
+      {
+        "bindingIdentity": "misa-a3-hp-pickup-spawn",
+        "controlSkillId": 10700203,
+        "subSkillIndex": 0,
+        "pickupIdentity": "misa-a3-hp-pickup",
+        "triggerFrames": [40, 46, 52, 58, 64, 70],
+        "count": 1,
+        "sourceOrder": 0,
+        "requiresHitElementId": 107002082,
+        "sourceIdentity": "skill_control_10700203.asset#only-hit-frames=40,46,52,58,64,70-create-107002220"
+      },
+      {
+        "bindingIdentity": "misa-star-sp-pickup-spawn",
+        "controlSkillId": 10700226,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 10700212,
+        "sourceSubSkillIndex": 0,
+        "pickupIdentity": "misa-star-sp-pickup",
+        "triggerFrames": [74, 82, 90, 99],
+        "count": 1,
+        "sourceOrder": 0,
+        "requiresHitElementId": 107002253,
+        "sourceIdentity": "skill_control_10700212.asset#sub0-only-hit-frames=74,82,90,99-create-107002214|selected-execution=10700226/sub0"
+      },
+      {
+        "bindingIdentity": "misa-ultimate-hp-pickup-spawn",
+        "controlSkillId": 10700213,
+        "subSkillIndex": 0,
+        "pickupIdentity": "misa-ultimate-hp-pickup",
+        "triggerFrame": 135,
+        "count": 3,
+        "sourceOrder": 20,
+        "sourceIdentity": "skill_control_10700213.asset#skillTrackDatas[20]/trackIndex=23/pathId=5308513824935950819@135F"
+      },
+      {
+        "bindingIdentity": "misa-ultimate-sp-pickup-spawn",
+        "controlSkillId": 10700213,
+        "subSkillIndex": 0,
+        "pickupIdentity": "misa-ultimate-sp-pickup",
+        "triggerFrame": 135,
+        "count": 3,
+        "sourceOrder": 21,
+        "sourceIdentity": "skill_control_10700213.asset#skillTrackDatas[21]/trackIndex=24/pathId=-2302479272537638429@135F"
+      }
+    ],
+    "specialResources": [],
+    "thresholdTransitions": [],
+    "passiveEffects": [],
+    "scenarioOutOfScopeActions": [
+      {
+        "controlSkillId": 10700215,
+        "status": "not-applicable",
+        "reason": "scenario-out-of-scope:airborne-fall-or-dive-action",
+        "sourceIdentity": "skill_control_10700215.asset#source-retained"
+      },
+      {
+        "controlSkillId": 10700211,
+        "status": "not-applicable",
+        "reason": "scenario-out-of-scope:jump-or-airborne-action",
+        "sourceIdentity": "skill_control_10700211.asset#source-retained"
+      },
+      {
+        "controlSkillId": 10700225,
+        "status": "not-applicable",
+        "reason": "scenario-out-of-scope:requires-boss-attack-event-limit-counter",
+        "sourceIdentity": "skill_control_10700225.asset#source-retained"
+      },
+      {
+        "controlSkillId": 10700227,
+        "status": "not-applicable",
+        "reason": "scenario-out-of-scope:requires-boss-attack-event-perfect-defense",
+        "sourceIdentity": "skill_control_10700227.asset#source-retained"
+      },
+      {
+        "controlSkillId": 10700205,
+        "status": "not-applicable",
+        "reason": "source-dead-placeholder:skillPlayers-and-skillResourceMaps-empty;public-four-stage-chain",
+        "sourceIdentity": "skill_control_10700205.asset#skillPlayers=[];skillResourceMaps=[]|NewTable/skill.rows[id=10700201]#四段攻击"
+      }
+    ]
+  },
+  "unresolvedRecords": [
+    {
+      "identity": "actor|107002|10700201|2|10700215|dodge-attack",
+      "sourceKind": "public-action",
+      "status": "not-applicable",
+      "reasons": ["scenario-out-of-scope:airborne-fall-or-dive-action"],
+      "sourceIdentity": "skill_control_10700215.asset#source-retained|character-combat-recipe:107002#scenarioOutOfScopeActions"
+    },
+    {
+      "identity": "effect:10700211|0|elements|3|-6599061693303632671|element:-6599061693303632671|37|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["scenario-out-of-scope:jump-or-airborne-action"],
+      "sourceIdentity": "battle-effect:10700211:0:-6599061693303632671:-2523497597519658216:37|character-combat-recipe:107002#scenarioOutOfScopeActions"
+    },
+    {
+      "identity": "effect:10700212|0|elements|5|-2174275479014567856|element:-2174275479014567856|82|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["covered-by-applied-tuning-consume-availability-contract"],
+      "sourceIdentity": "battle-effect:10700212:0:-2174275479014567856:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
+    },
+    {
+      "identity": "effect:10700212|0|elements|5|-2174275479014567856|element:1913468686735845945|82|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["covered-by-applied-tuning-consume-wrapper-contract"],
+      "sourceIdentity": "battle-effect:10700212:0:1913468686735845945:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
+    },
+    {
+      "identity": "effect:10700212|0|elements|5|-2174275479014567856|element:3375530858005333853|82|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["covered-by-applied-tuning-consume-wrapper-contract"],
+      "sourceIdentity": "battle-effect:10700212:0:3375530858005333853:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
+    },
+    {
+      "identity": "effect:10700212|0|elements|5|-2174275479014567856|element:623176689467243005|82|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["covered-by-applied-tuning-consume-wrapper-contract"],
+      "sourceIdentity": "battle-effect:10700212:0:623176689467243005:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
+    },
+    {
+      "identity": "effect:10700212|0|elements|9|-6104701335743815286|element:-1085330686087474031|82|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["covered-by-applied-tuning-consume-success-contract"],
+      "sourceIdentity": "battle-effect:10700212:0:-1085330686087474031:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
+    },
+    {
+      "identity": "effect:10700212|0|elements|9|-6104701335743815286|element:-1722401594839030113|82|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["covered-by-applied-tuning-consume-success-contract"],
+      "sourceIdentity": "battle-effect:10700212:0:-1722401594839030113:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
+    },
+    {
+      "identity": "effect:10700212|0|elements|9|-6104701335743815286|element:-6104701335743815286|82|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["covered-by-applied-priority-consume-overlimit-and-success-contract"],
+      "sourceIdentity": "battle-effect:10700212:0:-6104701335743815286:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
+    },
+    {
+      "identity": "effect:10700212|0|elements|9|-6104701335743815286|element:-7412029037550756065|82|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["covered-by-applied-tuning-consume-success-contract"],
+      "sourceIdentity": "battle-effect:10700212:0:-7412029037550756065:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
+    },
+    {
+      "identity": "effect:10700212|0|elements|9|-6104701335743815286|element:4310270459467820517|82|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["covered-by-applied-tuning-consume-success-contract"],
+      "sourceIdentity": "battle-effect:10700212:0:4310270459467820517:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
+    },
+    {
+      "identity": "effect:10700212|0|elements|9|-6104701335743815286|element:6500867373616520947|82|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["covered-by-applied-tuning-consume-success-contract"],
+      "sourceIdentity": "battle-effect:10700212:0:6500867373616520947:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
+    },
+    {
+      "identity": "effect:10700212|0|elements|9|-6104701335743815286|element:7183943640740465629|82|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["covered-by-applied-tuning-consume-success-property-contract"],
+      "sourceIdentity": "battle-effect:10700212:0:7183943640740465629:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
+    },
+    {
+      "identity": "effect:10700212|1|bulletElements|1|element-107002138|element:3972142030532870442|unresolved-frame|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["alternate-unselected-star-subskill"],
+      "sourceIdentity": "battle-effect:10700212:1:3972142030532870442:unresolved:unresolved|character-combat-recipe:107002#publicActionForms.misa-star-main-combo"
+    },
+    {
+      "identity": "effect:10700212|1|elements|5|3972142030532870442|element:3972142030532870442|unresolved-frame|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["alternate-unselected-star-subskill"],
+      "sourceIdentity": "battle-effect:10700212:1:3972142030532870442:unresolved:unresolved|character-combat-recipe:107002#publicActionForms.misa-star-main-combo"
+    },
+    {
+      "identity": "effect:10700261|0|elements|0|7643301625766811642|element:7643301625766811642|0|0",
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": ["covered-by-applied-pickup-passive-marker-contract"],
+      "sourceIdentity": "battle-effect:10700261:0:7643301625766811642:-3169485345798086959:0|character-combat-recipe:107002#pickupProfiles.passiveMarkerElementId=107002271"
+    }
+  ],
+  "goldenScenario": {
+    "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+    "durationFrames": 7200,
+    "frameRate": 60,
+    "teamCharacterIds": [107002, 101010, 103002],
+    "initialControlledCharacterId": 107002,
+    "initialActorSp": {
+      "107002": 90,
+      "101010": 0,
+      "103002": 0
+    },
+    "kiboByCharacterId": {
+      "107002": 500001,
+      "101010": 500003,
+      "103002": 500039
+    },
+    "initialKiboSp": {
+      "107002": 100,
+      "101010": 100,
+      "103002": 100
+    },
+    "initialTuningMarks": [
+      {
+        "profileKey": "wood",
+        "layerCount": 1,
+        "remainingDurationMs": 30000
+      },
+      {
+        "profileKey": "wind",
+        "layerCount": 1,
+        "remainingDurationMs": 30000
+      }
+    ],
+    "actions": [
+      {
+        "actionKey": "misa-a3",
+        "actorCharacterId": 107002,
+        "skillId": 10700201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "attackInputControlSkillId": 10700203,
+        "attackSequenceIndex": 3,
+        "mechanicWindowFrames": 101,
+        "mechanicWindowSourceIdentity": "skill_control_10700203.asset#last-hit=100F;focused-window=[0,101F);not-full-chain-occupancy",
+        "startFrame": 0
+      },
+      {
+        "actionKey": "misa-a4",
+        "actorCharacterId": 107002,
+        "skillId": 10700201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "attackInputControlSkillId": 10700204,
+        "attackSequenceIndex": 4,
+        "mechanicWindowFrames": 103,
+        "mechanicWindowSourceIdentity": "skill_control_10700204.asset#last-hit=102F;focused-window=[0,103F);not-full-chain-occupancy",
+        "startFrame": 240
+      },
+      {
+        "actionKey": "misa-charged",
+        "actorCharacterId": 107002,
+        "skillId": 10700201,
+        "actionKind": "charged-attack",
+        "actionVariantIndex": 1,
+        "controlSubSkillIndex": 0,
+        "startFrame": 600
+      },
+      {
+        "actionKey": "misa-star",
+        "actorCharacterId": 107002,
+        "skillId": 10700212,
+        "actionKind": "star-skill",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 1200
+      },
+      {
+        "actionKey": "misa-star-before-cooldown-boundary",
+        "actorCharacterId": 107002,
+        "skillId": 10700212,
+        "actionKind": "star-skill",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 1500
+      },
+      {
+        "actionKey": "misa-star-at-cooldown-boundary",
+        "actorCharacterId": 107002,
+        "skillId": 10700212,
+        "actionKind": "star-skill",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 2640
+      },
+      {
+        "actionKey": "misa-ultimate",
+        "actorCharacterId": 107002,
+        "skillId": 10700213,
+        "actionKind": "ultimate",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 3000
+      },
+      {
+        "actionKey": "misa-a4-required-hit-miss",
+        "actorCharacterId": 107002,
+        "skillId": 10700201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "attackInputControlSkillId": 10700204,
+        "attackSequenceIndex": 4,
+        "mechanicWindowFrames": 103,
+        "mechanicWindowSourceIdentity": "skill_control_10700204.asset#last-hit=102F;focused-window=[0,103F);not-full-chain-occupancy",
+        "startFrame": 3400,
+        "hitOverrides": {
+          "10700204|0|elements|1|1159803510611510720|84|6": {
+            "willHit": false
+          }
+        }
+      },
+      {
+        "actionKey": "misa-a3-pickup-hits-miss",
+        "actorCharacterId": 107002,
+        "skillId": 10700201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "attackInputControlSkillId": 10700203,
+        "attackSequenceIndex": 3,
+        "mechanicWindowFrames": 101,
+        "mechanicWindowSourceIdentity": "skill_control_10700203.asset#last-hit=100F;focused-window=[0,101F);not-full-chain-occupancy",
+        "startFrame": 3800,
+        "hitOverrides": {
+          "10700203|0|elements|2|-1404469563182445209|40|1": {
+            "willHit": false
+          },
+          "10700203|0|elements|2|-1404469563182445209|46|2": {
+            "willHit": false
+          },
+          "10700203|0|elements|2|-1404469563182445209|52|3": {
+            "willHit": false
+          },
+          "10700203|0|elements|2|-1404469563182445209|58|4": {
+            "willHit": false
+          },
+          "10700203|0|elements|2|-1404469563182445209|64|5": {
+            "willHit": false
+          },
+          "10700203|0|elements|2|-1404469563182445209|70|6": {
+            "willHit": false
+          }
+        }
+      },
+      {
+        "actionKey": "misa-star-no-consume-candidate",
+        "actorCharacterId": 107002,
+        "skillId": 10700212,
+        "actionKind": "star-skill",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 6000
+      }
+    ],
+    "switchEvents": [
+      {
+        "eventKey": "switch-away-from-misa",
+        "startFrame": 4200,
+        "sourceCharacterId": 107002,
+        "targetCharacterId": 101010
+      },
+      {
+        "eventKey": "switch-back-to-misa",
+        "startFrame": 4500,
+        "sourceCharacterId": 101010,
+        "targetCharacterId": 107002
+      }
+    ],
+    "controlIntervals": [
+      {
+        "startFrame": 0,
+        "endFrame": 4200,
+        "characterId": 107002
+      },
+      {
+        "startFrame": 4200,
+        "endFrame": 4500,
+        "characterId": 101010
+      },
+      {
+        "startFrame": 4500,
+        "endFrame": 7200,
+        "characterId": 107002
+      }
+    ],
+    "comparison": {},
+    "traceSelectors": {
+      "stateEffectIds": [
+        "battle-element:107002256",
+        "battle-element:-3902053340404252506",
+        "battle-element:1466117413664505892",
+        "battle-element:107002257",
+        "battle-element:107002258"
+      ]
+    },
+    "expectedRuntime": {
+      "exact": {
+        "project.durationMs": 120000,
+        "project.actionCount": 12,
+        "project.teamCharacterIds": [
+          107002,
+          101010,
+          103002
+        ],
+        "actions.blockedActionIds": [
+          "misa-star-before-cooldown-boundary"
+        ],
+        "actions.blockedActionDetails": [
+          {
+            "actionId": "misa-star-before-cooldown-boundary",
+            "contextActionId": null,
+            "skipReason": "confirmed-action-rule-violation",
+            "unresolvedCodes": [],
+            "violationCodes": [
+              "skill-cooldown-active"
+            ],
+            "diagnosticIds": [
+              "skill-cooldown-active|misa-star-before-cooldown-boundary|misa-star"
+            ]
+          }
+        ],
+        "actions.selectionByActionId.misa-star": {
+          "ownerId": 107002,
+          "semanticName": "星鸣技",
+          "controlSkillId": 10700226,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 218,
+          "sourceKind": "verified-public-action-form-wrapper-derived-execution"
+        },
+        "actions.selectionByActionId.misa-star-at-cooldown-boundary": {
+          "ownerId": 107002,
+          "semanticName": "星鸣技",
+          "controlSkillId": 10700226,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 218,
+          "sourceKind": "verified-public-action-form-wrapper-derived-execution"
+        },
+        "actions.selectionByActionId.misa-star-no-consume-candidate": {
+          "ownerId": 107002,
+          "semanticName": "星鸣技",
+          "controlSkillId": 10700226,
+          "subSkillIndex": 0,
+          "actualDurationFrames": 218,
+          "sourceKind": "verified-public-action-form-wrapper-derived-execution"
+        },
+        "combat.ownerHitSummaryByActionId.misa-a3.frames": [
+          40,
+          46,
+          52,
+          58,
+          64,
+          70,
+          76,
+          82,
+          88,
+          94,
+          100
+        ],
+        "combat.ownerHitSummaryByActionId.misa-a3-pickup-hits-miss.frames": [
+          3876,
+          3882,
+          3888,
+          3894,
+          3900
+        ],
+        "combat.ownerHitSummaryByActionId.misa-a4.frames": [
+          289,
+          296,
+          303,
+          310,
+          317,
+          324,
+          330,
+          336,
+          342
+        ],
+        "combat.ownerHitSummaryByActionId.misa-a4-required-hit-miss.frames": [
+          3449,
+          3456,
+          3463,
+          3470,
+          3477,
+          3490,
+          3496,
+          3502
+        ],
+        "combat.ownerHitSummaryByActionId.misa-charged.frames": [
+          648,
+          651,
+          663,
+          669,
+          676,
+          683,
+          690
+        ],
+        "combat.ownerHitSummaryByActionId.misa-star.frames": [
+          1274,
+          1282,
+          1290,
+          1299,
+          1307,
+          1314
+        ],
+        "combat.ownerHitSummaryByActionId.misa-star-at-cooldown-boundary.frames": [
+          2714,
+          2722,
+          2730,
+          2739,
+          2747,
+          2754
+        ],
+        "combat.ownerHitSummaryByActionId.misa-star-no-consume-candidate.frames": [
+          6074,
+          6082,
+          6090,
+          6099,
+          6107,
+          6114
+        ],
+        "combat.ownerDirectHealSummaryByActionId.misa-a3.eventCount": 6,
+        "combat.ownerDirectHealSummaryByActionId.misa-a3.frames": [
+          42,
+          48,
+          54,
+          60,
+          66,
+          72
+        ],
+        "combat.ownerDirectHealSummaryByActionId.misa-a3.targetIds": [
+          "actor-107002"
+        ],
+        "combat.ownerDirectHealSummaryByActionId.misa-a3.requestedChangeTotal": 966,
+        "combat.ownerDirectHealSummaryByActionId.misa-a3.baseFunctionIds": [
+          104
+        ],
+        "combat.ownerDirectHealSummaryByActionId.misa-a3.maximumHpSubjects": [
+          "source-actor"
+        ],
+        "combat.ownerDirectHealSummaryByActionId.misa-ultimate.eventCount": 18,
+        "combat.ownerDirectHealSummaryByActionId.misa-ultimate.frames": [
+          3137,
+          3137,
+          3137,
+          3143,
+          3143,
+          3143,
+          3155,
+          3155,
+          3155,
+          3167,
+          3167,
+          3167,
+          3181,
+          3181,
+          3181,
+          3193,
+          3193,
+          3193
+        ],
+        "combat.ownerDirectHealSummaryByActionId.misa-ultimate.targetIds": [
+          "actor-101010",
+          "actor-103002",
+          "actor-107002"
+        ],
+        "combat.ownerDirectHealSummaryByActionId.misa-ultimate.baseFunctionIds": [
+          104
+        ],
+        "combat.ownerDirectHealSummaryByActionId.misa-ultimate.maximumHpSubjects": [
+          "source-actor"
+        ],
+        "combat.ownerDirectHealSummaryByActionId.switch-away-from-misa--on-exit--actor-107002--star-carry.eventCount": 12,
+        "combat.ownerDirectHealSummaryByActionId.switch-away-from-misa--on-exit--actor-107002--star-carry.frames": [
+          4246,
+          4246,
+          4246,
+          4261,
+          4261,
+          4261,
+          4279,
+          4279,
+          4279,
+          4298,
+          4298,
+          4298
+        ],
+        "combat.ownerDirectHealSummaryByActionId.switch-away-from-misa--on-exit--actor-107002--star-carry.targetIds": [
+          "actor-101010",
+          "actor-103002",
+          "actor-107002"
+        ],
+        "resources.ownerActorSpTransactionsByActionId.misa-ultimate": {
+          "eventCount": 4,
+          "frames": [
+            3000,
+            3137,
+            3137,
+            3137
+          ],
+          "changes": [
+            -100,
+            1,
+            1,
+            1
+          ],
+          "totalChange": -97,
+          "reasons": [
+            "verified-direct-sp",
+            "verified-skill-cost"
+          ]
+        },
+        "resources.directSpSummaryByActionId.misa-star.targetEventCount": 4,
+        "resources.directSpSummaryByActionId.misa-star.shareAllEventCount": 8,
+        "resources.directSpSummaryByActionId.misa-star.targetActorIds": [
+          "actor-107002"
+        ],
+        "resources.directSpSummaryByActionId.misa-star.sharedActorIds": [
+          "actor-101010",
+          "actor-103002"
+        ],
+        "resources.directSpSummaryByActionId.misa-star-at-cooldown-boundary.targetEventCount": 0,
+        "resources.directSpSummaryByActionId.misa-star-at-cooldown-boundary.shareAllEventCount": 8,
+        "resources.directSpSummaryByActionId.misa-star-no-consume-candidate.targetEventCount": 4,
+        "resources.directSpSummaryByActionId.misa-star-no-consume-candidate.shareAllEventCount": 8,
+        "resources.directSpSummaryByActionId.misa-ultimate.targetEventCount": 3,
+        "resources.directSpSummaryByActionId.misa-ultimate.shareAllEventCount": 6,
+        "resources.pickupSummary": {
+          "profileCount": 4,
+          "bindingCount": 12,
+          "spawnedEntityCount": 24,
+          "collectedEntityCount": 24,
+          "capacityRejectedCount": 0,
+          "directHpEventCount": 9,
+          "directSpEventCount": 15,
+          "tuningEffectCommandCount": 24,
+          "unresolvedCount": 0,
+          "applied": true
+        },
+        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.spawnFrames": [
+          40,
+          46,
+          52,
+          58,
+          64,
+          70
+        ],
+        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.collectionFrames": [
+          42,
+          48,
+          54,
+          60,
+          66,
+          72
+        ],
+        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.rejectedCount": 6,
+        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.poolKeys": [
+          "actor-107002|SummonTempData|summon-temp:107002220|480042"
+        ],
+        "resources.pickupSummaryByIdentity.misa-star-sp-pickup.spawnFrames": [
+          1274,
+          1282,
+          1290,
+          1299,
+          2714,
+          2722,
+          2730,
+          2739,
+          6074,
+          6082,
+          6090,
+          6099
+        ],
+        "resources.pickupSummaryByIdentity.misa-star-sp-pickup.collectionFrames": [
+          1276,
+          1284,
+          1292,
+          1301,
+          2716,
+          2724,
+          2732,
+          2741,
+          6076,
+          6084,
+          6092,
+          6101
+        ],
+        "resources.pickupSummaryByIdentity.misa-star-sp-pickup.poolKeys": [
+          "actor-107002|SummonTempData|summon-temp:107002214|480041"
+        ],
+        "resources.pickupSummaryByIdentity.misa-ultimate-hp-pickup.spawnFrames": [
+          3135,
+          3135,
+          3135
+        ],
+        "resources.pickupSummaryByIdentity.misa-ultimate-hp-pickup.collectionFrames": [
+          3137,
+          3137,
+          3137
+        ],
+        "resources.pickupSummaryByIdentity.misa-ultimate-hp-pickup.poolKeys": [
+          "actor-107002|SummonId|summon-id:480042|480042"
+        ],
+        "resources.pickupSummaryByIdentity.misa-ultimate-sp-pickup.spawnFrames": [
+          3135,
+          3135,
+          3135
+        ],
+        "resources.pickupSummaryByIdentity.misa-ultimate-sp-pickup.collectionFrames": [
+          3137,
+          3137,
+          3137
+        ],
+        "resources.pickupSummaryByIdentity.misa-ultimate-sp-pickup.poolKeys": [
+          "actor-107002|SummonId|summon-id:480041|480041"
+        ],
+        "resources.tuningMarkAcquireByActionId": {
+          "misa-star": {
+            "eventCount": 1,
+            "totalDelta": 1
+          },
+          "misa-star-at-cooldown-boundary": {
+            "eventCount": 1,
+            "totalDelta": 1
+          },
+          "misa-star-no-consume-candidate": {
+            "eventCount": 1,
+            "totalDelta": 1
+          },
+          "misa-ultimate": {
+            "eventCount": 2,
+            "totalDelta": 2
+          }
+        },
+        "resources.tuningMarkConsumeByActionId": {
+          "misa-star": {
+            "eventCount": 1,
+            "consumedStacks": 1,
+            "frames": [
+              1282
+            ]
+          },
+          "misa-star-at-cooldown-boundary": {
+            "eventCount": 1,
+            "consumedStacks": 1,
+            "frames": [
+              2722
+            ]
+          }
+        },
+        "resources.tuningMarkUnresolvedByActionId": {
+          "misa-star-no-consume-candidate": {
+            "eventCount": 1,
+            "kinds": [
+              "tuning-consume-no-sufficient-priority-candidate"
+            ],
+            "statuses": [
+              "verified-tuning-consume-not-executed"
+            ]
+          },
+          "switch-away-from-misa--on-enter--actor-101010--star-carry": {
+            "eventCount": 1,
+            "kinds": [
+              "tuning-consume-insufficient-marks"
+            ],
+            "statuses": [
+              "verified-tuning-consume-not-executed"
+            ]
+          }
+        },
+        "resources.targetStateTrace": [
+          {
+            "eventId": null,
+            "actionId": "misa-a4",
+            "frame": 324,
+            "stateIdentity": "misa-def-down",
+            "stateName": "米砂物理及法术防御降低",
+            "operation": "gain",
+            "beforeValue": 0,
+            "change": 1,
+            "afterValue": 1,
+            "maxValue": 1
+          },
+          {
+            "eventId": null,
+            "actionId": "misa-charged",
+            "frame": 676,
+            "stateIdentity": "misa-def-down",
+            "stateName": "米砂物理及法术防御降低",
+            "operation": "refresh",
+            "beforeValue": 1,
+            "change": 0,
+            "afterValue": 1,
+            "maxValue": 1
+          },
+          {
+            "eventId": null,
+            "actionId": null,
+            "frame": 2116,
+            "stateIdentity": "misa-def-down",
+            "stateName": "米砂物理及法术防御降低",
+            "operation": "expire",
+            "beforeValue": 1,
+            "change": -1,
+            "afterValue": 0,
+            "maxValue": 1
+          }
+        ],
+        "effects.selectedEffectSummaryByElementId.107002256": {
+          "effectId": "battle-element:107002256",
+          "effectNames": [
+            "米砂物理及法术防御降低"
+          ],
+          "targetKinds": [
+            "enemy"
+          ],
+          "targetIds": [
+            "enemy-300032"
+          ],
+          "appliedEventCount": 2,
+          "blockedEventCount": 0,
+          "transferredEventCount": 0,
+          "expiredEventCount": 1,
+          "firstAppliedFrame": 324,
+          "firstExpiredFrame": 2116,
+          "firstAppliedSourceSequencePath": [
+            0,
+            6,
+            2
+          ],
+          "sameFrameVisibilityModes": [
+            "strict-source-sequence"
+          ],
+          "maxStacks": 1,
+          "attributeIds": [
+            3,
+            4
+          ],
+          "modifierSignatures": [
+            "3:dynamicPercent:-1000",
+            "4:dynamicPercent:-1000"
+          ],
+          "formulaFamilies": [],
+          "formulaValues": []
+        },
+        "effects.selectedEffectSummaryByElementId.107002265": {
+          "effectId": "battle-element:107002265",
+          "effectNames": [
+            "加伤害"
+          ],
+          "targetKinds": [
+            "actor"
+          ],
+          "targetIds": [
+            "actor-107002"
+          ],
+          "appliedEventCount": 2,
+          "blockedEventCount": 0,
+          "transferredEventCount": 0,
+          "expiredEventCount": 1,
+          "firstAppliedFrame": 1282,
+          "firstExpiredFrame": 4522,
+          "firstAppliedSourceSequencePath": [
+            0,
+            31,
+            31,
+            107002265
+          ],
+          "sameFrameVisibilityModes": [
+            "strict-source-sequence"
+          ],
+          "maxStacks": 1,
+          "attributeIds": [
+            53,
+            55
+          ],
+          "modifierSignatures": [
+            "53:dynamicExtra:5",
+            "55:dynamicExtra:5"
+          ],
+          "formulaFamilies": [],
+          "formulaValues": []
+        },
+        "effects.selectedEffectSummaryByElementId.480041002": {
+          "effectId": "battle-element:480041002",
+          "effectNames": [
+            "调谐强度"
+          ],
+          "targetKinds": [
+            "actor"
+          ],
+          "targetIds": [
+            "actor-107002"
+          ],
+          "appliedEventCount": 12,
+          "blockedEventCount": 12,
+          "transferredEventCount": 0,
+          "expiredEventCount": 8,
+          "firstAppliedFrame": 42,
+          "firstExpiredFrame": 1482,
+          "firstAppliedSourceSequencePath": null,
+          "sameFrameVisibilityModes": [],
+          "maxStacks": 4,
+          "attributeIds": [
+            229
+          ],
+          "modifierSignatures": [
+            "229:dynamicPercent:600"
+          ],
+          "formulaFamilies": [],
+          "formulaValues": []
+        }
+      }
+    }
+  }
+}

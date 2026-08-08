@@ -9131,6 +9131,13 @@ test('[m11-d-character-acceptance-visual-import] imports each owner acceptance f
       actionId: 'miti-full-charge-state-on',
       expectedTraceText: 'control 10800342 / sub 0',
     },
+    {
+      ownerId: 107002,
+      fixturePath: 'fixtures/character-acceptance/107002-visual.json',
+      traceHash: 'b92c8b853b49a902',
+      actionId: 'misa-star',
+      expectedTraceText: 'control 10700226 / sub 0',
+    },
   ].filter(
     entry =>
       !process.env.CHARACTER_ACCEPTANCE_OWNER_ID ||

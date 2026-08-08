@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "53ca71ba9e6d84698574b79de736adef3236743c860531d29735a220292b48ce",
+  "sourcePackageHash": "25fa12ec08ed8a5b82bf357b00ac9f7cf39e5225045accb69ca52563709dc219",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "0f78676ac82217c1",
-    "traceHash": "4a024f55129ff408",
-    "dataHash": "533c639fc9523980",
+    "inputHash": "de73b6a323d81712",
+    "traceHash": "b0d69b918fb433c2",
+    "dataHash": "5dc8b0353bb4464d",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -473,6 +473,7 @@
           "totalToughnessDamage": 4131
         }
       },
+      "ownerDirectHealSummaryByActionId": {},
       "ownerHitTotalHpDamage": 64780,
       "ownerHitTotalToughnessDamage": 15438,
       "selectedHpDamageByActionId": {
@@ -1072,6 +1073,20 @@
           ]
         }
       },
+      "directSpSummaryByActionId": {},
+      "pickupSummary": {
+        "profileCount": 4,
+        "bindingCount": 12,
+        "spawnedEntityCount": 0,
+        "collectedEntityCount": 0,
+        "capacityRejectedCount": 0,
+        "directHpEventCount": 0,
+        "directSpEventCount": 0,
+        "tuningEffectCommandCount": 0,
+        "unresolvedCount": 0,
+        "applied": true
+      },
+      "pickupSummaryByIdentity": {},
       "specialResourceTrace": [
         {
           "stream": "resource",
@@ -1322,6 +1337,44 @@
           ]
         }
       },
+      "tuningMarkUnresolvedByActionId": {
+        "ruby-enhanced-shot-3": {
+          "eventCount": 1,
+          "kinds": [
+            "tuning-consume-insufficient-marks"
+          ],
+          "statuses": [
+            "verified-tuning-consume-not-executed"
+          ]
+        },
+        "ruby-enhanced-shot-6": {
+          "eventCount": 1,
+          "kinds": [
+            "tuning-consume-insufficient-marks"
+          ],
+          "statuses": [
+            "verified-tuning-consume-not-executed"
+          ]
+        },
+        "ruby-ultimate": {
+          "eventCount": 3,
+          "kinds": [
+            "tuning-consume-insufficient-marks"
+          ],
+          "statuses": [
+            "verified-tuning-consume-not-executed"
+          ]
+        },
+        "switch-to-xiaoyu--on-enter--actor-101010--star-carry": {
+          "eventCount": 1,
+          "kinds": [
+            "tuning-consume-insufficient-marks"
+          ],
+          "statuses": [
+            "verified-tuning-consume-not-executed"
+          ]
+        }
+      },
       "targetStateTrace": [],
       "conditionalHitGroups": [],
       "targetStateSummary": {
@@ -1348,11 +1401,15 @@
       "passiveTrace": [
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_APPLIED|3333.333|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "ruby-enhanced-shot-1",
           "frame": 200,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -1381,11 +1438,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|7166.667|2",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "ruby-enhanced-shot-2",
           "frame": 430,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -1414,11 +1475,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|11000|3",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "ruby-enhanced-shot-3",
           "frame": 660,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -1447,11 +1512,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|14833.333|4",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "ruby-enhanced-shot-4",
           "frame": 890,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -1480,11 +1549,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|18666.667|5",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "ruby-enhanced-shot-5",
           "frame": 1120,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -1513,11 +1586,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|22500|6",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "ruby-enhanced-shot-6",
           "frame": 1350,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -1546,11 +1623,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_EXPIRED|37500|6",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "ruby-enhanced-shot-6",
           "frame": 2250,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -1579,11 +1660,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_APPLIED|38566.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "ruby-ultimate",
           "frame": 2314,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -1612,11 +1697,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|45333.333|2",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "ruby-post-ultimate-shot",
           "frame": 2720,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -1645,11 +1734,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_EXPIRED|60333.333|2",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "ruby-post-ultimate-shot",
           "frame": 3620,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -1704,13 +1797,19 @@
             "actor-103002"
           ],
           "appliedEventCount": 2,
+          "blockedEventCount": 0,
           "transferredEventCount": 0,
           "expiredEventCount": 2,
           "firstAppliedFrame": 3300,
           "firstExpiredFrame": 4260,
+          "firstAppliedSourceSequencePath": null,
+          "sameFrameVisibilityModes": [],
           "maxStacks": 1,
           "attributeIds": [
             52
+          ],
+          "modifierSignatures": [
+            "52:dynamicExtra:216"
           ],
           "formulaFamilies": [
             "literal-a-with-common-ratio"
@@ -4916,6 +5015,8 @@
           "kiboSpRecovery": null
         }
       ],
+      "directHeals": [],
+      "pickups": [],
       "specialResources": [
         {
           "stream": "resource",
@@ -5152,11 +5253,15 @@
       "effects": [
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_APPLIED|3333.333|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "ruby-enhanced-shot-1",
           "frame": 200,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5185,11 +5290,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|7166.667|2",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "ruby-enhanced-shot-2",
           "frame": 430,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5218,11 +5327,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|11000|3",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "ruby-enhanced-shot-3",
           "frame": 660,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5251,11 +5364,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|14833.333|4",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "ruby-enhanced-shot-4",
           "frame": 890,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5284,11 +5401,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|18666.667|5",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "ruby-enhanced-shot-5",
           "frame": 1120,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5317,11 +5438,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|22500|6",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "ruby-enhanced-shot-6",
           "frame": 1350,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5350,11 +5475,15 @@
         },
         {
           "eventId": "actor/actor-103002/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|30833.333|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "ruby-star-skill",
           "frame": 1850,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5383,11 +5512,15 @@
         },
         {
           "eventId": "kibo/actor-103002/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|30833.333|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "ruby-star-skill",
           "frame": 1850,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-103002",
@@ -5416,11 +5549,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_EXPIRED|37500|6",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "ruby-enhanced-shot-6",
           "frame": 2250,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5449,11 +5586,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_APPLIED|38566.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "ruby-ultimate",
           "frame": 2314,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5482,11 +5623,15 @@
         },
         {
           "eventId": "actor/actor-103002/tuning-mark:150:persistent/verified-calculator|EFFECT_REMOVED|41400|1",
+          "eventType": "EFFECT_REMOVED",
+          "status": "effect-runtime-removed",
           "actionId": "ruby-ultimate",
           "frame": 2484,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5515,11 +5660,15 @@
         },
         {
           "eventId": "kibo/actor-103002/tuning-mark:150:persistent/verified-calculator|EFFECT_REMOVED|41400|1",
+          "eventType": "EFFECT_REMOVED",
+          "status": "effect-runtime-removed",
           "actionId": "ruby-ultimate",
           "frame": 2484,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-103002",
@@ -5548,11 +5697,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_REFRESHED|45333.333|2",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "ruby-post-ultimate-shot",
           "frame": 2720,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5581,11 +5734,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:5945053457653544063/verified-calculator|EFFECT_APPLIED|55000|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "fire-kibo-signature",
           "frame": 3300,
           "effectId": "battle-element:540016",
           "runtimeEffectId": "battle-element:5945053457653544063",
           "sourceElementId": 540016,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火元素增伤提升1",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5614,11 +5771,15 @@
         },
         {
           "eventId": "kibo/actor-103002/battle-element:5945053457653544063/verified-calculator|EFFECT_APPLIED|55000|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "fire-kibo-signature",
           "frame": 3300,
           "effectId": "battle-element:540016",
           "runtimeEffectId": "battle-element:5945053457653544063",
           "sourceElementId": 540016,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火元素增伤提升1",
           "targetKind": "kibo",
           "targetId": "actor-103002",
@@ -5647,11 +5808,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:103002275/verified-calculator|EFFECT_EXPIRED|60333.333|2",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "ruby-post-ultimate-shot",
           "frame": 3620,
           "effectId": "battle-element:103002275",
           "runtimeEffectId": "battle-element:103002275",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "以心燃焰",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5680,11 +5845,15 @@
         },
         {
           "eventId": "actor/actor-103002/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|65900|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 3954,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5721,11 +5890,15 @@
         },
         {
           "eventId": "kibo/actor-103002/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|65900|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 3954,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-103002",
@@ -5762,11 +5935,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:5945053457653544063/verified-calculator|EFFECT_EXPIRED|71000|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "fire-kibo-signature",
           "frame": 4260,
           "effectId": "battle-element:540016",
           "runtimeEffectId": "battle-element:5945053457653544063",
           "sourceElementId": 540016,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火元素增伤提升1",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5795,11 +5972,15 @@
         },
         {
           "eventId": "kibo/actor-103002/battle-element:5945053457653544063/verified-calculator|EFFECT_EXPIRED|71000|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "fire-kibo-signature",
           "frame": 4260,
           "effectId": "battle-element:540016",
           "runtimeEffectId": "battle-element:5945053457653544063",
           "sourceElementId": 540016,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火元素增伤提升1",
           "targetKind": "kibo",
           "targetId": "actor-103002",
@@ -5828,11 +6009,15 @@
         },
         {
           "eventId": "actor/actor-103002/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|85900|1",
+          "eventType": "EFFECT_REMOVED",
+          "status": "effect-runtime-removed",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 5154,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -5869,11 +6054,15 @@
         },
         {
           "eventId": "kibo/actor-103002/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|85900|1",
+          "eventType": "EFFECT_REMOVED",
+          "status": "effect-runtime-removed",
           "actionId": "switch-back-to-ruby--on-enter--actor-103002--star-carry",
           "frame": 5154,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-103002",
@@ -5946,7 +6135,7 @@
         }
       ]
     },
-    "summaryHash": "839d8a26897de44b7a7710a614237d7cfea96bd13d3b70c3ceb4f2f25764030c"
+    "summaryHash": "764d8739c1123151ed72fa5bb810826573b4583b2b19ece246a1f8d7eb88cf05"
   },
   "expected": {
     "exact": {
@@ -7036,6 +7225,6 @@
       }
     ]
   },
-  "replayHash": "2e6f5519b4112aef04891d0f66773a6f9479d38260217bf8c2b2a325f5e66134",
-  "profileHash": "6b59ae574db380243bf01b3f11f9b9871e580f82aec1a8a92240f5892c0e304e"
+  "replayHash": "b3b685cb380ee79e84a7daff51ea5867b259708adf418480e45df6b8536aca2c",
+  "profileHash": "0ade13484079d51c65ac169a08b15a0bc5125d9be33e46cfd411284530d0b39a"
 }

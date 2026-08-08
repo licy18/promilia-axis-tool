@@ -1,0 +1,1040 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-description-coverage",
+  "ownerId": 107002,
+  "policy": {
+    "descriptionIsDiscoveryAndCrossCheckOnly": true,
+    "descriptionNeverCreatesAppliedValues": true
+  },
+  "entries": [
+    {
+      "coverageIdentity": "actor:107002:skill:10700201:description:0:0",
+      "skillId": 10700201,
+      "skillName": "轻语",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "【普攻】进行至多四段的多段攻击，对敌方造成最多{0}攻击力的木属性魔法伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|107002|10700201|0|10700203|normal-attack",
+        "actor|107002|10700201|0|10700203|normal-attack:default",
+        "hit:10700203|0|elements|2|-1404469563182445209|100|11",
+        "hit:10700203|0|elements|2|-1404469563182445209|40|1",
+        "hit:10700203|0|elements|2|-1404469563182445209|46|2",
+        "hit:10700203|0|elements|2|-1404469563182445209|52|3",
+        "hit:10700203|0|elements|2|-1404469563182445209|58|4",
+        "hit:10700203|0|elements|2|-1404469563182445209|64|5",
+        "hit:10700203|0|elements|2|-1404469563182445209|70|6",
+        "hit:10700203|0|elements|2|-1404469563182445209|76|7",
+        "hit:10700203|0|elements|2|-1404469563182445209|82|8",
+        "hit:10700203|0|elements|2|-1404469563182445209|88|9",
+        "hit:10700203|0|elements|2|-1404469563182445209|94|10",
+        "semantic-effect:10700204|0|-3902053340404252506|-1291223460462752175:84",
+        "semantic-effect:10700204|0|1466117413664505892|-1291223460462752175:84",
+        "semantic-effect:10700204|0|7790264186762117375|-1291223460462752175:84"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|107002|10700201|0|10700203|normal-attack",
+          "publicFormId": "actor|107002|10700201|0|10700203|normal-attack:default",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10700201,
+          "executionControlSkillId": 10700203,
+          "executionSubSkillIndex": 0,
+          "hitCount": 11,
+          "settlementEvidence": [
+            "hit:10700203|0|elements|2|-1404469563182445209|100|11",
+            "hit:10700203|0|elements|2|-1404469563182445209|40|1",
+            "hit:10700203|0|elements|2|-1404469563182445209|46|2",
+            "hit:10700203|0|elements|2|-1404469563182445209|52|3",
+            "hit:10700203|0|elements|2|-1404469563182445209|58|4",
+            "hit:10700203|0|elements|2|-1404469563182445209|64|5",
+            "hit:10700203|0|elements|2|-1404469563182445209|70|6",
+            "hit:10700203|0|elements|2|-1404469563182445209|76|7",
+            "hit:10700203|0|elements|2|-1404469563182445209|82|8",
+            "hit:10700203|0|elements|2|-1404469563182445209|88|9",
+            "hit:10700203|0|elements|2|-1404469563182445209|94|10"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 11
+            },
+            "toughness": {
+              "applied": 11
+            },
+            "actorSp": {
+              "applied": 11
+            },
+            "kiboSp": {
+              "applied": 11
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=107002].skillSlots[group=backup,skillId=10700203]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700201:description:0:1",
+      "skillId": 10700201,
+      "skillName": "轻语",
+      "paragraphIndex": 0,
+      "clauseIndex": 1,
+      "text": "第一段普攻结束后米砂会浮空，浮空时，米砂可自由位移。",
+      "mechanicKinds": [
+        "action-form"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|107002|10700201|0|10700203|normal-attack:default",
+        "semantic-effect:10700204|0|-3902053340404252506|-1291223460462752175:84",
+        "semantic-effect:10700204|0|1466117413664505892|-1291223460462752175:84",
+        "semantic-effect:10700204|0|7790264186762117375|-1291223460462752175:84"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700201:description:0:2",
+      "skillId": 10700201,
+      "skillName": "轻语",
+      "paragraphIndex": 0,
+      "clauseIndex": 2,
+      "text": "第三段普攻命中敌方后会在其所在位置生成可被主控角色拾取的「蝶生之种」，「蝶生之种」被拾取后会回复全队米砂最大生命值的3%的生命值，持续15秒（「蝶生之种」在场上最多同时存在6个）。",
+      "mechanicKinds": [
+        "action-form"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|107002|10700201|0|10700203|normal-attack:default",
+        "semantic-effect:10700204|0|-3902053340404252506|-1291223460462752175:84",
+        "semantic-effect:10700204|0|1466117413664505892|-1291223460462752175:84",
+        "semantic-effect:10700204|0|7790264186762117375|-1291223460462752175:84"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700201:description:0:3",
+      "skillId": 10700201,
+      "skillName": "轻语",
+      "paragraphIndex": 0,
+      "clauseIndex": 3,
+      "text": "第四段普攻若命中敌方，则降低其防御10%，持续24秒。",
+      "mechanicKinds": [
+        "action-form"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|107002|10700201|0|10700203|normal-attack:default",
+        "semantic-effect:10700204|0|-3902053340404252506|-1291223460462752175:84",
+        "semantic-effect:10700204|0|1466117413664505892|-1291223460462752175:84",
+        "semantic-effect:10700204|0|7790264186762117375|-1291223460462752175:84"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700201:description:1:0",
+      "skillId": 10700201,
+      "skillName": "轻语",
+      "paragraphIndex": 1,
+      "clauseIndex": 0,
+      "text": "【重击】对敌方造成{1}攻击力的木属性魔法伤害，使周围的敌方和生成物朝米砂面前聚拢。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|107002|10700201|1|10700210|charged-attack",
+        "actor|107002|10700201|1|10700210|charged-attack:default",
+        "hit:10700210|0|elements|2|-1211965369219084289|48|1",
+        "hit:10700210|0|elements|2|-1211965369219084289|51|2",
+        "hit:10700210|0|elements|2|-1211965369219084289|63|3",
+        "hit:10700210|0|elements|2|-1211965369219084289|69|4",
+        "hit:10700210|0|elements|2|-1211965369219084289|76|5",
+        "hit:10700210|0|elements|2|-1211965369219084289|83|6",
+        "hit:10700210|0|elements|2|-1211965369219084289|90|7",
+        "semantic-effect:10700210|0|-3902053340404252506|6704838959614714036:76",
+        "semantic-effect:10700210|0|1466117413664505892|6704838959614714036:76",
+        "semantic-effect:10700210|0|7790264186762117375|6704838959614714036:76"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|107002|10700201|1|10700210|charged-attack",
+          "publicFormId": "actor|107002|10700201|1|10700210|charged-attack:default",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 10700201,
+          "executionControlSkillId": 10700210,
+          "executionSubSkillIndex": 0,
+          "hitCount": 7,
+          "settlementEvidence": [
+            "hit:10700210|0|elements|2|-1211965369219084289|48|1",
+            "hit:10700210|0|elements|2|-1211965369219084289|51|2",
+            "hit:10700210|0|elements|2|-1211965369219084289|63|3",
+            "hit:10700210|0|elements|2|-1211965369219084289|69|4",
+            "hit:10700210|0|elements|2|-1211965369219084289|76|5",
+            "hit:10700210|0|elements|2|-1211965369219084289|83|6",
+            "hit:10700210|0|elements|2|-1211965369219084289|90|7"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 7
+            },
+            "toughness": {
+              "applied": 7
+            },
+            "actorSp": {
+              "applied": 7
+            },
+            "kiboSp": {
+              "applied": 7
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=2]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700201:description:1:1",
+      "skillId": 10700201,
+      "skillName": "轻语",
+      "paragraphIndex": 1,
+      "clauseIndex": 1,
+      "text": "同时降低被命中的敌方防御10%，持续24秒。",
+      "mechanicKinds": [],
+      "status": "applied",
+      "coverageReferences": [
+        "semantic-effect:10700204|0|-3902053340404252506|-1291223460462752175:84",
+        "semantic-effect:10700204|0|1466117413664505892|-1291223460462752175:84",
+        "semantic-effect:10700204|0|7790264186762117375|-1291223460462752175:84",
+        "semantic-effect:10700210|0|-3902053340404252506|6704838959614714036:76",
+        "semantic-effect:10700210|0|1466117413664505892|6704838959614714036:76",
+        "semantic-effect:10700210|0|7790264186762117375|6704838959614714036:76",
+        "semantic-effect:10700211|0|-6599061693303632671|-2523497597519658216:37"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700201:description:2:0",
+      "skillId": 10700201,
+      "skillName": "轻语",
+      "paragraphIndex": 2,
+      "clauseIndex": 0,
+      "text": "【闪击】对敌方造成{2}攻击力的木属性魔法伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "static-evidence-gap",
+      "coverageReferences": [
+        "actor|107002|10700201|2|10700215|dodge-attack",
+        "actor|107002|10700201|2|10700215|dodge-attack:default"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|107002|10700201|2|10700215|dodge-attack",
+          "publicFormId": "actor|107002|10700201|2|10700215|dodge-attack:default",
+          "actionKind": "dodge-attack",
+          "sourceSkillId": 10700201,
+          "executionControlSkillId": 10700215,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=204]"
+        }
+      ],
+      "reasons": [
+        "public-action-damage-settlement-evidence-missing"
+      ],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700201:description:3:0",
+      "skillId": 10700201,
+      "skillName": "轻语",
+      "paragraphIndex": 3,
+      "clauseIndex": 0,
+      "text": "【跃击】对敌方造成{3}攻击力的木属性魔法伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|107002|10700201|3|10700211|plunging-attack",
+        "actor|107002|10700201|3|10700211|plunging-attack:default",
+        "hit:10700211|0|elements|0|-5519795801939917140|37|1",
+        "semantic-effect:10700211|0|-6599061693303632671|-2523497597519658216:37"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|107002|10700201|3|10700211|plunging-attack",
+          "publicFormId": "actor|107002|10700201|3|10700211|plunging-attack:default",
+          "actionKind": "plunging-attack",
+          "sourceSkillId": 10700201,
+          "executionControlSkillId": 10700211,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:10700211|0|elements|0|-5519795801939917140|37|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=107002].skillSlots[group=aerial,slot=301]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700212:description:0:0",
+      "skillId": 10700212,
+      "skillName": "浮茵",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "【星鸣技】叶刃激发，对敌方造成{0}攻击力的木属性魔法伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor:107002:star-skill:misa-star-main-combo",
+        "actor|107002|10700212|0|10700212|star-skill",
+        "hit:10700226|0|elements|1|-3883846112050479707|107|5",
+        "hit:10700226|0|elements|1|-3883846112050479707|114|6",
+        "hit:10700226|0|elements|1|-3883846112050479707|74|1",
+        "hit:10700226|0|elements|1|-3883846112050479707|82|2",
+        "hit:10700226|0|elements|1|-3883846112050479707|90|3",
+        "hit:10700226|0|elements|1|-3883846112050479707|99|4",
+        "semantic-effect:10700212|0|-1085330686087474031|3929844140260263526:82",
+        "semantic-effect:10700212|0|-1722401594839030113|3929844140260263526:82",
+        "semantic-effect:10700212|0|-2174275479014567856|3929844140260263526:82",
+        "semantic-effect:10700212|0|-4529113272733101309|304217500998239846:90",
+        "semantic-effect:10700212|0|-6104701335743815286|3929844140260263526:82",
+        "semantic-effect:10700212|0|-7412029037550756065|3929844140260263526:82",
+        "semantic-effect:10700212|0|-8148787786042882084|304217500998239846:90",
+        "semantic-effect:10700212|0|1474042154774785480|304217500998239846:90",
+        "semantic-effect:10700212|0|1913468686735845945|3929844140260263526:82",
+        "semantic-effect:10700212|0|2120617582505955581|3929844140260263526:82",
+        "semantic-effect:10700212|0|3375530858005333853|3929844140260263526:82",
+        "semantic-effect:10700212|0|4310270459467820517|3929844140260263526:82",
+        "semantic-effect:10700212|0|4731523060341306954|3929844140260263526:82",
+        "semantic-effect:10700212|0|623176689467243005|3929844140260263526:82",
+        "semantic-effect:10700212|0|6500867373616520947|3929844140260263526:82",
+        "semantic-effect:10700212|0|7183943640740465629|3929844140260263526:82"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|107002|10700212|0|10700212|star-skill",
+          "publicFormId": "actor:107002:star-skill:misa-star-main-combo",
+          "actionKind": "star-skill",
+          "sourceSkillId": 10700212,
+          "executionControlSkillId": 10700226,
+          "executionSubSkillIndex": 0,
+          "hitCount": 6,
+          "settlementEvidence": [
+            "hit:10700226|0|elements|1|-3883846112050479707|107|5",
+            "hit:10700226|0|elements|1|-3883846112050479707|114|6",
+            "hit:10700226|0|elements|1|-3883846112050479707|74|1",
+            "hit:10700226|0|elements|1|-3883846112050479707|82|2",
+            "hit:10700226|0|elements|1|-3883846112050479707|90|3",
+            "hit:10700226|0|elements|1|-3883846112050479707|99|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 6
+            },
+            "toughness": {
+              "applied": 6
+            },
+            "actorSp": {
+              "applied": 6
+            },
+            "kiboSp": {
+              "applied": 6
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10700226.asset#sub0-selected-main-combo|animation-occupancy=218F"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700212:description:0:1",
+      "skillId": 10700212,
+      "skillName": "浮茵",
+      "paragraphIndex": 0,
+      "clauseIndex": 1,
+      "text": "命中敌方后会在其所在位置生成可被主控角色拾取的「灵木之种」，「灵木之种」被拾取后会为全队恢复1点星决蓄能，持续15秒（「灵木之种」在场上最多同时存在6个）。",
+      "mechanicKinds": [],
+      "status": "applied",
+      "coverageReferences": [
+        "semantic-effect:10700212|0|-1085330686087474031|3929844140260263526:82",
+        "semantic-effect:10700212|0|-1722401594839030113|3929844140260263526:82",
+        "semantic-effect:10700212|0|-2174275479014567856|3929844140260263526:82",
+        "semantic-effect:10700212|0|-4529113272733101309|304217500998239846:90",
+        "semantic-effect:10700212|0|-6104701335743815286|3929844140260263526:82",
+        "semantic-effect:10700212|0|-7412029037550756065|3929844140260263526:82",
+        "semantic-effect:10700212|0|-8148787786042882084|304217500998239846:90",
+        "semantic-effect:10700212|0|1474042154774785480|304217500998239846:90",
+        "semantic-effect:10700212|0|1913468686735845945|3929844140260263526:82",
+        "semantic-effect:10700212|0|2120617582505955581|3929844140260263526:82",
+        "semantic-effect:10700212|0|3375530858005333853|3929844140260263526:82",
+        "semantic-effect:10700212|0|4310270459467820517|3929844140260263526:82",
+        "semantic-effect:10700212|0|4731523060341306954|3929844140260263526:82",
+        "semantic-effect:10700212|0|623176689467243005|3929844140260263526:82",
+        "semantic-effect:10700212|0|6500867373616520947|3929844140260263526:82",
+        "semantic-effect:10700212|0|7183943640740465629|3929844140260263526:82"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700212:description:0:2",
+      "skillId": 10700212,
+      "skillName": "浮茵",
+      "paragraphIndex": 0,
+      "clauseIndex": 2,
+      "text": "消耗1枚 木/风调谐印记，触发超限伤害，同时给全队增加5%的木/风元素伤害，持续30秒。",
+      "mechanicKinds": [
+        "action-settlement",
+        "team-tuning-mark"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor:107002:star-skill:misa-star-main-combo",
+        "actor|107002|10700212|0|10700212|star-skill",
+        "actor|107002|10700212|1|10700226|star-combo",
+        "actor|107002|10700212|1|10700226|star-combo:default",
+        "hit:10700226|0|elements|1|-3883846112050479707|107|5",
+        "hit:10700226|0|elements|1|-3883846112050479707|114|6",
+        "hit:10700226|0|elements|1|-3883846112050479707|74|1",
+        "hit:10700226|0|elements|1|-3883846112050479707|82|2",
+        "hit:10700226|0|elements|1|-3883846112050479707|90|3",
+        "hit:10700226|0|elements|1|-3883846112050479707|99|4",
+        "semantic-effect:10700212|0|-1085330686087474031|3929844140260263526:82",
+        "semantic-effect:10700212|0|-1722401594839030113|3929844140260263526:82",
+        "semantic-effect:10700212|0|-2174275479014567856|3929844140260263526:82",
+        "semantic-effect:10700212|0|-4529113272733101309|304217500998239846:90",
+        "semantic-effect:10700212|0|-6104701335743815286|3929844140260263526:82",
+        "semantic-effect:10700212|0|-7412029037550756065|3929844140260263526:82",
+        "semantic-effect:10700212|0|-8148787786042882084|304217500998239846:90",
+        "semantic-effect:10700212|0|1474042154774785480|304217500998239846:90",
+        "semantic-effect:10700212|0|1913468686735845945|3929844140260263526:82",
+        "semantic-effect:10700212|0|2120617582505955581|3929844140260263526:82",
+        "semantic-effect:10700212|0|3375530858005333853|3929844140260263526:82",
+        "semantic-effect:10700212|0|4310270459467820517|3929844140260263526:82",
+        "semantic-effect:10700212|0|4731523060341306954|3929844140260263526:82",
+        "semantic-effect:10700212|0|623176689467243005|3929844140260263526:82",
+        "semantic-effect:10700212|0|6500867373616520947|3929844140260263526:82",
+        "semantic-effect:10700212|0|7183943640740465629|3929844140260263526:82",
+        "verified-tuning-mechanics-catalog"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|107002|10700212|0|10700212|star-skill",
+          "publicFormId": "actor:107002:star-skill:misa-star-main-combo",
+          "actionKind": "star-skill",
+          "sourceSkillId": 10700212,
+          "executionControlSkillId": 10700226,
+          "executionSubSkillIndex": 0,
+          "hitCount": 6,
+          "settlementEvidence": [
+            "hit:10700226|0|elements|1|-3883846112050479707|107|5",
+            "hit:10700226|0|elements|1|-3883846112050479707|114|6",
+            "hit:10700226|0|elements|1|-3883846112050479707|74|1",
+            "hit:10700226|0|elements|1|-3883846112050479707|82|2",
+            "hit:10700226|0|elements|1|-3883846112050479707|90|3",
+            "hit:10700226|0|elements|1|-3883846112050479707|99|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 6
+            },
+            "toughness": {
+              "applied": 6
+            },
+            "actorSp": {
+              "applied": 6
+            },
+            "kiboSp": {
+              "applied": 6
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10700226.asset#sub0-selected-main-combo|animation-occupancy=218F"
+        },
+        {
+          "actionIdentity": "actor|107002|10700212|1|10700226|star-combo",
+          "publicFormId": "actor|107002|10700212|1|10700226|star-combo:default",
+          "actionKind": "star-combo",
+          "sourceSkillId": 10700212,
+          "executionControlSkillId": 10700226,
+          "executionSubSkillIndex": 0,
+          "hitCount": 6,
+          "settlementEvidence": [
+            "hit:10700226|0|elements|1|-3883846112050479707|107|5",
+            "hit:10700226|0|elements|1|-3883846112050479707|114|6",
+            "hit:10700226|0|elements|1|-3883846112050479707|74|1",
+            "hit:10700226|0|elements|1|-3883846112050479707|82|2",
+            "hit:10700226|0|elements|1|-3883846112050479707|90|3",
+            "hit:10700226|0|elements|1|-3883846112050479707|99|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 6
+            },
+            "toughness": {
+              "applied": 6
+            },
+            "actorSp": {
+              "applied": 6
+            },
+            "kiboSp": {
+              "applied": 6
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=208]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700212:description:0:3",
+      "skillId": 10700212,
+      "skillName": "浮茵",
+      "paragraphIndex": 0,
+      "clauseIndex": 3,
+      "text": "释放星鸣技命中目标后至多获得1枚风属性调谐印记。",
+      "mechanicKinds": [
+        "action-form",
+        "team-tuning-mark"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "semantic-effect:10700212|0|-1085330686087474031|3929844140260263526:82",
+        "semantic-effect:10700212|0|-1722401594839030113|3929844140260263526:82",
+        "semantic-effect:10700212|0|-2174275479014567856|3929844140260263526:82",
+        "semantic-effect:10700212|0|-4529113272733101309|304217500998239846:90",
+        "semantic-effect:10700212|0|-6104701335743815286|3929844140260263526:82",
+        "semantic-effect:10700212|0|-7412029037550756065|3929844140260263526:82",
+        "semantic-effect:10700212|0|-8148787786042882084|304217500998239846:90",
+        "semantic-effect:10700212|0|1474042154774785480|304217500998239846:90",
+        "semantic-effect:10700212|0|1913468686735845945|3929844140260263526:82",
+        "semantic-effect:10700212|0|2120617582505955581|3929844140260263526:82",
+        "semantic-effect:10700212|0|3375530858005333853|3929844140260263526:82",
+        "semantic-effect:10700212|0|4310270459467820517|3929844140260263526:82",
+        "semantic-effect:10700212|0|4731523060341306954|3929844140260263526:82",
+        "semantic-effect:10700212|0|623176689467243005|3929844140260263526:82",
+        "semantic-effect:10700212|0|6500867373616520947|3929844140260263526:82",
+        "semantic-effect:10700212|0|7183943640740465629|3929844140260263526:82",
+        "verified-tuning-mechanics-catalog"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700212:description:1:0",
+      "skillId": 10700212,
+      "skillName": "浮茵",
+      "paragraphIndex": 1,
+      "clauseIndex": 0,
+      "text": "【星结合击】对敌方造成{1}攻击力的木属性魔法伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|107002|10700212|1|10700226|star-combo",
+        "actor|107002|10700212|1|10700226|star-combo:default",
+        "hit:10700226|0|elements|1|-3883846112050479707|107|5",
+        "hit:10700226|0|elements|1|-3883846112050479707|114|6",
+        "hit:10700226|0|elements|1|-3883846112050479707|74|1",
+        "hit:10700226|0|elements|1|-3883846112050479707|82|2",
+        "hit:10700226|0|elements|1|-3883846112050479707|90|3",
+        "hit:10700226|0|elements|1|-3883846112050479707|99|4"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|107002|10700212|1|10700226|star-combo",
+          "publicFormId": "actor|107002|10700212|1|10700226|star-combo:default",
+          "actionKind": "star-combo",
+          "sourceSkillId": 10700212,
+          "executionControlSkillId": 10700226,
+          "executionSubSkillIndex": 0,
+          "hitCount": 6,
+          "settlementEvidence": [
+            "hit:10700226|0|elements|1|-3883846112050479707|107|5",
+            "hit:10700226|0|elements|1|-3883846112050479707|114|6",
+            "hit:10700226|0|elements|1|-3883846112050479707|74|1",
+            "hit:10700226|0|elements|1|-3883846112050479707|82|2",
+            "hit:10700226|0|elements|1|-3883846112050479707|90|3",
+            "hit:10700226|0|elements|1|-3883846112050479707|99|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 6
+            },
+            "toughness": {
+              "applied": 6
+            },
+            "actorSp": {
+              "applied": 6
+            },
+            "kiboSp": {
+              "applied": 6
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=208]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700213:description:0:0",
+      "skillId": 10700213,
+      "skillName": "森之祈愿",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "为全队回复生命值，至多进行五段，每段回复米砂最大生命值的{0}。",
+      "mechanicKinds": [],
+      "status": "applied",
+      "coverageReferences": [
+        "semantic-effect:10700213|0|-3930384060379573910|-4423318694946358813:193",
+        "semantic-effect:10700213|0|-3930384060379573910|-6761994800908617245:143",
+        "semantic-effect:10700213|0|-3930384060379573910|2012046129064557027:181",
+        "semantic-effect:10700213|0|-3930384060379573910|2335886512998758883:167",
+        "semantic-effect:10700213|0|-3930384060379573910|2690596788617984483:155",
+        "semantic-effect:10700213|0|-408193470852536619|-7379670190087882269:150",
+        "semantic-effect:10700213|0|-408193470852536619|-7448755903733450269:144",
+        "semantic-effect:10700213|0|-669846950425800112|-7379670190087882269:150",
+        "semantic-effect:10700213|0|-669846950425800112|-7448755903733450269:144",
+        "semantic-effect:10700213|0|-8162268947497707053|-7379670190087882269:150",
+        "semantic-effect:10700213|0|-8162268947497707053|-7448755903733450269:144",
+        "semantic-effect:10700213|0|5111418560280323002|-7379670190087882269:150",
+        "semantic-effect:10700213|0|5111418560280323002|-7448755903733450269:144"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700213:description:0:1",
+      "skillId": 10700213,
+      "skillName": "森之祈愿",
+      "paragraphIndex": 0,
+      "clauseIndex": 1,
+      "text": "星决技释放后会在场上生成3个「蝶生之种」和3个「灵木之种」（不计入上限）。",
+      "mechanicKinds": [
+        "action-form"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|107002|10700213|0|10700213|ultimate:default",
+        "semantic-effect:10700213|0|-3930384060379573910|-4423318694946358813:193",
+        "semantic-effect:10700213|0|-3930384060379573910|-6761994800908617245:143",
+        "semantic-effect:10700213|0|-3930384060379573910|2012046129064557027:181",
+        "semantic-effect:10700213|0|-3930384060379573910|2335886512998758883:167",
+        "semantic-effect:10700213|0|-3930384060379573910|2690596788617984483:155",
+        "semantic-effect:10700213|0|-408193470852536619|-7379670190087882269:150",
+        "semantic-effect:10700213|0|-408193470852536619|-7448755903733450269:144",
+        "semantic-effect:10700213|0|-669846950425800112|-7379670190087882269:150",
+        "semantic-effect:10700213|0|-669846950425800112|-7448755903733450269:144",
+        "semantic-effect:10700213|0|-8162268947497707053|-7379670190087882269:150",
+        "semantic-effect:10700213|0|-8162268947497707053|-7448755903733450269:144",
+        "semantic-effect:10700213|0|5111418560280323002|-7379670190087882269:150",
+        "semantic-effect:10700213|0|5111418560280323002|-7448755903733450269:144"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700213:description:0:2",
+      "skillId": 10700213,
+      "skillName": "森之祈愿",
+      "paragraphIndex": 0,
+      "clauseIndex": 2,
+      "text": "释放星决技后至多获得2枚木属性调谐印记",
+      "mechanicKinds": [
+        "action-form",
+        "team-tuning-mark"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|107002|10700213|0|10700213|ultimate:default",
+        "semantic-effect:10700213|0|-3930384060379573910|-4423318694946358813:193",
+        "semantic-effect:10700213|0|-3930384060379573910|-6761994800908617245:143",
+        "semantic-effect:10700213|0|-3930384060379573910|2012046129064557027:181",
+        "semantic-effect:10700213|0|-3930384060379573910|2335886512998758883:167",
+        "semantic-effect:10700213|0|-3930384060379573910|2690596788617984483:155",
+        "semantic-effect:10700213|0|-408193470852536619|-7379670190087882269:150",
+        "semantic-effect:10700213|0|-408193470852536619|-7448755903733450269:144",
+        "semantic-effect:10700213|0|-669846950425800112|-7379670190087882269:150",
+        "semantic-effect:10700213|0|-669846950425800112|-7448755903733450269:144",
+        "semantic-effect:10700213|0|-8162268947497707053|-7379670190087882269:150",
+        "semantic-effect:10700213|0|-8162268947497707053|-7448755903733450269:144",
+        "semantic-effect:10700213|0|5111418560280323002|-7379670190087882269:150",
+        "semantic-effect:10700213|0|5111418560280323002|-7448755903733450269:144",
+        "verified-tuning-mechanics-catalog"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700222:description:0:0",
+      "skillId": 10700222,
+      "skillName": "林隙留影",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "【星携技】离场时触发",
+      "mechanicKinds": [
+        "action-form"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|107002|10700222|0|10700222|star-carry:default",
+        "semantic-effect:10700222|0|3069733526995086666|-2272681421718471085:61",
+        "semantic-effect:10700222|0|3069733526995086666|-2543388952570675629:79",
+        "semantic-effect:10700222|0|3069733526995086666|-5779514452982153645:46",
+        "semantic-effect:10700222|0|3069733526995086666|4569103198936120915:98"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700222:description:0:1",
+      "skillId": 10700222,
+      "skillName": "林隙留影",
+      "paragraphIndex": 0,
+      "clauseIndex": 1,
+      "text": "为全队回复生命值，至多进行四段，每段回复米砂最大生命值的{0}。",
+      "mechanicKinds": [],
+      "status": "applied",
+      "coverageReferences": [
+        "semantic-effect:10700222|0|3069733526995086666|-2272681421718471085:61",
+        "semantic-effect:10700222|0|3069733526995086666|-2543388952570675629:79",
+        "semantic-effect:10700222|0|3069733526995086666|-5779514452982153645:46",
+        "semantic-effect:10700222|0|3069733526995086666|4569103198936120915:98",
+        "semantic-effect:10700227|0|-2035055823451510697|8145957106161315640:0",
+        "semantic-effect:10700227|0|-4766827060653007299|8145957106161315640:0"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700222:description:1:0",
+      "skillId": 10700222,
+      "skillName": "林隙留影",
+      "paragraphIndex": 1,
+      "clauseIndex": 0,
+      "text": "【极限反击】对敌方造成{1}攻击力的木属性魔法伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|107002|10700222|1|10700225|limit-counter",
+        "actor|107002|10700222|1|10700225|limit-counter:default",
+        "hit:10700225|0|elements|0|5593300562289576764|15|1",
+        "hit:10700225|0|elements|0|5593300562289576764|22|2",
+        "hit:10700225|0|elements|0|5593300562289576764|29|3",
+        "hit:10700225|0|elements|0|5593300562289576764|36|4"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|107002|10700222|1|10700225|limit-counter",
+          "publicFormId": "actor|107002|10700222|1|10700225|limit-counter:default",
+          "actionKind": "limit-counter",
+          "sourceSkillId": 10700222,
+          "executionControlSkillId": 10700225,
+          "executionSubSkillIndex": 0,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:10700225|0|elements|0|5593300562289576764|15|1",
+            "hit:10700225|0|elements|0|5593300562289576764|22|2",
+            "hit:10700225|0|elements|0|5593300562289576764|29|3",
+            "hit:10700225|0|elements|0|5593300562289576764|36|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=207]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700222:description:2:0",
+      "skillId": 10700222,
+      "skillName": "林隙留影",
+      "paragraphIndex": 2,
+      "clauseIndex": 0,
+      "text": "【集中闪避】对敌方造成{2}攻击力的木属性魔法伤害。",
+      "mechanicKinds": [
+        "action-settlement"
+      ],
+      "status": "static-evidence-gap",
+      "coverageReferences": [
+        "actor|107002|10700222|0|10700222|star-carry",
+        "actor|107002|10700222|0|10700222|star-carry:default",
+        "actor|107002|10700222|1|10700225|limit-counter",
+        "actor|107002|10700222|1|10700225|limit-counter:default",
+        "actor|107002|10700222|2|10700227|perfect-parry",
+        "actor|107002|10700222|2|10700227|perfect-parry:default",
+        "hit:10700225|0|elements|0|5593300562289576764|15|1",
+        "hit:10700225|0|elements|0|5593300562289576764|22|2",
+        "hit:10700225|0|elements|0|5593300562289576764|29|3",
+        "hit:10700225|0|elements|0|5593300562289576764|36|4",
+        "semantic-effect:10700222|0|3069733526995086666|-2272681421718471085:61",
+        "semantic-effect:10700222|0|3069733526995086666|-2543388952570675629:79",
+        "semantic-effect:10700222|0|3069733526995086666|-5779514452982153645:46",
+        "semantic-effect:10700222|0|3069733526995086666|4569103198936120915:98",
+        "semantic-effect:10700227|0|-2035055823451510697|8145957106161315640:0",
+        "semantic-effect:10700227|0|-4766827060653007299|8145957106161315640:0"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|107002|10700222|0|10700222|star-carry",
+          "publicFormId": "actor|107002|10700222|0|10700222|star-carry:default",
+          "actionKind": "star-carry",
+          "sourceSkillId": 10700222,
+          "executionControlSkillId": 10700222,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "characters.items[id=107002].skillSlots[skillId=10700222]"
+        },
+        {
+          "actionIdentity": "actor|107002|10700222|1|10700225|limit-counter",
+          "publicFormId": "actor|107002|10700222|1|10700225|limit-counter:default",
+          "actionKind": "limit-counter",
+          "sourceSkillId": 10700222,
+          "executionControlSkillId": 10700225,
+          "executionSubSkillIndex": 0,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:10700225|0|elements|0|5593300562289576764|15|1",
+            "hit:10700225|0|elements|0|5593300562289576764|22|2",
+            "hit:10700225|0|elements|0|5593300562289576764|29|3",
+            "hit:10700225|0|elements|0|5593300562289576764|36|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=207]"
+        },
+        {
+          "actionIdentity": "actor|107002|10700222|2|10700227|perfect-parry",
+          "publicFormId": "actor|107002|10700222|2|10700227|perfect-parry:default",
+          "actionKind": "perfect-parry",
+          "sourceSkillId": 10700222,
+          "executionControlSkillId": 10700227,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=209]"
+        }
+      ],
+      "reasons": [
+        "public-action-damage-settlement-evidence-missing"
+      ],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700222:description:2:1",
+      "skillId": 10700222,
+      "skillName": "林隙留影",
+      "paragraphIndex": 2,
+      "clauseIndex": 1,
+      "text": "降低被命中的敌方防御10%，持续24秒。",
+      "mechanicKinds": [],
+      "status": "applied",
+      "coverageReferences": [
+        "semantic-effect:10700222|0|3069733526995086666|-2272681421718471085:61",
+        "semantic-effect:10700222|0|3069733526995086666|-2543388952570675629:79",
+        "semantic-effect:10700222|0|3069733526995086666|-5779514452982153645:46",
+        "semantic-effect:10700222|0|3069733526995086666|4569103198936120915:98",
+        "semantic-effect:10700227|0|-2035055823451510697|8145957106161315640:0",
+        "semantic-effect:10700227|0|-4766827060653007299|8145957106161315640:0"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700261:description:0:0",
+      "skillId": 10700261,
+      "skillName": "育树之风",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "「蝶生之种」和「灵木之种」被拾取后会增加全队{0}的调谐强度，可叠加4层，持续24秒。",
+      "mechanicKinds": [],
+      "status": "static-evidence-gap",
+      "coverageReferences": [],
+      "publicFormSettlements": [],
+      "reasons": [
+        "description-executable-effect-not-linked-to-static-profile"
+      ],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:107002:skill:10700262:description:0:0",
+      "skillId": 10700262,
+      "skillName": null,
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "被动星鸣技占位，后续会更新星鸣技描述{0}",
+      "mechanicKinds": [
+        "action-form"
+      ],
+      "status": "not-applicable",
+      "coverageReferences": [],
+      "publicFormSettlements": [],
+      "reasons": [
+        "unnamed-secondary-passive-not-implemented-current-client"
+      ],
+      "sourceIdentity": "characters.items[id=107002].skillSlots[group=passive,index=1,skillId=10700262]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107002.hero-module.local.json"
+    }
+  ],
+  "summary": {
+    "entryCount": 23,
+    "statusCounts": {
+      "applied": 19,
+      "not-applicable": 1,
+      "static-evidence-gap": 3
+    }
+  },
+  "profileHash": "f6eec495783b56210902a5f3fbc804e712847b95a92d8f251d129b36c01cb1f2"
+}

@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
   "durationMs": 30000,
   "frameRate": 60,
-  "sourcePackageHash": "8c6b93bf19243842a212908d843689ec72328e0fa8bf8b048cbea0514049b7e0",
+  "sourcePackageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "db9f789d56136c43",
-    "traceHash": "df5c9d06e1765633",
-    "dataHash": "e17ad491e843bbf8",
+    "inputHash": "bdb9b7898fd0f6f7",
+    "traceHash": "ac1501833777c3eb",
+    "dataHash": "bd76c5af6c4a8114",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -163,6 +163,7 @@
           "totalToughnessDamage": 792
         }
       },
+      "ownerDirectHealSummaryByActionId": {},
       "ownerHitTotalHpDamage": 8953,
       "ownerHitTotalToughnessDamage": 6265,
       "selectedHpDamageByActionId": {
@@ -506,6 +507,20 @@
         }
       },
       "ownerKiboSpTransactionsByActionId": {},
+      "directSpSummaryByActionId": {},
+      "pickupSummary": {
+        "profileCount": 4,
+        "bindingCount": 12,
+        "spawnedEntityCount": 0,
+        "collectedEntityCount": 0,
+        "capacityRejectedCount": 0,
+        "directHpEventCount": 0,
+        "directSpEventCount": 0,
+        "tuningEffectCommandCount": 0,
+        "unresolvedCount": 0,
+        "applied": true
+      },
+      "pickupSummaryByIdentity": {},
       "specialResourceTrace": [],
       "tuningMarkTrace": [
         {
@@ -616,6 +631,17 @@
         }
       },
       "tuningMarkConsumeByActionId": {},
+      "tuningMarkUnresolvedByActionId": {
+        "switch-to-xiaoyu--on-enter--actor-101010--star-carry": {
+          "eventCount": 1,
+          "kinds": [
+            "tuning-consume-insufficient-marks"
+          ],
+          "statuses": [
+            "verified-tuning-consume-not-executed"
+          ]
+        }
+      },
       "targetStateTrace": [],
       "conditionalHitGroups": [],
       "targetStateSummary": {
@@ -646,11 +672,15 @@
       "burstTrace": [
         {
           "eventId": "actor/actor-101003/battle-element:-4841411980842434486/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "han-ultimate",
           "frame": 208,
           "effectId": "battle-element:101003207",
           "runtimeEffectId": "battle-element:-4841411980842434486",
           "sourceElementId": 101003207,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "主控角色调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101003",
@@ -679,11 +709,15 @@
         },
         {
           "eventId": "actor/actor-101003/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "han-ultimate",
           "frame": 208,
           "effectId": "battle-element:101003205",
           "runtimeEffectId": "battle-element:-5652413049857383353",
           "sourceElementId": 101003205,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "全队调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101003",
@@ -712,11 +746,15 @@
         },
         {
           "eventId": "actor/actor-101010/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "han-ultimate",
           "frame": 208,
           "effectId": "battle-element:101003205",
           "runtimeEffectId": "battle-element:-5652413049857383353",
           "sourceElementId": 101003205,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "全队调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101010",
@@ -745,11 +783,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "han-ultimate",
           "frame": 208,
           "effectId": "battle-element:101003205",
           "runtimeEffectId": "battle-element:-5652413049857383353",
           "sourceElementId": 101003205,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "全队调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -778,11 +820,15 @@
         },
         {
           "eventId": "actor/actor-101010/battle-element:-4841411980842434486/verified-calculator|EFFECT_TRANSFERRED|6666.667|2",
+          "eventType": "EFFECT_TRANSFERRED",
+          "status": "effect-runtime-controlled-actor-transferred",
           "actionId": "han-ultimate",
           "frame": 400,
           "effectId": "battle-element:101003207",
           "runtimeEffectId": "battle-element:-4841411980842434486",
           "sourceElementId": 101003207,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "主控角色调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101010",
@@ -811,11 +857,15 @@
         },
         {
           "eventId": "actor/actor-101010/battle-element:-4841411980842434486/verified-calculator|EFFECT_EXPIRED|18466.667|2",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "han-ultimate",
           "frame": 1108,
           "effectId": "battle-element:101003207",
           "runtimeEffectId": "battle-element:-4841411980842434486",
           "sourceElementId": 101003207,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "主控角色调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101010",
@@ -844,11 +894,15 @@
         },
         {
           "eventId": "actor/actor-101003/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "han-ultimate",
           "frame": 1648,
           "effectId": "battle-element:101003205",
           "runtimeEffectId": "battle-element:-5652413049857383353",
           "sourceElementId": 101003205,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "全队调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101003",
@@ -877,11 +931,15 @@
         },
         {
           "eventId": "actor/actor-101010/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "han-ultimate",
           "frame": 1648,
           "effectId": "battle-element:101003205",
           "runtimeEffectId": "battle-element:-5652413049857383353",
           "sourceElementId": 101003205,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "全队调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101010",
@@ -910,11 +968,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "han-ultimate",
           "frame": 1648,
           "effectId": "battle-element:101003205",
           "runtimeEffectId": "battle-element:-5652413049857383353",
           "sourceElementId": 101003205,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "全队调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -957,13 +1019,19 @@
             "actor-103002"
           ],
           "appliedEventCount": 3,
+          "blockedEventCount": 0,
           "transferredEventCount": 0,
           "expiredEventCount": 3,
           "firstAppliedFrame": 208,
           "firstExpiredFrame": 1648,
+          "firstAppliedSourceSequencePath": null,
+          "sameFrameVisibilityModes": [],
           "maxStacks": 2,
           "attributeIds": [
             229
+          ],
+          "modifierSignatures": [
+            "229:dynamicExtra:18"
           ],
           "formulaFamilies": [
             "literal-a-with-common-ratio"
@@ -985,13 +1053,19 @@
             "actor-101010"
           ],
           "appliedEventCount": 1,
+          "blockedEventCount": 0,
           "transferredEventCount": 1,
           "expiredEventCount": 1,
           "firstAppliedFrame": 208,
           "firstExpiredFrame": 1108,
+          "firstAppliedSourceSequencePath": null,
+          "sameFrameVisibilityModes": [],
           "maxStacks": 1,
           "attributeIds": [
             229
+          ],
+          "modifierSignatures": [
+            "229:dynamicExtra:1042.0045928955078"
           ],
           "formulaFamilies": [
             "source-tuning-ratio-with-common-ratio"
@@ -1695,6 +1769,8 @@
           "kiboSpRecovery": null
         }
       ],
+      "directHeals": [],
+      "pickups": [],
       "specialResources": [],
       "tuningMarks": [
         {
@@ -1799,11 +1875,15 @@
       "effects": [
         {
           "eventId": "actor/actor-101003/battle-element:-4841411980842434486/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "han-ultimate",
           "frame": 208,
           "effectId": "battle-element:101003207",
           "runtimeEffectId": "battle-element:-4841411980842434486",
           "sourceElementId": 101003207,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "主控角色调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101003",
@@ -1832,11 +1912,15 @@
         },
         {
           "eventId": "actor/actor-101003/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "han-ultimate",
           "frame": 208,
           "effectId": "battle-element:101003205",
           "runtimeEffectId": "battle-element:-5652413049857383353",
           "sourceElementId": 101003205,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "全队调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101003",
@@ -1865,11 +1949,15 @@
         },
         {
           "eventId": "actor/actor-101010/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "han-ultimate",
           "frame": 208,
           "effectId": "battle-element:101003205",
           "runtimeEffectId": "battle-element:-5652413049857383353",
           "sourceElementId": 101003205,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "全队调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101010",
@@ -1898,11 +1986,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:-5652413049857383353/verified-calculator|EFFECT_APPLIED|3466.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "han-ultimate",
           "frame": 208,
           "effectId": "battle-element:101003205",
           "runtimeEffectId": "battle-element:-5652413049857383353",
           "sourceElementId": 101003205,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "全队调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -1931,11 +2023,15 @@
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|4216.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "han-ultimate",
           "frame": 253,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "actor",
           "targetId": "actor-101003",
@@ -1964,11 +2060,15 @@
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_APPLIED|4216.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "han-ultimate",
           "frame": 253,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-101003",
@@ -1997,11 +2097,15 @@
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|4450|2",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "han-ultimate",
           "frame": 267,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "actor",
           "targetId": "actor-101003",
@@ -2030,11 +2134,15 @@
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|4450|2",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "han-ultimate",
           "frame": 267,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-101003",
@@ -2063,11 +2171,15 @@
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|4716.667|3",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "han-ultimate",
           "frame": 283,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "actor",
           "targetId": "actor-101003",
@@ -2096,11 +2208,15 @@
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|4716.667|3",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "han-ultimate",
           "frame": 283,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-101003",
@@ -2129,11 +2245,15 @@
         },
         {
           "eventId": "actor/actor-101010/battle-element:-4841411980842434486/verified-calculator|EFFECT_TRANSFERRED|6666.667|2",
+          "eventType": "EFFECT_TRANSFERRED",
+          "status": "effect-runtime-controlled-actor-transferred",
           "actionId": "han-ultimate",
           "frame": 400,
           "effectId": "battle-element:101003207",
           "runtimeEffectId": "battle-element:-4841411980842434486",
           "sourceElementId": 101003207,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "主控角色调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101010",
@@ -2162,11 +2282,15 @@
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|7616.667|4",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
           "frame": 457,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "actor",
           "targetId": "actor-101003",
@@ -2195,11 +2319,15 @@
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|7616.667|4",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
           "frame": 457,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-101003",
@@ -2228,11 +2356,15 @@
         },
         {
           "eventId": "actor/actor-101010/battle-element:-4841411980842434486/verified-calculator|EFFECT_EXPIRED|18466.667|2",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "han-ultimate",
           "frame": 1108,
           "effectId": "battle-element:101003207",
           "runtimeEffectId": "battle-element:-4841411980842434486",
           "sourceElementId": 101003207,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "主控角色调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101010",
@@ -2261,11 +2393,15 @@
         },
         {
           "eventId": "actor/actor-101003/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "han-ultimate",
           "frame": 1648,
           "effectId": "battle-element:101003205",
           "runtimeEffectId": "battle-element:-5652413049857383353",
           "sourceElementId": 101003205,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "全队调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101003",
@@ -2294,11 +2430,15 @@
         },
         {
           "eventId": "actor/actor-101010/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "han-ultimate",
           "frame": 1648,
           "effectId": "battle-element:101003205",
           "runtimeEffectId": "battle-element:-5652413049857383353",
           "sourceElementId": 101003205,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "全队调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-101010",
@@ -2327,11 +2467,15 @@
         },
         {
           "eventId": "actor/actor-103002/battle-element:-5652413049857383353/verified-calculator|EFFECT_EXPIRED|27466.667|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "han-ultimate",
           "frame": 1648,
           "effectId": "battle-element:101003205",
           "runtimeEffectId": "battle-element:-5652413049857383353",
           "sourceElementId": 101003205,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "全队调谐强度提升",
           "targetKind": "actor",
           "targetId": "actor-103002",
@@ -2360,11 +2504,15 @@
         },
         {
           "eventId": "actor/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|27616.667|5",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "han-ultimate",
           "frame": 1657,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "actor",
           "targetId": "actor-101003",
@@ -2393,11 +2541,15 @@
         },
         {
           "eventId": "kibo/actor-101003/tuning-mark:150:persistent/verified-calculator|EFFECT_REFRESHED|27616.667|5",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "han-ultimate",
           "frame": 1657,
           "effectId": "tuning-mark:150:persistent",
           "runtimeEffectId": "tuning-mark:150:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "火调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-101003",
@@ -2474,7 +2626,7 @@
         }
       ]
     },
-    "summaryHash": "d309be69b92d5a76a6293fcef3bdf9e7fc254609f12d7767b21aa31f8ddb4f4d"
+    "summaryHash": "18fd38ab8aae07eaeedad97f53c0286a4026885c15715907fef8a8b1ab95cdc3"
   },
   "expected": {
     "exact": {
@@ -2829,5 +2981,5 @@
       }
     ]
   },
-  "replayHash": "24b23f3f726036c1b634639a6ddf397b702e94e5c7978627e5535e8d8b660203"
+  "replayHash": "17b0b1c507e265a21915ce718ef387b65f4219189b6720aa4240e1a41c0f9f30"
 }

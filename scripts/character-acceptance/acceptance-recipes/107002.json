@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrCharacterAcceptanceRecipe",
+  "productVisualAcceptance": {
+    "status": "pending",
+    "acceptanceCommit": null,
+    "recordIdentity": null,
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m12-b3-107002-reduced-action-surface-acceptance",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "reports/m11-d-character-acceptance-107002-desktop.png",
+        "screenshotSha256": "c33dedc13f74cb9cb58beec7cdee055607c797b3e7cb3aeced181ed070d66d52"
+      }
+    ]
+  },
+  "ownerId": 107002,
+  "fixturePath": "fixtures/character-acceptance/107002-visual.json",
+  "goldenReports": [
+    "reports/m10/107002/golden-trace.json"
+  ],
+  "unnamedSecondaryPassiveSkillId": 10700262,
+  "probes": [
+    {
+      "kind": "variant-selection",
+      "actionId": "misa-a3",
+      "controlSkillId": 10700203,
+      "subSkillIndex": 0,
+      "semanticName": "A3"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "misa-a4",
+      "controlSkillId": 10700204,
+      "subSkillIndex": 0,
+      "semanticName": "A4"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "misa-charged",
+      "controlSkillId": 10700210,
+      "subSkillIndex": 0,
+      "semanticName": "重击"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "misa-star",
+      "controlSkillId": 10700226,
+      "subSkillIndex": 0,
+      "semanticName": "星鸣技"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "misa-ultimate",
+      "controlSkillId": 10700213,
+      "subSkillIndex": 0,
+      "semanticName": "星决技"
+    }
+  ]
+}

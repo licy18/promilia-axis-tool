@@ -182,6 +182,9 @@ export function createVerifiedTuningMarkGeneration({
     const enqueuedConsumeGroups = new Set();
     for (const effect of tuningEffects) {
       if (effect.classification !== 'applied') continue;
+      if (!isHitBoundTuningEffectEnabled({ action, effect, resolution })) {
+        continue;
+      }
       if (
         !isActionFrameWithinContextualOccupancy(
           action,
@@ -1201,6 +1204,54 @@ function applyMarkConsumption({
     clearSharedDecay(state);
   }
   const source = createDescriptorSource(descriptor);
+  if (contract.successEffect?.applied === true) {
+    const sourceSequencePath = createTuningSourceSequencePath({
+      descriptor,
+      localKind: 'consume-success-effect',
+      localIdentity: contract.successEffect.elementId,
+    });
+    events.push({
+      schemaVersion: 1,
+      sourceKind: 'azpr-verified-tuning-consume-availability',
+      status: 'verified-tuning-consume-availability-succeeded',
+      eventIdentity: `tuning-consume-availability|${descriptor.action.id}|${descriptor.timeMs}|${contract.successEffect.elementId}`,
+      kind: 'availability',
+      type: 'VERIFIED_TUNING_CONSUME_AVAILABILITY',
+      timeMs: roundValue(descriptor.timeMs),
+      absoluteFrame: Math.round((descriptor.timeMs * FRAME_RATE) / 1000),
+      sourceSequencePath,
+      actionId: descriptor.action.id,
+      actorId: descriptor.action.actorId,
+      candidateMarkIds: [...contract.successEffect.candidateMarkIds],
+      selectedPriorityCandidate: descriptor.selectedPriorityCandidate ?? null,
+      sourceIdentity: contract.successEffect.sourceIdentity,
+      appliedToCalculators: true,
+      applied: true,
+    });
+    effectCommands.push(
+      ...createTimedModifierCommands({
+        effectId: contract.successEffect.effectId,
+        effectName: contract.successEffect.name,
+        tags: ['verified-tuning-consume-success-effect'],
+        targetKind: EFFECT_TARGET_KINDS.ACTOR,
+        targetIds: [descriptor.action.actorId],
+        scenario,
+        timeMs: descriptor.timeMs,
+        durationMs: contract.successEffect.durationMs,
+        stackDelta: 1,
+        maxStacks: contract.successEffect.maxStacks,
+        modifiers: contract.successEffect.modifiers,
+        source: {
+          ...source,
+          sourceElementId: contract.successEffect.elementId,
+          sourceIdentity: contract.successEffect.sourceIdentity,
+          sourceSequencePath,
+        },
+        mechanicsPackage,
+        appliedToCalculators: true,
+      })
+    );
+  }
   events.push(
     createMarkEvent({
       kind: 'consume',
@@ -1656,6 +1707,7 @@ function createTimedModifierCommands({
   timeMs,
   durationMs,
   stackDelta,
+  maxStacks = 5,
   modifiers,
   source,
   mechanicsPackage,
@@ -1686,7 +1738,7 @@ function createTimedModifierCommands({
     durationMs,
     stackMode: EFFECT_STACK_MODES.REPLACE,
     stackDelta: Math.max(1, Number(stackDelta) || 0),
-    maxStacks: 5,
+    maxStacks: Math.max(1, Number(maxStacks) || 1),
     tags,
     sourceStatus: TUNING_EFFECT_SOURCE_STATUS,
     confidence: 'verified',
@@ -1698,8 +1750,19 @@ function createTimedModifierCommands({
         source.actionBindingIdentity ??
         `tuning-source:${source.actionId ?? 'inherited'}`,
       effectIdentity: source.effectIdentity ?? effectId,
+      ...(positiveIntegerOrNull(source.sourceElementId) == null
+        ? {}
+        : { elementId: positiveIntegerOrNull(source.sourceElementId) }),
       sourceIdentity: source.sourceIdentity,
+      ...(Array.isArray(source.sourceSequencePath)
+        ? {
+            sourceSequencePath: source.sourceSequencePath,
+            sameFrameVisibility: 'strict-source-sequence',
+            triggerSequencePath: source.sourceSequencePath,
+          }
+        : {}),
     },
+    sourceSequencePath: source.sourceSequencePath ?? null,
     modifiers,
     appliedToCalculators,
     generatedVerified: true,
@@ -1999,6 +2062,7 @@ function createTuningSourceSequencePath({
     acquire: 20,
     'get-element-after': 21,
     consume: 30,
+    'consume-success-effect': 31,
     'conditional-damage': 35,
     'held-trigger': 40,
     'held-damage': 50,
@@ -2017,6 +2081,23 @@ function createTuningSourceSequencePath({
   return actionPath
     ? [...actionPath, ...suffix]
     : [Number.MAX_SAFE_INTEGER, ...suffix];
+}
+
+function isHitBoundTuningEffectEnabled({ action, effect, resolution }) {
+  const behaviorPathId = String(effect.trigger?.behaviorPathId ?? '');
+  if (!behaviorPathId) return true;
+  const hit = (resolution.allHits ?? resolution.hits ?? []).find(
+    candidate =>
+      String(candidate.trigger?.behaviorPathId ?? '') === behaviorPathId &&
+      Number(candidate.trigger?.startFrame) ===
+        Number(effect.trigger?.startFrame)
+  );
+  if (!hit) return true;
+  return resolveActionHitWillHit(
+    action,
+    hit.hitIdentity ?? hit.semanticIdentity ?? hit.effectIdentity,
+    (resolution.hits ?? []).includes(hit)
+  );
 }
 
 function resolveTuningSourceHitIdentity(descriptor) {
@@ -2170,13 +2251,24 @@ function compareGenerationDescriptors(left, right) {
     periodic: 3,
     'conditional-damage': 4,
     hit: 4,
-    combat: 5,
+    combat: 6,
   };
   return (
     left.timeMs - right.timeMs ||
-    (priority[left.kind] ?? 9) - (priority[right.kind] ?? 9) ||
+    resolveGenerationDescriptorPriority(left, priority) -
+      resolveGenerationDescriptorPriority(right, priority) ||
     left.queueSequence - right.queueSequence
   );
+}
+
+function resolveGenerationDescriptorPriority(descriptor, priority) {
+  if (
+    ['acquire', 'consume'].includes(descriptor.kind) &&
+    descriptor.effect?.hitSettlementOrder === 'after-hit'
+  ) {
+    return 5;
+  }
+  return priority[descriptor.kind] ?? 9;
 }
 
 function compareGeneratedEvents(left, right) {

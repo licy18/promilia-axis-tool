@@ -6,13 +6,13 @@
 - 场景可运行：634
 - 来源静态可应用：461
 - 来源运行时依赖：173
-- 零距离场景补全：585
+- 零距离场景补全：584
 - 来源静态证据缺口：12
 - 明确零：0
 - 未解析：12
 - 真实命中节点：3230
 - 公开动作变体：676（未解析 42）
-- 非零回能元素：667（未关联 464）
+- 非零回能元素：667（未关联 465）
 - 零距离投射物命中：3540（仍缺发射帧 68、仍缺公式 7、仍缺目标 0）
 - 普攻输入链：20 条 / 95 个输入段（可运行 80，未解析 15）
 - 普攻输入时序：已确认 78，未确认 17
@@ -48,12 +48,12 @@
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | actor | charged-attack | 20 | 20 | 15 | 0 | 5 | 71 |
 | actor | dodge-attack | 20 | 20 | 16 | 0 | 4 | 50 |
-| actor | limit-counter | 20 | 20 | 19 | 0 | 1 | 81 |
+| actor | limit-counter | 20 | 20 | 19 | 0 | 1 | 76 |
 | actor | normal-attack | 20 | 20 | 19 | 0 | 1 | 93 |
 | actor | perfect-parry | 20 | 20 | 20 | 0 | 0 | 10 |
 | actor | plunging-attack | 20 | 20 | 20 | 0 | 0 | 22 |
 | actor | star-carry | 18 | 18 | 17 | 0 | 1 | 90 |
-| actor | star-combo | 20 | 20 | 20 | 0 | 0 | 20 |
+| actor | star-combo | 20 | 20 | 20 | 0 | 0 | 25 |
 | actor | star-skill | 20 | 20 | 20 | 0 | 0 | 140 |
 | actor | ultimate | 20 | 20 | 20 | 0 | 0 | 143 |
 | kibo | active | 82 | 82 | 82 | 0 | 0 | 842 |
@@ -86,7 +86,7 @@
 ## 未关联非零回能元素
 
 - linked-only-to-unresolved-public-action: 35
-- not-referenced-by-public-action-control: 399
+- not-referenced-by-public-action-control: 400
 - referenced-only-by-unselected-control-variant: 30
 
 逐项 source identity 与字段值见 `verified-combat-action-coverage.json#nonzeroRecoveryCoverage`。

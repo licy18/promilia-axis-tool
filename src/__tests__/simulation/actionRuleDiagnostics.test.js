@@ -154,6 +154,32 @@ describe('action rule diagnostics', () => {
     ).toBe(false);
   });
 
+  it('blocks before a cooldown boundary and admits the exact right-open boundary', () => {
+    const scenario = {
+      actors: [createActor()],
+      actions: [
+        createSkillAction({ id: 'cooldown-source', startMs: 0, cooldownMs: 5000 }),
+        createSkillAction({ id: 'before-boundary', startMs: 1000, cooldownMs: 5000 }),
+        createSkillAction({ id: 'exact-boundary', startMs: 5000, cooldownMs: 5000 }),
+      ],
+    };
+
+    const result = createActionRuleDiagnostics({ scenario });
+    const cooldownRows = result.diagnostics.filter(
+      item => item.code === ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE
+    );
+
+    expect(cooldownRows).toEqual([
+      expect.objectContaining({
+        actionId: 'before-boundary',
+        readyAtMs: 5000,
+      }),
+    ]);
+    expect(
+      result.diagnostics.some(item => item.actionId === 'exact-boundary')
+    ).toBe(false);
+  });
+
   it('keeps exact-frame switches out of occupancy and resolves same-frame conflicts stably', () => {
     const actor = createActor();
     const createSwitch = (id, targetActorId) => ({

@@ -9344,15 +9344,14 @@ function createPublishedControlBinding(binding) {
     })),
     hits: binding.hits,
     effects: binding.effects.map(createPublishedRuntimeEffectBinding),
-    effectGraph: binding.effectGraph.map(root => ({
+    effectGraph: binding.effectGraph.map(({ nodes, ...root }) => ({
       ...root,
-      nodeIdentities: root.nodes.map(node =>
+      nodeIdentities: nodes.map(node =>
         createBattleEffectCatalogIdentity(
           binding.controlSkillId,
           node.nodeIdentity
         )
       ),
-      nodes: undefined,
     })),
     status: binding.status,
     confidence: binding.confidence,
@@ -9717,6 +9716,14 @@ function createSemanticEffectCandidate({
       Number(effect.elementId) === Number(node.elementId) &&
       effect.lifecycle
   )?.lifecycle;
+  const settlementOrderedEffect = rawEffects.find(
+    effect =>
+      effect.hitSettlementOrder != null &&
+      effect.sourceOrder?.contractName ===
+        'AzPrVerifiedEffectSourceSequence' &&
+      effect.sourceOrder?.status ===
+        'verified-battle-effect-source-order-ready'
+  );
   return {
     semanticKey,
     semanticIdentity: `semantic-effect:${semanticKey}`,
@@ -9742,6 +9749,9 @@ function createSemanticEffectCandidate({
     ),
     relationPath,
     trigger,
+    sourceOrder: settlementOrderedEffect?.sourceOrder ?? null,
+    hitSettlementOrder:
+      settlementOrderedEffect?.hitSettlementOrder ?? null,
     target,
     placementResolution: resolution,
     staticallyResolvable: resolution === 'static-resolved',
@@ -9866,6 +9876,19 @@ function createSemanticFormulaRuntimeContract(
       registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
       family: 'source-atk-ratio-heal',
       evaluator: 'q16.16-source-atk-times-a-per-10000',
+      status: 'applied',
+      applied: true,
+    };
+  }
+  if (
+    commonFunctionId === 1 &&
+    baseFunctionId === 104 &&
+    Number(node.damage?.damageType) === 5
+  ) {
+    return {
+      registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
+      family: 'source-max-hp-ratio-heal',
+      evaluator: 'q16.16-source-max-hp-times-a-per-10000',
       status: 'applied',
       applied: true,
     };

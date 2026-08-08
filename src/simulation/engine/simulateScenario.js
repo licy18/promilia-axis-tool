@@ -26,6 +26,7 @@ import {
 } from '../mechanics/verifiedSoulEssenceEffectGeneration';
 import { createVerifiedDamageEventGeneration } from '../mechanics/verifiedDamageEventGeneration';
 import { createVerifiedNonDamageEventGeneration } from '../mechanics/verifiedNonDamageEventGeneration';
+import { createVerifiedPickupEntityGeneration } from '../mechanics/verifiedPickupEntityGeneration';
 import { projectScenarioEffectiveActionTimeline } from '../mechanics/actionEffectiveTimeline';
 import { validateCombatCriticalScenario } from '../../domain/combatCriticalPolicy';
 import { createDeterministicCriticalRandomSource } from '../runtime/criticalRandomSource';
@@ -262,6 +263,7 @@ export function simulateScenario(
     verifiedDamageEventGeneration: runtimeBundle.damageEventGeneration,
     verifiedNonDamageEventGeneration: runtimeBundle.nonDamageEventGeneration,
     verifiedTuningMarkGeneration: runtimeBundle.tuningGeneration,
+    verifiedPickupEntityGeneration: runtimeBundle.pickupGeneration,
     verifiedActionVariantRuntime: runtimeBundle.actionVariantRuntime,
     effectiveActionTimeline,
     kiboResourceEvents: verifiedCombatRuntime.kiboResourceEvents,
@@ -413,6 +415,14 @@ function createVerifiedRuntimeBundle({
         generatedDirectSpEvents: actionVariantRuntime?.directSpEvents ?? [],
       })
     : null;
+  const pickupGeneration = isVerifiedCombatMechanicsScenario(scenario)
+    ? createVerifiedPickupEntityGeneration({
+        scenario,
+        actionExecutionPlan,
+        actionResolutionById: actionVariantRuntime?.actionResolutionById,
+        controlledActorTimeline,
+      })
+    : null;
   const tuningGeneration = isVerifiedCombatMechanicsScenario(scenario)
     ? createVerifiedTuningMarkGeneration({
         scenario,
@@ -456,6 +466,7 @@ function createVerifiedRuntimeBundle({
     generatedCommands: [
       ...(actionVariantRuntime?.effectCommands ?? []),
       ...(effectGeneration?.effectCommands ?? []),
+      ...(pickupGeneration?.effectCommands ?? []),
       ...(tuningGeneration?.effectCommands ?? []),
       ...(kiboPassiveGeneration?.effectCommands ?? []),
       ...(baselineSoulEssenceEffectGeneration?.effectCommands ?? []),
@@ -468,6 +479,7 @@ function createVerifiedRuntimeBundle({
         controlledActorTimeline,
         effectGeneration: mergeVerifiedDirectEffectGeneration(
           effectGeneration,
+          pickupGeneration,
           baselineSoulEssenceEffectGeneration
         ),
         tuningGeneration,
@@ -496,6 +508,7 @@ function createVerifiedRuntimeBundle({
         controlledActorTimeline,
         effectGeneration: mergeVerifiedDirectEffectGeneration(
           effectGeneration,
+          pickupGeneration,
           baselineSoulEssenceEffectGeneration
         ),
         tuningGeneration,
@@ -545,6 +558,7 @@ function createVerifiedRuntimeBundle({
     generatedCommands: [
       ...(actionVariantRuntime?.effectCommands ?? []),
       ...(effectGeneration?.effectCommands ?? []),
+      ...(pickupGeneration?.effectCommands ?? []),
       ...(tuningGeneration?.effectCommands ?? []),
       ...(finalKiboPassiveGeneration?.effectCommands ?? []),
       ...(soulEssenceEffectGeneration?.effectCommands ?? []),
@@ -556,9 +570,11 @@ function createVerifiedRuntimeBundle({
     controlledActorTimeline,
     effectGeneration: mergeVerifiedDirectEffectGeneration(
       effectGeneration,
+      pickupGeneration,
       soulEssenceEffectGeneration
     ),
     tuningGeneration,
+    pickupGeneration,
     damageEventGeneration,
     effectTimeline,
     actionVariantRuntime,
@@ -570,6 +586,7 @@ function createVerifiedRuntimeBundle({
   return {
     actionVariantRuntime,
     effectGeneration,
+    pickupGeneration,
     kiboPassiveGeneration: finalKiboPassiveGeneration,
     soulEssenceEffectGeneration,
     nonDamageEventGeneration,
@@ -580,15 +597,16 @@ function createVerifiedRuntimeBundle({
   };
 }
 
-function mergeVerifiedDirectEffectGeneration(effectGeneration, soulGeneration) {
-  if (!effectGeneration || !soulGeneration) return effectGeneration;
+function mergeVerifiedDirectEffectGeneration(effectGeneration, ...generations) {
+  if (!effectGeneration) return effectGeneration;
+  const additions = generations.filter(Boolean);
   const directSpEvents = [
     ...(effectGeneration.directSpEvents ?? []),
-    ...(soulGeneration.directSpEvents ?? []),
+    ...additions.flatMap(generation => generation.directSpEvents ?? []),
   ];
   const directHpEvents = [
     ...(effectGeneration.directHpEvents ?? []),
-    ...(soulGeneration.directHpEvents ?? []),
+    ...additions.flatMap(generation => generation.directHpEvents ?? []),
   ];
   return {
     ...effectGeneration,

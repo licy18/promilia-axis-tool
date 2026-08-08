@@ -412,12 +412,18 @@ function createGoldenActionDraft({
     mapping,
     mechanicsPackage,
   });
-  const durationFrames = resolveMappingDurationFrames(
-    mapping,
-    selectedSubSkillIndex,
-    mechanicsPackage,
-    action.attackInputControlSkillId
-  );
+  const explicitMechanicWindowFrames = Number(action.mechanicWindowFrames);
+  const usesSourceBoundedMechanicWindow =
+    Number.isInteger(explicitMechanicWindowFrames) &&
+    explicitMechanicWindowFrames > 0;
+  const durationFrames = usesSourceBoundedMechanicWindow
+    ? explicitMechanicWindowFrames
+    : resolveMappingDurationFrames(
+        mapping,
+        selectedSubSkillIndex,
+        mechanicsPackage,
+        action.attackInputControlSkillId
+      );
   const attackInputFields = createGoldenAttackInputFields({
     action,
     actionId,
@@ -437,14 +443,20 @@ function createGoldenActionDraft({
     ),
     variantInputSelection: action.variantInputSelection ?? null,
     controlSubSkillIndex: selectedSubSkillIndex,
+    hitOverrides: action.hitOverrides ?? {},
     contextActionId: action.contextActionId ?? null,
     startMs,
     durationMs: frameToMs(durationFrames, frameRate),
     durationFrames,
-    timingSource: mapping.actionTiming?.occupancy?.sourceKind ?? null,
-    timingStatus: mapping.timingStatus ?? 'applied',
-    timingSourceIdentity:
-      mapping.actionTiming?.occupancy?.sourceIdentity ?? null,
+    timingSource: usesSourceBoundedMechanicWindow
+      ? 'recipe-source-bounded-mechanic-window'
+      : mapping.actionTiming?.occupancy?.sourceKind ?? null,
+    timingStatus: usesSourceBoundedMechanicWindow
+      ? 'source-bounded-mechanic-window-not-full-occupancy'
+      : mapping.timingStatus ?? 'applied',
+    timingSourceIdentity: usesSourceBoundedMechanicWindow
+      ? action.mechanicWindowSourceIdentity ?? null
+      : mapping.actionTiming?.occupancy?.sourceIdentity ?? null,
     needsTimingData: false,
     ...attackInputFields,
   });
@@ -827,6 +839,8 @@ function createGoldenActualProjection({
       const sourceElementId = numberOrNull(event.sourceIdentity?.elementId);
       return {
         eventId: event.eventId ?? event.id ?? null,
+        eventType: event.type ?? null,
+        status: event.status ?? null,
         actionId: event.actionId ?? null,
         frame: msToFrame(event.timeMs, scenarioRecipe.frameRate),
         effectId:
@@ -835,6 +849,16 @@ function createGoldenActualProjection({
             : `battle-element:${sourceElementId}`,
         runtimeEffectId: event.effectId ?? null,
         sourceElementId,
+        sourceSequencePath:
+          event.after?.sourceIdentity?.triggerSequencePath ??
+          event.before?.sourceIdentity?.triggerSequencePath ??
+          event.sourceIdentity?.triggerSequencePath ??
+          null,
+        sameFrameVisibility:
+          event.after?.sourceIdentity?.sameFrameVisibility ??
+          event.before?.sourceIdentity?.sameFrameVisibility ??
+          event.sourceIdentity?.sameFrameVisibility ??
+          null,
         effectName: event.effectName ?? null,
         targetKind: event.targetKind ?? null,
         targetId: event.targetId ?? null,
@@ -873,6 +897,85 @@ function createGoldenActualProjection({
     })
     .sort(compareFrameThenIdentity);
   const combatRuntime = result.verifiedCombatRuntime ?? {};
+  const pickupGeneration = result.verifiedPickupEntityGeneration ?? null;
+  const pickupEntityById = new Map(
+    (pickupGeneration?.entities ?? []).map(entity => [entity.entityId, entity])
+  );
+  const pickupTrace = (pickupGeneration?.events ?? [])
+    .map(event => {
+      const entity = pickupEntityById.get(event.entityId);
+      return {
+        kind: event.kind ?? null,
+        status: event.status ?? null,
+        frame: numberOrNull(event.frame),
+        entityId: event.entityId ?? null,
+        pickupIdentity:
+          event.pickupIdentity ?? entity?.pickupIdentity ?? null,
+        poolKey: event.poolKey ?? entity?.poolKey ?? null,
+        sourceActionId:
+          event.sourceActionId ?? entity?.sourceActionId ?? null,
+        collectorActorId: event.collectorActorId ?? null,
+        applied: event.applied === true,
+      };
+    })
+    .sort(compareFrameThenIdentity);
+  const pickupSummaryByIdentity = Object.fromEntries(
+    [
+      ...new Set(
+        pickupTrace.map(event => event.pickupIdentity).filter(Boolean)
+      ),
+    ]
+      .sort()
+      .map(pickupIdentity => {
+        const rows = pickupTrace.filter(
+          event => event.pickupIdentity === pickupIdentity
+        );
+        const spawned = rows.filter(event => event.kind === 'pickup-spawned');
+        const collected = rows.filter(
+          event => event.kind === 'pickup-collected'
+        );
+        const rejected = rows.filter(event => event.applied !== true);
+        return [
+          pickupIdentity,
+          {
+            spawnedCount: spawned.length,
+            collectedCount: collected.length,
+            rejectedCount: rejected.length,
+            spawnFrames: spawned.map(event => event.frame),
+            collectionFrames: collected.map(event => event.frame),
+            sourceActionIds: [
+              ...new Set(rows.map(event => event.sourceActionId).filter(Boolean)),
+            ].sort(),
+            poolKeys: [
+              ...new Set(rows.map(event => event.poolKey).filter(Boolean)),
+            ].sort(),
+          },
+        ];
+      })
+  );
+  const tuningMarkUnresolvedByActionId = Object.fromEntries(
+    [
+      ...new Set(
+        (result.verifiedTuningMarkGeneration?.unresolved ?? [])
+          .filter(entry => entry.actionId)
+          .map(entry => entry.actionId)
+      ),
+    ]
+      .sort()
+      .map(actionId => {
+        const entries = (
+          result.verifiedTuningMarkGeneration?.unresolved ?? []
+        ).filter(entry => entry.actionId === actionId);
+        return [
+          actionId,
+          {
+            eventCount: entries.length,
+            kinds: [...new Set(entries.map(entry => entry.kind))].sort(),
+            statuses: [...new Set(entries.map(entry => entry.status))].sort(),
+          },
+        ];
+      })
+  );
   const actorSp = summarizeVerifiedEnergyRuntime({
     initialRows: combatRuntime.initialState?.actorEnergy,
     finalRows: combatRuntime.finalState?.actorEnergy,
@@ -955,6 +1058,68 @@ function createGoldenActualProjection({
     ownerKiboSp?.actionTransactions,
     scenarioRecipe.frameRate
   );
+  const directSpSummaryByActionId = Object.fromEntries(
+    [
+      ...new Set(
+        actorSp.flatMap(row =>
+          (row.actionTransactions ?? [])
+            .filter(transaction =>
+              ['verified-direct-sp', 'verified-direct-sp-shared'].includes(
+                transaction.reason
+              )
+            )
+            .map(transaction => transaction.actionId)
+        )
+      ),
+    ]
+      .sort()
+      .map(actionId => {
+        const rows = actorSp.flatMap(actor =>
+          (actor.actionTransactions ?? [])
+            .filter(
+              transaction =>
+                transaction.actionId === actionId &&
+                ['verified-direct-sp', 'verified-direct-sp-shared'].includes(
+                  transaction.reason
+                )
+            )
+            .map(transaction => ({ ...transaction, actorId: actor.actorId }))
+        );
+        return [
+          actionId,
+          {
+            eventCount: rows.length,
+            targetEventCount: rows.filter(
+              row => row.reason === 'verified-direct-sp'
+            ).length,
+            shareAllEventCount: rows.filter(
+              row => row.reason === 'verified-direct-sp-shared'
+            ).length,
+            targetActorIds: [
+              ...new Set(
+                rows
+                  .filter(row => row.reason === 'verified-direct-sp')
+                  .map(row => row.actorId)
+              ),
+            ].sort(),
+            sharedActorIds: [
+              ...new Set(
+                rows
+                  .filter(row => row.reason === 'verified-direct-sp-shared')
+                  .map(row => row.actorId)
+              ),
+            ].sort(),
+            totalChange: roundNumber(
+              rows.reduce(
+                (sum, transaction) =>
+                  sum + (Number(transaction.change) || 0),
+                0
+              )
+            ),
+          },
+        ];
+      })
+  );
   const energyActionKeys =
     recipe.goldenScenario?.traceSelectors?.energyActionKeys ?? [];
   for (const actionId of energyActionKeys) {
@@ -964,6 +1129,67 @@ function createGoldenActualProjection({
   const ownerDirectSpTransactions = (
     ownerActorSp?.actionTransactions ?? []
   ).filter(transaction => transaction.reason === 'verified-direct-sp');
+  const directHealTrace = (combatRuntime.vitalEvents ?? [])
+    .filter(event => event.type === 'VERIFIED_DIRECT_HEAL')
+    .map(event => ({
+      actionId: event.actionId ?? null,
+      frame: msToFrame(event.timeMs, scenarioRecipe.frameRate),
+      sourceActorId: event.payload?.sourceActorId ?? event.actorId ?? null,
+      targetId: event.targetId ?? null,
+      targetKind: event.payload?.targetKind ?? null,
+      requestedChange: numberOrNull(event.payload?.requestedChange),
+      effectiveChange: numberOrNull(event.payload?.change),
+      effectIdentity: event.payload?.effectIdentity ?? null,
+      formulaIdentity: event.payload?.formulaIdentity ?? null,
+      commonFunctionId: numberOrNull(event.payload?.commonFunctionId),
+      baseFunctionId: numberOrNull(event.payload?.baseFunctionId),
+      maximumHpSubject: event.payload?.maximumHpSubject ?? null,
+      sourceMaximumHp: numberOrNull(event.payload?.sourceMaximumHp),
+      targetMaximumHp: numberOrNull(event.payload?.targetMaximumHp),
+      applied: event.payload?.applied === true,
+      reason: event.payload?.reason ?? null,
+    }))
+    .sort(compareFrameThenIdentity);
+  const ownerDirectHealSummaryByActionId = Object.fromEntries(
+    [...new Set(directHealTrace.map(event => event.actionId).filter(Boolean))]
+      .filter(actionId => ownerActionIds.has(actionId))
+      .sort()
+      .map(actionId => {
+        const rows = directHealTrace.filter(event => event.actionId === actionId);
+        return [
+          actionId,
+          {
+            eventCount: rows.length,
+            frames: rows.map(event => event.frame),
+            targetIds: [...new Set(rows.map(event => event.targetId))].sort(),
+            targetKinds: [
+              ...new Set(rows.map(event => event.targetKind).filter(Boolean)),
+            ].sort(),
+            requestedChangeTotal: roundNumber(
+              sumNumbers(rows, 'requestedChange')
+            ),
+            effectiveChangeTotal: roundNumber(
+              sumNumbers(rows, 'effectiveChange')
+            ),
+            effectIdentities: [
+              ...new Set(rows.map(event => event.effectIdentity).filter(Boolean)),
+            ].sort(),
+            baseFunctionIds: [
+              ...new Set(
+                rows
+                  .map(event => event.baseFunctionId)
+                  .filter(Number.isFinite)
+              ),
+            ].sort((left, right) => left - right),
+            maximumHpSubjects: [
+              ...new Set(
+                rows.map(event => event.maximumHpSubject).filter(Boolean)
+              ),
+            ].sort(),
+          },
+        ];
+      })
+  );
   const passiveEffectIds = new Set(
     recipe.goldenScenario?.traceSelectors?.passiveEffectIds ?? [
       'battle-element:101010206',
@@ -1060,6 +1286,7 @@ function createGoldenActualProjection({
       ownerHitEventCount: ownerHitEvents.length,
       ownerHitCountByActionId,
       ownerHitSummaryByActionId,
+      ownerDirectHealSummaryByActionId,
       ownerHitTotalHpDamage: sumNumbers(ownerHitEvents, 'hpDamage'),
       ownerHitTotalToughnessDamage: sumNumbers(
         ownerHitEvents,
@@ -1084,10 +1311,14 @@ function createGoldenActualProjection({
       kiboSpBySlotId: Object.fromEntries(kiboSp.map(row => [row.slotId, row])),
       ownerActorSpTransactionsByActionId,
       ownerKiboSpTransactionsByActionId,
+      directSpSummaryByActionId,
+      pickupSummary: pickupGeneration?.summary ?? null,
+      pickupSummaryByIdentity,
       specialResourceTrace,
       tuningMarkTrace,
       tuningMarkAcquireByActionId,
       tuningMarkConsumeByActionId,
+      tuningMarkUnresolvedByActionId,
       targetStateTrace,
       conditionalHitGroups,
       targetStateSummary: targetStateRuntime?.summary ?? null,
@@ -1194,6 +1425,8 @@ function createGoldenActualProjection({
     comparison,
     trace: {
       damage: damageTrace,
+      directHeals: directHealTrace,
+      pickups: pickupTrace,
       specialResources: specialResourceTrace,
       tuningMarks: tuningMarkTrace,
       targetStates: targetStateTrace,
@@ -1226,8 +1459,13 @@ function summarizeSelectedEffectsByElementId(effectTrace) {
     [...byElementId.entries()]
       .sort(([left], [right]) => left - right)
       .map(([elementId, rows]) => {
-        const appliedRows = rows.filter(row =>
-          ['apply', 'refresh'].includes(row.operation)
+        const blockedRows = rows.filter(
+          row => row.eventType === 'EFFECT_BLOCKED'
+        );
+        const appliedRows = rows.filter(
+          row =>
+            row.eventType !== 'EFFECT_BLOCKED' &&
+            ['apply', 'refresh'].includes(row.operation)
         );
         const transferredRows = rows.filter(
           row => row.operation === 'transfer'
@@ -1248,10 +1486,16 @@ function summarizeSelectedEffectsByElementId(effectTrace) {
               .filter(Boolean)
               .sort(),
             appliedEventCount: appliedRows.length,
+            blockedEventCount: blockedRows.length,
             transferredEventCount: transferredRows.length,
             expiredEventCount: expiredRows.length,
             firstAppliedFrame: appliedRows[0]?.frame ?? null,
             firstExpiredFrame: expiredRows[0]?.frame ?? null,
+            firstAppliedSourceSequencePath:
+              appliedRows[0]?.sourceSequencePath ?? null,
+            sameFrameVisibilityModes: [
+              ...new Set(rows.map(row => row.sameFrameVisibility).filter(Boolean)),
+            ].sort(),
             maxStacks: Math.max(
               0,
               ...appliedRows.map(row => Number(row.afterStacks) || 0)
@@ -1263,6 +1507,14 @@ function summarizeSelectedEffectsByElementId(effectTrace) {
                   .filter(Number.isFinite)
               ),
             ].sort((left, right) => left - right),
+            modifierSignatures: [
+              ...new Set(
+                modifierRows.map(
+                  row =>
+                    `${numberOrNull(row.attributeId)}:${row.bucket ?? 'unknown'}:${numberOrNull(row.valueRaw)}`
+                )
+              ),
+            ].sort(),
             formulaFamilies: [
               ...new Set(
                 modifierRows.map(row => row.formulaFamily).filter(Boolean)

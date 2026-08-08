@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "53ca71ba9e6d84698574b79de736adef3236743c860531d29735a220292b48ce",
+  "sourcePackageHash": "25fa12ec08ed8a5b82bf357b00ac9f7cf39e5225045accb69ca52563709dc219",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "4bf277b45d309dcf",
-    "traceHash": "da7154a8b545dfb5",
-    "dataHash": "fd5a2bd1703dd179",
+    "inputHash": "093558efdba79034",
+    "traceHash": "8237fbcdbe68eea9",
+    "dataHash": "735191a959abdf6c",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -729,6 +729,7 @@
           "totalToughnessDamage": 1912
         }
       },
+      "ownerDirectHealSummaryByActionId": {},
       "ownerHitTotalHpDamage": 79661,
       "ownerHitTotalToughnessDamage": 15974,
       "selectedHpDamageByActionId": {
@@ -2751,6 +2752,20 @@
         }
       },
       "ownerKiboSpTransactionsByActionId": {},
+      "directSpSummaryByActionId": {},
+      "pickupSummary": {
+        "profileCount": 4,
+        "bindingCount": 12,
+        "spawnedEntityCount": 0,
+        "collectedEntityCount": 0,
+        "capacityRejectedCount": 0,
+        "directHpEventCount": 0,
+        "directSpEventCount": 0,
+        "tuningEffectCommandCount": 0,
+        "unresolvedCount": 0,
+        "applied": true
+      },
+      "pickupSummaryByIdentity": {},
       "specialResourceTrace": [],
       "tuningMarkTrace": [
         {
@@ -2852,6 +2867,64 @@
           "consumedStacks": 1,
           "frames": [
             183
+          ]
+        }
+      },
+      "tuningMarkUnresolvedByActionId": {
+        "moyin-a4-brilliant": {
+          "eventCount": 1,
+          "kinds": [
+            "tuning-overlimit-chain-targeting-unresolved"
+          ],
+          "statuses": [
+            "verified-tuning-extra-unresolved"
+          ]
+        },
+        "moyin-perfect-parry": {
+          "eventCount": 1,
+          "kinds": [
+            "tuning-overlimit-chain-targeting-unresolved"
+          ],
+          "statuses": [
+            "verified-tuning-extra-unresolved"
+          ]
+        },
+        "moyin-perfect-parry-2": {
+          "eventCount": 1,
+          "kinds": [
+            "tuning-consume-insufficient-marks"
+          ],
+          "statuses": [
+            "verified-tuning-consume-not-executed"
+          ]
+        },
+        "moyin-star-skill-chase-input": {
+          "eventCount": 1,
+          "kinds": [
+            "tuning-consume-insufficient-marks"
+          ],
+          "statuses": [
+            "verified-tuning-consume-not-executed"
+          ]
+        },
+        "moyin-ultimate": {
+          "eventCount": 2,
+          "kinds": [
+            "tuning-consume-insufficient-marks",
+            "tuning-overlimit-chain-targeting-unresolved"
+          ],
+          "statuses": [
+            "verified-tuning-consume-not-executed",
+            "verified-tuning-extra-unresolved"
+          ]
+        },
+        "switch-to-xiaoyu--on-enter--actor-101010--star-carry": {
+          "eventCount": 1,
+          "kinds": [
+            "tuning-consume-insufficient-marks"
+          ],
+          "statuses": [
+            "verified-tuning-consume-not-executed"
           ]
         }
       },
@@ -3059,7 +3132,7 @@
         "suppressedActionEffectConditionCount": 6,
         "appliedActionHitConditionCount": 0,
         "suppressedActionHitConditionCount": 0,
-        "effectCommandCount": 4,
+        "effectCommandCount": 2,
         "directSpEventCount": 0
       },
       "ownerDirectSp": {
@@ -3089,13 +3162,19 @@
             "actor-109001"
           ],
           "appliedEventCount": 2,
+          "blockedEventCount": 0,
           "transferredEventCount": 0,
           "expiredEventCount": 2,
           "firstAppliedFrame": 1100,
           "firstExpiredFrame": 1124,
+          "firstAppliedSourceSequencePath": null,
+          "sameFrameVisibilityModes": [],
           "maxStacks": 1,
           "attributeIds": [
             113
+          ],
+          "modifierSignatures": [
+            "113:dynamicExtra:99"
           ],
           "formulaFamilies": [
             "literal-a-with-common-ratio"
@@ -3103,6 +3182,31 @@
           "formulaValues": [
             99
           ]
+        },
+        "109001270": {
+          "effectId": "battle-element:109001270",
+          "effectNames": [
+            "璀璨"
+          ],
+          "targetKinds": [
+            "actor"
+          ],
+          "targetIds": [
+            "actor-109001"
+          ],
+          "appliedEventCount": 2,
+          "blockedEventCount": 0,
+          "transferredEventCount": 0,
+          "expiredEventCount": 2,
+          "firstAppliedFrame": 731,
+          "firstExpiredFrame": 1211,
+          "firstAppliedSourceSequencePath": null,
+          "sameFrameVisibilityModes": [],
+          "maxStacks": 1,
+          "attributeIds": [],
+          "modifierSignatures": [],
+          "formulaFamilies": [],
+          "formulaValues": []
         }
       },
       "inheritanceTransferCountByEffectId": {},
@@ -8665,6 +8769,8 @@
           "kiboSpRecovery": null
         }
       ],
+      "directHeals": [],
+      "pickups": [],
       "specialResources": [],
       "tuningMarks": [
         {
@@ -8938,11 +9044,15 @@
       "effects": [
         {
           "eventId": "actor/actor-109001/battle-element:109001316/verified-calculator|EFFECT_APPLIED|0|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": null,
           "frame": 0,
           "effectId": "battle-element:109001316",
           "runtimeEffectId": "battle-element:109001316",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "哈库茵之耀",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -8971,11 +9081,15 @@
         },
         {
           "eventId": "actor/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|0|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "inherited-thunder-1",
           "frame": 0,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -9012,11 +9126,15 @@
         },
         {
           "eventId": "kibo/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|0|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "inherited-thunder-1",
           "frame": 0,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-109001",
@@ -9053,11 +9171,15 @@
         },
         {
           "eventId": "actor/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|3050|1",
+          "eventType": "EFFECT_REMOVED",
+          "status": "effect-runtime-removed",
           "actionId": "moyin-ultimate",
           "frame": 183,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -9094,11 +9216,15 @@
         },
         {
           "eventId": "kibo/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|3050|1",
+          "eventType": "EFFECT_REMOVED",
+          "status": "effect-runtime-removed",
           "actionId": "moyin-ultimate",
           "frame": 183,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-109001",
@@ -9135,11 +9261,15 @@
         },
         {
           "eventId": "actor/actor-109001/battle-element:109001270|EFFECT_APPLIED|12183.333|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "moyin-limit-counter",
           "frame": 731,
           "effectId": "battle-element:109001270",
           "runtimeEffectId": "battle-element:109001270",
-          "sourceElementId": null,
+          "sourceElementId": 109001270,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "璀璨",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -9159,11 +9289,15 @@
         },
         {
           "eventId": "actor/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|14116.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "moyin-a5-brilliant",
           "frame": 847,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -9200,11 +9334,15 @@
         },
         {
           "eventId": "kibo/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|14116.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "moyin-a5-brilliant",
           "frame": 847,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-109001",
@@ -9241,11 +9379,15 @@
         },
         {
           "eventId": "actor/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|17150|2",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "moyin-a4-brilliant",
           "frame": 1029,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -9282,11 +9424,15 @@
         },
         {
           "eventId": "kibo/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|17150|2",
+          "eventType": "EFFECT_REFRESHED",
+          "status": "effect-runtime-refreshed",
           "actionId": "moyin-a4-brilliant",
           "frame": 1029,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-109001",
@@ -9323,11 +9469,15 @@
         },
         {
           "eventId": "actor/actor-109001/battle-element:2840539820446947370/source:moyin-perfect-parry/verified-calculator|EFFECT_APPLIED|18333.333|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "moyin-perfect-parry",
           "frame": 1100,
           "effectId": "battle-element:109001003",
           "runtimeEffectId": "battle-element:2840539820446947370|source:moyin-perfect-parry",
           "sourceElementId": 109001003,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "基础属性变更",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -9356,11 +9506,15 @@
         },
         {
           "eventId": "actor/actor-109001/battle-element:2840539820446947370/source:moyin-perfect-parry/verified-calculator|EFFECT_EXPIRED|18733.333|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "moyin-perfect-parry",
           "frame": 1124,
           "effectId": "battle-element:109001003",
           "runtimeEffectId": "battle-element:2840539820446947370|source:moyin-perfect-parry",
           "sourceElementId": 109001003,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "基础属性变更",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -9389,11 +9543,15 @@
         },
         {
           "eventId": "actor/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|18816.667|2",
+          "eventType": "EFFECT_REMOVED",
+          "status": "effect-runtime-removed",
           "actionId": "moyin-perfect-parry",
           "frame": 1129,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -9430,11 +9588,15 @@
         },
         {
           "eventId": "kibo/actor-109001/tuning-mark:250:persistent/verified-calculator|EFFECT_REMOVED|18816.667|2",
+          "eventType": "EFFECT_REMOVED",
+          "status": "effect-runtime-removed",
           "actionId": "moyin-perfect-parry",
           "frame": 1129,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "雷调谐印记",
           "targetKind": "kibo",
           "targetId": "actor-109001",
@@ -9471,11 +9633,15 @@
         },
         {
           "eventId": "actor/actor-109001/battle-element:109001270|EFFECT_EXPIRED|20183.333|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "moyin-limit-counter",
           "frame": 1211,
           "effectId": "battle-element:109001270",
           "runtimeEffectId": "battle-element:109001270",
-          "sourceElementId": null,
+          "sourceElementId": 109001270,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "璀璨",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -9495,11 +9661,15 @@
         },
         {
           "eventId": "actor/actor-109001/battle-element:2840539820446947370/source:moyin-perfect-parry-2/verified-calculator|EFFECT_APPLIED|21666.667|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "moyin-perfect-parry-2",
           "frame": 1300,
           "effectId": "battle-element:109001003",
           "runtimeEffectId": "battle-element:2840539820446947370|source:moyin-perfect-parry-2",
           "sourceElementId": 109001003,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "基础属性变更",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -9528,11 +9698,15 @@
         },
         {
           "eventId": "actor/actor-109001/battle-element:2840539820446947370/source:moyin-perfect-parry-2/verified-calculator|EFFECT_EXPIRED|22066.667|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "moyin-perfect-parry-2",
           "frame": 1324,
           "effectId": "battle-element:109001003",
           "runtimeEffectId": "battle-element:2840539820446947370|source:moyin-perfect-parry-2",
           "sourceElementId": 109001003,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "基础属性变更",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -9561,11 +9735,15 @@
         },
         {
           "eventId": "actor/actor-109001/battle-element:109001270|EFFECT_APPLIED|29250|1",
+          "eventType": "EFFECT_APPLIED",
+          "status": "effect-runtime-applied",
           "actionId": "moyin-star-skill-chase-input",
           "frame": 1755,
           "effectId": "battle-element:109001270",
           "runtimeEffectId": "battle-element:109001270",
-          "sourceElementId": null,
+          "sourceElementId": 109001270,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "璀璨",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -9585,11 +9763,15 @@
         },
         {
           "eventId": "actor/actor-109001/battle-element:109001270|EFFECT_EXPIRED|37250|1",
+          "eventType": "EFFECT_EXPIRED",
+          "status": "effect-runtime-expired",
           "actionId": "moyin-star-skill-chase-input",
           "frame": 2235,
           "effectId": "battle-element:109001270",
           "runtimeEffectId": "battle-element:109001270",
-          "sourceElementId": null,
+          "sourceElementId": 109001270,
+          "sourceSequencePath": null,
+          "sameFrameVisibility": null,
           "effectName": "璀璨",
           "targetKind": "actor",
           "targetId": "actor-109001",
@@ -9669,7 +9851,7 @@
         }
       ]
     },
-    "summaryHash": "1f06fdf0f82f2fa5894e6ba95bfeff32b969ad18262d1c5a5c67850b6a48dab1"
+    "summaryHash": "1369738af5b49567101707fdc4ecda1caaac9f7d4fc3d7874826566420632e9f"
   },
   "expected": {
     "exact": {
@@ -9741,6 +9923,6 @@
       }
     ]
   },
-  "replayHash": "c797818de5c98dba37f584a8846b89934e517fbf8ed98f67a30cecfdbde48b8b",
-  "profileHash": "c2a926a3c3f58b9cdfddcbe77c2563cb1f6df6d0ce858399bf92336212002500"
+  "replayHash": "37fcec1445f9047d2df7a0c86cd9739ac95a25e5182bc133c1bb83cf38b23eb1",
+  "profileHash": "0d503f6936db63381ef424727bcd085c2fc6924218b7f1d93fe23aecf0f75d07"
 }

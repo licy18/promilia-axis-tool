@@ -2,7 +2,7 @@
 
 - Owner: `103002`
 - Profile: `actor:103002:character-combat-profile:v1`
-- Hash: `6b59ae574db380243bf01b3f11f9b9871e580f82aec1a8a92240f5892c0e304e`
+- Hash: `0ade13484079d51c65ac169a08b15a0bc5125d9be33e46cfd411284530d0b39a`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no

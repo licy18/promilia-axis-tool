@@ -1941,11 +1941,15 @@ function resolveAttackInputChainAction({
           )
         : null;
     if (continuedChain) {
-      continuedSequenceIndex =
+      const nextSequenceIndex =
         Number(previous.attackChainSequenceIndex) ||
         Number(previous.attackSequenceIndex) ||
         null;
-      if (continuedSequenceIndex != null) continuedSequenceIndex += 1;
+      continuedSequenceIndex =
+        nextSequenceIndex != null &&
+        nextSequenceIndex + 1 === Number(action.attackSequenceIndex)
+          ? nextSequenceIndex + 1
+          : null;
     }
     const derivedEntries = matchingChains
       .filter(

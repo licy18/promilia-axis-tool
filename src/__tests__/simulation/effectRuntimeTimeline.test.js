@@ -819,6 +819,113 @@ describe('effect runtime timeline', () => {
     expect(timeline.summary.blockedRefreshEventCount).toBe(1);
   });
 
+  it('expires overlying layers independently and ignores a full-stack pickup without refreshing', () => {
+    const scenario = {
+      time: { durationMs: 25000, fps: 60 },
+      actors: [{ id: 'actor-source' }],
+      actions: [],
+    };
+    const command = (id, timeMs) => ({
+      ...createVerifiedGeneratedEffectCommand({
+        id,
+        effectId: 'pickup-tuning-strength',
+        semanticTargetKind: 'collision-target',
+        targetId: 'actor-source',
+        timeMs,
+        durationMs: 24000,
+        inheritType: null,
+        inheritOnControlledActorSwitch: false,
+      }),
+      stackMode: EFFECT_STACK_MODES.STACK,
+      maxStacks: 4,
+      expiryMode: 'independent-layer',
+      atCapacityPolicy: 'ignore-new-no-refresh',
+    });
+    const timeline = createEffectRuntimeTimeline({
+      scenario,
+      generatedCommands: [
+        command('layer-1', 0),
+        command('layer-2', 100),
+        command('layer-3', 200),
+        command('layer-4', 300),
+        command('layer-at-capacity', 400),
+      ],
+    });
+
+    expect(
+      timeline.events.map(event => [
+        event.type,
+        event.timeMs,
+        event.stackBefore,
+        event.stackAfter,
+        event.after?.expiresAtMs ?? null,
+      ])
+    ).toEqual([
+      ['EFFECT_APPLIED', 0, 0, 1, 24000],
+      ['EFFECT_REFRESHED', 100, 1, 2, 24000],
+      ['EFFECT_REFRESHED', 200, 2, 3, 24000],
+      ['EFFECT_REFRESHED', 300, 3, 4, 24000],
+      ['EFFECT_BLOCKED', 400, 4, 4, 24000],
+      ['EFFECT_EXPIRED', 24000, 4, 3, 24100],
+      ['EFFECT_EXPIRED', 24100, 3, 2, 24200],
+      ['EFFECT_EXPIRED', 24200, 2, 1, 24300],
+      ['EFFECT_EXPIRED', 24300, 1, 0, null],
+    ]);
+    expect(
+      resolveActiveEffectsAt(timeline, 23999)[0]
+    ).toMatchObject({ stacks: 4, expiresAtMs: 24000 });
+    expect(
+      resolveActiveEffectsAt(timeline, 24000)[0]
+    ).toMatchObject({ stacks: 3, expiresAtMs: 24100 });
+    expect(timeline.summary).toMatchObject({
+      blockedRefreshEventCount: 1,
+      expiredEventCount: 4,
+    });
+  });
+
+  it('keeps an after-hit effect invisible to its trigger and visible to later same-frame settlement', () => {
+    const command = {
+      ...createVerifiedGeneratedEffectCommand({
+        id: 'after-hit-effect',
+        effectId: 'after-hit-effect',
+        semanticTargetKind: 'enemy',
+        targetId: 'enemy-001',
+        timeMs: 100,
+        durationMs: 1000,
+        inheritType: null,
+        inheritOnControlledActorSwitch: false,
+      }),
+      sourceIdentity: {
+        packageId: 'fixture-package',
+        packageHash: 'fixture-hash',
+        actionBindingIdentity: 'fixture-action-binding',
+        effectIdentity: 'after-hit-effect',
+        sameFrameVisibility: 'strict-source-sequence',
+        triggerSequencePath: [0, 20],
+      },
+    };
+    const timeline = createEffectRuntimeTimeline({
+      scenario: {
+        time: { durationMs: 2000, fps: 60 },
+        actors: [{ id: 'actor-source' }],
+        actions: [],
+      },
+      generatedCommands: [command],
+    });
+
+    expect(
+      resolveActiveEffectsAt(timeline, 100, {
+        settlingSourceSequencePath: [0, 20],
+      })
+    ).toEqual([]);
+    expect(
+      resolveActiveEffectsAt(timeline, 100, {
+        settlingSourceSequencePath: [0, 21],
+      }).map(effect => effect.effectId)
+    ).toEqual(['after-hit-effect']);
+    expect(resolveActiveEffectsAt(timeline, 1100)).toEqual([]);
+  });
+
   it('rejects effect commands that bypass the calculator isolation boundary', () => {
     const project = createEffectOnlyProject();
     project.actions[0].effectCommands[0].appliedToCalculators = true;

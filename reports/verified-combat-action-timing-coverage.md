@@ -7,7 +7,7 @@
 - SkillControl/player 变体：1435
 - 一帧占轴：0
 - 异常长占轴（>600f）：5
-- 精确选中变体占轴：703
+- 精确选中变体占轴：702
 - 来源动画规划长度：28
 - 通用规划长度：1
 - control 身份未解析：1
@@ -43,7 +43,8 @@
 | actor | star-combo | skill-control-player-action-range | applied | 13 |
 | actor | star-combo | verified-unconditional-attack-reopen-window | applied | 7 |
 | actor | star-skill | declared-verified-input-reopen-occupancy | applied | 2 |
-| actor | star-skill | skill-control-player-action-range | applied | 13 |
+| actor | star-skill | declared-wrapper-derived-execution-occupancy | applied | 1 |
+| actor | star-skill | skill-control-player-action-range | applied | 12 |
 | actor | star-skill | unresolved-action-occupancy | unresolved | 1 |
 | actor | star-skill | verified-unconditional-attack-reopen-window | applied | 4 |
 | actor | ultimate | declared-verified-input-reopen-occupancy | applied | 1 |

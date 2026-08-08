@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "8c6b93bf19243842a212908d843689ec72328e0fa8bf8b048cbea0514049b7e0",
+  "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
   "fixedProductDenominator": {
     "publicSourceActionCount": 644,
     "actorOwnerCount": 20,
@@ -29,16 +29,16 @@
     "publicActionCount": 646,
     "actorOwnerCount": 20,
     "kiboOwnerCount": 122,
-    "runnableActionCount": 631,
+    "runnableActionCount": 629,
     "sourceAppliedActionCount": 461,
     "sourceRuntimeDependentActionCount": 173,
     "sourceStaticEvidenceGapActionCount": 12,
-    "scenarioResolvedActionCount": 585,
+    "scenarioResolvedActionCount": 583,
     "verifiedZeroActionCount": 0,
-    "unresolvedActionCount": 15,
+    "unresolvedActionCount": 17,
     "unresolvedStatusCounts": {
-      "runtime-and-evidence-gap": 7,
-      "static-evidence-gap": 8
+      "runtime-and-evidence-gap": 6,
+      "static-evidence-gap": 11
     },
     "unclassifiedUnresolvedActionCount": 0,
     "actorCoreActionCount": 60,
@@ -47,66 +47,66 @@
     "kiboCoreRunnableCount": 448,
     "nonzeroRecoveryElementCount": 667,
     "recoveryScopeCounts": {
-      "applied-current-public-action": 203,
+      "applied-current-public-action": 202,
       "current-public-action-unresolved": 35,
-      "outside-current-public-action-catalog": 399,
+      "outside-current-public-action-catalog": 400,
       "public-unselected-control-variant": 30
     },
     "actionDimensions": {
       "hp": {
         "nonzero": 895,
         "verified-zero": 0,
-        "unresolved": 2053
+        "unresolved": 2052
       },
       "toughness": {
         "nonzero": 869,
         "verified-zero": 26,
-        "unresolved": 2053
+        "unresolved": 2052
       },
       "actorSp": {
         "nonzero": 267,
         "verified-zero": 645,
-        "unresolved": 2036
+        "unresolved": 2035
       },
       "kiboSp": {
         "nonzero": 267,
         "verified-zero": 645,
-        "unresolved": 2036
+        "unresolved": 2035
       }
     },
     "effectDimensions": {
       "damage": {
-        "applied": 197,
-        "unresolved": 225,
-        "verified-zero": 2698
+        "applied": 198,
+        "unresolved": 227,
+        "verified-zero": 2707
       },
       "toughness": {
-        "verified-zero": 3120
+        "verified-zero": 3132
       },
       "sp": {
         "applied": 34,
-        "unresolved": 54,
-        "verified-zero": 3032
+        "unresolved": 55,
+        "verified-zero": 3043
       },
       "hp": {
         "applied": 38,
         "unresolved": 4,
-        "verified-zero": 3078
+        "verified-zero": 3090
       },
       "shield": {
         "applied": 13,
         "unresolved": 2,
-        "verified-zero": 3105
+        "verified-zero": 3117
       },
       "dynamicProperty": {
-        "applied": 695,
-        "unresolved": 117,
-        "verified-zero": 2308
+        "applied": 697,
+        "unresolved": 118,
+        "verified-zero": 2317
       },
       "mark": {
-        "applied": 225,
+        "applied": 228,
         "unresolved": 74,
-        "verified-zero": 2821
+        "verified-zero": 2830
       }
     },
     "semanticEffects": {
@@ -134,21 +134,21 @@
         "verified-action-effective-occupancy-window-unresolved": 4
       },
       "schedulingKindCounts": {
-        "exact-public-action-execution-form-occupancy": 9,
-        "exact-selected-variant-occupancy": 703,
+        "exact-public-action-execution-form-occupancy": 10,
+        "exact-selected-variant-occupancy": 702,
         "generic-planning-duration": 1,
         "source-animation-planning-duration": 28
       },
-      "exactSelectedVariantOccupancyCount": 703,
+      "exactSelectedVariantOccupancyCount": 702,
       "sourceAnimationPlanningDurationCount": 28,
       "genericPlanningDurationCount": 1,
       "unresolvedControlIdentityCount": 1,
       "variantModelStatusCounts": {
         "partially-resolved": 8,
-        "resolved": 512,
+        "resolved": 513,
         "static-evidence-gap": 4,
         "unresolved-control-identity": 1,
-        "variant-condition-not-yet-modeled": 216
+        "variant-condition-not-yet-modeled": 215
       },
       "variantConditionDiscoveryStatusCounts": {
         "partially-resolved": 6,
@@ -170,7 +170,7 @@
       "passiveEffectCount": 8,
       "appliedPassiveEffectCount": 8,
       "ownerCount": 142,
-      "nodeCount": 735,
+      "nodeCount": 736,
       "edgeCount": 346,
       "appliedEdgeCount": 64,
       "unresolvedEdgeCount": 286,
@@ -200,15 +200,18 @@
       },
       "contextEdgeCount": 9,
       "appliedContextEdgeCount": 9,
-      "publicActionFormCount": 14,
+      "publicActionFormCount": 15,
       "attackInputChainCount": 8,
+      "attackInputMechanicWindowCount": 1,
       "compiledInputVariantSelectorCount": 2,
       "compiledVariantWindowBindingCount": 6,
-      "targetStateProfileCount": 4,
-      "targetStateTransactionCount": 14,
+      "targetStateProfileCount": 5,
+      "targetStateTransactionCount": 16,
       "conditionalHitGroupCount": 3,
       "tuningMarkConditionalDamageGroupCount": 8,
       "runtimeEffectBindingCount": 12,
+      "pickupProfileCount": 4,
+      "pickupSpawnBindingCount": 12,
       "hiddenInputAuditRowCount": 89,
       "hiddenInputPublicExecutionFormCount": 21
     }
@@ -234,8 +237,8 @@
       "actionCount": 20,
       "runtimeStatusCounts": {
         "runnable": 16,
-        "runtime-and-evidence-gap": 3,
-        "static-evidence-gap": 1
+        "runtime-and-evidence-gap": 2,
+        "static-evidence-gap": 2
       },
       "timingStatusCounts": {
         "applied": 19,
@@ -272,8 +275,8 @@
       "actionKind": "perfect-parry",
       "actionCount": 20,
       "runtimeStatusCounts": {
-        "runnable": 17,
-        "static-evidence-gap": 3
+        "runnable": 16,
+        "static-evidence-gap": 4
       },
       "timingStatusCounts": {
         "applied": 20
@@ -295,8 +298,8 @@
       "actionKind": "star-carry",
       "actionCount": 18,
       "runtimeStatusCounts": {
-        "runnable": 17,
-        "static-evidence-gap": 1
+        "runnable": 16,
+        "static-evidence-gap": 2
       },
       "timingStatusCounts": {
         "applied": 17,
@@ -3367,20 +3370,16 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 11
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 11
         },
         "actorSp": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 11
         },
         "kiboSp": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 11
         },
         "healing": {
           "verified-zero": 3
@@ -3402,7 +3401,52 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "settlement": null,
+      "settlement": {
+        "required": true,
+        "status": "applied",
+        "hitCount": 11,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700201|0|10700203|normal-attack",
+            "publicFormId": "actor|107002|10700201|0|10700203|normal-attack:default",
+            "actionKind": "normal-attack",
+            "sourceSkillId": 10700201,
+            "executionControlSkillId": 10700203,
+            "executionSubSkillIndex": 0,
+            "hitCount": 11,
+            "settlementEvidence": [
+              "hit:10700203|0|elements|2|-1404469563182445209|100|11",
+              "hit:10700203|0|elements|2|-1404469563182445209|40|1",
+              "hit:10700203|0|elements|2|-1404469563182445209|46|2",
+              "hit:10700203|0|elements|2|-1404469563182445209|52|3",
+              "hit:10700203|0|elements|2|-1404469563182445209|58|4",
+              "hit:10700203|0|elements|2|-1404469563182445209|64|5",
+              "hit:10700203|0|elements|2|-1404469563182445209|70|6",
+              "hit:10700203|0|elements|2|-1404469563182445209|76|7",
+              "hit:10700203|0|elements|2|-1404469563182445209|82|8",
+              "hit:10700203|0|elements|2|-1404469563182445209|88|9",
+              "hit:10700203|0|elements|2|-1404469563182445209|94|10"
+            ],
+            "dimensionSummary": {
+              "hp": {
+                "applied": 11
+              },
+              "toughness": {
+                "applied": 11
+              },
+              "actorSp": {
+                "applied": 11
+              },
+              "kiboSp": {
+                "applied": 11
+              }
+            },
+            "status": "applied",
+            "reasons": [],
+            "sourceIdentity": "characters.items[id=107002].skillSlots[group=backup,skillId=10700203]"
+          }
+        ]
+      },
       "reasons": [
         "normal-attack-input-segment-duration-unresolved"
       ],
@@ -3423,15 +3467,15 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "source-verified",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 336,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
+        "durationFrames": 218,
+        "sourceKind": "declared-wrapper-derived-execution-occupancy",
+        "schedulingKind": "exact-public-action-execution-form-occupancy",
         "planningDurationFrames": null,
-        "variantModelStatus": "variant-condition-not-yet-modeled"
+        "variantModelStatus": "resolved"
       },
       "variants": {
         "status": "not-applicable",
@@ -3442,38 +3486,31 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 3,
-          "unresolved": 10
+          "applied": 6
         },
         "enemyToughness": {
-          "applied": 3,
-          "unresolved": 10
+          "applied": 6
         },
         "actorSp": {
-          "applied": 1,
-          "unresolved": 10,
-          "verified-zero": 2
+          "applied": 6
         },
         "kiboSp": {
-          "applied": 1,
-          "unresolved": 10,
-          "verified-zero": 2
+          "applied": 6
         },
         "healing": {
-          "verified-zero": 16
+          "verified-zero": 11
         },
         "shield": {
-          "verified-zero": 16
+          "verified-zero": 11
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 3,
-          "verified-zero": 12
+          "unresolved": 1,
+          "verified-zero": 9
         },
         "tuningMark": {
-          "applied": 4,
-          "unresolved": 1,
-          "verified-zero": 11
+          "applied": 3,
+          "verified-zero": 8
         }
       },
       "semanticEffects": {
@@ -3482,20 +3519,48 @@
         "verifiedZero": 0,
         "unresolved": 5
       },
-      "settlement": null,
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "judgment-condition-semantics-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "tuning-consume-judgment-missing",
-        "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved",
-        "tuning-consume-current-packet-not-in-candidate-map",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "property-formula-not-literal-function-5",
-        "sp-formula-not-literal-function-5"
-      ],
+      "settlement": {
+        "required": true,
+        "status": "applied",
+        "hitCount": 6,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700212|0|10700212|star-skill",
+            "publicFormId": "actor:107002:star-skill:misa-star-main-combo",
+            "actionKind": "star-skill",
+            "sourceSkillId": 10700212,
+            "executionControlSkillId": 10700226,
+            "executionSubSkillIndex": 0,
+            "hitCount": 6,
+            "settlementEvidence": [
+              "hit:10700226|0|elements|1|-3883846112050479707|107|5",
+              "hit:10700226|0|elements|1|-3883846112050479707|114|6",
+              "hit:10700226|0|elements|1|-3883846112050479707|74|1",
+              "hit:10700226|0|elements|1|-3883846112050479707|82|2",
+              "hit:10700226|0|elements|1|-3883846112050479707|90|3",
+              "hit:10700226|0|elements|1|-3883846112050479707|99|4"
+            ],
+            "dimensionSummary": {
+              "hp": {
+                "applied": 6
+              },
+              "toughness": {
+                "applied": 6
+              },
+              "actorSp": {
+                "applied": 6
+              },
+              "kiboSp": {
+                "applied": 6
+              }
+            },
+            "status": "applied",
+            "reasons": [],
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10700226.asset#sub0-selected-main-combo|animation-occupancy=218F"
+          }
+        ]
+      },
+      "reasons": [],
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=3]"
     },
     {
@@ -3568,7 +3633,12 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "settlement": null,
+      "settlement": {
+        "required": false,
+        "status": "not-required",
+        "hitCount": 0,
+        "publicForms": []
+      },
       "reasons": [
         "trigger-frame-missing"
       ],
@@ -37200,18 +37270,18 @@
           "verified-zero": 5
         },
         "healing": {
-          "verified-zero": 5
+          "verified-zero": 6
         },
         "shield": {
-          "verified-zero": 5
+          "verified-zero": 6
         },
         "dynamicProperty": {
-          "applied": 2,
+          "applied": 3,
           "verified-zero": 3
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 4
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
@@ -43338,20 +43408,16 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 11
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 11
         },
         "actorSp": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 11
         },
         "kiboSp": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 11
         },
         "healing": {
           "verified-zero": 3
@@ -43373,7 +43439,52 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "settlement": null,
+      "settlement": {
+        "required": true,
+        "status": "applied",
+        "hitCount": 11,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700201|0|10700203|normal-attack",
+            "publicFormId": "actor|107002|10700201|0|10700203|normal-attack:default",
+            "actionKind": "normal-attack",
+            "sourceSkillId": 10700201,
+            "executionControlSkillId": 10700203,
+            "executionSubSkillIndex": 0,
+            "hitCount": 11,
+            "settlementEvidence": [
+              "hit:10700203|0|elements|2|-1404469563182445209|100|11",
+              "hit:10700203|0|elements|2|-1404469563182445209|40|1",
+              "hit:10700203|0|elements|2|-1404469563182445209|46|2",
+              "hit:10700203|0|elements|2|-1404469563182445209|52|3",
+              "hit:10700203|0|elements|2|-1404469563182445209|58|4",
+              "hit:10700203|0|elements|2|-1404469563182445209|64|5",
+              "hit:10700203|0|elements|2|-1404469563182445209|70|6",
+              "hit:10700203|0|elements|2|-1404469563182445209|76|7",
+              "hit:10700203|0|elements|2|-1404469563182445209|82|8",
+              "hit:10700203|0|elements|2|-1404469563182445209|88|9",
+              "hit:10700203|0|elements|2|-1404469563182445209|94|10"
+            ],
+            "dimensionSummary": {
+              "hp": {
+                "applied": 11
+              },
+              "toughness": {
+                "applied": 11
+              },
+              "actorSp": {
+                "applied": 11
+              },
+              "kiboSp": {
+                "applied": 11
+              }
+            },
+            "status": "applied",
+            "reasons": [],
+            "sourceIdentity": "characters.items[id=107002].skillSlots[group=backup,skillId=10700203]"
+          }
+        ]
+      },
       "reasons": [
         "normal-attack-input-segment-duration-unresolved"
       ],
@@ -43413,20 +43524,16 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 8
+          "applied": 7
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 8
+          "applied": 7
         },
         "actorSp": {
-          "applied": 1,
-          "unresolved": 8
+          "applied": 7
         },
         "kiboSp": {
-          "applied": 1,
-          "unresolved": 8
+          "applied": 7
         },
         "healing": {
           "verified-zero": 3
@@ -43448,7 +43555,48 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "settlement": null,
+      "settlement": {
+        "required": true,
+        "status": "applied",
+        "hitCount": 7,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700201|1|10700210|charged-attack",
+            "publicFormId": "actor|107002|10700201|1|10700210|charged-attack:default",
+            "actionKind": "charged-attack",
+            "sourceSkillId": 10700201,
+            "executionControlSkillId": 10700210,
+            "executionSubSkillIndex": 0,
+            "hitCount": 7,
+            "settlementEvidence": [
+              "hit:10700210|0|elements|2|-1211965369219084289|48|1",
+              "hit:10700210|0|elements|2|-1211965369219084289|51|2",
+              "hit:10700210|0|elements|2|-1211965369219084289|63|3",
+              "hit:10700210|0|elements|2|-1211965369219084289|69|4",
+              "hit:10700210|0|elements|2|-1211965369219084289|76|5",
+              "hit:10700210|0|elements|2|-1211965369219084289|83|6",
+              "hit:10700210|0|elements|2|-1211965369219084289|90|7"
+            ],
+            "dimensionSummary": {
+              "hp": {
+                "applied": 7
+              },
+              "toughness": {
+                "applied": 7
+              },
+              "actorSp": {
+                "applied": 7
+              },
+              "kiboSp": {
+                "applied": 7
+              }
+            },
+            "status": "applied",
+            "reasons": [],
+            "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=2]"
+          }
+        ]
+      },
       "reasons": [],
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=2]"
     },
@@ -43462,12 +43610,12 @@
       "sourceSkillName": "轻语",
       "controlSkillId": 10700215,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "runtime-and-evidence-gap",
+      "runtimeStatus": "static-evidence-gap",
       "runnable": false,
       "rawRuntimeReady": false,
       "schedulable": true,
       "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "scenarioRuntimeStatus": "static-evidence-gap",
       "mechanicsClassification": "unresolved",
       "timing": {
         "status": "applied",
@@ -43486,19 +43634,15 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 2,
           "unresolved": 1
         },
         "enemyToughness": {
-          "applied": 2,
           "unresolved": 1
         },
         "actorSp": {
-          "applied": 2,
           "unresolved": 1
         },
         "kiboSp": {
-          "applied": 2,
           "unresolved": 1
         },
         "healing": {},
@@ -43512,10 +43656,46 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "settlement": null,
+      "settlement": {
+        "required": true,
+        "status": "static-evidence-gap",
+        "hitCount": 0,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700201|2|10700215|dodge-attack",
+            "publicFormId": "actor|107002|10700201|2|10700215|dodge-attack:default",
+            "actionKind": "dodge-attack",
+            "sourceSkillId": 10700201,
+            "executionControlSkillId": 10700215,
+            "executionSubSkillIndex": 0,
+            "hitCount": 0,
+            "settlementEvidence": [],
+            "dimensionSummary": {
+              "hp": {
+                "unresolved": 1
+              },
+              "toughness": {
+                "unresolved": 1
+              },
+              "actorSp": {
+                "unresolved": 1
+              },
+              "kiboSp": {
+                "unresolved": 1
+              }
+            },
+            "status": "static-evidence-gap",
+            "reasons": [
+              "public-action-damage-settlement-evidence-missing"
+            ],
+            "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=204]"
+          }
+        ]
+      },
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "public-action-damage-settlement-evidence-missing"
       ],
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=204]"
     },
@@ -43553,20 +43733,16 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 1
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 1
         },
         "actorSp": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 1
         },
         "kiboSp": {
-          "applied": 1,
-          "unresolved": 3
+          "applied": 1
         },
         "healing": {
           "verified-zero": 1
@@ -43587,7 +43763,42 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "settlement": null,
+      "settlement": {
+        "required": true,
+        "status": "applied",
+        "hitCount": 1,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700201|3|10700211|plunging-attack",
+            "publicFormId": "actor|107002|10700201|3|10700211|plunging-attack:default",
+            "actionKind": "plunging-attack",
+            "sourceSkillId": 10700201,
+            "executionControlSkillId": 10700211,
+            "executionSubSkillIndex": 0,
+            "hitCount": 1,
+            "settlementEvidence": [
+              "hit:10700211|0|elements|0|-5519795801939917140|37|1"
+            ],
+            "dimensionSummary": {
+              "hp": {
+                "applied": 1
+              },
+              "toughness": {
+                "applied": 1
+              },
+              "actorSp": {
+                "applied": 1
+              },
+              "kiboSp": {
+                "applied": 1
+              }
+            },
+            "status": "applied",
+            "reasons": [],
+            "sourceIdentity": "characters.items[id=107002].skillSlots[group=aerial,slot=301]"
+          }
+        ]
+      },
       "reasons": [],
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=aerial,slot=301]"
     },
@@ -43606,15 +43817,15 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "source-verified",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
-        "durationFrames": 336,
-        "sourceKind": "skill-control-player-action-range",
-        "schedulingKind": "exact-selected-variant-occupancy",
+        "durationFrames": 218,
+        "sourceKind": "declared-wrapper-derived-execution-occupancy",
+        "schedulingKind": "exact-public-action-execution-form-occupancy",
         "planningDurationFrames": null,
-        "variantModelStatus": "variant-condition-not-yet-modeled"
+        "variantModelStatus": "resolved"
       },
       "variants": {
         "status": "not-applicable",
@@ -43625,38 +43836,31 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 3,
-          "unresolved": 10
+          "applied": 6
         },
         "enemyToughness": {
-          "applied": 3,
-          "unresolved": 10
+          "applied": 6
         },
         "actorSp": {
-          "applied": 1,
-          "unresolved": 10,
-          "verified-zero": 2
+          "applied": 6
         },
         "kiboSp": {
-          "applied": 1,
-          "unresolved": 10,
-          "verified-zero": 2
+          "applied": 6
         },
         "healing": {
-          "verified-zero": 16
+          "verified-zero": 11
         },
         "shield": {
-          "verified-zero": 16
+          "verified-zero": 11
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 3,
-          "verified-zero": 12
+          "unresolved": 1,
+          "verified-zero": 9
         },
         "tuningMark": {
-          "applied": 4,
-          "unresolved": 1,
-          "verified-zero": 11
+          "applied": 3,
+          "verified-zero": 8
         }
       },
       "semanticEffects": {
@@ -43665,20 +43869,48 @@
         "verifiedZero": 0,
         "unresolved": 5
       },
-      "settlement": null,
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "judgment-condition-semantics-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "tuning-consume-judgment-missing",
-        "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved",
-        "tuning-consume-current-packet-not-in-candidate-map",
-        "nested-damage-trigger-lifecycle-evidence-gap",
-        "property-formula-not-literal-function-5",
-        "sp-formula-not-literal-function-5"
-      ],
+      "settlement": {
+        "required": true,
+        "status": "applied",
+        "hitCount": 6,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700212|0|10700212|star-skill",
+            "publicFormId": "actor:107002:star-skill:misa-star-main-combo",
+            "actionKind": "star-skill",
+            "sourceSkillId": 10700212,
+            "executionControlSkillId": 10700226,
+            "executionSubSkillIndex": 0,
+            "hitCount": 6,
+            "settlementEvidence": [
+              "hit:10700226|0|elements|1|-3883846112050479707|107|5",
+              "hit:10700226|0|elements|1|-3883846112050479707|114|6",
+              "hit:10700226|0|elements|1|-3883846112050479707|74|1",
+              "hit:10700226|0|elements|1|-3883846112050479707|82|2",
+              "hit:10700226|0|elements|1|-3883846112050479707|90|3",
+              "hit:10700226|0|elements|1|-3883846112050479707|99|4"
+            ],
+            "dimensionSummary": {
+              "hp": {
+                "applied": 6
+              },
+              "toughness": {
+                "applied": 6
+              },
+              "actorSp": {
+                "applied": 6
+              },
+              "kiboSp": {
+                "applied": 6
+              }
+            },
+            "status": "applied",
+            "reasons": [],
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10700226.asset#sub0-selected-main-combo|animation-occupancy=218F"
+          }
+        ]
+      },
+      "reasons": [],
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=3]"
     },
     {
@@ -43715,25 +43947,32 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1,
-          "unresolved": 1
+          "applied": 6
         },
         "enemyToughness": {
-          "applied": 1,
-          "unresolved": 1
+          "applied": 6
         },
         "actorSp": {
-          "applied": 1,
-          "unresolved": 1
+          "applied": 6
         },
         "kiboSp": {
-          "applied": 1,
-          "unresolved": 1
+          "applied": 6
         },
-        "healing": {},
-        "shield": {},
-        "dynamicProperty": {},
-        "tuningMark": {}
+        "healing": {
+          "verified-zero": 11
+        },
+        "shield": {
+          "verified-zero": 11
+        },
+        "dynamicProperty": {
+          "applied": 1,
+          "unresolved": 1,
+          "verified-zero": 9
+        },
+        "tuningMark": {
+          "applied": 3,
+          "verified-zero": 8
+        }
       },
       "semanticEffects": {
         "total": 0,
@@ -43741,7 +43980,47 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "settlement": null,
+      "settlement": {
+        "required": true,
+        "status": "applied",
+        "hitCount": 6,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700212|1|10700226|star-combo",
+            "publicFormId": "actor|107002|10700212|1|10700226|star-combo:default",
+            "actionKind": "star-combo",
+            "sourceSkillId": 10700212,
+            "executionControlSkillId": 10700226,
+            "executionSubSkillIndex": 0,
+            "hitCount": 6,
+            "settlementEvidence": [
+              "hit:10700226|0|elements|1|-3883846112050479707|107|5",
+              "hit:10700226|0|elements|1|-3883846112050479707|114|6",
+              "hit:10700226|0|elements|1|-3883846112050479707|74|1",
+              "hit:10700226|0|elements|1|-3883846112050479707|82|2",
+              "hit:10700226|0|elements|1|-3883846112050479707|90|3",
+              "hit:10700226|0|elements|1|-3883846112050479707|99|4"
+            ],
+            "dimensionSummary": {
+              "hp": {
+                "applied": 6
+              },
+              "toughness": {
+                "applied": 6
+              },
+              "actorSp": {
+                "applied": 6
+              },
+              "kiboSp": {
+                "applied": 6
+              }
+            },
+            "status": "applied",
+            "reasons": [],
+            "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=208]"
+          }
+        ]
+      },
       "reasons": [],
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=208]"
     },
@@ -43815,7 +44094,12 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "settlement": null,
+      "settlement": {
+        "required": false,
+        "status": "not-required",
+        "hitCount": 0,
+        "publicForms": []
+      },
       "reasons": [
         "trigger-frame-missing"
       ],
@@ -43831,12 +44115,12 @@
       "sourceSkillName": "林隙留影",
       "controlSkillId": 10700222,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "runnable",
-      "runnable": true,
+      "runtimeStatus": "static-evidence-gap",
+      "runnable": false,
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "static-evidence-gap",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -43855,16 +44139,16 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1
+          "unresolved": 1
         },
         "enemyToughness": {
-          "verified-zero": 1
+          "unresolved": 1
         },
         "actorSp": {
-          "verified-zero": 1
+          "unresolved": 1
         },
         "kiboSp": {
-          "verified-zero": 1
+          "unresolved": 1
         },
         "healing": {
           "applied": 4
@@ -43885,8 +44169,45 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "settlement": null,
-      "reasons": [],
+      "settlement": {
+        "required": true,
+        "status": "static-evidence-gap",
+        "hitCount": 0,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700222|0|10700222|star-carry",
+            "publicFormId": "actor|107002|10700222|0|10700222|star-carry:default",
+            "actionKind": "star-carry",
+            "sourceSkillId": 10700222,
+            "executionControlSkillId": 10700222,
+            "executionSubSkillIndex": 0,
+            "hitCount": 0,
+            "settlementEvidence": [],
+            "dimensionSummary": {
+              "hp": {
+                "unresolved": 1
+              },
+              "toughness": {
+                "unresolved": 1
+              },
+              "actorSp": {
+                "unresolved": 1
+              },
+              "kiboSp": {
+                "unresolved": 1
+              }
+            },
+            "status": "static-evidence-gap",
+            "reasons": [
+              "public-action-damage-settlement-evidence-missing"
+            ],
+            "sourceIdentity": "characters.items[id=107002].skillSlots[skillId=10700222]"
+          }
+        ]
+      },
+      "reasons": [
+        "public-action-damage-settlement-evidence-missing"
+      ],
       "sourceIdentity": "characters.items[id=107002].skillSlots[skillId=10700222]"
     },
     {
@@ -43923,16 +44244,16 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 1
+          "applied": 4
         },
         "enemyToughness": {
-          "applied": 1
+          "applied": 4
         },
         "actorSp": {
-          "applied": 1
+          "applied": 4
         },
         "kiboSp": {
-          "applied": 1
+          "applied": 4
         },
         "healing": {},
         "shield": {},
@@ -43945,7 +44266,45 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "settlement": null,
+      "settlement": {
+        "required": true,
+        "status": "applied",
+        "hitCount": 4,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700222|1|10700225|limit-counter",
+            "publicFormId": "actor|107002|10700222|1|10700225|limit-counter:default",
+            "actionKind": "limit-counter",
+            "sourceSkillId": 10700222,
+            "executionControlSkillId": 10700225,
+            "executionSubSkillIndex": 0,
+            "hitCount": 4,
+            "settlementEvidence": [
+              "hit:10700225|0|elements|0|5593300562289576764|15|1",
+              "hit:10700225|0|elements|0|5593300562289576764|22|2",
+              "hit:10700225|0|elements|0|5593300562289576764|29|3",
+              "hit:10700225|0|elements|0|5593300562289576764|36|4"
+            ],
+            "dimensionSummary": {
+              "hp": {
+                "applied": 4
+              },
+              "toughness": {
+                "applied": 4
+              },
+              "actorSp": {
+                "applied": 4
+              },
+              "kiboSp": {
+                "applied": 4
+              }
+            },
+            "status": "applied",
+            "reasons": [],
+            "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=207]"
+          }
+        ]
+      },
       "reasons": [],
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=207]"
     },
@@ -43959,12 +44318,12 @@
       "sourceSkillName": "林隙留影",
       "controlSkillId": 10700227,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "runnable",
-      "runnable": true,
+      "runtimeStatus": "static-evidence-gap",
+      "runnable": false,
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "static-evidence-gap",
       "mechanicsClassification": "applied",
       "timing": {
         "status": "applied",
@@ -43983,16 +44342,16 @@
       },
       "dimensions": {
         "enemyHp": {
-          "unresolved": 3
+          "unresolved": 1
         },
         "enemyToughness": {
-          "unresolved": 3
+          "unresolved": 1
         },
         "actorSp": {
-          "unresolved": 3
+          "unresolved": 1
         },
         "kiboSp": {
-          "unresolved": 3
+          "unresolved": 1
         },
         "healing": {
           "verified-zero": 2
@@ -44013,8 +44372,45 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "settlement": null,
-      "reasons": [],
+      "settlement": {
+        "required": true,
+        "status": "static-evidence-gap",
+        "hitCount": 0,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700222|2|10700227|perfect-parry",
+            "publicFormId": "actor|107002|10700222|2|10700227|perfect-parry:default",
+            "actionKind": "perfect-parry",
+            "sourceSkillId": 10700222,
+            "executionControlSkillId": 10700227,
+            "executionSubSkillIndex": 0,
+            "hitCount": 0,
+            "settlementEvidence": [],
+            "dimensionSummary": {
+              "hp": {
+                "unresolved": 1
+              },
+              "toughness": {
+                "unresolved": 1
+              },
+              "actorSp": {
+                "unresolved": 1
+              },
+              "kiboSp": {
+                "unresolved": 1
+              }
+            },
+            "status": "static-evidence-gap",
+            "reasons": [
+              "public-action-damage-settlement-evidence-missing"
+            ],
+            "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=209]"
+          }
+        ]
+      },
+      "reasons": [
+        "public-action-damage-settlement-evidence-missing"
+      ],
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=209]"
     },
     {
@@ -83561,12 +83957,12 @@
       "sourceSkillName": "轻语",
       "controlSkillId": 10700215,
       "selectedSubSkillIndex": 0,
-      "runtimeStatus": "runtime-and-evidence-gap",
+      "runtimeStatus": "static-evidence-gap",
       "runnable": false,
       "rawRuntimeReady": false,
       "schedulable": true,
       "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "scenario-runtime-unresolved",
+      "scenarioRuntimeStatus": "static-evidence-gap",
       "mechanicsClassification": "unresolved",
       "timing": {
         "status": "applied",
@@ -83585,19 +83981,15 @@
       },
       "dimensions": {
         "enemyHp": {
-          "applied": 2,
           "unresolved": 1
         },
         "enemyToughness": {
-          "applied": 2,
           "unresolved": 1
         },
         "actorSp": {
-          "applied": 2,
           "unresolved": 1
         },
         "kiboSp": {
-          "applied": 2,
           "unresolved": 1
         },
         "healing": {},
@@ -83611,12 +84003,258 @@
         "verifiedZero": 0,
         "unresolved": 0
       },
-      "settlement": null,
+      "settlement": {
+        "required": true,
+        "status": "static-evidence-gap",
+        "hitCount": 0,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700201|2|10700215|dodge-attack",
+            "publicFormId": "actor|107002|10700201|2|10700215|dodge-attack:default",
+            "actionKind": "dodge-attack",
+            "sourceSkillId": 10700201,
+            "executionControlSkillId": 10700215,
+            "executionSubSkillIndex": 0,
+            "hitCount": 0,
+            "settlementEvidence": [],
+            "dimensionSummary": {
+              "hp": {
+                "unresolved": 1
+              },
+              "toughness": {
+                "unresolved": 1
+              },
+              "actorSp": {
+                "unresolved": 1
+              },
+              "kiboSp": {
+                "unresolved": 1
+              }
+            },
+            "status": "static-evidence-gap",
+            "reasons": [
+              "public-action-damage-settlement-evidence-missing"
+            ],
+            "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=204]"
+          }
+        ]
+      },
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
+        "projectile-impact-frame-runtime-dependent",
+        "public-action-damage-settlement-evidence-missing"
       ],
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=204]"
+    },
+    {
+      "identity": "actor|107002|10700222|0|10700222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "ownerName": "米砂",
+      "actionKind": "star-carry",
+      "sourceSkillId": 10700222,
+      "sourceSkillName": "林隙留影",
+      "controlSkillId": 10700222,
+      "selectedSubSkillIndex": 0,
+      "runtimeStatus": "static-evidence-gap",
+      "runnable": false,
+      "rawRuntimeReady": true,
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "static-evidence-gap",
+      "mechanicsClassification": "applied",
+      "timing": {
+        "status": "applied",
+        "durationFrames": 150,
+        "sourceKind": "skill-control-player-action-range",
+        "schedulingKind": "exact-selected-variant-occupancy",
+        "planningDurationFrames": null,
+        "variantModelStatus": "resolved"
+      },
+      "variants": {
+        "status": "not-applicable",
+        "total": 0
+      },
+      "specialResource": {
+        "status": "not-applicable"
+      },
+      "dimensions": {
+        "enemyHp": {
+          "unresolved": 1
+        },
+        "enemyToughness": {
+          "unresolved": 1
+        },
+        "actorSp": {
+          "unresolved": 1
+        },
+        "kiboSp": {
+          "unresolved": 1
+        },
+        "healing": {
+          "applied": 4
+        },
+        "shield": {
+          "verified-zero": 4
+        },
+        "dynamicProperty": {
+          "verified-zero": 4
+        },
+        "tuningMark": {
+          "verified-zero": 4
+        }
+      },
+      "semanticEffects": {
+        "total": 4,
+        "applied": 4,
+        "verifiedZero": 0,
+        "unresolved": 0
+      },
+      "settlement": {
+        "required": true,
+        "status": "static-evidence-gap",
+        "hitCount": 0,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700222|0|10700222|star-carry",
+            "publicFormId": "actor|107002|10700222|0|10700222|star-carry:default",
+            "actionKind": "star-carry",
+            "sourceSkillId": 10700222,
+            "executionControlSkillId": 10700222,
+            "executionSubSkillIndex": 0,
+            "hitCount": 0,
+            "settlementEvidence": [],
+            "dimensionSummary": {
+              "hp": {
+                "unresolved": 1
+              },
+              "toughness": {
+                "unresolved": 1
+              },
+              "actorSp": {
+                "unresolved": 1
+              },
+              "kiboSp": {
+                "unresolved": 1
+              }
+            },
+            "status": "static-evidence-gap",
+            "reasons": [
+              "public-action-damage-settlement-evidence-missing"
+            ],
+            "sourceIdentity": "characters.items[id=107002].skillSlots[skillId=10700222]"
+          }
+        ]
+      },
+      "reasons": [
+        "public-action-damage-settlement-evidence-missing"
+      ],
+      "sourceIdentity": "characters.items[id=107002].skillSlots[skillId=10700222]"
+    },
+    {
+      "identity": "actor|107002|10700222|2|10700227|perfect-parry",
+      "ownerKind": "actor",
+      "ownerId": 107002,
+      "ownerName": "米砂",
+      "actionKind": "perfect-parry",
+      "sourceSkillId": 10700222,
+      "sourceSkillName": "林隙留影",
+      "controlSkillId": 10700227,
+      "selectedSubSkillIndex": 0,
+      "runtimeStatus": "static-evidence-gap",
+      "runnable": false,
+      "rawRuntimeReady": true,
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "static-evidence-gap",
+      "mechanicsClassification": "applied",
+      "timing": {
+        "status": "applied",
+        "durationFrames": 124,
+        "sourceKind": "skill-control-player-action-range",
+        "schedulingKind": "exact-selected-variant-occupancy",
+        "planningDurationFrames": null,
+        "variantModelStatus": "resolved"
+      },
+      "variants": {
+        "status": "not-applicable",
+        "total": 0
+      },
+      "specialResource": {
+        "status": "not-applicable"
+      },
+      "dimensions": {
+        "enemyHp": {
+          "unresolved": 1
+        },
+        "enemyToughness": {
+          "unresolved": 1
+        },
+        "actorSp": {
+          "unresolved": 1
+        },
+        "kiboSp": {
+          "unresolved": 1
+        },
+        "healing": {
+          "verified-zero": 2
+        },
+        "shield": {
+          "verified-zero": 2
+        },
+        "dynamicProperty": {
+          "verified-zero": 2
+        },
+        "tuningMark": {
+          "verified-zero": 2
+        }
+      },
+      "semanticEffects": {
+        "total": 1,
+        "applied": 1,
+        "verifiedZero": 0,
+        "unresolved": 0
+      },
+      "settlement": {
+        "required": true,
+        "status": "static-evidence-gap",
+        "hitCount": 0,
+        "publicForms": [
+          {
+            "actionIdentity": "actor|107002|10700222|2|10700227|perfect-parry",
+            "publicFormId": "actor|107002|10700222|2|10700227|perfect-parry:default",
+            "actionKind": "perfect-parry",
+            "sourceSkillId": 10700222,
+            "executionControlSkillId": 10700227,
+            "executionSubSkillIndex": 0,
+            "hitCount": 0,
+            "settlementEvidence": [],
+            "dimensionSummary": {
+              "hp": {
+                "unresolved": 1
+              },
+              "toughness": {
+                "unresolved": 1
+              },
+              "actorSp": {
+                "unresolved": 1
+              },
+              "kiboSp": {
+                "unresolved": 1
+              }
+            },
+            "status": "static-evidence-gap",
+            "reasons": [
+              "public-action-damage-settlement-evidence-missing"
+            ],
+            "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=209]"
+          }
+        ]
+      },
+      "reasons": [
+        "public-action-damage-settlement-evidence-missing"
+      ],
+      "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=209]"
     },
     {
       "identity": "actor|108001|10800101|1|10800110|charged-attack",
@@ -87025,6 +87663,14 @@
           "controlSkillId": 10700212,
           "subSkillIndex": 0,
           "selected": true
+        },
+        {
+          "actionIdentity": "actor|107002|10700212|1|10700226|star-combo",
+          "classification": "applied",
+          "scenarioClassification": "applied",
+          "controlSkillId": 10700226,
+          "subSkillIndex": 0,
+          "selected": true
         }
       ],
       "sourceIdentity": "battle-element-assets.jsonl#path_id=-3883846112050479707"
@@ -89191,17 +89837,8 @@
       "recoverSp": 13300,
       "petRecoverSp": 51999,
       "recoverIntervalMs": 9999,
-      "productScope": "applied-current-public-action",
-      "actionReferences": [
-        {
-          "actionIdentity": "actor|107002|10700212|1|10700226|star-combo",
-          "classification": "applied",
-          "scenarioClassification": "applied",
-          "controlSkillId": 10700226,
-          "subSkillIndex": 0,
-          "selected": true
-        }
-      ],
+      "productScope": "outside-current-public-action-catalog",
+      "actionReferences": [],
       "sourceIdentity": "battle-element-assets.jsonl#path_id=-155063331868376370"
     },
     {

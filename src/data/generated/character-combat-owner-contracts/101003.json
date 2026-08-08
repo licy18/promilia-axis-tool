@@ -6,7 +6,7 @@
   "ownerName": "寒悠悠",
   "recipeIdentity": "actor:101003:character-combat-recipe:v1",
   "recipeHash": "a10390f5df3318af17f2ac469f46318402a6bed4ee3a8656e08e6d8c9dd9ff5f",
-  "compilerInputHash": "65f7da5705358e9a0c5f829b407905ecfc7979fe485ddc466c2f57b925a0f827",
+  "compilerInputHash": "b8f4f159828b6c9217109314b2fd2fa1b919d34113cf47936be2d11cddd44c7e",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": true,
   "reachableControlSkillIds": [
@@ -8855,6 +8855,7 @@
             "executionControlSkillId": 10100312,
             "executionSubSkillIndex": 0,
             "selectionKind": "single-control-verified-occupancy",
+            "replaceSelectedEffectIdentities": false,
             "condition": {
               "kind": "always"
             },
@@ -9317,9 +9318,9 @@
           "10100313|0|elements|1|-1498771669867596146|element:466374251647106866|223|1",
           "10100313|0|elements|1|-1498771669867596146|element:466374251647106866|193|2",
           "10100313|0|elements|4|-5729186281790677610|element:-5729186281790677610|148|0",
-          "10100313|0|elements|4|-5729186281790677610|148|1",
+          "10100313|0|elements|4|-5729186281790677610|element:-5652413049857383353|148|0|bound:han-ultimate-team-tuning-two-stacks",
           "10100313|0|elements|6|-87352517346442030|element:-87352517346442030|148|0",
-          "10100313|0|elements|6|-87352517346442030|148|1"
+          "10100313|0|elements|6|-87352517346442030|element:-4841411980842434486|148|0|bound:han-ultimate-controlled-tuning-ratio"
         ],
         "classification": "applied",
         "sourceEvidenceStatus": "applied",
@@ -9869,8 +9870,8 @@
         ],
         "selectedEffectIdentities": [
           "10100322|0|elements|2|4373635720509741260|element:4373635720509741260|57|0",
-          "10100322|0|elements|2|4373635720509741260|57|1",
-          "10100322|0|elements|2|4373635720509741260|57|1",
+          "10100322|0|elements|2|4373635720509741260|element:-7141218965533365560|57|0|bound:han-star-carry-physical-defense-down",
+          "10100322|0|elements|2|4373635720509741260|element:-15343624725538709|57|0|bound:han-star-carry-magical-defense-down",
           "10100322|0|elements|6|-1498771669867596146|57|0",
           "10100322|0|elements|6|-1498771669867596146|element:3879285143630828198|57|0",
           "10100322|0|elements|6|-1498771669867596146|element:466374251647106866|57|0"
@@ -10974,6 +10975,7 @@
             "executionControlSkillId": 10100349,
             "executionSubSkillIndex": 1,
             "selectionKind": "wrapper-derived-execution",
+            "replaceSelectedEffectIdentities": false,
             "condition": {
               "kind": "always"
             },
@@ -11032,6 +11034,7 @@
         "executionControlSkillId": 10100349,
         "executionSubSkillIndex": 1,
         "selectionKind": "wrapper-derived-execution",
+        "replaceSelectedEffectIdentities": false,
         "condition": {
           "kind": "always"
         },
@@ -11085,6 +11088,7 @@
         "executionControlSkillId": 10100312,
         "executionSubSkillIndex": 0,
         "selectionKind": "single-control-verified-occupancy",
+        "replaceSelectedEffectIdentities": false,
         "condition": {
           "kind": "always"
         },
@@ -12620,10 +12624,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-charged-stage-one-item-hits:1",
-              "startFrame": 30,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 30,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -12705,10 +12709,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-one-firework-explosion:1",
-              "startFrame": 31,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 31,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -12785,10 +12789,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-charged-stage-one-item-hits:2",
-              "startFrame": 40,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 40,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -12855,10 +12859,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-charged-stage-one-item-hits:3",
-              "startFrame": 51,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 51,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -12940,10 +12944,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-one-firework-explosion:2",
-              "startFrame": 55,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 55,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -13035,10 +13039,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-one-firework-explosion:3",
-              "startFrame": 58,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 58,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -13130,10 +13134,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-one-firework-explosion:4",
-              "startFrame": 62,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 62,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -13225,10 +13229,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-one-firework-explosion:5",
-              "startFrame": 65,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 65,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -19272,7 +19276,7 @@
             "applied": true
           },
           {
-            "effectIdentity": "10100313|0|elements|4|-5729186281790677610|148|1",
+            "effectIdentity": "10100313|0|elements|4|-5729186281790677610|element:-5652413049857383353|148|0|bound:han-ultimate-team-tuning-two-stacks",
             "graphIdentity": "10100313|0|elements|4|-5729186281790677610",
             "controlSkillId": 10100313,
             "mapIndex": 0,
@@ -19535,7 +19539,7 @@
             "applied": true
           },
           {
-            "effectIdentity": "10100313|0|elements|6|-87352517346442030|148|1",
+            "effectIdentity": "10100313|0|elements|6|-87352517346442030|element:-4841411980842434486|148|0|bound:han-ultimate-controlled-tuning-ratio",
             "graphIdentity": "10100313|0|elements|6|-87352517346442030",
             "controlSkillId": 10100313,
             "mapIndex": 0,
@@ -20408,7 +20412,7 @@
             "applied": true
           },
           {
-            "effectIdentity": "10100322|0|elements|2|4373635720509741260|57|1",
+            "effectIdentity": "10100322|0|elements|2|4373635720509741260|element:-7141218965533365560|57|0|bound:han-star-carry-physical-defense-down",
             "graphIdentity": "10100322|0|elements|2|4373635720509741260",
             "controlSkillId": 10100322,
             "mapIndex": 0,
@@ -20553,7 +20557,7 @@
             "landedHitActivationCondition": null
           },
           {
-            "effectIdentity": "10100322|0|elements|2|4373635720509741260|57|1",
+            "effectIdentity": "10100322|0|elements|2|4373635720509741260|element:-15343624725538709|57|0|bound:han-star-carry-magical-defense-down",
             "graphIdentity": "10100322|0|elements|2|4373635720509741260",
             "controlSkillId": 10100322,
             "mapIndex": 0,
@@ -22769,10 +22773,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-normal-a4-child-opening-hit:1",
-              "startFrame": 38,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 38,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -22839,10 +22843,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-normal-a4-child-follow-up-hits:1",
-              "startFrame": 59,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 59,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -22909,10 +22913,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-normal-a4-child-follow-up-hits:2",
-              "startFrame": 68,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 68,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -22979,10 +22983,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-normal-a4-child-follow-up-hits:3",
-              "startFrame": 77,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 77,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -23154,10 +23158,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-normal-a5-child-opening-hit:1",
-              "startFrame": 50,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 50,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -23224,10 +23228,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-normal-a5-child-follow-up-hits:1",
-              "startFrame": 65,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 65,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -23294,10 +23298,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-normal-a5-child-follow-up-hits:2",
-              "startFrame": 74,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 74,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -23364,10 +23368,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-normal-a5-child-follow-up-hits:3",
-              "startFrame": 83,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 83,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -24326,10 +24330,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-charged-stage-two-projectile-hit:1",
-              "startFrame": 24,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 24,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -24396,10 +24400,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-charged-stage-two-item-hits:1",
-              "startFrame": 27,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 27,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -24481,14 +24485,14 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-two-firework-explosion:1",
-              "startFrame": 27,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 27,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|skill_control_10100341.asset#bullet101300105@24F|Battle/Element/ast_101003169.asset#condition101003079>9;summon480132|skill_control_48013201.asset#element101003111@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003170.asset/MonoBehaviour/ast_101003170__-7724175403339688493.json#elementConfigId=101003170|Battle/Element/ast_101003170.asset#IF(target.ELEMENT_LAYERS[101003079]>9,-10,0)|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003137.asset/MonoBehaviour/ast_101003137__-5558183128848240254.json#elementConfigId=101003137|Battle/Element/ast_101003137.asset#IF(target.ELEMENT_LAYERS[101003079]>7,-8,0)",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/MonoBehaviour_-1874987369514519353__-1874987369514519353.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|skill_control_10100341.asset#bullet101300105@24F|Battle/Element/ast_101003169.asset#condition101003079>9;summon480132|skill_control_48013201.asset#element101003111@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003170.asset/MonoBehaviour/ast_101003170__-7724175403339688493.json#elementConfigId=101003170|Battle/Element/ast_101003170.asset#IF(target.ELEMENT_LAYERS[101003079]>9,-10,0)|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003137.asset/MonoBehaviour/ast_101003137__-5558183128848240254.json#elementConfigId=101003137|Battle/Element/ast_101003137.asset#IF(target.ELEMENT_LAYERS[101003079]>7,-8,0)",
               "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
               "runtimeCondition": {
                 "kind": "target-state-at-least",
@@ -24561,10 +24565,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-charged-stage-two-item-hits:2",
-              "startFrame": 35,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 35,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -24631,10 +24635,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-charged-stage-two-item-hits:3",
-              "startFrame": 43,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 43,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -24716,10 +24720,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-two-firework-explosion:2",
-              "startFrame": 51,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 51,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -24796,10 +24800,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-charged-stage-two-item-hits:4",
-              "startFrame": 53,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 53,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -24881,10 +24885,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-two-firework-explosion:3",
-              "startFrame": 54,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 54,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -24976,10 +24980,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-two-firework-explosion:4",
-              "startFrame": 58,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 58,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -25071,10 +25075,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-two-firework-explosion:5",
-              "startFrame": 61,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 61,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -25151,10 +25155,10 @@
             },
             "trigger": {
               "behaviorPathId": "character-combat:han-charged-stage-two-item-hits:5",
-              "startFrame": 66,
-              "frameCount": 1,
               "behaviorIndex": null,
               "timelineGroupIndex": 0,
+              "startFrame": 66,
+              "frameCount": 1,
               "targetCode": 0,
               "targetKind": "enemy",
               "targetSourceField": "character-combat-verified-hit-binding",
@@ -26065,7 +26069,7 @@
         ],
         "effects": [
           {
-            "effectIdentity": "10100349|1|elements|1|-5652413049857383353|17|0",
+            "effectIdentity": "10100349|1|elements|1|-5652413049857383353|element:-5652413049857383353|17|0|bound:han-perfect-dodge-team-tuning",
             "graphIdentity": "10100349|1|elements|1|-5652413049857383353",
             "controlSkillId": 10100349,
             "mapIndex": 1,
@@ -27882,6 +27886,7 @@
         "applied": true
       }
     ],
+    "attackInputMechanicWindows": [],
     "controlTransitionWindows": [
       {
         "windowIdentity": "actor:101003|control:10100301|sub:0|0-50|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-1126751650670210077__-1126751650670210077.json#behaviorlineControl[0].behaviorList[pathId=4386047408647082979]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_4386047408647082979__4386047408647082979.json",
@@ -29589,6 +29594,8 @@
         "ownerId": 101003,
         "controlSkillId": 10100312,
         "subSkillIndex": 0,
+        "sourceControlSkillId": 10100312,
+        "sourceSubSkillIndex": 0,
         "mapIndex": 0,
         "elementId": 150,
         "triggerFrame": 63,
@@ -29718,10 +29725,12 @@
           "stackDelta": 1,
           "occurrenceIdentity": "action-effect-binding:han-star-skill-fire-tuning-mark-1"
         },
+        "tuningConsumeSuccessEffect": null,
         "lifecycleStackDelta": null,
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
@@ -29738,6 +29747,8 @@
         "ownerId": 101003,
         "controlSkillId": 10100312,
         "subSkillIndex": 0,
+        "sourceControlSkillId": 10100312,
+        "sourceSubSkillIndex": 0,
         "mapIndex": 0,
         "elementId": 150,
         "triggerFrame": 70,
@@ -29867,10 +29878,12 @@
           "stackDelta": 1,
           "occurrenceIdentity": "action-effect-binding:han-star-skill-fire-tuning-mark-2"
         },
+        "tuningConsumeSuccessEffect": null,
         "lifecycleStackDelta": null,
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
@@ -29887,6 +29900,8 @@
         "ownerId": 101003,
         "controlSkillId": 10100313,
         "subSkillIndex": 0,
+        "sourceControlSkillId": 10100313,
+        "sourceSubSkillIndex": 0,
         "mapIndex": 0,
         "elementId": 150,
         "triggerFrame": 193,
@@ -30016,10 +30031,12 @@
           "stackDelta": 1,
           "occurrenceIdentity": "action-effect-binding:han-ultimate-fire-tuning-mark-1"
         },
+        "tuningConsumeSuccessEffect": null,
         "lifecycleStackDelta": null,
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
@@ -30036,6 +30053,8 @@
         "ownerId": 101003,
         "controlSkillId": 10100313,
         "subSkillIndex": 0,
+        "sourceControlSkillId": 10100313,
+        "sourceSubSkillIndex": 0,
         "mapIndex": 0,
         "elementId": 150,
         "triggerFrame": 207,
@@ -30165,10 +30184,12 @@
           "stackDelta": 1,
           "occurrenceIdentity": "action-effect-binding:han-ultimate-fire-tuning-mark-2"
         },
+        "tuningConsumeSuccessEffect": null,
         "lifecycleStackDelta": null,
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
@@ -30185,6 +30206,8 @@
         "ownerId": 101003,
         "controlSkillId": 10100313,
         "subSkillIndex": 0,
+        "sourceControlSkillId": 10100313,
+        "sourceSubSkillIndex": 0,
         "mapIndex": 0,
         "elementId": 150,
         "triggerFrame": 223,
@@ -30314,10 +30337,12 @@
           "stackDelta": 1,
           "occurrenceIdentity": "action-effect-binding:han-ultimate-fire-tuning-mark-3"
         },
+        "tuningConsumeSuccessEffect": null,
         "lifecycleStackDelta": null,
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
@@ -30334,6 +30359,8 @@
         "ownerId": 101003,
         "controlSkillId": 10100322,
         "subSkillIndex": 0,
+        "sourceControlSkillId": 10100322,
+        "sourceSubSkillIndex": 0,
         "mapIndex": 0,
         "elementId": 150,
         "triggerFrame": 57,
@@ -30463,10 +30490,12 @@
           "stackDelta": 1,
           "occurrenceIdentity": "action-effect-binding:han-star-carry-fire-tuning-mark"
         },
+        "tuningConsumeSuccessEffect": null,
         "lifecycleStackDelta": null,
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
@@ -30483,6 +30512,8 @@
         "ownerId": 101003,
         "controlSkillId": 10100313,
         "subSkillIndex": 0,
+        "sourceControlSkillId": 10100313,
+        "sourceSubSkillIndex": 0,
         "mapIndex": 0,
         "elementId": 101003205,
         "triggerFrame": 148,
@@ -30490,10 +30521,12 @@
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|skill_control_10100313.asset#element101003204->101003205@148F|Battle/Element/ast_101003205.asset#attribute229;+18;max2;time24000",
         "bindingKind": "lifecycle-override",
         "tuningMark": null,
+        "tuningConsumeSuccessEffect": null,
         "lifecycleStackDelta": 2,
         "lifecycleMaxStacks": 2,
         "durationMsOverride": 24000,
         "targetKindOverride": "team-actors",
+        "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
@@ -30510,6 +30543,8 @@
         "ownerId": 101003,
         "controlSkillId": 10100313,
         "subSkillIndex": 0,
+        "sourceControlSkillId": 10100313,
+        "sourceSubSkillIndex": 0,
         "mapIndex": 0,
         "elementId": 101003207,
         "triggerFrame": 148,
@@ -30517,10 +30552,12 @@
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003207.asset/MonoBehaviour/ast_101003207__-4841411980842434486.json#elementConfigId=101003207|skill_control_10100313.asset#element101003206->101003207@148F|NewTable/element_formula.rows[id=2008]#(self.MASTERY[4]*A)/10000",
         "bindingKind": "lifecycle-override",
         "tuningMark": null,
+        "tuningConsumeSuccessEffect": null,
         "lifecycleStackDelta": 1,
         "lifecycleMaxStacks": 1,
         "durationMsOverride": 15000,
         "targetKindOverride": "controlling-actor",
+        "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
@@ -30548,6 +30585,8 @@
         "ownerId": 101003,
         "controlSkillId": 10100349,
         "subSkillIndex": 1,
+        "sourceControlSkillId": 10100349,
+        "sourceSubSkillIndex": 1,
         "mapIndex": 1,
         "elementId": 101003205,
         "triggerFrame": 17,
@@ -30555,10 +30594,12 @@
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|skill_control_10100349.asset#element101003205@17F|Battle/Element/ast_101003205.asset#attribute229;+18;max2;time24000",
         "bindingKind": "lifecycle-override",
         "tuningMark": null,
+        "tuningConsumeSuccessEffect": null,
         "lifecycleStackDelta": 1,
         "lifecycleMaxStacks": 2,
         "durationMsOverride": 24000,
         "targetKindOverride": "team-actors",
+        "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
@@ -30575,6 +30616,8 @@
         "ownerId": 101003,
         "controlSkillId": 10100322,
         "subSkillIndex": 0,
+        "sourceControlSkillId": 10100322,
+        "sourceSubSkillIndex": 0,
         "mapIndex": 0,
         "elementId": 101003145,
         "triggerFrame": 57,
@@ -30582,10 +30625,12 @@
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003145.asset/MonoBehaviour/ast_101003145__-7141218965533365560.json#elementConfigId=101003145|skill_control_10100322.asset#element101003141->101003145@57F|Battle/Element/ast_101003141.asset#time8000",
         "bindingKind": "lifecycle-override",
         "tuningMark": null,
+        "tuningConsumeSuccessEffect": null,
         "lifecycleStackDelta": 1,
         "lifecycleMaxStacks": 1,
         "durationMsOverride": 8000,
         "targetKindOverride": "enemy",
+        "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
@@ -30602,6 +30647,8 @@
         "ownerId": 101003,
         "controlSkillId": 10100322,
         "subSkillIndex": 0,
+        "sourceControlSkillId": 10100322,
+        "sourceSubSkillIndex": 0,
         "mapIndex": 0,
         "elementId": 101003142,
         "triggerFrame": 57,
@@ -30609,10 +30656,12 @@
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003142.asset/MonoBehaviour/ast_101003142__-15343624725538709.json#elementConfigId=101003142|skill_control_10100322.asset#element101003141->101003142@57F|Battle/Element/ast_101003141.asset#time8000",
         "bindingKind": "lifecycle-override",
         "tuningMark": null,
+        "tuningConsumeSuccessEffect": null,
         "lifecycleStackDelta": 1,
         "lifecycleMaxStacks": 1,
         "durationMsOverride": 8000,
         "targetKindOverride": "enemy",
+        "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
@@ -30647,6 +30696,8 @@
         "runtimeCondition": null,
         "hitActivation": null,
         "formulaNormalization": null,
+        "replaceTargetSubSkillElements": false,
+        "preserveSourceTriggerIdentity": false,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48005901.asset/MonoBehaviour/skill_control_48005901__-9025699339235441766.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=94149154268017158|skill_control_10100304.asset#child-control-48005901@34F|skill_control_48005901.asset#element101003156@4F",
         "status": "applied",
         "applied": true
@@ -30674,6 +30725,8 @@
         "runtimeCondition": null,
         "hitActivation": null,
         "formulaNormalization": null,
+        "replaceTargetSubSkillElements": false,
+        "preserveSourceTriggerIdentity": false,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48005901.asset/MonoBehaviour/skill_control_48005901__-9025699339235441766.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-9088874381931379762|skill_control_10100304.asset#child-control-48005901@34F|skill_control_48005901.asset#element101003182@[25,34,43]F",
         "status": "applied",
         "applied": true
@@ -30699,6 +30752,8 @@
         "runtimeCondition": null,
         "hitActivation": null,
         "formulaNormalization": null,
+        "replaceTargetSubSkillElements": false,
+        "preserveSourceTriggerIdentity": false,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48006001.asset/MonoBehaviour/skill_control_48006001__2237447054001274573.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=655406946032765735|skill_control_10100305.asset#child-control-48006001@45F|skill_control_48006001.asset#element101003157@5F",
         "status": "applied",
         "applied": true
@@ -30726,6 +30781,8 @@
         "runtimeCondition": null,
         "hitActivation": null,
         "formulaNormalization": null,
+        "replaceTargetSubSkillElements": false,
+        "preserveSourceTriggerIdentity": false,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48006001.asset/MonoBehaviour/skill_control_48006001__2237447054001274573.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=2955168730265195435|skill_control_10100305.asset#child-control-48006001@45F|skill_control_48006001.asset#element101003179@[20,29,38]F",
         "status": "applied",
         "applied": true
@@ -30753,6 +30810,8 @@
         "runtimeCondition": null,
         "hitActivation": null,
         "formulaNormalization": null,
+        "replaceTargetSubSkillElements": false,
+        "preserveSourceTriggerIdentity": false,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48012401.asset/MonoBehaviour/skill_control_48012401__-4277238474023214525.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-7636687166603453292|skill_control_10100310.asset#bullet101003101@28F->item480124|skill_control_48012401.asset#element101003104@[2,12,23]F",
         "status": "applied",
         "applied": true
@@ -30778,6 +30837,8 @@
         "runtimeCondition": null,
         "hitActivation": null,
         "formulaNormalization": null,
+        "replaceTargetSubSkillElements": false,
+        "preserveSourceTriggerIdentity": false,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/skill_control_10100341__-2787212800543620041.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=101003094|skill_control_10100341.asset#bullet101300105@24F|combatScenario.projectile.targetDistance=0",
         "status": "applied",
         "applied": true
@@ -30807,6 +30868,8 @@
         "runtimeCondition": null,
         "hitActivation": null,
         "formulaNormalization": null,
+        "replaceTargetSubSkillElements": false,
+        "preserveSourceTriggerIdentity": false,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48012501.asset/MonoBehaviour/skill_control_48012501__3968046899363608643.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=6205900832351659862|skill_control_10100341.asset#bullet101300105@24F->item480125|skill_control_48012501.asset#element101003105@[3,11,19,29,42]F",
         "status": "applied",
         "applied": true
@@ -30855,6 +30918,8 @@
           "status": "verified-target-state-conditional-formula-normalized",
           "applied": true
         },
+        "replaceTargetSubSkillElements": false,
+        "preserveSourceTriggerIdentity": false,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48012601.asset/MonoBehaviour/skill_control_48012601__-4439459879373897354.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-9168566004252254787|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48012601.asset/MonoBehaviour/skill_control_48012601__-4439459879373897354.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-9168566004252254787|skill_control_10100310.asset#bullet101003101@28F|Battle/Element/ast_101003117.asset#condition101003079>0;summon480126|skill_control_48012601.asset#element101003110@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)",
         "status": "applied",
         "applied": true
@@ -30903,6 +30968,8 @@
           "status": "verified-target-state-conditional-formula-normalized",
           "applied": true
         },
+        "replaceTargetSubSkillElements": false,
+        "preserveSourceTriggerIdentity": false,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|skill_control_10100341.asset#bullet101300105@24F|Battle/Element/ast_101003169.asset#condition101003079>9;summon480132|skill_control_48013201.asset#element101003111@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003170.asset/MonoBehaviour/ast_101003170__-7724175403339688493.json#elementConfigId=101003170|Battle/Element/ast_101003170.asset#IF(target.ELEMENT_LAYERS[101003079]>9,-10,0)|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003137.asset/MonoBehaviour/ast_101003137__-5558183128848240254.json#elementConfigId=101003137|Battle/Element/ast_101003137.asset#IF(target.ELEMENT_LAYERS[101003079]>7,-8,0)",
         "status": "applied",
         "applied": true
@@ -30921,6 +30988,8 @@
         "runtimeOwnerScope": null,
         "expiryMode": "independent-layer",
         "atCapacityPolicy": "ignore",
+        "activationScope": "global-runtime-profile",
+        "modifiers": [],
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15",
         "status": "verified-target-state-profile-ready",
         "applied": true
@@ -30939,6 +31008,7 @@
         "amount": 1,
         "durationMs": 10000,
         "requiresHitElementId": 101003033,
+        "hitSettlementOrder": null,
         "passiveSkillId": null,
         "priority": 0,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@61F",
@@ -30957,6 +31027,7 @@
         "amount": 1,
         "durationMs": 10000,
         "requiresHitElementId": 101003033,
+        "hitSettlementOrder": null,
         "passiveSkillId": null,
         "priority": 0,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@68F",
@@ -30975,6 +31046,7 @@
         "amount": 1,
         "durationMs": 10000,
         "requiresHitElementId": 101003033,
+        "hitSettlementOrder": null,
         "passiveSkillId": null,
         "priority": 0,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@73F",
@@ -30993,6 +31065,7 @@
         "amount": 1,
         "durationMs": 10000,
         "requiresHitElementId": 101003108,
+        "hitSettlementOrder": null,
         "passiveSkillId": null,
         "priority": 0,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@94F",
@@ -31011,6 +31084,7 @@
         "amount": 1,
         "durationMs": 10000,
         "requiresHitElementId": 101003108,
+        "hitSettlementOrder": null,
         "passiveSkillId": null,
         "priority": 0,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@99F",
@@ -31029,6 +31103,7 @@
         "amount": 1,
         "durationMs": 10000,
         "requiresHitElementId": 101003108,
+        "hitSettlementOrder": null,
         "passiveSkillId": null,
         "priority": 0,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@104F",
@@ -31047,6 +31122,7 @@
         "amount": 1,
         "durationMs": 10000,
         "requiresHitElementId": 101003108,
+        "hitSettlementOrder": null,
         "passiveSkillId": null,
         "priority": 0,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@109F",
@@ -31580,6 +31656,10 @@
         "applied": true
       }
     ],
+    "rawDirectEffectBindings": [],
+    "pickupProfiles": [],
+    "pickupSpawnBindings": [],
+    "scenarioOutOfScopeActions": [],
     "hits": [
       {
         "elementId": 101003087,
@@ -32073,10 +32153,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-normal-a4-child-opening-hit:1",
-          "startFrame": 38,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 38,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -32145,10 +32225,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-normal-a4-child-follow-up-hits:1",
-          "startFrame": 59,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 59,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -32217,10 +32297,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-normal-a4-child-follow-up-hits:2",
-          "startFrame": 68,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 68,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -32289,10 +32369,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-normal-a4-child-follow-up-hits:3",
-          "startFrame": 77,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 77,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -32361,10 +32441,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-normal-a5-child-opening-hit:1",
-          "startFrame": 50,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 50,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -32433,10 +32513,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-normal-a5-child-follow-up-hits:1",
-          "startFrame": 65,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 65,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -32505,10 +32585,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-normal-a5-child-follow-up-hits:2",
-          "startFrame": 74,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 74,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -32577,10 +32657,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-normal-a5-child-follow-up-hits:3",
-          "startFrame": 83,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 83,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -32664,10 +32744,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-one-firework-explosion:1",
-          "startFrame": 31,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 31,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -32761,10 +32841,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-one-firework-explosion:2",
-          "startFrame": 55,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 55,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -32858,10 +32938,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-one-firework-explosion:3",
-          "startFrame": 58,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 58,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -32955,10 +33035,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-one-firework-explosion:4",
-          "startFrame": 62,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 62,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -33052,10 +33132,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-one-firework-explosion:5",
-          "startFrame": 65,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 65,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -33134,10 +33214,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-charged-stage-one-item-hits:1",
-          "startFrame": 30,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 30,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -33206,10 +33286,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-charged-stage-one-item-hits:2",
-          "startFrame": 40,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 40,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -33278,10 +33358,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-charged-stage-one-item-hits:3",
-          "startFrame": 51,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 51,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -35847,10 +35927,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-charged-stage-two-projectile-hit:1",
-          "startFrame": 24,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 24,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -35919,10 +35999,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-charged-stage-two-item-hits:1",
-          "startFrame": 27,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 27,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -35991,10 +36071,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-charged-stage-two-item-hits:2",
-          "startFrame": 35,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 35,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -36063,10 +36143,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-charged-stage-two-item-hits:3",
-          "startFrame": 43,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 43,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -36135,10 +36215,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-charged-stage-two-item-hits:4",
-          "startFrame": 53,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 53,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -36207,10 +36287,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:han-charged-stage-two-item-hits:5",
-          "startFrame": 66,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 66,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -36294,14 +36374,14 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-two-firework-explosion:1",
-          "startFrame": 27,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 27,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|skill_control_10100341.asset#bullet101300105@24F|Battle/Element/ast_101003169.asset#condition101003079>9;summon480132|skill_control_48013201.asset#element101003111@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003170.asset/MonoBehaviour/ast_101003170__-7724175403339688493.json#elementConfigId=101003170|Battle/Element/ast_101003170.asset#IF(target.ELEMENT_LAYERS[101003079]>9,-10,0)|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003137.asset/MonoBehaviour/ast_101003137__-5558183128848240254.json#elementConfigId=101003137|Battle/Element/ast_101003137.asset#IF(target.ELEMENT_LAYERS[101003079]>7,-8,0)",
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/MonoBehaviour_-1874987369514519353__-1874987369514519353.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48013201.asset/MonoBehaviour/skill_control_48013201__-1633280855125063200.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=4954460886115009592|skill_control_10100341.asset#bullet101300105@24F|Battle/Element/ast_101003169.asset#condition101003079>9;summon480132|skill_control_48013201.asset#element101003111@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003170.asset/MonoBehaviour/ast_101003170__-7724175403339688493.json#elementConfigId=101003170|Battle/Element/ast_101003170.asset#IF(target.ELEMENT_LAYERS[101003079]>9,-10,0)|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003137.asset/MonoBehaviour/ast_101003137__-5558183128848240254.json#elementConfigId=101003137|Battle/Element/ast_101003137.asset#IF(target.ELEMENT_LAYERS[101003079]>7,-8,0)",
           "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
           "runtimeCondition": {
             "kind": "target-state-at-least",
@@ -36391,10 +36471,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-two-firework-explosion:2",
-          "startFrame": 51,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 51,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -36488,10 +36568,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-two-firework-explosion:3",
-          "startFrame": 54,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 54,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -36585,10 +36665,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-two-firework-explosion:4",
-          "startFrame": 58,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 58,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -36682,10 +36762,10 @@
         },
         "trigger": {
           "behaviorPathId": "character-combat:conditional-hit-group:han-charged-stage-two-firework-explosion:5",
-          "startFrame": 61,
-          "frameCount": 1,
           "behaviorIndex": null,
           "timelineGroupIndex": 0,
+          "startFrame": 61,
+          "frameCount": 1,
           "targetCode": 0,
           "targetKind": "enemy",
           "targetSourceField": "character-combat-verified-hit-binding",
@@ -39727,7 +39807,7 @@
           "landedHitActivationCondition": null
         },
         {
-          "effectIdentity": "10100313|0|elements|6|-87352517346442030|148|1",
+          "effectIdentity": "10100313|0|elements|6|-87352517346442030|element:-4841411980842434486|148|0|bound:han-ultimate-controlled-tuning-ratio",
           "graphIdentity": "10100313|0|elements|6|-87352517346442030",
           "controlSkillId": 10100313,
           "mapIndex": 0,
@@ -39892,7 +39972,7 @@
           "landedHitActivationCondition": null
         },
         {
-          "effectIdentity": "10100313|0|elements|4|-5729186281790677610|148|1",
+          "effectIdentity": "10100313|0|elements|4|-5729186281790677610|element:-5652413049857383353|148|0|bound:han-ultimate-team-tuning-two-stacks",
           "graphIdentity": "10100313|0|elements|4|-5729186281790677610",
           "controlSkillId": 10100313,
           "mapIndex": 0,
@@ -41441,7 +41521,7 @@
           "landedHitActivationCondition": null
         },
         {
-          "effectIdentity": "10100322|0|elements|2|4373635720509741260|57|1",
+          "effectIdentity": "10100322|0|elements|2|4373635720509741260|element:-15343624725538709|57|0|bound:han-star-carry-magical-defense-down",
           "graphIdentity": "10100322|0|elements|2|4373635720509741260",
           "controlSkillId": 10100322,
           "mapIndex": 0,
@@ -41586,7 +41666,7 @@
           "landedHitActivationCondition": null
         },
         {
-          "effectIdentity": "10100322|0|elements|2|4373635720509741260|57|1",
+          "effectIdentity": "10100322|0|elements|2|4373635720509741260|element:-7141218965533365560|57|0|bound:han-star-carry-physical-defense-down",
           "graphIdentity": "10100322|0|elements|2|4373635720509741260",
           "controlSkillId": 10100322,
           "mapIndex": 0,
@@ -42862,7 +42942,7 @@
           "applied": true
         },
         {
-          "effectIdentity": "10100349|1|elements|1|-5652413049857383353|17|0",
+          "effectIdentity": "10100349|1|elements|1|-5652413049857383353|element:-5652413049857383353|17|0|bound:han-perfect-dodge-team-tuning",
           "graphIdentity": "10100349|1|elements|1|-5652413049857383353",
           "controlSkillId": 10100349,
           "mapIndex": 1,
@@ -43413,6 +43493,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100311.asset/MonoBehaviour/MonoBehaviour_-1349214709461132511__-1349214709461132511.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 0,
             "kind": "source-owner",
@@ -43572,6 +43654,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_1011852803228526128__1011852803228526128.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "team-tuning-pool",
             "code": 150,
@@ -43749,6 +43833,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2749505792865494576__2749505792865494576.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "team-tuning-pool",
             "code": 150,
@@ -43926,6 +44012,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-1123755805311539664__-1123755805311539664.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -44091,6 +44179,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-1349437852626754000__-1349437852626754000.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -44256,6 +44346,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-8545081533461404112__-8545081533461404112.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -44421,6 +44513,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_378286786379146800__378286786379146800.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -44586,6 +44680,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_935768788960962096__935768788960962096.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -44751,6 +44847,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_1941002140595807792__1941002140595807792.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -44916,6 +45014,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_7593113159482566192__7593113159482566192.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -45088,6 +45188,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_1011852803228526128__1011852803228526128.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 0,
             "kind": "source-owner",
@@ -45266,6 +45368,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2749505792865494576__2749505792865494576.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 0,
             "kind": "source-owner",
@@ -45444,6 +45548,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_1011852803228526128__1011852803228526128.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 0,
             "kind": "source-owner",
@@ -45616,6 +45722,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2749505792865494576__2749505792865494576.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 0,
             "kind": "source-owner",
@@ -45781,6 +45889,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-3895435746724307476__-3895435746724307476.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "controlling-actor",
@@ -45943,6 +46053,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6215383830795215380__-6215383830795215380.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "team-tuning-pool",
             "code": 150,
@@ -46120,6 +46232,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_2700200137312345580__2700200137312345580.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "team-tuning-pool",
             "code": 150,
@@ -46297,6 +46411,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6998348329063063020__6998348329063063020.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "team-tuning-pool",
             "code": 150,
@@ -46482,6 +46598,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-3895435746724307476__-3895435746724307476.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "controlling-actor",
@@ -46579,7 +46697,7 @@
           },
           "reasons": [],
           "rawEffectIdentities": [
-            "10100313|0|elements|6|-87352517346442030|148|1"
+            "10100313|0|elements|6|-87352517346442030|element:-4841411980842434486|148|0|bound:han-ultimate-controlled-tuning-ratio"
           ],
           "graphIdentities": [
             "10100313|0|elements|6|-87352517346442030"
@@ -46664,6 +46782,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6060088285417807340__6060088285417807340.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 3,
             "kind": "team-actors",
@@ -46752,7 +46872,7 @@
           },
           "reasons": [],
           "rawEffectIdentities": [
-            "10100313|0|elements|4|-5729186281790677610|148|1"
+            "10100313|0|elements|4|-5729186281790677610|element:-5652413049857383353|148|0|bound:han-ultimate-team-tuning-two-stacks"
           ],
           "graphIdentities": [
             "10100313|0|elements|4|-5729186281790677610"
@@ -46830,6 +46950,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6060088285417807340__6060088285417807340.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 3,
             "kind": "team-actors",
@@ -47006,6 +47128,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6215383830795215380__-6215383830795215380.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -47183,6 +47307,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_2700200137312345580__2700200137312345580.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -47360,6 +47486,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6998348329063063020__6998348329063063020.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -47537,6 +47665,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6215383830795215380__-6215383830795215380.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -47708,6 +47838,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_2700200137312345580__2700200137312345580.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -47879,6 +48011,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6998348329063063020__6998348329063063020.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -48051,6 +48185,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -48139,7 +48275,7 @@
           },
           "reasons": [],
           "rawEffectIdentities": [
-            "10100322|0|elements|2|4373635720509741260|57|1"
+            "10100322|0|elements|2|4373635720509741260|element:-15343624725538709|57|0|bound:han-star-carry-magical-defense-down"
           ],
           "graphIdentities": [
             "10100322|0|elements|2|4373635720509741260"
@@ -48216,6 +48352,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "kind": "team-tuning-pool",
             "code": 150,
@@ -48399,6 +48537,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -48487,7 +48627,7 @@
           },
           "reasons": [],
           "rawEffectIdentities": [
-            "10100322|0|elements|2|4373635720509741260|57|1"
+            "10100322|0|elements|2|4373635720509741260|element:-7141218965533365560|57|0|bound:han-star-carry-physical-defense-down"
           ],
           "graphIdentities": [
             "10100322|0|elements|2|4373635720509741260"
@@ -48571,6 +48711,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -48746,6 +48888,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|toOwnElementBaseDatas"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": null,
             "kind": "source-owner",
@@ -48909,6 +49053,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 1,
             "kind": "enemy",
@@ -49079,6 +49225,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/MonoBehaviour_2119769922617281174__2119769922617281174.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 0,
             "kind": "source-owner",
@@ -49252,6 +49400,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/MonoBehaviour_2119769922617281174__2119769922617281174.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 0,
             "kind": "source-owner",
@@ -49414,6 +49564,8 @@
             "reasons": [],
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/MonoBehaviour_2119769922617281174__2119769922617281174.json#startFrame|directInjectTargetType"
           },
+          "sourceOrder": null,
+          "hitSettlementOrder": null,
           "target": {
             "code": 0,
             "kind": "source-owner",
@@ -49737,12 +49889,13 @@
       "sourceIdentity": "NewTable/template_value.rows[id=101003].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003#attributeID=1;function=3;A=1000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_1011852803228526128__1011852803228526128.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2749505792865494576__2749505792865494576.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6060088285417807340__6060088285417807340.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-5652413049857383353|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6215383830795215380__-6215383830795215380.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_2700200137312345580__2700200137312345580.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6998348329063063020__6998348329063063020.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-15343624725538709|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-7141218965533365560|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/MonoBehaviour_2119769922617281174__2119769922617281174.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/skill_control_10100327__739140358862992778.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-1732209689403186369"
     }
   },
-  "contractHash": "1bec768671e430d1e88d485ce270bf18fbf3f561f6c299a8d68c4d0e14d8fa8d",
+  "contractHash": "53ec8ff79962ee21c9ac12943393a72ba20a61a0539b46b73597db2ee74caeee",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 1,
     "publicActionFormCount": 2,
     "attackInputChainCount": 1,
+    "attackInputMechanicWindowCount": 0,
     "inputVariantSelectorCount": 1,
     "controlTransitionWindowCount": 57,
     "variantWindowBindingCount": 0,
@@ -49753,6 +49906,10 @@
     "conditionalHitGroupCount": 2,
     "tuningMarkConditionalDamageGroupCount": 0,
     "runtimeEffectBindingCount": 6,
+    "rawDirectEffectBindingCount": 0,
+    "pickupProfileCount": 0,
+    "pickupSpawnBindingCount": 0,
+    "scenarioOutOfScopeActionCount": 0,
     "resourceProfileCount": 0,
     "resourceTransactionCount": 0,
     "appliedResourceTransactionCount": 0,
@@ -49760,5 +49917,5 @@
     "thresholdTransitionCount": 0,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "b34b9d65c2edda813a0f4df54f7073355229a859fc09e7c3010f1c84bc64ad37"
+  "recipeContractHash": "efa4c93c160c46669ecd5fbe4adbdbe61e2471f877725bb1014c5d6c66a751e7"
 }

@@ -42,6 +42,13 @@ const SIFLIYA_STAR_SKILL_PRIMARY_TRIGGER_SOURCE = `${SIFLIYA_STAR_SKILL_SOURCE_B
 const SIFLIYA_STAR_SKILL_ALTERNATE_TRIGGER_SOURCE = `${SIFLIYA_STAR_SKILL_SOURCE_BASE}MonoBehaviour_6770209787263084539__6770209787263084539.json#startFrame|toOwnElementBaseDatas`;
 const SIFLIYA_WIND_MARK_SOURCE =
   'battle-element-assets.jsonl#path_id=1474042154774785480';
+const MISA_STAR_SKILL_SOURCE_BASE =
+  'C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/';
+const MISA_STAR_SKILL_CONTROL_SOURCE = `${MISA_STAR_SKILL_SOURCE_BASE}skill_control_10700212__6607307865547800973.json`;
+const MISA_STAR_SKILL_WIND_TRIGGER_SOURCE = `${MISA_STAR_SKILL_SOURCE_BASE}MonoBehaviour_304217500998239846__304217500998239846.json#startFrame|toOwnElementBaseDatas`;
+const MISA_STAR_SKILL_CONSUME_TRIGGER_SOURCE = `${MISA_STAR_SKILL_SOURCE_BASE}MonoBehaviour_3929844140260263526__3929844140260263526.json#startFrame|targetType`;
+const MISA_WIND_JUDGMENT_SOURCE =
+  'battle-element-assets.jsonl#path_id=4731523060341306954';
 
 // The roster is a product-frozen inclusion decision, not a live projection of
 // every later character-runtime refinement. Keep the approved evidence
@@ -114,6 +121,41 @@ const FROZEN_EVIDENCE_COMPATIBILITY = Object.freeze([
       effectIdentity:
         '10700113|0|elements|5|1474042154774785480|element:1474042154774785480|133|0',
     },
+  },
+  {
+    characterId: 107002,
+    currentEffectIdentity:
+      '10700212|0|elements|3|1474042154774785480|element:1474042154774785480|90|0|projected:misa-star-independent-wind-mark',
+    requiredCurrent: {
+      actionIdentity: 'actor|107002|10700212|1|10700226|star-combo',
+      actionKind: 'star-combo',
+      controlSkillId: 10700226,
+      elementId: 750,
+      markId: 750,
+      stackDelta: 1,
+      depth: 0,
+      startFrame: 90,
+      sourceIdentity: `${MISA_STAR_SKILL_CONTROL_SOURCE}#skillResourceMaps[0].elements[3]|${SIFLIYA_WIND_MARK_SOURCE}|${MISA_STAR_SKILL_WIND_TRIGGER_SOURCE}`,
+    },
+    frozenOmit: true,
+  },
+  {
+    characterId: 107002,
+    evidenceField: 'consumptionEvidence',
+    currentEffectIdentity:
+      '10700212|0|elements|9|-6104701335743815286|element:4731523060341306954|82|0|projected:misa-star-wood-priority-consume|bound:misa-star-wood-priority-consume',
+    requiredCurrent: {
+      actionIdentity: 'actor|107002|10700212|1|10700226|star-combo',
+      actionKind: 'star-combo',
+      controlSkillId: 10700226,
+      operation: 'tuningOverlimit-consumption',
+      markId: 750,
+      packetElementId: 799,
+      judgmentElementId: 107002264,
+      startFrame: 82,
+      sourceIdentity: `${MISA_STAR_SKILL_CONTROL_SOURCE}#skillResourceMaps[0].elements[9]|${MISA_WIND_JUDGMENT_SOURCE}|${MISA_STAR_SKILL_CONSUME_TRIGGER_SOURCE}`,
+    },
+    frozenOmit: true,
   },
   {
     characterId: 108003,
@@ -324,7 +366,9 @@ function projectFrozenCandidateRoster(liveRoster) {
     const producer = frozenRoster.markProducerCharacters.find(
       entry => Number(entry.characterId) === compatibility.characterId
     );
-    const evidence = producer?.productionEvidence?.find(
+    const evidenceField = compatibility.evidenceField ?? 'productionEvidence';
+    const evidenceList = producer?.[evidenceField];
+    const evidence = evidenceList?.find(
       entry => entry.effectIdentity === compatibility.currentEffectIdentity
     );
     if (!evidence) {
@@ -341,9 +385,11 @@ function projectFrozenCandidateRoster(liveRoster) {
         );
       }
     }
-    if (compatibility.frozenExpansion) {
-      const evidenceIndex = producer.productionEvidence.indexOf(evidence);
-      producer.productionEvidence.splice(
+    const evidenceIndex = evidenceList.indexOf(evidence);
+    if (compatibility.frozenOmit === true) {
+      evidenceList.splice(evidenceIndex, 1);
+    } else if (compatibility.frozenExpansion) {
+      evidenceList.splice(
         evidenceIndex,
         1,
         ...compatibility.frozenExpansion.map(projection => ({
@@ -357,6 +403,7 @@ function projectFrozenCandidateRoster(liveRoster) {
   }
   for (const producer of frozenRoster.markProducerCharacters) {
     producer.productionEvidence.sort(sortEffectEvidence);
+    producer.consumptionEvidence.sort(sortEffectEvidence);
   }
   return frozenRoster;
 }

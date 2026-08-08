@@ -74,6 +74,60 @@ describe('verified Battle effect formula registry', () => {
     });
   });
 
+  it('evaluates base 104 healing from the source maximum HP only', () => {
+    const effect = createEffect({ a: 300, baseFunctionId: 104 });
+    const result = evaluateVerifiedBattleEffectFormula({
+      effect,
+      sourceActor: {
+        stats: {
+          maxHp: 10000,
+        },
+      },
+    });
+
+    expect(classifyVerifiedBattleEffectFormula(effect)).toMatchObject({
+      family: 'source-max-hp-ratio-heal',
+      evaluator: 'q16.16-source-max-hp-times-a-per-10000',
+      applied: true,
+    });
+    expect(result).toMatchObject({
+      value: 299.98779296875,
+      sourceRawA: 300,
+      sourceMaximumHp: 10000,
+      reason: null,
+    });
+    expect(result.trace).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          step: 'source-actor-maximum-hp',
+          input: 10000,
+        }),
+        expect.objectContaining({
+          step: 'base-function-104-a-per-10000',
+          input: 300,
+        }),
+      ])
+    );
+  });
+
+  it('fails closed for base 104 when source maximum HP is unavailable', () => {
+    expect(
+      evaluateVerifiedBattleEffectFormula({
+        effect: createEffect({ a: 300, baseFunctionId: 104 }),
+        sourceActor: {
+          stats: {
+            maxHp: undefined,
+          },
+        },
+      })
+    ).toMatchObject({
+      status: 'unresolved',
+      applied: false,
+      value: null,
+      reason: 'source-actor-maximum-hp-missing',
+    });
+  });
+
   it('delegates verified tuning families and rejects unverified formulas', () => {
     expect(
       classifyVerifiedBattleEffectFormula(
