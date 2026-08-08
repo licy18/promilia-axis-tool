@@ -1,9 +1,13 @@
 import { ACTION_TYPES } from '../../domain/projectSchema';
 import { isFrameWithinVerifiedInputWindow } from '../../domain/verifiedActionContextScheduling';
-import { compareActionSourceSequence } from '../../domain/actionSourceSequence';
+import {
+  compareActionSourceSequence,
+  compareSourceSequencePaths,
+  getActionSourceSequencePath,
+} from '../../domain/actionSourceSequence';
+import { createVerifiedEffectSourceSequencePath } from '../../domain/verifiedEffectSourceSequence';
 import { VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID } from '../../domain/workbenchMechanicsProfileSelection';
 import {
-  getInstalledVerifiedCombatMechanicsPackage,
   getVerifiedCombatActionMapping,
   resolveVerifiedCombatActionMechanics,
 } from '../../data/verifiedCombatMechanicsPackage';
@@ -160,10 +164,17 @@ export function createActionRuleDiagnostics({
       cooldownWindowCount: readinessTimeline.summary.cooldownWindowCount,
       cooldownModifiedWindowCount:
         readinessTimeline.summary.cooldownModifiedWindowCount,
+      cooldownReductionTransactionCount:
+        readinessTimeline.summary.cooldownReductionTransactionCount,
+      appliedCooldownReductionTransactionCount:
+        readinessTimeline.summary.appliedCooldownReductionTransactionCount,
       appliedToSimulationResults: false,
     },
     acceptedSkillStartTransitions:
       cooldownEvaluation.acceptedSkillStartTransitions,
+    cooldownReductionTransactions:
+      cooldownEvaluation.cooldownReductionTransactions,
+    cooldownState: cooldownEvaluation.cooldownState,
     cooldownModifierSession: cooldownEvaluation.cooldownModifierSession,
     appliedToSimulationResults: false,
   };
@@ -574,6 +585,9 @@ function createActionReadinessTimeline({
           : 'action-readiness-timeline-ready',
     actions: actionRows,
     cooldownWindows: cooldownEvaluation.cooldownWindows,
+    cooldownReductionTransactions:
+      cooldownEvaluation.cooldownReductionTransactions,
+    cooldownState: cooldownEvaluation.cooldownState,
     summary: {
       actionCount: actionRows.length,
       readyActionCount: actionRows.filter(action => action.status === 'ready')
@@ -583,6 +597,12 @@ function createActionReadinessTimeline({
       cooldownTrackedActionCount: actionRows.filter(action => action.cooldown)
         .length,
       cooldownWindowCount: cooldownEvaluation.cooldownWindows.length,
+      cooldownReductionTransactionCount:
+        cooldownEvaluation.cooldownReductionTransactions.length,
+      appliedCooldownReductionTransactionCount:
+        cooldownEvaluation.cooldownReductionTransactions.filter(
+          transaction => transaction.appliedToSimulationResults
+        ).length,
       cooldownModifiedWindowCount: cooldownEvaluation.cooldownWindows.filter(
         window =>
           window.cooldownEvaluation?.status === 'cooldown-evaluation-adapted'
@@ -725,77 +745,6 @@ function createSwitchFrameConflictDiagnostics(actions, fps = 60) {
   return diagnostics;
 }
 
-function collectCooldownReductionEvents(actions, scenario) {
-  const reductionsByOwner = new Map();
-  if (!scenario) return reductionsByOwner;
-  for (const action of actions ?? []) {
-    if (action.type !== ACTION_TYPES.SKILL || !action.actorId) continue;
-    const characterId = Number(action.actor?.characterId);
-    if (!Number.isInteger(characterId) || characterId <= 0) continue;
-    const resolution = resolveVerifiedCombatActionMechanics(action, {
-      combatScenario: scenario.combatScenario,
-    });
-    const effect = (resolution?.effects ?? []).find(
-      candidate => candidate.cooldownReduction
-    );
-    const raw = Number(effect?.cooldownReduction?.valueByLevel?.['1']);
-    if (!Number.isFinite(raw) || raw >= 0) continue;
-    const ownerKey = String(characterId);
-    const list = reductionsByOwner.get(ownerKey) ?? [];
-    list.push({
-      timeMs: Math.max(0, Number(action.startMs) || 0),
-      reductionMs: -raw * 1000,
-      sourceActionId: action.id,
-    });
-    reductionsByOwner.set(ownerKey, list);
-  }
-  return reductionsByOwner;
-}
-
-function collectStarSkillIdByOwner() {
-  const packageValue = getInstalledVerifiedCombatMechanicsPackage();
-  const byOwner = new Map();
-  for (const mapping of packageValue?.actionMappings ?? []) {
-    if (
-      mapping.ownerKind === 'actor' &&
-      mapping.actionKind === 'star-skill'
-    ) {
-      byOwner.set(String(mapping.ownerId), Number(mapping.controlSkillId));
-    }
-  }
-  return byOwner;
-}
-
-function applyCooldownChargeReductions({
-  state,
-  characterId,
-  skillId,
-  actionStartMs,
-  reductionsByOwner,
-  starSkillIdByOwner,
-}) {
-  const starSkillId = starSkillIdByOwner.get(String(characterId));
-  if (!starSkillId || Number(skillId) !== starSkillId) return;
-  const reductions = (reductionsByOwner.get(String(characterId)) ?? []).filter(
-    reduction => reduction.timeMs <= Number(actionStartMs)
-  );
-  if (reductions.length === 0) return;
-  const totalReductionMs = reductions.reduce(
-    (sum, reduction) => sum + reduction.reductionMs,
-    0
-  );
-  if (!(totalReductionMs > 0)) return;
-  const target = [...state.charges].sort(
-    (left, right) => right.readyAtMs - left.readyAtMs
-  )[0];
-  if (!target) return;
-  target.readyAtMs = Math.max(0, target.readyAtMs - totalReductionMs);
-  target.cooldownReductionMs = totalReductionMs;
-  target.cooldownReductionSourceActionIds = reductions.map(
-    reduction => reduction.sourceActionId
-  );
-}
-
 function createSkillCooldownEvaluation(
   actions,
   {
@@ -805,19 +754,24 @@ function createSkillCooldownEvaluation(
   } = {}
 ) {
   const cooldownStateBySkillOwner = new Map();
-  const cooldownReductionsByOwner = collectCooldownReductionEvents(
-    actions,
-    scenario
-  );
-  const starSkillIdByOwner = collectStarSkillIdByOwner();
   const diagnostics = [];
   const snapshotsByActionId = new Map();
   const cooldownWindows = [];
+  const pendingCooldownReductionTransactions = [];
+  const cooldownReductionTransactions = [];
   const acceptedSkillStartTransitions = [];
   const cooldownModifierSession = createVerifiedKiboCooldownModifierSession({
     scenario,
   });
   for (const [actionOrderIndex, action] of actions.entries()) {
+    settleCooldownReductionTransactions({
+      pending: pendingCooldownReductionTransactions,
+      settled: cooldownReductionTransactions,
+      cooldownStateBySkillOwner,
+      cooldownWindows,
+      throughTimeMs: Number(action.startMs) || 0,
+      boundaryAction: action,
+    });
     if (
       ![ACTION_TYPES.SKILL, ACTION_TYPES.KIBO_EVENT].includes(action.type) ||
       !action.actorId ||
@@ -860,6 +814,20 @@ function createSkillCooldownEvaluation(
           passiveTransitions,
         })
       );
+      enqueueAcceptedCooldownReductionTransactions({
+        action,
+        actionOrderIndex,
+        scenario,
+        pending: pendingCooldownReductionTransactions,
+      });
+      settleCooldownReductionTransactions({
+        pending: pendingCooldownReductionTransactions,
+        settled: cooldownReductionTransactions,
+        cooldownStateBySkillOwner,
+        cooldownWindows,
+        throughTimeMs: Number(action.startMs) || 0,
+        boundaryAction: null,
+      });
       continue;
     }
     let evaluation = createActionCooldownEvaluation({
@@ -894,22 +862,25 @@ function createSkillCooldownEvaluation(
     const cooldownIdentity = cooldown.source?.subSkillId ?? action.skillId;
     const key = `${ownerKind}|${runtimeOwnerIdentity}|${cooldownIdentity}`;
     const state =
-      cooldownStateBySkillOwner.get(key) ?? createSkillCooldownState(cooldown);
-    applyCooldownChargeReductions({
-      state,
-      characterId: Number(action.actor?.characterId),
-      skillId: Number(action.skillId),
-      actionStartMs: action.startMs,
-      reductionsByOwner: cooldownReductionsByOwner,
-      starSkillIdByOwner,
-    });
+      cooldownStateBySkillOwner.get(key) ??
+      createSkillCooldownState(cooldown, {
+        key,
+        action,
+        ownerKind,
+        ownerId,
+        runtimeOwnerIdentity,
+        cooldownIdentity,
+      });
     cooldownStateBySkillOwner.set(key, state);
-    const chargesBefore = cloneCooldownCharges(state.charges);
-    const availableCharges = state.charges
-      .filter(charge => charge.readyAtMs <= action.startMs)
-      .sort((left, right) => left.chargeIndex - right.chargeIndex);
-    const blocking = [...state.charges].sort(compareCooldownCharges)[0] ?? null;
-    if (availableCharges.length === 0 && blocking) {
+    settleSkillCooldownStateToTime({
+      state,
+      timeMs: Number(action.startMs) || 0,
+      cooldownWindows,
+    });
+    const cooldownStateBefore = snapshotSkillCooldownState(state);
+    const availableCount = getAvailableCooldownCount(state, action.startMs);
+    const blocking = getBlockingCooldownState(state, action.startMs);
+    if (availableCount === 0 && blocking) {
       diagnostics.push({
         schemaVersion: 1,
         id: createDiagnosticId(
@@ -952,58 +923,26 @@ function createSkillCooldownEvaluation(
           action,
           cooldown,
           status: 'blocked-no-charge-ready',
-          chargesBefore,
-          chargesAfter: chargesBefore,
+          cooldownStateBefore,
+          cooldownStateAfter: cooldownStateBefore,
           consumedChargeIndex: null,
           windowId: null,
+          cooldownReductionTransactions: state.cooldownReductionTransactions,
         })
       );
       cooldownStateBySkillOwner.set(key, state);
       continue;
     }
 
-    const consumedCharge = availableCharges[0];
-    const readyAtMs = action.startMs + cooldown.cooldownMs;
-    state.charges = state.charges.map(charge =>
-      charge.chargeIndex === consumedCharge.chargeIndex
-        ? {
-            ...charge,
-            readyAtMs,
-            sourceActionId: action.id,
-            sourceActionName: action.name,
-          }
-        : charge
-    );
-    const window = {
-      schemaVersion: 1,
-      sourceKind: 'azpr-skill-cooldown-window',
-      status: 'skill-cooldown-window-active',
-      windowId: `${action.id}|cooldown-charge|${consumedCharge.chargeIndex}`,
-      actionId: action.id,
-      actionName: action.name,
-      actorId: action.actorId,
-      actorName: action.actor?.name ?? action.actorId,
-      ownerKind,
-      ownerId,
-      runtimeOwnerIdentity,
-      kiboId: action.kiboId ?? null,
-      skillId: action.skillId,
+    const consumption = consumeSkillCooldownAvailability({
+      state,
+      action,
       actionOrderIndex,
-      chargeIndex: consumedCharge.chargeIndex,
-      cooldownCount: cooldown.cooldownCount,
-      startMs: action.startMs,
-      endMs: readyAtMs,
-      durationMs: cooldown.cooldownMs,
-      baseDurationMs: evaluation.base.durationMs,
-      effectiveDurationMs: evaluation.effective.durationMs,
-      source: cooldown.source,
-      sourceIdentity: cooldown.sourceIdentity,
-      confidence: cooldown.confidence,
-      cooldownEvaluation: evaluation,
-      modifierCount: evaluation.appliedModifierCount,
-      trackingStatus: 'applied-to-readiness',
-      appliedToSimulationResults: false,
-    };
+      cooldown,
+      evaluation,
+      cooldownWindows,
+    });
+    const window = consumption.window;
     const cooldownPolicy = {
       setCd: true,
       source: cooldown.source?.sourceKind ?? 'positive-cooldown-requirement',
@@ -1021,11 +960,16 @@ function createSkillCooldownEvaluation(
       ownerId,
       actionOrderIndex,
       cooldownPolicy,
-      cooldownWindowId: window.windowId,
+      cooldownWindowId: window?.windowId ?? null,
       passiveTransitions,
     });
-    window.acceptedSkillStartTransition = acceptedSkillStartTransition;
-    cooldownWindows.push(window);
+    if (window) {
+      window.acceptedSkillStartTransition ??= acceptedSkillStartTransition;
+      window.acceptedSkillStartTransitions = [
+        ...(window.acceptedSkillStartTransitions ?? []),
+        acceptedSkillStartTransition,
+      ];
+    }
     acceptedSkillStartTransitions.push(acceptedSkillStartTransition);
     snapshotsByActionId.set(
       action.id,
@@ -1033,19 +977,76 @@ function createSkillCooldownEvaluation(
         action,
         cooldown,
         status: 'cooldown-charge-consumed',
-        chargesBefore,
-        chargesAfter: cloneCooldownCharges(state.charges),
-        consumedChargeIndex: consumedCharge.chargeIndex,
-        windowId: window.windowId,
+        cooldownStateBefore,
+        cooldownStateAfter: snapshotSkillCooldownState(state),
+        consumedChargeIndex: consumption.consumedChargeIndex,
+        windowId: window?.windowId ?? null,
+        cooldownReductionTransactions: state.cooldownReductionTransactions,
       })
     );
     cooldownStateBySkillOwner.set(key, state);
+    enqueueAcceptedCooldownReductionTransactions({
+      action,
+      actionOrderIndex,
+      scenario,
+      pending: pendingCooldownReductionTransactions,
+    });
+    settleCooldownReductionTransactions({
+      pending: pendingCooldownReductionTransactions,
+      settled: cooldownReductionTransactions,
+      cooldownStateBySkillOwner,
+      cooldownWindows,
+      throughTimeMs: Number(action.startMs) || 0,
+      boundaryAction: null,
+    });
   }
+  settleCooldownReductionTransactions({
+    pending: pendingCooldownReductionTransactions,
+    settled: cooldownReductionTransactions,
+    cooldownStateBySkillOwner,
+    cooldownWindows,
+    throughTimeMs:
+      Number(scenario?.time?.durationMs) || Number.POSITIVE_INFINITY,
+    boundaryAction: null,
+  });
+  settleAllCooldownStatesToTime({
+    cooldownStateBySkillOwner,
+    cooldownWindows,
+    timeMs: Number(scenario?.time?.durationMs) || 0,
+  });
   return {
     diagnostics,
     snapshotsByActionId,
     acceptedSkillStartTransitions,
     cooldownModifierSession: cooldownModifierSession.snapshot(),
+    cooldownReductionTransactions,
+    cooldownState: [...cooldownStateBySkillOwner.values()].map(state => ({
+      key: state.key,
+      ownerKind: state.ownerKind,
+      ownerId: state.ownerId,
+      runtimeOwnerIdentity: state.runtimeOwnerIdentity,
+      skillId: state.skillId,
+      cooldownIdentity: state.cooldownIdentity,
+      cooldownType: state.cooldownType,
+      fullCooldownMs: state.fullCooldownMs,
+      chargeMaxCount: state.chargeMaxCount ?? null,
+      currentChargeCount: state.currentChargeCount ?? null,
+      coolTimeMs: state.coolTimeMs ?? null,
+      sharedTimerRunning: state.sharedTimerRunning ?? false,
+      nextReadyAtMs: getNextCooldownReadyAtMs(state),
+      lastSettlementTimeMs: state.lastSettlementTimeMs ?? null,
+      lastSettlementIdentity: state.lastSettlementIdentity ?? null,
+      lastCooldownReductionTransactionId:
+        state.lastCooldownReductionTransactionId ?? null,
+      missingChargeSourceActionIds: (state.missingChargeSources ?? []).map(
+        source => source.actionId
+      ),
+      charges:
+        state.cooldownType === 'single'
+          ? cloneCooldownCharges(state.charges)
+          : [],
+      cooldownReductionTransactions: [...state.cooldownReductionTransactions],
+    })),
     cooldownWindows: cooldownWindows.sort(
       (left, right) =>
         left.startMs - right.startMs ||
@@ -1053,6 +1054,361 @@ function createSkillCooldownEvaluation(
         left.actionOrderIndex - right.actionOrderIndex
     ),
   };
+}
+
+function enqueueAcceptedCooldownReductionTransactions({
+  action,
+  actionOrderIndex,
+  scenario,
+  pending,
+}) {
+  if (action.type !== ACTION_TYPES.SKILL || !action.actorId) return;
+  const resolution = resolveVerifiedCombatActionMechanics(action, {
+    combatScenario: scenario?.combatScenario,
+  });
+  const frameRate = Number(resolution?.controlBinding?.frameRate) || 60;
+  for (const [effectIndex, effect] of (resolution?.effects ?? []).entries()) {
+    const reduction = effect.cooldownReduction;
+    const rawValue = Number(reduction?.valueByLevel?.['1']);
+    if (
+      Number(reduction?.recoverType) !== 3 ||
+      !Number.isFinite(rawValue) ||
+      rawValue >= 0
+    ) {
+      continue;
+    }
+    const triggerFrame = Number(effect.trigger?.startFrame);
+    if (!Number.isInteger(triggerFrame) || triggerFrame < 0) continue;
+    const sourceSequencePath = createVerifiedEffectSourceSequencePath({
+      action,
+      effect,
+      phase: 'settlement',
+      localSequenceSuffix: [effectIndex],
+    }) ?? [Number(actionOrderIndex), 20, effectIndex];
+    pending.push({
+      schemaVersion: 1,
+      sourceKind: 'azpr-cooldown-reduction-transaction',
+      status: 'cooldown-reduction-transaction-pending',
+      eventIdentity: `cooldown-reduction|${action.id}|${effect.effectIdentity ?? effect.elementId}|${effectIndex}`,
+      timeMs: resolveActionFrameTimeMs(action, triggerFrame, frameRate),
+      sourceActionId: action.id,
+      sourceActionName: action.name ?? action.id,
+      sourceActorId: action.actorId,
+      sourceSkillId: Number(action.skillId),
+      sourceEffectIdentity: effect.effectIdentity ?? null,
+      sourceElementId: Number(effect.elementId),
+      triggerFrame,
+      frameRate,
+      recoverType: 3,
+      slot: Number(reduction.slot),
+      cdRecoveryType: Number(reduction.cdRecoveryType),
+      rawValue,
+      reductionMs: -rawValue * 1000,
+      sourceSequencePath,
+      sourceSequenceStatus: Array.isArray(sourceSequencePath)
+        ? 'verified-cooldown-reduction-source-sequence-ready'
+        : 'verified-cooldown-reduction-source-sequence-unresolved',
+      sourceIdentity: effect.sourceIdentity ?? null,
+      appliedToSimulationResults: false,
+      consumed: false,
+    });
+  }
+  pending.sort(compareCooldownReductionTransactions);
+}
+
+function resolveActionFrameTimeMs(action, relativeFrame, frameRate) {
+  const resolvedFrameRate = Number(frameRate) || 60;
+  const actionStartFrame = Number.isInteger(Number(action.startFrame))
+    ? Number(action.startFrame)
+    : Math.round(((Number(action.startMs) || 0) * resolvedFrameRate) / 1000);
+  return Number(
+    (((actionStartFrame + relativeFrame) * 1000) / resolvedFrameRate).toFixed(6)
+  );
+}
+
+function settleCooldownReductionTransactions({
+  pending,
+  settled,
+  cooldownStateBySkillOwner,
+  cooldownWindows,
+  throughTimeMs,
+  boundaryAction,
+}) {
+  while (
+    pending.length > 0 &&
+    isCooldownReductionTransactionDue(pending[0], throughTimeMs, boundaryAction)
+  ) {
+    const transaction = pending.shift();
+    const result = applyCooldownReductionTransaction({
+      transaction,
+      cooldownStateBySkillOwner,
+      cooldownWindows,
+    });
+    settled.push(result);
+  }
+}
+
+function isCooldownReductionTransactionDue(
+  transaction,
+  throughTimeMs,
+  boundaryAction
+) {
+  if (transaction.timeMs < throughTimeMs) return true;
+  if (transaction.timeMs > throughTimeMs) return false;
+  if (!boundaryAction) return true;
+  const boundaryPath = getActionSourceSequencePath(boundaryAction);
+  return (
+    compareSourceSequencePaths(transaction.sourceSequencePath, boundaryPath) <=
+    0
+  );
+}
+
+function applyCooldownReductionTransaction({
+  transaction,
+  cooldownStateBySkillOwner,
+  cooldownWindows,
+}) {
+  settleAllCooldownStatesToTime({
+    cooldownStateBySkillOwner,
+    cooldownWindows,
+    timeMs: transaction.timeMs,
+  });
+  const runtimeOwnerIdentity = `actor:${String(transaction.sourceActorId)}`;
+  let candidates = [...cooldownStateBySkillOwner.values()].filter(
+    state =>
+      state.ownerKind === 'actor' &&
+      state.runtimeOwnerIdentity === runtimeOwnerIdentity &&
+      Number(state.skillId) !== Number(transaction.sourceSkillId) &&
+      hasActiveCooldownAtTime(state, transaction.timeMs)
+  );
+  if (transaction.slot !== -1) {
+    candidates = candidates.filter(
+      state => Number(state.skillSlot) === Number(transaction.slot)
+    );
+  }
+  if (candidates.length !== 1) {
+    return {
+      ...transaction,
+      status:
+        candidates.length === 0
+          ? 'cooldown-reduction-transaction-consumed-no-active-target'
+          : 'cooldown-reduction-transaction-consumed-ambiguous-target',
+      targetResolutionStatus:
+        candidates.length === 0
+          ? 'no-active-cooldown-at-effect-time'
+          : 'multiple-active-cooldowns-at-effect-time',
+      candidateSkillIds: candidates.map(state => state.skillId),
+      appliedToSimulationResults: false,
+      consumed: true,
+    };
+  }
+  if (transaction.cdRecoveryType !== 0) {
+    return {
+      ...transaction,
+      status: 'cooldown-reduction-transaction-consumed-unsupported-mode',
+      targetResolutionStatus: 'cooldown-recovery-mode-not-fixed',
+      targetSkillId: candidates[0].skillId,
+      appliedToSimulationResults: false,
+      consumed: true,
+    };
+  }
+  const state = candidates[0];
+  if (state.cooldownType === 'charge') {
+    return applySharedChargeCooldownReduction({
+      state,
+      transaction,
+      cooldownWindows,
+    });
+  }
+  const targetCharge = state.charges
+    .filter(charge => charge.readyAtMs > transaction.timeMs)
+    .sort(compareCooldownCharges)[0];
+  if (!targetCharge) {
+    return {
+      ...transaction,
+      status: 'cooldown-reduction-transaction-consumed-no-active-target',
+      targetResolutionStatus: 'no-active-charge-at-effect-time',
+      targetSkillId: state.skillId,
+      appliedToSimulationResults: false,
+      consumed: true,
+    };
+  }
+  const beforeReadyAtMs = targetCharge.readyAtMs;
+  const afterReadyAtMs = Math.max(
+    transaction.timeMs,
+    beforeReadyAtMs - transaction.reductionMs
+  );
+  targetCharge.readyAtMs = afterReadyAtMs;
+  targetCharge.cooldownReductionMs =
+    (Number(targetCharge.cooldownReductionMs) || 0) +
+    (beforeReadyAtMs - afterReadyAtMs);
+  targetCharge.cooldownReductionSourceActionIds = [
+    ...(targetCharge.cooldownReductionSourceActionIds ?? []),
+    transaction.sourceActionId,
+  ];
+  targetCharge.cooldownReductionTransactionIds = [
+    ...(targetCharge.cooldownReductionTransactionIds ?? []),
+    transaction.eventIdentity,
+  ];
+  const window = cooldownWindows.find(
+    candidate => candidate.windowId === targetCharge.windowId
+  );
+  if (window) {
+    window.endMs = afterReadyAtMs;
+    window.durationMs = Math.max(0, afterReadyAtMs - window.startMs);
+    window.status =
+      afterReadyAtMs <= transaction.timeMs
+        ? 'skill-cooldown-window-reset-by-transaction'
+        : 'skill-cooldown-window-reduced-by-transaction';
+    window.cooldownReductionTransactionIds = [
+      ...(window.cooldownReductionTransactionIds ?? []),
+      transaction.eventIdentity,
+    ];
+  }
+  const result = {
+    ...transaction,
+    status: 'cooldown-reduction-transaction-applied',
+    targetResolutionStatus: 'single-active-cooldown-resolved',
+    targetSkillId: state.skillId,
+    targetCooldownIdentity: state.cooldownIdentity,
+    targetChargeIndex: targetCharge.chargeIndex,
+    targetWindowId: targetCharge.windowId ?? null,
+    beforeReadyAtMs,
+    afterReadyAtMs,
+    appliedReductionMs: beforeReadyAtMs - afterReadyAtMs,
+    restoredChargeCount: afterReadyAtMs <= transaction.timeMs ? 1 : 0,
+    appliedToSimulationResults: true,
+    consumed: true,
+  };
+  state.lastSettlementTimeMs = transaction.timeMs;
+  state.lastSettlementIdentity = transaction.eventIdentity;
+  state.lastCooldownReductionTransactionId = transaction.eventIdentity;
+  state.cooldownReductionTransactions.push(result);
+  return result;
+}
+
+function hasActiveCooldownAtTime(state, timeMs) {
+  return state.cooldownType === 'charge'
+    ? state.currentChargeCount < state.chargeMaxCount &&
+        state.sharedTimerRunning &&
+        state.coolTimeMs > 0
+    : state.charges.some(charge => charge.readyAtMs > timeMs);
+}
+
+function applySharedChargeCooldownReduction({
+  state,
+  transaction,
+  cooldownWindows,
+}) {
+  const beforeChargeCount = state.currentChargeCount;
+  const beforeCoolTimeMs = state.coolTimeMs;
+  const beforeSharedTimerRunning = state.sharedTimerRunning === true;
+  const beforeReadyAtMs = Number(
+    (transaction.timeMs + beforeCoolTimeMs).toFixed(6)
+  );
+  const targetWindow = findActiveSharedChargeWindow(state, cooldownWindows);
+  const targetWindowId = targetWindow?.windowId ?? null;
+  const appliedReductionMs = Math.min(
+    beforeCoolTimeMs,
+    transaction.reductionMs
+  );
+  const remainingCoolTimeMs = Math.max(
+    0,
+    beforeCoolTimeMs - transaction.reductionMs
+  );
+  let restoredChargeCount = 0;
+  let afterReadyAtMs;
+  if (remainingCoolTimeMs <= ACTION_BOUNDARY_EPSILON_MS) {
+    completeSharedChargeWindow({
+      state,
+      cooldownWindows,
+      endMs: transaction.timeMs,
+      status: 'skill-charge-cooldown-cycle-reset-by-transaction',
+    });
+    state.missingChargeSources.shift();
+    state.currentChargeCount = Math.min(
+      state.chargeMaxCount,
+      state.currentChargeCount + 1
+    );
+    state.coolTimeMs = state.fullCooldownMs;
+    restoredChargeCount = 1;
+    afterReadyAtMs = transaction.timeMs;
+    if (state.currentChargeCount < state.chargeMaxCount) {
+      state.sharedTimerRunning = true;
+      openSharedChargeWindow({
+        state,
+        cooldownWindows,
+        startMs: transaction.timeMs,
+        source: state.missingChargeSources[0],
+      });
+    } else {
+      state.sharedTimerRunning = false;
+    }
+  } else {
+    state.coolTimeMs = remainingCoolTimeMs;
+    state.sharedTimerRunning = true;
+    afterReadyAtMs = Number(
+      (transaction.timeMs + remainingCoolTimeMs).toFixed(6)
+    );
+    if (targetWindow) {
+      targetWindow.endMs = afterReadyAtMs;
+      targetWindow.durationMs = Math.max(
+        0,
+        afterReadyAtMs - targetWindow.startMs
+      );
+      targetWindow.status =
+        'skill-charge-cooldown-cycle-reduced-by-transaction';
+    }
+  }
+  if (targetWindow) {
+    targetWindow.cooldownReductionTransactionIds = [
+      ...(targetWindow.cooldownReductionTransactionIds ?? []),
+      transaction.eventIdentity,
+    ];
+  }
+  state.lastSettlementTimeMs = transaction.timeMs;
+  state.lastSettlementIdentity = transaction.eventIdentity;
+  state.lastCooldownReductionTransactionId = transaction.eventIdentity;
+  const result = {
+    ...transaction,
+    status: 'cooldown-reduction-transaction-applied',
+    targetResolutionStatus: 'single-active-shared-charge-timer-resolved',
+    targetSkillId: state.skillId,
+    targetCooldownIdentity: state.cooldownIdentity,
+    targetChargeIndex: null,
+    targetWindowId,
+    cooldownType: 'charge',
+    beforeChargeCount,
+    afterChargeCount: state.currentChargeCount,
+    beforeCoolTimeMs,
+    afterCoolTimeMs: state.coolTimeMs,
+    beforeSharedTimerRunning,
+    afterSharedTimerRunning: state.sharedTimerRunning === true,
+    beforeReadyAtMs,
+    afterReadyAtMs,
+    nextReadyAtMs: getNextCooldownReadyAtMs(state),
+    appliedReductionMs,
+    discardedReductionMs: Math.max(
+      0,
+      transaction.reductionMs - appliedReductionMs
+    ),
+    restoredChargeCount,
+    appliedToSimulationResults: true,
+    consumed: true,
+  };
+  state.cooldownReductionTransactions.push(result);
+  return result;
+}
+
+function compareCooldownReductionTransactions(left, right) {
+  return (
+    Number(left.timeMs) - Number(right.timeMs) ||
+    compareSourceSequencePaths(
+      left.sourceSequencePath,
+      right.sourceSequencePath
+    ) ||
+    String(left.eventIdentity).localeCompare(String(right.eventIdentity))
+  );
 }
 
 function applyVerifiedKiboCooldownEvaluation({
@@ -1164,18 +1520,50 @@ function createKiboCooldownSessionDiagnostics(session) {
   }));
 }
 
-function createSkillCooldownState(cooldown) {
-  return {
-    maxCharges: cooldown.cooldownCount,
-    charges: Array.from(
-      { length: cooldown.cooldownCount },
-      (_, chargeIndex) => ({
-        chargeIndex,
-        readyAtMs: 0,
-        sourceActionId: null,
-        sourceActionName: null,
-      })
+function createSkillCooldownState(
+  cooldown,
+  { key, action, ownerKind, ownerId, runtimeOwnerIdentity, cooldownIdentity }
+) {
+  const cooldownType = cooldown.cooldownCount > 1 ? 'charge' : 'single';
+  const common = {
+    key,
+    ownerKind,
+    ownerId,
+    runtimeOwnerIdentity,
+    cooldownIdentity,
+    skillId: Number(action.skillId),
+    skillSlot: finiteNumberOrNull(
+      action.skillSlot ?? action.slot ?? action.logicModel?.logic?.slot
     ),
+    cooldownType,
+    fullCooldownMs: cooldown.cooldownMs,
+    lastSettlementTimeMs: 0,
+    lastSettlementIdentity: 'cooldown-state-initialized',
+    lastCooldownReductionTransactionId: null,
+    cooldownReductionTransactions: [],
+  };
+  if (cooldownType === 'charge') {
+    return {
+      ...common,
+      chargeMaxCount: cooldown.cooldownCount,
+      currentChargeCount: cooldown.cooldownCount,
+      coolTimeMs: 0,
+      sharedTimerRunning: false,
+      activeWindowId: null,
+      windowSequence: 0,
+      missingChargeSources: [],
+      charges: [],
+    };
+  }
+  return {
+    ...common,
+    maxCharges: 1,
+    charges: Array.from({ length: 1 }, (_, chargeIndex) => ({
+      chargeIndex,
+      readyAtMs: 0,
+      sourceActionId: null,
+      sourceActionName: null,
+    })),
   };
 }
 
@@ -1183,10 +1571,11 @@ function createCooldownReadinessSnapshot({
   action,
   cooldown,
   status,
-  chargesBefore,
-  chargesAfter,
+  cooldownStateBefore,
+  cooldownStateAfter,
   consumedChargeIndex,
   windowId,
+  cooldownReductionTransactions = [],
 }) {
   return {
     schemaVersion: 1,
@@ -1201,8 +1590,7 @@ function createCooldownReadinessSnapshot({
       action.type === ACTION_TYPES.KIBO_EVENT ? action.kiboId : action.actorId,
     runtimeOwnerIdentity: createCooldownRuntimeOwnerIdentity({
       action,
-      ownerKind:
-        action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor',
+      ownerKind: action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor',
       ownerId:
         action.type === ACTION_TYPES.KIBO_EVENT
           ? action.kiboId
@@ -1210,13 +1598,21 @@ function createCooldownReadinessSnapshot({
     }),
     kiboId: action.kiboId ?? null,
     skillId: action.skillId ?? null,
-    availableBefore: countAvailableCharges(chargesBefore, action.startMs),
-    availableAfter: countAvailableCharges(chargesAfter, action.startMs),
+    cooldownType: cooldownStateAfter.cooldownType,
+    availableBefore: cooldownStateBefore.availableCount,
+    availableAfter: cooldownStateAfter.availableCount,
     consumedChargeIndex,
-    nextReadyAtMs: getNextReadyAtMs(chargesAfter, action.startMs),
-    chargesBefore,
-    chargesAfter,
+    nextReadyAtMs: cooldownStateAfter.nextReadyAtMs,
+    chargesBefore: cooldownStateBefore.charges ?? [],
+    chargesAfter: cooldownStateAfter.charges ?? [],
+    chargeStateBefore:
+      cooldownStateBefore.cooldownType === 'charge'
+        ? cooldownStateBefore
+        : null,
+    chargeStateAfter:
+      cooldownStateAfter.cooldownType === 'charge' ? cooldownStateAfter : null,
     windowId,
+    cooldownReductionTransactions: [...cooldownReductionTransactions],
     source: cooldown.source,
     sourceIdentity: cooldown.sourceIdentity,
     confidence: cooldown.confidence,
@@ -1224,6 +1620,316 @@ function createCooldownReadinessSnapshot({
     modifierCount: cooldown.evaluation.appliedModifierCount,
     trackingStatus: 'applied-to-readiness',
     appliedToSimulationResults: false,
+  };
+}
+
+function settleAllCooldownStatesToTime({
+  cooldownStateBySkillOwner,
+  cooldownWindows,
+  timeMs,
+}) {
+  for (const state of cooldownStateBySkillOwner.values()) {
+    settleSkillCooldownStateToTime({ state, timeMs, cooldownWindows });
+  }
+}
+
+function settleSkillCooldownStateToTime({ state, timeMs, cooldownWindows }) {
+  if (state.cooldownType !== 'charge') return;
+  const targetTimeMs = Math.max(
+    Number(state.lastSettlementTimeMs) || 0,
+    Number(timeMs) || 0
+  );
+  let cursorMs = Number(state.lastSettlementTimeMs) || 0;
+  let elapsedMs = targetTimeMs - cursorMs;
+  if (
+    state.currentChargeCount >= state.chargeMaxCount ||
+    !(state.coolTimeMs > 0)
+  ) {
+    state.sharedTimerRunning = false;
+    state.lastSettlementTimeMs = targetTimeMs;
+    return;
+  }
+  state.sharedTimerRunning = true;
+  while (
+    elapsedMs + ACTION_BOUNDARY_EPSILON_MS >= state.coolTimeMs &&
+    state.currentChargeCount < state.chargeMaxCount
+  ) {
+    const recoveryTimeMs = Number((cursorMs + state.coolTimeMs).toFixed(6));
+    const recoveredSource = state.missingChargeSources.shift() ?? null;
+    completeSharedChargeWindow({
+      state,
+      cooldownWindows,
+      endMs: recoveryTimeMs,
+      status: 'skill-charge-cooldown-cycle-completed-naturally',
+    });
+    state.currentChargeCount += 1;
+    state.coolTimeMs = state.fullCooldownMs;
+    state.lastSettlementTimeMs = recoveryTimeMs;
+    state.lastSettlementIdentity = `cooldown-natural-recovery|${state.cooldownIdentity}`;
+    cursorMs = recoveryTimeMs;
+    elapsedMs = Math.max(0, targetTimeMs - cursorMs);
+    if (state.currentChargeCount < state.chargeMaxCount) {
+      openSharedChargeWindow({
+        state,
+        cooldownWindows,
+        startMs: recoveryTimeMs,
+        source: state.missingChargeSources[0] ?? recoveredSource,
+      });
+    } else {
+      state.sharedTimerRunning = false;
+    }
+  }
+  if (state.currentChargeCount < state.chargeMaxCount) {
+    state.coolTimeMs = Math.max(0, state.coolTimeMs - elapsedMs);
+    state.sharedTimerRunning = true;
+  }
+  state.lastSettlementTimeMs = targetTimeMs;
+}
+
+function consumeSkillCooldownAvailability({
+  state,
+  action,
+  actionOrderIndex,
+  cooldown,
+  evaluation,
+  cooldownWindows,
+}) {
+  if (state.cooldownType === 'charge') {
+    state.currentChargeCount -= 1;
+    const source = createSharedChargeSource({
+      action,
+      actionOrderIndex,
+      cooldown,
+      evaluation,
+    });
+    state.missingChargeSources.push(source);
+    if (!(state.coolTimeMs > 0)) {
+      state.fullCooldownMs = cooldown.cooldownMs;
+      state.coolTimeMs = cooldown.cooldownMs;
+    }
+    state.sharedTimerRunning = true;
+    state.lastSettlementTimeMs = Number(action.startMs) || 0;
+    state.lastSettlementIdentity = `cooldown-charge-cast|${action.id}`;
+    if (!state.activeWindowId) {
+      openSharedChargeWindow({
+        state,
+        cooldownWindows,
+        startMs: Number(action.startMs) || 0,
+        source: state.missingChargeSources[0],
+      });
+    }
+    return {
+      consumedChargeIndex: null,
+      window: findActiveSharedChargeWindow(state, cooldownWindows),
+    };
+  }
+
+  const consumedCharge = state.charges
+    .filter(charge => charge.readyAtMs <= action.startMs)
+    .sort((left, right) => left.chargeIndex - right.chargeIndex)[0];
+  const readyAtMs = action.startMs + cooldown.cooldownMs;
+  const windowId = `${action.id}|cooldown-charge|${consumedCharge.chargeIndex}`;
+  state.charges = state.charges.map(charge =>
+    charge.chargeIndex === consumedCharge.chargeIndex
+      ? {
+          ...charge,
+          readyAtMs,
+          sourceActionId: action.id,
+          sourceActionName: action.name,
+          windowId,
+        }
+      : charge
+  );
+  state.lastSettlementTimeMs = Number(action.startMs) || 0;
+  state.lastSettlementIdentity = `cooldown-cast|${action.id}`;
+  const window = {
+    schemaVersion: 1,
+    sourceKind: 'azpr-skill-cooldown-window',
+    status: 'skill-cooldown-window-active',
+    windowId,
+    actionId: action.id,
+    actionName: action.name,
+    actorId: action.actorId,
+    actorName: action.actor?.name ?? action.actorId,
+    ownerKind: state.ownerKind,
+    ownerId: state.ownerId,
+    runtimeOwnerIdentity: state.runtimeOwnerIdentity,
+    kiboId: action.kiboId ?? null,
+    skillId: action.skillId,
+    actionOrderIndex,
+    chargeIndex: consumedCharge.chargeIndex,
+    cooldownCount: cooldown.cooldownCount,
+    cooldownType: 'single',
+    startMs: action.startMs,
+    endMs: readyAtMs,
+    durationMs: cooldown.cooldownMs,
+    baseDurationMs: evaluation.base.durationMs,
+    effectiveDurationMs: evaluation.effective.durationMs,
+    source: cooldown.source,
+    sourceIdentity: cooldown.sourceIdentity,
+    confidence: cooldown.confidence,
+    cooldownEvaluation: evaluation,
+    modifierCount: evaluation.appliedModifierCount,
+    trackingStatus: 'applied-to-readiness',
+    appliedToSimulationResults: false,
+  };
+  cooldownWindows.push(window);
+  return { consumedChargeIndex: consumedCharge.chargeIndex, window };
+}
+
+function createSharedChargeSource({
+  action,
+  actionOrderIndex,
+  cooldown,
+  evaluation,
+}) {
+  return {
+    actionId: action.id,
+    actionName: action.name,
+    actorId: action.actorId,
+    actorName: action.actor?.name ?? action.actorId,
+    kiboId: action.kiboId ?? null,
+    skillId: action.skillId,
+    actionOrderIndex,
+    cooldown,
+    evaluation,
+  };
+}
+
+function openSharedChargeWindow({ state, cooldownWindows, startMs, source }) {
+  if (!source || state.activeWindowId) return;
+  state.windowSequence += 1;
+  const windowId = `${state.runtimeOwnerIdentity}|${state.cooldownIdentity}|charge-cycle|${state.windowSequence}`;
+  const window = {
+    schemaVersion: 1,
+    sourceKind: 'azpr-shared-charge-cooldown-window',
+    status: 'skill-charge-cooldown-cycle-active',
+    windowId,
+    actionId: source.actionId,
+    actionName: source.actionName,
+    actorId: source.actorId,
+    actorName: source.actorName,
+    ownerKind: state.ownerKind,
+    ownerId: state.ownerId,
+    runtimeOwnerIdentity: state.runtimeOwnerIdentity,
+    kiboId: source.kiboId,
+    skillId: state.skillId,
+    actionOrderIndex: source.actionOrderIndex,
+    chargeIndex: null,
+    cooldownCount: state.chargeMaxCount,
+    cooldownType: 'charge',
+    startMs,
+    endMs: Number((startMs + state.coolTimeMs).toFixed(6)),
+    durationMs: state.coolTimeMs,
+    baseDurationMs: source.evaluation.base.durationMs,
+    effectiveDurationMs: source.evaluation.effective.durationMs,
+    source: source.cooldown.source,
+    sourceIdentity: source.cooldown.sourceIdentity,
+    confidence: source.cooldown.confidence,
+    cooldownEvaluation: source.evaluation,
+    modifierCount: source.evaluation.appliedModifierCount,
+    trackingStatus: 'applied-to-readiness',
+    appliedToSimulationResults: false,
+  };
+  state.activeWindowId = windowId;
+  cooldownWindows.push(window);
+}
+
+function completeSharedChargeWindow({ state, cooldownWindows, endMs, status }) {
+  const window = findActiveSharedChargeWindow(state, cooldownWindows);
+  if (!window) return null;
+  window.endMs = endMs;
+  window.durationMs = Math.max(0, endMs - window.startMs);
+  window.status = status;
+  state.activeWindowId = null;
+  return window;
+}
+
+function findActiveSharedChargeWindow(state, cooldownWindows) {
+  return (
+    cooldownWindows.find(window => window.windowId === state.activeWindowId) ??
+    null
+  );
+}
+
+function getAvailableCooldownCount(state, timeMs) {
+  return state.cooldownType === 'charge'
+    ? state.currentChargeCount
+    : countAvailableCharges(state.charges, timeMs);
+}
+
+function getBlockingCooldownState(state, timeMs) {
+  if (state.cooldownType === 'charge') {
+    if (state.currentChargeCount > 0 || !state.sharedTimerRunning) return null;
+    const source = state.missingChargeSources[0] ?? {};
+    return {
+      sourceActionId: source.actionId ?? null,
+      sourceActionName: source.actionName ?? null,
+      readyAtMs: getNextCooldownReadyAtMs(state),
+    };
+  }
+  return (
+    state.charges
+      .filter(charge => charge.readyAtMs > timeMs)
+      .sort(compareCooldownCharges)[0] ?? null
+  );
+}
+
+function getNextCooldownReadyAtMs(state) {
+  if (state.cooldownType === 'charge') {
+    return state.sharedTimerRunning &&
+      state.currentChargeCount < state.chargeMaxCount
+      ? Number(
+          (
+            (Number(state.lastSettlementTimeMs) || 0) +
+            (Number(state.coolTimeMs) || 0)
+          ).toFixed(6)
+        )
+      : null;
+  }
+  return getNextReadyAtMs(state.charges, state.lastSettlementTimeMs);
+}
+
+function snapshotSkillCooldownState(state) {
+  if (state.cooldownType === 'charge') {
+    return {
+      cooldownType: 'charge',
+      fullCooldownMs: state.fullCooldownMs,
+      chargeMaxCount: state.chargeMaxCount,
+      currentChargeCount: state.currentChargeCount,
+      availableCount: state.currentChargeCount,
+      coolTimeMs: Number((Number(state.coolTimeMs) || 0).toFixed(6)),
+      sharedTimerRunning: state.sharedTimerRunning === true,
+      nextReadyAtMs: getNextCooldownReadyAtMs(state),
+      lastSettlementTimeMs: state.lastSettlementTimeMs,
+      lastSettlementIdentity: state.lastSettlementIdentity,
+      lastCooldownReductionTransactionId:
+        state.lastCooldownReductionTransactionId ?? null,
+      activeWindowId: state.activeWindowId ?? null,
+      missingChargeSourceActionIds: state.missingChargeSources.map(
+        source => source.actionId
+      ),
+      cooldownReductionTransactionIds: state.cooldownReductionTransactions.map(
+        transaction => transaction.eventIdentity
+      ),
+    };
+  }
+  return {
+    cooldownType: 'single',
+    fullCooldownMs: state.fullCooldownMs,
+    availableCount: countAvailableCharges(
+      state.charges,
+      state.lastSettlementTimeMs
+    ),
+    nextReadyAtMs: getNextReadyAtMs(state.charges, state.lastSettlementTimeMs),
+    lastSettlementTimeMs: state.lastSettlementTimeMs,
+    lastSettlementIdentity: state.lastSettlementIdentity,
+    lastCooldownReductionTransactionId:
+      state.lastCooldownReductionTransactionId ?? null,
+    charges: cloneCooldownCharges(state.charges),
+    cooldownReductionTransactionIds: state.cooldownReductionTransactions.map(
+      transaction => transaction.eventIdentity
+    ),
   };
 }
 

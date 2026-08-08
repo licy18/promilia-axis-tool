@@ -1,7 +1,24 @@
 import crypto from 'node:crypto';
 
-export const CHARACTER_COMBAT_COMPILER_VERSION = 3;
+export const CHARACTER_COMBAT_COMPILER_VERSION = 4;
 const TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID = 101100;
+const SELF_STATE_CONDITIONAL_COMMON_FUNCTION_ID = 102100;
+const ELEMENT_LAYER_CONDITIONAL_FORMULA_FAMILIES = new Map([
+  [
+    TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID,
+    {
+      subjectKind: 'target',
+      expression: 'IF(target.ELEMENT_LAYERS[M]>I,T,F)',
+    },
+  ],
+  [
+    SELF_STATE_CONDITIONAL_COMMON_FUNCTION_ID,
+    {
+      subjectKind: 'self',
+      expression: 'IF(self.ELEMENT_LAYERS[M]>I,T,F)',
+    },
+  ],
+]);
 
 export function compileCharacterCombatRecipeContracts({
   recipe,
@@ -83,17 +100,18 @@ export function compileCharacterCombatRecipeContracts({
     resourceProfiles,
     operators: normalizedOperators,
   });
+  const targetStateProfiles = compileTargetStateProfiles({
+    ownerId,
+    definitions: compilerRecipe.targetStateProfiles ?? [],
+    operators: normalizedOperators,
+  });
   const actionEffectBindings = compileActionEffectBindings({
     ownerId,
     definitions: compilerRecipe.actionEffectBindings ?? [],
     controlBySkillId,
     resourceProfiles,
+    targetStateProfiles,
     tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
-    operators: normalizedOperators,
-  });
-  const targetStateProfiles = compileTargetStateProfiles({
-    ownerId,
-    definitions: compilerRecipe.targetStateProfiles ?? [],
     operators: normalizedOperators,
   });
   const targetStateTransactions = compileTargetStateTransactions({
@@ -591,11 +609,25 @@ export function applyCharacterCombatActionEffectBindings({
         `character combat action effect match mismatch: ${binding.ownerId}/${binding.controlSkillId}/${binding.mapIndex}/${binding.elementId} received ${matches.length}`
       );
     }
-    control.effects = control.effects.map(effect =>
-      matches.includes(effect)
-        ? applyActionEffectBinding(effect, binding)
-        : effect
-    );
+    const matchedEffect = matches[0];
+    const activationDescendants =
+      binding.activationConditionScope === 'matched-effect-subtree'
+        ? (control.effects ?? []).filter(
+            effect =>
+              effect !== matchedEffect &&
+              effect.graphIdentity === matchedEffect.graphIdentity &&
+              Number(effect.depth) >= Number(matchedEffect.depth)
+          )
+        : [];
+    control.effects = control.effects.map(effect => {
+      if (effect === matchedEffect) {
+        return applyActionEffectBinding(effect, binding);
+      }
+      if (activationDescendants.includes(effect)) {
+        return applyActionEffectActivationBinding(effect, binding);
+      }
+      return effect;
+    });
   }
   return controls;
 }
@@ -893,6 +925,8 @@ function applyActionEffectBinding(effect, binding) {
         inheritance: binding.inheritance ?? null,
       },
       inheritance: binding.inheritance ?? null,
+      targetStateActivationCondition:
+        binding.targetStateActivationCondition ?? null,
       sourceIdentity: [effect.sourceIdentity, binding.sourceIdentity]
         .filter(Boolean)
         .join('|'),
@@ -915,6 +949,21 @@ function applyActionEffectBinding(effect, binding) {
       applied: true,
     };
   }
+  if (binding.bindingKind === 'activation-condition') {
+    return applyActionEffectActivationBinding(
+      {
+        ...effect,
+        effectIdentity: `${effect.graphIdentity}|${binding.triggerFrame}|${effect.depth ?? 0}`,
+        trigger,
+        target: {
+          ...(effect.target ?? {}),
+          kind: targetKind,
+          sourceIdentity: binding.sourceIdentity,
+        },
+      },
+      binding
+    );
+  }
   return {
     ...effect,
     effectIdentity: `${effect.graphIdentity}|${binding.triggerFrame}|${effect.depth ?? 0}`,
@@ -925,6 +974,8 @@ function applyActionEffectBinding(effect, binding) {
       sourceIdentity: binding.sourceIdentity,
     },
     tuningMark: binding.tuningMark,
+    targetStateActivationCondition:
+      binding.targetStateActivationCondition ?? null,
     sourceIdentity: [effect.sourceIdentity, binding.sourceIdentity]
       .filter(Boolean)
       .join('|'),
@@ -2488,9 +2539,16 @@ function compileActionEffectBindings({
   definitions,
   controlBySkillId,
   resourceProfiles,
+  targetStateProfiles,
   tuningMarkProfiles,
   operators,
 }) {
+  const targetStateProfileByIdentity = new Map(
+    (targetStateProfiles ?? []).map(profile => [
+      profile.stateIdentity,
+      profile,
+    ])
+  );
   return definitions.map(definition => {
     requireControl(
       controlBySkillId,
@@ -2517,11 +2575,20 @@ function compileActionEffectBindings({
     const lifecycleBinding =
       Number.isFinite(lifecycleStackDelta) &&
       lifecycleStackDelta > 0;
+    const targetStateActivationCondition =
+      compileActionEffectTargetStateActivationCondition({
+        ownerId,
+        definition: definition.targetStateActivationCondition,
+        targetStateProfileByIdentity,
+        operators,
+      });
     if (
       !element ||
       !Number.isInteger(triggerFrame) ||
       triggerFrame < 0 ||
-      (!tuningProfile?.applied && !lifecycleBinding)
+      (!tuningProfile?.applied &&
+        !lifecycleBinding &&
+        !targetStateActivationCondition?.applied)
     ) {
       throw new Error(
         `character combat action effect evidence missing: ${ownerId}/${definition.bindingIdentity}`
@@ -2536,12 +2603,18 @@ function compileActionEffectBindings({
       elementId: Number(definition.elementId),
       triggerFrame,
       frameCount: Math.max(1, Number(definition.frameCount) || 1),
-      sourceIdentity: [element.sourceIdentity, definition.sourceIdentity]
+      sourceIdentity: [
+        element.sourceIdentity,
+        targetStateActivationCondition?.sourceIdentity,
+        definition.sourceIdentity,
+      ]
         .filter(Boolean)
         .join('|'),
       bindingKind: lifecycleBinding
         ? 'lifecycle-override'
-        : 'tuning-mark',
+        : tuningProfile?.applied
+          ? 'tuning-mark'
+          : 'activation-condition',
       tuningMark: tuningProfile
         ? {
             ...tuningProfile,
@@ -2562,11 +2635,78 @@ function compileActionEffectBindings({
           ? null
           : Number(definition.durationMsOverride),
       targetKindOverride: definition.targetKindOverride ?? null,
+      targetStateActivationCondition,
+      activationConditionScope:
+        definition.activationConditionScope ?? 'matched-effect',
       inheritance,
       status: 'applied',
       applied: true,
     };
   });
+}
+
+function compileActionEffectTargetStateActivationCondition({
+  ownerId,
+  definition,
+  targetStateProfileByIdentity,
+  operators,
+}) {
+  if (!definition) return null;
+  const profile = targetStateProfileByIdentity.get(
+    String(definition.stateIdentity)
+  );
+  const sourceElementId = Number(definition.sourceElementId);
+  const asset = operators.readElementAsset(sourceElementId);
+  const tree = asset?.tree;
+  const parameters =
+    tree?.formulaParams?.formulaParamValues ?? tree?.functionParams ?? [];
+  const commonFunctionId = Number(tree?.formulaParams?.function_1);
+  const family = ELEMENT_LAYER_CONDITIONAL_FORMULA_FAMILIES.get(
+    commonFunctionId
+  );
+  const stateElementId = Number(parameters[12]);
+  const threshold = Number(parameters[8]);
+  const trueValue = Number(parameters[19]);
+  const falseValue = Number(parameters[5]);
+  const minimumStacks = threshold + 1;
+  if (
+    !asset ||
+    !profile ||
+    !family ||
+    stateElementId !== Number(profile.elementId) ||
+    minimumStacks !== Number(definition.minimumStacks ?? 1) ||
+    trueValue !== 1 ||
+    falseValue !== 0 ||
+    (definition.subjectKind != null &&
+      family.subjectKind !== definition.subjectKind)
+  ) {
+    throw new Error(
+      `character combat action effect activation condition evidence missing: ${ownerId}/${definition.stateIdentity}/${sourceElementId}`
+    );
+  }
+  return {
+    kind: 'element-layer-formula-activation-condition',
+    commonFunctionId,
+    expression: family.expression,
+    subjectKind: family.subjectKind,
+    stateIdentity: profile.stateIdentity,
+    stateElementId,
+    comparison: 'greater-than',
+    threshold,
+    minimumStacks,
+    trueValue,
+    falseValue,
+    sourceElementId,
+    sourceIdentity: [
+      asset.sourceIdentity,
+      `element_formula[${commonFunctionId}]#${family.expression}`,
+      definition.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: 'verified-element-layer-formula-activation-condition-ready',
+    applied: true,
+  };
 }
 
 function compileTargetStateProfiles({ ownerId, definitions, operators }) {
@@ -2612,6 +2752,7 @@ function compileTargetStateProfiles({ ownerId, definitions, operators }) {
       durationMs,
       maxStacks,
       expiryMode: definition.expiryMode ?? 'independent-layer',
+      atCapacityPolicy: definition.atCapacityPolicy ?? 'ignore',
       sourceIdentity: [
         stateAsset.sourceIdentity,
         `${stateAsset.sourceIdentity}#time=${durationMs}`,
@@ -3817,6 +3958,22 @@ function compileTargetStateRuntimePassiveEffect({
       ...(modifiers.length > 0 ? [] : ['passive-runtime-output-missing']),
     ],
     applied,
+  };
+}
+
+function applyActionEffectActivationBinding(effect, binding) {
+  return {
+    ...effect,
+    targetStateActivationCondition:
+      binding.targetStateActivationCondition ?? null,
+    sourceIdentity: [effect.sourceIdentity, binding.sourceIdentity]
+      .filter(Boolean)
+      .join('|'),
+    classification: 'applied',
+    reasons: [],
+    status: 'verified-action-effect-activation-condition-applied',
+    confidence: 'high',
+    applied: true,
   };
 }
 

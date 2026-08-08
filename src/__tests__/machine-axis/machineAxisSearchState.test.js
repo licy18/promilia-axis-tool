@@ -67,6 +67,52 @@ describe('Machine Axis search state', () => {
     );
   });
 
+  it('includes shared charge count, timer, and settlement identity in the search hash', () => {
+    const withChargeState = structuredClone(run);
+    withChargeState.trace.readiness.cooldownState = [
+      {
+        runtimeOwnerIdentity: 'actor:actor-109001',
+        ownerId: 'actor-109001',
+        skillId: 10900112,
+        cooldownIdentity: 10900112,
+        cooldownType: 'charge',
+        fullCooldownMs: 15_000,
+        chargeMaxCount: 2,
+        currentChargeCount: 0,
+        coolTimeMs: 12_000,
+        sharedTimerRunning: true,
+        nextReadyAtMs: 17_000,
+        lastSettlementTimeMs: 5_000,
+        lastSettlementIdentity: 'cooldown-charge-cast|moyin-star-2',
+        lastCooldownReductionTransactionId:
+          'cooldown-reduction|moyin-ultimate|109001171|0',
+        missingChargeSourceActionIds: ['moyin-star-2'],
+      },
+    ];
+    const snapshot = createSearchStateSnapshot({
+      run: withChargeState,
+      contract: fixture,
+    });
+    expect(snapshot.chargeCooldowns).toEqual([
+      expect.objectContaining({
+        currentChargeCount: 0,
+        coolTimeMs: 12_000,
+        sharedTimerRunning: true,
+        lastSettlementIdentity: 'cooldown-charge-cast|moyin-star-2',
+      }),
+    ]);
+
+    const differentTimer = structuredClone(snapshot);
+    differentTimer.chargeCooldowns[0].coolTimeMs = 11_000;
+    expect(hashSearchState(differentTimer)).not.toBe(hashSearchState(snapshot));
+    const differentSettlement = structuredClone(snapshot);
+    differentSettlement.chargeCooldowns[0].lastSettlementIdentity =
+      'cooldown-natural-recovery|10900112';
+    expect(hashSearchState(differentSettlement)).not.toBe(
+      hashSearchState(snapshot)
+    );
+  });
+
   it('keeps delayed settlements from already-started actions in the node state', () => {
     const pending = createSearchPendingEventProjection({
       currentFrame: 10,
@@ -109,6 +155,7 @@ describe('Machine Axis search state', () => {
         identity: 'pending-hit',
         phase: null,
         sequence: 2,
+        sourceSequencePath: null,
       },
     ]);
   });

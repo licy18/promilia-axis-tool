@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 109001,
-  "sourcePackageHash": "9aa0cef255f37faeb4b2676e13ca57f8b7c2c43bb58c6fc97116aaeb46dbc4e1",
+  "sourcePackageHash": "3dfbeea54b34a37f1df49d439307bef1f7b7ab8c90c2939b70a97b8a902fed9c",
   "actionRows": [
     {
       "actionIdentity": "actor|109001|10900101|0|10900103|normal-attack",
@@ -711,7 +711,7 @@
     "runtimeReadyActionCount": 9,
     "executionFormCount": 10,
     "controlCount": 23,
-    "hitCount": 75,
+    "hitCount": 71,
     "rawEffectCount": 36,
     "semanticEffectCount": 26,
     "resourceProfileCount": 0,
@@ -719,7 +719,7 @@
     "thresholdTransitionCount": 0,
     "targetStateProfileCount": 1,
     "targetStateTransactionCount": 2,
-    "conditionalHitGroupCount": 2,
+    "conditionalHitGroupCount": 0,
     "runtimeEffectBindingCount": 0,
     "passiveCount": 1,
     "switchTriggerCount": 1,
@@ -729,5 +729,5 @@
       "static-evidence-gap": 5
     }
   },
-  "profileHash": "0a9baf9dc55e0845af50430156169e0d394685aa3610e8e008ff6b337a256ec4"
+  "profileHash": "bedee665afcdaec8f133dd9febb24bdb35d13be7c983fb7755d147e352a53351"
 }

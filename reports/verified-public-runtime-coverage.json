@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "2c0b5dde7909e03c2b7b4ab6bcabec590c4e6027eaaf0eb3d374dd11fb747e86",
+  "packageHash": "ed65d281dc63732353605142ee3f8ebebd7329618def661d8477b48d266e6e7e",
   "fixedProductDenominator": {
     "publicActionCount": 645,
     "actorOwnerCount": 20,
@@ -110,9 +110,9 @@
     "semanticEffects": {
       "total": 3479,
       "gameplay": 1892,
-      "applied": 1018,
+      "applied": 1088,
       "verifiedZero": 7,
-      "unresolved": 867
+      "unresolved": 797
     },
     "timing": {
       "appliedActionCount": 634,
@@ -204,7 +204,7 @@
       "compiledVariantWindowBindingCount": 6,
       "targetStateProfileCount": 2,
       "targetStateTransactionCount": 9,
-      "conditionalHitGroupCount": 4,
+      "conditionalHitGroupCount": 2,
       "runtimeEffectBindingCount": 6,
       "hiddenInputAuditRowCount": 89,
       "hiddenInputPublicExecutionFormCount": 21
@@ -1455,9 +1455,9 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 1
       },
       "settlement": {
         "required": true,
@@ -1582,9 +1582,9 @@
       },
       "semanticEffects": {
         "total": 31,
-        "applied": 10,
+        "applied": 19,
         "verifiedZero": 1,
-        "unresolved": 20
+        "unresolved": 11
       },
       "settlement": {
         "required": true,
@@ -2603,9 +2603,9 @@
       },
       "semanticEffects": {
         "total": 13,
-        "applied": 5,
+        "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 8
+        "unresolved": 2
       },
       "settlement": {
         "required": true,
@@ -3068,9 +3068,9 @@
       },
       "semanticEffects": {
         "total": 12,
-        "applied": 5,
+        "applied": 7,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [
@@ -3382,9 +3382,9 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 7
       },
       "settlement": null,
       "reasons": [
@@ -3540,9 +3540,9 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 6,
+        "applied": 7,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 4
       },
       "settlement": null,
       "reasons": [
@@ -3626,9 +3626,9 @@
       },
       "semanticEffects": {
         "total": 14,
-        "applied": 5,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 6
       },
       "settlement": null,
       "reasons": [
@@ -3847,9 +3847,9 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 6,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
@@ -4357,9 +4357,9 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 5,
+        "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -4569,9 +4569,9 @@
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 3,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 2
       },
       "settlement": {
         "required": true,
@@ -5074,9 +5074,9 @@
       },
       "semanticEffects": {
         "total": 9,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [
@@ -5297,9 +5297,9 @@
       },
       "semanticEffects": {
         "total": 20,
-        "applied": 5,
+        "applied": 7,
         "verifiedZero": 0,
-        "unresolved": 15
+        "unresolved": 13
       },
       "settlement": null,
       "reasons": [
@@ -5548,9 +5548,9 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 5,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
@@ -6200,9 +6200,9 @@
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [
@@ -38454,9 +38454,9 @@
       },
       "semanticEffects": {
         "total": 4,
-        "applied": 1,
+        "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 1
       },
       "settlement": {
         "required": true,
@@ -38678,9 +38678,9 @@
       },
       "semanticEffects": {
         "total": 31,
-        "applied": 10,
+        "applied": 19,
         "verifiedZero": 1,
-        "unresolved": 20
+        "unresolved": 11
       },
       "settlement": {
         "required": true,
@@ -40728,9 +40728,9 @@
       },
       "semanticEffects": {
         "total": 13,
-        "applied": 5,
+        "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 8
+        "unresolved": 2
       },
       "settlement": {
         "required": true,
@@ -42224,9 +42224,9 @@
       },
       "semanticEffects": {
         "total": 12,
-        "applied": 5,
+        "applied": 7,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [
@@ -43071,9 +43071,9 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 7
       },
       "settlement": null,
       "reasons": [
@@ -43618,9 +43618,9 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 6,
+        "applied": 7,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 4
       },
       "settlement": null,
       "reasons": [
@@ -43768,9 +43768,9 @@
       },
       "semanticEffects": {
         "total": 14,
-        "applied": 5,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 6
       },
       "settlement": null,
       "reasons": [
@@ -44468,9 +44468,9 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 6,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
@@ -46121,9 +46121,9 @@
       },
       "semanticEffects": {
         "total": 6,
-        "applied": 5,
+        "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -46734,9 +46734,9 @@
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 3,
+        "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 2
       },
       "settlement": {
         "required": true,
@@ -48284,9 +48284,9 @@
       },
       "semanticEffects": {
         "total": 9,
-        "applied": 2,
+        "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [
@@ -48978,9 +48978,9 @@
       },
       "semanticEffects": {
         "total": 20,
-        "applied": 5,
+        "applied": 7,
         "verifiedZero": 0,
-        "unresolved": 15
+        "unresolved": 13
       },
       "settlement": null,
       "reasons": [
@@ -49696,9 +49696,9 @@
       },
       "semanticEffects": {
         "total": 11,
-        "applied": 5,
+        "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 3
       },
       "settlement": null,
       "reasons": [
@@ -51606,9 +51606,9 @@
       },
       "semanticEffects": {
         "total": 7,
-        "applied": 1,
+        "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [

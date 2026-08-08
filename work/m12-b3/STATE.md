@@ -204,26 +204,54 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - ~~`audit:verified-combat` 在已提交基线上即失败~~ **已解决（2026-08-05 用户批准重基线）**：`C:/PC2/Codex/AzPr/BWiki/data/combat-formula-knowledge.json` 从 v3.1.1（sha256 `ba27896e…`、66263B）漂移到 v3.1.2（`8671ad36…`、87062B）；经用户批准后重定基线提交 `99454e1e`，E17 阶段一在此基础上继续；已同步包哈希/资格哈希/Machine Axis 标准哈希并全量重验收。
 - E2 仅更新了 `reports/applied-source-binding-audit.json`（loadoutPropertyTagSourceCount 49→51，对应 10101/10018 两个新 runtime-applied 灵魂），单独提交。
 
-## M12-B3-E20-2-109001-S3 当前检查点（2026-08-08）
+## M12-B3-E20-2-109001-S3 旧检查点（2026-08-08，已被 S3-R1 产品打回覆盖）
 
 ### 冻结政策
 
-- scenario policy：`m12c-zero-distance-passive-boss-v1` / `c241492911786b34`。距离 0、投射物立即命中、Boss 不攻击、无限 HP、默认不启用韧性/击破/死亡截断；正式链路缺绑定或漂移即锁定。
-- roster policy：`m12c-wind-thunder-mark-producer-roster-v1` / `760e59dac2c7c1c5`。正式 9 人：`101010,102001,103002,107001,107002,108003,109001,112001,STARBORN`；来源别名 10。末音后待做 5 人：`102001,107001,107002,108003,112001`。
+- scenario policy：`m12c-zero-distance-passive-boss-v1` / `c60fb5a713a5f691`。距离 0、投射物立即命中、Boss 不攻击、无限 HP、默认不启用韧性/击破/死亡截断；正式链路缺绑定或漂移即锁定。
+- roster policy：`m12c-wind-thunder-mark-producer-roster-v1` / `7c96de67bf19b48e`。正式 9 人：`101010,102001,103002,107001,107002,108003,109001,112001,STARBORN`；来源别名 10。末音后待做 5 人：`102001,107001,107002,108003,112001`。
 - 产品排除：`108001` 只有 150 生产，750 仅消费；`111001` 没有 250/750 生产，只有 judgment 消费。两者 reason=`m12c-no-in-scope-wind-or-thunder-mark-production`，不进正式候选、完整验收、绑定矩阵或 optimization-ready 分母；源/runtime 保留。
 - 保留来源：10200113 `211/216/220F` 750；10700112 `10F`、10700113 `133F` 750；10700212 `90F` 独立 750；10800313、10800322 `37F` 250；11200112 `27F` 250。
 
 ### 生成资格与边界
 
-- qualification denominator `9/43/62/137/12`；source snapshot `39acb167dbcf7801`、roster `130c9cd5f5192ad6`、manifests `44f387f512518c29`、ledger `9e046d2a3c1f56fa`、binding matrix `7f2ea0c47f0b6845`、catalog `68996d22cce80720`；blocking unique gap `18`，M12-C/formal search 继续锁定。
+- qualification denominator `9/43/62/137/12`；source snapshot `0a4b69e0716de917`、roster `a3edc962effdcba0`、manifests `1cb4029bc8a8c91f`、ledger `c70e8c978317e184`、binding matrix `8d6ae083ad89db3b`、catalog `4346c39d4d818730`；blocking unique gap `16`，且全部是角色 `not-implemented`，M12-C/formal search 继续锁定。
 - Kibo DNA 固定 `[]`；奇波/灵子/装备/套装分母不变。下一步只完成末音产品签收，不开始下一角色或 E20-3。
-- 109001 已达到 required/pass/N/A/blocked=`142/142/70/0`，source/acceptance gap=`0/0`，仅 `acceptance-product-visual-signoff-pending`。产品视觉签收不由实现侧代签。
+- 109001 已达到 requirement `207`、required/pass/N/A/blocked=`138/138/69/0`，ledger source/acceptance/non-blocking=`0/0/13`，仅 `acceptance-product-visual-signoff-pending`。产品视觉签收不由实现侧代签。
 - 最终审计：Vitest `191/191` 文件、`1451/1451` 用例；verified-combat、character-combat、scenario-policy、character-acceptance、optimization-qualification、visual-acceptance、production-imports、Workbench data、action-status、applied-source-bindings 均 clean；production build 与 `git diff --check` 通过。额外 bundle budget 检查仍为分支 HEAD 已存在的 `workbenchWithinBudget=false / totalJavaScriptWithinBudget=false`（本阶段没有新增门状态跃迁），按禁止纯性能优化的边界不在 S3 展开。
 
-## M12-B3-E21 套装技能收口（2026-08-08，当前最新）
+## M12-B3-E21 套装技能收口（2026-08-08，已关闭基线）
 
 - 产品裁决：`set-skill:3:4` 本地化的“普攻叠攻击”是旧文本；唯一可达执行图为权威来源。全量反查 212,053 份 SkillList 与 14,779 个战斗元素，没有替代 `19998005` 绑定或 ATK +1% / 12s / 10 层签名。
 - 实际效果：两件套自身 MAXHP +6.2%；四件套常驻自身 MAXHP +2%；每 5 次受击后自身 MAXHP +5%（Cover）。常驻分支已 runtime-applied；受击分支来源闭合，但在被动 Boss 试点中按 `m12c-zero-distance-passive-boss-out-of-scope` 记 N/A。
-- 场景边界绑定 `m12c-zero-distance-passive-boss-v1 / c241492911786b34` 与 roster `m12c-wind-thunder-mark-producer-roster-v1 / 760e59dac2c7c1c5`；证据 13,883B / `1a9a46c725b369635f4a2c9a6830564982cc331a77b2657fed3307865f326cf8`。
-- 当前资格：`9/43/62/137/12`；soul/equipment/set optimization-ready=`62/137/12`；set blocker=0；全局 blocker=16，全部为 character/not-implemented。qualification hashes：source `935fb9f83e33f81d`、roster `d258a6f8327a6722`、manifests `ef9763c902841fdf`、ledger `bc98f1cfc5c3c2c8`、binding `0ed198377d31931f`、catalog `da0adf6361505a7a`。
+- 场景边界绑定 `m12c-zero-distance-passive-boss-v1 / c60fb5a713a5f691` 与 roster `m12c-wind-thunder-mark-producer-roster-v1 / 7c96de67bf19b48e`；证据 13,883B / `74b91a85a55c20c1f9a3c2fe54c04d5a197070be6e03ca6505d94cdae2c43d6c`。
+- 当前资格：`9/43/62/137/12`；soul/equipment/set optimization-ready=`62/137/12`；set blocker=0；全局 blocker=16，全部为 character/not-implemented。qualification hashes：source `0a4b69e0716de917`、roster `a3edc962effdcba0`、manifests `1cb4029bc8a8c91f`、ledger `c70e8c978317e184`、binding `8d6ae083ad89db3b`、catalog `4346c39d4d818730`。
 - E21 closed。M12-C/formal search 仍锁定；下一步只处理角色视觉/资格、STARBORN、绑定矩阵和总门禁，不再追加套装机制批次。
+
+## M12-B3-E20-2-109001-S3-R1 当前检查点（2026-08-08，等待产品视觉复验）
+
+### 产品打回与真实修复
+
+- `element_formula 102100` 现由通用 activation wrapper 编译/执行 `self.ELEMENT_LAYERS[M] > I`，inject/judgment 共用来源语义，无 109001/A4/A5 ID 特判。
+- A5：璀璨 off 时无雷印记事务；璀璨 on 且动作/hit 合法时 47F 恰好 `+2`，遵守上限、刷新与 source order，不消费璀璨。Golden 旧 frame 547 错误 acquire 已消失；frame 847 才发生 `0→2`。
+- A4/主动追击：璀璨只作允许条件，消费对象严格为 `element 250`；mark=0 不生成 packet，mark>=1 恰好 `-1` 后生成一个 `element 296` packet，不先合成 `+1`，不消费璀璨。Golden frame 1029 为 `2→1`，packet raw/HP=`110461`、toughness=`6123`、source path=`[0,60,49,296,0]`；璀璨 frame `731→1211` 只按 8 秒右开边界到期。
+- 连续 A4 矩阵为 `2→1→0`，第三次资源不足无 packet；A5 off/on、A4 off+1/on+0/on+1/on+2、追击后 A4、刷新/到期/同帧排序与 replay 重排均由 canonical + Machine Axis 真实事务覆盖。Workbench 只显示 applied 事务，未满足条件保留 structured suppression。
+- nested tuning-state damage 296 由 verified tuning runtime delegated-applied；A4 与星决的真实 damage event 进入 acceptance coverage，`sourceSequencePath` 贯穿 runtime/projection/golden。
+
+### Charge 与一次性减冷却
+
+- Charge 运行时已从独立 `charges[].readyAtMs` 近似改为原生共享顺序状态：`chargeMaxCount/currentChargeCount/coolTime/fullCooldownMs/sharedTimerRunning`。10900112 使用 `skillsub_logic` 的 15000ms，不使用 10000ms 显示层 mismatch。
+- t0 第一发：`2→1, timer=15000`；t1 第二发：`1→0, timer=14000`；t2 合法星决的 Fixed -20 只调用一次 RefreshCoolTime，`0→1, timer=15000`；t6 消耗恢复层后共享 timer 继续，下一层 t17 才恢复。满层冻结；自然 t15/t30 逐层恢复；一次 transaction 最多恢复一层。
+- 减冷却事件只在来源动作 accepted/executed 且通过 SP、重叠、readiness 门后物化，并带稳定 eventIdentity/sourceSequencePath；每个事件/合法目标只消费一次。`slot=-1` 只解析事件时正在 CD 的目标，无 CD 时以 `consumed-no-active-target` 结束，不给未来预存；blocked/资源不足/重叠/unexecuted 星决均无重置。
+- charge count、共享 timer、last settlement identity、last cooldown-reduction transaction identity 已进入 canonical cycle boundary、Machine Axis readiness、formal search state 与 replay hash；普通单层技能和 Kibo cooldown 回归保持通过。
+
+### 当前生成状态与边界
+
+- scenario policy=`m12c-zero-distance-passive-boss-v1 / c60fb5a713a5f691`；roster policy=`m12c-wind-thunder-mark-producer-roster-v1 / 7c96de67bf19b48e`。
+- 正式 9 人：`101010,103002,109001,102001,107001,107002,108003,112001,STARBORN`；末音后 5 人：`102001,107001,107002,108003,112001`；产品排除 `108001/111001`，来源/runtime 保留。
+- 109001 requirement `207`；required/pass/N/A/blocked=`138/138/69/0`；ledger source/acceptance/non-blocking=`0/0/13`；scenario 2/2 executed，assertion `1097/1098`，唯一未通过项为产品视觉身份。maturity=`runtime-integrated`，唯一 blocker=`acceptance-product-visual-signoff-pending`。
+- qualification=`9/43/62/137/12`；source/roster/manifests/ledger/binding/catalog=`0a4b69e0716de917/a3edc962effdcba0/1cb4029bc8a8c91f/c70e8c978317e184/8d6ae083ad89db3b/4346c39d4d818730`；全局 blocker=16，全部为角色 `not-implemented`。set=`12/12 optimization-ready`，E21 不重做。
+- verified package=`ed65d281dc63732353605142ee3f8ebebd7329618def661d8477b48d266e6e7e`，文件 SHA-256=`1f3ed08b56ebf56c48ecf1f7909dbd537d172918253b0f6871b3048540f44aa0`；109001 golden replay=`1d6b5ad18b084a625ec571af96ae3252f123b0e56453e2a0b4d6fbb95b4ed724`。
+- 产品场景 N/A：`102001093` 与反应动作专属 action/hit/effect/window 使用 `m12c-zero-distance-passive-boss-out-of-scope`；`799` 使用 `m23-client-orphan-no-reachable-native-consumer`。机制真实闭合：251/252/253、buff 生命周期、critical 0/100/non-crittable/pre-hit、主动窗口、璀璨 A4/A5、296 packet、共享 Charge 与一次性 reset。
+- 已 clean：verified-combat、character-combat、scenario-policy、character-acceptance、visual-acceptance、optimization-qualification、production-imports、Workbench data、action-status、applied-source-bindings、Kibo headless；production build 1878 modules 通过。全量串行 Vitest 最终 `192/192` 文件、`1472/1472` 用例通过；首轮暴露的 staging 300s 门限与 E21 派生哈希引用均已修复并纳入最终复跑。
+- 硬边界：不开始 108003/其他角色、E20-3、E22、M12-C 或正式搜索；Kibo DNA=`[]`；停在末音产品视觉复验点。

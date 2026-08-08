@@ -156,23 +156,6 @@
       "sourceRecordHash": "82bfd4e2a501ef94"
     },
     {
-      "uniqueGapIdentity": "source-gap:b179c619cf2fbedd",
-      "sourceRecordIdentities": [
-        "effect:10900104|0|elements|5|-6711007604037179960|element:-5022202969777715803|29|0",
-        "semantic-gap:a279736894e3e02b785f"
-      ],
-      "status": "not-applicable",
-      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10900104:0:-5022202969777715803:2505213732361599632:29",
-        "effect:10900104|0|elements|5|-6711007604037179960|element:-5022202969777715803|29|0"
-      ],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "5e218d0472c127c4"
-    },
-    {
       "uniqueGapIdentity": "source-gap:bb369ea202e65a47",
       "sourceRecordIdentities": [
         "effect:10900143|0|elements|3|-7506081561353179437|element:-5022202969777715803|13|0",
@@ -248,14 +231,14 @@
     }
   ],
   "summary": {
-    "uniqueGapCount": 14,
+    "uniqueGapCount": 13,
     "blockingCount": 0,
-    "nonBlockingCount": 14,
+    "nonBlockingCount": 13,
     "statusCounts": {
-      "not-applicable": 14
+      "not-applicable": 13
     },
     "reasonCounts": {
-      "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 5,
+      "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 4,
       "nested-effect-wrapper-semantics-unresolved": 2,
       "nested-effect-wrapper-semantics-unresolved|sp-formula-not-literal-function-5": 1,
       "tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 1,
@@ -263,5 +246,5 @@
       "unresolved": 4
     }
   },
-  "inventoryHash": "df86e19dc043bf69"
+  "inventoryHash": "ff95b5bb772aefd6"
 }

@@ -57,6 +57,7 @@ export function applyVerifiedTargetStateRuntime({
   const effectCommands = [];
   const directSpEvents = [];
   const groupResults = [];
+  const actionEffectActivationResults = [];
   let eventSequence = 0;
 
   for (const [actionId, resolution] of actionResolutionById) {
@@ -102,6 +103,28 @@ export function applyVerifiedTargetStateRuntime({
         action,
         resolution,
         group,
+      });
+    }
+    for (const effect of resolution.effects ?? []) {
+      const condition = effect.targetStateActivationCondition;
+      if (
+        !condition?.applied ||
+        !profileByIdentity.has(condition.stateIdentity)
+      ) {
+        continue;
+      }
+      pending.push({
+        kind: 'action-effect-state-condition',
+        timeMs: actionFrameToMs(
+          action,
+          effect.trigger?.startFrame ?? 0,
+          resolution.controlBinding?.frameRate ?? 60
+        ),
+        priority: 50,
+        action,
+        resolution,
+        effect,
+        condition,
       });
     }
     for (const [bindingSequenceIndex, binding] of runtimeBindings.entries()) {
@@ -159,6 +182,17 @@ export function applyVerifiedTargetStateRuntime({
         effectCommands,
         nextSequence: () => eventSequence++,
       });
+      continue;
+    }
+    if (descriptor.kind === 'action-effect-state-condition') {
+      actionEffectActivationResults.push(
+        applyActionEffectTargetStateActivationCondition({
+          descriptor,
+          stateByIdentity,
+          events,
+          nextSequence: () => eventSequence++,
+        })
+      );
       continue;
     }
     if (descriptor.kind === 'conditional-hit-group') {
@@ -275,6 +309,15 @@ export function applyVerifiedTargetStateRuntime({
       .filter(result => result.applied)
       .map(result => `${result.actionId}|${result.groupIdentity}`)
   );
+  const actionEffectActivationResultByKey = new Map(
+    actionEffectActivationResults.map(result => [
+      createActionEffectActivationResultKey(
+        result.actionId,
+        result.effectIdentity
+      ),
+      result,
+    ])
+  );
   for (const [actionId, resolution] of actionResolutionById) {
     const actionGroupResults = groupResults.filter(
       result => String(result.actionId) === String(actionId)
@@ -284,11 +327,33 @@ export function applyVerifiedTargetStateRuntime({
         !hit.conditionalGroupIdentity ||
         appliedGroupKeys.has(`${actionId}|${hit.conditionalGroupIdentity}`)
     );
+    const originalEffects = resolution?.effects ?? [];
+    const actionEffectResults = actionEffectActivationResults.filter(
+      result => String(result.actionId) === String(actionId)
+    );
+    const effects = originalEffects.filter(effect => {
+      const result = actionEffectActivationResultByKey.get(
+        createActionEffectActivationResultKey(
+          actionId,
+          effect.effectIdentity
+        )
+      );
+      return result?.applied !== false;
+    });
+    const suppressedEffects = actionEffectResults
+      .filter(result => !result.applied)
+      .map(result => ({
+        effectIdentity: result.effectIdentity,
+        elementId: result.elementId,
+        reason: result.reason,
+        condition: result.condition,
+        sourceIdentity: result.sourceIdentity,
+      }));
     actionResolutionById.set(actionId, {
       ...resolution,
       hits,
       effects: [
-        ...(resolution?.effects ?? []),
+        ...effects,
         ...actionGroupResults
           .filter(result => result.applied && result.tuningMark)
           .map(result =>
@@ -298,6 +363,9 @@ export function applyVerifiedTargetStateRuntime({
             })
           ),
       ],
+      allEffects: originalEffects,
+      suppressedEffects,
+      actionEffectActivationResults: actionEffectResults,
       conditionalHitGroupResults: actionGroupResults,
     });
   }
@@ -319,6 +387,7 @@ export function applyVerifiedTargetStateRuntime({
     effectCommands,
     directSpEvents,
     groupResults,
+    actionEffectActivationResults,
     finalState: [...stateByIdentity.values()].map(state => ({
       stateIdentity: state.profile.stateIdentity,
       targetKind: state.profile.targetKind,
@@ -331,6 +400,10 @@ export function applyVerifiedTargetStateRuntime({
       eventCount: events.length,
       appliedGroupCount: groupResults.filter(result => result.applied).length,
       skippedGroupCount: groupResults.filter(result => !result.applied).length,
+      appliedActionEffectConditionCount:
+        actionEffectActivationResults.filter(result => result.applied).length,
+      suppressedActionEffectConditionCount:
+        actionEffectActivationResults.filter(result => !result.applied).length,
       effectCommandCount: effectCommands.length,
       directSpEventCount: directSpEvents.length,
     },
@@ -350,12 +423,15 @@ function createEmptyResult(actionResolutionById) {
     effectCommands: [],
     directSpEvents: [],
     groupResults: [],
+    actionEffectActivationResults: [],
     finalState: [],
     summary: {
       profileCount: 0,
       eventCount: 0,
       appliedGroupCount: 0,
       skippedGroupCount: 0,
+      appliedActionEffectConditionCount: 0,
+      suppressedActionEffectConditionCount: 0,
       effectCommandCount: 0,
       directSpEventCount: 0,
     },
@@ -386,12 +462,49 @@ function applyTargetStateTransaction({
   const before = state.layers.length;
   const available = Math.max(0, state.profile.maxStacks - before);
   const amount = Math.min(available, descriptor.transaction.amount);
+  if (
+    amount <= 0 &&
+    descriptor.transaction.amount > 0 &&
+    state.layers.length > 0 &&
+    state.profile.atCapacityPolicy === 'refresh-oldest'
+  ) {
+    const refreshedLayer = state.layers.shift();
+    state.layers.push({
+      ...refreshedLayer,
+      layerIdentity: `${descriptor.transaction.transactionIdentity}|${descriptor.action.id}|${descriptor.timeMs}|refresh`,
+      appliedAtMs: descriptor.timeMs,
+      expiresAtMs: roundValue(
+        descriptor.timeMs + descriptor.transaction.durationMs
+      ),
+      sourceActionId: descriptor.action.id,
+      sourceSequencePath: getActionSourceSequencePath(descriptor.action),
+      sourceIdentity: descriptor.transaction.sourceIdentity,
+    });
+    state.layers.sort(compareLayers);
+    emitStateChange({
+      state,
+      action: descriptor.action,
+      timeMs: descriptor.timeMs,
+      operation: 'refresh',
+      before,
+      after: state.layers.length,
+      sourceIdentity: descriptor.transaction.sourceIdentity,
+      scenario,
+      events,
+      effectCommands,
+      sequence: nextSequence(),
+    });
+    return;
+  }
   for (let index = 0; index < amount; index += 1) {
     state.layers.push({
       layerIdentity: `${descriptor.transaction.transactionIdentity}|${descriptor.action.id}|${descriptor.timeMs}|${index + 1}`,
       appliedAtMs: descriptor.timeMs,
-      expiresAtMs: descriptor.timeMs + descriptor.transaction.durationMs,
+      expiresAtMs: roundValue(
+        descriptor.timeMs + descriptor.transaction.durationMs
+      ),
       sourceActionId: descriptor.action.id,
+      sourceSequencePath: getActionSourceSequencePath(descriptor.action),
       sourceIdentity: descriptor.transaction.sourceIdentity,
     });
   }
@@ -410,6 +523,60 @@ function applyTargetStateTransaction({
     effectCommands,
     sequence: nextSequence(),
   });
+}
+
+function applyActionEffectTargetStateActivationCondition({
+  descriptor,
+  stateByIdentity,
+  events,
+  nextSequence,
+}) {
+  const state = stateByIdentity.get(descriptor.condition.stateIdentity);
+  const activeStacks = state?.layers.length ?? 0;
+  const minimumStacks = Number(descriptor.condition.minimumStacks ?? 1);
+  const applied = activeStacks >= minimumStacks;
+  const reason = applied
+    ? 'target-state-activation-condition-met'
+    : 'target-state-activation-condition-not-met';
+  const result = {
+    actionId: descriptor.action.id,
+    effectIdentity: descriptor.effect.effectIdentity,
+    elementId: Number(descriptor.effect.elementId),
+    timeMs: descriptor.timeMs,
+    stateIdentity: descriptor.condition.stateIdentity,
+    activeStacks,
+    minimumStacks,
+    condition: descriptor.condition,
+    reason,
+    sourceIdentity: descriptor.condition.sourceIdentity,
+    status: applied
+      ? 'verified-action-effect-activation-condition-applied'
+      : 'verified-action-effect-activation-condition-suppressed',
+    applied,
+  };
+  events.push({
+    ...createActionSourceSequenceFields(descriptor.action),
+    type: 'VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED',
+    timeMs: descriptor.timeMs,
+    actionId: descriptor.action.id,
+    actorId: descriptor.action.actorId ?? null,
+    runtimeSequenceIndex: nextSequence(),
+    payload: {
+      effectIdentity: descriptor.effect.effectIdentity,
+      elementId: Number(descriptor.effect.elementId),
+      stateIdentity: descriptor.condition.stateIdentity,
+      activeStacks,
+      minimumStacks,
+      reason,
+      sourceIdentity: descriptor.condition.sourceIdentity,
+      applied,
+    },
+  });
+  return result;
+}
+
+function createActionEffectActivationResultKey(actionId, effectIdentity) {
+  return `${String(actionId)}|${String(effectIdentity)}`;
 }
 
 function applyConditionalHitGroup({
@@ -533,6 +700,9 @@ function expireTargetStates({
         before,
         after: state.layers.length,
         sourceIdentity: expired.map(layer => layer.sourceIdentity).join('|'),
+        sourceSequencePath: expired[0]?.sourceSequencePath
+          ? [...expired[0].sourceSequencePath, 90]
+          : null,
         scenario,
         events,
         effectCommands,
@@ -550,16 +720,26 @@ function emitStateChange({
   before,
   after,
   sourceIdentity,
+  sourceSequencePath = null,
   scenario,
   events,
   effectCommands,
   sequence,
 }) {
+  const actionSourceFields = createActionSourceSequenceFields(action);
+  const resolvedSourceSequencePath =
+    sourceSequencePath ?? actionSourceFields.sourceSequencePath;
   const targetId =
     state.profile.targetKind === 'enemy'
       ? String(scenario?.enemy?.id ?? 'enemy')
       : String(action?.actorId ?? '');
   events.push({
+    ...actionSourceFields,
+    sourceSequenceIndex:
+      actionSourceFields.sourceSequenceIndex ??
+      resolvedSourceSequencePath?.[0] ??
+      null,
+    sourceSequencePath: resolvedSourceSequencePath,
     type: 'VERIFIED_TARGET_STATE_CHANGE',
     timeMs,
     actionId: action?.id ?? null,
@@ -590,6 +770,7 @@ function emitStateChange({
       operation,
       after,
       sourceIdentity,
+      sourceSequencePath: resolvedSourceSequencePath,
       sequence,
     })
   );
@@ -603,11 +784,19 @@ function createTargetStateEffectCommand({
   operation,
   after,
   sourceIdentity,
+  sourceSequencePath,
   sequence,
 }) {
   const nextExpiryMs = state.layers[0]?.expiresAtMs ?? null;
   return {
     ...createActionSourceSequenceFields(action),
+    ...(Array.isArray(sourceSequencePath)
+      ? {
+          sourceSequenceIndex: sourceSequencePath[0] ?? null,
+          sourceSequencePath,
+          sourceSequenceSource: 'target-state-origin-transaction',
+        }
+      : {}),
     id: `verified-target-state|${state.profile.stateIdentity}|${timeMs}|${operation}|${sequence}`,
     sourceActionId: action?.id ?? null,
     sourceActionName: action?.name ?? state.profile.name,
@@ -866,8 +1055,12 @@ function createTargetStateDirectEffectSourceSequencePath({
 }
 
 function actionFrameToMs(action, frame, frameRate) {
+  const resolvedFrameRate = Number(frameRate) || 60;
+  const actionStartFrame = Number.isInteger(Number(action.startFrame))
+    ? Number(action.startFrame)
+    : Math.round((Number(action.startMs) * resolvedFrameRate) / 1000);
   return roundValue(
-    Number(action.startMs) + (Number(frame) * 1000) / Number(frameRate || 60)
+    ((actionStartFrame + Number(frame)) * 1000) / resolvedFrameRate
   );
 }
 
@@ -879,12 +1072,14 @@ function comparePending(left, right) {
     String(
       left.transaction?.transactionIdentity ??
         left.group?.groupIdentity ??
-        left.binding?.bindingIdentity
+        left.binding?.bindingIdentity ??
+        left.effect?.effectIdentity
     ).localeCompare(
       String(
         right.transaction?.transactionIdentity ??
           right.group?.groupIdentity ??
-          right.binding?.bindingIdentity
+          right.binding?.bindingIdentity ??
+          right.effect?.effectIdentity
       )
     )
   );

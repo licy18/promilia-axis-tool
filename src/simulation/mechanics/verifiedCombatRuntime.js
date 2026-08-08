@@ -4072,6 +4072,11 @@ function applyTuningCombatDescriptor({
       hitKey,
       hitIndex: null,
       hitSkillId: resolution.actionBinding.controlSkillId,
+      sourceSequencePath: Array.isArray(
+        tuningEvent.eventContext?.sourceSequencePath
+      )
+        ? [...tuningEvent.eventContext.sourceSequencePath]
+        : null,
       payload: {
         verifiedCombat: true,
         tuningMechanics: true,

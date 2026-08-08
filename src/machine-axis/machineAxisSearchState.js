@@ -40,6 +40,9 @@ export function createSearchStateSnapshot({
       trace.readiness?.cooldownWindows ?? [],
       timeMs
     ),
+    chargeCooldowns: normalizeChargeCooldownStates(
+      trace.readiness?.cooldownState ?? []
+    ),
     effects: normalizeEffectIntervals(trace.effects?.intervals ?? [], timeMs),
     tuningMarks: normalizeTuningMarkStacks(trace.resources?.tuningMarks ?? []),
     specialResources: normalizeSpecialResources({
@@ -73,6 +76,7 @@ export function createSearchLoopClosureProjection(snapshot) {
     actors: snapshot.actors ?? [],
     kibos: snapshot.kibos ?? [],
     cooldowns: snapshot.cooldowns ?? [],
+    chargeCooldowns: snapshot.chargeCooldowns ?? [],
     effects: snapshot.effects ?? [],
     tuningMarks: snapshot.tuningMarks ?? [],
     specialResources: snapshot.specialResources ?? [],
@@ -167,6 +171,19 @@ export function createSearchEventBoundaryNodes({
       actionId: cooldownWindow.actionId ?? null,
       skillId: cooldownWindow.skillId ?? null,
       ownerId: cooldownWindow.ownerId ?? null,
+    });
+  }
+  for (const transaction of trace.readiness?.cooldownReductionTransactions ??
+    []) {
+    const frame = resolveEventFrame(transaction);
+    if (frame == null) continue;
+    add(frame, 'cooldown-reduction', {
+      actionId: transaction.sourceActionId ?? null,
+      skillId: transaction.targetSkillId ?? null,
+      eventIdentity: transaction.eventIdentity ?? null,
+      sourceSequencePath: transaction.sourceSequencePath ?? null,
+      status: transaction.status ?? null,
+      resumeFrame: frame + 1,
     });
   }
   for (const event of [
@@ -381,10 +398,14 @@ export function createSearchPendingEventProjection({ run, currentFrame } = {}) {
       kind: 'target-state',
       event,
     })),
+    ...(trace.readiness?.cooldownReductionTransactions ?? []).map(event => ({
+      kind: 'cooldown-reduction',
+      event,
+    })),
   ];
   const projection = [];
   for (const { kind, event } of candidates) {
-    const actionId = String(event?.actionId ?? '');
+    const actionId = String(event?.actionId ?? event?.sourceActionId ?? '');
     const frame = resolveEventFrame(event);
     if (
       !actionId ||
@@ -409,6 +430,7 @@ export function createSearchPendingEventProjection({ run, currentFrame } = {}) {
         null,
       phase: event.phase ?? event.eventPhase ?? null,
       sequence: event.runtimeSequenceIndex ?? event.sourceSequenceIndex ?? null,
+      sourceSequencePath: event.sourceSequencePath ?? null,
     });
   }
   return projection.sort((left, right) => {
@@ -618,11 +640,17 @@ function normalizeCooldownWindows(rows, timeMs) {
   return rows
     .map(entry => ({
       actionId: entry.actionId ?? null,
+      runtimeOwnerIdentity: entry.runtimeOwnerIdentity ?? null,
       ownerId: entry.ownerId ?? null,
       skillId: entry.skillId ?? null,
+      chargeIndex: integerOrNull(entry.chargeIndex),
+      cooldownCount: integerOrNull(entry.cooldownCount),
       endMs: roundMetric(numberOrZero(entry.endMs)),
       startMs: roundMetric(numberOrZero(entry.startMs)),
       status: entry.status ?? null,
+      cooldownReductionTransactionIds: [
+        ...(entry.cooldownReductionTransactionIds ?? []),
+      ].sort(),
       active: Number(entry.endMs) > timeMs,
     }))
     .filter(entry => entry.active)
@@ -634,6 +662,47 @@ function normalizeCooldownWindows(rows, timeMs) {
       if (ownerOrder !== 0) return ownerOrder;
       const skillOrder = Number(left.skillId ?? 0) - Number(right.skillId ?? 0);
       return skillOrder || left.endMs - right.endMs;
+    });
+}
+
+function normalizeChargeCooldownStates(rows) {
+  return rows
+    .filter(entry => entry.cooldownType === 'charge')
+    .map(entry => ({
+      runtimeOwnerIdentity: entry.runtimeOwnerIdentity ?? null,
+      ownerId: entry.ownerId ?? null,
+      skillId: entry.skillId ?? null,
+      cooldownIdentity: entry.cooldownIdentity ?? null,
+      fullCooldownMs: roundMetric(numberOrZero(entry.fullCooldownMs)),
+      chargeMaxCount: integerOrNull(entry.chargeMaxCount),
+      currentChargeCount: integerOrNull(entry.currentChargeCount),
+      coolTimeMs: roundMetric(numberOrZero(entry.coolTimeMs)),
+      sharedTimerRunning: entry.sharedTimerRunning === true,
+      nextReadyAtMs:
+        entry.nextReadyAtMs == null
+          ? null
+          : roundMetric(numberOrZero(entry.nextReadyAtMs)),
+      lastSettlementTimeMs:
+        entry.lastSettlementTimeMs == null
+          ? null
+          : roundMetric(numberOrZero(entry.lastSettlementTimeMs)),
+      lastSettlementIdentity: entry.lastSettlementIdentity ?? null,
+      lastCooldownReductionTransactionId:
+        entry.lastCooldownReductionTransactionId ?? null,
+      missingChargeSourceActionIds: [
+        ...(entry.missingChargeSourceActionIds ?? []),
+      ],
+    }))
+    .sort((left, right) => {
+      const ownerOrder = String(left.runtimeOwnerIdentity ?? '').localeCompare(
+        String(right.runtimeOwnerIdentity ?? ''),
+        'en'
+      );
+      return (
+        ownerOrder ||
+        Number(left.cooldownIdentity ?? left.skillId ?? 0) -
+          Number(right.cooldownIdentity ?? right.skillId ?? 0)
+      );
     });
 }
 
@@ -885,6 +954,8 @@ function describeBoundary(kind, details, frame) {
       return `action ${details.actionId ?? ''} ends at frame ${frame}`;
     case 'cd-ready':
       return `cooldown ready at frame ${frame} (skill ${details.skillId ?? ''})`;
+    case 'cooldown-reduction':
+      return `cooldown transaction ${details.eventIdentity ?? ''} settles at frame ${frame} (skill ${details.skillId ?? ''})`;
     case 'state-change':
       return `state change at frame ${frame} (effect ${details.effectId ?? ''} / mark ${details.markId ?? ''})`;
     case 'resource-change':

@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "d258a6f8327a6722",
-  "manifestsHash": "ef9763c902841fdf",
-  "gapLedgerHash": "bc98f1cfc5c3c2c8",
-  "bindingMatrixHash": "0ed198377d31931f",
-  "sourceSnapshotHash": "935fb9f83e33f81d",
+  "rosterHash": "a3edc962effdcba0",
+  "manifestsHash": "1cb4029bc8a8c91f",
+  "gapLedgerHash": "c70e8c978317e184",
+  "bindingMatrixHash": "8d6ae083ad89db3b",
+  "sourceSnapshotHash": "0a4b69e0716de917",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -26,7 +26,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "0ba3b1883881eed9"
+      "manifestHash": "93187e1d6ae82973"
     },
     {
       "objectKind": "character",
@@ -49,7 +49,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "13bd1a85e3ddd7b3"
+      "manifestHash": "d4c58329f58a8f23"
     },
     {
       "objectKind": "character",
@@ -96,7 +96,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "a293f4bf2994d093"
+      "manifestHash": "6f779cb7c1407a58"
     },
     {
       "objectKind": "character",
@@ -1795,7 +1795,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "e451b64b5e0d9254"
+      "manifestHash": "80f765a12a8bbe9b"
     },
     {
       "objectKind": "set-skill",
@@ -2636,7 +2636,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "d258a6f8327a6722",
+    "rosterHash": "a3edc962effdcba0",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -20608,7 +20608,7 @@
       "setSkillThresholdQualifiedCount": 12,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "0ed198377d31931f"
+    "bindingMatrixHash": "8d6ae083ad89db3b"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -38297,5 +38297,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "da0adf6361505a7a"
+  "catalogHash": "4346c39d4d818730"
 }

@@ -1051,14 +1051,29 @@ function createGoldenTraceProjection(report) {
         hitIdentity: event.hitIdentity,
         frame: event.frame ?? null,
       })),
-    effects: effects.map((event, index) => ({
-      projectionIdentity:
-        'golden-effect:' + report.scenarioIdentity + ':' + index,
-      actionId: event.actionId ?? null,
-      effectIdentity: event.effectId ?? event.runtimeEffectId ?? null,
-      operation: event.operation ?? null,
-      targetId: event.targetId ?? null,
-    })),
+    effects: [
+      ...effects.map((event, index) => ({
+        projectionIdentity:
+          'golden-effect:' + report.scenarioIdentity + ':' + index,
+        actionId: event.actionId ?? null,
+        effectIdentity: event.effectId ?? event.runtimeEffectId ?? null,
+        operation: event.operation ?? null,
+        targetId: event.targetId ?? null,
+      })),
+      ...(report.actual?.trace?.damage ?? [])
+        .filter(event => Number.isInteger(Number(event.elementId)))
+        .map((event, index) => ({
+          projectionIdentity:
+            'golden-damage-effect:' + report.scenarioIdentity + ':' + index,
+          actionId: event.actionId ?? null,
+          effectIdentity: 'battle-element:' + Number(event.elementId),
+          operation: 'damage',
+          targetId: event.targetId ?? null,
+          sourceSequencePath: Array.isArray(event.sourceSequencePath)
+            ? [...event.sourceSequencePath]
+            : null,
+        })),
+    ],
     resources: resourceEvents.map((event, index) => ({
       projectionIdentity:
         'golden-resource:' + report.scenarioIdentity + ':' + index,

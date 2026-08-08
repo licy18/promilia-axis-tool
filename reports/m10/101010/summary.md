@@ -2,7 +2,7 @@
 
 - Owner: `101010`
 - Profile: `actor:101010:character-combat-profile:v1`
-- Hash: `777c6dfa76c9c005c36617f1f4003d32ea46d06c57dcb6e792f1176f3a0120fc`
+- Hash: `f46ed819240952e353ee6c08113b4efacc2e8b1037ae0b4c77d8317ce3542c34`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -37,7 +37,7 @@
 | cooldowns | applied | 20 | 0 | 20 |
 | personalResources | static-evidence-gap | 25 | 7 | 32 |
 | teamResourcesAndMarks | applied | 1 | 0 | 1 |
-| buffsAndDebuffs | static-evidence-gap | 17 | 80 | 97 |
+| buffsAndDebuffs | static-evidence-gap | 28 | 69 | 97 |
 | passives | applied | 1 | 0 | 1 |
 | dynamicProperties | applied | 6 | 0 | 6 |
 | healingAndShields | not-applicable | 0 | 0 | 0 |

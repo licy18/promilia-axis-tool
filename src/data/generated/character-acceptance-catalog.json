@@ -3,10 +3,10 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "d70847bd9c90cb45",
+  "manifestIndexHash": "2fbe004e1b9970f6",
   "optimizationScenarioPolicy": {
     "policyId": "m12c-zero-distance-passive-boss-v1",
-    "policyHash": "c241492911786b34"
+    "policyHash": "c60fb5a713a5f691"
   },
   "optimizationCandidateRoster": {
     "schemaVersion": 1,
@@ -30,7 +30,7 @@
     "verifiedMechanicsSource": {
       "sourceIdentity": "src/data/generated/verified-combat-mechanics-package.json#actionMappings|controlBindings.effects",
       "packageId": "azpr-tc-2026-07-18",
-      "packageHash": "2c0b5dde7909e03c2b7b4ab6bcabec590c4e6027eaaf0eb3d374dd11fb747e86"
+      "packageHash": "ed65d281dc63732353605142ee3f8ebebd7329618def661d8477b48d266e6e7e"
     },
     "formalDenominator": 9,
     "formalOptimizationObjectIds": [
@@ -600,7 +600,7 @@
         "sourceRetention": "source-data-manual-runtime-and-coverage-retained"
       }
     ],
-    "rosterHash": "760e59dac2c7c1c5"
+    "rosterHash": "7c96de67bf19b48e"
   },
   "productScenarioExcludedCharacters": [
     {
@@ -737,13 +737,13 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 54,
+      "blockingLedgerCount": 48,
       "matrixRequiredCount": 159,
-      "matrixPassedCount": 111,
-      "manifestHash": "739456eaf9be503f",
-      "qualificationSubjectHash": "894d93c5d02a132d",
-      "sourceOfTruthHash": "e762a3342e5e4f17",
-      "profileHash": "4dfafed4bcb63c941edfea78a7241fda8ec942bb8f24fa9efd4633d5709ff3f2",
+      "matrixPassedCount": 117,
+      "manifestHash": "65ed0671802d8eb1",
+      "qualificationSubjectHash": "784e5cd7350e81e4",
+      "sourceOfTruthHash": "5df33e0a841361ef",
+      "profileHash": "52f9851b126f2fea486878df5eea3557734ff4dfa34d268c75581a242680c318",
       "visualScenarioIds": [
         "m11-d-101003-visual-acceptance"
       ]
@@ -762,13 +762,13 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 134,
+      "blockingLedgerCount": 131,
       "matrixRequiredCount": 255,
-      "matrixPassedCount": 143,
-      "manifestHash": "6ada1a6a7bfb25bb",
-      "qualificationSubjectHash": "77a2e93832b36c83",
-      "sourceOfTruthHash": "99773ddd7402aa26",
-      "profileHash": "777c6dfa76c9c005c36617f1f4003d32ea46d06c57dcb6e792f1176f3a0120fc",
+      "matrixPassedCount": 146,
+      "manifestHash": "8883a3ea3f64c417",
+      "qualificationSubjectHash": "825f72c45ec642f0",
+      "sourceOfTruthHash": "5f1ffde25647521b",
+      "profileHash": "f46ed819240952e353ee6c08113b4efacc2e8b1037ae0b4c77d8317ce3542c34",
       "visualScenarioIds": [
         "m11-d-101010-visual-acceptance"
       ]
@@ -787,13 +787,13 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 239,
+      "blockingLedgerCount": 237,
       "matrixRequiredCount": 588,
-      "matrixPassedCount": 162,
-      "manifestHash": "780738f7978cbbb2",
-      "qualificationSubjectHash": "b6846ef5f14599b5",
-      "sourceOfTruthHash": "96b8b414b119a7f6",
-      "profileHash": "8532a2ade8682abdc97f53123f3dfef271541d0bc0e57c67b6fc74df33b38f00",
+      "matrixPassedCount": 164,
+      "manifestHash": "c43c104ecd1e082e",
+      "qualificationSubjectHash": "7bf5e2960c344f5b",
+      "sourceOfTruthHash": "f1d632f650346141",
+      "profileHash": "dd5d91f97ac86131158d483002712dc579ecefd4f518bce1ffe4798754478018",
       "visualScenarioIds": [
         "m11-d-103002-visual-acceptance"
       ]
@@ -811,12 +811,12 @@
         "acceptance-product-visual-signoff-pending"
       ],
       "blockingLedgerCount": 0,
-      "matrixRequiredCount": 142,
-      "matrixPassedCount": 142,
-      "manifestHash": "fd4dd8806b3bc801",
-      "qualificationSubjectHash": "58a65daee024aeb7",
-      "sourceOfTruthHash": "1856aa0ee3767995",
-      "profileHash": "0a9baf9dc55e0845af50430156169e0d394685aa3610e8e008ff6b337a256ec4",
+      "matrixRequiredCount": 138,
+      "matrixPassedCount": 138,
+      "manifestHash": "9177bc243d29a268",
+      "qualificationSubjectHash": "25588fc0ffb7bfe1",
+      "sourceOfTruthHash": "993854f151e055ac",
+      "profileHash": "bedee665afcdaec8f133dd9febb24bdb35d13be7c983fb7755d147e352a53351",
       "visualScenarioIds": [
         "m11-d-109001-visual-acceptance"
       ]
@@ -831,5 +831,5 @@
     },
     "optimizationReadyCount": 0
   },
-  "catalogHash": "a507f77dcc0c612c"
+  "catalogHash": "55f077d48437a9a3"
 }

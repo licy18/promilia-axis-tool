@@ -1,6 +1,6 @@
 # E20-2-109001 末音 验收状态
 
-更新：2026-08-08（被动2 回退收口）
+更新：2026-08-08（S3-R1 璀璨条件、雷印记事务与共享 Charge 无头 parity 收口）
 
 ## 目标
 
@@ -450,7 +450,7 @@
 
 - 顶层 `skill_control_<id>.json` 不存在；可读 JSON 在 `<id>.asset/MonoBehaviour/` 子目录，且多数文件是行为切片，只有一份含 skillControlData
 
-## S3 完成检查点（2026-08-08，等待产品视觉签收）
+## S3 旧完成检查点（2026-08-08，已被 S3-R1 产品打回覆盖）
 
 ### 政策重算
 
@@ -479,3 +479,48 @@
 - maturity 仍为 `runtime-integrated`；唯一 blocker `acceptance-product-visual-signoff-pending`。不得自行写成 visually-accepted/optimization-ready。
 - 不进入下一角色、E20-3、M12-C 或正式搜索；Kibo DNA 保持 `[]`。
 - 最终审计：Vitest `191/191` 文件、`1451/1451` 用例；verified-combat / character-combat 双生成器对拍 clean，scenario policy、character acceptance、optimization qualification、visual acceptance、production imports、Workbench data、action status、applied source bindings 均 clean；production build 与 `git diff --check` 通过。bundle budget 的两个 false 在本分支 HEAD 已存在，S3 未跨越新门状态，按范围不做纯性能拆包。
+
+## S3-R1 当前检查点（2026-08-08，等待产品视觉复验）
+
+### 打回反例
+
+- 10900101 文本中的“若末音处于璀璨状态”同时约束 A4 与 A5。旧 golden frame 547 在璀璨 off 时仍把雷印记 `0→2`；旧 frame 1029 的 A4 又先 `+1` 再 `-1`，净消耗 0，并把璀璨 `1→0`。
+- 原因是 A5 recipe 缺 activation condition，A4 又把 `stateIdentity=moyin-brilliant` 放入通用 consumeBands 并设置 synthetic `tuningMarkStackDelta=+1`。来源 `ast_109001049/362` 与 formula 102100 明确：109001270 是 activation state，实际注入/消费资源是 element 250。
+- 星决重置另有两层无头错误：cooldownReduction 在动作是否执行前预扫描物化，且历史事件被每次 readiness 查询重复求和；Charge 又被实现为多个独立 readyAtMs 槽，与客户端的一条共享 coolTime 顺序回复不等价。
+
+### 来源驱动实现
+
+- 编译/运行通用支持 `element_formula 102100 = IF(self.ELEMENT_LAYERS[M] > I,T,F)` activation wrapper；inject/judgment 均消费同一表达式契约，wrapper 有稳定来源 identity/path，不按 109001 或动作 ID 分支。
+- A5 off：不 acquire；A5 on：命中事务合法时 47F 恰好 `+2`，封顶/刷新/source order 按 tuning runtime；璀璨不消费。
+- A4/10900143 追击：璀璨仅作 activation，mark=0 时抑制 consume 与 packet；mark>=1 时 `element 250` 恰好 `-1`，成功后恰好一个雷超限 transaction/packet。synthetic `+1` 与 target-state consume 均已移除。
+- 296 nested tuning damage 不再只投影 effect id：语义目录标为 `delegated-applied`，由 verified tuning overlimit runtime 结算真实 damage/hit 并进入 acceptance coverage；actual damage trace 保留 elementId 与 sourceSequencePath。
+- Workbench/动作分析/资源轨迹只呈现实际 applied tuning/state transaction；未满足条件显示结构化 suppression，不把配方声明画成已发生变化。
+
+### Canonical + Machine Axis 反例结果
+
+- Golden：frame 547 A5 off 无雷印记 acquire；frame 731 璀璨 `0→1`；frame 847 A5 on `0→2`；frame 1029 A4 `2→1`，一个 296 packet（raw/HP=`110461`，toughness=`6123`，path=`[0,60,49,296,0]`）；璀璨没有 consume，只在 frame 1211 右开到期 `1→0`。
+- A5 off/on 与 A4 `off+mark1/on+mark0/on+mark1/on+mark2` 全矩阵通过；合法 A4 packet 数与 consume 数一一相等。连续 A4 为 `2→1→0`，资源不足第三次 packet=0，整个窗口璀璨持续存在。
+- 8 秒边界：inside 生效，exact expiry 先于同帧 activation 判断；刷新序列为 gain@51F、refresh@322F、expire@802F。主动 `10900112→10900143` 追击不消费璀璨，A4 使用追击后实际 mark 层数。
+- 原 S3 的 251/252/253、buff apply/stack/refresh/expire、critical 0/100/non-crittable/pre-hit attribute change、主动输入窗口边界继续由真实 canonical settlement 覆盖。
+
+### 共享 Charge 与一次性 reset
+
+- 通用 Charge 状态为 `chargeMaxCount/currentChargeCount/fullCooldownMs/coolTimeMs/sharedTimerRunning`；Cast 只在共享 timer idle 时启动完整 CD，第二次 Cast 不另建 timer。RefreshCoolTime 一次最多把 count `+1`，若仍缺层则 timer 重置一个完整周期；满层时 timer 冻结。
+- 10900112 使用 `skillsub_logic coolDown=15000ms, coolDownCount=2`。t0：`2→1/timer15000`；t1：`1→0/timer14000`；自然 t15：`0→1/timer15000`；t30：`1→2` 后 timer 冻结。
+- t0/t1/t2/t6：t2 accepted ultimate 的 Fixed -20 对当前共享 timer 结算一次，`0→1/timer15000`；t6 消耗该层不重置正在运行的 timer，下一层 t17 才 ready（锁死旧独立槽 t16 近似）。
+- cooldownReduction 仅由 accepted/executed 来源动作在真实 effect trigger 时刻物化；SP/重叠/readiness/execute 阻断的星决无事件。每个事件对目标最多一次，带 eventIdentity/sourceSequencePath；`slot=-1` 在事件时解析 active cooldown，无目标则当场 consumed-no-active-target，不能预存。
+- currentChargeCount/coolTime/lastSettlementIdentity/lastCooldownReductionTransactionId 已进入 canonical cycle boundary、Machine Axis readiness、formal search state 与 replay hash；普通单层技能和 Kibo cooldown 回归通过。
+
+### 政策 N/A 与真实闭合分账
+
+- 产品场景 N/A：`battle-element:102001093` 及完美招架/极限反击专属 action/hit/effect/control-window/conditional-hit，reason=`m12c-zero-distance-passive-boss-out-of-scope`；手工 runtime/test 保留。
+- 来源边界 N/A：`battle-element:799`，reason=`m23-client-orphan-no-reachable-native-consumer`；保留资源图/判断路径，不生成假逻辑。
+- 真实闭合：251/252/253、雷印记生命周期、critical 四探针、主动输入窗、formula 102100、A4/A5/主动追击 296、共享 Charge 与一次性 cooldown transaction。
+- 原 11 unique gaps 展开 28 blocked rows 的原因仍是同一 selector 被 golden/Machine/source/requirement 多维绑定；现在 requirement `207`，required/pass/N/A/blocked=`138/138/69/0`，ledger source/acceptance/non-blocking=`0/0/13`，不存在以 N/A 伪装已实现的行。
+
+### 当前身份、验证与边界
+
+- policy=`m12c-zero-distance-passive-boss-v1/c60fb5a713a5f691`；roster=`m12c-wind-thunder-mark-producer-roster-v1/7c96de67bf19b48e`；verified package=`ed65d281dc63732353605142ee3f8ebebd7329618def661d8477b48d266e6e7e`（file SHA-256 `1f3ed08b56ebf56c48ecf1f7909dbd537d172918253b0f6871b3048540f44aa0`）；golden replay=`1d6b5ad18b084a625ec571af96ae3252f123b0e56453e2a0b4d6fbb95b4ed724`。
+- qualification `9/43/62/137/12`；source/roster/manifests/ledger/binding/catalog=`0a4b69e0716de917/a3edc962effdcba0/1cb4029bc8a8c91f/c70e8c978317e184/8d6ae083ad89db3b/4346c39d4d818730`；全局 16 blocker 全为角色项；set 12/12 optimization-ready。
+- 已 clean：verified-combat、character-combat、scenario-policy、character-acceptance、visual-acceptance、optimization-qualification、production-imports、Workbench data、action-status、applied-source-bindings、Kibo headless；production build 1878 modules 通过。全量串行 Vitest 最终 `192/192` 文件、`1472/1472` 用例通过；首轮两个非机制项（staging 300s timeout、E21 派生哈希引用）已修复并纳入最终复跑。
+- maturity=`runtime-integrated`；唯一 blocker=`acceptance-product-visual-signoff-pending`。不开始米蒂/其他角色、E20-3、E22、M12-C 或 formal search；Kibo DNA=`[]`。

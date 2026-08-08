@@ -649,6 +649,69 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
+  it('compares shared charge state and normalizes only cycle-local action identities', () => {
+    const createBoundary = ({
+      coolTimeMs = 12_000,
+      actionId = 'moyin-star-2',
+      ultimateId = 'moyin-ultimate',
+    } = {}) => ({
+      activeActorId: 'actor-109001',
+      actors: [],
+      kibos: [],
+      tuningMarks: [],
+      specialResources: [],
+      cooldowns: [],
+      chargeCooldowns: [
+        {
+          runtimeOwnerIdentity: 'actor:actor-109001',
+          ownerId: 'actor-109001',
+          skillId: 10900112,
+          cooldownIdentity: 10900112,
+          fullCooldownMs: 15_000,
+          chargeMaxCount: 2,
+          currentChargeCount: 0,
+          coolTimeMs,
+          sharedTimerRunning: true,
+          lastSettlementIdentity: `cooldown-charge-cast|${actionId}`,
+          lastCooldownReductionTransactionId: `cooldown-reduction|${ultimateId}|109001171|0`,
+          missingChargeSourceActionIds: [actionId],
+        },
+      ],
+      effects: [],
+      pendingEvents: [],
+    });
+    const first = createBoundary();
+    const replay = createBoundary({
+      actionId: 'cycle-2:moyin-star-2',
+      ultimateId: 'cycle-2:moyin-ultimate',
+    });
+
+    expect(compareCycleBoundaryStates(first, replay)).toMatchObject({
+      closed: true,
+      stateDiffs: expect.arrayContaining([
+        expect.objectContaining({
+          dimension: 'chargeCooldowns',
+          equal: true,
+        }),
+      ]),
+    });
+    expect(
+      compareCycleBoundaryStates(first, createBoundary({ coolTimeMs: 11_000 }))
+        .issues
+    ).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-state-not-closed',
+        path: 'state.chargeCooldowns',
+      })
+    );
+    expect(
+      compareCycleBoundaryStates(
+        first,
+        createBoundary({ actionId: 'different-star-cast' })
+      ).closed
+    ).toBe(false);
+  });
+
   it('compares Kibo passive internal cooldowns by relative remaining time', () => {
     const start = createKiboPassiveBoundary({
       internalCooldownRemainingFrames: 600,
@@ -1120,11 +1183,11 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.metrics.loopHpDamage).toBe(22.59375);
     expect(report.metrics.cycleDps).toBe(4.51875);
     expect(report.hashes).toMatchObject({
-      input: '454cdc895a0f94e7',
-      data: '6c7f28204359187d',
-      trace: 'a739eac81e97149c',
+      input: '85dbe21f5b72666e',
+      data: '3ff810bea0cdbafd',
+      trace: 'ef420a0463632bef',
       evaluation: '13fc3bf3db5aeb9d',
-      cycle: 'd701768842e81bc7',
+      cycle: '2c22582e45d321a9',
     });
     expect(report.sampleStatistics.loopHpDamage.variance).toBeGreaterThan(0);
     for (const dimension of ['byActor', 'byAction', 'byHit']) {

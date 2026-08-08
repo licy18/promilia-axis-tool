@@ -13,7 +13,7 @@
     "publicActionCount": 10,
     "runtimeReadyActionCount": 10,
     "appliedResourceTransactionCount": 0,
-    "appliedActionEffectCount": 1
+    "appliedActionEffectCount": 2
   },
   "phases": [],
   "quickEntries": [
@@ -55,6 +55,18 @@
   "resourceTransactions": [],
   "actionEffects": [
     {
+      "controlSkillId": 10900104,
+      "subSkillIndex": 0,
+      "elementId": 109001362,
+      "triggerFrame": 29,
+      "effectKind": "action-effect",
+      "profileKey": null,
+      "stackDelta": null,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001362.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#elementConfigId=109001362@29F|Battle/Element/ast_109001362.asset#consume-element-250-layer-1-after-brilliant-condition"
+    },
+    {
       "controlSkillId": 10900105,
       "subSkillIndex": 0,
       "elementId": 250,
@@ -64,7 +76,7 @@
       "stackDelta": 2,
       "status": "applied",
       "applied": true,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2"
     }
   ],
   "publicActionReview": [
@@ -173,5 +185,5 @@
       "status": "applied"
     }
   ],
-  "profileHash": "0a9baf9dc55e0845af50430156169e0d394685aa3610e8e008ff6b337a256ec4"
+  "profileHash": "bedee665afcdaec8f133dd9febb24bdb35d13be7c983fb7755d147e352a53351"
 }

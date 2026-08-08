@@ -302,6 +302,139 @@ describe('verified target-state runtime', () => {
     ).toBe(false);
     expect(result.finalState[0].currentValue).toBe(0);
   });
+
+  it('executes a generic self layer formula as an effect activation condition', () => {
+    const mechanicsPackage = createMechanicsPackage();
+    mechanicsPackage.actionVariantGraph.targetStateProfiles[0] = {
+      ...mechanicsPackage.actionVariantGraph.targetStateProfiles[0],
+      targetKind: 'self',
+      maxStacks: 1,
+    };
+    const condition = {
+      kind: 'element-layer-formula-activation-condition',
+      commonFunctionId: 102100,
+      expression: 'IF(self.ELEMENT_LAYERS[M]>I,T,F)',
+      subjectKind: 'self',
+      stateIdentity: 'enemy:synthetic-firework',
+      stateElementId: 9001,
+      comparison: 'greater-than',
+      threshold: 0,
+      minimumStacks: 1,
+      trueValue: 1,
+      falseValue: 0,
+      sourceElementId: 9008,
+      sourceIdentity: 'fixture:formula:102100',
+      applied: true,
+    };
+    const actionResolutionById = new Map([
+      [
+        'effect-off',
+        createResolution({
+          controlSkillId: 424203,
+          hits: [],
+          effects: [createConditionedEffect('effect-off', condition)],
+        }),
+      ],
+      [
+        'gain',
+        createResolution({
+          controlSkillId: 424201,
+          hits: [createHit(9001, 5)],
+        }),
+      ],
+      [
+        'effect-on',
+        createResolution({
+          controlSkillId: 424203,
+          hits: [],
+          effects: [createConditionedEffect('effect-on', condition)],
+        }),
+      ],
+    ]);
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 5000 },
+        actors: [{ id: 'actor-1', characterId: 424242 }],
+        enemy: { id: 'enemy-1' },
+        actions: [
+          createAction('effect-off', 0),
+          createAction('gain', 1000),
+          createAction('effect-on', 2000),
+        ],
+      },
+      actionResolutionById,
+      mechanicsPackage,
+    });
+
+    expect(actionResolutionById.get('effect-off').effects).toEqual([]);
+    expect(actionResolutionById.get('effect-off').suppressedEffects).toEqual([
+      expect.objectContaining({
+        effectIdentity: 'effect-off',
+        reason: 'target-state-activation-condition-not-met',
+      }),
+    ]);
+    expect(actionResolutionById.get('effect-on').effects).toEqual([
+      expect.objectContaining({ effectIdentity: 'effect-on' }),
+    ]);
+    expect(result.actionEffectActivationResults).toEqual([
+      expect.objectContaining({ actionId: 'effect-off', applied: false }),
+      expect.objectContaining({ actionId: 'effect-on', applied: true }),
+    ]);
+  });
+
+  it('refreshes a capped state and expires it on the right-open boundary', () => {
+    const mechanicsPackage = createMechanicsPackage();
+    mechanicsPackage.actionVariantGraph.targetStateProfiles[0] = {
+      ...mechanicsPackage.actionVariantGraph.targetStateProfiles[0],
+      maxStacks: 1,
+      atCapacityPolicy: 'refresh-oldest',
+    };
+    const actionResolutionById = new Map([
+      [
+        'gain-first',
+        createResolution({
+          controlSkillId: 424201,
+          hits: [createHit(9001, 5)],
+        }),
+      ],
+      [
+        'gain-refresh',
+        createResolution({
+          controlSkillId: 424201,
+          hits: [createHit(9001, 5)],
+        }),
+      ],
+    ]);
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 12000 },
+        actors: [{ id: 'actor-1', characterId: 424242 }],
+        enemy: { id: 'enemy-1' },
+        actions: [
+          createAction('gain-first', 0),
+          createAction('gain-refresh', 1000),
+        ],
+      },
+      actionResolutionById,
+      mechanicsPackage,
+    });
+
+    expect(
+      result.events
+        .filter(event => event.type === 'VERIFIED_TARGET_STATE_CHANGE')
+        .map(event => [
+          event.actionId,
+          event.payload.operation,
+          event.timeMs,
+          event.payload.beforeValue,
+          event.payload.afterValue,
+        ])
+    ).toEqual([
+      ['gain-first', 'gain', 83.333333, 0, 1],
+      ['gain-refresh', 'refresh', 1083.333333, 1, 1],
+      [null, 'expire', 11083.333333, 1, 0],
+    ]);
+  });
 });
 
 function createMechanicsPackage() {
@@ -420,7 +553,7 @@ function createMechanicsPackage() {
   };
 }
 
-function createResolution({ controlSkillId, hits }) {
+function createResolution({ controlSkillId, hits, effects = [] }) {
   return {
     ready: true,
     packageId: 'synthetic-target-state-package',
@@ -430,7 +563,18 @@ function createResolution({ controlSkillId, hits }) {
       selectedSubSkillIndex: 0,
     },
     hits,
-    effects: [],
+    effects,
+  };
+}
+
+function createConditionedEffect(effectIdentity, condition) {
+  return {
+    effectIdentity,
+    elementId: 9009,
+    trigger: { startFrame: 0 },
+    targetStateActivationCondition: condition,
+    classification: 'applied',
+    applied: true,
   };
 }
 

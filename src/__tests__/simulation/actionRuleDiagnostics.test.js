@@ -353,23 +353,60 @@ describe('action rule diagnostics', () => {
     expect(result.readinessTimeline.cooldownWindows).toEqual([
       expect.objectContaining({
         actionId: 'action-1',
-        chargeIndex: 0,
+        chargeIndex: null,
+        cooldownType: 'charge',
         startMs: 0,
         endMs: 5000,
+        status: 'skill-charge-cooldown-cycle-completed-naturally',
       }),
       expect.objectContaining({
         actionId: 'action-2',
-        chargeIndex: 1,
-        startMs: 1000,
-        endMs: 6000,
-      }),
-      expect.objectContaining({
-        actionId: 'action-4',
-        chargeIndex: 0,
+        chargeIndex: null,
+        cooldownType: 'charge',
         startMs: 5000,
         endMs: 10000,
+        status: 'skill-charge-cooldown-cycle-active',
       }),
     ]);
+    const readinessById = new Map(
+      result.readinessTimeline.actions.map(action => [action.actionId, action])
+    );
+    expect(readinessById.get('action-1').cooldown).toMatchObject({
+      availableBefore: 2,
+      availableAfter: 1,
+      nextReadyAtMs: 5000,
+      chargeStateAfter: {
+        currentChargeCount: 1,
+        coolTimeMs: 5000,
+        sharedTimerRunning: true,
+      },
+    });
+    expect(readinessById.get('action-2').cooldown).toMatchObject({
+      availableBefore: 1,
+      availableAfter: 0,
+      nextReadyAtMs: 5000,
+      chargeStateBefore: {
+        currentChargeCount: 1,
+        coolTimeMs: 4000,
+      },
+      chargeStateAfter: {
+        currentChargeCount: 0,
+        coolTimeMs: 4000,
+      },
+    });
+    expect(readinessById.get('action-4').cooldown).toMatchObject({
+      availableBefore: 1,
+      availableAfter: 0,
+      nextReadyAtMs: 10000,
+      chargeStateBefore: {
+        currentChargeCount: 1,
+        coolTimeMs: 5000,
+      },
+      chargeStateAfter: {
+        currentChargeCount: 0,
+        coolTimeMs: 5000,
+      },
+    });
     expect(
       result.readinessTimeline.actions.find(
         action => action.actionId === 'action-3'
@@ -383,6 +420,84 @@ describe('action rule diagnostics', () => {
         nextReadyAtMs: 5000,
       },
     });
+  });
+
+  it('recovers charge cooldowns sequentially on one shared timer', () => {
+    const result = createActionRuleDiagnostics({
+      scenario: {
+        time: { durationMs: 30_000, fps: 60 },
+        actors: [createActor()],
+        actions: [
+          createSkillAction({
+            id: 'shared-charge-1',
+            startMs: 0,
+            durationMs: 100,
+            cooldownMs: 15_000,
+            cooldownCount: 2,
+          }),
+          createSkillAction({
+            id: 'shared-charge-2',
+            startMs: 1_000,
+            durationMs: 100,
+            cooldownMs: 15_000,
+            cooldownCount: 2,
+          }),
+        ],
+      },
+    });
+
+    const readinessById = new Map(
+      result.readinessTimeline.actions.map(action => [action.actionId, action])
+    );
+    expect(readinessById.get('shared-charge-1').cooldown).toMatchObject({
+      availableBefore: 2,
+      availableAfter: 1,
+      nextReadyAtMs: 15_000,
+      chargeStateAfter: {
+        currentChargeCount: 1,
+        coolTimeMs: 15_000,
+        sharedTimerRunning: true,
+      },
+    });
+    expect(readinessById.get('shared-charge-2').cooldown).toMatchObject({
+      availableBefore: 1,
+      availableAfter: 0,
+      nextReadyAtMs: 15_000,
+      chargeStateBefore: {
+        currentChargeCount: 1,
+        coolTimeMs: 14_000,
+      },
+      chargeStateAfter: {
+        currentChargeCount: 0,
+        coolTimeMs: 14_000,
+      },
+    });
+    expect(result.readinessTimeline.cooldownWindows).toEqual([
+      expect.objectContaining({
+        actionId: 'shared-charge-1',
+        startMs: 0,
+        endMs: 15_000,
+        status: 'skill-charge-cooldown-cycle-completed-naturally',
+      }),
+      expect.objectContaining({
+        actionId: 'shared-charge-2',
+        startMs: 15_000,
+        endMs: 30_000,
+        status: 'skill-charge-cooldown-cycle-completed-naturally',
+      }),
+    ]);
+    expect(result.cooldownState).toEqual([
+      expect.objectContaining({
+        cooldownType: 'charge',
+        fullCooldownMs: 15_000,
+        chargeMaxCount: 2,
+        currentChargeCount: 2,
+        coolTimeMs: 15_000,
+        sharedTimerRunning: false,
+        nextReadyAtMs: null,
+        missingChargeSourceActionIds: [],
+      }),
+    ]);
   });
 
   it('returns an executable ready contract when no checked rule is violated', () => {

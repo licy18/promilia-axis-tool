@@ -827,6 +827,11 @@ function applyHeldMarkTriggers({
     state.heldReadyAtMs = roundValue(
       descriptor.timeMs + state.profile.heldReadyMs
     );
+    const sourceSequencePath = createTuningSourceSequencePath({
+      descriptor,
+      localKind: 'held-trigger',
+      localIdentity: state.profile.markId,
+    });
     events.push({
       schemaVersion: 1,
       sourceKind: 'azpr-verified-tuning-mark-event',
@@ -836,6 +841,7 @@ function applyHeldMarkTriggers({
       type: 'VERIFIED_TUNING_MARK_HELD_TRIGGER',
       timeMs: descriptor.timeMs,
       frameIndex: Math.round((descriptor.timeMs * FRAME_RATE) / 1000),
+      sourceSequencePath,
       actionId: descriptor.action?.id ?? null,
       actorId: descriptor.action?.actorId ?? null,
       markId: state.profile.markId,

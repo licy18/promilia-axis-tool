@@ -387,6 +387,19 @@ function executeVisualScenario({
           operation: event.operation ?? null,
           targetId: event.targetId ?? null,
         })),
+        ...(first.trace?.damage ?? [])
+          .filter(event => Number.isInteger(Number(event.elementId)))
+          .map((event, index) => ({
+            projectionIdentity:
+              'machine-damage-effect:' + fixture.scenario.id + ':' + index,
+            actionId: event.actionId ?? null,
+            effectIdentity: 'battle-element:' + Number(event.elementId),
+            operation: 'damage',
+            targetId: event.targetId ?? null,
+            sourceSequencePath: Array.isArray(event.sourceSequencePath)
+              ? [...event.sourceSequencePath]
+              : null,
+          })),
         ...projectVerifiedTuningComponentEffects(first, fixture.scenario.id),
       ],
       diagnostics: [
@@ -502,7 +515,8 @@ function inspectCriticalMatrix(ownerId, first, second) {
             rateZero?.formula?.randomBranch?.criticalRoll === 0 &&
             rateZero?.formula?.randomBranch?.critical === false,
           rateOneHundredPercent:
-            rateOneHundred?.formula?.randomBranch?.criticalThreshold === 10000 &&
+            rateOneHundred?.formula?.randomBranch?.criticalThreshold ===
+              10000 &&
             rateOneHundred?.formula?.randomBranch?.criticalRoll === 9999 &&
             rateOneHundred?.formula?.randomBranch?.critical === true,
           preHitAttributeChange:
@@ -542,8 +556,21 @@ function inspectThunderLifecycle(run) {
   const marks = (run.trace?.resources?.tuningMarks ?? []).filter(
     event => Number(event.markId) === 250
   );
+  const targetEvents = run.trace?.state?.targetEvents ?? [];
   const findMark = (actionId, predicate = () => true) =>
-    marks.find(event => event.actionId === actionId && predicate(event)) ?? null;
+    marks.find(event => event.actionId === actionId && predicate(event)) ??
+    null;
+  const suppressedOffAcquire = findMark(
+    'moyin-a5-brilliant-off',
+    event => event.kind === 'acquire'
+  );
+  const suppressedOffCondition = targetEvents.find(
+    event =>
+      event.actionId === 'moyin-a5-brilliant-off' &&
+      event.type === 'VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED' &&
+      event.payload?.stateIdentity === 'moyin-brilliant' &&
+      event.payload?.applied === false
+  );
   const apply = findMark(
     'moyin-lifecycle-a5-1',
     event => event.kind === 'acquire'
@@ -557,7 +584,7 @@ function inspectThunderLifecycle(run) {
     event => event.kind === 'acquire'
   );
   const refresh = findMark(
-    'moyin-lifecycle-a5-6-refresh',
+    'moyin-lifecycle-a5-4-refresh',
     event => event.kind === 'acquire'
   );
   const expire = marks.find(event => event.kind === 'expire') ?? null;
@@ -569,15 +596,13 @@ function inspectThunderLifecycle(run) {
   );
   const nextHeldDamage = (run.trace?.damage ?? []).find(
     event =>
-      event.actionId === 'moyin-lifecycle-a5-4' &&
+      event.actionId === 'moyin-held-boundary-hit' &&
       event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
       Number(event.elementId) === 251
   );
   const heldDamageInsideCooldown = (run.trace?.damage ?? []).find(
     event =>
-      ['moyin-lifecycle-a5-2', 'moyin-lifecycle-a5-3'].includes(
-        event.actionId
-      ) &&
+      event.actionId === 'moyin-lifecycle-a5-2' &&
       event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
       Number(event.elementId) === 251
   );
@@ -601,13 +626,16 @@ function inspectThunderLifecycle(run) {
     ])
   );
   const passed =
+    suppressedOffAcquire == null &&
+    suppressedOffCondition != null &&
     apply?.before === 0 &&
     apply?.after === 2 &&
     apply?.delta === 2 &&
     stack?.before === 2 &&
     stack?.after === 4 &&
-    cap?.before === 4 &&
+    cap?.before === 3 &&
     cap?.after === 5 &&
+    cap?.delta === 2 &&
     refresh?.before === 5 &&
     refresh?.after === 5 &&
     refresh?.delta === 0 &&
@@ -624,15 +652,15 @@ function inspectThunderLifecycle(run) {
     nextHeldDamage?.formula?.status === 'verified-tuning-formula-applied' &&
     Number(nextHeldDamage?.rawDamage) > Number(firstHeldDamage?.rawDamage) &&
     Math.abs(
-      Number(nextHeldDamage?.timeMs) -
-        Number(firstHeldDamage?.timeMs) -
-        5000
+      Number(nextHeldDamage?.timeMs) - Number(firstHeldDamage?.timeMs) - 5000
     ) < 0.001 &&
     modifierByAttribute.get(7) === 43 &&
     modifierByAttribute.get(8) === 86;
   return {
     passed,
     details: {
+      suppressedOffAcquire,
+      suppressedOffCondition,
       apply,
       stack,
       cap,
@@ -876,8 +904,7 @@ function createAcceptanceReport(manifests, visualRuns, catalog, manifestIndex) {
     manifestIndexHash: manifestIndex.indexHash,
     summary: {
       ownerCount: manifests.length,
-      formalCharacterDenominator:
-        catalog.summary.formalCharacterDenominator,
+      formalCharacterDenominator: catalog.summary.formalCharacterDenominator,
       productScenarioExcludedCharacterCount:
         catalog.summary.productScenarioExcludedCharacterCount,
       runtimeIntegratedCount: manifests.filter(manifest =>

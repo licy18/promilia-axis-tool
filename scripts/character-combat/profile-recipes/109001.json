@@ -91,6 +91,7 @@
         "capacityElementId": 109001270,
         "expectedDurationMs": 8000,
         "expectedMaxStacks": 1,
+        "atCapacityPolicy": "refresh-oldest",
         "sourceIdentity": "Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1"
       }
     ],
@@ -125,66 +126,37 @@
         "frameCount": 1,
         "tuningMarkProfileKey": "thunder",
         "stackDelta": 2,
+        "targetStateActivationCondition": {
+          "sourceElementId": 109001049,
+          "stateIdentity": "moyin-brilliant",
+          "subjectKind": "self",
+          "minimumStacks": 1,
+          "sourceIdentity": "Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0"
+        },
+        "activationConditionScope": "matched-effect-subtree",
         "sourceIdentity": "skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2"
+      },
+      {
+        "bindingIdentity": "moyin-a4-brilliant-thunder-overdrive",
+        "controlSkillId": 10900104,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 109001362,
+        "triggerFrame": 29,
+        "frameCount": 1,
+        "targetStateActivationCondition": {
+          "sourceElementId": 109001362,
+          "stateIdentity": "moyin-brilliant",
+          "subjectKind": "self",
+          "minimumStacks": 1,
+          "sourceIdentity": "Battle/Element/ast_109001362.asset#formula=102100|M=109001270|I=0|T=1|F=0"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#elementConfigId=109001362@29F|Battle/Element/ast_109001362.asset#consume-element-250-layer-1-after-brilliant-condition"
       }
     ],
     "actionHitBindings": [],
-  "conditionalHitGroups": [
-      {
-        "groupIdentity": "moyin-a4-brilliant-thunder-overdrive",
-        "controlSkillId": 10900104,
-        "subSkillIndex": 0,
-        "sourceControlSkillId": 10900104,
-        "sourceSubSkillIndex": 0,
-        "elementId": 109001135,
-        "triggerFrames": [
-          29
-        ],
-        "decisionFrame": 29,
-        "stateIdentity": "moyin-brilliant",
-        "minimumStacks": 1,
-        "tuningMarkProfileKey": "thunder",
-        "tuningMarkStackDelta": 1,
-        "consumeBands": [
-          {
-            "sourceElementId": 109001362,
-            "amount": 1,
-            "minimumStacks": 1,
-            "sourceIdentity": "Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant"
-          }
-        ],
-        "semanticName": "普攻四段·璀璨超限",
-        "sourceIdentity": "skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F"
-      },
-      {
-        "groupIdentity": "moyin-chase-thunder-overdrive",
-        "controlSkillId": 10900143,
-        "subSkillIndex": 0,
-        "sourceControlSkillId": 10900143,
-        "sourceSubSkillIndex": 0,
-        "elementId": 109001302,
-        "triggerFrames": [
-          13,
-          18,
-          23
-        ],
-        "decisionFrame": 13,
-        "stateIdentity": "moyin-brilliant",
-        "minimumStacks": 1,
-        "tuningMarkProfileKey": "thunder",
-        "tuningMarkStackDelta": 1,
-        "consumeBands": [
-          {
-            "sourceElementId": 109001359,
-            "amount": 1,
-            "minimumStacks": 1,
-            "sourceIdentity": "Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
-          }
-        ],
-        "semanticName": "二段追击·超限",
-      "sourceIdentity": "skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F"
-    }
-  ],
+    "conditionalHitGroups": [],
   "specialResources": [],
     "thresholdTransitions": [],
     "passiveEffects": [
@@ -328,6 +300,17 @@
         "actionVariantIndex": 2,
         "controlSubSkillIndex": 0,
         "startFrame": 700
+      },
+      {
+        "actionKey": "moyin-a5-brilliant",
+        "actorCharacterId": 109001,
+        "skillId": 10900101,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 800,
+        "attackInputControlSkillId": 10900105,
+        "attackSequenceIndex": 5
       },
       {
         "actionKey": "moyin-charged",
@@ -504,7 +487,9 @@
     "expectedRuntime": {
    "exact": {
     "project.durationMs": 120000,
-    "actions.executedActionIds.length": 23,
+    "actions.executedActionIds.length": 24,
+    "resources.tuningMarkAcquireByActionId.moyin-a5-brilliant.totalDelta": 2,
+    "resources.tuningMarkConsumeByActionId.moyin-a4-brilliant.consumedStacks": 1,
     "resources.tuningMarkConsumeByActionId.moyin-perfect-parry.consumedStacks": 1
    },
       "greaterThan": {

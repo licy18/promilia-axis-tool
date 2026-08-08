@@ -697,11 +697,12 @@ describe('verified tuning mark runtime', () => {
         transaction.tuningEvent?.kind === 'overlimit-damage' &&
         Number(transaction.tuningEvent?.profile?.markId) === Number(wind.markId)
     );
-    const passiveCommands = result.verifiedActionVariantRuntime.effectCommands.filter(
-      command =>
-        String(command.id).startsWith('verified-passive|battle-start|') &&
-        command.sourceActorId === 'actor-109001'
-    );
+    const passiveCommands =
+      result.verifiedActionVariantRuntime.effectCommands.filter(
+        command =>
+          String(command.id).startsWith('verified-passive|battle-start|') &&
+          command.sourceActorId === 'actor-109001'
+      );
 
     expect(consume).toMatchObject({
       timeMs: 3050,
@@ -710,9 +711,9 @@ describe('verified tuning mark runtime', () => {
       after: 0,
     });
     expect(overlimitEvents.length).toBeGreaterThan(0);
-    expect(overlimitEvents.every(event => event.eventContext.propertyTags)).toBe(
-      true
-    );
+    expect(
+      overlimitEvents.every(event => event.eventContext.propertyTags)
+    ).toBe(true);
     expect(overlimitEvents[0].eventContext.propertyTags).toEqual([307]);
     expect(overlimitTransactions.length).toBeGreaterThan(0);
     expect(
@@ -775,9 +776,7 @@ describe('verified tuning mark runtime', () => {
       );
     expect(presenceEvents).toHaveLength(3);
     expect(presenceEvents.map(event => event.timeMs)).toEqual([
-      83.333333,
-      333.333333,
-      1000,
+      83.333333, 333.333333, 1000,
     ]);
     const spEvents = withMark.verifiedCombatRuntime.resourceEvents.filter(
       event => event.payload.reason === 'tuning-conditional-direct-sp'
@@ -808,9 +807,259 @@ describe('verified tuning mark runtime', () => {
     ).toHaveLength(0);
   });
 
-  it('resets one star-skill charge cooldown when the ultimate is cast', () => {
-    const result = simulateVerifiedProject({
+  it('gates Moyin A5 acquisition and A4 consumption on the real Brilliant state', () => {
+    const thunder = mechanicsPackage.tuningMechanicsCatalog.profiles.find(
+      profile => profile.key === 'thunder'
+    );
+    const runA5 = brilliant =>
+      simulateVerifiedProject({
+        durationMs: 4_000,
+        actions: [
+          ...(brilliant ? [createMoyinBrilliantAction('a5-brilliant', 0)] : []),
+          createMoyinNormalSegment({
+            id: brilliant ? 'a5-on' : 'a5-off',
+            controlSkillId: 10900105,
+            sequenceIndex: 5,
+            startMs: brilliant ? 1_000 : 0,
+          }),
+        ],
+      });
+    const a5Off = runA5(false);
+    const a5On = runA5(true);
+    expect(
+      a5Off.verifiedTuningMarkGeneration.events.filter(
+        event => event.kind === 'acquire' && event.profileKey === 'thunder'
+      )
+    ).toEqual([]);
+    expect(
+      a5Off.verifiedActionVariantRuntime.actionResolutionById.get('a5-off')
+        .suppressedEffects
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          elementId: 250,
+          reason: 'target-state-activation-condition-not-met',
+        }),
+      ])
+    );
+    expect(
+      a5On.verifiedTuningMarkGeneration.events.filter(
+        event => event.kind === 'acquire' && event.actionId === 'a5-on'
+      )
+    ).toEqual([expect.objectContaining({ before: 0, after: 2, delta: 2 })]);
+
+    const runA4 = ({ brilliant, markCount }) =>
+      simulateVerifiedProject({
+        durationMs: 4_000,
+        initialRuntimeState:
+          markCount > 0
+            ? {
+                tuningMarks: [
+                  createInheritedMarkWithCount(thunder.markId, markCount),
+                ],
+              }
+            : null,
+        actions: [
+          ...(brilliant ? [createMoyinBrilliantAction('a4-brilliant', 0)] : []),
+          createMoyinNormalSegment({
+            id: `a4-${brilliant ? 'on' : 'off'}-mark-${markCount}`,
+            controlSkillId: 10900104,
+            sequenceIndex: 4,
+            startMs: brilliant ? 1_000 : 0,
+          }),
+        ],
+      });
+    const cases = [
+      { brilliant: false, markCount: 1, consumed: 0, packets: 0 },
+      { brilliant: true, markCount: 0, consumed: 0, packets: 0 },
+      { brilliant: true, markCount: 1, consumed: 1, packets: 1 },
+      { brilliant: true, markCount: 2, consumed: 1, packets: 1 },
+    ];
+    for (const expected of cases) {
+      const result = runA4(expected);
+      const actionId = `a4-${expected.brilliant ? 'on' : 'off'}-mark-${expected.markCount}`;
+      const consumes = result.verifiedTuningMarkGeneration.events.filter(
+        event => event.kind === 'consume' && event.actionId === actionId
+      );
+      const packets = result.verifiedTuningMarkGeneration.combatEvents.filter(
+        event =>
+          event.kind === 'overlimit-damage' && event.actionId === actionId
+      );
+      expect(consumes).toHaveLength(expected.consumed);
+      expect(packets).toHaveLength(expected.packets);
+      if (expected.consumed) {
+        expect(consumes[0]).toMatchObject({
+          delta: -1,
+          before: expected.markCount,
+          after: expected.markCount - 1,
+        });
+      }
+      expect(
+        result.verifiedActionVariantRuntime.targetStateRuntime.events.filter(
+          event =>
+            event.actionId === actionId && event.payload.operation === 'consume'
+        )
+      ).toEqual([]);
+    }
+  });
+
+  it('keeps Brilliant through repeated A4 settlement and the active chase chain', () => {
+    const thunder = mechanicsPackage.tuningMechanicsCatalog.profiles.find(
+      profile => profile.key === 'thunder'
+    );
+    const repeated = simulateVerifiedProject({
       durationMs: 6_000,
+      initialRuntimeState: {
+        tuningMarks: [createInheritedMarkWithCount(thunder.markId, 2)],
+      },
+      actions: [
+        createMoyinBrilliantAction('repeat-brilliant', 0),
+        ...[1_000, 2_200, 3_400].map((startMs, index) =>
+          createMoyinNormalSegment({
+            id: `repeat-a4-${index + 1}`,
+            controlSkillId: 10900104,
+            sequenceIndex: 4,
+            startMs,
+          })
+        ),
+      ],
+    });
+    expect(
+      repeated.verifiedTuningMarkGeneration.events
+        .filter(event => event.kind === 'consume')
+        .map(event => [event.actionId, event.before, event.after])
+    ).toEqual([
+      ['repeat-a4-1', 2, 1],
+      ['repeat-a4-2', 1, 0],
+    ]);
+    expect(
+      repeated.verifiedTuningMarkGeneration.combatEvents
+        .filter(event => event.kind === 'overlimit-damage')
+        .map(event => event.actionId)
+    ).toEqual(['repeat-a4-1', 'repeat-a4-2']);
+    expect(
+      repeated.verifiedActionVariantRuntime.targetStateRuntime.events.filter(
+        event => event.payload.operation === 'consume'
+      )
+    ).toEqual([]);
+    expect(
+      repeated.verifiedActionVariantRuntime.targetStateRuntime.finalState.find(
+        state => state.stateIdentity === 'moyin-brilliant'
+      )
+    ).toMatchObject({ currentValue: 1 });
+
+    const chase = simulateVerifiedProject({
+      durationMs: 8_000,
+      initialRuntimeState: {
+        tuningMarks: [createInheritedMarkWithCount(thunder.markId, 2)],
+      },
+      actions: [
+        createMoyinBrilliantAction('moyin-brilliant-before-chase', 0),
+        createWorkbenchActionDraft({
+          id: 'moyin-star-for-chase',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900112,
+          actionKind: 'star-skill',
+          actionVariantIndex: 0,
+          startMs: 1_000,
+          durationMs: 1_000,
+        }),
+        createWorkbenchActionDraft({
+          id: 'moyin-active-chase',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900101,
+          actionKind: 'normal-attack',
+          actionVariantIndex: 0,
+          startMs: 1_750,
+          durationMs: 500,
+          contextActionId: 'moyin-star-for-chase',
+          attackInputExpansionMode: 'single-input',
+          attackInputChainSelectionSource: 'user-explicit',
+          attackInput: {
+            identity:
+              'actor|109001|10900101|0|10900101|normal-attack|attack-input-1',
+            controlSkillId: 10900101,
+            selectedSubSkillIndex: 0,
+            sequenceIndex: 1,
+            sequenceTotal: 5,
+            durationFrames: 60,
+            durationStatus: 'applied',
+            sourceEvidenceStatus: 'confirmed-structured-data',
+          },
+        }),
+        createMoyinNormalSegment({
+          id: 'moyin-a4-after-chase',
+          controlSkillId: 10900104,
+          sequenceIndex: 4,
+          startMs: 6_000,
+        }),
+      ],
+    });
+    expect(
+      chase.verifiedTuningMarkGeneration.events
+        .filter(event => event.kind === 'consume')
+        .map(event => [event.actionId, event.before, event.after])
+    ).toEqual([
+      ['moyin-active-chase', 2, 1],
+      ['moyin-a4-after-chase', 1, 0],
+    ]);
+    expect(
+      chase.verifiedActionVariantRuntime.targetStateRuntime.events.filter(
+        event => event.payload.operation === 'consume'
+      )
+    ).toEqual([]);
+    expect(
+      chase.verifiedActionVariantRuntime.targetStateRuntime.events
+        .filter(event => ['gain', 'refresh'].includes(event.payload.operation))
+        .map(event => [event.actionId, event.payload.operation])
+    ).toEqual([
+      ['moyin-brilliant-before-chase', 'gain'],
+      ['moyin-active-chase', 'refresh'],
+    ]);
+  });
+
+  it('expires Brilliant on the exact eight-second right-open boundary', () => {
+    const runA5At = startMs =>
+      simulateVerifiedProject({
+        durationMs: 10_000,
+        actions: [
+          createMoyinBrilliantAction('boundary-brilliant', 0),
+          createMoyinNormalSegment({
+            id: 'boundary-a5',
+            controlSkillId: 10900105,
+            sequenceIndex: 5,
+            startMs,
+          }),
+        ],
+      });
+    const inside = runA5At(7_716.666);
+    const exact = runA5At(7_733.333334);
+    expect(
+      inside.verifiedTuningMarkGeneration.events.filter(
+        event => event.kind === 'acquire' && event.actionId === 'boundary-a5'
+      )
+    ).toHaveLength(1);
+    expect(
+      exact.verifiedTuningMarkGeneration.events.filter(
+        event => event.kind === 'acquire' && event.actionId === 'boundary-a5'
+      )
+    ).toHaveLength(0);
+    expect(
+      exact.verifiedActionVariantRuntime.targetStateRuntime.events
+        .filter(event => ['VERIFIED_TARGET_STATE_CHANGE'].includes(event.type))
+        .map(event => [event.payload.operation, event.timeMs])
+    ).toEqual([
+      ['gain', 516.666667],
+      ['expire', 8516.666667],
+    ]);
+  });
+
+  it('resets exactly one star-skill charge cooldown once when the ultimate is accepted', () => {
+    const result = simulateVerifiedProject({
+      durationMs: 8_000,
+      initialSpByCharacterId: { 109001: 100 },
       actions: [
         createWorkbenchActionDraft({
           id: 'moyin-star-1',
@@ -848,6 +1097,15 @@ describe('verified tuning mark runtime', () => {
           startMs: 6_000,
           durationMs: 1_000,
         }),
+        createWorkbenchActionDraft({
+          id: 'moyin-star-4',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900112,
+          actionVariantIndex: 0,
+          startMs: 7_000,
+          durationMs: 1_000,
+        }),
       ],
     });
     const cooldownViolations = (
@@ -858,12 +1116,395 @@ describe('verified tuning mark runtime', () => {
         diagnostic.actionId === 'moyin-star-3'
     );
     expect(cooldownViolations).toHaveLength(0);
-    const readiness = result.actionRuleDiagnostics?.readinessTimeline
-      ?.actions ?? [];
+    const readiness =
+      result.actionRuleDiagnostics?.readinessTimeline?.actions ?? [];
     const star3Readiness = readiness.find(
       row => row.actionId === 'moyin-star-3'
     );
     expect(star3Readiness?.status).toBe('ready');
+    const star4Readiness = readiness.find(
+      row => row.actionId === 'moyin-star-4'
+    );
+    expect(star4Readiness).toMatchObject({
+      status: 'blocked',
+      executable: false,
+      violationCodes: ['skill-cooldown-active'],
+      cooldown: {
+        availableBefore: 0,
+        availableAfter: 0,
+        nextReadyAtMs: 17000,
+      },
+    });
+    expect(result.actionRuleDiagnostics?.cooldownReductionTransactions).toEqual(
+      [
+        expect.objectContaining({
+          sourceActionId: 'moyin-ultimate',
+          sourceElementId: 109001171,
+          timeMs: 2000,
+          slot: -1,
+          cdRecoveryType: 0,
+          targetSkillId: 10900112,
+          beforeReadyAtMs: 15000,
+          afterReadyAtMs: 2000,
+          beforeChargeCount: 0,
+          afterChargeCount: 1,
+          beforeCoolTimeMs: 13000,
+          afterCoolTimeMs: 15000,
+          nextReadyAtMs: 17000,
+          restoredChargeCount: 1,
+          consumed: true,
+          appliedToSimulationResults: true,
+        }),
+      ]
+    );
+  });
+
+  it('does not bank a slot-minus-one cooldown reset when no target is cooling down', () => {
+    const result = simulateVerifiedProject({
+      durationMs: 8_000,
+      initialSpByCharacterId: { 109001: 100 },
+      actions: [
+        createWorkbenchActionDraft({
+          id: 'moyin-ultimate-no-cd',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900113,
+          actionVariantIndex: 0,
+          startMs: 0,
+          durationMs: 3_600,
+        }),
+        ...[4_000, 5_000, 6_000].map((startMs, index) =>
+          createWorkbenchActionDraft({
+            id: `moyin-star-after-empty-${index + 1}`,
+            type: 'skill',
+            actorCharacterId: 109001,
+            skillId: 10900112,
+            actionVariantIndex: 0,
+            startMs,
+            durationMs: 1_000,
+          })
+        ),
+      ],
+    });
+    expect(result.actionRuleDiagnostics.cooldownReductionTransactions).toEqual([
+      expect.objectContaining({
+        sourceActionId: 'moyin-ultimate-no-cd',
+        status: 'cooldown-reduction-transaction-consumed-no-active-target',
+        targetResolutionStatus: 'no-active-cooldown-at-effect-time',
+        consumed: true,
+        appliedToSimulationResults: false,
+      }),
+    ]);
+    expect(
+      result.actionRuleDiagnostics.readinessTimeline.actions.find(
+        row => row.actionId === 'moyin-star-after-empty-3'
+      )
+    ).toMatchObject({
+      status: 'blocked',
+      violationCodes: ['skill-cooldown-active'],
+    });
+  });
+
+  it('does not materialize a cooldown reset from an SP-blocked ultimate', () => {
+    const result = simulateVerifiedProject({
+      durationMs: 8_000,
+      initialSpByCharacterId: { 109001: 0 },
+      actions: [
+        ...[0, 1_000].map((startMs, index) =>
+          createWorkbenchActionDraft({
+            id: `moyin-star-before-blocked-ultimate-${index + 1}`,
+            type: 'skill',
+            actorCharacterId: 109001,
+            skillId: 10900112,
+            actionVariantIndex: 0,
+            startMs,
+            durationMs: 1_000,
+          })
+        ),
+        createWorkbenchActionDraft({
+          id: 'moyin-ultimate-sp-blocked',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900113,
+          actionVariantIndex: 0,
+          startMs: 2_000,
+          durationMs: 3_600,
+        }),
+        createWorkbenchActionDraft({
+          id: 'moyin-star-after-blocked-ultimate',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900112,
+          actionVariantIndex: 0,
+          startMs: 6_000,
+          durationMs: 1_000,
+        }),
+      ],
+    });
+    expect(
+      result.actionExecutionPlan.actions.find(
+        row => row.actionId === 'moyin-ultimate-sp-blocked'
+      )
+    ).toMatchObject({ execute: false });
+    expect(result.actionRuleDiagnostics.cooldownReductionTransactions).toEqual(
+      []
+    );
+    expect(
+      result.actionRuleDiagnostics.readinessTimeline.actions.find(
+        row => row.actionId === 'moyin-star-after-blocked-ultimate'
+      )
+    ).toMatchObject({
+      status: 'blocked',
+      violationCodes: ['skill-cooldown-active'],
+    });
+  });
+
+  it('freezes a shared charge timer at full, consumes each legal reset once, and honors the exact recovery boundary', () => {
+    const createActions = boundaryStartMs => [
+      createWorkbenchActionDraft({
+        id: 'moyin-shared-star-1',
+        type: 'skill',
+        actorCharacterId: 109001,
+        skillId: 10900112,
+        actionVariantIndex: 0,
+        startMs: 0,
+        durationMs: 1_000,
+      }),
+      createWorkbenchActionDraft({
+        id: 'moyin-shared-star-2',
+        type: 'skill',
+        actorCharacterId: 109001,
+        skillId: 10900112,
+        actionVariantIndex: 0,
+        startMs: 1_000,
+        durationMs: 1_000,
+      }),
+      createWorkbenchActionDraft({
+        id: 'moyin-shared-ultimate-1',
+        type: 'skill',
+        actorCharacterId: 109001,
+        skillId: 10900113,
+        actionVariantIndex: 0,
+        startMs: 2_000,
+        durationMs: 3_600,
+      }),
+      createWorkbenchActionDraft({
+        id: 'moyin-shared-sp-refill',
+        type: 'resource',
+        actorCharacterId: 109001,
+        startMs: 6_000,
+        resource: 'sp',
+        change: 100,
+        reason: 'cooldown-reset-second-legal-cast-test',
+      }),
+      createWorkbenchActionDraft({
+        id: 'moyin-shared-ultimate-2',
+        type: 'skill',
+        actorCharacterId: 109001,
+        skillId: 10900113,
+        actionVariantIndex: 0,
+        startMs: 12_000,
+        durationMs: 3_600,
+      }),
+      createWorkbenchActionDraft({
+        id: 'moyin-shared-ultimate-overlap-blocked',
+        type: 'skill',
+        actorCharacterId: 109001,
+        skillId: 10900113,
+        actionVariantIndex: 0,
+        startMs: 12_500,
+        durationMs: 3_600,
+      }),
+      createWorkbenchActionDraft({
+        id: 'moyin-shared-star-after-full-1',
+        type: 'skill',
+        actorCharacterId: 109001,
+        skillId: 10900112,
+        actionVariantIndex: 0,
+        startMs: 17_000,
+        durationMs: 1_000,
+      }),
+      createWorkbenchActionDraft({
+        id: 'moyin-shared-star-after-full-2',
+        type: 'skill',
+        actorCharacterId: 109001,
+        skillId: 10900112,
+        actionVariantIndex: 0,
+        startMs: 18_000,
+        durationMs: 1_000,
+      }),
+      createWorkbenchActionDraft({
+        id: 'moyin-shared-star-boundary',
+        type: 'skill',
+        actorCharacterId: 109001,
+        skillId: 10900112,
+        actionVariantIndex: 0,
+        startMs: boundaryStartMs,
+        durationMs: 1_000,
+      }),
+    ];
+    const exact = simulateVerifiedProject({
+      durationMs: 33_000,
+      initialSpByCharacterId: { 109001: 100 },
+      actions: createActions(32_000),
+    });
+    const transactions =
+      exact.actionRuleDiagnostics.cooldownReductionTransactions;
+
+    expect(transactions).toHaveLength(2);
+    expect(transactions.map(transaction => transaction.sourceActionId)).toEqual(
+      ['moyin-shared-ultimate-1', 'moyin-shared-ultimate-2']
+    );
+    expect(new Set(transactions.map(row => row.eventIdentity)).size).toBe(2);
+    expect(
+      transactions.every(row => Array.isArray(row.sourceSequencePath))
+    ).toBe(true);
+    expect(transactions[1]).toMatchObject({
+      beforeChargeCount: 1,
+      afterChargeCount: 2,
+      beforeCoolTimeMs: 5_000,
+      afterCoolTimeMs: 15_000,
+      beforeSharedTimerRunning: true,
+      afterSharedTimerRunning: false,
+      nextReadyAtMs: null,
+      restoredChargeCount: 1,
+      discardedReductionMs: 15_000,
+      consumed: true,
+      appliedToSimulationResults: true,
+    });
+    expect(
+      exact.actionExecutionPlan.actions.find(
+        row => row.actionId === 'moyin-shared-ultimate-overlap-blocked'
+      )
+    ).toMatchObject({
+      execute: false,
+      violationCodes: expect.arrayContaining(['action-lane-overlap']),
+    });
+
+    const readinessById = new Map(
+      exact.actionRuleDiagnostics.readinessTimeline.actions.map(row => [
+        row.actionId,
+        row,
+      ])
+    );
+    expect(
+      readinessById.get('moyin-shared-star-after-full-1').cooldown
+    ).toMatchObject({
+      availableBefore: 2,
+      availableAfter: 1,
+      nextReadyAtMs: 32_000,
+      chargeStateBefore: {
+        currentChargeCount: 2,
+        coolTimeMs: 15_000,
+        sharedTimerRunning: false,
+      },
+      chargeStateAfter: {
+        currentChargeCount: 1,
+        coolTimeMs: 15_000,
+        sharedTimerRunning: true,
+      },
+    });
+    expect(
+      readinessById.get('moyin-shared-star-after-full-2').cooldown
+    ).toMatchObject({
+      availableBefore: 1,
+      availableAfter: 0,
+      nextReadyAtMs: 32_000,
+      chargeStateBefore: {
+        currentChargeCount: 1,
+        coolTimeMs: 14_000,
+      },
+      chargeStateAfter: {
+        currentChargeCount: 0,
+        coolTimeMs: 14_000,
+      },
+    });
+    expect(readinessById.get('moyin-shared-star-boundary')).toMatchObject({
+      status: 'ready',
+      executable: true,
+      cooldown: {
+        availableBefore: 1,
+        availableAfter: 0,
+        chargeStateBefore: {
+          currentChargeCount: 1,
+          coolTimeMs: 15_000,
+        },
+      },
+    });
+
+    const inside = simulateVerifiedProject({
+      durationMs: 32_500,
+      initialSpByCharacterId: { 109001: 100 },
+      actions: createActions(31_983.333333),
+    });
+    expect(
+      inside.actionRuleDiagnostics.readinessTimeline.actions.find(
+        row => row.actionId === 'moyin-shared-star-boundary'
+      )
+    ).toMatchObject({
+      status: 'blocked',
+      executable: false,
+      violationCodes: ['skill-cooldown-active'],
+      cooldown: { nextReadyAtMs: 32_000 },
+    });
+  });
+
+  it('keeps a one-use cooldown transaction stable under action-array reordering', () => {
+    const definitions = [
+      ['reorder-star-1', 10900112, 0, 1_000],
+      ['reorder-star-2', 10900112, 1_000, 1_000],
+      ['reorder-ultimate', 10900113, 2_000, 3_600],
+      ['reorder-star-3', 10900112, 6_000, 1_000],
+      ['reorder-star-4', 10900112, 7_000, 1_000],
+    ];
+    const actions = definitions.map(
+      ([id, skillId, startMs, durationMs], sourceSequenceIndex) =>
+        createWorkbenchActionDraft({
+          id,
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId,
+          actionVariantIndex: 0,
+          startMs,
+          durationMs,
+          sourceSequenceIndex,
+          sourceSequencePath: [sourceSequenceIndex],
+          sourceSequenceSource: 'cooldown-reorder-test-fixture',
+        })
+    );
+    const run = sourceActions =>
+      simulateVerifiedProject({
+        durationMs: 8_000,
+        initialSpByCharacterId: { 109001: 100 },
+        actions: sourceActions,
+      });
+    const forward = run(actions);
+    const reversed = run([...actions].reverse());
+    const project = result => ({
+      transactions:
+        result.actionRuleDiagnostics.cooldownReductionTransactions.map(row => ({
+          eventIdentity: row.eventIdentity,
+          sourceActionId: row.sourceActionId,
+          sourceSequencePath: row.sourceSequencePath,
+          targetSkillId: row.targetSkillId,
+          beforeChargeCount: row.beforeChargeCount,
+          afterChargeCount: row.afterChargeCount,
+          nextReadyAtMs: row.nextReadyAtMs,
+        })),
+      readiness: result.actionRuleDiagnostics.readinessTimeline.actions
+        .map(row => ({
+          actionId: row.actionId,
+          status: row.status,
+          nextReadyAtMs: row.cooldown?.nextReadyAtMs ?? null,
+          chargeStateAfter: row.cooldown?.chargeStateAfter ?? null,
+        }))
+        .sort((left, right) => left.actionId.localeCompare(right.actionId)),
+    });
+
+    expect(project(reversed)).toEqual(project(forward));
+    expect(
+      project(forward).readiness.find(row => row.actionId === 'reorder-star-4')
+    ).toMatchObject({ status: 'blocked', nextReadyAtMs: 17_000 });
   });
 
   it('fires a thunder overlimit on perfect parry when a mark is held', () => {
@@ -1250,6 +1891,51 @@ function projectConsumeUnresolved(result) {
   return result.unresolved.filter(row =>
     row.kind.startsWith('tuning-consume-')
   );
+}
+
+function createMoyinBrilliantAction(id, startMs) {
+  return createWorkbenchActionDraft({
+    id,
+    type: 'skill',
+    actorCharacterId: 109001,
+    skillId: 10900121,
+    actionKind: 'limit-counter',
+    actionVariantIndex: 2,
+    startMs,
+    durationMs: 600,
+  });
+}
+
+function createMoyinNormalSegment({
+  id,
+  controlSkillId,
+  sequenceIndex,
+  startMs,
+}) {
+  return createWorkbenchActionDraft({
+    id,
+    type: 'skill',
+    actorCharacterId: 109001,
+    skillId: 10900101,
+    actionKind: 'normal-attack',
+    actionVariantIndex: 0,
+    startMs,
+    durationMs: 1_000,
+    attackSequenceIndex: sequenceIndex,
+    attackSequenceTotal: 5,
+    attackInputExpansionMode: 'single-input',
+    attackInputChainSelectionSource: 'user-explicit',
+    attackInput: {
+      identity: `actor|109001|10900101|0|${controlSkillId}|normal-attack|attack-input-${sequenceIndex}`,
+      controlSkillId,
+      selectedSubSkillIndex: 0,
+      sequenceIndex,
+      sequenceTotal: 5,
+      durationFrames: 60,
+      durationStatus: 'applied',
+      sourceEvidenceStatus: 'confirmed-structured-data',
+    },
+  });
 }
 
 function simulateVerifiedProject({

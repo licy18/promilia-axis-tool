@@ -518,6 +518,7 @@ export function compareCycleBoundaryStates(startSnapshot, endSnapshot) {
   issues.push(...tuningMarkComparison.issues);
   const stateDimensions = [
     ['cooldowns', normalizeCooldownState],
+    ['chargeCooldowns', normalizeChargeCooldownState],
     ['effects', normalizeEffectState],
     ['kiboPassiveRuntime', normalizeKiboPassiveRuntimeState],
     ['targetStates', normalizeTargetState],
@@ -1957,7 +1958,7 @@ function projectCanonicalBoundaryState({ snapshot, boundaryRun, frame }) {
   }
   const finalState = verifiedRuntime.finalState ?? {};
   const cooldownWindows =
-    boundaryRun.simulation?.readinessTimeline?.cooldownWindows;
+    boundaryRun.simulation?.actionReadinessTimeline?.cooldownWindows;
   if (Array.isArray(cooldownWindows)) {
     snapshot.cooldowns = cooldownWindows
       .map(row => ({
@@ -1968,8 +1969,24 @@ function projectCanonicalBoundaryState({ snapshot, boundaryRun, frame }) {
         cooldownCount: integerOrNull(row.cooldownCount),
         endMs: Number(row.endMs) || 0,
         status: row.status ?? null,
+        cooldownReductionTransactionIds: [
+          ...(row.cooldownReductionTransactionIds ?? []),
+        ].sort(),
       }))
       .filter(row => row.endMs > boundaryTimeMs)
+      .sort(compareCanonicalRows);
+  }
+  const cooldownState =
+    boundaryRun.simulation?.actionReadinessTimeline?.cooldownState;
+  if (Array.isArray(cooldownState)) {
+    snapshot.chargeCooldowns = cooldownState
+      .filter(row => row.cooldownType === 'charge')
+      .map(row =>
+        projectChargeCooldownStateToBoundary({
+          row,
+          elapsedMs: prefixGapMs,
+        })
+      )
       .sort(compareCanonicalRows);
   }
   snapshot.actorVitals = (finalState.actorVitals ?? [])
@@ -2032,6 +2049,91 @@ function normalizeCooldownState(snapshot) {
     }))
     .filter(row => row.remainingFrames > 0)
     .sort(compareCanonicalRows);
+}
+
+function normalizeChargeCooldownState(snapshot) {
+  return (snapshot.chargeCooldowns ?? [])
+    .map(row => ({
+      runtimeOwnerIdentity: row.runtimeOwnerIdentity ?? null,
+      ownerId: row.ownerId ?? null,
+      skillId: row.skillId ?? null,
+      cooldownIdentity: row.cooldownIdentity ?? null,
+      fullCooldownMs: Number(row.fullCooldownMs) || 0,
+      chargeMaxCount: integerOrNull(row.chargeMaxCount),
+      currentChargeCount: integerOrNull(row.currentChargeCount),
+      remainingFrames:
+        row.sharedTimerRunning === true
+          ? Math.max(0, msToFrame(Number(row.coolTimeMs) || 0))
+          : 0,
+      sharedTimerRunning: row.sharedTimerRunning === true,
+      lastSettlementIdentity: normalizeCycleLocalCooldownIdentity(
+        row.lastSettlementIdentity
+      ),
+      lastCooldownReductionTransactionId: normalizeCycleLocalCooldownIdentity(
+        row.lastCooldownReductionTransactionId
+      ),
+      missingChargeSourceActionIds: [
+        ...(row.missingChargeSourceActionIds ?? []),
+      ].map(normalizeCycleLocalCooldownIdentity),
+    }))
+    .sort(compareCanonicalRows);
+}
+
+function projectChargeCooldownStateToBoundary({ row, elapsedMs }) {
+  const fullCooldownMs = Math.max(0, Number(row.fullCooldownMs) || 0);
+  const chargeMaxCount = Math.max(0, integerOrNull(row.chargeMaxCount) ?? 0);
+  let currentChargeCount = Math.max(
+    0,
+    Math.min(
+      chargeMaxCount,
+      integerOrNull(row.currentChargeCount) ?? chargeMaxCount
+    )
+  );
+  let coolTimeMs = Math.max(0, Number(row.coolTimeMs) || 0);
+  let sharedTimerRunning =
+    row.sharedTimerRunning === true &&
+    currentChargeCount < chargeMaxCount &&
+    coolTimeMs > 0;
+  let remainingElapsedMs = Math.max(0, Number(elapsedMs) || 0);
+  const missingChargeSourceActionIds = [
+    ...(row.missingChargeSourceActionIds ?? []),
+  ];
+  let lastSettlementIdentity = row.lastSettlementIdentity ?? null;
+
+  while (
+    sharedTimerRunning &&
+    remainingElapsedMs + VALUE_TOLERANCE >= coolTimeMs
+  ) {
+    remainingElapsedMs = Math.max(0, remainingElapsedMs - coolTimeMs);
+    currentChargeCount = Math.min(chargeMaxCount, currentChargeCount + 1);
+    missingChargeSourceActionIds.shift();
+    coolTimeMs = fullCooldownMs;
+    lastSettlementIdentity = `cooldown-natural-recovery|${row.cooldownIdentity}`;
+    sharedTimerRunning = currentChargeCount < chargeMaxCount;
+  }
+  if (sharedTimerRunning) {
+    coolTimeMs = Math.max(0, coolTimeMs - remainingElapsedMs);
+  }
+
+  return {
+    runtimeOwnerIdentity: row.runtimeOwnerIdentity ?? null,
+    ownerId: row.ownerId ?? null,
+    skillId: row.skillId ?? null,
+    cooldownIdentity: row.cooldownIdentity ?? null,
+    fullCooldownMs,
+    chargeMaxCount,
+    currentChargeCount,
+    coolTimeMs,
+    sharedTimerRunning,
+    lastSettlementIdentity,
+    lastCooldownReductionTransactionId:
+      row.lastCooldownReductionTransactionId ?? null,
+    missingChargeSourceActionIds,
+  };
+}
+
+function normalizeCycleLocalCooldownIdentity(value) {
+  return value == null ? null : String(value).replace(/cycle-\d+:/g, '');
 }
 
 function normalizeEffectState(snapshot) {

@@ -359,16 +359,118 @@ function projectReadinessTimeline(timeline = {}) {
       diagnosticIds: entry.diagnosticIds ?? [],
       violationCodes: entry.violationCodes ?? [],
       unresolvedCodes: entry.unresolvedCodes ?? [],
+      cooldown: projectCooldownReadiness(entry.cooldown),
     })),
     cooldownWindows: (timeline.cooldownWindows ?? []).map(cooldownWindow => ({
       actionId: cooldownWindow.actionId,
+      runtimeOwnerIdentity: cooldownWindow.runtimeOwnerIdentity ?? null,
       ownerId: cooldownWindow.ownerId ?? null,
       skillId: cooldownWindow.skillId ?? null,
+      chargeIndex: cooldownWindow.chargeIndex ?? null,
+      cooldownCount: cooldownWindow.cooldownCount ?? null,
       startMs: cooldownWindow.startMs,
       endMs: cooldownWindow.endMs,
       status: cooldownWindow.status ?? null,
+      cooldownReductionTransactionIds:
+        cooldownWindow.cooldownReductionTransactionIds ?? [],
+    })),
+    cooldownReductionTransactions: (
+      timeline.cooldownReductionTransactions ?? []
+    ).map(transaction => ({
+      eventIdentity: transaction.eventIdentity ?? null,
+      status: transaction.status ?? null,
+      timeMs: transaction.timeMs ?? null,
+      sourceActionId: transaction.sourceActionId ?? null,
+      sourceElementId: transaction.sourceElementId ?? null,
+      sourceSequencePath: transaction.sourceSequencePath ?? null,
+      slot: transaction.slot ?? null,
+      cdRecoveryType: transaction.cdRecoveryType ?? null,
+      targetSkillId: transaction.targetSkillId ?? null,
+      targetChargeIndex: transaction.targetChargeIndex ?? null,
+      cooldownType: transaction.cooldownType ?? null,
+      beforeChargeCount: transaction.beforeChargeCount ?? null,
+      afterChargeCount: transaction.afterChargeCount ?? null,
+      beforeCoolTimeMs: transaction.beforeCoolTimeMs ?? null,
+      afterCoolTimeMs: transaction.afterCoolTimeMs ?? null,
+      beforeSharedTimerRunning: transaction.beforeSharedTimerRunning ?? null,
+      afterSharedTimerRunning: transaction.afterSharedTimerRunning ?? null,
+      beforeReadyAtMs: transaction.beforeReadyAtMs ?? null,
+      afterReadyAtMs: transaction.afterReadyAtMs ?? null,
+      nextReadyAtMs: transaction.nextReadyAtMs ?? null,
+      appliedReductionMs: transaction.appliedReductionMs ?? null,
+      discardedReductionMs: transaction.discardedReductionMs ?? null,
+      restoredChargeCount: transaction.restoredChargeCount ?? 0,
+      consumed: transaction.consumed === true,
+      appliedToSimulationResults:
+        transaction.appliedToSimulationResults === true,
+    })),
+    cooldownState: (timeline.cooldownState ?? []).map(state => ({
+      runtimeOwnerIdentity: state.runtimeOwnerIdentity ?? null,
+      ownerId: state.ownerId ?? null,
+      skillId: state.skillId ?? null,
+      cooldownIdentity: state.cooldownIdentity ?? null,
+      cooldownType: state.cooldownType ?? null,
+      fullCooldownMs: state.fullCooldownMs ?? null,
+      chargeMaxCount: state.chargeMaxCount ?? null,
+      currentChargeCount: state.currentChargeCount ?? null,
+      coolTimeMs: state.coolTimeMs ?? null,
+      sharedTimerRunning: state.sharedTimerRunning === true,
+      nextReadyAtMs: state.nextReadyAtMs ?? null,
+      lastSettlementTimeMs: state.lastSettlementTimeMs ?? null,
+      lastSettlementIdentity: state.lastSettlementIdentity ?? null,
+      lastCooldownReductionTransactionId:
+        state.lastCooldownReductionTransactionId ?? null,
+      missingChargeSourceActionIds: state.missingChargeSourceActionIds ?? [],
+      charges: (state.charges ?? []).map(charge => ({
+        chargeIndex: charge.chargeIndex ?? null,
+        readyAtMs: charge.readyAtMs ?? null,
+        sourceActionId: charge.sourceActionId ?? null,
+        cooldownReductionTransactionIds:
+          charge.cooldownReductionTransactionIds ?? [],
+      })),
     })),
     summary: timeline.summary ?? null,
+  };
+}
+
+function projectCooldownReadiness(cooldown) {
+  if (!cooldown) return null;
+  const projectChargeState = state =>
+    state
+      ? {
+          cooldownType: state.cooldownType ?? null,
+          fullCooldownMs: state.fullCooldownMs ?? null,
+          chargeMaxCount: state.chargeMaxCount ?? null,
+          currentChargeCount: state.currentChargeCount ?? null,
+          availableCount: state.availableCount ?? null,
+          coolTimeMs: state.coolTimeMs ?? null,
+          sharedTimerRunning: state.sharedTimerRunning === true,
+          nextReadyAtMs: state.nextReadyAtMs ?? null,
+          lastSettlementTimeMs: state.lastSettlementTimeMs ?? null,
+          lastSettlementIdentity: state.lastSettlementIdentity ?? null,
+          lastCooldownReductionTransactionId:
+            state.lastCooldownReductionTransactionId ?? null,
+          missingChargeSourceActionIds:
+            state.missingChargeSourceActionIds ?? [],
+          cooldownReductionTransactionIds:
+            state.cooldownReductionTransactionIds ?? [],
+        }
+      : null;
+  return {
+    status: cooldown.status ?? null,
+    cooldownMs: cooldown.cooldownMs ?? null,
+    cooldownCount: cooldown.cooldownCount ?? null,
+    cooldownType: cooldown.cooldownType ?? null,
+    availableBefore: cooldown.availableBefore ?? null,
+    availableAfter: cooldown.availableAfter ?? null,
+    consumedChargeIndex: cooldown.consumedChargeIndex ?? null,
+    nextReadyAtMs: cooldown.nextReadyAtMs ?? null,
+    windowId: cooldown.windowId ?? null,
+    chargeStateBefore: projectChargeState(cooldown.chargeStateBefore),
+    chargeStateAfter: projectChargeState(cooldown.chargeStateAfter),
+    cooldownReductionTransactionIds: (
+      cooldown.cooldownReductionTransactions ?? []
+    ).map(transaction => transaction.eventIdentity ?? null),
   };
 }
 
@@ -382,6 +484,7 @@ function projectRuntimeEvent(event = {}) {
     runtimePhasePriority: event.runtimePhasePriority ?? null,
     runtimePriority: event.runtimePriority ?? null,
     runtimeSequenceIndex: event.runtimeSequenceIndex ?? null,
+    sourceSequencePath: event.sourceSequencePath ?? null,
     actionId: event.actionId ?? null,
     actorId: event.actorId ?? null,
     targetId: event.targetId ?? null,
@@ -539,6 +642,9 @@ function projectDamageEvent(event = {}) {
     hitIndex: event.hitIndex ?? null,
     hitSkillId: event.hitSkillId ?? null,
     elementId: event.elementId ?? null,
+    sourceSequencePath: Array.isArray(event.sourceSequencePath)
+      ? [...event.sourceSequencePath]
+      : null,
     rawDamage: event.rawDamage ?? 0,
     toughnessDamage: event.toughnessDamage ?? 0,
     formula: {
@@ -641,6 +747,7 @@ function projectTuningMarkEvent(event = {}) {
     delta: event.delta ?? null,
     after: event.after ?? null,
     maximum: event.maximum ?? null,
+    sourceSequencePath: event.sourceSequencePath ?? null,
     sourceIdentity: projectSourceIdentity(event.sourceIdentity),
   };
 }
@@ -1020,7 +1127,8 @@ function createDataIdentity({ scenario, gameData }) {
 }
 
 function accumulateContribution(target, identity, event) {
-  const current = target.get(identity) ?? createEmptyCombatContribution(identity);
+  const current =
+    target.get(identity) ?? createEmptyCombatContribution(identity);
   accumulateContributionValue(current, event);
   target.set(identity, current);
 }

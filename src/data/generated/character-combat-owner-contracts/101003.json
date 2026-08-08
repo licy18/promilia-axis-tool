@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "azpr-character-combat-owner-compilation",
-  "compilerVersion": 3,
+  "compilerVersion": 4,
   "ownerId": 101003,
   "ownerName": "寒悠悠",
   "recipeIdentity": "actor:101003:character-combat-recipe:v1",
@@ -15925,7 +15925,8 @@
             "reasons": [],
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
-            "applied": true
+            "applied": true,
+            "targetStateActivationCondition": null
           },
           {
             "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0",
@@ -16159,7 +16160,8 @@
             "reasons": [],
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
-            "applied": true
+            "applied": true,
+            "targetStateActivationCondition": null
           },
           {
             "effectIdentity": "10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0",
@@ -17751,7 +17753,8 @@
             "reasons": [],
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
-            "applied": true
+            "applied": true,
+            "targetStateActivationCondition": null
           },
           {
             "effectIdentity": "10100313|0|elements|1|-1498771669867596146|223|0",
@@ -17985,7 +17988,8 @@
             "reasons": [],
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
-            "applied": true
+            "applied": true,
+            "targetStateActivationCondition": null
           },
           {
             "effectIdentity": "10100313|0|elements|1|-1498771669867596146|193|0",
@@ -18219,7 +18223,8 @@
             "reasons": [],
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
-            "applied": true
+            "applied": true,
+            "targetStateActivationCondition": null
           },
           {
             "effectIdentity": "10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|207|0",
@@ -19291,7 +19296,8 @@
             "status": "verified-action-effect-lifecycle-binding-applied",
             "confidence": "high",
             "applied": true,
-            "inheritance": null
+            "inheritance": null,
+            "targetStateActivationCondition": null
           },
           {
             "effectIdentity": "10100313|0|elements|6|-87352517346442030|element:-87352517346442030|148|0",
@@ -19572,7 +19578,8 @@
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003206.asset/MonoBehaviour/ast_101003206__-87352517346442030.json#elementConfigId=101003206",
               "status": "verified-element-inheritance-ready",
               "applied": true
-            }
+            },
+            "targetStateActivationCondition": null
           }
         ],
         "effectGraph": [
@@ -20413,7 +20420,8 @@
             "status": "verified-action-effect-lifecycle-binding-applied",
             "confidence": "high",
             "applied": true,
-            "inheritance": null
+            "inheritance": null,
+            "targetStateActivationCondition": null
           },
           {
             "effectIdentity": "10100322|0|elements|2|4373635720509741260|57|1",
@@ -20556,7 +20564,8 @@
             "status": "verified-action-effect-lifecycle-binding-applied",
             "confidence": "high",
             "applied": true,
-            "inheritance": null
+            "inheritance": null,
+            "targetStateActivationCondition": null
           },
           {
             "effectIdentity": "10100322|0|elements|6|-1498771669867596146|57|0",
@@ -20790,7 +20799,8 @@
             "reasons": [],
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
-            "applied": true
+            "applied": true,
+            "targetStateActivationCondition": null
           },
           {
             "effectIdentity": "10100322|0|elements|6|-1498771669867596146|element:3879285143630828198|57|0",
@@ -25956,7 +25966,8 @@
             "status": "verified-action-effect-lifecycle-binding-applied",
             "confidence": "high",
             "applied": true,
-            "inheritance": null
+            "inheritance": null,
+            "targetStateActivationCondition": null
           }
         ],
         "effectGraph": [
@@ -26294,6 +26305,9 @@
               "shareType": 0,
               "petShareType": 0,
               "mainPetShareType": 0,
+              "slot": -1,
+              "cdRecoveryType": 0,
+              "stopSharing": true,
               "enhanceable": false,
               "valueByLevel": {
                 "1": 139,
@@ -29474,6 +29488,8 @@
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
         "applied": true
@@ -29615,6 +29631,8 @@
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
         "applied": true
@@ -29756,6 +29774,8 @@
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
         "applied": true
@@ -29897,6 +29917,8 @@
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
         "applied": true
@@ -30038,6 +30060,8 @@
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
         "applied": true
@@ -30179,6 +30203,8 @@
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
         "applied": true
@@ -30199,6 +30225,8 @@
         "lifecycleMaxStacks": 2,
         "durationMsOverride": 24000,
         "targetKindOverride": "team-actors",
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
         "applied": true
@@ -30219,6 +30247,8 @@
         "lifecycleMaxStacks": 1,
         "durationMsOverride": 15000,
         "targetKindOverride": "controlling-actor",
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": {
           "inheritOnControlledActorSwitch": true,
           "inheritType": "source",
@@ -30250,6 +30280,8 @@
         "lifecycleMaxStacks": 2,
         "durationMsOverride": 24000,
         "targetKindOverride": "team-actors",
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
         "applied": true
@@ -30270,6 +30302,8 @@
         "lifecycleMaxStacks": 1,
         "durationMsOverride": 8000,
         "targetKindOverride": "enemy",
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
         "applied": true
@@ -30290,6 +30324,8 @@
         "lifecycleMaxStacks": 1,
         "durationMsOverride": 8000,
         "targetKindOverride": "enemy",
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
         "applied": true
@@ -30580,6 +30616,7 @@
         "durationMs": 10000,
         "maxStacks": 15,
         "expiryMode": "independent-layer",
+        "atCapacityPolicy": "ignore",
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15",
         "status": "verified-target-state-profile-ready",
         "applied": true
@@ -36842,7 +36879,8 @@
           "reasons": [],
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
-          "applied": true
+          "applied": true,
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0",
@@ -37076,7 +37114,8 @@
           "reasons": [],
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
-          "applied": true
+          "applied": true,
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|61|0",
@@ -38650,7 +38689,8 @@
           "reasons": [],
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
-          "applied": true
+          "applied": true,
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|1|-1498771669867596146|223|0",
@@ -38884,7 +38924,8 @@
           "reasons": [],
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
-          "applied": true
+          "applied": true,
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|1|-1498771669867596146|193|0",
@@ -39118,7 +39159,8 @@
           "reasons": [],
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
-          "applied": true
+          "applied": true,
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|6|-87352517346442030|148|1",
@@ -39281,7 +39323,8 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003206.asset/MonoBehaviour/ast_101003206__-87352517346442030.json#elementConfigId=101003206",
             "status": "verified-element-inheritance-ready",
             "applied": true
-          }
+          },
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|4|-5729186281790677610|148|1",
@@ -39424,7 +39467,8 @@
           "status": "verified-action-effect-lifecycle-binding-applied",
           "confidence": "high",
           "applied": true,
-          "inheritance": null
+          "inheritance": null,
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|4|-5729186281790677610|element:-5729186281790677610|148|0",
@@ -40823,7 +40867,8 @@
           "reasons": [],
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
-          "applied": true
+          "applied": true,
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10100322|0|elements|2|4373635720509741260|57|1",
@@ -40966,7 +41011,8 @@
           "status": "verified-action-effect-lifecycle-binding-applied",
           "confidence": "high",
           "applied": true,
-          "inheritance": null
+          "inheritance": null,
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10100322|0|elements|2|4373635720509741260|57|1",
@@ -41109,7 +41155,8 @@
           "status": "verified-action-effect-lifecycle-binding-applied",
           "confidence": "high",
           "applied": true,
-          "inheritance": null
+          "inheritance": null,
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10100322|0|elements|6|-1498771669867596146|element:3879285143630828198|57|0",
@@ -42376,7 +42423,8 @@
           "status": "verified-action-effect-lifecycle-binding-applied",
           "confidence": "high",
           "applied": true,
-          "inheritance": null
+          "inheritance": null,
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10100360|0|elements|0|-6820191037001031513|element:-6820191037001031513|0|0",
@@ -42573,6 +42621,9 @@
             "shareType": 0,
             "petShareType": 0,
             "mainPetShareType": 0,
+            "slot": -1,
+            "cdRecoveryType": 0,
+            "stopSharing": true,
             "enhanceable": false,
             "valueByLevel": {
               "1": 139,
@@ -44854,7 +44905,9 @@
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
             "status": "delegated",
-            "applied": false
+            "applied": false,
+            "delegatedApplied": false,
+            "delegation": null
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -45024,7 +45077,9 @@
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
             "status": "delegated",
-            "applied": false
+            "applied": false,
+            "delegatedApplied": false,
+            "delegation": null
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -46942,7 +46997,9 @@
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
             "status": "delegated",
-            "applied": false
+            "applied": false,
+            "delegatedApplied": false,
+            "delegation": null
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -47111,7 +47168,9 @@
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
             "status": "delegated",
-            "applied": false
+            "applied": false,
+            "delegatedApplied": false,
+            "delegation": null
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -47280,7 +47339,9 @@
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
             "status": "delegated",
-            "applied": false
+            "applied": false,
+            "delegatedApplied": false,
+            "delegation": null
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -48145,7 +48206,9 @@
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
             "status": "delegated",
-            "applied": false
+            "applied": false,
+            "delegatedApplied": false,
+            "delegation": null
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -49101,7 +49164,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=101003].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003#attributeID=1;function=3;A=1000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_1011852803228526128__1011852803228526128.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2749505792865494576__2749505792865494576.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6060088285417807340__6060088285417807340.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-5652413049857383353|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6215383830795215380__-6215383830795215380.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_2700200137312345580__2700200137312345580.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6998348329063063020__6998348329063063020.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-15343624725538709|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-7141218965533365560|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/MonoBehaviour_2119769922617281174__2119769922617281174.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/skill_control_10100327__739140358862992778.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-1732209689403186369"
     }
   },
-  "contractHash": "09d8fa30a9a141c49a5e21099f0c6237c1d42a919938a97319a2bcec08028edb",
+  "contractHash": "4707fffc001b2174b2a9d7daa9dc9ae4ab18fd9f7a58400677884ef0d1dc4cb9",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 1,
@@ -49123,5 +49186,5 @@
     "thresholdTransitionCount": 0,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "578c5aae2e64f8be73a87d7ff25652284d51cbc1109ea6fc5ab825e90c5c93cb"
+  "recipeContractHash": "974806a84934201ef37f838355497e562f0cb5e58f546a572966b9479bb17ed8"
 }

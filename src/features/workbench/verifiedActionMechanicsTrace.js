@@ -117,6 +117,8 @@ export function createVerifiedActionMechanicsTrace({
     }),
     disabledHitCount: resolution?.disabledHitIdentities?.length ?? 0,
     effectBindingCount: resolution?.effects?.length ?? 0,
+    suppressedEffectCount: resolution?.suppressedEffects?.length ?? 0,
+    suppressedEffects: resolution?.suppressedEffects ?? [],
     runtimeHitCount: hitEvents.length,
     runtimeEffectEventCount: effectEvents.length,
     runtimeTuningEventCount: tuningEvents.length,
@@ -174,7 +176,7 @@ export function createVerifiedActionMechanicsTrace({
         key: 'effects',
         label: '效果',
         value: `${resolution?.effects?.length ?? 0} 个绑定`,
-        detail: `${effectEvents.length} 个生命周期事件`,
+        detail: `${effectEvents.length} 个生命周期事件 · ${resolution?.suppressedEffects?.length ?? 0} 个条件未满足`,
         applied: effectEvents.some(event => event.appliedToCalculators),
       },
       {

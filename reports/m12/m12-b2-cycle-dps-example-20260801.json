@@ -407,6 +407,12 @@
           "end": []
         },
         {
+          "dimension": "chargeCooldowns",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
           "dimension": "effects",
           "equal": true,
           "start": [],
@@ -551,6 +557,12 @@
       "stateDiffs": [
         {
           "dimension": "cooldowns",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
+          "dimension": "chargeCooldowns",
           "equal": true,
           "start": [],
           "end": []
@@ -739,6 +751,7 @@
           }
         ],
         "cooldowns": [],
+        "chargeCooldowns": [],
         "effects": [],
         "tuningMarks": [],
         "specialResources": [
@@ -883,6 +896,7 @@
           }
         ],
         "cooldowns": [],
+        "chargeCooldowns": [],
         "effects": [],
         "tuningMarks": [],
         "specialResources": [
@@ -1027,6 +1041,7 @@
           }
         ],
         "cooldowns": [],
+        "chargeCooldowns": [],
         "effects": [],
         "tuningMarks": [],
         "specialResources": [
@@ -1134,16 +1149,16 @@
       "issues": [],
       "hashes": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "c549265f73e6d6c1",
-        "data": "cda8554f0862b7dd",
-        "trace": "04faed684dbc0687",
+        "input": "5092fc17d0f38fb4",
+        "data": "ccce0df2f15d4a16",
+        "trace": "bd4b3c227828ab73",
         "evaluation": "412605349bbf2fe3"
       },
       "proofHashes": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "c549265f73e6d6c1",
-        "data": "cda8554f0862b7dd",
-        "trace": "04faed684dbc0687",
+        "input": "5092fc17d0f38fb4",
+        "data": "ccce0df2f15d4a16",
+        "trace": "bd4b3c227828ab73",
         "evaluation": "412605349bbf2fe3"
       },
       "firstCycle": {
@@ -1427,6 +1442,12 @@
               "end": []
             },
             {
+              "dimension": "chargeCooldowns",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
               "dimension": "effects",
               "equal": true,
               "start": [],
@@ -1571,6 +1592,12 @@
           "stateDiffs": [
             {
               "dimension": "cooldowns",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
+              "dimension": "chargeCooldowns",
               "equal": true,
               "start": [],
               "end": []
@@ -2099,10 +2126,10 @@
     ]
   },
   "hashes": {
-    "input": "c549265f73e6d6c1",
-    "data": "cda8554f0862b7dd",
-    "trace": "04faed684dbc0687",
+    "input": "5092fc17d0f38fb4",
+    "data": "ccce0df2f15d4a16",
+    "trace": "bd4b3c227828ab73",
     "evaluation": "412605349bbf2fe3",
-    "cycle": "1a4b67534ae2debb"
+    "cycle": "c3111d17b63ec54d"
   }
 }

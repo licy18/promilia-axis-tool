@@ -28,12 +28,12 @@
       },
       "verifiedMechanics": {
         "path": "src/data/generated/verified-combat-mechanics-package.json",
-        "sha256": "9bef1e4daba4de09df80727268b4d66a06307db9acac10c620f90a8b8f38f532",
-        "bytes": 113312200
+        "sha256": "1f3ed08b56ebf56c48ecf1f7909dbd537d172918253b0f6871b3048540f44aa0",
+        "bytes": 113293076
       },
       "characterAcceptance": {
         "path": "src/data/generated/character-acceptance-catalog.json",
-        "sha256": "df8a9435c91d82bf0202b3430ffa9ae6faa25e55074adeefe9f02341e7a36ebb",
+        "sha256": "36c4eb3f84a4a7c3a9763abaa8746686c6ae1bce2ef6f88713aee5f90578d8f3",
         "bytes": 53483
       },
       "visualAcceptance": {
@@ -3849,7 +3849,7 @@
       },
       "setThreeSourceIdentityEvidence": {
         "path": "scripts/optimization-qualification/evidence/set-three-source-identity-evidence.json",
-        "sha256": "1a9a46c725b369635f4a2c9a6830564982cc331a77b2657fed3307865f326cf8",
+        "sha256": "74b91a85a55c20c1f9a3c2fe54c04d5a197070be6e03ca6505d94cdae2c43d6c",
         "bytes": 13883,
         "value": {
           "schemaVersion": 1,
@@ -4204,9 +4204,9 @@
                 "reason": "m12c-zero-distance-passive-boss-out-of-scope",
                 "bossAttacks": false,
                 "policyId": "m12c-zero-distance-passive-boss-v1",
-                "policyHash": "c241492911786b34",
+                "policyHash": "c60fb5a713a5f691",
                 "rosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
-                "rosterHash": "760e59dac2c7c1c5",
+                "rosterHash": "7c96de67bf19b48e",
                 "mechanismReality": "source-closed-runtime-not-required-for-first-optimization-scenario"
               }
             }
@@ -4240,13 +4240,13 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "935fb9f83e33f81d"
+    "sourceSnapshotHash": "0a4b69e0716de917"
   },
   "filterContract": {
     "optimizationScenarioPolicyId": "m12c-zero-distance-passive-boss-v1",
-    "optimizationScenarioPolicyHash": "c241492911786b34",
+    "optimizationScenarioPolicyHash": "c60fb5a713a5f691",
     "candidateRosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
-    "candidateRosterHash": "760e59dac2c7c1c5",
+    "candidateRosterHash": "7c96de67bf19b48e",
     "formalCharacterOptimizationObjectIds": [
       "101010",
       "103002",
@@ -4362,7 +4362,7 @@
         "verifiedMechanicsSource": {
           "sourceIdentity": "src/data/generated/verified-combat-mechanics-package.json#actionMappings|controlBindings.effects",
           "packageId": "azpr-tc-2026-07-18",
-          "packageHash": "2c0b5dde7909e03c2b7b4ab6bcabec590c4e6027eaaf0eb3d374dd11fb747e86"
+          "packageHash": "ed65d281dc63732353605142ee3f8ebebd7329618def661d8477b48d266e6e7e"
         },
         "formalDenominator": 9,
         "formalOptimizationObjectIds": [
@@ -4932,9 +4932,9 @@
             "sourceRetention": "source-data-manual-runtime-and-coverage-retained"
           }
         ],
-        "rosterHash": "760e59dac2c7c1c5"
+        "rosterHash": "7c96de67bf19b48e"
       },
-      "policyHash": "c241492911786b34"
+      "policyHash": "c60fb5a713a5f691"
     },
     "characterRoster": {
       "schemaVersion": 1,
@@ -4958,7 +4958,7 @@
       "verifiedMechanicsSource": {
         "sourceIdentity": "src/data/generated/verified-combat-mechanics-package.json#actionMappings|controlBindings.effects",
         "packageId": "azpr-tc-2026-07-18",
-        "packageHash": "2c0b5dde7909e03c2b7b4ab6bcabec590c4e6027eaaf0eb3d374dd11fb747e86"
+        "packageHash": "ed65d281dc63732353605142ee3f8ebebd7329618def661d8477b48d266e6e7e"
       },
       "formalDenominator": 9,
       "formalOptimizationObjectIds": [
@@ -5528,7 +5528,7 @@
           "sourceRetention": "source-data-manual-runtime-and-coverage-retained"
         }
       ],
-      "rosterHash": "760e59dac2c7c1c5"
+      "rosterHash": "7c96de67bf19b48e"
     },
     "productScenarioExcludedCharacters": [
       {
@@ -30770,5 +30770,5 @@
       ]
     }
   },
-  "rosterHash": "d258a6f8327a6722"
+  "rosterHash": "a3edc962effdcba0"
 }

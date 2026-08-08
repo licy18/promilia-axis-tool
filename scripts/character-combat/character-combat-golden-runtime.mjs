@@ -615,6 +615,12 @@ function createGoldenActualProjection({
       actionId: event.actionId,
       frame: msToFrame(event.timeMs, scenarioRecipe.frameRate),
       hitIdentity: event.payload?.hitIdentity ?? null,
+      elementId: numberOrNull(event.payload?.elementId),
+      sourceSequencePath: Array.isArray(
+        event.payload?.damageEventContext?.sourceSequencePath
+      )
+        ? [...event.payload.damageEventContext.sourceSequencePath]
+        : null,
       rawDamage: numberOrNull(event.payload?.rawDamage),
       hpDamage: numberOrNull(
         event.payload?.hpDamage ?? event.payload?.rawDamage

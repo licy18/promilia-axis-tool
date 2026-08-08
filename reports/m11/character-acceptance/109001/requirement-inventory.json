@@ -3,6 +3,23 @@
   "kind": "character-acceptance-requirement-inventory",
   "records": [
     {
+      "requirementIdentity": "contract:action-effect-binding:moyin-a4-brilliant-thunder-overdrive",
+      "dimension": "action-effect-binding",
+      "subjectIdentity": "moyin-a4-brilliant-thunder-overdrive",
+      "sourceDisposition": "applied",
+      "contractStatus": "applied",
+      "impactClassification": "gameplay-impacting",
+      "coverageSelector": {
+        "effectIdentity": "battle-element:109001362",
+        "kind": "effect"
+      },
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001362.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#elementConfigId=109001362@29F|Battle/Element/ast_109001362.asset#consume-element-250-layer-1-after-brilliant-condition"
+      ],
+      "reasons": [],
+      "sourceRecordHash": "7814c634bed6e4ba"
+    },
+    {
       "requirementIdentity": "contract:action-effect-binding:moyin-a5-thunder-mark",
       "dimension": "action-effect-binding",
       "subjectIdentity": "moyin-a5-thunder-mark",
@@ -14,10 +31,10 @@
         "kind": "effect"
       },
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2"
       ],
       "reasons": [],
-      "sourceRecordHash": "752e47abe3770dcb"
+      "sourceRecordHash": "52c0fe519930e479"
     },
     {
       "requirementIdentity": "contract:action-form:actor|109001|10900101|0|10900103|normal-attack:default",
@@ -75,7 +92,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [
@@ -92,7 +109,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "bd0c497b73fa7617"
+      "sourceRecordHash": "adb670eeec720b03"
     },
     {
       "requirementIdentity": "contract:action-form:actor|109001|10900101|3|10900111|plunging-attack:default",
@@ -112,7 +129,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [
@@ -129,7 +146,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "fb96283cbac5eca1"
+      "sourceRecordHash": "37d18efd7191d361"
     },
     {
       "requirementIdentity": "contract:action-form:actor|109001|10900112|0|10900112|star-skill:default",
@@ -225,7 +242,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [
@@ -242,7 +259,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "13752042f569d8db"
+      "sourceRecordHash": "17286d7bd5928d07"
     },
     {
       "requirementIdentity": "contract:action-form:actor|109001|10900121|3|10900127|perfect-parry:default",
@@ -262,7 +279,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [
@@ -279,41 +296,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "65696ba9b1629fa6"
-    },
-    {
-      "requirementIdentity": "contract:conditional-hit-group:moyin-a4-brilliant-thunder-overdrive",
-      "dimension": "conditional-hit-group",
-      "subjectIdentity": "moyin-a4-brilliant-thunder-overdrive",
-      "sourceDisposition": "applied",
-      "contractStatus": "verified-conditional-hit-group-ready",
-      "impactClassification": "gameplay-impacting",
-      "coverageSelector": {
-        "groupIdentity": "moyin-a4-brilliant-thunder-overdrive",
-        "kind": "conditional-hit-group"
-      },
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant"
-      ],
-      "reasons": [],
-      "sourceRecordHash": "6d2ddc7098cde9e1"
-    },
-    {
-      "requirementIdentity": "contract:conditional-hit-group:moyin-chase-thunder-overdrive",
-      "dimension": "conditional-hit-group",
-      "subjectIdentity": "moyin-chase-thunder-overdrive",
-      "sourceDisposition": "applied",
-      "contractStatus": "verified-conditional-hit-group-ready",
-      "impactClassification": "gameplay-impacting",
-      "coverageSelector": {
-        "groupIdentity": "moyin-chase-thunder-overdrive",
-        "kind": "conditional-hit-group"
-      },
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
-      ],
-      "reasons": [],
-      "sourceRecordHash": "045e2eab9450fb5c"
+      "sourceRecordHash": "10a8487288874166"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:0:13ecc6d3afbee6ce",
@@ -552,7 +535,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -565,7 +548,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "c61098b7a8eb8a77"
+      "sourceRecordHash": "d3eaaf67ae0760b7"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:21:150d28153579cd10",
@@ -583,7 +566,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -596,7 +579,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "017ace47b64b9793"
+      "sourceRecordHash": "fc24913be0433aaf"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:22:866a5ce5dad3b373",
@@ -719,7 +702,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -732,7 +715,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "7afffd6dd413dc7c"
+      "sourceRecordHash": "4c7231af2da2523c"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:29:23da40bffee11437",
@@ -750,7 +733,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -763,7 +746,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "d5d03c8c2e2af8d8"
+      "sourceRecordHash": "c38ef6443d6c9018"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:3:f8170f10d68308b8",
@@ -949,7 +932,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -962,7 +945,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "a0cb815a69697b0d"
+      "sourceRecordHash": "59ac99578eab828d"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:39:6665f5c2a9fd862f",
@@ -980,7 +963,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -993,7 +976,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "2afd8fa509246667"
+      "sourceRecordHash": "10e45a85119388c7"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:4:242f7a1bc1f07113",
@@ -1048,7 +1031,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -1061,7 +1044,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "4bb6b9e2b942fb70"
+      "sourceRecordHash": "c97e046d7f5140f0"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:42:2b3971bf4c0712db",
@@ -1079,7 +1062,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -1092,7 +1075,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "72893a5b8116ac6e"
+      "sourceRecordHash": "c2ec84c7fcb8abae"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:43:5eb094f5d28bc503",
@@ -1315,7 +1298,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -1329,7 +1312,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "cdde1807fcb22da4"
+      "sourceRecordHash": "6a6c596e88de5ce8"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:54:d52d5a7cef2727d9",
@@ -1347,7 +1330,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -1361,7 +1344,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "2ef83d1f4e2013f0"
+      "sourceRecordHash": "619537224c341cb0"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:55:b25ce6e5935296d6",
@@ -1379,7 +1362,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -1393,7 +1376,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "e55e860992326167"
+      "sourceRecordHash": "b6a7edac9e422247"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:56:bad9985f012dbf56",
@@ -1411,7 +1394,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -1425,7 +1408,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "670ef6a6ad44633b"
+      "sourceRecordHash": "e54e2340ad2d712b"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:57:ad44781dca2d0ed1",
@@ -1443,7 +1426,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -1456,7 +1439,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "9ae4883c797b3704"
+      "sourceRecordHash": "68ec8307ba726410"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:58:9a3147007173addb",
@@ -1474,7 +1457,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -1487,7 +1470,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "36772fdf705c91dc"
+      "sourceRecordHash": "2e3e75e7568320b8"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:59:ba4d82bb8353a149",
@@ -1505,7 +1488,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -1518,7 +1501,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "860c478e0a1de9e6"
+      "sourceRecordHash": "cc797c00f7e60f1a"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:6:231909f2b5b84b6b",
@@ -1553,7 +1536,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -1566,7 +1549,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "e7bc85942c7bd1e8"
+      "sourceRecordHash": "ae032047c7bd31dc"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:7:2a030dc3aa8f7151",
@@ -1620,12 +1603,12 @@
       "sourceRecordHash": "005bc00e9028fa71"
     },
     {
-      "requirementIdentity": "contract:effect:effect:0:e87bfcfdba2338d3",
+      "requirementIdentity": "contract:effect:effect:0:2e45a1d10c04b4ad",
       "dimension": "effect",
-      "subjectIdentity": "effect:0:e87bfcfdba2338d3",
-      "sourceDisposition": "not-applicable",
+      "subjectIdentity": "effect:0:2e45a1d10c04b4ad",
+      "sourceDisposition": "applied",
       "contractStatus": null,
-      "impactClassification": "not-applicable",
+      "impactClassification": "gameplay-impacting",
       "coverageSelector": {
         "effectIdentity": "battle-element:296",
         "kind": "effect"
@@ -1635,40 +1618,13 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[5]",
         "battle-element-assets.jsonl#path_id=-5022202969777715803"
       ],
-      "sourceGapDisposition": {
-        "disposition": "not-applicable",
-        "sourceRecordIdentities": [
-          "semantic-gap:a279736894e3e02b785f"
-        ],
-        "rawRecordIdentities": [
-          "10900104|0|elements|5|-6711007604037179960|element:-5022202969777715803|29|0"
-        ],
-        "controlAndElementKeys": [
-          "10900104|-5022202969777715803",
-          "10900104|-6711007604037179960"
-        ],
-        "impactClassifications": [
-          "wrapper-or-duplicate"
-        ],
-        "reasons": [
-          "nested-damage-trigger-lifecycle-not-expanded",
-          "nested-effect-wrapper-semantics-unresolved",
-          "nonblocking-source-record-projection"
-        ]
-      },
-      "reasons": [
-        "nested-damage-runtime-family-unimplemented",
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "nonblocking-source-record-projection",
-        "wrapper-condition-semantics-unresolved"
-      ],
-      "sourceRecordHash": "2e96b63439c62d66"
+      "reasons": [],
+      "sourceRecordHash": "b1607833eef74812"
     },
     {
-      "requirementIdentity": "contract:effect:effect:1:81483d1dafa2509b",
+      "requirementIdentity": "contract:effect:effect:1:d62f2f32db381170",
       "dimension": "effect",
-      "subjectIdentity": "effect:1:81483d1dafa2509b",
+      "subjectIdentity": "effect:1:d62f2f32db381170",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -1682,7 +1638,7 @@
         "battle-element-assets.jsonl#path_id=-6711007604037179960"
       ],
       "reasons": [],
-      "sourceRecordHash": "672a6fd7eddaf96d"
+      "sourceRecordHash": "dce955ebba836315"
     },
     {
       "requirementIdentity": "contract:effect:effect:10:c4eaf7037526a1db",
@@ -1765,7 +1721,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [
@@ -1803,7 +1759,7 @@
         "semantic-wrapper-not-gameplay-effect",
         "unresolved"
       ],
-      "sourceRecordHash": "bee0243d98bf9b2f"
+      "sourceRecordHash": "d314be26b79cf8eb"
     },
     {
       "requirementIdentity": "contract:effect:effect:14:d311c0688d8c2399",
@@ -1860,9 +1816,9 @@
       "sourceRecordHash": "21a26ecfe269fadd"
     },
     {
-      "requirementIdentity": "contract:effect:effect:15:9b38bbf8671277cc",
+      "requirementIdentity": "contract:effect:effect:15:16663c4ca8f82d97",
       "dimension": "effect",
-      "subjectIdentity": "effect:15:9b38bbf8671277cc",
+      "subjectIdentity": "effect:15:16663c4ca8f82d97",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -1876,12 +1832,12 @@
         "battle-element-assets.jsonl#path_id=-1203829837708589376"
       ],
       "reasons": [],
-      "sourceRecordHash": "3fc0339bae0aa05a"
+      "sourceRecordHash": "ce0cb6c861f6a19a"
     },
     {
-      "requirementIdentity": "contract:effect:effect:16:1987fadc43dd73dc",
+      "requirementIdentity": "contract:effect:effect:16:203c7b48e6b3c47b",
       "dimension": "effect",
-      "subjectIdentity": "effect:16:1987fadc43dd73dc",
+      "subjectIdentity": "effect:16:203c7b48e6b3c47b",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -1928,15 +1884,14 @@
         "tuning-consume-current-packet-not-in-candidate-map",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved",
-        "wrapper-condition-semantics-unresolved"
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "4c5e04aa2d439564"
+      "sourceRecordHash": "080fdfbd11fe185f"
     },
     {
-      "requirementIdentity": "contract:effect:effect:17:b90bfe6ed1ed5cb6",
+      "requirementIdentity": "contract:effect:effect:17:1f19421f8638d6e2",
       "dimension": "effect",
-      "subjectIdentity": "effect:17:b90bfe6ed1ed5cb6",
+      "subjectIdentity": "effect:17:1f19421f8638d6e2",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -1971,18 +1926,17 @@
         ]
       },
       "reasons": [
-        "nested-damage-runtime-family-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "nonblocking-source-record-projection",
-        "wrapper-condition-semantics-unresolved"
+        "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "671ec9e7f4db75cb"
+      "sourceRecordHash": "0d4aeb6ec6df7bb2"
     },
     {
-      "requirementIdentity": "contract:effect:effect:18:7795ff2dc35de3a4",
+      "requirementIdentity": "contract:effect:effect:18:bcf6ce46bf472f0f",
       "dimension": "effect",
-      "subjectIdentity": "effect:18:7795ff2dc35de3a4",
+      "subjectIdentity": "effect:18:bcf6ce46bf472f0f",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -2023,17 +1977,16 @@
         ]
       },
       "reasons": [
-        "nested-damage-runtime-family-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "nonblocking-source-record-projection",
+        "source-confirmed-not-applicable",
         "tuning-consume-current-packet-not-in-candidate-map",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved",
-        "wrapper-condition-semantics-unresolved"
+        "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "1b04e14bca4695f7"
+      "sourceRecordHash": "ddac736410836036"
     },
     {
       "requirementIdentity": "contract:effect:effect:19:c4a9d334b85ea725",
@@ -2241,7 +2194,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [
@@ -2279,7 +2232,7 @@
         "semantic-wrapper-not-gameplay-effect",
         "unresolved"
       ],
-      "sourceRecordHash": "c74e72f8818b21fa"
+      "sourceRecordHash": "73c5f2fb28fd498a"
     },
     {
       "requirementIdentity": "contract:effect:effect:23:8a5f56be80ace77f",
@@ -2299,7 +2252,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [
@@ -2316,7 +2269,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "322aa1bc0527c211"
+      "sourceRecordHash": "0645894082e815d1"
     },
     {
       "requirementIdentity": "contract:effect:effect:24:8f39aa39c0774a7b",
@@ -2336,7 +2289,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [
@@ -2353,7 +2306,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "2b0bc46051b04ec4"
+      "sourceRecordHash": "ee6c5325e01e03e4"
     },
     {
       "requirementIdentity": "contract:effect:effect:25:3eef75a17133b3da",
@@ -2373,7 +2326,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [
@@ -2390,12 +2343,12 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "43501347d26c9318"
+      "sourceRecordHash": "79b27c77e31986ac"
     },
     {
-      "requirementIdentity": "contract:effect:effect:3:f09f7f986edb0837",
+      "requirementIdentity": "contract:effect:effect:3:e798c55ddfcca15d",
       "dimension": "effect",
-      "subjectIdentity": "effect:3:f09f7f986edb0837",
+      "subjectIdentity": "effect:3:e798c55ddfcca15d",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2409,12 +2362,12 @@
         "battle-element-assets.jsonl#path_id=-3809486317990090417"
       ],
       "reasons": [],
-      "sourceRecordHash": "84246d0a1bc033d5"
+      "sourceRecordHash": "9bae7ff42e21647f"
     },
     {
-      "requirementIdentity": "contract:effect:effect:4:99c4c6bba7102edf",
+      "requirementIdentity": "contract:effect:effect:4:cf3a96eef4bf1a79",
       "dimension": "effect",
-      "subjectIdentity": "effect:4:99c4c6bba7102edf",
+      "subjectIdentity": "effect:4:cf3a96eef4bf1a79",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -2428,7 +2381,7 @@
         "battle-element-assets.jsonl#path_id=-637110086033006477"
       ],
       "reasons": [],
-      "sourceRecordHash": "a816a89b5b2df434"
+      "sourceRecordHash": "e7cf947cabc33638"
     },
     {
       "requirementIdentity": "contract:effect:effect:5:9fd76b4242a04547",
@@ -2471,9 +2424,9 @@
       "sourceRecordHash": "963af1a1a59a0b63"
     },
     {
-      "requirementIdentity": "contract:effect:effect:7:cb4591c092a053af",
+      "requirementIdentity": "contract:effect:effect:7:d8535b7943776c7d",
       "dimension": "effect",
-      "subjectIdentity": "effect:7:cb4591c092a053af",
+      "subjectIdentity": "effect:7:d8535b7943776c7d",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -2513,12 +2466,12 @@
         "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "bb52230989a3e1be"
+      "sourceRecordHash": "6e7e0f5a0392a1ba"
     },
     {
-      "requirementIdentity": "contract:effect:effect:8:3135f53532c0af7f",
+      "requirementIdentity": "contract:effect:effect:8:5defa51e7a244eed",
       "dimension": "effect",
-      "subjectIdentity": "effect:8:3135f53532c0af7f",
+      "subjectIdentity": "effect:8:5defa51e7a244eed",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -2558,12 +2511,12 @@
         "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "48d00f0c35c55c86"
+      "sourceRecordHash": "80a59843b07953c6"
     },
     {
-      "requirementIdentity": "contract:effect:effect:9:342ec71840f2e42c",
+      "requirementIdentity": "contract:effect:effect:9:f19bca509a8f5a16",
       "dimension": "effect",
-      "subjectIdentity": "effect:9:342ec71840f2e42c",
+      "subjectIdentity": "effect:9:f19bca509a8f5a16",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -2603,7 +2556,7 @@
         "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "3950502f392e686a"
+      "sourceRecordHash": "c229ba7869787432"
     },
     {
       "requirementIdentity": "contract:hit:10900101|0|elements|0|3476557355496561381|12|1",
@@ -2923,78 +2876,61 @@
         "kind": "hit"
       },
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765"
       ],
       "reasons": [],
-      "sourceRecordHash": "1aa207e7775524cb"
+      "sourceRecordHash": "3d5ac5b49623a8cc"
     },
     {
-      "requirementIdentity": "contract:hit:10900104|0|elements|3|4184198133427158765|29|5",
+      "requirementIdentity": "contract:hit:10900104|0|elements|8|-1163125552202303495|45|5",
       "dimension": "hit",
-      "subjectIdentity": "10900104|0|elements|3|4184198133427158765|29|5",
+      "subjectIdentity": "10900104|0|elements|8|-1163125552202303495|45|5",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
-        "hitIdentity": "10900104|0|elements|3|4184198133427158765|29|5",
-        "kind": "hit"
-      },
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4184198133427158765|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#brilliant-overdrive@29F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|Battle/Element/ast_109001362.asset#consume-1-thunder-mark-when-brilliant"
-      ],
-      "reasons": [],
-      "sourceRecordHash": "86647d77c38c6456"
-    },
-    {
-      "requirementIdentity": "contract:hit:10900104|0|elements|8|-1163125552202303495|45|6",
-      "dimension": "hit",
-      "subjectIdentity": "10900104|0|elements|8|-1163125552202303495|45|6",
-      "sourceDisposition": "applied",
-      "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
-      "coverageSelector": {
-        "hitIdentity": "10900104|0|elements|8|-1163125552202303495|45|6",
+        "hitIdentity": "10900104|0|elements|8|-1163125552202303495|45|5",
         "kind": "hit"
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-1163125552202303495"
       ],
       "reasons": [],
-      "sourceRecordHash": "53913a512811ea04"
+      "sourceRecordHash": "0bd70e1a5ae1e6a5"
     },
     {
-      "requirementIdentity": "contract:hit:10900104|0|elements|8|-1163125552202303495|49|7",
+      "requirementIdentity": "contract:hit:10900104|0|elements|8|-1163125552202303495|49|6",
       "dimension": "hit",
-      "subjectIdentity": "10900104|0|elements|8|-1163125552202303495|49|7",
+      "subjectIdentity": "10900104|0|elements|8|-1163125552202303495|49|6",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
-        "hitIdentity": "10900104|0|elements|8|-1163125552202303495|49|7",
+        "hitIdentity": "10900104|0|elements|8|-1163125552202303495|49|6",
         "kind": "hit"
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-1163125552202303495"
       ],
       "reasons": [],
-      "sourceRecordHash": "8053b24a7709a52f"
+      "sourceRecordHash": "08fbdfb0726b9fa8"
     },
     {
-      "requirementIdentity": "contract:hit:10900104|0|elements|8|-1163125552202303495|53|8",
+      "requirementIdentity": "contract:hit:10900104|0|elements|8|-1163125552202303495|53|7",
       "dimension": "hit",
-      "subjectIdentity": "10900104|0|elements|8|-1163125552202303495|53|8",
+      "subjectIdentity": "10900104|0|elements|8|-1163125552202303495|53|7",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
-        "hitIdentity": "10900104|0|elements|8|-1163125552202303495|53|8",
+        "hitIdentity": "10900104|0|elements|8|-1163125552202303495|53|7",
         "kind": "hit"
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/skill_control_10900104__7557426041525159209.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-1163125552202303495"
       ],
       "reasons": [],
-      "sourceRecordHash": "7dc827bcebace2ad"
+      "sourceRecordHash": "aba611008b0348c8"
     },
     {
       "requirementIdentity": "contract:hit:10900105|0|elements|2|-4067071381797012601|12|3",
@@ -3233,7 +3169,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -3246,7 +3182,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "fec90e21274c3ac8"
+      "sourceRecordHash": "24a342d8e63e0f08"
     },
     {
       "requirementIdentity": "contract:hit:10900112|0|elements|1|-4564820134104165813|13|3",
@@ -3536,7 +3472,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -3549,7 +3485,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "6a681c171069b50c"
+      "sourceRecordHash": "6c19f4bfb846d8c8"
     },
     {
       "requirementIdentity": "contract:hit:10900121|0|elements|0|-7737634469737456931|66|1",
@@ -3635,7 +3571,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -3648,7 +3584,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "4ec2e47f23293612"
+      "sourceRecordHash": "0f1454f87b05d1fe"
     },
     {
       "requirementIdentity": "contract:hit:10900125|0|elements|2|-5633710717881758712|32|2",
@@ -3666,7 +3602,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -3679,7 +3615,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "52449647b3bdbd07"
+      "sourceRecordHash": "f82cbdfb76884d37"
     },
     {
       "requirementIdentity": "contract:hit:10900125|0|elements|2|-5633710717881758712|34|3",
@@ -3697,7 +3633,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -3710,7 +3646,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "77c532b2a1320cf8"
+      "sourceRecordHash": "94b2631adbcaf3b8"
     },
     {
       "requirementIdentity": "contract:hit:10900126|0|elements|0|-1533137595819747742|40|1",
@@ -3741,95 +3677,44 @@
         "kind": "hit"
       },
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292"
       ],
       "reasons": [],
-      "sourceRecordHash": "ac0765ee275556ce"
+      "sourceRecordHash": "b5e240d394591275"
     },
     {
-      "requirementIdentity": "contract:hit:10900143|0|elements|0|2642523047740593292|13|2",
+      "requirementIdentity": "contract:hit:10900143|0|elements|0|2642523047740593292|18|2",
       "dimension": "hit",
-      "subjectIdentity": "10900143|0|elements|0|2642523047740593292|13|2",
+      "subjectIdentity": "10900143|0|elements|0|2642523047740593292|18|2",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
-        "hitIdentity": "10900143|0|elements|0|2642523047740593292|13|2",
+        "hitIdentity": "10900143|0|elements|0|2642523047740593292|18|2",
         "kind": "hit"
       },
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292"
       ],
       "reasons": [],
-      "sourceRecordHash": "f0395d23c58dde21"
+      "sourceRecordHash": "ce10969a9ecf1f45"
     },
     {
-      "requirementIdentity": "contract:hit:10900143|0|elements|0|2642523047740593292|18|3",
+      "requirementIdentity": "contract:hit:10900143|0|elements|0|2642523047740593292|23|3",
       "dimension": "hit",
-      "subjectIdentity": "10900143|0|elements|0|2642523047740593292|18|3",
+      "subjectIdentity": "10900143|0|elements|0|2642523047740593292|23|3",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
-        "hitIdentity": "10900143|0|elements|0|2642523047740593292|18|3",
+        "hitIdentity": "10900143|0|elements|0|2642523047740593292|23|3",
         "kind": "hit"
       },
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292"
       ],
       "reasons": [],
-      "sourceRecordHash": "69a2d0eeabdc2813"
-    },
-    {
-      "requirementIdentity": "contract:hit:10900143|0|elements|0|2642523047740593292|18|4",
-      "dimension": "hit",
-      "subjectIdentity": "10900143|0|elements|0|2642523047740593292|18|4",
-      "sourceDisposition": "applied",
-      "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
-      "coverageSelector": {
-        "hitIdentity": "10900143|0|elements|0|2642523047740593292|18|4",
-        "kind": "hit"
-      },
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
-      ],
-      "reasons": [],
-      "sourceRecordHash": "ba37daa4a4c95d78"
-    },
-    {
-      "requirementIdentity": "contract:hit:10900143|0|elements|0|2642523047740593292|23|5",
-      "dimension": "hit",
-      "subjectIdentity": "10900143|0|elements|0|2642523047740593292|23|5",
-      "sourceDisposition": "applied",
-      "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
-      "coverageSelector": {
-        "hitIdentity": "10900143|0|elements|0|2642523047740593292|23|5",
-        "kind": "hit"
-      },
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
-      ],
-      "reasons": [],
-      "sourceRecordHash": "3b38ef5a834e59eb"
-    },
-    {
-      "requirementIdentity": "contract:hit:10900143|0|elements|0|2642523047740593292|23|6",
-      "dimension": "hit",
-      "subjectIdentity": "10900143|0|elements|0|2642523047740593292|23|6",
-      "sourceDisposition": "applied",
-      "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
-      "coverageSelector": {
-        "hitIdentity": "10900143|0|elements|0|2642523047740593292|23|6",
-        "kind": "hit"
-      },
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900143.asset/MonoBehaviour/skill_control_10900143__-96204011574609767.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2642523047740593292|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_5854955834435011997__5854955834435011997.json#brilliant-overdrive@13F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001359.asset/MonoBehaviour/ast_109001359__-7506081561353179437.json#elementConfigId=109001359|Battle/Element/ast_109001359.asset#consume-1-thunder-mark"
-      ],
-      "reasons": [],
-      "sourceRecordHash": "e52b6702a54287c8"
+      "sourceRecordHash": "2d54599b5bf59d4e"
     },
     {
       "requirementIdentity": "contract:hit:10900149|1|elements|0|-7354766802121318499|11|2",
@@ -3847,7 +3732,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -3860,7 +3745,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "cb3ec0ab22014fed"
+      "sourceRecordHash": "bc352c71c91761dd"
     },
     {
       "requirementIdentity": "contract:hit:10900149|1|elements|0|-7354766802121318499|15|3",
@@ -3878,7 +3763,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -3891,7 +3776,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "7b7c036c46e48cf8"
+      "sourceRecordHash": "30f8144189a4f0cc"
     },
     {
       "requirementIdentity": "contract:hit:10900149|1|elements|0|-7354766802121318499|7|1",
@@ -3909,7 +3794,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -3922,7 +3807,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "b4278bdaec1c0a85"
+      "sourceRecordHash": "8526a8f4d1d1dbd5"
     },
     {
       "requirementIdentity": "contract:hit:10900149|1|elements|3|-995583199439393354|29|4",
@@ -3940,7 +3825,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -3953,7 +3838,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "198934493f181918"
+      "sourceRecordHash": "fc77805321eb3238"
     },
     {
       "requirementIdentity": "contract:hit:10900149|1|elements|8|-7910779705807006372|45|5",
@@ -3971,7 +3856,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -3984,7 +3869,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "66c3acbe63ea1e17"
+      "sourceRecordHash": "98b498d0193327b3"
     },
     {
       "requirementIdentity": "contract:hit:10900149|1|elements|8|-7910779705807006372|49|6",
@@ -4002,7 +3887,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -4015,7 +3900,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "dac3a34d1e078828"
+      "sourceRecordHash": "03090e0c37232964"
     },
     {
       "requirementIdentity": "contract:hit:10900149|1|elements|8|-7910779705807006372|53|7",
@@ -4033,7 +3918,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -4046,7 +3931,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "338866a9c7ae99a0"
+      "sourceRecordHash": "9b3611acee7f72bc"
     },
     {
       "requirementIdentity": "contract:passive:actor:109001:passive:10900161",
@@ -4115,7 +4000,7 @@
       "sourceIdentities": [],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [
@@ -4132,7 +4017,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "418fb9a25d93a212"
+      "sourceRecordHash": "2a68f79681f76686"
     },
     {
       "requirementIdentity": "contract:public-action:actor|109001|10900101|3|10900111|plunging-attack",
@@ -4150,7 +4035,7 @@
       "sourceIdentities": [],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [
@@ -4167,7 +4052,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "326ed60224fd0ad7"
+      "sourceRecordHash": "53cb07a1d700d457"
     },
     {
       "requirementIdentity": "contract:public-action:actor|109001|10900112|0|10900112|star-skill",
@@ -4253,7 +4138,7 @@
       "sourceIdentities": [],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [
@@ -4270,7 +4155,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "191c0b9f02e10f65"
+      "sourceRecordHash": "96135a9955dac2c9"
     },
     {
       "requirementIdentity": "contract:public-action:actor|109001|10900121|3|10900127|perfect-parry",
@@ -4288,7 +4173,7 @@
       "sourceIdentities": [],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [
@@ -4306,7 +4191,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "ba8d2f1bb8eefc6a"
+      "sourceRecordHash": "6582f1c0b0cffe8a"
     },
     {
       "requirementIdentity": "contract:stat-dependency:stat-dependency:0:6a6f420a8144f32f",
@@ -4395,7 +4280,7 @@
       ],
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
-        "policyHash": "c241492911786b34",
+        "policyHash": "c60fb5a713a5f691",
         "disposition": "scenario-out-of-scope",
         "reason": "m12c-zero-distance-passive-boss-out-of-scope",
         "actionKinds": [],
@@ -4408,7 +4293,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "22cfa063562b5e09"
+      "sourceRecordHash": "22fafab7afcee349"
     },
     {
       "requirementIdentity": "contract:variant-edge:variant-edge:0:c564f0c0c2dc5aac",
@@ -4818,20 +4703,19 @@
     }
   ],
   "summary": {
-    "recordCount": 212,
-    "appliedCount": 142,
+    "recordCount": 207,
+    "appliedCount": 138,
     "gapCount": 0,
-    "notApplicableCount": 70,
+    "notApplicableCount": 69,
     "dimensionCounts": {
-      "action-effect-binding": 1,
+      "action-effect-binding": 2,
       "action-form": 10,
       "buff-lifecycle": 1,
-      "conditional-hit-group": 2,
       "control-window": 61,
       "controlled-actor": 1,
       "critical": 9,
       "effect": 26,
-      "hit": 75,
+      "hit": 71,
       "hit-override": 1,
       "passive": 1,
       "persistence-replay": 1,
@@ -4848,5 +4732,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "5cef3aef9fdb69d4"
+  "inventoryHash": "83200f6f3d8448bb"
 }

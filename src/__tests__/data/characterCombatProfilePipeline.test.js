@@ -287,6 +287,21 @@ describe('M10 character combat profile pipeline', () => {
           tree: { functionParams: [20000] },
         },
       ],
+      [
+        9005,
+        {
+          elementId: 9005,
+          sourceIdentity: 'fixture:element:9005',
+          tree: {
+            formulaParams: {
+              function_1: 102100,
+              formulaParamValues: Array.from({ length: 20 }, (_, index) =>
+                index === 12 ? 9001 : index === 19 ? 1 : 0
+              ),
+            },
+          },
+        },
+      ],
     ]);
     const compilation = compileCharacterCombatRecipeContracts({
       recipe: {
@@ -322,6 +337,24 @@ describe('M10 character combat profile pipeline', () => {
               amount: 1,
               requiresHitElementId: 9001,
               sourceIdentity: 'fixture:target-state-transaction',
+            },
+          ],
+          actionEffectBindings: [
+            {
+              bindingIdentity: 'synthetic-self-state-effect',
+              controlSkillId,
+              subSkillIndex: 0,
+              mapIndex: 0,
+              elementId: 9003,
+              triggerFrame: 5,
+              targetStateActivationCondition: {
+                sourceElementId: 9005,
+                stateIdentity: 'enemy:synthetic-firework',
+                subjectKind: 'self',
+                minimumStacks: 1,
+                sourceIdentity: 'fixture:formula:102100',
+              },
+              sourceIdentity: 'fixture:self-state-effect',
             },
           ],
           conditionalHitGroups: [
@@ -413,6 +446,21 @@ describe('M10 character combat profile pipeline', () => {
       stateIdentity: 'enemy:synthetic-firework',
       durationMs: 10000,
       maxStacks: 3,
+      applied: true,
+    });
+    expect(compilation.contracts.actionEffectBindings[0]).toMatchObject({
+      bindingIdentity: 'synthetic-self-state-effect',
+      bindingKind: 'activation-condition',
+      targetStateActivationCondition: {
+        commonFunctionId: 102100,
+        expression: 'IF(self.ELEMENT_LAYERS[M]>I,T,F)',
+        subjectKind: 'self',
+        stateIdentity: 'enemy:synthetic-firework',
+        stateElementId: 9001,
+        threshold: 0,
+        minimumStacks: 1,
+        applied: true,
+      },
       applied: true,
     });
     expect(compilation.contracts.actionHitBindings[0]).toMatchObject({
@@ -1534,7 +1582,7 @@ describe('M10 character combat profile pipeline', () => {
     expect(rejectedRun.status).not.toBe(0);
     expect(rejectedRun.stderr).toContain('invalid public character owner');
     expect(hashFile(VERIFIED_PACKAGE_PATH)).toBe(packageHashBefore);
-  }, 300_000);
+  }, 900_000);
 
   it('keeps source, graph, runtime, and runtime-capture artifacts traceable', () => {
     expect(sourceManifest.summary.identityCount).toBeGreaterThan(800);

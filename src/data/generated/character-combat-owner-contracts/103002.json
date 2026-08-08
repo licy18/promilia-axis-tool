@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "azpr-character-combat-owner-compilation",
-  "compilerVersion": 3,
+  "compilerVersion": 4,
   "ownerId": 103002,
   "ownerName": "红宝石",
   "recipeIdentity": "actor:103002:character-combat-recipe:v1",
@@ -39745,7 +39745,8 @@
             "reasons": [],
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
-            "applied": true
+            "applied": true,
+            "targetStateActivationCondition": null
           },
           {
             "effectIdentity": "10300212|0|elements|28|-1498771669867596146|element:3879285143630828198|0|0",
@@ -43162,7 +43163,8 @@
             "status": "verified-action-effect-lifecycle-binding-applied",
             "confidence": "high",
             "applied": true,
-            "inheritance": null
+            "inheritance": null,
+            "targetStateActivationCondition": null
           },
           {
             "effectIdentity": "10300213|0|elements|28|8812566341439638057|element:8812566341439638057|113|0",
@@ -47121,7 +47123,8 @@
             "reasons": [],
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
-            "applied": true
+            "applied": true,
+            "targetStateActivationCondition": null
           },
           {
             "effectIdentity": "10300221|0|elements|6|-3809486317990090417|element:-637110086033006477|54|0",
@@ -69572,6 +69575,9 @@
               "shareType": 1,
               "petShareType": 0,
               "mainPetShareType": 0,
+              "slot": -1,
+              "cdRecoveryType": 0,
+              "stopSharing": false,
               "enhanceable": false,
               "valueByLevel": {
                 "1": 5000,
@@ -69698,6 +69704,9 @@
               "shareType": 1,
               "petShareType": 0,
               "mainPetShareType": 0,
+              "slot": -1,
+              "cdRecoveryType": 0,
+              "stopSharing": false,
               "enhanceable": false,
               "valueByLevel": {
                 "1": 5000,
@@ -93633,6 +93642,8 @@
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
         "applied": true
@@ -93791,6 +93802,8 @@
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
         "applied": true
@@ -93811,6 +93824,8 @@
         "lifecycleMaxStacks": 6,
         "durationMsOverride": null,
         "targetKindOverride": null,
+        "targetStateActivationCondition": null,
+        "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
         "applied": true
@@ -115558,7 +115573,8 @@
           "reasons": [],
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
-          "applied": true
+          "applied": true,
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10300212|0|elements|25|8812566341439638057|element:3663436943335475859|0|0",
@@ -117948,7 +117964,8 @@
           "status": "verified-action-effect-lifecycle-binding-applied",
           "confidence": "high",
           "applied": true,
-          "inheritance": null
+          "inheritance": null,
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10300213|0|elements|25|4470366004342629686|element:4470366004342629686|114|0",
@@ -119480,7 +119497,8 @@
           "reasons": [],
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
-          "applied": true
+          "applied": true,
+          "targetStateActivationCondition": null
         },
         {
           "effectIdentity": "10300221|0|elements|6|-3809486317990090417|element:-637110086033006477|54|0",
@@ -120776,6 +120794,9 @@
             "shareType": 1,
             "petShareType": 0,
             "mainPetShareType": 0,
+            "slot": -1,
+            "cdRecoveryType": 0,
+            "stopSharing": false,
             "enhanceable": false,
             "valueByLevel": {
               "1": 5000,
@@ -120902,6 +120923,9 @@
             "shareType": 1,
             "petShareType": 0,
             "mainPetShareType": 0,
+            "slot": -1,
+            "cdRecoveryType": 0,
+            "stopSharing": false,
             "enhanceable": false,
             "valueByLevel": {
               "1": 5000,
@@ -125832,7 +125856,9 @@
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
             "status": "delegated",
-            "applied": false
+            "applied": false,
+            "delegatedApplied": false,
+            "delegation": null
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -126346,8 +126372,19 @@
             "registry": "AzPrVerifiedBattleEffectFormulaRegistry",
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
-            "status": "delegated",
-            "applied": false
+            "status": "delegated-applied",
+            "applied": false,
+            "delegatedApplied": true,
+            "delegation": {
+              "kind": "verified-tuning-overlimit-consumption-runtime",
+              "effectIdentity": "10300213|0|elements|36|-6187686510236149564|element:2917355649561243897|300|0",
+              "judgmentGroupIdentity": "tuning-consume-judgment:10300213:0:103002274:-6187686510236149564",
+              "markId": 150,
+              "packetElementId": 199,
+              "sourceIdentity": "battle-effect:10300213:0:2917355649561243897:-1358196052883222818:300",
+              "status": "verified-tuning-formula-runtime-binding-ready",
+              "applied": true
+            }
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -126364,11 +126401,11 @@
           "tuningOverlimit": null,
           "directSpPresence": null,
           "judgment": null,
-          "classification": "unresolved",
+          "classification": "applied",
           "dimensions": {
             "damage": {
-              "status": "unresolved",
-              "sourceField": "damageType"
+              "status": "applied",
+              "sourceField": "verified-tuning-mark-runtime"
             },
             "toughness": {
               "status": "verified-zero",
@@ -126395,10 +126432,7 @@
               "sourceField": null
             }
           },
-          "reasons": [
-            "nested-damage-runtime-family-unimplemented",
-            "wrapper-condition-semantics-unresolved"
-          ],
+          "reasons": [],
           "rawEffectIdentities": [
             "10300213|0|elements|36|-6187686510236149564|element:-310946560669858520|300|0",
             "10300213|0|elements|36|-6187686510236149564|element:-310946560669858520|284|1"
@@ -126526,8 +126560,19 @@
             "registry": "AzPrVerifiedBattleEffectFormulaRegistry",
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
-            "status": "delegated",
-            "applied": false
+            "status": "delegated-applied",
+            "applied": false,
+            "delegatedApplied": true,
+            "delegation": {
+              "kind": "verified-tuning-overlimit-consumption-runtime",
+              "effectIdentity": "10300213|0|elements|36|-6187686510236149564|element:2917355649561243897|300|0",
+              "judgmentGroupIdentity": "tuning-consume-judgment:10300213:0:103002274:-6187686510236149564",
+              "markId": 150,
+              "packetElementId": 199,
+              "sourceIdentity": "battle-effect:10300213:0:2917355649561243897:-1358196052883222818:300",
+              "status": "verified-tuning-formula-runtime-binding-ready",
+              "applied": true
+            }
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -126544,11 +126589,11 @@
           "tuningOverlimit": null,
           "directSpPresence": null,
           "judgment": null,
-          "classification": "unresolved",
+          "classification": "applied",
           "dimensions": {
             "damage": {
-              "status": "unresolved",
-              "sourceField": "damageType"
+              "status": "applied",
+              "sourceField": "verified-tuning-mark-runtime"
             },
             "toughness": {
               "status": "verified-zero",
@@ -126575,10 +126620,7 @@
               "sourceField": null
             }
           },
-          "reasons": [
-            "nested-damage-runtime-family-unimplemented",
-            "wrapper-condition-semantics-unresolved"
-          ],
+          "reasons": [],
           "rawEffectIdentities": [
             "10300213|0|elements|36|-6187686510236149564|element:-310946560669858520|300|0",
             "10300213|0|elements|36|-6187686510236149564|element:-310946560669858520|284|1"
@@ -126700,8 +126742,19 @@
             "registry": "AzPrVerifiedBattleEffectFormulaRegistry",
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
-            "status": "delegated",
-            "applied": false
+            "status": "delegated-applied",
+            "applied": false,
+            "delegatedApplied": true,
+            "delegation": {
+              "kind": "verified-tuning-overlimit-consumption-runtime",
+              "effectIdentity": "10300213|0|elements|34|-8725062263845393396|element:-8725062263845393396|173|0",
+              "judgmentGroupIdentity": "tuning-consume-judgment:10300213:0:103002273:-8725062263845393396",
+              "markId": 250,
+              "packetElementId": 299,
+              "sourceIdentity": "battle-effect:10300213:0:-8725062263845393396:2818728561424649950:173",
+              "status": "verified-tuning-formula-runtime-binding-ready",
+              "applied": true
+            }
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -126718,11 +126771,11 @@
           "tuningOverlimit": null,
           "directSpPresence": null,
           "judgment": null,
-          "classification": "unresolved",
+          "classification": "applied",
           "dimensions": {
             "damage": {
-              "status": "unresolved",
-              "sourceField": "damageType"
+              "status": "applied",
+              "sourceField": "verified-tuning-mark-runtime"
             },
             "toughness": {
               "status": "verified-zero",
@@ -126749,10 +126802,7 @@
               "sourceField": null
             }
           },
-          "reasons": [
-            "nested-damage-runtime-family-unimplemented",
-            "wrapper-condition-semantics-unresolved"
-          ],
+          "reasons": [],
           "rawEffectIdentities": [
             "10300213|0|elements|34|-8725062263845393396|element:-5022202969777715803|173|0",
             "10300213|0|elements|34|-8725062263845393396|element:-5022202969777715803|237|1"
@@ -126874,8 +126924,19 @@
             "registry": "AzPrVerifiedBattleEffectFormulaRegistry",
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
-            "status": "delegated",
-            "applied": false
+            "status": "delegated-applied",
+            "applied": false,
+            "delegatedApplied": true,
+            "delegation": {
+              "kind": "verified-tuning-overlimit-consumption-runtime",
+              "effectIdentity": "10300213|0|elements|34|-8725062263845393396|element:-8725062263845393396|173|0",
+              "judgmentGroupIdentity": "tuning-consume-judgment:10300213:0:103002273:-8725062263845393396",
+              "markId": 250,
+              "packetElementId": 299,
+              "sourceIdentity": "battle-effect:10300213:0:-8725062263845393396:2818728561424649950:173",
+              "status": "verified-tuning-formula-runtime-binding-ready",
+              "applied": true
+            }
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -126892,11 +126953,11 @@
           "tuningOverlimit": null,
           "directSpPresence": null,
           "judgment": null,
-          "classification": "unresolved",
+          "classification": "applied",
           "dimensions": {
             "damage": {
-              "status": "unresolved",
-              "sourceField": "damageType"
+              "status": "applied",
+              "sourceField": "verified-tuning-mark-runtime"
             },
             "toughness": {
               "status": "verified-zero",
@@ -126923,10 +126984,7 @@
               "sourceField": null
             }
           },
-          "reasons": [
-            "nested-damage-runtime-family-unimplemented",
-            "wrapper-condition-semantics-unresolved"
-          ],
+          "reasons": [],
           "rawEffectIdentities": [
             "10300213|0|elements|34|-8725062263845393396|element:-5022202969777715803|173|0",
             "10300213|0|elements|34|-8725062263845393396|element:-5022202969777715803|237|1"
@@ -129011,8 +129069,19 @@
             "registry": "AzPrVerifiedBattleEffectFormulaRegistry",
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
-            "status": "delegated",
-            "applied": false
+            "status": "delegated-applied",
+            "applied": false,
+            "delegatedApplied": true,
+            "delegation": {
+              "kind": "verified-tuning-overlimit-consumption-runtime",
+              "effectIdentity": "10300213|0|elements|36|-6187686510236149564|element:2917355649561243897|300|0",
+              "judgmentGroupIdentity": "tuning-consume-judgment:10300213:0:103002274:-6187686510236149564",
+              "markId": 150,
+              "packetElementId": 199,
+              "sourceIdentity": "battle-effect:10300213:0:2917355649561243897:-1358196052883222818:300",
+              "status": "verified-tuning-formula-runtime-binding-ready",
+              "applied": true
+            }
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -129029,11 +129098,11 @@
           "tuningOverlimit": null,
           "directSpPresence": null,
           "judgment": null,
-          "classification": "unresolved",
+          "classification": "applied",
           "dimensions": {
             "damage": {
               "status": "applied",
-              "sourceField": "triggerEffectList"
+              "sourceField": "verified-tuning-mark-runtime"
             },
             "toughness": {
               "status": "verified-zero",
@@ -129060,9 +129129,7 @@
               "sourceField": null
             }
           },
-          "reasons": [
-            "wrapper-condition-semantics-unresolved"
-          ],
+          "reasons": [],
           "rawEffectIdentities": [
             "10300213|0|elements|36|-6187686510236149564|element:8702816433770841171|300|0",
             "10300213|0|elements|36|-6187686510236149564|element:8702816433770841171|284|1"
@@ -129194,8 +129261,19 @@
             "registry": "AzPrVerifiedBattleEffectFormulaRegistry",
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
-            "status": "delegated",
-            "applied": false
+            "status": "delegated-applied",
+            "applied": false,
+            "delegatedApplied": true,
+            "delegation": {
+              "kind": "verified-tuning-overlimit-consumption-runtime",
+              "effectIdentity": "10300213|0|elements|36|-6187686510236149564|element:2917355649561243897|300|0",
+              "judgmentGroupIdentity": "tuning-consume-judgment:10300213:0:103002274:-6187686510236149564",
+              "markId": 150,
+              "packetElementId": 199,
+              "sourceIdentity": "battle-effect:10300213:0:2917355649561243897:-1358196052883222818:300",
+              "status": "verified-tuning-formula-runtime-binding-ready",
+              "applied": true
+            }
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -129212,11 +129290,11 @@
           "tuningOverlimit": null,
           "directSpPresence": null,
           "judgment": null,
-          "classification": "unresolved",
+          "classification": "applied",
           "dimensions": {
             "damage": {
               "status": "applied",
-              "sourceField": "triggerEffectList"
+              "sourceField": "verified-tuning-mark-runtime"
             },
             "toughness": {
               "status": "verified-zero",
@@ -129243,9 +129321,7 @@
               "sourceField": null
             }
           },
-          "reasons": [
-            "wrapper-condition-semantics-unresolved"
-          ],
+          "reasons": [],
           "rawEffectIdentities": [
             "10300213|0|elements|36|-6187686510236149564|element:8702816433770841171|300|0",
             "10300213|0|elements|36|-6187686510236149564|element:8702816433770841171|284|1"
@@ -129895,7 +129971,9 @@
             "family": "verified-tuning-state-formula",
             "evaluator": "verified-tuning-mark-runtime",
             "status": "delegated",
-            "applied": false
+            "applied": false,
+            "delegatedApplied": false,
+            "delegation": null
           },
           "activationConditions": [],
           "propertyConditionStatus": null,
@@ -131683,7 +131761,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=103002].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|battle-effect:10300203:1:4227003560910032429:-1496705248257481635:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-2222897544586480824__-2222897544586480824.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[19]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-6096481972427987931.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[28]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_1259665864203226846__1259665864203226846.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[25]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387500083290000.asset/MonoBehaviour/ast_17387500083290000__166774690136961000.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-127131817645696752"
     }
   },
-  "contractHash": "1598f0ace8e1051bfca52ae529dc47be5ce9ddd3dcf87af6141508f5b9578055",
+  "contractHash": "69a851696e948b367271d88186ebf10747f1afb456f01059e3b13f2809368f93",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 1,
@@ -131705,5 +131783,5 @@
     "thresholdTransitionCount": 0,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "096511dd196f6bf80c95b5c311b993faa384cfe0687064230ea8c25c49606d0b"
+  "recipeContractHash": "f3b10bdc0cd64c6643fcf6201cb3c2d4b0772986067f80dc5f6eb51990cea934"
 }

@@ -2,24 +2,24 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-unresolved-ledger",
   "ownerId": 109001,
-  "profileHash": "0a9baf9dc55e0845af50430156169e0d394685aa3610e8e008ff6b337a256ec4",
+  "profileHash": "bedee665afcdaec8f133dd9febb24bdb35d13be7c983fb7755d147e352a53351",
   "summary": {
-    "semanticRecordCount": 14,
-    "rawRecordCount": 16,
+    "semanticRecordCount": 13,
+    "rawRecordCount": 15,
     "semanticStatusCounts": {
       "not-applicable": 1,
-      "static-evidence-gap": 13
+      "static-evidence-gap": 12
     },
     "rawStatusCounts": {
       "not-applicable": 1,
-      "static-evidence-gap": 15
+      "static-evidence-gap": 14
     },
     "impactClassificationCounts": {
       "not-applicable": 6,
-      "wrapper-or-duplicate": 8
+      "wrapper-or-duplicate": 7
     },
     "gameplayImpactingCount": 0,
-    "wrapperOrDuplicateCount": 8,
+    "wrapperOrDuplicateCount": 7,
     "transitionCandidateSupersededCount": 0,
     "unreachableOrNotApplicableCount": 6
   },
@@ -188,29 +188,6 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:a279736894e3e02b785f",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10900104:0:-5022202969777715803:2505213732361599632:29",
-      "sourceIdentities": [
-        "battle-effect:10900104:0:-5022202969777715803:2505213732361599632:29"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10900104|0|elements|5|-6711007604037179960|element:-5022202969777715803|29|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
       "recordIdentity": "semantic-gap:a5188bc8cebfb6afe126",
       "ownerId": 109001,
       "sourceKind": "effect",
@@ -356,21 +333,6 @@
         "unnamed-secondary-passive-not-implemented-current-client"
       ],
       "sourceIdentity": "characters.items[id=109001].skillSlots[group=passive,index=1,skillId=10900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json",
-      "referenceKind": null,
-      "sourceEvidenceStatus": null,
-      "scenarioRuntimeStatus": null,
-      "metadata": null
-    },
-    {
-      "recordIdentity": "effect:10900104|0|elements|5|-6711007604037179960|element:-5022202969777715803|29|0",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10900104:0:-5022202969777715803:2505213732361599632:29",
       "referenceKind": null,
       "sourceEvidenceStatus": null,
       "scenarioRuntimeStatus": null,

@@ -6226,6 +6226,9 @@ function createBattleEffectGraphNode({
             shareType: integerOrNull(tree.shareType),
             petShareType: integerOrNull(tree.petShareType),
             mainPetShareType: integerOrNull(tree.mainPetShareType),
+            slot: integerOrNull(tree.slot),
+            cdRecoveryType: integerOrNull(tree.cdRecoveryType),
+            stopSharing: Number(tree.stopSharing) === 1,
             enhanceable: Number(tree.enhanceable) === 1,
           }
         : null,
@@ -7033,7 +7036,7 @@ function createControlRuntimeEffectBinding({
     cooldownReduction:
       node.directSp?.recoverType === 3
         ? {
-            recoverType: 3,
+            ...node.directSp,
             valueByLevel,
           }
         : null,
@@ -9363,8 +9366,11 @@ function createPublishedRuntimeEffectBinding(effect) {
   };
 }
 
-function createPublishedEffectDimensions(dimensions) {
-  return Object.fromEntries(
+function createPublishedEffectDimensions(
+  dimensions,
+  { node = null, formulaRuntime = null } = {}
+) {
+  const published = Object.fromEntries(
     Object.entries(dimensions ?? {}).map(([dimension, value]) => [
       dimension,
       {
@@ -9373,6 +9379,17 @@ function createPublishedEffectDimensions(dimensions) {
       },
     ])
   );
+  if (
+    node?.kind === 'damage' &&
+    formulaRuntime?.family === 'verified-tuning-state-formula' &&
+    formulaRuntime.delegatedApplied === true
+  ) {
+    published.damage = {
+      status: 'applied',
+      sourceField: 'verified-tuning-mark-runtime',
+    };
+  }
+  return published;
 }
 
 function createSemanticEffectCatalog({
@@ -9410,11 +9427,12 @@ function createSemanticEffectCatalog({
       binding.effectGraph.flatMap(root => {
         const runtimeNodes = root.nodes.filter(isRuntimeEffectGraphNode);
         const triggers = createSemanticRootTriggerContracts(binding, root);
+        const rootRawEffects = binding.effects.filter(
+          effect => effect.graphIdentity === root.graphIdentity
+        );
         return runtimeNodes.flatMap(node => {
-          const rawEffects = binding.effects.filter(
-            effect =>
-              effect.graphIdentity === root.graphIdentity &&
-              effect.pathId === node.pathId
+          const rawEffects = rootRawEffects.filter(
+            effect => effect.pathId === node.pathId
           );
           return triggers.map(trigger =>
             createSemanticEffectCandidate({
@@ -9422,6 +9440,7 @@ function createSemanticEffectCatalog({
               node,
               trigger,
               rawEffects,
+              rootRawEffects,
               publicActionByRawEffect,
             })
           );
@@ -9634,6 +9653,7 @@ function createSemanticEffectCandidate({
   node,
   trigger,
   rawEffects,
+  rootRawEffects,
   publicActionByRawEffect,
 }) {
   const relationPath = resolveEffectGraphRelationPath(root, node.nodeIdentity);
@@ -9662,8 +9682,11 @@ function createSemanticEffectCandidate({
     rawEffects,
     node.elementId
   );
+  const verifiedTuningRuntimeBinding =
+    resolveVerifiedTuningFormulaRuntimeBinding(node, rootRawEffects);
   const formulaRuntime = createSemanticFormulaRuntimeContract(node, {
     verifiedCharacterBinding,
+    verifiedTuningRuntimeBinding,
   });
   const reasons = createSemanticEffectReasons({
     role,
@@ -9680,6 +9703,7 @@ function createSemanticEffectCandidate({
     rawEffects,
     reasons,
     placementResolution: resolution,
+    formulaRuntime,
   });
   const stack = resolveEffectStackContract(node.lifecycle);
   const boundLifecycle = rawEffects.find(
@@ -9759,7 +9783,7 @@ function createSemanticEffectCandidate({
     cooldownReduction:
       node.directSp?.recoverType === 3
         ? {
-            recoverType: 3,
+            ...node.directSp,
             valueByLevel: node.formula?.valueByLevel ?? null,
           }
         : null,
@@ -9773,7 +9797,10 @@ function createSemanticEffectCandidate({
     directSpPresence: node.directSpPresence ?? null,
     judgment: node.judgment,
     classification,
-    dimensions: createPublishedEffectDimensions(node.dimensions),
+    dimensions: createPublishedEffectDimensions(node.dimensions, {
+      node,
+      formulaRuntime,
+    }),
     reasons,
     rawEffectIdentities,
     graphIdentities: [root.graphIdentity],
@@ -9803,7 +9830,10 @@ function classifySemanticEffectRole(node, root) {
 
 function createSemanticFormulaRuntimeContract(
   node,
-  { verifiedCharacterBinding = false } = {}
+  {
+    verifiedCharacterBinding = false,
+    verifiedTuningRuntimeBinding = null,
+  } = {}
 ) {
   const commonFunctionId = Number(node.formula?.commonFunctionId);
   const baseFunctionId = Number(node.formula?.baseFunctionId);
@@ -9869,8 +9899,12 @@ function createSemanticFormulaRuntimeContract(
       registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
       family: 'verified-tuning-state-formula',
       evaluator: 'verified-tuning-mark-runtime',
-      status: 'delegated',
+      status: verifiedTuningRuntimeBinding
+        ? 'delegated-applied'
+        : 'delegated',
       applied: false,
+      delegatedApplied: Boolean(verifiedTuningRuntimeBinding),
+      delegation: verifiedTuningRuntimeBinding,
     };
   }
   return {
@@ -9879,6 +9913,31 @@ function createSemanticFormulaRuntimeContract(
     evaluator: null,
     status: 'unresolved',
     applied: false,
+  };
+}
+
+function resolveVerifiedTuningFormulaRuntimeBinding(node, rootRawEffects) {
+  if (![119, 107205, 107207].includes(Number(node.formula?.baseFunctionId))) {
+    return null;
+  }
+  const runtimeEffect = (rootRawEffects ?? []).find(
+    effect =>
+      effect.classification === 'applied' &&
+      effect.tuningOverlimit &&
+      Number.isInteger(Number(effect.tuningOverlimit.markId)) &&
+      Number.isInteger(Number(effect.tuningOverlimit.packetElementId))
+  );
+  if (!runtimeEffect) return null;
+  return {
+    kind: 'verified-tuning-overlimit-consumption-runtime',
+    effectIdentity: runtimeEffect.effectIdentity,
+    judgmentGroupIdentity:
+      runtimeEffect.tuningOverlimit.judgmentGroupIdentity ?? null,
+    markId: Number(runtimeEffect.tuningOverlimit.markId),
+    packetElementId: Number(runtimeEffect.tuningOverlimit.packetElementId),
+    sourceIdentity: runtimeEffect.sourceIdentity,
+    status: 'verified-tuning-formula-runtime-binding-ready',
+    applied: true,
   };
 }
 
@@ -9948,6 +10007,17 @@ function createSemanticEffectReasons({
     )
     .filter(
       reason =>
+        !(
+          formulaRuntime.family === 'verified-tuning-state-formula' &&
+          formulaRuntime.delegatedApplied &&
+          [
+            'nested-damage-runtime-family-unimplemented',
+            'wrapper-condition-semantics-unresolved',
+          ].includes(reason)
+        )
+    )
+    .filter(
+      reason =>
         role !== 'wrapper' ||
         reason !== 'inject-wrapper-classified-through-child-edges'
     );
@@ -10014,10 +10084,17 @@ function resolveSemanticMechanicClassification({
   rawEffects,
   reasons,
   placementResolution,
+  formulaRuntime,
 }) {
   if (role !== 'gameplay-effect') return 'structural';
   if (placementResolution !== 'static-resolved') return 'unresolved';
   if (reasons.length > 0) return 'unresolved';
+  if (
+    formulaRuntime?.family === 'verified-tuning-state-formula' &&
+    formulaRuntime.delegatedApplied === true
+  ) {
+    return 'applied';
+  }
   if (
     node.classification === 'applied' ||
     rawEffects.some(effect => effect.classification === 'applied')

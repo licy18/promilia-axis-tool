@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "d258a6f8327a6722",
+  "rosterHash": "a3edc962effdcba0",
   "records": [
     {
       "objectKind": "character",
@@ -27,10 +27,10 @@
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "6ada1a6a7bfb25bb"
+          "8883a3ea3f64c417"
         ]
       },
-      "manifestHash": "0ba3b1883881eed9"
+      "manifestHash": "93187e1d6ae82973"
     },
     {
       "objectKind": "character",
@@ -84,10 +84,10 @@
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "780738f7978cbbb2"
+          "c43c104ecd1e082e"
         ]
       },
-      "manifestHash": "13bd1a85e3ddd7b3"
+      "manifestHash": "d4c58329f58a8f23"
     },
     {
       "objectKind": "character",
@@ -201,10 +201,10 @@
         ],
         "mechanismHash": "fd47d5ed36224b04",
         "characterAcceptanceManifestHashes": [
-          "fd4dd8806b3bc801"
+          "9177bc243d29a268"
         ]
       },
-      "manifestHash": "a293f4bf2994d093"
+      "manifestHash": "6f779cb7c1407a58"
     },
     {
       "objectKind": "character",
@@ -6618,9 +6618,9 @@
               "reason": "m12c-zero-distance-passive-boss-out-of-scope",
               "bossAttacks": false,
               "policyId": "m12c-zero-distance-passive-boss-v1",
-              "policyHash": "c241492911786b34",
+              "policyHash": "c60fb5a713a5f691",
               "rosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
-              "rosterHash": "760e59dac2c7c1c5",
+              "rosterHash": "7c96de67bf19b48e",
               "mechanismReality": "source-closed-runtime-not-required-for-first-optimization-scenario",
               "eventName": "AfterReceiveDamage",
               "triggerElementId": 199999022,
@@ -6933,11 +6933,11 @@
           "runtimeGaps": [],
           "sourceIdentityConflict": null,
           "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998005].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/skill_control_19998005__-2339022120750825272.json|NewTable/accessory_set.rows[id=3].skill[4#19998005]|NewTable/skill.rows[id=19998005]|ResourcesLang/*/lang_skill[id=85890777460246016]|SkillControl/19998005|BattleElement/199999022/023/043/044/086|full-current-SkillList-reverse-reference-census|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/MonoBehaviour_-5874771271388107138__-5874771271388107138.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/MonoBehaviour_-7665508558900367746__-7665508558900367746.json|elementDataList[1]|battle-element-assets.jsonl#path_id=-5654239168115731000;elementId=199999086|battle-element-assets.jsonl#path_id=-5654239168115731000;elementId=199999086|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/MonoBehaviour_-4955137497584177538__-4955137497584177538.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/MonoBehaviour_-7993432668986282370__-7993432668986282370.json|elementDataList[0]|battle-element-assets.jsonl#path_id=1357144959877628400;elementId=199999043|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|battle-element-assets.jsonl#path_id=-3122175980655525000;elementId=199999022|battle-element-assets.jsonl#path_id=-2059155062252145200;elementId=199999023",
-          "mechanicsHash": "e3a09c95e2867b5f"
+          "mechanicsHash": "3e186b0eb9574f79"
         },
         "visualAcceptanceManifestHash": "4b0e9d2730f3fa58"
       },
-      "manifestHash": "e451b64b5e0d9254"
+      "manifestHash": "80f765a12a8bbe9b"
     },
     {
       "objectKind": "set-skill",
@@ -30916,5 +30916,5 @@
     },
     "optimizationReadyTotal": 211
   },
-  "manifestsHash": "ef9763c902841fdf"
+  "manifestsHash": "1cb4029bc8a8c91f"
 }

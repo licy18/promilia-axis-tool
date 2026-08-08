@@ -1533,6 +1533,9 @@ export function projectSimulationResult({
     hitIndex: event.hitIndex ?? event.payload.hitIndex ?? null,
     hitSkillId: event.hitSkillId ?? null,
     elementId: event.payload.elementId ?? null,
+    sourceSequencePath: Array.isArray(event.sourceSequencePath)
+      ? [...event.sourceSequencePath]
+      : null,
     toughnessDamage: event.payload.toughnessDamage ?? 0,
     segmentLabel: event.payload.segment?.label ?? null,
     multiplier: event.payload.segment?.multiplier ?? null,
