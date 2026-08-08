@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { createReadStream } from 'node:fs';
-import { mkdir, stat, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
@@ -22,8 +22,11 @@ const TARGET_METHODS = [
     className: 'AliveProperty',
     methodName: 'GetBattlePropertyCurrentValue',
     hookMoments: ['entry', 'exit'],
-    eventTypes: ['recover-sp-modifier-property-read'],
-    captureWhen: { argumentName: 'id', values: [105, 228] },
+    eventTypes: [
+      'recover-sp-modifier-property-read',
+      'toughness-break-property-read',
+    ],
+    captureWhen: { argumentName: 'id', values: [105, 221, 228] },
   },
   {
     key: 'SnapshotPropertyManager.GetBattlePropertyCurrentValue',
@@ -46,6 +49,48 @@ const TARGET_METHODS = [
     methodName: 'SetWeaknessPoint',
     hookMoments: ['entry', 'exit'],
     eventTypes: ['toughness-damage-applied'],
+  },
+  {
+    key: 'AliveProperty.SetHpByHurt',
+    className: 'AliveProperty',
+    methodName: 'SetHpByHurt',
+    hookMoments: ['entry', 'exit'],
+    eventTypes: ['toughness-hp-applied'],
+  },
+  {
+    key: 'AliveProperty.get_breakDmgUp',
+    className: 'AliveProperty',
+    methodName: 'get_breakDmgUp',
+    hookMoments: ['entry', 'exit'],
+    eventTypes: ['toughness-break-property-read'],
+  },
+  {
+    key: 'ControlProperty.get_inWeakState',
+    className: 'ControlProperty',
+    methodName: 'get_inWeakState',
+    hookMoments: ['entry', 'exit'],
+    eventTypes: ['toughness-weak-state-read'],
+  },
+  {
+    key: 'ControlProperty.GetWeakState',
+    className: 'ControlProperty',
+    methodName: 'GetWeakState',
+    hookMoments: ['entry', 'exit'],
+    eventTypes: ['toughness-weak-state-read'],
+  },
+  {
+    key: 'ControlProperty.SetWeakState',
+    className: 'ControlProperty',
+    methodName: 'SetWeakState',
+    hookMoments: ['entry', 'exit'],
+    eventTypes: ['toughness-weak-state-write'],
+  },
+  {
+    key: 'DamageElement.Execute',
+    className: 'DamageElement',
+    methodName: 'Execute',
+    hookMoments: ['entry', 'exit'],
+    eventTypes: ['toughness-packet-execution'],
   },
   {
     key: 'DamageElement.RecoverSP',
@@ -80,6 +125,20 @@ const TARGET_METHODS = [
     eventTypes: ['pet-ultimate-cooldown-observed'],
   },
   {
+    key: 'FormulaUtility.GetOutputDamage',
+    className: 'FormulaUtility',
+    methodName: 'GetOutputDamage',
+    hookMoments: ['entry', 'exit'],
+    eventTypes: ['toughness-hp-output-calculated'],
+  },
+  {
+    key: 'FormulaUtility.GetOutputRealDamage',
+    className: 'FormulaUtility',
+    methodName: 'GetOutputRealDamage',
+    hookMoments: ['entry', 'exit'],
+    eventTypes: ['toughness-real-output-calculated'],
+  },
+  {
     key: 'FormulaUtility.GetOutputWeaknessDamage',
     className: 'FormulaUtility',
     methodName: 'GetOutputWeaknessDamage',
@@ -92,6 +151,49 @@ const TARGET_METHODS = [
     methodName: 'WeaknessPointChange',
     hookMoments: ['entry', 'exit'],
     eventTypes: ['toughness-damage-applied'],
+  },
+  {
+    key: 'FormulaUtility.ChangeHP',
+    className: 'FormulaUtility',
+    methodName: 'ChangeHP',
+    hookMoments: ['entry', 'exit'],
+    eventTypes: ['toughness-hp-change-dispatch'],
+  },
+  ...[
+    'RecoverBreakTimingByBreakData',
+    'OnAttributeCacheUpdate',
+    'OnBeforeUpdate',
+    'OnUpdate_LocalControlled',
+    'OnUpdate_RemoteControlled',
+    'WeaknessPointUpdate',
+    'Lens.Gameplay.Modules.BigWorld.IUpdate.OnUpdateDeltaTime',
+    'OnLateUpdate',
+    'UpdateWeakState',
+    'WeakBreaking',
+    'WeakBreakEnding',
+    'UpdateWeakBreakEnd',
+  ].map(methodName => ({
+    key: `WeakBreakSystem.${methodName}`,
+    className: 'WeakBreakSystem',
+    methodName,
+    hookMoments: ['entry', 'exit'],
+    eventTypes: ['toughness-state-update'],
+  })),
+  {
+    key: 'UnityEngine.Time.get_frameCount',
+    className: 'Time',
+    methodName: 'get_frameCount',
+    expectedRva: '0x94C28B0',
+    hookMoments: [],
+    eventTypes: ['toughness-frame-clock'],
+  },
+  {
+    key: 'UnityEngine.Time.get_deltaTime',
+    className: 'Time',
+    methodName: 'get_deltaTime',
+    expectedRva: '0x94C2760',
+    hookMoments: [],
+    eventTypes: ['toughness-frame-clock'],
   },
 ];
 
@@ -119,7 +221,27 @@ const TARGET_FIELDS = [
   },
   {
     className: 'AliveProperty',
-    fieldNames: ['m_sp', 'm_weaknessPoint'],
+    fieldNames: ['m_hp', 'm_sp', 'm_weaknessPoint'],
+  },
+  {
+    className: 'ControlProperty',
+    fieldNames: ['m_weakState'],
+  },
+  {
+    className: 'WeakBreakSystem',
+    fieldNames: [
+      'm_entityHandle',
+      'm_lastDamageTime',
+      'm_weakTime',
+      'm_curWeakTime',
+      'm_weakEndTime',
+      'm_curWeakEndTime',
+      'm_weakState',
+    ],
+  },
+  {
+    className: 'FormulaUtility.OutputDamageData',
+    fieldNames: ['outputDamage', 'realDamage', 'isCritical', 'isShield'],
   },
   {
     className: 'DamageElement',
@@ -168,7 +290,7 @@ async function main() {
     hashFile(sourcePath),
     hashFile(modulePath),
   ]);
-  const generatedAt = new Date().toISOString();
+  const generatedAt = sourceStat.mtime.toISOString();
   const manifest = createManifest({
     sourcePath,
     sourceStat,
@@ -180,8 +302,18 @@ async function main() {
     extracted,
   });
 
-  await mkdir(dirname(outputPath), { recursive: true });
-  await writeFile(outputPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
+  const serializedManifest = `${JSON.stringify(manifest, null, 2)}\n`;
+  if (options.assertClean) {
+    const current = await readFile(outputPath, 'utf8').catch(() => null);
+    if (current !== serializedManifest) {
+      throw new Error(
+        `Runtime capture hook manifest is stale: ${normalizePath(outputPath)}`
+      );
+    }
+  } else {
+    await mkdir(dirname(outputPath), { recursive: true });
+    await writeFile(outputPath, serializedManifest, 'utf8');
+  }
   process.stdout.write(
     `${JSON.stringify({
       outputPath,
@@ -203,7 +335,7 @@ async function extractTargets(sourcePath) {
 
   for await (const line of lines) {
     const classMatch = line.match(
-      /^(?:public|private|internal|protected)\s+(?:(?:static|abstract|sealed)\s+)?class\s+([A-Za-z0-9_]+)/u
+      /^(?:public|private|internal|protected)\s+(?:(?:static|abstract|sealed|readonly)\s+)?(?:class|struct)\s+([A-Za-z0-9_.]+)/u
     );
     if (classMatch) {
       currentClassName = TARGET_CLASS_NAMES.has(classMatch[1])
@@ -236,6 +368,8 @@ async function extractTargets(sourcePath) {
     const target = TARGET_METHODS.find(
       candidate =>
         candidate.className === currentClassName &&
+        (!candidate.expectedRva ||
+          candidate.expectedRva === pendingMethodAddress.rva) &&
         new RegExp(`\\b${candidate.methodName}\\s*\\(`, 'u').test(line)
     );
     if (target) {
@@ -314,7 +448,7 @@ function createManifest({
     schemaVersion: 1,
     game: 'azur-promilia',
     kind: 'runtime-capture-hook-manifest',
-    manifestId: 'azpr-tc-20260709-three-value-runtime-capture-v2',
+    manifestId: 'azpr-tc-20260709-three-value-runtime-capture-v3',
     generatedAt,
     source: {
       kind: 'il2cpp-dump-cs',
@@ -379,12 +513,64 @@ function createManifest({
       },
       {
         key: 'toughness-runtime-sequence',
-        requiredEventTypes: ['toughness-damage-applied'],
-        diagnosticEventTypes: ['toughness-output-calculated'],
+        requiredEventTypes: [
+          'toughness-packet-execution',
+          'toughness-weak-state-read',
+          'toughness-break-property-read',
+          'toughness-hp-output-calculated',
+          'toughness-damage-applied',
+          'toughness-weak-state-write',
+          'toughness-hp-change-dispatch',
+          'toughness-hp-applied',
+          'toughness-state-update',
+        ],
+        diagnosticEventTypes: [
+          'toughness-real-output-calculated',
+          'toughness-output-calculated',
+          'toughness-frame-clock',
+        ],
         hookTargets: [
+          'DamageElement.Execute',
+          'FormulaUtility.GetOutputDamage',
+          'FormulaUtility.GetOutputRealDamage',
           'FormulaUtility.GetOutputWeaknessDamage',
           'FormulaUtility.WeaknessPointChange',
+          'FormulaUtility.ChangeHP',
           'AliveProperty.SetWeaknessPoint',
+          'AliveProperty.SetHpByHurt',
+          'AliveProperty.GetBattlePropertyCurrentValue',
+          'AliveProperty.get_breakDmgUp',
+          'ControlProperty.get_inWeakState',
+          'ControlProperty.GetWeakState',
+          'ControlProperty.SetWeakState',
+          'WeakBreakSystem.RecoverBreakTimingByBreakData',
+          'WeakBreakSystem.OnAttributeCacheUpdate',
+          'WeakBreakSystem.OnBeforeUpdate',
+          'WeakBreakSystem.OnUpdate_LocalControlled',
+          'WeakBreakSystem.OnUpdate_RemoteControlled',
+          'WeakBreakSystem.WeaknessPointUpdate',
+          'WeakBreakSystem.Lens.Gameplay.Modules.BigWorld.IUpdate.OnUpdateDeltaTime',
+          'WeakBreakSystem.OnLateUpdate',
+          'WeakBreakSystem.UpdateWeakState',
+          'WeakBreakSystem.WeakBreaking',
+          'WeakBreakSystem.WeakBreakEnding',
+          'WeakBreakSystem.UpdateWeakBreakEnd',
+        ],
+        orderingFields: [
+          'captureSequence',
+          'clientFrameCount',
+          'clientDeltaTimeSeconds',
+          'threadId',
+        ],
+        settlementStateFields: [
+          'hpBefore',
+          'hpAfter',
+          'weaknessPointBefore',
+          'weaknessPointAfter',
+          'weakStateBefore',
+          'weakStateAfter',
+          'outputDamage',
+          'realDamage',
         ],
       },
     ],
@@ -425,9 +611,11 @@ function parseArguments(args) {
     } else if (argument === '--output') {
       options.output = args[index + 1];
       index += 1;
+    } else if (argument === '--assert-clean') {
+      options.assertClean = true;
     } else if (argument === '--help') {
       process.stdout.write(
-        'Usage: node scripts/generate-runtime-capture-hook-manifest.mjs [--dump-cs PATH] [--game-assembly PATH] [--output PATH]\n'
+        'Usage: node scripts/generate-runtime-capture-hook-manifest.mjs [--dump-cs PATH] [--game-assembly PATH] [--output PATH] [--assert-clean]\n'
       );
       process.exit(0);
     } else {

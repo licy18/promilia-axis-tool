@@ -16,8 +16,8 @@ describe('controlled Frida runtime capture agent', () => {
   it.each([
     ['role-sp', {}, 6],
     ['kibo-energy', { slotId: 'team-slot-1', kiboId: 500001 }, 1],
-    ['toughness', {}, 2],
-    ['all', { slotId: 'team-slot-1', kiboId: 500001 }, 9],
+    ['toughness', {}, 25],
+    ['all', { slotId: 'team-slot-1', kiboId: 500001 }, 32],
   ])('installs only the %s hook scope', (captureKind, owner, hookCount) => {
     const harness = createAgentHarness();
     const result = harness.rpc.exports.startcapture({
@@ -54,7 +54,7 @@ describe('controlled Frida runtime capture agent', () => {
         actorId: 'actor-109001',
         targetId: 'enemy-300032',
       })
-    ).toMatchObject({ captureKind: 'all', installedHookCount: 8 });
+    ).toMatchObject({ captureKind: 'all', installedHookCount: 31 });
     harness.rpc.exports.stopcapture();
     expect(harness.listeners.every(listener => listener.detached)).toBe(true);
 
@@ -65,6 +65,16 @@ describe('controlled Frida runtime capture agent', () => {
         captureKind: 'kibo-energy',
       })
     ).toThrow('kibo-energy capture requires slotId and a positive kiboId');
+  });
+
+  it('keeps a monotonic client-frame ordering envelope in capture records', () => {
+    expect(agentSource).toContain('captureSequence');
+    expect(agentSource).toContain('clientFrameCount');
+    expect(agentSource).toContain('clientDeltaTimeSeconds');
+    expect(agentSource).toContain('FormulaUtility.GetOutputDamage');
+    expect(agentSource).toContain('ControlProperty.SetWeakState');
+    expect(agentSource).toContain('UpdateWeakBreakEnd');
+    expect(agentSource).toContain('AliveProperty.SetHpByHurt');
   });
 });
 

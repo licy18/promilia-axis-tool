@@ -534,6 +534,9 @@ export function collectCycleDamageContributions(
       toughnessDamage: finiteNumberOrNull(event.toughnessDamage) ?? 0,
       breakTriggered: event.breakTriggered === true,
       deathTriggered: event.deathTriggered === true,
+      ...(Array.isArray(event.settlementOrder)
+        ? { settlementOrder: [...event.settlementOrder] }
+        : {}),
     });
     hpDamage += damage;
     combatHitCount += 1;

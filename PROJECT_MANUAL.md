@@ -2179,3 +2179,11 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - 范围分栏是强约束：`reports/m10/108003` 仍为完整通用机制档案，权威状态继续是 `runtime-applied / combatCoverage=partial / runtimeReadyActionCount=7/10 / runtimeCapture=10`；M12 的 `optimization-ready` 只覆盖 `m12c-zero-distance-passive-boss-v1` 缩减动作面（139 required pass + 86 policy N/A）。本次 closeout 没有改写 M10 的全场景事实，二者分母不同且不冲突。
 - 全局资格重算为 blocker=`13`（全部 character/not-implemented），分母仍 `9/43/62/137/12`；hashes=`26db4986bce695fe/b3bb274e638433c1/f6aab7de4accdba6/3f1ee6e8e0af5ec4/6cba81d337120c35/b8810086de37175e`，M12-C/formal search 锁定。character acceptance 目录已有 2 个 ready owner，但 formal character kind 在九人全绿前仍为 0。
 - 实现期一次 bounded full test 后失败文件均聚焦收口；中央独立验收另验证核心 `11 files/190 tests`、Workbench DOM `108/108`、十项只读 assert-clean、production build `1885 modules` 和双 diff check 全绿。closeout 只同步验收记录/派生报告/文档，不开始 102001/107001/107002/112001/STARBORN、E20-3、M12-C 或正式搜索。
+
+### M12-B3-OPT-T2 有韧敌人客户端结算静态证据与 capture 准备（2026-08-08）
+
+- 证据链固定在 `scripts/machine-axis/evidence/enemy-toughness-settlement-runtime-evidence.json`，重算报告为 `reports/m12/m12-b3-enemy-toughness-settlement-evidence-20260808.json`。它绑定 TC GameAssembly/dump/script 三份来源、精确 RVA/callsites/basic-block bytes+SHA、enum/field 与每项 closes/leavesOpen；`npm run audit:machine-axis-enemy-settlement-evidence` 和 tamper tests fail closed。
+- 客户端单包裁决：普通与真实伤害均在削韧前读取 packet 前 weak state 与 property 221，破韧包 HP output 因而为 pre-break；`WeaknessPointChange` 的 setter 调用早于 `ChangeHP`。breakDmgUp 是 profile 属性，不是全敌人固定 2 倍；pure toughness 不套 HP break multiplier。
+- local WeakBreakSystem 的计时来自每次 update deltaTime，`WeakBreaking/WeakBreakEnding` 以 `>=` 退出；remote update 仅镜像表现。现 runtime 固定 100ms 与 local 路径的差异已公开登记，需由正式场景真实 capture 先选择 authoritative local/remote/network 路径后再修正。
+- runtime-capture manifest v3 与 Frida agent 可记录同帧 `captureSequence/frameCount/deltaTime/threadId`，覆盖 DamageElement、三条 output、HP/韧性 setter、weak state 与 WeakBreakSystem update。当前未运行客户端、未取得真实 capture；工具不自动启动/附加客户端且不提供反作弊绕过。
+- formal gate 继续拒绝 `machine-axis-enemy-settlement-client-order-open`。未闭合的是同帧跨包可见性、结束帧 state update/hit、致死后尾包和 passive boss 执行路径；有韧循环/最快击杀只能输出诊断 proof，不能形成正式分数。三主指标、legacy/healing、Kibo DNA `[]` 和 M12-C 锁均未回退。

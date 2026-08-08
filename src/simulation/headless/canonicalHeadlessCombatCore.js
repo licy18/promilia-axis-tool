@@ -701,6 +701,9 @@ function projectDamageEvent(event = {}) {
     breakTriggered: event.breakTriggered === true,
     deathTriggered: event.deathTriggered === true,
     deathState: event.deathState ?? null,
+    ...(Array.isArray(event.settlementOrder)
+      ? { settlementOrder: [...event.settlementOrder] }
+      : {}),
     settlementCursor: event.settlementCursor ?? null,
     toughnessDamage: event.toughnessDamage ?? 0,
     formula: {

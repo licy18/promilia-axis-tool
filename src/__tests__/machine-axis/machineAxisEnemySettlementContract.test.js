@@ -26,9 +26,23 @@ describe('Machine Axis enemy settlement timing contract', () => {
           'stop-enemy-hp-and-toughness-settlement-after-first-lethal-packet',
       },
       evidence: {
-        evidenceStatus: 'runtime-implemented-client-order-open',
+        evidenceStatus: 'client-static-partial-controlled-capture-required',
         formalReady: false,
         blockerCode: MACHINE_AXIS_ENEMY_SETTLEMENT_BLOCKER_CODE,
+        clientStaticFindings: {
+          breakingPacketHpMultiplierRead: 'pre-break-state',
+          packetInternalSettlementOrder:
+            'weakness-point-change-dispatch-before-change-hp',
+          breakDamageUpSource:
+            'authoritative-profile-battle-property-221-wp-break-dmgup',
+          localControlledTimerAdvance: 'per-update-delta-time',
+        },
+        leavesOpen: [
+          'same-frame-damage-element-queue-order-and-immediate-weak-state-visibility',
+          'break-end-state-update-versus-hit-order-in-the-same-client-frame',
+          'finite-hp-lethal-packet-and-post-death-tail-packet-disposition',
+          'authoritative-local-versus-remote-network-path-for-the-zero-distance-passive-boss-scenario',
+        ],
       },
     });
     expect(contractHash).toBe(hashCanonicalValue(payload));
@@ -44,7 +58,7 @@ describe('Machine Axis enemy settlement timing contract', () => {
 
     expect(readiness).toMatchObject({
       formalReady: false,
-      evidenceStatus: 'runtime-implemented-client-order-open',
+      evidenceStatus: 'client-static-partial-controlled-capture-required',
       issues: [
         {
           code: MACHINE_AXIS_ENEMY_SETTLEMENT_BLOCKER_CODE,

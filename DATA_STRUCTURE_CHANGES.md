@@ -27845,3 +27845,22 @@ Machine Axis 新增严格、版本化的 `AzPrMachineAxisObjectiveContract` 与 
 canonical damage event 增加 `preDefenseValue/requestedHpDamage/effectiveHpDamage/overkill/inBreakForHpDamage/hpDamageMultiplier/toughnessBefore/toughnessAfter/breakTriggered/deathTriggered/deathState/settlementCursor`。Cycle 报告保存逐包 settlement 与敌人状态迁移，边界包括 HP/韧性、defeated、break phase、恢复计时与 profile 来源。
 
 batch/search/cycle/kill 的 `metrics.healing` 统一为 requested/effective healing、overhealing、effectiveHps、settlementCount 与 source actor/action 聚合。只消费 canonical 实际治疗 settlement；shield、suppressed 和 vital damage 均明确排除。
+
+## 459. Enemy toughness client settlement evidence / capture v3
+
+新增来源驱动的 `AzPrEnemyToughnessSettlementClientRuntimeEvidence` 与冻结报告。artifact 同时绑定 TC `GameAssembly.dll / dump.cs / script.json` 的 bytes、SHA-256，25 个方法 RVA/签名、字段/枚举、17 个 PE basic-block range bytes/SHA 和 8 个直接 callsite；生成器从外部文件与 PE 重算，`--assert-clean` 不接受只存在不匹配的文件。
+
+`runtime-capture-hook-manifest` 升为 `azpr-tc-20260709-three-value-runtime-capture-v3`，新增普通/真实/纯韧性 output、HP/韧性 setter、weak-state getter/setter、WeakBreakSystem local/remote update 与 Unity frame/deltaTime hook。真实记录统一增加 `captureSequence / clientFrameCount / clientDeltaTimeSeconds / threadId`，并可保存包内 HP、韧性、weakState、outputDamage/realDamage 前后值；self-test、synthetic 或 runtime 自身输出不能关闭客户端 evidence blocker。
+
+verified damage packet 新增：
+
+```text
+settlementOrder = [
+  hp-output-calculated-from-pre-break-state,
+  toughness-settled,
+  break-state-transitioned,
+  hp-settled
+]
+```
+
+该数组进入 canonical damage、cycle settlement packet、kill proof 与对应 hash。普通和调谐伤害都先以 packet 前 weak state 计算 HP output，再结算韧性/破韧状态，最后结算 HP，匹配已闭合的客户端单包调用顺序。`m12-enemy-settlement-runtime-v1` 仍保持 `formalReady=false`：同帧跨 DamageElement 可见性、break 结束同帧 update/hit、致死尾包以及正式 passive boss 的 local/remote 路径仍需真实受控 capture。

@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "game": "azur-promilia",
   "kind": "runtime-capture-hook-manifest",
-  "manifestId": "azpr-tc-20260709-three-value-runtime-capture-v2",
-  "generatedAt": "2026-08-07T02:05:55.667Z",
+  "manifestId": "azpr-tc-20260709-three-value-runtime-capture-v3",
+  "generatedAt": "2026-07-09T14:06:49.319Z",
   "source": {
     "kind": "il2cpp-dump-cs",
     "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
@@ -22,14 +22,30 @@
     }
   },
   "summary": {
-    "methodCount": 10,
-    "fieldCount": 30,
+    "methodCount": 33,
+    "fieldCount": 43,
     "energyMethodCount": 7,
-    "toughnessMethodCount": 3,
+    "toughnessMethodCount": 27,
     "realRuntimeCaptureAvailable": false,
     "status": "source-backed-hook-targets-ready-awaiting-controlled-capture"
   },
   "methods": [
+    {
+      "key": "AliveProperty.get_breakDmgUp",
+      "className": "AliveProperty",
+      "methodName": "get_breakDmgUp",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-break-property-read"
+      ],
+      "rva": "0x12AD660",
+      "offset": "0x12ABE60",
+      "va": "0x1812AD660",
+      "signature": "public MyFloat get_breakDmgUp() { }"
+    },
     {
       "key": "AliveProperty.SetWeaknessPoint",
       "className": "AliveProperty",
@@ -45,6 +61,22 @@
       "offset": "0x12AB0A0",
       "va": "0x1812AC8A0",
       "signature": "public bool SetWeaknessPoint(MyFloat v, bool force = False) { }"
+    },
+    {
+      "key": "AliveProperty.SetHpByHurt",
+      "className": "AliveProperty",
+      "methodName": "SetHpByHurt",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-hp-applied"
+      ],
+      "rva": "0x12AB970",
+      "offset": "0x12AA170",
+      "va": "0x1812AB970",
+      "signature": "public void SetHpByHurt(MyFloat value) { }"
     },
     {
       "key": "AliveProperty.SetSp",
@@ -71,12 +103,14 @@
         "exit"
       ],
       "eventTypes": [
-        "recover-sp-modifier-property-read"
+        "recover-sp-modifier-property-read",
+        "toughness-break-property-read"
       ],
       "captureWhen": {
         "argumentName": "id",
         "values": [
           105,
+          221,
           228
         ]
       },
@@ -84,6 +118,54 @@
       "offset": "0x12A66E0",
       "va": "0x1812A7EE0",
       "signature": "public MyFloat GetBattlePropertyCurrentValue(int id, bool isRatio = False, List<int> tags) { }"
+    },
+    {
+      "key": "ControlProperty.get_inWeakState",
+      "className": "ControlProperty",
+      "methodName": "get_inWeakState",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-weak-state-read"
+      ],
+      "rva": "0x12CF070",
+      "offset": "0x12CD870",
+      "va": "0x1812CF070",
+      "signature": "public bool get_inWeakState() { }"
+    },
+    {
+      "key": "ControlProperty.SetWeakState",
+      "className": "ControlProperty",
+      "methodName": "SetWeakState",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-weak-state-write"
+      ],
+      "rva": "0x12CDE00",
+      "offset": "0x12CC600",
+      "va": "0x1812CDE00",
+      "signature": "public void SetWeakState(EWeakBreakState state) { }"
+    },
+    {
+      "key": "ControlProperty.GetWeakState",
+      "className": "ControlProperty",
+      "methodName": "GetWeakState",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-weak-state-read"
+      ],
+      "rva": "0x12CBDF0",
+      "offset": "0x12CA5F0",
+      "va": "0x1812CBDF0",
+      "signature": "public EWeakBreakState GetWeakState() { }"
     },
     {
       "key": "DamageElement.RecoverSP",
@@ -99,6 +181,22 @@
       "offset": "0x138D6E0",
       "va": "0x18138EEE0",
       "signature": "public void RecoverSP() { }"
+    },
+    {
+      "key": "DamageElement.Execute",
+      "className": "DamageElement",
+      "methodName": "Execute",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-packet-execution"
+      ],
+      "rva": "0x138D0E0",
+      "offset": "0x138B8E0",
+      "va": "0x18138D0E0",
+      "signature": "public override void Execute() { }"
     },
     {
       "key": "SPSystem.OnTransmit",
@@ -132,6 +230,198 @@
       "offset": "0x1482740",
       "va": "0x181483F40",
       "signature": "private void RecoverSP(TSpElementParams.ERecoverTagType recoverTagType, float baseDelta, float delta) { }"
+    },
+    {
+      "key": "WeakBreakSystem.OnAttributeCacheUpdate",
+      "className": "WeakBreakSystem",
+      "methodName": "OnAttributeCacheUpdate",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-state-update"
+      ],
+      "rva": "0x14BF6F0",
+      "offset": "0x14BDEF0",
+      "va": "0x1814BF6F0",
+      "signature": "private void OnAttributeCacheUpdate(int arg1, EntryInfo arg2) { }"
+    },
+    {
+      "key": "WeakBreakSystem.RecoverBreakTimingByBreakData",
+      "className": "WeakBreakSystem",
+      "methodName": "RecoverBreakTimingByBreakData",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-state-update"
+      ],
+      "rva": "0x14C1410",
+      "offset": "0x14BFC10",
+      "va": "0x1814C1410",
+      "signature": "private void RecoverBreakTimingByBreakData() { }"
+    },
+    {
+      "key": "WeakBreakSystem.OnBeforeUpdate",
+      "className": "WeakBreakSystem",
+      "methodName": "OnBeforeUpdate",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-state-update"
+      ],
+      "rva": "0x14BF870",
+      "offset": "0x14BE070",
+      "va": "0x1814BF870",
+      "signature": "public void OnBeforeUpdate() { }"
+    },
+    {
+      "key": "WeakBreakSystem.OnUpdate_LocalControlled",
+      "className": "WeakBreakSystem",
+      "methodName": "OnUpdate_LocalControlled",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-state-update"
+      ],
+      "rva": "0x14C0EA0",
+      "offset": "0x14BF6A0",
+      "va": "0x1814C0EA0",
+      "signature": "private void OnUpdate_LocalControlled() { }"
+    },
+    {
+      "key": "WeakBreakSystem.OnUpdate_RemoteControlled",
+      "className": "WeakBreakSystem",
+      "methodName": "OnUpdate_RemoteControlled",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-state-update"
+      ],
+      "rva": "0x14C10B0",
+      "offset": "0x14BF8B0",
+      "va": "0x1814C10B0",
+      "signature": "private void OnUpdate_RemoteControlled() { }"
+    },
+    {
+      "key": "WeakBreakSystem.WeaknessPointUpdate",
+      "className": "WeakBreakSystem",
+      "methodName": "WeaknessPointUpdate",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-state-update"
+      ],
+      "rva": "0x14C39D0",
+      "offset": "0x14C21D0",
+      "va": "0x1814C39D0",
+      "signature": "private void WeaknessPointUpdate() { }"
+    },
+    {
+      "key": "WeakBreakSystem.Lens.Gameplay.Modules.BigWorld.IUpdate.OnUpdateDeltaTime",
+      "className": "WeakBreakSystem",
+      "methodName": "Lens.Gameplay.Modules.BigWorld.IUpdate.OnUpdateDeltaTime",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-state-update"
+      ],
+      "rva": "0x14BF5D0",
+      "offset": "0x14BDDD0",
+      "va": "0x1814BF5D0",
+      "signature": "private void Lens.Gameplay.Modules.BigWorld.IUpdate.OnUpdateDeltaTime(float deltaTime) { }"
+    },
+    {
+      "key": "WeakBreakSystem.OnLateUpdate",
+      "className": "WeakBreakSystem",
+      "methodName": "OnLateUpdate",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-state-update"
+      ],
+      "rva": "0x14BFFE0",
+      "offset": "0x14BE7E0",
+      "va": "0x1814BFFE0",
+      "signature": "public void OnLateUpdate() { }"
+    },
+    {
+      "key": "WeakBreakSystem.UpdateWeakState",
+      "className": "WeakBreakSystem",
+      "methodName": "UpdateWeakState",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-state-update"
+      ],
+      "rva": "0x14C1C80",
+      "offset": "0x14C0480",
+      "va": "0x1814C1C80",
+      "signature": "private void UpdateWeakState() { }"
+    },
+    {
+      "key": "WeakBreakSystem.WeakBreaking",
+      "className": "WeakBreakSystem",
+      "methodName": "WeakBreaking",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-state-update"
+      ],
+      "rva": "0x14C33D0",
+      "offset": "0x14C1BD0",
+      "va": "0x1814C33D0",
+      "signature": "private void WeakBreaking() { }"
+    },
+    {
+      "key": "WeakBreakSystem.WeakBreakEnding",
+      "className": "WeakBreakSystem",
+      "methodName": "WeakBreakEnding",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-state-update"
+      ],
+      "rva": "0x14C2DB0",
+      "offset": "0x14C15B0",
+      "va": "0x1814C2DB0",
+      "signature": "private void WeakBreakEnding() { }"
+    },
+    {
+      "key": "WeakBreakSystem.UpdateWeakBreakEnd",
+      "className": "WeakBreakSystem",
+      "methodName": "UpdateWeakBreakEnd",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-state-update"
+      ],
+      "rva": "0x14C1AC0",
+      "offset": "0x14C02C0",
+      "va": "0x1814C1AC0",
+      "signature": "private void UpdateWeakBreakEnd() { }"
     },
     {
       "key": "PetEntity.PetUltimateCdTime",
@@ -173,6 +463,38 @@
       "signature": "public MyFloat GetBattlePropertyCurrentValue(int entityId, ulong key, int id, bool isRatio = False, List<int> tags) { }"
     },
     {
+      "key": "FormulaUtility.GetOutputDamage",
+      "className": "FormulaUtility",
+      "methodName": "GetOutputDamage",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-hp-output-calculated"
+      ],
+      "rva": "0x187F360",
+      "offset": "0x187DB60",
+      "va": "0x18187F360",
+      "signature": "private static FormulaUtility.OutputDamageData GetOutputDamage(IElement element, EntityHandle attackerHandle, EntityHandle executorHandle, EntityHandle sourceHandle, int skillGroupId, int criticalRandom) { }"
+    },
+    {
+      "key": "FormulaUtility.GetOutputRealDamage",
+      "className": "FormulaUtility",
+      "methodName": "GetOutputRealDamage",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-real-output-calculated"
+      ],
+      "rva": "0x1883DB0",
+      "offset": "0x18825B0",
+      "va": "0x181883DB0",
+      "signature": "private static FormulaUtility.OutputDamageData GetOutputRealDamage(IElement element, EntityHandle attackerHandle, EntityHandle executorHandle, EntityHandle sourceHandle, int skillGroupId) { }"
+    },
+    {
       "key": "FormulaUtility.GetOutputWeaknessDamage",
       "className": "FormulaUtility",
       "methodName": "GetOutputWeaknessDamage",
@@ -203,6 +525,50 @@
       "offset": "0x1888EB0",
       "va": "0x18188A6B0",
       "signature": "private static bool WeaknessPointChange(DamageElement damageElement, EntityHandle executor, EntityHandle attacker, int outputType1, int outputType2, MyFloat weaknessSkillDmgUp, ref MyFloat outputDamage, out MyFloat wk) { }"
+    },
+    {
+      "key": "FormulaUtility.ChangeHP",
+      "className": "FormulaUtility",
+      "methodName": "ChangeHP",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-hp-change-dispatch"
+      ],
+      "rva": "0x187C950",
+      "offset": "0x187B150",
+      "va": "0x18187C950",
+      "signature": "private static bool ChangeHP(EntityHandle attacker, EntityHandle executor, AliveData executorData, MyFloat value, ref int lockResult, out bool changeHpIndex) { }"
+    },
+    {
+      "key": "UnityEngine.Time.get_deltaTime",
+      "className": "Time",
+      "methodName": "get_deltaTime",
+      "expectedRva": "0x94C2760",
+      "hookMoments": [],
+      "eventTypes": [
+        "toughness-frame-clock"
+      ],
+      "rva": "0x94C2760",
+      "offset": "0x94C0F60",
+      "va": "0x1894C2760",
+      "signature": "public static float get_deltaTime() { }"
+    },
+    {
+      "key": "UnityEngine.Time.get_frameCount",
+      "className": "Time",
+      "methodName": "get_frameCount",
+      "expectedRva": "0x94C28B0",
+      "hookMoments": [],
+      "eventTypes": [
+        "toughness-frame-clock"
+      ],
+      "rva": "0x94C28B0",
+      "offset": "0x94C10B0",
+      "va": "0x1894C28B0",
+      "signature": "public static int get_frameCount() { }"
     }
   ],
   "fields": [
@@ -319,6 +685,14 @@
       "declaration": "public float mainPetSharePercent;"
     },
     {
+      "key": "AliveProperty.m_hp",
+      "className": "AliveProperty",
+      "fieldName": "m_hp",
+      "fieldType": "MyFloat",
+      "offset": "0x38",
+      "declaration": "private MyFloat m_hp;"
+    },
+    {
       "key": "AliveProperty.m_sp",
       "className": "AliveProperty",
       "fieldName": "m_sp",
@@ -333,6 +707,14 @@
       "fieldType": "MyFloat",
       "offset": "0x48",
       "declaration": "private MyFloat m_weaknessPoint;"
+    },
+    {
+      "key": "ControlProperty.m_weakState",
+      "className": "ControlProperty",
+      "fieldName": "m_weakState",
+      "fieldType": "EWeakBreakState",
+      "offset": "0x68",
+      "declaration": "private EWeakBreakState m_weakState;"
     },
     {
       "key": "BaseElement.p_sourceID",
@@ -439,12 +821,100 @@
       "declaration": "private Dictionary<int, double> m_recoverTimerMap;"
     },
     {
+      "key": "WeakBreakSystem.m_entityHandle",
+      "className": "WeakBreakSystem",
+      "fieldName": "m_entityHandle",
+      "fieldType": "EntityHandle",
+      "offset": "0x10",
+      "declaration": "private EntityHandle m_entityHandle;"
+    },
+    {
+      "key": "WeakBreakSystem.m_lastDamageTime",
+      "className": "WeakBreakSystem",
+      "fieldName": "m_lastDamageTime",
+      "fieldType": "MyFloat",
+      "offset": "0x28",
+      "declaration": "private MyFloat m_lastDamageTime;"
+    },
+    {
+      "key": "WeakBreakSystem.m_weakTime",
+      "className": "WeakBreakSystem",
+      "fieldName": "m_weakTime",
+      "fieldType": "float",
+      "offset": "0x30",
+      "declaration": "private float m_weakTime;"
+    },
+    {
+      "key": "WeakBreakSystem.m_curWeakTime",
+      "className": "WeakBreakSystem",
+      "fieldName": "m_curWeakTime",
+      "fieldType": "float",
+      "offset": "0x34",
+      "declaration": "private float m_curWeakTime;"
+    },
+    {
+      "key": "WeakBreakSystem.m_weakEndTime",
+      "className": "WeakBreakSystem",
+      "fieldName": "m_weakEndTime",
+      "fieldType": "float",
+      "offset": "0x3C",
+      "declaration": "private float m_weakEndTime;"
+    },
+    {
+      "key": "WeakBreakSystem.m_curWeakEndTime",
+      "className": "WeakBreakSystem",
+      "fieldName": "m_curWeakEndTime",
+      "fieldType": "float",
+      "offset": "0x40",
+      "declaration": "private float m_curWeakEndTime;"
+    },
+    {
+      "key": "WeakBreakSystem.m_weakState",
+      "className": "WeakBreakSystem",
+      "fieldName": "m_weakState",
+      "fieldType": "EWeakBreakState",
+      "offset": "0x60",
+      "declaration": "private EWeakBreakState m_weakState;"
+    },
+    {
       "key": "PetEntity.data",
       "className": "PetEntity",
       "fieldName": "data",
       "fieldType": "PetData",
       "offset": "0x1C0",
       "declaration": "public PetData data;"
+    },
+    {
+      "key": "FormulaUtility.OutputDamageData.outputDamage",
+      "className": "FormulaUtility.OutputDamageData",
+      "fieldName": "outputDamage",
+      "fieldType": "MyFloat",
+      "offset": "0x0",
+      "declaration": "public MyFloat outputDamage;"
+    },
+    {
+      "key": "FormulaUtility.OutputDamageData.realDamage",
+      "className": "FormulaUtility.OutputDamageData",
+      "fieldName": "realDamage",
+      "fieldType": "MyFloat",
+      "offset": "0x8",
+      "declaration": "public MyFloat realDamage;"
+    },
+    {
+      "key": "FormulaUtility.OutputDamageData.isCritical",
+      "className": "FormulaUtility.OutputDamageData",
+      "fieldName": "isCritical",
+      "fieldType": "bool",
+      "offset": "0x10",
+      "declaration": "public bool isCritical;"
+    },
+    {
+      "key": "FormulaUtility.OutputDamageData.isShield",
+      "className": "FormulaUtility.OutputDamageData",
+      "fieldName": "isShield",
+      "fieldType": "bool",
+      "offset": "0x11",
+      "declaration": "public bool isShield;"
     }
   ],
   "eventContracts": [
@@ -489,15 +959,63 @@
     {
       "key": "toughness-runtime-sequence",
       "requiredEventTypes": [
-        "toughness-damage-applied"
+        "toughness-packet-execution",
+        "toughness-weak-state-read",
+        "toughness-break-property-read",
+        "toughness-hp-output-calculated",
+        "toughness-damage-applied",
+        "toughness-weak-state-write",
+        "toughness-hp-change-dispatch",
+        "toughness-hp-applied",
+        "toughness-state-update"
       ],
       "diagnosticEventTypes": [
-        "toughness-output-calculated"
+        "toughness-real-output-calculated",
+        "toughness-output-calculated",
+        "toughness-frame-clock"
       ],
       "hookTargets": [
+        "DamageElement.Execute",
+        "FormulaUtility.GetOutputDamage",
+        "FormulaUtility.GetOutputRealDamage",
         "FormulaUtility.GetOutputWeaknessDamage",
         "FormulaUtility.WeaknessPointChange",
-        "AliveProperty.SetWeaknessPoint"
+        "FormulaUtility.ChangeHP",
+        "AliveProperty.SetWeaknessPoint",
+        "AliveProperty.SetHpByHurt",
+        "AliveProperty.GetBattlePropertyCurrentValue",
+        "AliveProperty.get_breakDmgUp",
+        "ControlProperty.get_inWeakState",
+        "ControlProperty.GetWeakState",
+        "ControlProperty.SetWeakState",
+        "WeakBreakSystem.RecoverBreakTimingByBreakData",
+        "WeakBreakSystem.OnAttributeCacheUpdate",
+        "WeakBreakSystem.OnBeforeUpdate",
+        "WeakBreakSystem.OnUpdate_LocalControlled",
+        "WeakBreakSystem.OnUpdate_RemoteControlled",
+        "WeakBreakSystem.WeaknessPointUpdate",
+        "WeakBreakSystem.Lens.Gameplay.Modules.BigWorld.IUpdate.OnUpdateDeltaTime",
+        "WeakBreakSystem.OnLateUpdate",
+        "WeakBreakSystem.UpdateWeakState",
+        "WeakBreakSystem.WeakBreaking",
+        "WeakBreakSystem.WeakBreakEnding",
+        "WeakBreakSystem.UpdateWeakBreakEnd"
+      ],
+      "orderingFields": [
+        "captureSequence",
+        "clientFrameCount",
+        "clientDeltaTimeSeconds",
+        "threadId"
+      ],
+      "settlementStateFields": [
+        "hpBefore",
+        "hpAfter",
+        "weaknessPointBefore",
+        "weaknessPointAfter",
+        "weakStateBefore",
+        "weakStateAfter",
+        "outputDamage",
+        "realDamage"
       ]
     }
   ],

@@ -1113,3 +1113,11 @@ npm run test -- --run
 - M10 与 M12 状态分栏：`reports/m10/108003` 仍诚实保持完整通用档案的 `runtime-applied / partial / runtime-ready 7/10`，继续追踪全场景原生证据；M12 `optimization-ready` 仅表示 frozen passive-boss 缩减动作面 `139/139` required 行已闭合，另 `86` 行有来源 scenario N/A。不得用 M12 签收覆盖或篡改 M10 的 full-profile 未闭事实。
 - 当前全局正式分母仍为 `9/43/62/137/12`，唯一 blocker=`13` 且全部为角色项；qualification source/roster/manifests/ledger/binding/catalog=`26db4986bce695fe/b3bb274e638433c1/f6aab7de4accdba6/3f1ee6e8e0af5ec4/6cba81d337120c35/b8810086de37175e`。M12-C/formal search 继续锁定，Kibo DNA=`[]`。
 - 迭代期只运行一次 bounded `test:full`：首轮 `1511 passed / 16 failed`，失败均由聚焦复跑收口为 `242/242`，没有重复全量；中央独立复验另有核心 `11 files/190 tests`、Workbench DOM `108/108`、十项 assert-clean 与 production build 全绿。closeout 后停住等待中央集成，不开始下一角色。
+
+## 15. M12-B3-OPT-T2 有韧敌人客户端原生结算证据（2026-08-08）
+
+- TC 客户端静态证据已闭合单包顺序：普通/真实 HP output 先读取 packet 前 `inWeakState` 与 profile 属性 221 `WP_BREAK_DMGUP`，随后调用 `WeaknessPointChange/SetWeaknessPoint`，最后调用 `ChangeHP`。因此破韧发生包使用 pre-break 倍率；倍率来自敌人权威 profile，不硬编码 2 倍；pure toughness 路径不套 HP break multiplier。
+- local-controlled WeakBreakSystem 以每次 update 的 deltaTime 推进 `m_curWeakTime/m_curWeakEndTime`，在 `>=` 边界转换，区间右开；remote-controlled 路径仅作 performance mirror。这也证明现 runtime 固定 100ms tick 与 local 路径存在已登记差异，但正式 passive boss 的权威 local/remote/network 路径尚未闭合，不能据此改成另一条猜测路径。
+- 通用 runtime 已把普通/调谐 packet 修为“pre-break 计算 HP output → 韧性/破韧状态 → HP”，并将顺序投影到 canonical/cycle/kill hash。没有 enemyId/actionId 特判；无韧目标仍完全不产生 toughness/broken 状态。
+- `runtime-capture` v3 已准备同帧单调序列与状态前后 hook。当前环境没有运行中的获准客户端进程，且工具禁止自动启动/附加/绕过反作弊，所以没有伪造 capture。
+- blocker 未解除：同帧多 DamageElement 的刚破韧状态可见性、break 结束帧 state update/hit phase、致死包后同队列尾包以及正式场景 authoritative execution path 仍为 `leavesOpen`。`cycle-dps-with-toughness` 与 `fastest-kill` 的 `formalScore` 继续为 null；M12-C/formal search 保持锁定。

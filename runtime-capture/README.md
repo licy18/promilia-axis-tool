@@ -33,6 +33,12 @@ src/data/generated/runtime-capture-hook-manifest.json
 
 manifest 同时固定 `dump.cs` 与 `GameAssembly.dll` SHA-256、RVA/VA、BaseElement 来源身份字段、RecoverSP 修正属性读取、SP/韧性前后状态和充能/削韧方法。采集端会在安装 hook 前核对进程内模块文件哈希；客户端更新后必须重新生成，不能沿用旧 RVA。
 
+可审计重算使用：
+
+```powershell
+npm run audit:runtime-capture-manifest
+```
+
 ## 受控采集端
 
 先在本地测试进程验证 Frida transport，不接触游戏：
@@ -68,6 +74,20 @@ npm run runtime-capture:capture -- `
   --slot-id team-slot-1 `
   --kibo-id 500001 `
   --duration 30 `
+  --confirm-controlled-session
+```
+
+敌人韧性原生顺序必须使用独立 `toughness` 会话，并由操作者制造可识别的破韧包、同帧后续包、结束边界包和有限 HP 致死尾包；工具本身不会自动执行战斗：
+
+```powershell
+npm run runtime-capture:capture -- `
+  --pid 12345 `
+  --output C:\path\azpr-enemy-toughness.jsonl `
+  --capture-kind toughness `
+  --action-id controlled-toughness-probe `
+  --actor-id actor-109001 `
+  --target-id enemy-300032 `
+  --duration 0 `
   --confirm-controlled-session
 ```
 
@@ -132,7 +152,9 @@ npm run runtime-capture:plan -- `
 - `RecoverSPArgs` 构造值、`OnTransmit(0x12F)`、`SPSystem.RecoverSP`。
 - `AliveProperty.SetSp` 的 `spBefore/spAfter`。
 - 可选的 `PetEntity.PetUltimateCdTime` 观测；只有同时传入 `--slot-id` 与 `--kibo-id` 时安装，并通过 `PetEntity.data -> BaseData.configId/entityId` 核对实际奇波实体后记录 `cdTime/totalTime/ready`。
-- `FormulaUtility.WeaknessPointChange` 与 `AliveProperty.SetWeaknessPoint` 的韧性前后值。
+- `DamageElement.Execute`、普通/真实/纯韧性 output、`WeaknessPointChange`、`ChangeHP`、`SetWeaknessPoint` 与 `SetHpByHurt` 的包内前后值。
+- `AliveProperty.GetBattlePropertyCurrentValue(221)` / `get_breakDmgUp` 与 `ControlProperty.get_inWeakState/GetWeakState/SetWeakState`，用于确认倍率来源和状态可见性。
+- `WeakBreakSystem` 的 local/remote update、break/recovery 状态机与 `UnityEngine.Time.frameCount/deltaTime`；每条记录带单调 `captureSequence`、`clientFrameCount`、`clientDeltaTimeSeconds` 和 `threadId`。
 
 `RecoverSPArgs.petDelta` 仍只作为 SP 分享链的来源/诊断字段，不能直接等同于奇波终极技就绪进度。奇波曲线只消费 `pet-ultimate-cooldown-observed`，并要求 `slotId / actorId / kiboId / petEntityId` 与当前项目拓扑完全一致；不提供奇波参数时，现有角色 SP/韧性采集行为不变。
 
@@ -159,7 +181,7 @@ npm run runtime-capture:plan -- `
   "captureTool": {
     "name": "controlled-il2cpp-capture",
     "version": "1.0.0",
-    "hookManifestId": "azpr-tc-20260709-three-value-runtime-capture-v2"
+    "hookManifestId": "azpr-tc-20260709-three-value-runtime-capture-v3"
   }
 }
 ```
@@ -191,7 +213,7 @@ recover-sp-applied
 recover-sp-share-rebroadcast
 ```
 
-削韧采样必须包含 `toughness-damage-applied`，并满足 `toughnessBefore - toughnessAfter = toughnessDeltaApplied`。
+削韧采样必须覆盖 `toughness-packet-execution / toughness-weak-state-read / toughness-break-property-read / toughness-hp-output-calculated / toughness-damage-applied / toughness-weak-state-write / toughness-hp-change-dispatch / toughness-hp-applied / toughness-state-update`。同帧顺序以 `captureSequence` 为唯一单调序，`clientFrameCount` 用于分帧；没有真实受控会话记录时，不能用 hook 自测或 runtime 输出关闭客户端顺序 blocker。
 
 奇波就绪采样必须包含 `pet-ultimate-cooldown-observed`，并同时记录实际 `petEntityId`、`petEntityPointer`、`kiboId`、`slotId`、`actorId`、`cdTime` 与 `totalTime`。运行时以 `totalTime - clamp(cdTime, 0, totalTime)` 作为同轴就绪展示值；这只是对已观测冷却的显示变换，不进入 calculator，也不推断未观测区间。
 

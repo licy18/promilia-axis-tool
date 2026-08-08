@@ -103,6 +103,37 @@ describe('Machine Axis enemy profile contract', () => {
     expect(higherDefense.profileHash).not.toBe(baseline.profileHash);
   });
 
+  it('accepts a zero profile break multiplier and fail-closes missing or illegal values', () => {
+    const baseline = createResolvedProfile();
+    const zeroMultiplier = createResolvedProfile({
+      breakRules: {
+        ...baseline.breakRules,
+        breakDamageUpBasisPoints: 0,
+      },
+    });
+    expect(validateMachineAxisEnemyProfile(zeroMultiplier)).toMatchObject({
+      valid: true,
+      issues: [],
+    });
+    expect(zeroMultiplier.profileHash).not.toBe(baseline.profileHash);
+
+    for (const mutate of [
+      profile => delete profile.breakRules.breakDamageUpBasisPoints,
+      profile => {
+        profile.breakRules.breakDamageUpBasisPoints = -1;
+      },
+    ]) {
+      const invalid = structuredClone(baseline);
+      mutate(invalid);
+      expect(validateMachineAxisEnemyProfile(invalid).issues).toContainEqual(
+        expect.objectContaining({
+          code: 'machine-axis-enemy-profile-attribute-required',
+          path: 'scenario.enemy.profile.breakRules.breakDamageUpBasisPoints',
+        })
+      );
+    }
+  });
+
   it('builds the strict profile from level growth and the verified break source', () => {
     const profile = createMachineAxisEnemyProfileFromCompiledEnemy({
       enemy: {

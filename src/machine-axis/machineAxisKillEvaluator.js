@@ -233,6 +233,9 @@ export function createFastestKillProof(
       toughnessDamage: Number(lethal.toughnessDamage) || 0,
       breakTriggered: lethal.breakTriggered === true,
       deathTriggered: true,
+      settlementOrder: Array.isArray(lethal.settlementOrder)
+        ? [...lethal.settlementOrder]
+        : null,
     },
     stopAfterDeath: {
       verified: postLethalSettlements.length === 0,

@@ -51,6 +51,12 @@ const DERIVED_DOT_SELF_HEAL_MECHANISM_FAMILY =
 
 const FIXED_STEP_MS = 100;
 const FRAME_RATE = 60;
+const VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER = Object.freeze([
+  'hp-output-calculated-from-pre-break-state',
+  'toughness-settled',
+  'break-state-transitioned',
+  'hp-settled',
+]);
 const ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE = Object.freeze({
   0: 51,
   1: 52,
@@ -4199,7 +4205,6 @@ function applyTuningCombatDescriptor({
         enemy.toughness,
         Math.max(0, Number(weaknessResult.deducted ?? 0))
       );
-  if (!infiniteHp) enemy.hp = roundValue(enemy.hp - hpDamage);
   if (!toughnessDisabled) {
     enemy.toughness = roundValue(enemy.toughness - toughnessDamage);
   }
@@ -4223,6 +4228,7 @@ function applyTuningCombatDescriptor({
     enemy.normalRecoveryEligibleAtMs =
       tuningEvent.timeMs + nonNegativeNumber(enemyProfile.recoveryDelayMs);
   }
+  if (!infiniteHp) enemy.hp = roundValue(enemy.hp - hpDamage);
   const stateAfter = createEnemyStateSnapshot(enemy);
   const deathTriggered =
     !infiniteHp && Number(stateBefore.hp) > 0 && Number(stateAfter.hp) <= 0;
@@ -4268,6 +4274,7 @@ function applyTuningCombatDescriptor({
         toughnessAfter: enemy.toughness,
         breakTriggered,
         deathTriggered,
+        settlementOrder: [...VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER],
         settlementCursor: createEnemySettlementCursor(descriptor),
         hpLossPercent: ratioOrZero(hpDamage, enemy.maxHp),
         toughnessLossPercent: ratioOrZero(toughnessDamage, enemy.maxToughness),
@@ -4610,7 +4617,6 @@ function applyHitDescriptor({
         enemy.toughness,
         Math.max(0, Number(weaknessResult.deducted ?? 0))
       );
-  if (!infiniteHp) enemy.hp = roundValue(enemy.hp - hpDamage);
   if (!toughnessDisabled) {
     enemy.toughness = roundValue(enemy.toughness - toughnessDamage);
   }
@@ -4634,6 +4640,7 @@ function applyHitDescriptor({
     enemy.normalRecoveryEligibleAtMs =
       descriptor.timeMs + nonNegativeNumber(enemyProfile.recoveryDelayMs);
   }
+  if (!infiniteHp) enemy.hp = roundValue(enemy.hp - hpDamage);
   const stateAfter = createEnemyStateSnapshot(enemy);
   const deathTriggered =
     !infiniteHp && Number(stateBefore.hp) > 0 && Number(stateAfter.hp) <= 0;
@@ -4723,6 +4730,7 @@ function applyHitDescriptor({
         toughnessAfter: enemy.toughness,
         breakTriggered,
         deathTriggered,
+        settlementOrder: [...VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER],
         settlementCursor: createEnemySettlementCursor(descriptor),
         hpLossPercent: ratioOrZero(hpDamage, enemy.maxHp),
         toughnessLossPercent: ratioOrZero(toughnessDamage, enemy.maxToughness),

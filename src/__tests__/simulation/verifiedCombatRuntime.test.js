@@ -2059,6 +2059,12 @@ describe('verified combat mechanics runtime', () => {
       toughnessAfter: 0,
       breakTriggered: true,
       deathTriggered: false,
+      settlementOrder: [
+        'hp-output-calculated-from-pre-break-state',
+        'toughness-settled',
+        'break-state-transitioned',
+        'hp-settled',
+      ],
       breakState: {
         triggered: true,
         inBreak: true,
@@ -2097,6 +2103,61 @@ describe('verified combat mechanics runtime', () => {
     });
     expect(hits[1].payload.settlementCursor.cursorIdentity).not.toBe(
       hits[0].payload.settlementCursor.cursorIdentity
+    );
+  });
+
+  it('reads the Break HP multiplier from each enemy profile instead of hardcoding two times', () => {
+    const runWithBreakDamageUp = breakDamageUpBasisPoints =>
+      rerunPangpangEnemySettlement({
+        durationMs: 200,
+        hitFrames: [5],
+        initialEnemy: {
+          hp: { currentValue: 8628, maxValue: 8628 },
+          toughness: { currentValue: 100, maxValue: 100 },
+          inBreak: true,
+          breakElapsedMs: 0,
+        },
+        enemyProfile: {
+          enemyId: 300032,
+          profileId: `test-break-damage-up-${breakDamageUpBasisPoints}`,
+          profileHash: `test-break-damage-up-${breakDamageUpBasisPoints}-hash`,
+          source: { identity: 'verified-runtime-regression', hash: 'test' },
+          attributes: { maxToughness: 100 },
+          breakRules: {
+            recoveryDelayMs: 0,
+            recoveryRateBasisPoints: 0,
+            breakTimeMs: 1000,
+            breakEndTimeMs: 0,
+            breakDamageUpBasisPoints,
+            weaknessDamageMaximum: 100,
+            weaknessDamageMinimum: 1,
+            typeMultipliersBasisPoints: {},
+            elementMultipliersBasisPoints: {},
+          },
+        },
+        targetPolicy: {
+          hpMode: 'infinite',
+          toughnessMode: 'enabled',
+          breakMode: 'enabled',
+          deathTruncation: 'disabled',
+        },
+      }).damageEvents.find(event => event.type === 'VERIFIED_COMBAT_HIT');
+
+    const zero = runWithBreakDamageUp(0);
+    const fiftyPercent = runWithBreakDamageUp(5000);
+    expect(zero.payload).toMatchObject({
+      inBreakForHpDamage: true,
+      hpDamageMultiplier: 1,
+    });
+    expect(fiftyPercent.payload).toMatchObject({
+      inBreakForHpDamage: true,
+      hpDamageMultiplier: 1.5,
+    });
+    expect(
+      BigInt(fiftyPercent.payload.formulaBreakdown.verifiedResult.preShieldRaw)
+    ).toBe(
+      (BigInt(zero.payload.formulaBreakdown.verifiedResult.preShieldRaw) * 3n) /
+        2n
     );
   });
 
@@ -2233,7 +2294,7 @@ describe('verified combat mechanics runtime', () => {
       hitFrames: [5, 5],
       initialEnemy: {
         hp: { currentValue: 1, maxValue: 8628 },
-        toughness: { currentValue: 6667, maxValue: 6667 },
+        toughness: { currentValue: 1, maxValue: 6667 },
       },
       enemyProfile: {
         enemyId: 300032,
@@ -2272,8 +2333,19 @@ describe('verified combat mechanics runtime', () => {
     expect(hits).toHaveLength(1);
     expect(hits[0].payload).toMatchObject({
       effectiveHpDamage: 1,
+      inBreakForHpDamage: false,
+      hpDamageMultiplier: 1,
+      toughnessBefore: 1,
+      toughnessAfter: 0,
+      breakTriggered: true,
       deathTriggered: true,
       deathState: { before: 1, after: 0, triggered: true },
+      settlementOrder: [
+        'hp-output-calculated-from-pre-break-state',
+        'toughness-settled',
+        'break-state-transitioned',
+        'hp-settled',
+      ],
     });
     expect(hits[0].payload.requestedHpDamage).toBeGreaterThan(1);
     expect(hits[0].payload.overkill).toBe(
@@ -2293,6 +2365,7 @@ describe('verified combat mechanics runtime', () => {
     expect(runtime.finalState.enemy).toMatchObject({
       hp: 0,
       toughness: hits[0].payload.toughnessAfter,
+      inBreak: true,
     });
     expect(runtime.summary.enemySettlementTruncatedCount).toBeGreaterThan(1);
   });

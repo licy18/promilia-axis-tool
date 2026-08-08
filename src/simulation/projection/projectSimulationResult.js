@@ -1539,6 +1539,9 @@ export function projectSimulationResult({
     breakTriggered: event.payload.breakTriggered === true,
     deathTriggered: event.payload.deathTriggered === true,
     deathState: event.payload.deathState ?? null,
+    ...(Array.isArray(event.payload.settlementOrder)
+      ? { settlementOrder: [...event.payload.settlementOrder] }
+      : {}),
     settlementCursor: event.payload.settlementCursor ?? null,
     formulaVersion: event.payload.formulaVersion,
     formulaBreakdown: event.payload.formulaBreakdown,

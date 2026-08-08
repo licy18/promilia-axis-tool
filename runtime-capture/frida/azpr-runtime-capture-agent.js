@@ -8,6 +8,9 @@ let methodByKey = new Map();
 let fieldOffsetByKey = new Map();
 let captureStartedAt = 0;
 let emittedEventCount = 0;
+let captureSequence = 0;
+let frameCountFunction = null;
+let deltaTimeFunction = null;
 
 rpc.exports = {
   inspectmodule(moduleName) {
@@ -48,6 +51,17 @@ rpc.exports = {
     );
     captureStartedAt = Date.now();
     emittedEventCount = 0;
+    captureSequence = 0;
+    frameCountFunction = createManifestNativeFunction(
+      'UnityEngine.Time.get_frameCount',
+      'int',
+      []
+    );
+    deltaTimeFunction = createManifestNativeFunction(
+      'UnityEngine.Time.get_deltaTime',
+      'float',
+      []
+    );
 
     if (captureKind === 'all' || captureKind === 'role-sp') {
       installRecoverSpHooks();
@@ -82,6 +96,7 @@ rpc.exports = {
     captureConfig = config;
     captureStartedAt = Date.now();
     emittedEventCount = 0;
+    captureSequence = 0;
     const kernel32 = Process.getModuleByName('kernel32.dll');
     const sleepAddress = kernel32.getExportByName('Sleep');
     listeners.push(
@@ -346,15 +361,67 @@ function installRecoverSpHooks() {
 }
 
 function installToughnessHooks() {
-  attachMethod('FormulaUtility.WeaknessPointChange', {
+  attachMethod('DamageElement.Execute', {
     onEnter(args) {
       const state = getThreadState();
       const source = readDamageElementSource(args[0]);
-      state.weaknessCalculations.push(source);
-      this.weaknessSource = source;
+      state.damagePackets.push(source);
+      this.damagePacket = source;
+      emitCaptureEvent('toughness-packet-execution', source, {
+        phase: 'entry',
+        packetDepth: state.damagePackets.length,
+      });
     },
     onLeave() {
       const state = getThreadState();
+      const source = this.damagePacket;
+      if (!source) {
+        return;
+      }
+      emitCaptureEvent('toughness-packet-execution', source, {
+        phase: 'exit',
+        packetDepth: state.damagePackets.length,
+      });
+      popExpected(state.damagePackets, source);
+      releaseThreadStateIfEmpty(state);
+    },
+  });
+
+  installOutputDamageHook(
+    'FormulaUtility.GetOutputDamage',
+    'toughness-hp-output-calculated'
+  );
+  installOutputDamageHook(
+    'FormulaUtility.GetOutputRealDamage',
+    'toughness-real-output-calculated'
+  );
+  installOutputDamageHook(
+    'FormulaUtility.GetOutputWeaknessDamage',
+    'toughness-output-calculated'
+  );
+
+  attachMethod('FormulaUtility.WeaknessPointChange', {
+    onEnter(args) {
+      const state = getThreadState();
+      const source =
+        peek(state.damagePackets) ?? readDamageElementSource(args[0]);
+      state.weaknessCalculations.push(source);
+      this.weaknessSource = source;
+      this.outputDamagePointer = args[6];
+      emitCaptureEvent('toughness-damage-applied', source, {
+        phase: 'weakness-change-entry',
+        outputDamageBefore: readMyFloatPointer(args[6]),
+      });
+    },
+    onLeave(retval) {
+      const state = getThreadState();
+      if (this.weaknessSource) {
+        emitCaptureEvent('toughness-damage-applied', this.weaknessSource, {
+          phase: 'weakness-change-exit',
+          changed: readBoolReturn(retval),
+          outputDamageAfter: readMyFloatPointer(this.outputDamagePointer),
+        });
+      }
       popExpected(state.weaknessCalculations, this.weaknessSource);
       releaseThreadStateIfEmpty(state);
     },
@@ -363,11 +430,10 @@ function installToughnessHooks() {
   attachMethod('AliveProperty.SetWeaknessPoint', {
     onEnter(args) {
       const state = getThreadState();
-      const source = peek(state.weaknessCalculations);
-      if (!source) {
-        this.toughnessApplication = null;
-        return;
-      }
+      const source =
+        peek(state.weaknessCalculations) ??
+        peek(state.damagePackets) ??
+        createUnattributedDamageSource();
       this.toughnessApplication = {
         source,
         aliveProperty: args[0],
@@ -377,8 +443,19 @@ function installToughnessHooks() {
         ),
         requestedToughnessAfter: readMyFloatArgument(args[1]),
       };
+      emitCaptureEvent('toughness-damage-applied', source, {
+        phase: 'set-weakness-point-entry',
+        targetPropertyPointer: args[0].toString(),
+        toughnessBefore: this.toughnessApplication.toughnessBefore.value,
+        toughnessBeforeRaw: this.toughnessApplication.toughnessBefore.raw,
+        requestedToughnessAfter:
+          this.toughnessApplication.requestedToughnessAfter.value,
+        requestedToughnessAfterRaw:
+          this.toughnessApplication.requestedToughnessAfter.raw,
+        force: args[2].toInt32() !== 0,
+      });
     },
-    onLeave() {
+    onLeave(retval) {
       const application = this.toughnessApplication;
       if (!application) {
         return;
@@ -388,7 +465,9 @@ function installToughnessHooks() {
         'AliveProperty.m_weaknessPoint'
       );
       emitCaptureEvent('toughness-damage-applied', application.source, {
-        targetEntityId: application.aliveProperty.toString(),
+        phase: 'set-weakness-point-exit',
+        targetPropertyPointer: application.aliveProperty.toString(),
+        changed: readBoolReturn(retval),
         toughnessBefore: application.toughnessBefore.value,
         toughnessAfter: toughnessAfter.value,
         toughnessDeltaApplied: roundNumber(
@@ -398,6 +477,284 @@ function installToughnessHooks() {
         toughnessAfterRaw: toughnessAfter.raw,
         requestedToughnessAfter: application.requestedToughnessAfter.value,
         requestedToughnessAfterRaw: application.requestedToughnessAfter.raw,
+      });
+    },
+  });
+
+  attachMethod('FormulaUtility.ChangeHP', {
+    onEnter(args) {
+      const state = getThreadState();
+      const source =
+        peek(state.damagePackets) ?? createUnattributedDamageSource();
+      const change = {
+        source,
+        requestedHpChange: readMyFloatArgument(args[3]),
+      };
+      state.hpChanges.push(change);
+      this.hpChange = change;
+      emitCaptureEvent('toughness-hp-change-dispatch', source, {
+        phase: 'entry',
+        requestedHpChange: change.requestedHpChange.value,
+        requestedHpChangeRaw: change.requestedHpChange.raw,
+      });
+    },
+    onLeave(retval) {
+      const state = getThreadState();
+      const change = this.hpChange;
+      if (!change) {
+        return;
+      }
+      emitCaptureEvent('toughness-hp-change-dispatch', change.source, {
+        phase: 'exit',
+        changed: readBoolReturn(retval),
+        requestedHpChange: change.requestedHpChange.value,
+        requestedHpChangeRaw: change.requestedHpChange.raw,
+      });
+      popExpected(state.hpChanges, change);
+      releaseThreadStateIfEmpty(state);
+    },
+  });
+
+  attachMethod('AliveProperty.SetHpByHurt', {
+    onEnter(args) {
+      const state = getThreadState();
+      const change = peek(state.hpChanges);
+      const source =
+        change?.source ??
+        peek(state.damagePackets) ??
+        createUnattributedDamageSource();
+      this.hpApplication = {
+        source,
+        aliveProperty: args[0],
+        hpBefore: readMyFloatField(args[0], 'AliveProperty.m_hp'),
+        requestedHpAfter: readMyFloatArgument(args[1]),
+      };
+      emitCaptureEvent('toughness-hp-applied', source, {
+        phase: 'set-hp-by-hurt-entry',
+        targetPropertyPointer: args[0].toString(),
+        hpBefore: this.hpApplication.hpBefore.value,
+        hpBeforeRaw: this.hpApplication.hpBefore.raw,
+        requestedHpAfter: this.hpApplication.requestedHpAfter.value,
+        requestedHpAfterRaw: this.hpApplication.requestedHpAfter.raw,
+      });
+    },
+    onLeave() {
+      const application = this.hpApplication;
+      if (!application) {
+        return;
+      }
+      const hpAfter = readMyFloatField(
+        application.aliveProperty,
+        'AliveProperty.m_hp'
+      );
+      emitCaptureEvent('toughness-hp-applied', application.source, {
+        phase: 'set-hp-by-hurt-exit',
+        targetPropertyPointer: application.aliveProperty.toString(),
+        hpBefore: application.hpBefore.value,
+        hpAfter: hpAfter.value,
+        hpDeltaApplied: roundNumber(application.hpBefore.value - hpAfter.value),
+        hpBeforeRaw: application.hpBefore.raw,
+        hpAfterRaw: hpAfter.raw,
+        requestedHpAfter: application.requestedHpAfter.value,
+        requestedHpAfterRaw: application.requestedHpAfter.raw,
+      });
+    },
+  });
+
+  installToughnessPropertyHook();
+
+  attachMethod('AliveProperty.get_breakDmgUp', {
+    onEnter(args) {
+      this.breakPropertyRead = {
+        source:
+          peek(getThreadState().damagePackets) ??
+          createUnattributedDamageSource(),
+        ownerPropertyPointer: args[0].toString(),
+      };
+    },
+    onLeave(retval) {
+      const read = this.breakPropertyRead;
+      if (!read) {
+        return;
+      }
+      const value = readMyFloatArgument(retval);
+      emitCaptureEvent('toughness-break-property-read', read.source, {
+        ownerPropertyPointer: read.ownerPropertyPointer,
+        propertyId: 221,
+        propertyName: 'WP_BREAK_DMGUP',
+        myFloatRaw: value.raw,
+        floatValue: value.value,
+      });
+    },
+  });
+
+  installWeakStateReadHook('ControlProperty.get_inWeakState', true);
+  installWeakStateReadHook('ControlProperty.GetWeakState', false);
+
+  attachMethod('ControlProperty.SetWeakState', {
+    onEnter(args) {
+      const source =
+        peek(getThreadState().damagePackets) ??
+        createUnattributedDamageSource();
+      this.weakStateWrite = {
+        source,
+        controlProperty: args[0],
+        weakStateBefore: readS32Field(args[0], 'ControlProperty.m_weakState'),
+        requestedWeakState: args[1].toInt32(),
+      };
+      emitCaptureEvent('toughness-weak-state-write', source, {
+        phase: 'entry',
+        controlPropertyPointer: args[0].toString(),
+        weakStateBefore: this.weakStateWrite.weakStateBefore,
+        requestedWeakState: this.weakStateWrite.requestedWeakState,
+      });
+    },
+    onLeave() {
+      const write = this.weakStateWrite;
+      if (!write) {
+        return;
+      }
+      emitCaptureEvent('toughness-weak-state-write', write.source, {
+        phase: 'exit',
+        controlPropertyPointer: write.controlProperty.toString(),
+        weakStateBefore: write.weakStateBefore,
+        weakStateAfter: readS32Field(
+          write.controlProperty,
+          'ControlProperty.m_weakState'
+        ),
+        requestedWeakState: write.requestedWeakState,
+      });
+    },
+  });
+
+  for (const methodName of [
+    'RecoverBreakTimingByBreakData',
+    'OnAttributeCacheUpdate',
+    'OnBeforeUpdate',
+    'OnUpdate_LocalControlled',
+    'OnUpdate_RemoteControlled',
+    'WeaknessPointUpdate',
+    'Lens.Gameplay.Modules.BigWorld.IUpdate.OnUpdateDeltaTime',
+    'OnLateUpdate',
+    'UpdateWeakState',
+    'WeakBreaking',
+    'WeakBreakEnding',
+    'UpdateWeakBreakEnd',
+  ]) {
+    installWeakBreakStateHook(methodName);
+  }
+}
+
+function installOutputDamageHook(methodKey, eventType) {
+  attachMethod(methodKey, {
+    onEnter(args) {
+      const state = getThreadState();
+      const source =
+        peek(state.damagePackets) ?? readDamageElementSource(args[1]);
+      this.outputCalculation = {
+        source,
+        outputPointer: args[0],
+      };
+      emitCaptureEvent(eventType, source, { phase: 'entry' });
+    },
+    onLeave() {
+      const calculation = this.outputCalculation;
+      if (!calculation) {
+        return;
+      }
+      emitCaptureEvent(eventType, calculation.source, {
+        phase: 'exit',
+        ...readOutputDamageData(calculation.outputPointer),
+      });
+    },
+  });
+}
+
+function installToughnessPropertyHook() {
+  attachMethod('AliveProperty.GetBattlePropertyCurrentValue', {
+    onEnter(args) {
+      const propertyId = args[1].toInt32();
+      if (propertyId !== 221) {
+        this.toughnessPropertyRead = null;
+        return;
+      }
+      this.toughnessPropertyRead = {
+        source:
+          peek(getThreadState().damagePackets) ??
+          createUnattributedDamageSource(),
+        ownerPropertyPointer: args[0].toString(),
+        propertyId,
+      };
+    },
+    onLeave(retval) {
+      const read = this.toughnessPropertyRead;
+      if (!read) {
+        return;
+      }
+      const value = readMyFloatArgument(retval);
+      emitCaptureEvent('toughness-break-property-read', read.source, {
+        ownerPropertyPointer: read.ownerPropertyPointer,
+        propertyId: read.propertyId,
+        propertyName: 'WP_BREAK_DMGUP',
+        myFloatRaw: value.raw,
+        floatValue: value.value,
+      });
+    },
+  });
+}
+
+function installWeakStateReadHook(methodKey, isBoolean) {
+  attachMethod(methodKey, {
+    onEnter(args) {
+      this.weakStateRead = {
+        source:
+          peek(getThreadState().damagePackets) ??
+          createUnattributedDamageSource(),
+        controlPropertyPointer: args[0].toString(),
+      };
+    },
+    onLeave(retval) {
+      const read = this.weakStateRead;
+      if (!read) {
+        return;
+      }
+      emitCaptureEvent('toughness-weak-state-read', read.source, {
+        methodKey,
+        controlPropertyPointer: read.controlPropertyPointer,
+        weakState: isBoolean ? null : retval.toInt32(),
+        inWeakState: isBoolean ? readBoolReturn(retval) : null,
+      });
+    },
+  });
+}
+
+function installWeakBreakStateHook(methodName) {
+  const methodKey = `WeakBreakSystem.${methodName}`;
+  attachMethod(methodKey, {
+    onEnter(args) {
+      this.weakBreakUpdate = {
+        system: args[0],
+        stateBefore: readWeakBreakSystemState(args[0]),
+      };
+      emitToughnessStateUpdate(methodKey, 'entry', {
+        stateBefore: this.weakBreakUpdate.stateBefore,
+        attributeId:
+          methodName === 'OnAttributeCacheUpdate' ? args[1].toInt32() : null,
+        updateDeltaTime:
+          methodName ===
+          'Lens.Gameplay.Modules.BigWorld.IUpdate.OnUpdateDeltaTime'
+            ? readXmmFloat(this.context, 'xmm1')
+            : null,
+      });
+    },
+    onLeave() {
+      const update = this.weakBreakUpdate;
+      if (!update) {
+        return;
+      }
+      emitToughnessStateUpdate(methodKey, 'exit', {
+        stateBefore: update.stateBefore,
+        stateAfter: readWeakBreakSystemState(update.system),
       });
     },
   });
@@ -476,6 +833,22 @@ function readDamageElementSource(damageElement) {
   };
 }
 
+function createUnattributedDamageSource() {
+  return {
+    damageElement: null,
+    damageElementPointer: null,
+    sourceElementConfigId: null,
+    sourceSkillId: null,
+    sourceElementUniqueId: null,
+    sourceId: null,
+    attackerEntityId: null,
+    executeEntityId: null,
+    sourceEntityId: null,
+    uuid: null,
+    modifierValues: {},
+  };
+}
+
 function readRecoverSpArgs(argsPointer) {
   return {
     id: readS32Field(argsPointer, 'RecoverSPArgs.id'),
@@ -521,9 +894,34 @@ function emitCaptureEvent(eventType, source, extra = {}) {
   });
 }
 
+function emitToughnessStateUpdate(methodKey, phase, extra = {}) {
+  emitRecord({
+    recordType: 'event',
+    captureSessionId: captureConfig.captureSessionId,
+    eventType: 'toughness-state-update',
+    timeMs: elapsedTimeMs(),
+    actionId: captureConfig.actionId,
+    actorId: captureConfig.actorId,
+    targetId: captureConfig.targetId,
+    methodKey,
+    phase,
+    threadId: Process.getCurrentThreadId(),
+    ...extra,
+  });
+}
+
 function emitRecord(record) {
   emittedEventCount += 1;
-  send({ channel: 'capture-event', record });
+  captureSequence += 1;
+  send({
+    channel: 'capture-event',
+    record: {
+      ...record,
+      captureSequence,
+      clientFrameCount: safeNativeCall(frameCountFunction),
+      clientDeltaTimeSeconds: roundNumber(safeNativeCall(deltaTimeFunction)),
+    },
+  });
 }
 
 function sendStatus(status, details = {}) {
@@ -539,6 +937,25 @@ function attachMethod(methodKey, callbacks) {
   listeners.push(Interceptor.attach(address, callbacks));
 }
 
+function createManifestNativeFunction(methodKey, returnType, argumentTypes) {
+  if (typeof NativeFunction !== 'function') {
+    return null;
+  }
+  const method = methodByKey.get(methodKey);
+  if (!method) {
+    throw new Error(`Hook manifest method missing: ${methodKey}`);
+  }
+  const address = captureModule.base.add(parseHex(method.rva));
+  return new NativeFunction(address, returnType, argumentTypes);
+}
+
+function safeNativeCall(nativeFunction) {
+  if (!nativeFunction) {
+    return null;
+  }
+  return safeRead(() => nativeFunction(), null);
+}
+
 function getThreadState() {
   const threadId = Process.getCurrentThreadId();
   let state = threadStates.get(threadId);
@@ -549,6 +966,8 @@ function getThreadState() {
       transmits: [],
       spRecoveries: [],
       weaknessCalculations: [],
+      damagePackets: [],
+      hpChanges: [],
     };
     threadStates.set(threadId, state);
   }
@@ -560,7 +979,9 @@ function releaseThreadStateIfEmpty(state) {
     state.damageSources.length === 0 &&
     state.transmits.length === 0 &&
     state.spRecoveries.length === 0 &&
-    state.weaknessCalculations.length === 0
+    state.weaknessCalculations.length === 0 &&
+    state.damagePackets.length === 0 &&
+    state.hpChanges.length === 0
   ) {
     threadStates.delete(state.threadId);
   }
@@ -629,6 +1050,64 @@ function readMyFloatField(objectPointer, key) {
     () => myFloatFromInt64(objectPointer.add(requireOffset(key)).readS64()),
     { raw: null, value: null }
   );
+}
+
+function readMyFloatPointer(valuePointer) {
+  return safeRead(() => myFloatFromInt64(valuePointer.readS64()), {
+    raw: null,
+    value: null,
+  });
+}
+
+function readOutputDamageData(outputPointer) {
+  const outputDamage = readMyFloatField(
+    outputPointer,
+    'FormulaUtility.OutputDamageData.outputDamage'
+  );
+  const realDamage = readMyFloatField(
+    outputPointer,
+    'FormulaUtility.OutputDamageData.realDamage'
+  );
+  return {
+    outputDamage: outputDamage.value,
+    outputDamageRaw: outputDamage.raw,
+    realDamage: realDamage.value,
+    realDamageRaw: realDamage.raw,
+    isCritical: readBoolField(
+      outputPointer,
+      'FormulaUtility.OutputDamageData.isCritical'
+    ),
+    isShield: readBoolField(
+      outputPointer,
+      'FormulaUtility.OutputDamageData.isShield'
+    ),
+  };
+}
+
+function readWeakBreakSystemState(systemPointer) {
+  return {
+    systemPointer: safeRead(() => systemPointer.toString(), null),
+    entityHandle: readU64Field(systemPointer, 'WeakBreakSystem.m_entityHandle'),
+    lastDamageTime: readMyFloatField(
+      systemPointer,
+      'WeakBreakSystem.m_lastDamageTime'
+    ),
+    weakTime: readFloatField(systemPointer, 'WeakBreakSystem.m_weakTime'),
+    currentWeakTime: readFloatField(
+      systemPointer,
+      'WeakBreakSystem.m_curWeakTime'
+    ),
+    weakEndTime: readFloatField(systemPointer, 'WeakBreakSystem.m_weakEndTime'),
+    currentWeakEndTime: readFloatField(
+      systemPointer,
+      'WeakBreakSystem.m_curWeakEndTime'
+    ),
+    weakState: readS32Field(systemPointer, 'WeakBreakSystem.m_weakState'),
+  };
+}
+
+function readBoolReturn(retval) {
+  return safeRead(() => retval.toInt32() !== 0, null);
 }
 
 function readMyFloatArgument(value) {
@@ -707,6 +1186,8 @@ function stopCapture() {
   captureModule = null;
   methodByKey = new Map();
   fieldOffsetByKey = new Map();
+  frameCountFunction = null;
+  deltaTimeFunction = null;
   return result;
 }
 

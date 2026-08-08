@@ -15,8 +15,8 @@ This batch implements and verifies objective/runtime/protocol behavior only. It 
 ## Workspace Boundary
 
 - Worktree: `C:\Codex\AzPr Axis\.worktrees\promilia-m12-optimizer-objectives`
-- Branch: `feature/m12-optimizer-primary-objectives`
-- Base: `8ced55eb0135b1edf3fd014bdaf4a2f0b03c79cf`
+- Branch: `feature/m12-optimizer-toughness-client-order`
+- Base: `140eefcd233cd9c1d136728f1c94b91aff632278`
 - Other worktrees and the main workspace are out of scope.
 
 ## Product Decisions
@@ -104,3 +104,26 @@ This batch implements and verifies objective/runtime/protocol behavior only. It 
 - Integrated scenario policy: `967b0667f315db5b`; candidate roster: `a690b860f0967e3d`.
 - Qualification hashes: source `bb14836067d2dee7`, roster `42d85964ffd402b4`, manifests `726dec2e22a3577d`, ledger `96e3367a9ab6adef`, binding `5f73e56a48591121`, catalog `b26e4d9379d9a95d`.
 - Formal admission for toughness-cycle and fastest-kill remains blocked by `machine-axis-enemy-settlement-client-order-open`; no formal optimization was run and M12-C remains locked.
+
+## OPT-T2 Client Settlement Order (2026-08-08)
+
+- Branch: `feature/m12-optimizer-toughness-client-order`; integrated base: `140eefcd233cd9c1d136728f1c94b91aff632278`.
+- Scope is limited to TC client-native toughness/break/recovery/packet-order evidence, reusable capture support, and the corresponding generic runtime/formal-readiness contract. No character-specific mechanics, Mitti work, formal optimization, M12-C work, or merge back to B3 is authorized.
+- Evidence-first rule: the current runtime ordering is a hypothesis until independently closed by GameAssembly/dump/script consumers. Runtime behavior cannot be used to prove itself.
+- Current gate remains fail closed: `m12-enemy-settlement-runtime-v1` is `formalReady=false` with `machine-axis-enemy-settlement-client-order-open`.
+- Bound client identities: GameAssembly SHA-256 `c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b`; dump.cs SHA-256 `0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a`; script.json SHA-256 `604394cf001aea1e3acee698a145392b0e808db7e0ff917ca337cf92ef876c0b`.
+- Next: extract exact class/method/enum bindings, cross-disassemble native callsites and update paths, then decide per conclusion whether static evidence closes it or a controlled runtime capture remains mandatory.
+
+### OPT-T2 Evidence Result
+
+- Static client evidence closes: breaking packet multiplier reads pre-break state; ordinary/real routes use property 221; toughness change dispatch precedes HP change; pure toughness is not HP break-multiplied; enum/state fields; local per-update/right-open state machine; remote performance-only update.
+- Generic runtime packet transaction corrected to compute HP output from pre-break state, settle toughness/break, then HP; `settlementOrder` is carried into canonical/cycle/kill hashes. Fixed 100ms recovery remains unchanged because the authoritative formal enemy local/remote/network path is still open.
+- Evidence report: `reports/m12/m12-b3-enemy-toughness-settlement-evidence-20260808.json`, reportHash `ace9c36b6b51b9c8dae60cc2edb412729c75799054f9fb069df2aeb3763bfe21`, `formalReady=false`.
+- Capture manifest v3 and agent now bind the required packet/state/time hooks and monotonic same-frame record order. No source client process was running; controlled-capture policy forbids automatic launch/attach/bypass, so no capture was fabricated.
+- Leaves open: same-frame cross-packet weak-state visibility; break-end update versus hit; lethal/tail-packet disposition; authoritative passive-boss local/remote/network path. Blocker remains `machine-axis-enemy-settlement-client-order-open`; with-toughness/kill formalScore remains null.
+- Final evidence identities: source artifact `414999ef7d73df2e3f257b55a593d957de29fa04884f1c78b33161f06e2cc512` (18,035 bytes); generated report file `d771cc427b9b4a3d4b41e4a916d91ffbb14c3d61d867dd88385ea072d878ccfd` (19,027 bytes); semantic `reportHash=ace9c36b6b51b9c8dae60cc2edb412729c75799054f9fb069df2aeb3763bfe21`.
+- Capture manifest v3: `azpr-tc-20260709-three-value-runtime-capture-v3`, 33 methods / 43 fields, file SHA-256 `3724588d3c94f620095820181ddf008f10896963d9663590d9818b92d8587ea4`.
+- PASS verification: evidence/contract/objective/capture/CLI/qualification (101 tests); kill/search/report/batch/Workbench (32 tests); full cycle (37 tests); full verified runtime (36 tests); evidence/profile tamper group (21 tests); Frida agent (6 tests); profile-driven 0/1.5x multiplier focused checks; `machine-axis:build`; production `build`; evidence and capture-manifest `--assert-clean`; scenario-policy, qualification (`m12cLocked=true`, catalog `b26e4d9379d9a95d`), production-import and Workbench-data audits; changed-file ESLint with zero errors (three pre-existing warnings); Node syntax checks; `git diff --check`.
+- `audit:verified-combat` was attempted twice under bounded 120s/180s runs and timed out without a reported assertion failure. Per the no-repeat rule it was not retried and is not claimed as a current OPT-T2 pass. Targeted runtime coverage above is green.
+- No formal optimization or source-client capture was run. M12-C remains locked, Kibo DNA remains unchanged, and the formal blocker remains intentional.
+- Next external step: a later explicitly authorized controlled client session must close every `leavesOpen` item before contract v2 / `formalReady=true`, recovery-clock changes, or formal-score release.
