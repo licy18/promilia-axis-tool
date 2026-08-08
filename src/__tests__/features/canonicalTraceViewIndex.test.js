@@ -1,4 +1,5 @@
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import integratedBaseline from '../../../reports/m11/m11-headless-integrated-baseline-20260730.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createCanonicalTraceViewIndex } from '../../features/workbench/canonicalTraceViewIndex';
@@ -17,7 +18,9 @@ describe('canonicalTraceViewIndex', () => {
     const second = createCanonicalTraceViewIndex(run);
 
     expect(second).toBe(first);
-    expect(first.traceHash).toBe('82ad2e7800608630');
+    expect(first.traceHash).toBe(
+      integratedBaseline.machineAxis.canonicalHashes.trace
+    );
     expect(first.actionViews).toHaveLength(44);
 
     const kibo = first.actionsById.get('xunlang-signature');
@@ -82,13 +85,13 @@ describe('canonicalTraceViewIndex', () => {
         sourceCriticalDamageBasisPoints: 15000,
         expectedResult: {
           probabilityBasisPoints: 500,
-          nonCriticalRaw: '524288',
-          nonCriticalValue: 8,
-          criticalRaw: '851968',
-          criticalValue: 13,
-          weightedRaw: '540672',
-          weightedValue: 8.25,
-          weightedInteger: '8',
+          nonCriticalRaw: '4718592',
+          nonCriticalValue: 72,
+          criticalRaw: '7077888',
+          criticalValue: 108,
+          weightedRaw: '4836556',
+          weightedValue: 73.79998779296875,
+          weightedInteger: '74',
           criticalEventMaterialized: false,
         },
         eventMaterialized: false,

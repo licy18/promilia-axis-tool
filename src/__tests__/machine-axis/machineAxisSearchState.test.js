@@ -37,8 +37,10 @@ describe('Machine Axis search state', () => {
       kibos: expect.any(Array),
       cooldowns: expect.any(Array),
       enemy: expect.objectContaining({
-        toughness: expect.any(Number),
-        maxToughness: 6667,
+        hp: 690.24,
+        maxHp: 690.24,
+        toughness: 213.344,
+        maxToughness: 213.344,
         defeated: false,
       }),
     });

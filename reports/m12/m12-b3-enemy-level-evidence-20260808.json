@@ -132,8 +132,8 @@
   "verification": {
     "focusedEnemyLevelAndWorkbench": "57 tests passed",
     "generatedDataContract": "10 tests passed",
-    "canonicalMachineAxisAndRoundTrip": "53 tests passed",
-    "machineAxisCycle": "33 tests passed",
+    "canonicalMachineAxisAndRoundTrip": "R0 statement superseded by R1 product recheck; corrected fixture/baseline verification passed 7 files / 64 canonical, cycle, adapter, contract, and round-trip tests",
+    "machineAxisCycle": "included in the R1 7 files / 64 tests result",
     "workbenchEnemyPanelAndView": "110 tests passed after baseline update",
     "productionBuild": "passed",
     "machineAxisCliBuild": "passed",
@@ -141,7 +141,8 @@
     "workbenchDataAudit": "clean; profile refs and fail-closed coverage included",
     "actionStatusAudit": "clean",
     "appliedSourceBindingAudit": "clean",
-    "diffCheck": "clean"
+    "diffCheck": "clean",
+    "r1MachineAxisBaselineSync": "reports/m12/m12-b3-enemy-level-r1-baseline-sync-20260808.json; exact product test passed, default-concurrency directory had 0 numeric assertion failures plus resource-contention timeouts, and each timed-out process path passed standalone"
   },
   "remainingIntegrationBoundaries": {
     "characterGoldenRebaseline": "audit:verified-combat reaches the new enemy stats but legacy authoritative character goldens still assert raw-template enemy outcomes; example owner 101003 expected HP damage 78149 but the corrected chain produces 160349. This isolated task does not rewrite character mechanics or those goldens.",

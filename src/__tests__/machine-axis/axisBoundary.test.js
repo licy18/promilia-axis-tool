@@ -402,14 +402,16 @@ describe('Machine Axis external audit boundaries', () => {
         combatHitCount: 64,
         projectedHitCount: 64,
         stateEventCount: 0,
-        inflictedToughnessDamage: 3532,
+        hpDamage: 27762.79998779297,
+        inflictedToughnessDamage: 0,
         recoveredToughness: 0,
       });
       expect(ruby).toMatchObject({
         combatHitCount: 3,
         hitCount: 3,
         stateEventCount: 0,
-        inflictedToughnessDamage: 6,
+        hpDamage: 81,
+        inflictedToughnessDamage: 0,
         recoveredToughness: 0,
       });
       expect(
@@ -642,8 +644,8 @@ describe('Machine Axis external audit boundaries', () => {
           sourceSequencePath: [index + 2],
         })),
       ]);
-      expect(actorIdSortsFirst.evaluation.totals.hpDamage).toBe(2958);
-      expect(kiboIdSortsFirst.evaluation.totals.hpDamage).toBe(2958);
+      expect(actorIdSortsFirst.evaluation.totals.hpDamage).toBe(22244);
+      expect(kiboIdSortsFirst.evaluation.totals.hpDamage).toBe(22244);
     }, 30_000);
 
     it('points unresolved condition warnings at canonical plan indices', () => {

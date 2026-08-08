@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-enemy-level-machine-axis-baseline-sync",
+  "status": "verification-complete-post-commit-package-handoff",
+  "scope": "M12-B3 enemy-level R1 fixture, baseline, reporting, and deterministic gates only",
+  "runtimeChanged": false,
+  "fixtureChanged": true,
+  "reproduction": {
+    "command": "npm test -- --run src/__tests__/machine-axis/machineAxisService.test.js -t \"runs the acceptance fixture as a real three-actor plus kibo axis\" --testTimeout=30000",
+    "resultBeforeR1": {
+      "testFilesFailed": 1,
+      "testsFailed": 1,
+      "testsSkipped": 13
+    },
+    "assertionBeforeR1": "expect(integratedBaseline.machineAxis.canonicalHashes).toEqual(run.hashes)",
+    "vitestDiffDirection": {
+      "expectedOperand": "run.hashes",
+      "receivedOperand": "integratedBaseline.machineAxis.canonicalHashes",
+      "productRecheckLabelsReversed": true
+    }
+  },
+  "hashChain": {
+    "trackedReportBeforeR1": {
+      "algorithm": "fnv1a64-utf8-v1",
+      "input": "1324c950f61232ac",
+      "data": "73456783a3dd342d",
+      "trace": "82ad2e7800608630",
+      "evaluation": "6e8efc266159901b"
+    },
+    "finiteTargetCounterexample": {
+      "algorithm": "fnv1a64-utf8-v1",
+      "input": "3cf2c705a5c85929",
+      "data": "73456783a3dd342d",
+      "trace": "3b25577991f6cf3e",
+      "evaluation": "0b59fbf00bcbb53e"
+    },
+    "finalFrozenTargetPolicy": {
+      "algorithm": "fnv1a64-utf8-v1",
+      "input": "74466fb0f55b90c9",
+      "data": "73456783a3dd342d",
+      "trace": "b6d899957b7dc240",
+      "evaluation": "6b1817db45d140ab"
+    },
+    "evidence": [
+      "createMachineAxisService().simulate fixture under Vitest",
+      "AZPR_MACHINE_AXIS_REBUILD=1 CLI simulate of the same fixture"
+    ]
+  },
+  "finiteTargetRegression": {
+    "enemyLevel": 1,
+    "realMaxHp": 690.24,
+    "firstSettledHpDamage": [225, 225, 225, 15],
+    "firstSettledHpDamageTotal": 690,
+    "evaluationHpDamage": 690,
+    "a3Expected": {
+      "preShieldRaw": "9683008",
+      "settledRaw": "0",
+      "reason": "finite target had already reached the death boundary"
+    },
+    "rejectedSync": "Changing the downstream expected critical golden to zero would turn the 120 second integration fixture into a 0.4 second death-truncated empty axis.",
+    "zeroGoldenReverted": true
+  },
+  "finalFixturePolicy": {
+    "target": {
+      "hpMode": "infinite",
+      "toughnessMode": "disabled",
+      "breakMode": "disabled",
+      "deathTruncation": "disabled"
+    },
+    "projectile": {
+      "targetDistance": 0,
+      "defaultWillHit": true
+    },
+    "enemy": {
+      "enemyId": 300032,
+      "level": 1,
+      "hpMultiplier": 1,
+      "realMaxHp": 690.24,
+      "initialHp": 690.24,
+      "finalHp": 690.24,
+      "defeated": false,
+      "hostileActionCount": 0
+    },
+    "evaluation": {
+      "durationFrames": 7200,
+      "combatHitCount": 64,
+      "hpDamage": 27762.79998779297,
+      "toughnessDamage": 0,
+      "selectedActionHpDamage": {
+        "xunlang-signature": 2166,
+        "a3-expected": 73.79998779296875,
+        "xiaoyu-charged": 115,
+        "ruby-enhanced-e1-intent": 81
+      },
+      "a3Expected": {
+        "nonCriticalRaw": "4718592",
+        "nonCriticalValue": 72,
+        "criticalRaw": "7077888",
+        "criticalValue": 108,
+        "weightedRaw": "4836556",
+        "weightedValue": 73.79998779296875,
+        "weightedInteger": "74"
+      },
+      "lastDamage": {
+        "actionId": "kibo-500001-slot-1-auto-normal-attack-28",
+        "absoluteFrame": 6890,
+        "hpDamage": 765
+      }
+    }
+  },
+  "directConsumers": [
+    {
+      "path": "fixtures/machine-axis/m11-b-three-actor-120s.json",
+      "action": "declare the frozen infinite-HP, disabled-toughness/break/death-truncation target policy"
+    },
+    {
+      "path": "reports/m11/m11-headless-integrated-baseline-20260730.json",
+      "action": "synchronize canonicalHashes to the corrected fixture run"
+    },
+    {
+      "path": "src/__tests__/machine-axis/machineAxisService.test.js",
+      "action": "retain runtime-to-report hash equality and assert target policy, real maxHp, undefeated state, four nonzero actions, and late nonzero damage"
+    },
+    {
+      "path": "src/__tests__/features/canonicalTraceViewIndex.test.js",
+      "action": "consume the integrated trace hash and synchronize the nonzero expected-critical trace golden"
+    },
+    {
+      "path": "src/__tests__/machine-axis/axisBoundary.test.js",
+      "action": "synchronize 120 second conservation and same-frame ordering goldens"
+    },
+    {
+      "path": "src/__tests__/machine-axis/machineAxisSearchState.test.js",
+      "action": "synchronize the real Lv1 enemy panel in the deterministic search state"
+    },
+    {
+      "path": "src/__tests__/machine-axis/machineAxisSearchAcceptanceBoundary.test.js",
+      "action": "synchronize multi-seed search metrics while retaining contribution conservation"
+    },
+    {
+      "path": "src/__tests__/views/Workbench.test.js",
+      "action": "synchronize the real Workbench import, inspector, edit, and undo trace hash"
+    },
+    {
+      "path": "scripts/build-m11-headless-audit-package.mjs",
+      "action": "regenerate copied baseline, smoke expected hashes, and package manifest after commit"
+    }
+  ],
+  "gateSeparation": {
+    "closedByR1": "M11 integrated Machine Axis canonical baseline and directly derived external audit package",
+    "remainingUpstream": "character verified-combat authoritative golden rebaseline; first known 101003 counterexample expects HP damage 78149 while enemy-level runtime produces 160349",
+    "excluded": [
+      "enemy-level compiler or runtime changes",
+      "末音/米蒂 character mechanics",
+      "M12-C search",
+      "main B3 merge"
+    ]
+  },
+  "verification": {
+    "exactProductRecheck": "passed: 1 test, 13 skipped",
+    "machineAxisDirectoryDefaultConcurrency": {
+      "testFiles": 13,
+      "testFilesPassed": 10,
+      "testFilesResourceTimedOut": 3,
+      "tests": 163,
+      "testsPassed": 153,
+      "testsSkippedByHookTimeout": 8,
+      "testTimeouts": 2,
+      "numericAssertionFailures": 0,
+      "resourceContention": [
+        "machineAxisSearchState beforeAll exceeded the default 10 second hook timeout; all 8 tests skipped",
+        "machineAxisCliProcess deterministic file I/O exceeded 30 seconds",
+        "machineAxisCli search envelope exceeded its explicit 120 second timeout"
+      ]
+    },
+    "processHeavyStandalone": {
+      "machineAxisSearchState": "passed: 8 tests",
+      "machineAxisCliProcess": "passed: 9 tests",
+      "machineAxisCliSearchEnvelope": "passed: 1 test, 31 skipped",
+      "multiSeedSearchDirectDependency": "passed: 1 test, 10 skipped"
+    },
+    "focusedSixFiles": "passed: 6 files, 165 tests",
+    "canonicalAndCycle": "passed: 7 files, 64 tests",
+    "workbenchMachineAxisDirectDependency": "passed: 1 test, 107 skipped",
+    "audits": {
+      "productionImports": "clean: 0 unexpected test-only, 0 unreferenced",
+      "workbenchData": "clean: enemy profiles, generated projections, and manifest match",
+      "actionStatus": "clean: 0 issues",
+      "appliedSourceBindings": "clean: 3 applied deltas, 0 drift, 0 compatible unbound"
+    },
+    "build": {
+      "production": "passed",
+      "machineAxisCli": "passed"
+    },
+    "diffCheck": "passed",
+    "externalAuditPackage": "regenerated only after the final commit because the package builder requires a clean tracked tree; final package path and manifest hash are reported in the handoff"
+  }
+}

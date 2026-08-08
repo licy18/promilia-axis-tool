@@ -41,5 +41,20 @@
 
 ## 下一步
 
-1. 等待本线程对独立提交做验收。
-2. 不合并主线，不进入 M12-C 正式搜索；角色 golden 统一重基线由上游另行安排。
+1. 完成 R1：同步 M11 integrated baseline、canonical trace view golden 与外部审计包派生哈希；不改已验收敌人等级 runtime。
+2. 重跑产品指定单测、完整 Machine Axis、6 文件/165 聚焦、canonical/cycle、四项审计、build 与 diff check。
+3. 单提交并确认工作树 clean；不合并主线，不进入 M12-C 正式搜索；角色 golden 统一重基线由上游另行安排。
+
+## R1 产品复验纠偏（2026-08-08）
+
+- 已复现指定用例 `1 failed / 13 skipped`。
+- 原断言为 `expect(integratedBaseline...).toEqual(run.hashes)`；Vitest 的 Expected 来自参数 `run.hashes`，Received 来自 `integratedBaseline`。因此复验文字中的两组身份恰好反向。
+- 第一次有限 HP 实跑为 `3cf2c705a5c85929 / 73456783a3dd342d / 3b25577991f6cf3e / 0b59fbf00bcbb53e`，但它在迅狼前四段合计 690 后死亡截断；把 A3 expected 改为 0 的未提交方案已撤回。
+- M11 fixture 已补冻结 target policy（无限 HP、禁韧性、禁击破、禁死亡截断），保持 `level=1 / hpMultiplier=1 / maxHp=690.24`、0 距离投射物和无敌方动作。
+- service 与强制重建 CLI 最终一致：`74466fb0f55b90c9 / 73456783a3dd342d / b6d899957b7dc240 / 6b1817db45d140ab`；总伤害 `27762.79998779297`，A3 expected 为 `72 / 108 / 73.79998779296875`，6890F 末段仍有 765 伤害。
+- R1 门禁改为 `expect(run.hashes).toEqual(integratedBaseline...)`，不删除 hash 断言；另断言 target policy、真实 maxHp、`defeated=false`、迅狼/A3 expected/小玉/红宝石及后段伤害均非零。
+- Machine Axis integrated baseline 属 R1 闭合范围；character verified-combat golden（101003：`78149` vs `160349`）继续保留为上游边界。
+- 最终聚焦：exact `1/1`（13 skipped）；敌人/Workbench `6 files / 165 tests`；canonical/cycle/adapter/round-trip `7 files / 64 tests`。
+- 默认并发 Machine Axis 目录：13 文件/163 项，153 passed、8 因 hook timeout skipped、2 process timeout；数值断言失败 0。单跑 search state `8/8`、CLI process `9/9`、CLI search `1/1`（31 skipped）均通过；按产品调整不再重跑整目录。
+- production imports、Workbench data、action status、applied source bindings 四审计 clean；production/CLI build 与 diff check 通过。
+- 下一步仅提交 R1，随后在 clean final commit 上生成 M11 外部审计包并停在产品复验点。
