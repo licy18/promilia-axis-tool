@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "kind": "azpr-character-combat-owner-compilation",
-  "compilerVersion": 4,
+  "compilerVersion": 5,
   "ownerId": 101003,
   "ownerName": "寒悠悠",
   "recipeIdentity": "actor:101003:character-combat-recipe:v1",
   "recipeHash": "a10390f5df3318af17f2ac469f46318402a6bed4ee3a8656e08e6d8c9dd9ff5f",
-  "compilerInputHash": "928521014a52320831a44596aa6e911fa7d2df35ca842f9c94bc696a4b58be04",
+  "compilerInputHash": "65f7da5705358e9a0c5f829b407905ecfc7979fe485ddc466c2f57b925a0f827",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": true,
   "reachableControlSkillIds": [
@@ -6783,7 +6783,7 @@
         "linked": true,
         "runtimeReady": true,
         "runtimeHitCount": 9,
-        "runtimeEffectCount": 0,
+        "runtimeEffectCount": 3,
         "runtimeResourceTransactionCount": 0,
         "selectedResourceTransactionIdentities": [],
         "selectedElementCount": 7,
@@ -6798,7 +6798,11 @@
           "10100310|0|elements|0|-9168566004252254787|62|8",
           "10100310|0|elements|0|-9168566004252254787|65|9"
         ],
-        "selectedEffectIdentities": [],
+        "selectedEffectIdentities": [
+          "runtime-effect:han-firework-explosion-controlled-attack-passive",
+          "runtime-effect:han-firework-explosion-team-tuning-stage-one",
+          "runtime-effect:han-firework-explosion-sp-stage-one"
+        ],
         "classification": "applied",
         "sourceEvidenceStatus": "applied",
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
@@ -8828,7 +8832,7 @@
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_3542946942757856816__3542946942757856816.json#attack-reopen-window-start=93F",
           "reasons": []
         },
-        "timingStatus": "unresolved",
+        "timingStatus": "applied",
         "actionScheduling": {
           "status": "exact",
           "kind": "exact-public-action-execution-form-occupancy",
@@ -16003,8 +16007,10 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "hitGate": null,
             "targetStateActivationCondition": null,
-            "hitActivation": null
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0",
@@ -16240,8 +16246,10 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "hitGate": null,
             "targetStateActivationCondition": null,
-            "hitActivation": null
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0",
@@ -17851,8 +17859,10 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "hitGate": null,
             "targetStateActivationCondition": null,
-            "hitActivation": null
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100313|0|elements|1|-1498771669867596146|223|0",
@@ -18088,8 +18098,10 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "hitGate": null,
             "targetStateActivationCondition": null,
-            "hitActivation": null
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100313|0|elements|1|-1498771669867596146|193|0",
@@ -18325,8 +18337,10 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "hitGate": null,
             "targetStateActivationCondition": null,
-            "hitActivation": null
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|207|0",
@@ -19399,7 +19413,8 @@
             "confidence": "high",
             "applied": true,
             "inheritance": null,
-            "targetStateActivationCondition": null
+            "targetStateActivationCondition": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100313|0|elements|6|-87352517346442030|element:-87352517346442030|148|0",
@@ -19681,7 +19696,8 @@
               "status": "verified-element-inheritance-ready",
               "applied": true
             },
-            "targetStateActivationCondition": null
+            "targetStateActivationCondition": null,
+            "landedHitActivationCondition": null
           }
         ],
         "effectGraph": [
@@ -20533,7 +20549,8 @@
             "confidence": "high",
             "applied": true,
             "inheritance": null,
-            "targetStateActivationCondition": null
+            "targetStateActivationCondition": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100322|0|elements|2|4373635720509741260|57|1",
@@ -20677,7 +20694,8 @@
             "confidence": "high",
             "applied": true,
             "inheritance": null,
-            "targetStateActivationCondition": null
+            "targetStateActivationCondition": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100322|0|elements|6|-1498771669867596146|57|0",
@@ -20913,8 +20931,10 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "hitGate": null,
             "targetStateActivationCondition": null,
-            "hitActivation": null
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100322|0|elements|6|-1498771669867596146|element:3879285143630828198|57|0",
@@ -26179,7 +26199,8 @@
             "confidence": "high",
             "applied": true,
             "inheritance": null,
-            "targetStateActivationCondition": null
+            "targetStateActivationCondition": null,
+            "landedHitActivationCondition": null
           }
         ],
         "effectGraph": [
@@ -29704,6 +29725,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -29850,6 +29874,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -29996,6 +30023,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30142,6 +30172,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30288,6 +30321,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30434,6 +30470,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30458,6 +30497,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30482,6 +30524,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": {
           "inheritOnControlledActorSwitch": true,
@@ -30517,6 +30562,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30541,6 +30589,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30565,6 +30616,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30864,6 +30918,7 @@
         "capacityElementId": 101003171,
         "durationMs": 10000,
         "maxStacks": 15,
+        "runtimeOwnerScope": null,
         "expiryMode": "independent-layer",
         "atCapacityPolicy": "ignore",
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15",
@@ -31242,11 +31297,13 @@
         "applied": true
       }
     ],
+    "tuningMarkConditionalDamageGroups": [],
     "runtimeEffectBindings": [
       {
         "bindingIdentity": "han-firework-explosion-controlled-attack-passive",
         "ownerId": 101003,
         "triggerKind": "conditional-hit-group-applied",
+        "runtimeOwnerScope": null,
         "conditionalGroupIdentity": "han-charged-stage-one-firework-explosion",
         "stateIdentity": null,
         "stateName": null,
@@ -31254,6 +31311,7 @@
         "controlSkillId": 10100310,
         "subSkillIndex": 0,
         "triggerFrame": 29,
+        "hitBindings": [],
         "frameRate": 60,
         "targetKind": "controlled-actor",
         "effectId": "battle-element:480124006",
@@ -31296,6 +31354,7 @@
         "bindingIdentity": "han-firework-explosion-team-tuning-stage-one",
         "ownerId": 101003,
         "triggerKind": "conditional-hit-group-applied",
+        "runtimeOwnerScope": null,
         "conditionalGroupIdentity": "han-charged-stage-one-firework-explosion",
         "stateIdentity": null,
         "stateName": null,
@@ -31303,6 +31362,7 @@
         "controlSkillId": 10100310,
         "subSkillIndex": 0,
         "triggerFrame": 29,
+        "hitBindings": [],
         "frameRate": 60,
         "targetKind": "team-actors",
         "effectId": "battle-element:101003205",
@@ -31345,6 +31405,7 @@
         "bindingIdentity": "han-firework-explosion-sp-stage-one",
         "ownerId": 101003,
         "triggerKind": "conditional-hit-group-applied",
+        "runtimeOwnerScope": null,
         "conditionalGroupIdentity": "han-charged-stage-one-firework-explosion",
         "stateIdentity": null,
         "stateName": null,
@@ -31352,6 +31413,7 @@
         "controlSkillId": 10100310,
         "subSkillIndex": 0,
         "triggerFrame": 29,
+        "hitBindings": [],
         "frameRate": 60,
         "targetKind": "source-actor",
         "effectId": "battle-element:101003125",
@@ -31381,6 +31443,7 @@
         "bindingIdentity": "han-firework-explosion-controlled-attack-passive-stage-two",
         "ownerId": 101003,
         "triggerKind": "conditional-hit-group-applied",
+        "runtimeOwnerScope": null,
         "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
         "stateIdentity": null,
         "stateName": null,
@@ -31388,6 +31451,7 @@
         "controlSkillId": 10100341,
         "subSkillIndex": 0,
         "triggerFrame": 25,
+        "hitBindings": [],
         "frameRate": 60,
         "targetKind": "controlled-actor",
         "effectId": "battle-element:480124006",
@@ -31430,6 +31494,7 @@
         "bindingIdentity": "han-firework-explosion-team-tuning-stage-two",
         "ownerId": 101003,
         "triggerKind": "conditional-hit-group-applied",
+        "runtimeOwnerScope": null,
         "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
         "stateIdentity": null,
         "stateName": null,
@@ -31437,6 +31502,7 @@
         "controlSkillId": 10100341,
         "subSkillIndex": 0,
         "triggerFrame": 25,
+        "hitBindings": [],
         "frameRate": 60,
         "targetKind": "team-actors",
         "effectId": "battle-element:101003205",
@@ -31479,6 +31545,7 @@
         "bindingIdentity": "han-firework-explosion-sp-stage-two",
         "ownerId": 101003,
         "triggerKind": "conditional-hit-group-applied",
+        "runtimeOwnerScope": null,
         "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
         "stateIdentity": null,
         "stateName": null,
@@ -31486,6 +31553,7 @@
         "controlSkillId": 10100341,
         "subSkillIndex": 0,
         "triggerFrame": 25,
+        "hitBindings": [],
         "frameRate": 60,
         "targetKind": "source-actor",
         "effectId": "battle-element:101003125",
@@ -37357,8 +37425,10 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "hitGate": null,
           "targetStateActivationCondition": null,
-          "hitActivation": null
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0",
@@ -37594,8 +37664,10 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "hitGate": null,
           "targetStateActivationCondition": null,
-          "hitActivation": null
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|61|0",
@@ -39171,8 +39243,10 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "hitGate": null,
           "targetStateActivationCondition": null,
-          "hitActivation": null
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|1|-1498771669867596146|223|0",
@@ -39408,8 +39482,10 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "hitGate": null,
           "targetStateActivationCondition": null,
-          "hitActivation": null
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|1|-1498771669867596146|193|0",
@@ -39645,8 +39721,10 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "hitGate": null,
           "targetStateActivationCondition": null,
-          "hitActivation": null
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|6|-87352517346442030|148|1",
@@ -39810,7 +39888,8 @@
             "status": "verified-element-inheritance-ready",
             "applied": true
           },
-          "targetStateActivationCondition": null
+          "targetStateActivationCondition": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|4|-5729186281790677610|148|1",
@@ -39954,7 +40033,8 @@
           "confidence": "high",
           "applied": true,
           "inheritance": null,
-          "targetStateActivationCondition": null
+          "targetStateActivationCondition": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|4|-5729186281790677610|element:-5729186281790677610|148|0",
@@ -41355,8 +41435,10 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "hitGate": null,
           "targetStateActivationCondition": null,
-          "hitActivation": null
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100322|0|elements|2|4373635720509741260|57|1",
@@ -41500,7 +41582,8 @@
           "confidence": "high",
           "applied": true,
           "inheritance": null,
-          "targetStateActivationCondition": null
+          "targetStateActivationCondition": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100322|0|elements|2|4373635720509741260|57|1",
@@ -41644,7 +41727,8 @@
           "confidence": "high",
           "applied": true,
           "inheritance": null,
-          "targetStateActivationCondition": null
+          "targetStateActivationCondition": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100322|0|elements|6|-1498771669867596146|element:3879285143630828198|57|0",
@@ -42912,7 +42996,8 @@
           "confidence": "high",
           "applied": true,
           "inheritance": null,
-          "targetStateActivationCondition": null
+          "targetStateActivationCondition": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100360|0|elements|0|-6820191037001031513|element:-6820191037001031513|0|0",
@@ -49652,7 +49737,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=101003].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003#attributeID=1;function=3;A=1000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_1011852803228526128__1011852803228526128.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2749505792865494576__2749505792865494576.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6060088285417807340__6060088285417807340.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-5652413049857383353|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6215383830795215380__-6215383830795215380.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_2700200137312345580__2700200137312345580.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6998348329063063020__6998348329063063020.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-15343624725538709|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-7141218965533365560|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/MonoBehaviour_2119769922617281174__2119769922617281174.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/skill_control_10100327__739140358862992778.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-1732209689403186369"
     }
   },
-  "contractHash": "af7fbee265fd4c88f50c8f25244025e384c58d455c22e33706dd11dbef718204",
+  "contractHash": "1bec768671e430d1e88d485ce270bf18fbf3f561f6c299a8d68c4d0e14d8fa8d",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 1,
@@ -49666,6 +49751,7 @@
     "targetStateProfileCount": 1,
     "targetStateTransactionCount": 7,
     "conditionalHitGroupCount": 2,
+    "tuningMarkConditionalDamageGroupCount": 0,
     "runtimeEffectBindingCount": 6,
     "resourceProfileCount": 0,
     "resourceTransactionCount": 0,
@@ -49674,5 +49760,5 @@
     "thresholdTransitionCount": 0,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "41a8e67bbbb810035e521f4e7ad41fc6271a7b21845b5bf51c1d7318dccbb510"
+  "recipeContractHash": "b34b9d65c2edda813a0f4df54f7073355229a859fc09e7c3010f1c84bc64ad37"
 }

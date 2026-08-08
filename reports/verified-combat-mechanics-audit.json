@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "72301ce690c866fdcff7fc8df4d375333f810ff22e372c1eecd33a963fe2b287",
+  "packageHash": "8c6b93bf19243842a212908d843689ec72328e0fa8bf8b048cbea0514049b7e0",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
@@ -1270,27 +1270,27 @@
     ]
   },
   "sourceCoverage": {
-    "candidateActionCount": 645,
-    "classifiedActionCount": 645,
-    "foundControlCount": 659,
-    "indexedElementPathCount": 2275,
-    "appliedActionBindingCount": 693,
-    "appliedHitBindingCount": 3464,
-    "uniqueControlBindingCount": 582,
-    "uniqueControlHitBindingCount": 5781,
-    "appliedEffectBindingCount": 1817,
+    "candidateActionCount": 646,
+    "classifiedActionCount": 646,
+    "foundControlCount": 680,
+    "indexedElementPathCount": 2306,
+    "appliedActionBindingCount": 695,
+    "appliedHitBindingCount": 3465,
+    "uniqueControlBindingCount": 584,
+    "uniqueControlHitBindingCount": 5769,
+    "appliedEffectBindingCount": 1786,
     "verifiedZeroEffectBindingCount": 12,
-    "unresolvedEffectBindingCount": 1331,
-    "unresolvedActionBindingCount": 13,
+    "unresolvedEffectBindingCount": 1304,
+    "unresolvedActionBindingCount": 12,
     "enemyProfileCount": 208,
     "appliedEnemyProfileCount": 204,
     "appliedHitDamageTypeCounts": {
-      "1": 1602,
-      "2": 308,
+      "1": 1584,
+      "2": 316,
       "3": 2773,
       "4": 1086,
       "7": 7,
-      "8": 5
+      "8": 3
     }
   },
   "requiredAcceptanceBindings": {
@@ -1330,20 +1330,6 @@
         "effect-trigger-frame-missing",
         "effect-target-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved"
-      ],
-      "applied": false
-    },
-    {
-      "identity": "actor|107001|10700121|0|10700121|star-carry",
-      "ownerKind": "actor",
-      "ownerId": 107001,
-      "sourceSkillId": 10700121,
-      "actionVariantIndex": 0,
-      "controlSkillId": 10700121,
-      "status": "unresolved",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
       ],
       "applied": false
     },

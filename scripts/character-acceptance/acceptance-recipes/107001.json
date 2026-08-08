@@ -5,7 +5,14 @@
     "status": "pending",
     "acceptanceCommit": null,
     "recordIdentity": null,
-    "automatedEvidence": []
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m12-b3-107001-focused-acceptance",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "reports/m11-d-character-acceptance-107001-desktop.png",
+        "screenshotSha256": "8a18a3bbd01961745f4470eed77cf9b5361a0c78a0805fae97b0d27a23f592c0"
+      }
+    ]
   },
   "ownerId": 107001,
   "fixturePath": "fixtures/character-acceptance/107001-visual.json",

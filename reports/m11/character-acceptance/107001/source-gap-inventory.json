@@ -1,0 +1,2185 @@
+{
+  "schemaVersion": 1,
+  "kind": "character-acceptance-source-gap-inventory",
+  "records": [
+    {
+      "uniqueGapIdentity": "source-gap:0275c5d42ff179bd",
+      "sourceRecordIdentities": [
+        "effect:10700103|4|bulletElements|3|element-107001133|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700103|4|bulletElements|6|element-750|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700103|4|elements|4|-5198070001380788731|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700103|4|elements|7|1474042154774785480|element:-8148787786042882084|unresolved-frame|0",
+        "semantic-gap:add96f77258196efc9e6"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700103:4:-8148787786042882084:unresolved:unresolved",
+        "effect:10700103|4|bulletElements|3|element-107001133|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700103|4|bulletElements|6|element-750|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700103|4|elements|4|-5198070001380788731|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700103|4|elements|7|1474042154774785480|element:-8148787786042882084|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "120c0e64a9a41bc4"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:04b04c7b1c7dd3b3",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|bulletElements|0|element-107001226|element:-2142712412512726298|unresolved-frame|0",
+        "effect:10700112|1|elements|24|-2142712412512726298|element:-2142712412512726298|unresolved-frame|0",
+        "semantic-gap:2cde70d356fdb91940a7"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|judgment-condition-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:-2142712412512726298:unresolved:unresolved",
+        "effect:10700112|1|bulletElements|0|element-107001226|element:-2142712412512726298|unresolved-frame|0",
+        "effect:10700112|1|elements|24|-2142712412512726298|element:-2142712412512726298|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "179d40f6efc68dc5"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:059b4c01189a9480",
+      "sourceRecordIdentities": [
+        "hit:10700110|2|projectile|107001081|107001101|0|0|control:10700110|sub:2|behavior:-211309303782043620|config:0|bullet:107001101:0:0|element:107001081:0",
+        "semantic-gap:da3ccd743003fff7f722"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700110.asset/MonoBehaviour/skill_control_10700110__-437515422288521664.json#skillResourceMaps[2].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001081",
+        "hit:10700110|2|projectile|107001081|107001101|0|0|control:10700110|sub:2|behavior:-211309303782043620|config:0|bullet:107001101:0:0|element:107001081:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "96565b98bed4acd9"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:089d75437070b05f",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|elements|14|1995917523683825037|element:-2423501056710067666|39|0",
+        "semantic-gap:b750ea7136cf9779a5cd"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:-2423501056710067666:-6643017074123380741:39",
+        "effect:10700112|1|elements|14|1995917523683825037|element:-2423501056710067666|39|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "922ee73e914bfc85"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:1272e6320efd29d5",
+      "sourceRecordIdentities": [
+        "actor:107001|control:10700126|sub:1->actor:107001|control:10700126|sub:1->-616359065503339031->missing",
+        "semantic-gap:c4239c1b83420fdeb4f5"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-static-evidence-gap|effect-trigger-frame-static-evidence-gap|switch-duration-unresolved",
+      "sourceKind": "variant-edge",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700126.asset/MonoBehaviour/skill_control_10700126__8373207642601293020.json#skillResourceMaps[1].elements[3]|battle-element-assets.jsonl#path_id=-616359065503339031|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700126.asset/MonoBehaviour/skill_control_10700126__8373207642601293020.json#skillResourceMaps[1].elements[3]",
+        "actor:107001|control:10700126|sub:1->actor:107001|control:10700126|sub:1->-616359065503339031->missing"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "f8b3bdb043a04a88"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:13722bdb0b058545",
+      "sourceRecordIdentities": [
+        "hit:10700110|0|projectile|107001081|107001101|0|0|control:10700110|sub:0|behavior:3116273160182376715|config:0|bullet:107001101:0:0|element:107001081:0",
+        "semantic-gap:f2d5fdc5a58b55643445"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700110.asset/MonoBehaviour/skill_control_10700110__-437515422288521664.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001081",
+        "hit:10700110|0|projectile|107001081|107001101|0|0|control:10700110|sub:0|behavior:3116273160182376715|config:0|bullet:107001101:0:0|element:107001081:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "ccc07c30cf8f0ad7"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:1489aa70eb007e04",
+      "sourceRecordIdentities": [
+        "effect:10700102|4|bulletElements|3|element-107001133|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700102|4|bulletElements|6|element-750|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700102|4|bulletElements|7|element-751|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700102|4|elements|4|-5198070001380788731|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700102|4|elements|7|1474042154774785480|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700102|4|elements|8|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0",
+        "semantic-gap:a14de8db0aeaaf36f8b8"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700102:4:-4529113272733101309:unresolved:unresolved",
+        "effect:10700102|4|bulletElements|3|element-107001133|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700102|4|bulletElements|6|element-750|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700102|4|bulletElements|7|element-751|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700102|4|elements|4|-5198070001380788731|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700102|4|elements|7|1474042154774785480|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700102|4|elements|8|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "3d38fcc46956966e"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:1584f1c75f438661",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|bulletElements|0|element-107001226|element:-9073445159671161877|unresolved-frame|0",
+        "effect:10700112|1|elements|24|-2142712412512726298|element:-9073445159671161877|unresolved-frame|0",
+        "semantic-gap:90e749b0bd96b94dbedc"
+      ],
+      "status": "not-applicable",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:-9073445159671161877:unresolved:unresolved",
+        "effect:10700112|1|bulletElements|0|element-107001226|element:-9073445159671161877|unresolved-frame|0",
+        "effect:10700112|1|elements|24|-2142712412512726298|element:-9073445159671161877|unresolved-frame|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "c78a79b0a7b65e79"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:16424f7d0d10239a",
+      "sourceRecordIdentities": [
+        "effect:10700113|0|elements|2|-7855064557830690379|element:-7855064557830690379|133|0",
+        "semantic-gap:0f2931897a7e64fdc8cb"
+      ],
+      "status": "not-applicable",
+      "reason": "judgment-condition-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700113:0:-7855064557830690379:-4555925827987686937:133",
+        "effect:10700113|0|elements|2|-7855064557830690379|element:-7855064557830690379|133|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "f6c33357d7aa42ff"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:16abee84f1dd325b",
+      "sourceRecordIdentities": [
+        "hit:10700102|4|projectile|107001010|107001021|0|0|control:10700102|sub:4|behavior:8100721922202346811|config:0|bullet:107001021:0:0|element:107001010:0",
+        "semantic-gap:714a6330fdc1716c15e4"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700102.asset/MonoBehaviour/skill_control_10700102__385415469474585977.json#skillResourceMaps[4].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001010",
+        "hit:10700102|4|projectile|107001010|107001021|0|0|control:10700102|sub:4|behavior:8100721922202346811|config:0|bullet:107001021:0:0|element:107001010:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "fa3dc05e729f3159"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:18af727c8e4986d5",
+      "sourceRecordIdentities": [
+        "effect:10700102|3|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700102|3|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0",
+        "semantic-gap:47fbdef988057eb3dc78"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700102:3:-1135868369539571433:unresolved:unresolved",
+        "effect:10700102|3|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700102|3|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "fad3b3e0ef4324f0"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:1bfb9da04907bd17",
+      "sourceRecordIdentities": [
+        "actor:107001|control:10700113|sub:1->actor:107001|control:10700113|sub:1->-5544448708699936395->missing",
+        "semantic-gap:47ac9f6e82b048f24b1e"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-static-evidence-gap|effect-trigger-frame-static-evidence-gap|switch-duration-unresolved",
+      "sourceKind": "variant-edge",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/skill_control_10700113__-4780504530561126012.json#skillResourceMaps[1].elements[2]|battle-element-assets.jsonl#path_id=-5544448708699936395|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/skill_control_10700113__-4780504530561126012.json#skillResourceMaps[1].elements[2]",
+        "actor:107001|control:10700113|sub:1->actor:107001|control:10700113|sub:1->-5544448708699936395->missing"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "c599c505297d1ed7"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:1c5e906119c55e3d",
+      "sourceRecordIdentities": [
+        "hit:10700102|4|projectile|107001010|107001021|0|0|control:10700102|sub:4|behavior:-2619384497358297797|config:0|bullet:107001021:0:0|element:107001010:0",
+        "semantic-gap:eaa347b62b88b56c447c"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700102.asset/MonoBehaviour/skill_control_10700102__385415469474585977.json#skillResourceMaps[4].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001010",
+        "hit:10700102|4|projectile|107001010|107001021|0|0|control:10700102|sub:4|behavior:-2619384497358297797|config:0|bullet:107001021:0:0|element:107001010:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "5323f1bdf0aea3fb"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:1d1d3689a3bde999",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|24|-8863380330050196731|element:-5182582270181453340|53|0",
+        "semantic-gap:c869f18f4df9aed24b4e"
+      ],
+      "status": "not-applicable",
+      "reason": "source-driven-transform-remove-handles-state-subtree",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-5182582270181453340:-1248620457979526792:53",
+        "effect:10700112|0|elements|24|-8863380330050196731|element:-5182582270181453340|53|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "dbf4c338b6d1fcdc"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:1e0aefdb89837041",
+      "sourceRecordIdentities": [
+        "effect:10700101|0|bulletElements|3|element-107001133|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700101|0|bulletElements|6|element-750|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700101|0|bulletElements|7|element-751|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700101|0|elements|4|-5198070001380788731|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700101|0|elements|7|1474042154774785480|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700101|0|elements|8|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0",
+        "semantic-gap:b908956c5cc276ec1c6f"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700101:0:-4529113272733101309:unresolved:unresolved",
+        "effect:10700101|0|bulletElements|3|element-107001133|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700101|0|bulletElements|6|element-750|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700101|0|bulletElements|7|element-751|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700101|0|elements|4|-5198070001380788731|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700101|0|elements|7|1474042154774785480|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700101|0|elements|8|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "fd187fde98fcab9f"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:22f1aa48503e885d",
+      "sourceRecordIdentities": [
+        "effect:10700103|4|bulletElements|1|element-107001006|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700103|4|bulletElements|3|element-107001133|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700103|4|bulletElements|4|element-107001132|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700103|4|elements|2|1072632683368959996|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700103|4|elements|4|-5198070001380788731|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700103|4|elements|5|6611606809238868009|element:1072632683368959996|unresolved-frame|0",
+        "semantic-gap:5b46cb2512c37a64a155"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700103:4:1072632683368959996:unresolved:unresolved",
+        "effect:10700103|4|bulletElements|1|element-107001006|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700103|4|bulletElements|3|element-107001133|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700103|4|bulletElements|4|element-107001132|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700103|4|elements|2|1072632683368959996|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700103|4|elements|4|-5198070001380788731|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700103|4|elements|5|6611606809238868009|element:1072632683368959996|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "08cacff6ac8bcaf8"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:231f96ea58e3f062",
+      "sourceRecordIdentities": [
+        "effect:10700101|0|bulletElements|6|element-750|element:1474042154774785480|unresolved-frame|0",
+        "effect:10700101|0|elements|7|1474042154774785480|element:1474042154774785480|unresolved-frame|0",
+        "semantic-gap:f9aa048d6d08b59d212f"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700101:0:1474042154774785480:unresolved:unresolved",
+        "effect:10700101|0|bulletElements|6|element-750|element:1474042154774785480|unresolved-frame|0",
+        "effect:10700101|0|elements|7|1474042154774785480|element:1474042154774785480|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "2474f9012fc6e6ec"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:25490b71e7e49cfe",
+      "sourceRecordIdentities": [
+        "boundary:107001:hero-rank",
+        "semantic-gap:6755f995b463af8f27e5"
+      ],
+      "status": "not-applicable",
+      "reason": "must-not-enter-runtime|unimplemented-dead-configuration",
+      "sourceKind": "configuration",
+      "sourceIdentities": [
+        "NewTable/hero_rank.json#owner=107001",
+        "boundary:107001:hero-rank"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "d5b1aef3ec2c6bc8"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:25eca9008e76a754",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|9|4078110148201200064|element:4078110148201200064|21|0",
+        "semantic-gap:e4016c2823422df83a4f"
+      ],
+      "status": "not-applicable",
+      "reason": "judgment-condition-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:4078110148201200064:-7763983529624190600:21",
+        "effect:10700112|0|elements|9|4078110148201200064|element:4078110148201200064|21|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "b9864d47f515c47f"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:29e3af5a04f6943f",
+      "sourceRecordIdentities": [
+        "scenario-oos:107001:reactive-and-air-actions",
+        "semantic-gap:5355d2a5b46e03a58eba"
+      ],
+      "status": "not-applicable",
+      "reason": "requires-dodge-jump-fall-or-boss-attack-event|scenario-out-of-scope",
+      "sourceKind": "public-action",
+      "sourceIdentities": [
+        "m12c-zero-distance-passive-boss-v1#闪击/闪避/跃击/跳跃/下落/完美闪避/格挡/招架/极限反击",
+        "scenario-oos:107001:reactive-and-air-actions"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "d82ded08cd460f1f"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:2b4948b36e1a6300",
+      "sourceRecordIdentities": [
+        "hit:10700103|2|projectile|107001186|107001103|0|0|control:10700103|sub:2|behavior:-1919578787309499194|config:0|bullet:107001103:0:0|element:107001186:0",
+        "semantic-gap:c0ed45da650fca774461"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[2].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001186",
+        "hit:10700103|2|projectile|107001186|107001103|0|0|control:10700103|sub:2|behavior:-1919578787309499194|config:0|bullet:107001103:0:0|element:107001186:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "b0d60c02d8aefb42"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:2bb357c4cc336b58",
+      "sourceRecordIdentities": [
+        "actor:107001|control:10700126|sub:1->actor:107001|control:10700126|sub:1->-616359065503339031->42",
+        "semantic-gap:97f3c9a53a2f30290f7b"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "switch-duration-unresolved|switch-wrapper-relation-unresolved",
+      "sourceKind": "variant-edge",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700126.asset/MonoBehaviour/skill_control_10700126__8373207642601293020.json#skillResourceMaps[1].elements[2]|battle-element-assets.jsonl#path_id=-616359065503339031|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700126.asset/MonoBehaviour/MonoBehaviour_-1981459538925276464__-1981459538925276464.json#startFrame|directInjectTargetType",
+        "actor:107001|control:10700126|sub:1->actor:107001|control:10700126|sub:1->-616359065503339031->42"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "d7b7349c0a9beb7d"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:2ce09fba821a1fc9",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|24|-8863380330050196731|element:1474042154774785480|53|0",
+        "semantic-gap:ebdc9a4d2c676f596560"
+      ],
+      "status": "not-applicable",
+      "reason": "source-driven-transform-remove-handles-state-subtree|tuning-mark-relation-elementDataList-unresolved|tuning-mark-relation-notDelElementDataList-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:1474042154774785480:-1248620457979526792:53",
+        "effect:10700112|0|elements|24|-8863380330050196731|element:1474042154774785480|53|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "b0b52444a929811f"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:2ebe8f2930230343",
+      "sourceRecordIdentities": [
+        "effect:10700101|0|bulletElements|3|element-107001133|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700101|0|bulletElements|6|element-750|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700101|0|elements|4|-5198070001380788731|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700101|0|elements|7|1474042154774785480|element:-8148787786042882084|unresolved-frame|0",
+        "semantic-gap:858bb18a1989847a6b56"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700101:0:-8148787786042882084:unresolved:unresolved",
+        "effect:10700101|0|bulletElements|3|element-107001133|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700101|0|bulletElements|6|element-750|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700101|0|elements|4|-5198070001380788731|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700101|0|elements|7|1474042154774785480|element:-8148787786042882084|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "0e5e2726c7f4643c"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:311076402ae18593",
+      "sourceRecordIdentities": [
+        "effect:10700102|1|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700102|1|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0",
+        "semantic-gap:085570e654c708e36ed3"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700102:1:-1135868369539571433:unresolved:unresolved",
+        "effect:10700102|1|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700102|1|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "7fc5fefd7c8911c6"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:311a1ac755eaf807",
+      "sourceRecordIdentities": [
+        "hit:10700102|3|projectile|107001186|107001103|0|0|control:10700102|sub:3|behavior:-691045404384015001|config:0|bullet:107001103:0:0|element:107001186:0",
+        "semantic-gap:f94d54d61cd0009c7e2b"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700102.asset/MonoBehaviour/skill_control_10700102__385415469474585977.json#skillResourceMaps[3].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001186",
+        "hit:10700102|3|projectile|107001186|107001103|0|0|control:10700102|sub:3|behavior:-691045404384015001|config:0|bullet:107001103:0:0|element:107001186:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "b21456313ba06b05"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:318c6f99f65f223b",
+      "sourceRecordIdentities": [
+        "effect:10700101|0|bulletElements|3|element-107001133|element:-5198070001380788731|unresolved-frame|0",
+        "effect:10700101|0|elements|4|-5198070001380788731|element:-5198070001380788731|unresolved-frame|0",
+        "semantic-gap:048700eea95e2007eacb"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700101:0:-5198070001380788731:unresolved:unresolved",
+        "effect:10700101|0|bulletElements|3|element-107001133|element:-5198070001380788731|unresolved-frame|0",
+        "effect:10700101|0|elements|4|-5198070001380788731|element:-5198070001380788731|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "200003d010935a18"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:33106efbca36801d",
+      "sourceRecordIdentities": [
+        "scenario-oos:107001:limit-counter-settlement",
+        "semantic-gap:8b54dc5d79e8c7db336d"
+      ],
+      "status": "not-applicable",
+      "reason": "requires-boss-attack-event-not-in-m12c-zero-distance-passive-boss-v1|scenario-out-of-scope",
+      "sourceKind": "public-form-settlement",
+      "sourceIdentities": [
+        "scenario-oos:107001:limit-counter-settlement",
+        "workbench-seed.gameData.skills[id=10700121].level.labels[2]|characters.items[id=107001].skillSlots[group=ground,slot=207,skillId=10700125]"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "057d2f359e2822f5"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:3875db81301e7a6f",
+      "sourceRecordIdentities": [
+        "effect:10700103|0|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700103|0|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0",
+        "semantic-gap:bc89c1cb537a8edfdd8f"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700103:0:-1135868369539571433:unresolved:unresolved",
+        "effect:10700103|0|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700103|0|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "748164b994a39ae2"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:3b45583f26c8a298",
+      "sourceRecordIdentities": [
+        "effect:10700113|0|elements|11|3003507247352445777|element:3003507247352445777|165|0",
+        "semantic-gap:ab198139829d6fd93922"
+      ],
+      "status": "not-applicable",
+      "reason": "judgment-condition-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700113:0:3003507247352445777:783726078271830503:165",
+        "effect:10700113|0|elements|11|3003507247352445777|element:3003507247352445777|165|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "36111bb667c486dd"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:3b76f680c491233b",
+      "sourceRecordIdentities": [
+        "effect:10700103|4|bulletElements|3|element-107001133|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700103|4|bulletElements|6|element-750|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700103|4|bulletElements|7|element-751|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700103|4|elements|4|-5198070001380788731|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700103|4|elements|7|1474042154774785480|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700103|4|elements|8|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0",
+        "semantic-gap:0d87b1a6fa5e4c7867ea"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700103:4:-4529113272733101309:unresolved:unresolved",
+        "effect:10700103|4|bulletElements|3|element-107001133|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700103|4|bulletElements|6|element-750|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700103|4|bulletElements|7|element-751|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700103|4|elements|4|-5198070001380788731|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700103|4|elements|7|1474042154774785480|element:-4529113272733101309|unresolved-frame|0",
+        "effect:10700103|4|elements|8|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "0f5a7da4fcc7ee2f"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:3b7a38744b288e02",
+      "sourceRecordIdentities": [
+        "actor|107001|10700121|2|10700125|limit-counter",
+        "semantic-gap:ab94fc07acc8c788bce4"
+      ],
+      "status": "not-applicable",
+      "reason": "requires-boss-attack-event-not-in-m12c-zero-distance-passive-boss-v1|scenario-out-of-scope",
+      "sourceKind": "public-action",
+      "sourceIdentities": [
+        "actor|107001|10700121|2|10700125|limit-counter",
+        "workbench-seed.gameData.skills[id=10700121].level.labels[2]|characters.items[id=107001].skillSlots[group=ground,slot=207,skillId=10700125]"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "f00d3cf46f88fa60"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:3f1a945166a60cad",
+      "sourceRecordIdentities": [
+        "effect:10700113|0|elements|7|-5152427323170057484|element:5117571904979150824|141|1",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:5117571904979150824|147|0",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:5117571904979150824|153|2",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:5117571904979150824|159|3",
+        "semantic-gap:7d05256c3e0309192830"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700113:0:5117571904979150824:-2248959654152554009:147",
+        "battle-effect:10700113:0:5117571904979150824:-9143097396400342553:141",
+        "battle-effect:10700113:0:5117571904979150824:3919660554678516199:153",
+        "battle-effect:10700113:0:5117571904979150824:5883055386576304615:159",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:5117571904979150824|141|1",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:5117571904979150824|147|0",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:5117571904979150824|153|2",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:5117571904979150824|159|3"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "5f9befdf7c2e25e8"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:3f533f91dcfeda02",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|elements|19|-2200267759796411514|element:-4409116417649181207|57|0",
+        "semantic-gap:3337a2a8a3f6a243896c"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:-4409116417649181207:5614586991715444731:57",
+        "effect:10700112|1|elements|19|-2200267759796411514|element:-4409116417649181207|57|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "d105f4f68aaea41c"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:40e97e08d70ea413",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|24|-8863380330050196731|element:1072632683368959996|53|0",
+        "semantic-gap:a30cf9d7f9a31f87c956"
+      ],
+      "status": "not-applicable",
+      "reason": "source-driven-transform-remove-handles-state-subtree",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:1072632683368959996:-1248620457979526792:53",
+        "effect:10700112|0|elements|24|-8863380330050196731|element:1072632683368959996|53|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "d8a94478501afed3"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:41203011723324fe",
+      "sourceRecordIdentities": [
+        "hit:10700103|3|projectile|107001186|107001103|0|0|control:10700103|sub:3|behavior:1686867761537638572|config:0|bullet:107001103:0:0|element:107001186:0",
+        "semantic-gap:1390e6b21924cfd184d7"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[3].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001186",
+        "hit:10700103|3|projectile|107001186|107001103|0|0|control:10700103|sub:3|behavior:1686867761537638572|config:0|bullet:107001103:0:0|element:107001186:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "210066caa1372ef8"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:418e7a6a23d08613",
+      "sourceRecordIdentities": [
+        "hit:10700110|1|projectile|107001081|107001101|0|0|control:10700110|sub:1|behavior:-2106420387944746814|config:0|bullet:107001101:0:0|element:107001081:0",
+        "semantic-gap:25b836f9959ea5ff3600"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700110.asset/MonoBehaviour/skill_control_10700110__-437515422288521664.json#skillResourceMaps[1].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001081",
+        "hit:10700110|1|projectile|107001081|107001101|0|0|control:10700110|sub:1|behavior:-2106420387944746814|config:0|bullet:107001101:0:0|element:107001081:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "d7772a476e63d1b1"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:41e8cb0e3ec18023",
+      "sourceRecordIdentities": [
+        "effect:10700113|0|elements|2|-7855064557830690379|element:-5352121430423226062|133|0",
+        "semantic-gap:0a37807ad4239944ff5c"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700113:0:-5352121430423226062:-4555925827987686937:133",
+        "effect:10700113|0|elements|2|-7855064557830690379|element:-5352121430423226062|133|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "3f31de7a060a1ec5"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:439530f7062c99be",
+      "sourceRecordIdentities": [
+        "effect:10700102|0|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700102|0|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0",
+        "semantic-gap:65d5121368d201651a11"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700102:0:-1135868369539571433:unresolved:unresolved",
+        "effect:10700102|0|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700102|0|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "09098572790fb172"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:44fb1c12fc839f54",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|19|-2200267759796411514|element:-4409116417649181207|57|0",
+        "semantic-gap:44f4f2a7b07fa5c68878"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-4409116417649181207:-7581912755014385288:57",
+        "effect:10700112|0|elements|19|-2200267759796411514|element:-4409116417649181207|57|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "60ae9f3eabde15a8"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:468eb60aea2e5593",
+      "sourceRecordIdentities": [
+        "hit:10700110|4|projectile|107001081|107001101|0|0|control:10700110|sub:4|behavior:-8044036480902821585|config:0|bullet:107001101:0:0|element:107001081:0",
+        "semantic-gap:0bec41910e1578b008f3"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700110.asset/MonoBehaviour/skill_control_10700110__-437515422288521664.json#skillResourceMaps[4].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001081",
+        "hit:10700110|4|projectile|107001081|107001101|0|0|control:10700110|sub:4|behavior:-8044036480902821585|config:0|bullet:107001101:0:0|element:107001081:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "9fd6f5ec7d2ce92d"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:49defa977101b321",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|24|-8863380330050196731|element:-5198070001380788731|53|0",
+        "semantic-gap:98fe5fc9b41116530cf6"
+      ],
+      "status": "not-applicable",
+      "reason": "source-driven-transform-remove-handles-state-subtree",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-5198070001380788731:-1248620457979526792:53",
+        "effect:10700112|0|elements|24|-8863380330050196731|element:-5198070001380788731|53|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "ada3b64f78710307"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:5482586768096e31",
+      "sourceRecordIdentities": [
+        "effect:10700103|4|bulletElements|3|element-107001133|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700103|4|bulletElements|5|element-107001262|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700103|4|elements|4|-5198070001380788731|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700103|4|elements|6|-5182582270181453340|element:-5182582270181453340|unresolved-frame|0",
+        "semantic-gap:642665457bbff3a3ec35"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700103:4:-5182582270181453340:unresolved:unresolved",
+        "effect:10700103|4|bulletElements|3|element-107001133|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700103|4|bulletElements|5|element-107001262|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700103|4|elements|4|-5198070001380788731|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700103|4|elements|6|-5182582270181453340|element:-5182582270181453340|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "cff60278aa31d3d6"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:55ca65a9b294b94e",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|2|8220943896709730867|element:-8101034328248568528|10|0",
+        "semantic-gap:4765703137ed31beb173"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-8101034328248568528:588802666480550264:10",
+        "effect:10700112|0|elements|2|8220943896709730867|element:-8101034328248568528|10|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "d5fcb89ffd2b50c1"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:5620886197b3aa60",
+      "sourceRecordIdentities": [
+        "hit:10700110|4|projectile|107001081|107001101|0|0|control:10700110|sub:4|behavior:257549806221134127|config:0|bullet:107001101:0:0|element:107001081:0",
+        "semantic-gap:a3c8e2c7fd96878f3e85"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700110.asset/MonoBehaviour/skill_control_10700110__-437515422288521664.json#skillResourceMaps[4].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001081",
+        "hit:10700110|4|projectile|107001081|107001101|0|0|control:10700110|sub:4|behavior:257549806221134127|config:0|bullet:107001101:0:0|element:107001081:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "64ade7025a1221a4"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:563aab5b5a69aad0",
+      "sourceRecordIdentities": [
+        "effect:10700161|1|elements|2|-8020941046441479936|element:1072632683368959996|0|0",
+        "semantic-gap:d6048b825b81c3a47727"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700161:1:1072632683368959996:6770108958829398156:0",
+        "effect:10700161|1|elements|2|-8020941046441479936|element:1072632683368959996|0|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "9f4f87f2b83bd8f1"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:577b7c7124b7f6a0",
+      "sourceRecordIdentities": [
+        "effect:10700102|2|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700102|2|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0",
+        "semantic-gap:c4b3902824a0ca6acb01"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700102:2:-1135868369539571433:unresolved:unresolved",
+        "effect:10700102|2|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700102|2|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "9205394c95be6152"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:58a5df7c6aedf953",
+      "sourceRecordIdentities": [
+        "actor|107001|10700121|4|10700127|perfect-parry",
+        "semantic-gap:34a8558c24bf833384e4"
+      ],
+      "status": "not-applicable",
+      "reason": "requires-perfect-dodge-or-parry-boss-attack-event-not-in-m12c-zero-distance-passive-boss-v1|scenario-out-of-scope",
+      "sourceKind": "public-action",
+      "sourceIdentities": [
+        "actor|107001|10700121|4|10700127|perfect-parry",
+        "workbench-seed.gameData.skills[id=10700121].level.labels[4]|characters.items[id=107001].skillSlots[group=ground,slot=209,skillId=10700127]"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "1e3416709f092d0f"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:5c4e3525b5d81210",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|elements|2|8220943896709730867|element:-587321900480828770|10|0",
+        "semantic-gap:5cb3416f3efea1c44ba7"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:-587321900480828770:6770209787263084539:10",
+        "effect:10700112|1|elements|2|8220943896709730867|element:-587321900480828770|10|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "843951a6b8bf7a40"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:5ef04e1f51ecfce8",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|elements|2|8220943896709730867|element:-8101034328248568528|10|0",
+        "semantic-gap:0958334ad2e420d49303"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:-8101034328248568528:6770209787263084539:10",
+        "effect:10700112|1|elements|2|8220943896709730867|element:-8101034328248568528|10|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "9965e432c3cfa937"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:5fa4c39933dee26b",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|bulletElements|0|element-107001226|element:-7558519163926512592|unresolved-frame|0",
+        "effect:10700112|1|elements|24|-2142712412512726298|element:-7558519163926512592|unresolved-frame|0",
+        "semantic-gap:d46f64899e1395ed415f"
+      ],
+      "status": "not-applicable",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:-7558519163926512592:unresolved:unresolved",
+        "effect:10700112|1|bulletElements|0|element-107001226|element:-7558519163926512592|unresolved-frame|0",
+        "effect:10700112|1|elements|24|-2142712412512726298|element:-7558519163926512592|unresolved-frame|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "3cd74a16d15e22c3"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:608f93216960f1ff",
+      "sourceRecordIdentities": [
+        "hit:10700110|3|projectile|107001081|107001101|0|0|control:10700110|sub:3|behavior:4301787949619968804|config:0|bullet:107001101:0:0|element:107001081:0",
+        "semantic-gap:8b4a387543c6c1eccba0"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700110.asset/MonoBehaviour/skill_control_10700110__-437515422288521664.json#skillResourceMaps[3].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001081",
+        "hit:10700110|3|projectile|107001081|107001101|0|0|control:10700110|sub:3|behavior:4301787949619968804|config:0|bullet:107001101:0:0|element:107001081:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "03f45eefb9f024d2"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:61d06f4e77f999a9",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|14|1995917523683825037|element:4058453678556661524|39|0",
+        "semantic-gap:60ff014c78e5a87893bb"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:4058453678556661524:120948271976759672:39",
+        "effect:10700112|0|elements|14|1995917523683825037|element:4058453678556661524|39|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "78cbe935b2f7b8a2"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:65de3407f0a5a26f",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|9|4078110148201200064|element:-3773510057542381906|21|0",
+        "semantic-gap:7d7966f9bdfe3e98f91f"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-3773510057542381906:-7763983529624190600:21",
+        "effect:10700112|0|elements|9|4078110148201200064|element:-3773510057542381906|21|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "d8728ef4862e4b75"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:6818569d5d06117a",
+      "sourceRecordIdentities": [
+        "hit:10700110|3|projectile|107001081|107001101|0|0|control:10700110|sub:3|behavior:-3223266755001681116|config:0|bullet:107001101:0:0|element:107001081:0",
+        "semantic-gap:fb322c1993900a9c0012"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700110.asset/MonoBehaviour/skill_control_10700110__-437515422288521664.json#skillResourceMaps[3].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001081",
+        "hit:10700110|3|projectile|107001081|107001101|0|0|control:10700110|sub:3|behavior:-3223266755001681116|config:0|bullet:107001101:0:0|element:107001081:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "62c77315b135a4c8"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:6ba4eed9d804e754",
+      "sourceRecordIdentities": [
+        "effect:10700103|4|bulletElements|3|element-107001133|element:1474042154774785480|unresolved-frame|0",
+        "effect:10700103|4|elements|4|-5198070001380788731|element:1474042154774785480|unresolved-frame|0",
+        "semantic-gap:53392b59503b3a679897"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing|tuning-mark-relation-notDelElementDataList-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700103:4:1474042154774785480:unresolved:unresolved",
+        "effect:10700103|4|bulletElements|3|element-107001133|element:1474042154774785480|unresolved-frame|0",
+        "effect:10700103|4|elements|4|-5198070001380788731|element:1474042154774785480|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "65175122e4b08468"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:71fc4367df867b95",
+      "sourceRecordIdentities": [
+        "effect:10700113|0|elements|11|3003507247352445777|element:-6825078686157369403|165|0",
+        "semantic-gap:d63394a83bc1ce83f3fa"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700113:0:-6825078686157369403:783726078271830503:165",
+        "effect:10700113|0|elements|11|3003507247352445777|element:-6825078686157369403|165|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "388db497ba97b4bf"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:7452d3a0eaccccfc",
+      "sourceRecordIdentities": [
+        "hit:10700102|0|projectile|107001186|107001103|0|0|control:10700102|sub:0|behavior:-7032389547728579854|config:0|bullet:107001103:0:0|element:107001186:0",
+        "semantic-gap:12d799c5848d429e72c0"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700102.asset/MonoBehaviour/skill_control_10700102__385415469474585977.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001186",
+        "hit:10700102|0|projectile|107001186|107001103|0|0|control:10700102|sub:0|behavior:-7032389547728579854|config:0|bullet:107001103:0:0|element:107001186:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "bc86f98de58f6f88"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:754aa0f3e97e5a86",
+      "sourceRecordIdentities": [
+        "effect:10700113|0|elements|7|-5152427323170057484|element:-5152427323170057484|141|1",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:-5152427323170057484|147|0",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:-5152427323170057484|153|2",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:-5152427323170057484|159|3",
+        "semantic-gap:5c02663f53e7c724efeb"
+      ],
+      "status": "not-applicable",
+      "reason": "judgment-condition-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700113:0:-5152427323170057484:-2248959654152554009:147",
+        "battle-effect:10700113:0:-5152427323170057484:-9143097396400342553:141",
+        "battle-effect:10700113:0:-5152427323170057484:3919660554678516199:153",
+        "battle-effect:10700113:0:-5152427323170057484:5883055386576304615:159",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:-5152427323170057484|141|1",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:-5152427323170057484|147|0",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:-5152427323170057484|153|2",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:-5152427323170057484|159|3"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "a8d15b088f79ce2f"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:819b9b871c92d897",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|elements|2|8220943896709730867|element:8220943896709730867|10|0",
+        "semantic-gap:4c2a2caf5829cba0f79d"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "judgment-condition-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:8220943896709730867:6770209787263084539:10",
+        "effect:10700112|1|elements|2|8220943896709730867|element:8220943896709730867|10|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "ba4e4bd9ae29e1fc"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:8785c5ab7201b968",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|elements|14|1995917523683825037|element:1995917523683825037|39|0",
+        "semantic-gap:a583e2e1bf6256a37b50"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "judgment-condition-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:1995917523683825037:-6643017074123380741:39",
+        "effect:10700112|1|elements|14|1995917523683825037|element:1995917523683825037|39|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "934457ba1767b6f3"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:896f2750611f85bb",
+      "sourceRecordIdentities": [
+        "effect:10700101|0|bulletElements|1|element-107001006|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700101|0|bulletElements|3|element-107001133|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700101|0|bulletElements|4|element-107001132|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700101|0|elements|2|1072632683368959996|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700101|0|elements|4|-5198070001380788731|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700101|0|elements|5|6611606809238868009|element:1072632683368959996|unresolved-frame|0",
+        "semantic-gap:16528e6fae56700b9b5a"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700101:0:1072632683368959996:unresolved:unresolved",
+        "effect:10700101|0|bulletElements|1|element-107001006|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700101|0|bulletElements|3|element-107001133|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700101|0|bulletElements|4|element-107001132|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700101|0|elements|2|1072632683368959996|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700101|0|elements|4|-5198070001380788731|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700101|0|elements|5|6611606809238868009|element:1072632683368959996|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "78963ebe227008fd"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:8b9f4c10009602a9",
+      "sourceRecordIdentities": [
+        "boundary:107001:passive-10700162",
+        "semantic-gap:16f1ab8ad986ce03b7bb"
+      ],
+      "status": "not-applicable",
+      "reason": "no-runtime-description-or-applied-effect|unnamed-secondary-passive-boundary",
+      "sourceKind": "passive",
+      "sourceIdentities": [
+        "boundary:107001:passive-10700162",
+        "hero-module:107001#skill:10700162"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "b0e993d6fbb90331"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:8d18f2f37161c72a",
+      "sourceRecordIdentities": [
+        "scenario-oos:107001:perfect-parry-settlement",
+        "semantic-gap:952809f53366a1bf74ac"
+      ],
+      "status": "not-applicable",
+      "reason": "requires-perfect-dodge-or-parry-boss-attack-event-not-in-m12c-zero-distance-passive-boss-v1|scenario-out-of-scope",
+      "sourceKind": "public-form-settlement",
+      "sourceIdentities": [
+        "scenario-oos:107001:perfect-parry-settlement",
+        "workbench-seed.gameData.skills[id=10700121].level.labels[4]|characters.items[id=107001].skillSlots[group=ground,slot=209,skillId=10700127]"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "e7cfda65c4046af7"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:8d2f291f5de7574a",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|2|8220943896709730867|element:-587321900480828770|10|0",
+        "semantic-gap:680dacba4de5303e3dbd"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-587321900480828770:588802666480550264:10",
+        "effect:10700112|0|elements|2|8220943896709730867|element:-587321900480828770|10|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "36c4ce353ebf7de7"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:8d4aee42a3a92137",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|bulletElements|0|element-107001226|element:-2142712412512726298|unresolved-frame|0",
+        "effect:10700112|0|elements|29|-2142712412512726298|element:-2142712412512726298|unresolved-frame|0",
+        "semantic-gap:df3fe2777fb3fc1860c9"
+      ],
+      "status": "not-applicable",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|judgment-condition-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-2142712412512726298:unresolved:unresolved",
+        "effect:10700112|0|bulletElements|0|element-107001226|element:-2142712412512726298|unresolved-frame|0",
+        "effect:10700112|0|elements|29|-2142712412512726298|element:-2142712412512726298|unresolved-frame|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "caa7e295451b23fc"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:8f3d8cfff3753b3e",
+      "sourceRecordIdentities": [
+        "effect:10700101|0|bulletElements|3|element-107001133|element:1474042154774785480|unresolved-frame|0",
+        "effect:10700101|0|elements|4|-5198070001380788731|element:1474042154774785480|unresolved-frame|0",
+        "semantic-gap:3cb27d5460fdfc45bf80"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing|tuning-mark-relation-notDelElementDataList-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700101:0:1474042154774785480:unresolved:unresolved",
+        "effect:10700101|0|bulletElements|3|element-107001133|element:1474042154774785480|unresolved-frame|0",
+        "effect:10700101|0|elements|4|-5198070001380788731|element:1474042154774785480|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "6e8da9820fe80e9d"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:9687d6d5220771c4",
+      "sourceRecordIdentities": [
+        "hit:10700103|1|projectile|107001186|107001103|0|0|control:10700103|sub:1|behavior:-8878305569444811787|config:0|bullet:107001103:0:0|element:107001186:0",
+        "semantic-gap:d1639baf63003f2dda6d"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[1].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001186",
+        "hit:10700103|1|projectile|107001186|107001103|0|0|control:10700103|sub:1|behavior:-8878305569444811787|config:0|bullet:107001103:0:0|element:107001186:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "e7bac05749a8efad"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:97b55c2ed3c8e8f7",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|elements|19|-2200267759796411514|element:-2200267759796411514|57|0",
+        "semantic-gap:3cd5215aa2944af5055e"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "judgment-condition-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:-2200267759796411514:5614586991715444731:57",
+        "effect:10700112|1|elements|19|-2200267759796411514|element:-2200267759796411514|57|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "f559989e1b4a8241"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:9aa9520c1df36611",
+      "sourceRecordIdentities": [
+        "effect:10700113|0|elements|7|-5152427323170057484|element:1055236929421022303|141|1",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:1055236929421022303|147|0",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:1055236929421022303|153|2",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:1055236929421022303|159|3",
+        "semantic-gap:c5b4883982834c20c088"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700113:0:1055236929421022303:-2248959654152554009:147",
+        "battle-effect:10700113:0:1055236929421022303:-9143097396400342553:141",
+        "battle-effect:10700113:0:1055236929421022303:3919660554678516199:153",
+        "battle-effect:10700113:0:1055236929421022303:5883055386576304615:159",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:1055236929421022303|141|1",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:1055236929421022303|147|0",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:1055236929421022303|153|2",
+        "effect:10700113|0|elements|7|-5152427323170057484|element:1055236929421022303|159|3"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "7f341a8fa5560433"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:9b1814c136ea02df",
+      "sourceRecordIdentities": [
+        "actor:107001|control:10700113|sub:1->actor:107001|control:10700113|sub:1->-5544448708699936395->134",
+        "semantic-gap:fa6f4752aff3377278e5"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "switch-duration-unresolved|switch-wrapper-relation-unresolved",
+      "sourceKind": "variant-edge",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/skill_control_10700113__-4780504530561126012.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-5544448708699936395|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/MonoBehaviour_5899181173306753358__5899181173306753358.json#startFrame|directInjectTargetType",
+        "actor:107001|control:10700113|sub:1->actor:107001|control:10700113|sub:1->-5544448708699936395->134"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "4b9538ea4655f4f2"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:9dc313f95e9dd8d4",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|19|-2200267759796411514|element:2582654716839686672|57|0",
+        "semantic-gap:ee1d61c76bf5ccd1de99"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:2582654716839686672:-7581912755014385288:57",
+        "effect:10700112|0|elements|19|-2200267759796411514|element:2582654716839686672|57|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "349ad23dfee257c1"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:9de1566d07f828c7",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|19|-2200267759796411514|element:-2200267759796411514|57|0",
+        "semantic-gap:23178dfa9cf3f2e44e82"
+      ],
+      "status": "not-applicable",
+      "reason": "judgment-condition-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-2200267759796411514:-7581912755014385288:57",
+        "effect:10700112|0|elements|19|-2200267759796411514|element:-2200267759796411514|57|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "8f2f6f24dd59be62"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a09e16f82facbf69",
+      "sourceRecordIdentities": [
+        "effect:10700103|2|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700103|2|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0",
+        "semantic-gap:93bc11b56649b4bd351d"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700103:2:-1135868369539571433:unresolved:unresolved",
+        "effect:10700103|2|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700103|2|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "84042dfce76bfa24"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a3516883cf6f1e81",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|elements|14|1995917523683825037|element:4058453678556661524|39|0",
+        "semantic-gap:812900628e493d3df1d2"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:4058453678556661524:-6643017074123380741:39",
+        "effect:10700112|1|elements|14|1995917523683825037|element:4058453678556661524|39|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "a175d3c9479510e3"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a7993940f15a3b21",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|bulletElements|0|element-107001226|element:-7558519163926512592|unresolved-frame|0",
+        "effect:10700112|0|elements|29|-2142712412512726298|element:-7558519163926512592|unresolved-frame|0",
+        "semantic-gap:e9be90d923a3c24b704c"
+      ],
+      "status": "not-applicable",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-7558519163926512592:unresolved:unresolved",
+        "effect:10700112|0|bulletElements|0|element-107001226|element:-7558519163926512592|unresolved-frame|0",
+        "effect:10700112|0|elements|29|-2142712412512726298|element:-7558519163926512592|unresolved-frame|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "c1fb360e965ca1c0"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a7b37ec9227f3f19",
+      "sourceRecordIdentities": [
+        "effect:10700103|4|bulletElements|3|element-107001133|element:-5198070001380788731|unresolved-frame|0",
+        "effect:10700103|4|elements|4|-5198070001380788731|element:-5198070001380788731|unresolved-frame|0",
+        "semantic-gap:8acde41d0891307d7f7d"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700103:4:-5198070001380788731:unresolved:unresolved",
+        "effect:10700103|4|bulletElements|3|element-107001133|element:-5198070001380788731|unresolved-frame|0",
+        "effect:10700103|4|elements|4|-5198070001380788731|element:-5198070001380788731|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "ce0093e493a8b4a5"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:ad9d64daee52ba73",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|bulletElements|0|element-107001226|element:-9073445159671161877|unresolved-frame|0",
+        "effect:10700112|0|elements|29|-2142712412512726298|element:-9073445159671161877|unresolved-frame|0",
+        "semantic-gap:d6953fecea6b265636a9"
+      ],
+      "status": "not-applicable",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-9073445159671161877:unresolved:unresolved",
+        "effect:10700112|0|bulletElements|0|element-107001226|element:-9073445159671161877|unresolved-frame|0",
+        "effect:10700112|0|elements|29|-2142712412512726298|element:-9073445159671161877|unresolved-frame|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "c2bdc0944f22e5e0"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:ae58d2e4d099a2ad",
+      "sourceRecordIdentities": [
+        "hit:10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0",
+        "semantic-gap:467825e460957dec27a6"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/skill_control_10700101__636759246568854573.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001001",
+        "hit:10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "9728137a50f59823"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:ae80c42d652f73b3",
+      "sourceRecordIdentities": [
+        "effect:10700113|0|elements|2|-7855064557830690379|element:1752797758134377124|133|0",
+        "semantic-gap:0f1731dc3317ea8aa892"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700113:0:1752797758134377124:-4555925827987686937:133",
+        "effect:10700113|0|elements|2|-7855064557830690379|element:1752797758134377124|133|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "2f71b2f71e0c8ca9"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:aee5d4497e627cf9",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|2|8220943896709730867|element:8220943896709730867|10|0",
+        "semantic-gap:c9bf548c4a4917068dc2"
+      ],
+      "status": "not-applicable",
+      "reason": "judgment-condition-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:8220943896709730867:588802666480550264:10",
+        "effect:10700112|0|elements|2|8220943896709730867|element:8220943896709730867|10|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "3911e80321a0d624"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:b2e52ec0597d9b43",
+      "sourceRecordIdentities": [
+        "effect:10700102|4|bulletElements|6|element-750|element:1474042154774785480|unresolved-frame|0",
+        "effect:10700102|4|elements|7|1474042154774785480|element:1474042154774785480|unresolved-frame|0",
+        "semantic-gap:63eeef2faad6c91abf34"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700102:4:1474042154774785480:unresolved:unresolved",
+        "effect:10700102|4|bulletElements|6|element-750|element:1474042154774785480|unresolved-frame|0",
+        "effect:10700102|4|elements|7|1474042154774785480|element:1474042154774785480|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "825157333bf3488d"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:b35fce4d23f317fd",
+      "sourceRecordIdentities": [
+        "actor:107001:skill:10700162",
+        "semantic-gap:4483482acc824496151b"
+      ],
+      "status": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceKind": "passive-or-skill",
+      "sourceIdentities": [
+        "actor:107001:skill:10700162",
+        "characters.items[id=107001].skillSlots[group=passive,index=1,skillId=10700162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/107001.hero-module.local.json"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "8e34ff9d4387b5e4"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:b3a188a7fe426532",
+      "sourceRecordIdentities": [
+        "effect:10700102|4|bulletElements|3|element-107001133|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700102|4|bulletElements|5|element-107001262|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700102|4|elements|4|-5198070001380788731|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700102|4|elements|6|-5182582270181453340|element:-5182582270181453340|unresolved-frame|0",
+        "semantic-gap:ba1dc45633ab0897c3f1"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700102:4:-5182582270181453340:unresolved:unresolved",
+        "effect:10700102|4|bulletElements|3|element-107001133|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700102|4|bulletElements|5|element-107001262|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700102|4|elements|4|-5198070001380788731|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700102|4|elements|6|-5182582270181453340|element:-5182582270181453340|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "b0a78c3108b88dfa"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:b500f8585e214a31",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|elements|9|4078110148201200064|element:-5291781688018961485|21|0",
+        "semantic-gap:9c9b5137fd39938a9be3"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:-5291781688018961485:-7740964651644459013:21",
+        "effect:10700112|1|elements|9|4078110148201200064|element:-5291781688018961485|21|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "4fdbe2b8cabda1fb"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:b60a44cae51631d3",
+      "sourceRecordIdentities": [
+        "effect:10700101|0|bulletElements|3|element-107001133|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700101|0|bulletElements|5|element-107001262|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700101|0|elements|4|-5198070001380788731|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700101|0|elements|6|-5182582270181453340|element:-5182582270181453340|unresolved-frame|0",
+        "semantic-gap:d657f02d4f91dd27e2b7"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700101:0:-5182582270181453340:unresolved:unresolved",
+        "effect:10700101|0|bulletElements|3|element-107001133|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700101|0|bulletElements|5|element-107001262|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700101|0|elements|4|-5198070001380788731|element:-5182582270181453340|unresolved-frame|0",
+        "effect:10700101|0|elements|6|-5182582270181453340|element:-5182582270181453340|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "09fb82f90a9603b5"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:b61f46e070143c39",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|14|1995917523683825037|element:-2423501056710067666|39|0",
+        "semantic-gap:2f5042606141df4ba3cc"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-2423501056710067666:120948271976759672:39",
+        "effect:10700112|0|elements|14|1995917523683825037|element:-2423501056710067666|39|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "148396ea89d8291f"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:b8f6082f1f436204",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|14|1995917523683825037|element:1995917523683825037|39|0",
+        "semantic-gap:28e8d8e5663b644bf434"
+      ],
+      "status": "not-applicable",
+      "reason": "judgment-condition-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:1995917523683825037:120948271976759672:39",
+        "effect:10700112|0|elements|14|1995917523683825037|element:1995917523683825037|39|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "832715582fc79f63"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:bbb84dbe8aac5361",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|elements|9|4078110148201200064|element:-3773510057542381906|21|0",
+        "semantic-gap:c7eb9ffac055cba4219d"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:-3773510057542381906:-7740964651644459013:21",
+        "effect:10700112|1|elements|9|4078110148201200064|element:-3773510057542381906|21|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "b95fbe6d23c5561a"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:c00752b89a689f4a",
+      "sourceRecordIdentities": [
+        "effect:10700103|1|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700103|1|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0",
+        "semantic-gap:0e4c196e76e1022deeb2"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700103:1:-1135868369539571433:unresolved:unresolved",
+        "effect:10700103|1|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700103|1|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "4e0749ed7cc7adfb"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:c2a05b155e5eb3a4",
+      "sourceRecordIdentities": [
+        "effect:10700161|1|elements|0|5305664906744155906|element:5305664906744155906|0|0",
+        "semantic-gap:9f855cd9fee478db127d"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700161:1:5305664906744155906:8294761060758407308:0",
+        "effect:10700161|1|elements|0|5305664906744155906|element:5305664906744155906|0|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "496d157e033010fe"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:c338d6dfc0e2879a",
+      "sourceRecordIdentities": [
+        "hit:10700102|2|projectile|107001186|107001103|0|0|control:10700102|sub:2|behavior:5208218641655675353|config:0|bullet:107001103:0:0|element:107001186:0",
+        "semantic-gap:11fc1a62acdf98e7a49c"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700102.asset/MonoBehaviour/skill_control_10700102__385415469474585977.json#skillResourceMaps[2].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001186",
+        "hit:10700102|2|projectile|107001186|107001103|0|0|control:10700102|sub:2|behavior:5208218641655675353|config:0|bullet:107001103:0:0|element:107001186:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "ca374a49a35f1d04"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:c6d1152d0fc7f1be",
+      "sourceRecordIdentities": [
+        "effect:10700102|4|bulletElements|1|element-107001006|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700102|4|bulletElements|3|element-107001133|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700102|4|bulletElements|4|element-107001132|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700102|4|elements|2|1072632683368959996|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700102|4|elements|4|-5198070001380788731|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700102|4|elements|5|6611606809238868009|element:1072632683368959996|unresolved-frame|0",
+        "semantic-gap:031def378b30ef9fd44d"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700102:4:1072632683368959996:unresolved:unresolved",
+        "effect:10700102|4|bulletElements|1|element-107001006|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700102|4|bulletElements|3|element-107001133|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700102|4|bulletElements|4|element-107001132|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700102|4|elements|2|1072632683368959996|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700102|4|elements|4|-5198070001380788731|element:1072632683368959996|unresolved-frame|0",
+        "effect:10700102|4|elements|5|6611606809238868009|element:1072632683368959996|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "db72e4f5032a7c7e"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:ca2682fc5879dc73",
+      "sourceRecordIdentities": [
+        "hit:10700103|0|projectile|107001186|107001103|0|0|control:10700103|sub:0|behavior:-5390864234131596105|config:0|bullet:107001103:0:0|element:107001186:0",
+        "semantic-gap:73d9103d7a68b6ddf9c6"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001186",
+        "hit:10700103|0|projectile|107001186|107001103|0|0|control:10700103|sub:0|behavior:-5390864234131596105|config:0|bullet:107001103:0:0|element:107001186:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "358afdd475160ade"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:ca4e5c8c115903d6",
+      "sourceRecordIdentities": [
+        "actor|107001|10700101|7|10700111|plunging-attack",
+        "semantic-gap:94ca78e1cfbf9ba90544"
+      ],
+      "status": "not-applicable",
+      "reason": "requires-jump-or-fall-input-not-in-m12c-zero-distance-passive-boss-v1|scenario-out-of-scope",
+      "sourceKind": "public-action",
+      "sourceIdentities": [
+        "actor|107001|10700101|7|10700111|plunging-attack",
+        "characters.items[id=107001].skillSlots[group=aerial,slot=301,skillId=10700111]"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "ccdeffc8ac2e2c94"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:cb9d3e4152176b19",
+      "sourceRecordIdentities": [
+        "effect:10700113|0|elements|11|3003507247352445777|element:1986389418731670736|165|0",
+        "semantic-gap:3d4e55889143ae0073c2"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700113:0:1986389418731670736:783726078271830503:165",
+        "effect:10700113|0|elements|11|3003507247352445777|element:1986389418731670736|165|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "721cf5b4d4fe11ed"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:cc31bb4f42076b8a",
+      "sourceRecordIdentities": [
+        "actor|107001|10700101|6|10700115|dodge-attack",
+        "semantic-gap:d43db1dfceaac847c2a3"
+      ],
+      "status": "not-applicable",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing|projectile-impact-frame-runtime-dependent|trigger-frame-missing|tuning-mark-relation-notDelElementDataList-unresolved",
+      "sourceKind": "public-action",
+      "sourceIdentities": [
+        "actor|107001|10700101|6|10700115|dodge-attack"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "3dcf03a28b8783c1"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:cd7cfd348a79876a",
+      "sourceRecordIdentities": [
+        "effect:10700161|0|elements|4|144194941341049803|element:1072632683368959996|0|0",
+        "semantic-gap:bf30d965a673caf04542"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700161:0:1072632683368959996:-280970701586330421:0",
+        "effect:10700161|0|elements|4|144194941341049803|element:1072632683368959996|0|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "4e19a44da31168b9"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:cee92431c9216ef4",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|elements|9|4078110148201200064|element:4078110148201200064|21|0",
+        "semantic-gap:59faef21e0eb2fb88d51"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "judgment-condition-runtime-unimplemented",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:4078110148201200064:-7740964651644459013:21",
+        "effect:10700112|1|elements|9|4078110148201200064|element:4078110148201200064|21|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "e33425b5f063edc8"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:d009093fb12c09b8",
+      "sourceRecordIdentities": [
+        "hit:10700110|1|projectile|107001081|107001101|0|0|control:10700110|sub:1|behavior:2143683595391905986|config:0|bullet:107001101:0:0|element:107001081:0",
+        "semantic-gap:819440a32d4bb51c85d8"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700110.asset/MonoBehaviour/skill_control_10700110__-437515422288521664.json#skillResourceMaps[1].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001081",
+        "hit:10700110|1|projectile|107001081|107001101|0|0|control:10700110|sub:1|behavior:2143683595391905986|config:0|bullet:107001101:0:0|element:107001081:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "066d0db564ec5367"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:d4245271dc940f52",
+      "sourceRecordIdentities": [
+        "effect:10700112|1|elements|19|-2200267759796411514|element:2582654716839686672|57|0",
+        "semantic-gap:e298e976f307f6aec65f"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:1:2582654716839686672:5614586991715444731:57",
+        "effect:10700112|1|elements|19|-2200267759796411514|element:2582654716839686672|57|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "5ceb25157237b037"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:d6f42a58f42856ac",
+      "sourceRecordIdentities": [
+        "effect:10700102|4|bulletElements|3|element-107001133|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700102|4|bulletElements|6|element-750|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700102|4|elements|4|-5198070001380788731|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700102|4|elements|7|1474042154774785480|element:-8148787786042882084|unresolved-frame|0",
+        "semantic-gap:1f0a727709977a20dc63"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700102:4:-8148787786042882084:unresolved:unresolved",
+        "effect:10700102|4|bulletElements|3|element-107001133|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700102|4|bulletElements|6|element-750|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700102|4|elements|4|-5198070001380788731|element:-8148787786042882084|unresolved-frame|0",
+        "effect:10700102|4|elements|7|1474042154774785480|element:-8148787786042882084|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "2868fd7a30572bf0"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:d894c9eff9a57767",
+      "sourceRecordIdentities": [
+        "hit:10700110|2|projectile|107001081|107001101|0|0|control:10700110|sub:2|behavior:-3900085254801321956|config:0|bullet:107001101:0:0|element:107001081:0",
+        "semantic-gap:79a47950b64889189f2a"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700110.asset/MonoBehaviour/skill_control_10700110__-437515422288521664.json#skillResourceMaps[2].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001081",
+        "hit:10700110|2|projectile|107001081|107001101|0|0|control:10700110|sub:2|behavior:-3900085254801321956|config:0|bullet:107001101:0:0|element:107001081:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "46d49c1a6ef6ab50"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:dc104e30bb882c88",
+      "sourceRecordIdentities": [
+        "effect:10700103|4|bulletElements|6|element-750|element:1474042154774785480|unresolved-frame|0",
+        "effect:10700103|4|elements|7|1474042154774785480|element:1474042154774785480|unresolved-frame|0",
+        "semantic-gap:507b7b765c59eb377e17"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700103:4:1474042154774785480:unresolved:unresolved",
+        "effect:10700103|4|bulletElements|6|element-750|element:1474042154774785480|unresolved-frame|0",
+        "effect:10700103|4|elements|7|1474042154774785480|element:1474042154774785480|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "0683ed9dbb108410"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:e04af304be506f0d",
+      "sourceRecordIdentities": [
+        "effect:10700102|4|bulletElements|3|element-107001133|element:1474042154774785480|unresolved-frame|0",
+        "effect:10700102|4|elements|4|-5198070001380788731|element:1474042154774785480|unresolved-frame|0",
+        "semantic-gap:64cfd3ac5b6678aeaf25"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing|tuning-mark-relation-notDelElementDataList-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700102:4:1474042154774785480:unresolved:unresolved",
+        "effect:10700102|4|bulletElements|3|element-107001133|element:1474042154774785480|unresolved-frame|0",
+        "effect:10700102|4|elements|4|-5198070001380788731|element:1474042154774785480|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "79a7254188929a37"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:e17786bda7cd65d6",
+      "sourceRecordIdentities": [
+        "hit:10700110|0|projectile|107001081|107001101|0|0|control:10700110|sub:0|behavior:3787279483560012043|config:0|bullet:107001101:0:0|element:107001081:0",
+        "semantic-gap:b2b45ac4929409605561"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700110.asset/MonoBehaviour/skill_control_10700110__-437515422288521664.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001081",
+        "hit:10700110|0|projectile|107001081|107001101|0|0|control:10700110|sub:0|behavior:3787279483560012043|config:0|bullet:107001101:0:0|element:107001081:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "1a933af706cc4da7"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:e1a71911cacbb586",
+      "sourceRecordIdentities": [
+        "scenario-oos:107001:dodge-attack-settlement",
+        "semantic-gap:19f8db5d2506fa4d3109"
+      ],
+      "status": "not-applicable",
+      "reason": "requires-dodge-input-not-in-m12c-zero-distance-passive-boss-v1|scenario-out-of-scope",
+      "sourceKind": "public-form-settlement",
+      "sourceIdentities": [
+        "characters.items[id=107001].skillSlots[group=ground,slot=204,skillId=10700115]",
+        "scenario-oos:107001:dodge-attack-settlement"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "861e4c73e79e4a34"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:e2f7e6dfe32d9205",
+      "sourceRecordIdentities": [
+        "effect:10700161|0|elements|0|848580101945244706|element:400549414081394249|0|0",
+        "effect:10700161|0|elements|2|7861533784312122095|element:400549414081394249|0|0",
+        "semantic-gap:8e64929a0f7c24372e19"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-combine-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700161:0:400549414081394249:-1612026248709108533:0",
+        "effect:10700161|0|elements|0|848580101945244706|element:400549414081394249|0|0",
+        "effect:10700161|0|elements|2|7861533784312122095|element:400549414081394249|0|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "f81b492635808de8"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:e6cb1a1af582ea64",
+      "sourceRecordIdentities": [
+        "effect:10700103|3|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700103|3|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0",
+        "semantic-gap:e2029ea095fe6019294a"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700103:3:-1135868369539571433:unresolved:unresolved",
+        "effect:10700103|3|bulletElements|1|element-107001062|element:-1135868369539571433|unresolved-frame|0",
+        "effect:10700103|3|elements|2|-1135868369539571433|element:-1135868369539571433|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "54c7427b87bede24"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:e8f17dd0b71acbff",
+      "sourceRecordIdentities": [
+        "scenario-oos:107001:plunging-attack-settlement",
+        "semantic-gap:0127416b07c37decaf23"
+      ],
+      "status": "not-applicable",
+      "reason": "requires-jump-or-fall-input-not-in-m12c-zero-distance-passive-boss-v1|scenario-out-of-scope",
+      "sourceKind": "public-form-settlement",
+      "sourceIdentities": [
+        "characters.items[id=107001].skillSlots[group=aerial,slot=301,skillId=10700111]",
+        "scenario-oos:107001:plunging-attack-settlement"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "e213f76c808db8c2"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:e94fe0bc50e88549",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|24|-8863380330050196731|element:-8148787786042882084|53|0",
+        "semantic-gap:1176d9f23f1cd1c70f3c"
+      ],
+      "status": "not-applicable",
+      "reason": "source-driven-transform-remove-handles-state-subtree",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-8148787786042882084:-1248620457979526792:53",
+        "effect:10700112|0|elements|24|-8863380330050196731|element:-8148787786042882084|53|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "d7456339ca616546"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:ea48a0ba87bbf494",
+      "sourceRecordIdentities": [
+        "effect:10700102|4|bulletElements|3|element-107001133|element:-5198070001380788731|unresolved-frame|0",
+        "effect:10700102|4|elements|4|-5198070001380788731|element:-5198070001380788731|unresolved-frame|0",
+        "semantic-gap:1abc056e0ce965051e8f"
+      ],
+      "status": "static-evidence-gap",
+      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700102:4:-5198070001380788731:unresolved:unresolved",
+        "effect:10700102|4|bulletElements|3|element-107001133|element:-5198070001380788731|unresolved-frame|0",
+        "effect:10700102|4|elements|4|-5198070001380788731|element:-5198070001380788731|unresolved-frame|0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "d1b2bb8bc71b7b3d"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:f1de6833be3d1d78",
+      "sourceRecordIdentities": [
+        "scenario-oos:107001:move-attack-extra-arrow",
+        "semantic-gap:42c75329776277eb23e6"
+      ],
+      "status": "not-applicable",
+      "reason": "scenario-out-of-scope|simultaneous-move-and-normal-attack-input-not-in-m12c-zero-distance-passive-boss-v1",
+      "sourceKind": "public-action",
+      "sourceIdentities": [
+        "hero-module:107001#skill:10700101#移动同时普攻额外发射箭矢",
+        "scenario-oos:107001:move-attack-extra-arrow"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "9660d23a6c03f177"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:f40f311cc3125ca5",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|24|-8863380330050196731|element:-4529113272733101309|53|0",
+        "semantic-gap:c7c3057d6b57933e667b"
+      ],
+      "status": "not-applicable",
+      "reason": "source-driven-transform-remove-handles-state-subtree",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-4529113272733101309:-1248620457979526792:53",
+        "effect:10700112|0|elements|24|-8863380330050196731|element:-4529113272733101309|53|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "31f1b2e9ab747269"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:f6e42eafc728375d",
+      "sourceRecordIdentities": [
+        "hit:10700102|1|projectile|107001186|107001103|0|0|control:10700102|sub:1|behavior:7394904183794316451|config:0|bullet:107001103:0:0|element:107001186:0",
+        "semantic-gap:9d0c6fe09ec62f866a28"
+      ],
+      "status": "runtime-evidence-required",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700102.asset/MonoBehaviour/skill_control_10700102__385415469474585977.json#skillResourceMaps[1].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001186",
+        "hit:10700102|1|projectile|107001186|107001103|0|0|control:10700102|sub:1|behavior:7394904183794316451|config:0|bullet:107001103:0:0|element:107001186:0"
+      ],
+      "impactClassification": "gameplay-impacting",
+      "blocking": true,
+      "sourceRecordHash": "10bc39e89be089cf"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:fadd181f70b8c5df",
+      "sourceRecordIdentities": [
+        "effect:10700112|0|elements|9|4078110148201200064|element:-5291781688018961485|21|0",
+        "semantic-gap:6fb445c94cd1f95ebc22"
+      ],
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700112:0:-5291781688018961485:-7763983529624190600:21",
+        "effect:10700112|0|elements|9|4078110148201200064|element:-5291781688018961485|21|0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "3ed0801a93d8667e"
+    }
+  ],
+  "summary": {
+    "uniqueGapCount": 116,
+    "blockingCount": 63,
+    "nonBlockingCount": 53,
+    "statusCounts": {
+      "not-applicable": 53,
+      "runtime-evidence-required": 21,
+      "static-evidence-gap": 42
+    },
+    "reasonCounts": {
+      "effect-combine-semantics-unresolved": 1,
+      "effect-target-static-evidence-gap|effect-trigger-frame-static-evidence-gap|switch-duration-unresolved": 2,
+      "effect-target-unresolved|effect-trigger-frame-missing": 15,
+      "effect-target-unresolved|effect-trigger-frame-missing|judgment-condition-runtime-unimplemented": 2,
+      "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 4,
+      "effect-target-unresolved|effect-trigger-frame-missing|projectile-impact-frame-runtime-dependent|trigger-frame-missing|tuning-mark-relation-notDelElementDataList-unresolved": 1,
+      "effect-trigger-frame-missing": 11,
+      "effect-trigger-frame-missing|tuning-mark-relation-notDelElementDataList-unresolved": 3,
+      "judgment-condition-runtime-unimplemented": 11,
+      "must-not-enter-runtime|unimplemented-dead-configuration": 1,
+      "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 22,
+      "no-runtime-description-or-applied-effect|unnamed-secondary-passive-boundary": 1,
+      "requires-boss-attack-event-not-in-m12c-zero-distance-passive-boss-v1|scenario-out-of-scope": 2,
+      "requires-dodge-input-not-in-m12c-zero-distance-passive-boss-v1|scenario-out-of-scope": 1,
+      "requires-dodge-jump-fall-or-boss-attack-event|scenario-out-of-scope": 1,
+      "requires-jump-or-fall-input-not-in-m12c-zero-distance-passive-boss-v1|scenario-out-of-scope": 2,
+      "requires-perfect-dodge-or-parry-boss-attack-event-not-in-m12c-zero-distance-passive-boss-v1|scenario-out-of-scope": 2,
+      "runtime-dependent": 21,
+      "scenario-out-of-scope|simultaneous-move-and-normal-attack-input-not-in-m12c-zero-distance-passive-boss-v1": 1,
+      "source-driven-transform-remove-handles-state-subtree": 5,
+      "source-driven-transform-remove-handles-state-subtree|tuning-mark-relation-elementDataList-unresolved|tuning-mark-relation-notDelElementDataList-unresolved": 1,
+      "switch-duration-unresolved|switch-wrapper-relation-unresolved": 2,
+      "unnamed-secondary-passive-not-implemented-current-client": 1,
+      "unresolved": 3
+    }
+  },
+  "inventoryHash": "56072c3620927739"
+}

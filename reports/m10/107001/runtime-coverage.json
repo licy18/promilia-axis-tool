@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 107001,
-  "sourcePackageHash": "4ecabc38227f68b9e7f61954f9b007e0353bfe14fdc8d3f4f07678f0238fa6c8",
+  "sourcePackageHash": "53ca71ba9e6d84698574b79de736adef3236743c860531d29735a220292b48ce",
   "actionRows": [
     {
       "actionIdentity": "actor|107001|10700101|0|10700103|normal-attack",
@@ -219,14 +219,14 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "not-applicable",
+      "scenarioRuntimeStatus": "not-required",
       "rawRuntimeReady": false,
       "sourceDrivenConditionalDamageReady": false,
       "runtimeReady": false,
-      "notApplicable": true,
+      "notApplicable": false,
       "hitCount": 0,
-      "requiresDamageSettlement": true,
-      "settlementStatus": "not-applicable",
+      "requiresDamageSettlement": false,
+      "settlementStatus": "not-required",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|107001|10700101|6|10700115|dodge-attack",
@@ -239,21 +239,20 @@
           "settlementEvidence": [],
           "dimensionSummary": {
             "hp": {
-              "unresolved": 1
+              "not-applicable": 1
             },
             "toughness": {
-              "unresolved": 1
+              "not-applicable": 1
             },
             "actorSp": {
-              "unresolved": 1
+              "not-applicable": 1
             },
             "kiboSp": {
-              "unresolved": 1
+              "not-applicable": 1
             }
           },
           "status": "not-applicable",
           "reasons": [
-            "public-action-damage-settlement-evidence-missing",
             "requires-dodge-input-not-in-m12c-zero-distance-passive-boss-v1",
             "scenario-out-of-scope"
           ],
@@ -295,14 +294,14 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "not-applicable",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "rawRuntimeReady": true,
       "sourceDrivenConditionalDamageReady": false,
-      "runtimeReady": false,
-      "notApplicable": true,
+      "runtimeReady": true,
+      "notApplicable": false,
       "hitCount": 0,
-      "requiresDamageSettlement": true,
-      "settlementStatus": "not-applicable",
+      "requiresDamageSettlement": false,
+      "settlementStatus": "not-required",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|107001|10700101|7|10700111|plunging-attack",
@@ -315,21 +314,20 @@
           "settlementEvidence": [],
           "dimensionSummary": {
             "hp": {
-              "unresolved": 1
+              "not-applicable": 1
             },
             "toughness": {
-              "unresolved": 1
+              "not-applicable": 1
             },
             "actorSp": {
-              "unresolved": 1
+              "not-applicable": 1
             },
             "kiboSp": {
-              "unresolved": 1
+              "not-applicable": 1
             }
           },
           "status": "not-applicable",
           "reasons": [
-            "public-action-damage-settlement-evidence-missing",
             "requires-jump-or-fall-input-not-in-m12c-zero-distance-passive-boss-v1",
             "scenario-out-of-scope"
           ],
@@ -663,14 +661,14 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "not-applicable",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
       "rawRuntimeReady": true,
       "sourceDrivenConditionalDamageReady": false,
-      "runtimeReady": false,
-      "notApplicable": true,
+      "runtimeReady": true,
+      "notApplicable": false,
       "hitCount": 0,
-      "requiresDamageSettlement": true,
-      "settlementStatus": "not-applicable",
+      "requiresDamageSettlement": false,
+      "settlementStatus": "not-required",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|107001|10700121|2|10700125|limit-counter",
@@ -683,21 +681,20 @@
           "settlementEvidence": [],
           "dimensionSummary": {
             "hp": {
-              "unresolved": 1
+              "not-applicable": 1
             },
             "toughness": {
-              "unresolved": 1
+              "not-applicable": 1
             },
             "actorSp": {
-              "unresolved": 1
+              "not-applicable": 1
             },
             "kiboSp": {
-              "unresolved": 1
+              "not-applicable": 1
             }
           },
           "status": "not-applicable",
           "reasons": [
-            "public-action-damage-settlement-evidence-missing",
             "requires-boss-attack-event-not-in-m12c-zero-distance-passive-boss-v1",
             "scenario-out-of-scope"
           ],
@@ -739,14 +736,14 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "not-applicable",
+      "scenarioRuntimeStatus": "source-verified",
       "rawRuntimeReady": true,
       "sourceDrivenConditionalDamageReady": false,
-      "runtimeReady": false,
-      "notApplicable": true,
+      "runtimeReady": true,
+      "notApplicable": false,
       "hitCount": 0,
-      "requiresDamageSettlement": true,
-      "settlementStatus": "not-applicable",
+      "requiresDamageSettlement": false,
+      "settlementStatus": "not-required",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|107001|10700121|4|10700127|perfect-parry",
@@ -759,21 +756,20 @@
           "settlementEvidence": [],
           "dimensionSummary": {
             "hp": {
-              "unresolved": 1
+              "not-applicable": 1
             },
             "toughness": {
-              "unresolved": 1
+              "not-applicable": 1
             },
             "actorSp": {
-              "unresolved": 1
+              "not-applicable": 1
             },
             "kiboSp": {
-              "unresolved": 1
+              "not-applicable": 1
             }
           },
           "status": "not-applicable",
           "reasons": [
-            "public-action-damage-settlement-evidence-missing",
             "requires-perfect-dodge-or-parry-boss-attack-event-not-in-m12c-zero-distance-passive-boss-v1",
             "scenario-out-of-scope"
           ],
@@ -799,7 +795,7 @@
   ],
   "summary": {
     "actionCount": 10,
-    "runtimeReadyActionCount": 6,
+    "runtimeReadyActionCount": 9,
     "executionFormCount": 12,
     "controlCount": 9,
     "hitCount": 37,
@@ -822,5 +818,5 @@
       "static-evidence-gap": 7
     }
   },
-  "profileHash": "7589405b8bc604498d51f85039f0121600043be534e79da518297f4fb3e0c678"
+  "profileHash": "294ba6ec55740d1ff91d3eaeae2d6bca83c95c5cbff2d9d0ffcc20c3f37814fb"
 }

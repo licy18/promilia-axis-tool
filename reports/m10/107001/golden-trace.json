@@ -6,14 +6,14 @@
   "scenarioIdentity": "m12-b3-107001-sifliya-focused-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "4ecabc38227f68b9e7f61954f9b007e0353bfe14fdc8d3f4f07678f0238fa6c8",
+  "sourcePackageHash": "53ca71ba9e6d84698574b79de736adef3236743c860531d29735a220292b48ce",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "4612964d653585fc",
-    "traceHash": "09ca54879c1a7f2c",
-    "dataHash": "0f1eaae2902deb7d",
+    "inputHash": "1f86a1d9968dcc8a",
+    "traceHash": "5062e49a93319b94",
+    "dataHash": "1e029f3ef7128a5f",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -966,12 +966,14 @@
       "targetStateTrace": [],
       "conditionalHitGroups": [],
       "targetStateSummary": {
-        "profileCount": 2,
+        "profileCount": 3,
         "eventCount": 0,
         "appliedGroupCount": 0,
         "skippedGroupCount": 0,
         "appliedActionEffectConditionCount": 0,
         "suppressedActionEffectConditionCount": 0,
+        "appliedActionHitConditionCount": 0,
+        "suppressedActionHitConditionCount": 0,
         "effectCommandCount": 0,
         "directSpEventCount": 0
       },
@@ -3504,7 +3506,7 @@
         }
       ]
     },
-    "summaryHash": "7a2a4385ea6b78ae8d691942cb897e17954a55f2fff4608550707d88a3614745"
+    "summaryHash": "e22a099bbf545ca4e955fb014c55610d4568a263256912e1b4312690f38f851a"
   },
   "expected": {
     "exact": {
@@ -3526,6 +3528,6 @@
       }
     ]
   },
-  "replayHash": "e4c74c78ec15aafc35712a022e453366ba7ac75a40cb646a1ed2e7a25217c097",
-  "profileHash": "7589405b8bc604498d51f85039f0121600043be534e79da518297f4fb3e0c678"
+  "replayHash": "4d8245e1ca30a1948a9513a21ff19b8557f3aa2ac42fdcfc091ae34e0b87df4d",
+  "profileHash": "294ba6ec55740d1ff91d3eaeae2d6bca83c95c5cbff2d9d0ffcc20c3f37814fb"
 }

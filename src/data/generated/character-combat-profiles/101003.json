@@ -66,7 +66,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "f1ab6bbbcbef6b9514261ed763d911b19d4340977627f4dfbcdb03f8ddb6cfc2",
+    "packageHash": "53ca71ba9e6d84698574b79de736adef3236743c860531d29735a220292b48ce",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -6827,7 +6827,7 @@
         "linked": true,
         "runtimeReady": true,
         "runtimeHitCount": 9,
-        "runtimeEffectCount": 0,
+        "runtimeEffectCount": 3,
         "runtimeResourceTransactionCount": 0,
         "selectedResourceTransactionIdentities": [],
         "selectedElementCount": 7,
@@ -6842,7 +6842,11 @@
           "10100310|0|elements|0|-9168566004252254787|62|8",
           "10100310|0|elements|0|-9168566004252254787|65|9"
         ],
-        "selectedEffectIdentities": [],
+        "selectedEffectIdentities": [
+          "runtime-effect:han-firework-explosion-controlled-attack-passive",
+          "runtime-effect:han-firework-explosion-team-tuning-stage-one",
+          "runtime-effect:han-firework-explosion-sp-stage-one"
+        ],
         "classification": "applied",
         "sourceEvidenceStatus": "applied",
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
@@ -8872,7 +8876,7 @@
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_3542946942757856816__3542946942757856816.json#attack-reopen-window-start=93F",
           "reasons": []
         },
-        "timingStatus": "unresolved",
+        "timingStatus": "applied",
         "actionScheduling": {
           "status": "exact",
           "kind": "exact-public-action-execution-form-occupancy",
@@ -16622,8 +16626,10 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "hitGate": null,
             "targetStateActivationCondition": null,
-            "hitActivation": null
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0",
@@ -16859,8 +16865,10 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "hitGate": null,
             "targetStateActivationCondition": null,
-            "hitActivation": null
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100312|0|elements|3|-1498771669867596146|element:3879285143630828198|70|0",
@@ -18296,8 +18304,10 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "hitGate": null,
             "targetStateActivationCondition": null,
-            "hitActivation": null
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100313|0|elements|1|-1498771669867596146|223|0",
@@ -18533,8 +18543,10 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "hitGate": null,
             "targetStateActivationCondition": null,
-            "hitActivation": null
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100313|0|elements|1|-1498771669867596146|193|0",
@@ -18770,8 +18782,10 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "hitGate": null,
             "targetStateActivationCondition": null,
-            "hitActivation": null
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100313|0|elements|1|-1498771669867596146|element:3879285143630828198|207|0",
@@ -19844,7 +19858,8 @@
             "confidence": "high",
             "applied": true,
             "inheritance": null,
-            "targetStateActivationCondition": null
+            "targetStateActivationCondition": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100313|0|elements|6|-87352517346442030|element:-87352517346442030|148|0",
@@ -20126,7 +20141,8 @@
               "status": "verified-element-inheritance-ready",
               "applied": true
             },
-            "targetStateActivationCondition": null
+            "targetStateActivationCondition": null,
+            "landedHitActivationCondition": null
           }
         ],
         "effectGraph": [
@@ -21876,7 +21892,8 @@
             "confidence": "high",
             "applied": true,
             "inheritance": null,
-            "targetStateActivationCondition": null
+            "targetStateActivationCondition": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100322|0|elements|2|4373635720509741260|57|1",
@@ -22020,7 +22037,8 @@
             "confidence": "high",
             "applied": true,
             "inheritance": null,
-            "targetStateActivationCondition": null
+            "targetStateActivationCondition": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100322|0|elements|6|-1498771669867596146|57|0",
@@ -22256,8 +22274,10 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "hitGate": null,
             "targetStateActivationCondition": null,
-            "hitActivation": null
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10100322|0|elements|6|-1498771669867596146|element:3879285143630828198|57|0",
@@ -26223,7 +26243,8 @@
             "confidence": "high",
             "applied": true,
             "inheritance": null,
-            "targetStateActivationCondition": null
+            "targetStateActivationCondition": null,
+            "landedHitActivationCondition": null
           }
         ],
         "effectGraph": [
@@ -29748,6 +29769,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -29894,6 +29918,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30040,6 +30067,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30186,6 +30216,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30332,6 +30365,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30356,6 +30392,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30380,6 +30419,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": {
           "inheritOnControlledActorSwitch": true,
@@ -30537,6 +30579,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30561,6 +30606,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30585,6 +30633,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -30609,6 +30660,9 @@
         "targetStateActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -36120,6 +36174,7 @@
         "capacityElementId": 101003171,
         "durationMs": 10000,
         "maxStacks": 15,
+        "runtimeOwnerScope": null,
         "expiryMode": "independent-layer",
         "atCapacityPolicy": "ignore",
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15",
@@ -36498,11 +36553,13 @@
         "applied": true
       }
     ],
+    "tuningMarkConditionalDamageGroups": [],
     "runtimeEffectBindings": [
       {
         "bindingIdentity": "han-firework-explosion-controlled-attack-passive",
         "ownerId": 101003,
         "triggerKind": "conditional-hit-group-applied",
+        "runtimeOwnerScope": null,
         "conditionalGroupIdentity": "han-charged-stage-one-firework-explosion",
         "stateIdentity": null,
         "stateName": null,
@@ -36510,6 +36567,7 @@
         "controlSkillId": 10100310,
         "subSkillIndex": 0,
         "triggerFrame": 29,
+        "hitBindings": [],
         "frameRate": 60,
         "targetKind": "controlled-actor",
         "effectId": "battle-element:480124006",
@@ -36552,6 +36610,7 @@
         "bindingIdentity": "han-firework-explosion-team-tuning-stage-one",
         "ownerId": 101003,
         "triggerKind": "conditional-hit-group-applied",
+        "runtimeOwnerScope": null,
         "conditionalGroupIdentity": "han-charged-stage-one-firework-explosion",
         "stateIdentity": null,
         "stateName": null,
@@ -36559,6 +36618,7 @@
         "controlSkillId": 10100310,
         "subSkillIndex": 0,
         "triggerFrame": 29,
+        "hitBindings": [],
         "frameRate": 60,
         "targetKind": "team-actors",
         "effectId": "battle-element:101003205",
@@ -36601,6 +36661,7 @@
         "bindingIdentity": "han-firework-explosion-sp-stage-one",
         "ownerId": 101003,
         "triggerKind": "conditional-hit-group-applied",
+        "runtimeOwnerScope": null,
         "conditionalGroupIdentity": "han-charged-stage-one-firework-explosion",
         "stateIdentity": null,
         "stateName": null,
@@ -36608,6 +36669,7 @@
         "controlSkillId": 10100310,
         "subSkillIndex": 0,
         "triggerFrame": 29,
+        "hitBindings": [],
         "frameRate": 60,
         "targetKind": "source-actor",
         "effectId": "battle-element:101003125",
@@ -36637,6 +36699,7 @@
         "bindingIdentity": "han-firework-explosion-controlled-attack-passive-stage-two",
         "ownerId": 101003,
         "triggerKind": "conditional-hit-group-applied",
+        "runtimeOwnerScope": null,
         "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
         "stateIdentity": null,
         "stateName": null,
@@ -36644,6 +36707,7 @@
         "controlSkillId": 10100341,
         "subSkillIndex": 0,
         "triggerFrame": 25,
+        "hitBindings": [],
         "frameRate": 60,
         "targetKind": "controlled-actor",
         "effectId": "battle-element:480124006",
@@ -36686,6 +36750,7 @@
         "bindingIdentity": "han-firework-explosion-team-tuning-stage-two",
         "ownerId": 101003,
         "triggerKind": "conditional-hit-group-applied",
+        "runtimeOwnerScope": null,
         "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
         "stateIdentity": null,
         "stateName": null,
@@ -36693,6 +36758,7 @@
         "controlSkillId": 10100341,
         "subSkillIndex": 0,
         "triggerFrame": 25,
+        "hitBindings": [],
         "frameRate": 60,
         "targetKind": "team-actors",
         "effectId": "battle-element:101003205",
@@ -36735,6 +36801,7 @@
         "bindingIdentity": "han-firework-explosion-sp-stage-two",
         "ownerId": 101003,
         "triggerKind": "conditional-hit-group-applied",
+        "runtimeOwnerScope": null,
         "conditionalGroupIdentity": "han-charged-stage-two-firework-explosion",
         "stateIdentity": null,
         "stateName": null,
@@ -36742,6 +36809,7 @@
         "controlSkillId": 10100341,
         "subSkillIndex": 0,
         "triggerFrame": 25,
+        "hitBindings": [],
         "frameRate": 60,
         "targetKind": "source-actor",
         "effectId": "battle-element:101003125",
@@ -37118,8 +37186,10 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "hitGate": null,
           "targetStateActivationCondition": null,
-          "hitActivation": null
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0",
@@ -37355,8 +37425,10 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "hitGate": null,
           "targetStateActivationCondition": null,
-          "hitActivation": null
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100312|0|elements|1|-3716196104709416648|element:-3716196104709416648|61|0",
@@ -38932,8 +39004,10 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "hitGate": null,
           "targetStateActivationCondition": null,
-          "hitActivation": null
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|1|-1498771669867596146|223|0",
@@ -39169,8 +39243,10 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "hitGate": null,
           "targetStateActivationCondition": null,
-          "hitActivation": null
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|1|-1498771669867596146|193|0",
@@ -39406,8 +39482,10 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "hitGate": null,
           "targetStateActivationCondition": null,
-          "hitActivation": null
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|6|-87352517346442030|148|1",
@@ -39571,7 +39649,8 @@
             "status": "verified-element-inheritance-ready",
             "applied": true
           },
-          "targetStateActivationCondition": null
+          "targetStateActivationCondition": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|4|-5729186281790677610|148|1",
@@ -39715,7 +39794,8 @@
           "confidence": "high",
           "applied": true,
           "inheritance": null,
-          "targetStateActivationCondition": null
+          "targetStateActivationCondition": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100313|0|elements|4|-5729186281790677610|element:-5729186281790677610|148|0",
@@ -41116,8 +41196,10 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "hitGate": null,
           "targetStateActivationCondition": null,
-          "hitActivation": null
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100322|0|elements|2|4373635720509741260|57|1",
@@ -41261,7 +41343,8 @@
           "confidence": "high",
           "applied": true,
           "inheritance": null,
-          "targetStateActivationCondition": null
+          "targetStateActivationCondition": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100322|0|elements|2|4373635720509741260|57|1",
@@ -41405,7 +41488,8 @@
           "confidence": "high",
           "applied": true,
           "inheritance": null,
-          "targetStateActivationCondition": null
+          "targetStateActivationCondition": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100322|0|elements|6|-1498771669867596146|element:3879285143630828198|57|0",
@@ -42673,7 +42757,8 @@
           "confidence": "high",
           "applied": true,
           "inheritance": null,
-          "targetStateActivationCondition": null
+          "targetStateActivationCondition": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10100360|0|elements|0|-6820191037001031513|element:-6820191037001031513|0|0",
@@ -49421,18 +49506,19 @@
     "profileIdentity": "actor:101003:character-combat-profile:v1",
     "operatorContractVersion": 1,
     "sourceCompilation": {
-      "compilerVersion": 4,
+      "compilerVersion": 5,
       "recipeIdentity": "actor:101003:character-combat-recipe:v1",
       "recipeHash": "a10390f5df3318af17f2ac469f46318402a6bed4ee3a8656e08e6d8c9dd9ff5f",
-      "compilerInputHash": "928521014a52320831a44596aa6e911fa7d2df35ca842f9c94bc696a4b58be04",
-      "recipeContractHash": "41a8e67bbbb810035e521f4e7ad41fc6271a7b21845b5bf51c1d7318dccbb510",
-      "ownerContractHash": "af7fbee265fd4c88f50c8f25244025e384c58d455c22e33706dd11dbef718204"
+      "compilerInputHash": "65f7da5705358e9a0c5f829b407905ecfc7979fe485ddc466c2f57b925a0f827",
+      "recipeContractHash": "b34b9d65c2edda813a0f4df54f7073355229a859fc09e7c3010f1c84bc64ad37",
+      "ownerContractHash": "1bec768671e430d1e88d485ce270bf18fbf3f561f6c299a8d68c4d0e14d8fa8d"
     },
     "operators": [
       "public-action-binding",
       "action-form-resolution",
       "contextual-input-scheduling",
       "state-and-resource-variant-selection",
+      "tuning-mark-conditional-damage",
       "attack-input-chain",
       "three-value-hit-settlement",
       "special-resource-profile",
@@ -49447,7 +49533,7 @@
         "packagePath": "actionMappings",
         "operator": "public-action-binding",
         "recordCount": 10,
-        "recordsHash": "433562c47db13a1013b3c564210a2966944174551ce994e8926d12be4d66a002"
+        "recordsHash": "bfdec0e6933127dbac046ce56cde390006b00bd7bcaf3a650d31c543c16747aa"
       },
       {
         "packagePath": "actionVariantGraph.publicActionForms",
@@ -49464,6 +49550,12 @@
       {
         "packagePath": "actionVariantGraph.edges",
         "operator": "state-and-resource-variant-selection",
+        "recordCount": 0,
+        "recordsHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "packagePath": "actionVariantGraph.tuningMarkConditionalDamageGroups",
+        "operator": "tuning-mark-conditional-damage",
         "recordCount": 0,
         "recordsHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
       },
@@ -49516,7 +49608,7 @@
         "recordsHash": "c884b28518d10f0b40fb7e63c5464d7570fa360b094dac4c638042ed58280bbf"
       }
     ],
-    "contractHash": "6997230d5ddd34fb34f88007cae1211f1226b4f733f328e514777562fa8bb862"
+    "contractHash": "8b975aa56028f474af2aa9bf5a75b5d24acb439c71599f05d16162c683b69168"
   },
   "coverage": [
     {
@@ -50400,7 +50492,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "aa6132f0ea0f7359eb967003d53ee3e74b4246645a15855f97027c233408ec8a"
+    "deterministicInputHash": "edb65ff48acff118eea7abda09c3d73eb23b045c7b681ad0651dcc50de7ac462"
   },
-  "profileHash": "250072a420c7177bab2cabca94a89620de1f5725a86f8b505efea6fa225fce43"
+  "profileHash": "f990d5142692f2d9ea4e748876725841ad70076ee753dcbe7e53084c6a942ec5"
 }

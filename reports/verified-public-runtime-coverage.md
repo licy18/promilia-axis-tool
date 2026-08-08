@@ -1,12 +1,12 @@
 # M9-D 公开动作运行时覆盖
 
 - 包：`azpr-tc-2026-07-18`
-- 固定产品分母：645 个公开动作 / 20 名角色 / 122 只奇波
-- 场景可运行：630
-- 来源静态可应用：459
+- 固定产品分母：646 个公开动作 / 20 名角色 / 122 只奇波
+- 场景可运行：631
+- 来源静态可应用：461
 - 来源运行时依赖：173
-- 零距离场景补全：584
-- 来源静态证据缺口：13
+- 零距离场景补全：585
+- 来源静态证据缺口：12
 - 明确零：0
 - 未解析：15（未分类 0）
 - 角色核心动作：59/60 可运行
@@ -14,8 +14,8 @@
 
 ## 未解析边界
 
-- runtime-and-evidence-gap: 8
-- static-evidence-gap: 7
+- runtime-and-evidence-gap: 7
+- static-evidence-gap: 8
 
 ## 非零命中回能元素
 
@@ -32,9 +32,9 @@
 | actor | dodge-attack | 20 | 16 | 0 | 1 | 3 |
 | actor | limit-counter | 20 | 19 | 0 | 0 | 1 |
 | actor | normal-attack | 20 | 19 | 0 | 0 | 1 |
-| actor | perfect-parry | 20 | 18 | 0 | 2 | 0 |
+| actor | perfect-parry | 20 | 17 | 0 | 3 | 0 |
 | actor | plunging-attack | 20 | 20 | 0 | 0 | 0 |
-| actor | star-carry | 17 | 15 | 0 | 1 | 1 |
+| actor | star-carry | 18 | 17 | 0 | 1 | 0 |
 | actor | star-combo | 20 | 20 | 0 | 0 | 0 |
 | actor | star-skill | 20 | 20 | 0 | 0 | 0 |
 | actor | ultimate | 20 | 20 | 0 | 0 | 0 |

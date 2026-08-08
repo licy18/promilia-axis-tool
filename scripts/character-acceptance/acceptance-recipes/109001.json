@@ -2,20 +2,15 @@
   "schemaVersion": 1,
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "productVisualAcceptance": {
-    "status": "accepted",
-    "acceptanceCommit": "4a5030a52bd51a118f579957bc449efa0c38cf3b",
-    "recordIdentity": "character-product-acceptance:109001:4a5030a52bd51a118f579957bc449efa0c38cf3b:c369c5382ad3b812",
-    "qualificationSubjectHash": "c369c5382ad3b812",
-    "scenarioSetHash": "4e2395e728e8a05b",
-    "scenarioIdentities": [
-      "m11-d-109001-visual-acceptance"
-    ],
+    "status": "pending",
+    "acceptanceCommit": null,
+    "recordIdentity": null,
     "automatedEvidence": [
       {
         "scenarioIdentity": "m11-d-109001-visual-acceptance",
         "status": "automated-workbench-import-passed",
         "screenshotPath": "reports/m11-d-character-acceptance-109001-desktop.png",
-        "screenshotSha256": "d15f1e20c2d6adbee50a0af3f53e23626616328edf28eb9a17d296f40b62abfc"
+        "screenshotSha256": "f9e45de8def2bac907e003956e3508876250c87ee5a041b582f66490282e9312"
       }
     ]
   },

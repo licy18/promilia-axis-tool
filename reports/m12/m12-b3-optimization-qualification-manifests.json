@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "b3bb274e638433c1",
+  "rosterHash": "3f1ad0ad5f380ad3",
   "records": [
     {
       "objectKind": "character",
@@ -27,10 +27,10 @@
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "53a9d481e22cc36d"
+          "70f6c838b40fb89a"
         ]
       },
-      "manifestHash": "27e249bbbacedd75"
+      "manifestHash": "f796b26bb19a52af"
     },
     {
       "objectKind": "character",
@@ -84,10 +84,10 @@
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "841977b608eeae70"
+          "4b8d09f01881429b"
         ]
       },
-      "manifestHash": "144c2883dbd1d0db"
+      "manifestHash": "bcf862a5ca690402"
     },
     {
       "objectKind": "character",
@@ -96,14 +96,9 @@
       "sourceIdentities": [
         "generated/characters.json#items[id=107001]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "character-acceptance-not-published",
-          "category": "not-implemented",
-          "message": "No published M11-D acceptance manifest covers every source identity."
-        },
         {
           "code": "character-not-optimization-ready",
           "category": "not-implemented",
@@ -115,9 +110,11 @@
           107001
         ],
         "mechanismHash": "d430860c91304d4d",
-        "characterAcceptanceManifestHashes": []
+        "characterAcceptanceManifestHashes": [
+          "34ad1ca859274a55"
+        ]
       },
-      "manifestHash": "ebea1bbd8c579f57"
+      "manifestHash": "c5415e34ad579073"
     },
     {
       "objectKind": "character",
@@ -158,17 +155,23 @@
       ],
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [],
+      "blockers": [
+        {
+          "code": "character-not-optimization-ready",
+          "category": "not-implemented",
+          "message": "Character acceptance maturity has not reached optimization-ready."
+        }
+      ],
       "evidence": {
         "sourceCharacterIds": [
           108003
         ],
         "mechanismHash": "bddf60c09a08e7f7",
         "characterAcceptanceManifestHashes": [
-          "8abf4e3d3794ce24"
+          "ce63c76e3cee9523"
         ]
       },
-      "manifestHash": "916846dc7178785a"
+      "manifestHash": "b6d92d8c7b987691"
     },
     {
       "objectKind": "character",
@@ -179,17 +182,23 @@
       ],
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [],
+      "blockers": [
+        {
+          "code": "character-not-optimization-ready",
+          "category": "not-implemented",
+          "message": "Character acceptance maturity has not reached optimization-ready."
+        }
+      ],
       "evidence": {
         "sourceCharacterIds": [
           109001
         ],
         "mechanismHash": "fd47d5ed36224b04",
         "characterAcceptanceManifestHashes": [
-          "8371d55c1a8195d1"
+          "ef1108ce7d50922d"
         ]
       },
-      "manifestHash": "f7233fe8808b7ad6"
+      "manifestHash": "e951f3e9e00c2d60"
     },
     {
       "objectKind": "character",
@@ -30888,9 +30897,9 @@
   "summary": {
     "objectCount": 263,
     "maturityCounts": {
-      "extracted": 20,
+      "extracted": 19,
       "optimization-ready": 211,
-      "runtime-integrated": 32
+      "runtime-integrated": 33
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -30901,5 +30910,5 @@
     },
     "optimizationReadyTotal": 211
   },
-  "manifestsHash": "f6aab7de4accdba6"
+  "manifestsHash": "aff51f72a51a1ff3"
 }

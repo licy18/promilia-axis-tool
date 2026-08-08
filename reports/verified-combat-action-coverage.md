@@ -1,19 +1,19 @@
 # M7 真实三值动作覆盖
 
 - 包：`azpr-tc-2026-07-18`
-- 公开动作分母：645
-- 已关联：645
-- 场景可运行：632
-- 来源静态可应用：459
+- 公开动作分母：646
+- 已关联：646
+- 场景可运行：634
+- 来源静态可应用：461
 - 来源运行时依赖：173
-- 零距离场景补全：584
-- 来源静态证据缺口：13
+- 零距离场景补全：585
+- 来源静态证据缺口：12
 - 明确零：0
-- 未解析：13
-- 真实命中节点：3229
-- 公开动作变体：675（未解析 43）
+- 未解析：12
+- 真实命中节点：3230
+- 公开动作变体：676（未解析 42）
 - 非零回能元素：667（未关联 464）
-- 零距离投射物命中：3540（仍缺发射帧 69、仍缺公式 7、仍缺目标 0）
+- 零距离投射物命中：3540（仍缺发射帧 68、仍缺公式 7、仍缺目标 0）
 - 普攻输入链：20 条 / 95 个输入段（可运行 80，未解析 15）
 - 普攻输入时序：已确认 78，未确认 17
 
@@ -46,13 +46,13 @@
 
 | Owner | 动作类型 | 目录 | 关联 | 可运行 | 明确零 | 未解析 | 命中 |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| actor | charged-attack | 20 | 20 | 15 | 0 | 5 | 75 |
+| actor | charged-attack | 20 | 20 | 15 | 0 | 5 | 71 |
 | actor | dodge-attack | 20 | 20 | 16 | 0 | 4 | 50 |
 | actor | limit-counter | 20 | 20 | 19 | 0 | 1 | 81 |
 | actor | normal-attack | 20 | 20 | 19 | 0 | 1 | 93 |
 | actor | perfect-parry | 20 | 20 | 20 | 0 | 0 | 10 |
 | actor | plunging-attack | 20 | 20 | 20 | 0 | 0 | 22 |
-| actor | star-carry | 17 | 17 | 15 | 0 | 2 | 85 |
+| actor | star-carry | 18 | 18 | 17 | 0 | 1 | 90 |
 | actor | star-combo | 20 | 20 | 20 | 0 | 0 | 20 |
 | actor | star-skill | 20 | 20 | 20 | 0 | 0 | 140 |
 | actor | ultimate | 20 | 20 | 20 | 0 | 0 | 143 |
@@ -70,7 +70,6 @@
 - `actor|107001|10700101|0|10700103|normal-attack` 西芙莉雅 / normal-attack / 疾风之箭: trigger-frame-missing, effect-trigger-frame-missing, normal-attack-input-segment-duration-unresolved
 - `actor|107001|10700101|4|10700110|charged-attack` 西芙莉雅 / charged-attack / 疾风之箭: trigger-frame-missing
 - `actor|107001|10700101|6|10700115|dodge-attack` 西芙莉雅 / dodge-attack / 疾风之箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, tuning-mark-relation-notDelElementDataList-unresolved
-- `actor|107001|10700121|0|10700121|star-carry` 西芙莉雅 / star-carry / 余音之痕: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|107002|10700201|2|10700215|dodge-attack` 米砂 / dodge-attack / 轻语: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|108001|10800101|1|10800110|charged-attack` 忒拉拉 / charged-attack / 狼行焰影: selected-control-variant-has-no-three-value-elements
 - `actor|108002|10800201|1|10800210|charged-attack` 璐璐卡 / charged-attack / 涟漪之舞: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved

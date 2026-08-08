@@ -11,7 +11,8 @@
 | 寒悠悠 (101003) | runtime-integrated | 130/159 | 13 | 22 | 否 |
 | 涂山小玉 (101010) | runtime-integrated | 148/255 | 72 | 57 | 否 |
 | 红宝石 (103002) | runtime-integrated | 167/588 | 71 | 163 | 否 |
-| 米蒂 (108003) | optimization-ready | 139/139 | 0 | 0 | 是 |
-| 末音 (109001) | optimization-ready | 138/138 | 0 | 0 | 是 |
+| 西芙莉雅 (107001) | runtime-integrated | 39/127 | 63 | 46 | 否 |
+| 米蒂 (108003) | runtime-integrated | 139/139 | 0 | 0 | 否 |
+| 末音 (109001) | runtime-integrated | 138/138 | 0 | 0 | 否 |
 
 三份 Machine Axis 场景继续由唯一 canonical core 重放并通过 Workbench 导入/导出；产品可视签收仍为 pending，真实 source gap 与尚缺场景覆盖继续阻断优化资格。

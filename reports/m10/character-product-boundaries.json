@@ -104,7 +104,7 @@
       }
     },
     {
-      "boundaryIdentity": "actor:102001:skill:10200162:product-boundary",
+      "boundaryIdentity": "actor:102001:skill:10200162:implemented",
       "ownerId": 102001,
       "ownerName": "莉莉",
       "passiveSlotIndex": 1,
@@ -120,17 +120,17 @@
         "skillId": 10200161,
         "name": "精准命中"
       },
-      "classification": "not-applicable",
-      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "classification": "implemented",
+      "reason": null,
       "sourceIdentities": [
         "characters.items[id=102001].skillSlots[group=passive,index=1,skillId=10200162]",
         "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
       ],
       "runtimeContractPolicy": {
-        "passiveProfile": false,
+        "passiveProfile": true,
         "listener": false,
-        "effectBinding": false,
-        "captureRequirement": false,
+        "effectBinding": true,
+        "captureRequirement": true,
         "gameplayImpactingGap": false
       }
     },
@@ -635,8 +635,8 @@
   "summary": {
     "publicCharacterCount": 20,
     "matchedCharacterCount": 20,
-    "implementedCharacterCount": 1,
-    "notApplicableCharacterCount": 19,
+    "implementedCharacterCount": 2,
+    "notApplicableCharacterCount": 18,
     "unresolvedCharacterCount": 0,
     "matchedSkillIds": [
       10100362,

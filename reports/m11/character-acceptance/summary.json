@@ -794,15 +794,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "27965702be3f2c3e",
-      "sourceOfTruthHash": "1b8f498737b783af",
+      "manifestHash": "1a090cbfe8c0b747",
+      "sourceOfTruthHash": "f10e2cd80db06995",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "e049701ffea7e7a0",
-        "data": "2af026303af3482b",
-        "trace": "2142fb12428cdbff",
+        "input": "f6d99e71caa91145",
+        "data": "93ccb4dbbd9e1e7a",
+        "trace": "d3c7f0eb34bf7102",
         "evaluation": "53eb57b729f3a7e6",
-        "build": "a8f27a97418a313f"
+        "build": "c87bc319f470b456"
       }
     },
     {
@@ -856,15 +856,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "53a9d481e22cc36d",
-      "sourceOfTruthHash": "335341203f34bb8a",
+      "manifestHash": "70f6c838b40fb89a",
+      "sourceOfTruthHash": "ce1d8244859edc3c",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "6e8afd481301cf39",
-        "data": "86b1d47a61cdb8ef",
-        "trace": "d33ad1730e8f7c44",
+        "input": "702de892be758f4e",
+        "data": "78ccf6a8ec2d95ce",
+        "trace": "c4c7bf31cf9a4b01",
         "evaluation": "204c04b2ab3f5fb4",
-        "build": "4684d774fb76e052"
+        "build": "237c1cc37f3c3e7b"
       }
     },
     {
@@ -919,23 +919,87 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "841977b608eeae70",
-      "sourceOfTruthHash": "525a9ca0949b3937",
+      "manifestHash": "4b8d09f01881429b",
+      "sourceOfTruthHash": "8c8c0b0e47f25c01",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "07ea755071a4731e",
-        "data": "5a3cc0d119e02f31",
-        "trace": "cf42eb60e1ed9b0b",
+        "input": "e825013a0a91d5c9",
+        "data": "218778dd2ea1a318",
+        "trace": "36a7e7a90d1b46a4",
         "evaluation": "208849308c4ec837",
-        "build": "d148417ab4e538eb"
+        "build": "e2cd63bf29021c04"
+      }
+    },
+    {
+      "ownerId": 107001,
+      "ownerName": "西芙莉雅",
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending",
+        "acceptance-required-matrix-incomplete",
+        "acceptance-blocking-ledger-not-empty"
+      ],
+      "blockingLedgerCount": 109,
+      "sourceGapCount": 63,
+      "acceptanceGapCount": 46,
+      "nonBlockingSourceCount": 53,
+      "matrix": {
+        "requirementCount": 265,
+        "requiredCount": 127,
+        "passedCount": 39,
+        "blockedCount": 88,
+        "notApplicableCount": 138,
+        "statusCounts": {
+          "blocked": 88,
+          "not-applicable": 138,
+          "passed": 39
+        },
+        "dimensionCounts": {
+          "action-effect-binding": 2,
+          "action-form": 12,
+          "attack-input-chain": 1,
+          "buff-lifecycle": 1,
+          "control-window": 82,
+          "controlled-actor": 1,
+          "critical": 9,
+          "effect": 94,
+          "hit": 37,
+          "hit-override": 1,
+          "passive": 1,
+          "persistence-replay": 1,
+          "public-action": 10,
+          "resource-boundary": 1,
+          "resource-profile": 1,
+          "resource-transaction": 1,
+          "scenario-negative": 1,
+          "scenario-positive": 1,
+          "stat-dependency": 1,
+          "state-machine": 1,
+          "switch-trigger": 1,
+          "variant-edge": 4,
+          "window-boundary": 1
+        }
+      },
+      "manifestHash": "34ad1ca859274a55",
+      "sourceOfTruthHash": "2ad1c0d0133fe017",
+      "machineScenario": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "58416841e10380c2",
+        "data": "216c8160b6e976e4",
+        "trace": "fd5673b19e6ad59c",
+        "evaluation": "2cfbca381aa12bae",
+        "build": "b08a5791d1b23241"
       }
     },
     {
       "ownerId": 108003,
       "ownerName": "米蒂",
-      "maturityState": "optimization-ready",
-      "optimizationReady": true,
-      "blockers": [],
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending"
+      ],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -976,23 +1040,25 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "8abf4e3d3794ce24",
-      "sourceOfTruthHash": "b2f33751d13cbb36",
+      "manifestHash": "ce63c76e3cee9523",
+      "sourceOfTruthHash": "0ec63ec3e2f60d0c",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "ff0e5cfeb6204398",
-        "data": "9e1c2699347eea59",
-        "trace": "9f2b9badd29cf1f2",
+        "input": "6430e1e6a6873323",
+        "data": "0054ef276ddc8580",
+        "trace": "31ef176144e726db",
         "evaluation": "3c2fb1d6fda5e7b9",
-        "build": "320ddf8446ee4c92"
+        "build": "f3562d525bcffba5"
       }
     },
     {
       "ownerId": 109001,
       "ownerName": "末音",
-      "maturityState": "optimization-ready",
-      "optimizationReady": true,
-      "blockers": [],
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending"
+      ],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1032,33 +1098,33 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "8371d55c1a8195d1",
-      "sourceOfTruthHash": "ce5c8a477e467433",
+      "manifestHash": "ef1108ce7d50922d",
+      "sourceOfTruthHash": "048450e320da07ff",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "ed8232da24ac81fb",
-        "data": "1407195353ed817b",
-        "trace": "81cc6e489621707b",
+        "input": "a1644119803dab1a",
+        "data": "f77ad812380f008a",
+        "trace": "6c3f839106298912",
         "evaluation": "855dd5b0926bf110",
-        "build": "51cec398e7de963e"
+        "build": "f38868d467316ab8"
       }
     }
   ],
-  "catalogHash": "2d5cf7bbbf53c7f9",
-  "manifestIndexHash": "bb65ad11069f650f",
+  "catalogHash": "2fe970af2facb647",
+  "manifestIndexHash": "a1693f598bda2b9c",
   "summary": {
-    "ownerCount": 5,
+    "ownerCount": 6,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
-    "runtimeIntegratedCount": 5,
-    "visuallyAcceptedCount": 2,
-    "optimizationReadyCount": 2,
-    "machineScenarioPassCount": 5,
-    "workbenchRoundTripPassCount": 5,
-    "sourceGapCount": 156,
-    "acceptanceGapCount": 242,
-    "nonBlockingSourceCount": 494,
-    "functionalBlockers": 398,
+    "runtimeIntegratedCount": 6,
+    "visuallyAcceptedCount": 0,
+    "optimizationReadyCount": 0,
+    "machineScenarioPassCount": 6,
+    "workbenchRoundTripPassCount": 6,
+    "sourceGapCount": 219,
+    "acceptanceGapCount": 288,
+    "nonBlockingSourceCount": 547,
+    "functionalBlockers": 507,
     "performanceAndBundleRisksBlocking": false
   }
 }

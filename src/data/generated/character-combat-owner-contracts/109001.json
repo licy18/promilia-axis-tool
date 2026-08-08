@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "kind": "azpr-character-combat-owner-compilation",
-  "compilerVersion": 4,
+  "compilerVersion": 5,
   "ownerId": 109001,
   "ownerName": "末音",
   "recipeIdentity": "actor:109001:character-combat-recipe:v1",
   "recipeHash": "5375a1af3e956798ee9304dd197b4eb25d89f64e7e58a3a44fec92e69bca2be9",
-  "compilerInputHash": "934ddcbb49e4abff0f3bae54a4f1559aee3de348f149f0601a55239976cca077",
+  "compilerInputHash": "04d2c48ed65b64a028e3dfb6f29452e5cda21833fe7d0b31133b37c98075aa69",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": true,
   "reachableControlSkillIds": [
@@ -16747,7 +16747,8 @@
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001362.asset#formula=102100|M=109001270|I=0|T=1|F=0",
               "status": "verified-element-layer-formula-activation-condition-ready",
               "applied": true
-            }
+            },
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10900104|0|elements|5|-6711007604037179960|element:-5022202969777715803|29|0",
@@ -16888,7 +16889,8 @@
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001362.asset#formula=102100|M=109001270|I=0|T=1|F=0",
               "status": "verified-element-layer-formula-activation-condition-ready",
               "applied": true
-            }
+            },
+            "landedHitActivationCondition": null
           }
         ],
         "effectGraph": [
@@ -18191,6 +18193,7 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "hitGate": null,
             "targetStateActivationCondition": {
               "kind": "element-layer-formula-activation-condition",
               "commonFunctionId": 102100,
@@ -18208,7 +18211,8 @@
               "status": "verified-element-layer-formula-activation-condition-ready",
               "applied": true
             },
-            "hitActivation": null
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-637110086033006477|47|0",
@@ -18353,7 +18357,8 @@
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
               "status": "verified-element-layer-formula-activation-condition-ready",
               "applied": true
-            }
+            },
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-1715488869977622004|47|0",
@@ -18526,7 +18531,8 @@
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
               "status": "verified-element-layer-formula-activation-condition-ready",
               "applied": true
-            }
+            },
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-7783775984244194322|47|0",
@@ -18699,7 +18705,8 @@
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
               "status": "verified-element-layer-formula-activation-condition-ready",
               "applied": true
-            }
+            },
+            "landedHitActivationCondition": null
           }
         ],
         "effectGraph": [
@@ -23826,6 +23833,9 @@
         },
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect-subtree",
         "inheritance": null,
         "status": "applied",
@@ -23866,6 +23876,9 @@
         },
         "hitActivation": null,
         "sourceReferenceKind": null,
+        "hitGate": null,
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect-subtree",
         "inheritance": null,
         "status": "applied",
@@ -23883,6 +23896,7 @@
         "capacityElementId": 109001270,
         "durationMs": 8000,
         "maxStacks": 1,
+        "runtimeOwnerScope": null,
         "expiryMode": "independent-layer",
         "atCapacityPolicy": "refresh-oldest",
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#time=8000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#combineNumber=-1|declared-capacity-override=1|Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1",
@@ -23929,6 +23943,7 @@
       }
     ],
     "conditionalHitGroups": [],
+    "tuningMarkConditionalDamageGroups": [],
     "runtimeEffectBindings": [],
     "hits": [
       {
@@ -29117,7 +29132,8 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001362.asset#formula=102100|M=109001270|I=0|T=1|F=0",
             "status": "verified-element-layer-formula-activation-condition-ready",
             "applied": true
-          }
+          },
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10900104|0|elements|5|-6711007604037179960|29|0",
@@ -29268,7 +29284,8 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001362.asset#formula=102100|M=109001270|I=0|T=1|F=0",
             "status": "verified-element-layer-formula-activation-condition-ready",
             "applied": true
-          }
+          },
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-1715488869977622004|47|0",
@@ -29441,7 +29458,8 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
             "status": "verified-element-layer-formula-activation-condition-ready",
             "applied": true
-          }
+          },
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
@@ -29701,6 +29719,7 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "hitGate": null,
           "targetStateActivationCondition": {
             "kind": "element-layer-formula-activation-condition",
             "commonFunctionId": 102100,
@@ -29718,7 +29737,8 @@
             "status": "verified-element-layer-formula-activation-condition-ready",
             "applied": true
           },
-          "hitActivation": null
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-637110086033006477|47|0",
@@ -29863,7 +29883,8 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
             "status": "verified-element-layer-formula-activation-condition-ready",
             "applied": true
-          }
+          },
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-7783775984244194322|47|0",
@@ -30036,7 +30057,8 @@
             "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
             "status": "verified-element-layer-formula-activation-condition-ready",
             "applied": true
-          }
+          },
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:5485634636675905737|47|0",
@@ -38707,7 +38729,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=109001].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|battle-effect:10900161:0:-2193895459641539428:-2633118252501932489:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/skill_control_10900105__1562824798995844947.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/skill_control_10900105__1562824798995844947.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900127.asset/MonoBehaviour/MonoBehaviour_8340818065355282527__8340818065355282527.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900127.asset/MonoBehaviour/skill_control_10900127__4167699101078258301.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2840539820446947370"
     }
   },
-  "contractHash": "73cfe739907fc319a6d2fafa955d955ae09e3bbfd8540c3348eaad49d5c9127e",
+  "contractHash": "253b8300c979e26ee30e76b9e0b56d21b2b3fc1e8ca510efeaa1741b473b40a2",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 0,
@@ -38721,6 +38743,7 @@
     "targetStateProfileCount": 1,
     "targetStateTransactionCount": 2,
     "conditionalHitGroupCount": 0,
+    "tuningMarkConditionalDamageGroupCount": 0,
     "runtimeEffectBindingCount": 0,
     "resourceProfileCount": 0,
     "resourceTransactionCount": 0,
@@ -38729,5 +38752,5 @@
     "thresholdTransitionCount": 0,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "60211e31c6d524fb3cc186032356d74c59797d367dd71376e0682f42c8f04259"
+  "recipeContractHash": "ace6d93efc1af8b9a4a9a1879d6cd222f0a4e3aeff2640ac3cc8f6046e475b58"
 }

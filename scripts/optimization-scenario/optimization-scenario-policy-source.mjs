@@ -35,6 +35,13 @@ const FROZEN_POLICY_HASH = '967b0667f315db5b';
 const FROZEN_ROSTER_HASH = 'a690b860f0967e3d';
 const FROZEN_VERIFIED_MECHANICS_PACKAGE_HASH =
   '226b60bec7c3b9e701b0a5483ec71685c71530bbec65f1df632362a30f588a4b';
+const SIFLIYA_STAR_SKILL_SOURCE_BASE =
+  'C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/';
+const SIFLIYA_STAR_SKILL_CONTROL_SOURCE = `${SIFLIYA_STAR_SKILL_SOURCE_BASE}skill_control_10700112__-5120092426558530615.json`;
+const SIFLIYA_STAR_SKILL_PRIMARY_TRIGGER_SOURCE = `${SIFLIYA_STAR_SKILL_SOURCE_BASE}MonoBehaviour_588802666480550264__588802666480550264.json#startFrame|toOwnElementBaseDatas`;
+const SIFLIYA_STAR_SKILL_ALTERNATE_TRIGGER_SOURCE = `${SIFLIYA_STAR_SKILL_SOURCE_BASE}MonoBehaviour_6770209787263084539__6770209787263084539.json#startFrame|toOwnElementBaseDatas`;
+const SIFLIYA_WIND_MARK_SOURCE =
+  'battle-element-assets.jsonl#path_id=1474042154774785480';
 
 // The roster is a product-frozen inclusion decision, not a live projection of
 // every later character-runtime refinement. Keep the approved evidence
@@ -42,6 +49,72 @@ const FROZEN_VERIFIED_MECHANICS_PACKAGE_HASH =
 // explicitly reviewed, stronger replacement evidence before projecting it
 // back to the frozen snapshot.
 const FROZEN_EVIDENCE_COMPATIBILITY = Object.freeze([
+  {
+    characterId: 107001,
+    currentEffectIdentity: '10700112|0|elements|5|1474042154774785480|10|0',
+    requiredCurrent: {
+      actionIdentity: 'actor|107001|10700112|0|10700112|star-skill',
+      controlSkillId: 10700112,
+      elementId: 750,
+      markId: 750,
+      stackDelta: 1,
+      depth: 0,
+      startFrame: 10,
+      sourceIdentity: `${SIFLIYA_STAR_SKILL_CONTROL_SOURCE}#skillResourceMaps[0].elements[5]|${SIFLIYA_WIND_MARK_SOURCE}|${SIFLIYA_STAR_SKILL_PRIMARY_TRIGGER_SOURCE}`,
+    },
+    frozenExpansion: [
+      {
+        effectIdentity:
+          '10700112|0|elements|5|1474042154774785480|element:1474042154774785480|10|0',
+      },
+      {
+        effectIdentity:
+          '10700112|0|elements|5|1474042154774785480|element:1474042154774785480|10|1',
+        sourceIdentity: `${SIFLIYA_STAR_SKILL_CONTROL_SOURCE}#skillResourceMaps[0].elements[5]|${SIFLIYA_WIND_MARK_SOURCE}|${SIFLIYA_STAR_SKILL_ALTERNATE_TRIGGER_SOURCE}`,
+      },
+    ],
+  },
+  {
+    characterId: 107001,
+    currentEffectIdentity:
+      '10700112|1|elements|5|1474042154774785480|element:1474042154774785480|10|0',
+    requiredCurrent: {
+      actionIdentity: 'actor|107001|10700112|0|10700112|star-skill',
+      controlSkillId: 10700112,
+      elementId: 750,
+      markId: 750,
+      stackDelta: 1,
+      depth: 0,
+      startFrame: 10,
+      sourceIdentity: `${SIFLIYA_STAR_SKILL_CONTROL_SOURCE}#skillResourceMaps[1].elements[5]|${SIFLIYA_WIND_MARK_SOURCE}|${SIFLIYA_STAR_SKILL_ALTERNATE_TRIGGER_SOURCE}`,
+    },
+    frozenExpansion: [
+      {
+        sourceIdentity: `${SIFLIYA_STAR_SKILL_CONTROL_SOURCE}#skillResourceMaps[1].elements[5]|${SIFLIYA_WIND_MARK_SOURCE}|${SIFLIYA_STAR_SKILL_PRIMARY_TRIGGER_SOURCE}`,
+      },
+      {
+        effectIdentity:
+          '10700112|1|elements|5|1474042154774785480|element:1474042154774785480|10|1',
+      },
+    ],
+  },
+  {
+    characterId: 107001,
+    currentEffectIdentity: '10700113|0|elements|5|1474042154774785480|133|0',
+    requiredCurrent: {
+      actionIdentity: 'actor|107001|10700113|0|10700113|ultimate',
+      controlSkillId: 10700113,
+      elementId: 750,
+      markId: 750,
+      stackDelta: 1,
+      depth: 0,
+      startFrame: 133,
+    },
+    frozenProjection: {
+      effectIdentity:
+        '10700113|0|elements|5|1474042154774785480|element:1474042154774785480|133|0',
+    },
+  },
   {
     characterId: 108003,
     currentEffectIdentity: '10800313|0|bulletElements|1|element-250|142|0',
@@ -62,8 +135,7 @@ const FROZEN_EVIDENCE_COMPATIBILITY = Object.freeze([
   },
   {
     characterId: 108003,
-    currentEffectIdentity:
-      '10800322|0|elements|0|-3809486317990090417|37|0',
+    currentEffectIdentity: '10800322|0|elements|0|-3809486317990090417|37|0',
     requiredCurrent: {
       controlSkillId: 10800322,
       elementId: 250,
@@ -269,7 +341,22 @@ function projectFrozenCandidateRoster(liveRoster) {
         );
       }
     }
-    Object.assign(evidence, compatibility.frozenProjection);
+    if (compatibility.frozenExpansion) {
+      const evidenceIndex = producer.productionEvidence.indexOf(evidence);
+      producer.productionEvidence.splice(
+        evidenceIndex,
+        1,
+        ...compatibility.frozenExpansion.map(projection => ({
+          ...structuredClone(evidence),
+          ...structuredClone(projection),
+        }))
+      );
+    } else {
+      Object.assign(evidence, compatibility.frozenProjection);
+    }
+  }
+  for (const producer of frozenRoster.markProducerCharacters) {
+    producer.productionEvidence.sort(sortEffectEvidence);
   }
   return frozenRoster;
 }

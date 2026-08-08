@@ -19,6 +19,7 @@ import {
   createOptimizationQualificationIssuesForContract,
   getOptimizationQualificationCatalog,
 } from '../../optimization-qualification/optimizationQualificationProtocol.js';
+import { createOptimizationScenarioPolicy as createOptimizationScenarioPolicyFromSource } from '../../../scripts/optimization-scenario/optimization-scenario-policy-source.mjs';
 
 describe('frozen M12-C optimization scenario policy', () => {
   it('binds the zero-distance passive-boss assumptions and nine-object roster', () => {
@@ -90,6 +91,26 @@ describe('frozen M12-C optimization scenario policy', () => {
           depth: 0,
           startFrame: 90,
         }),
+      ])
+    );
+  });
+
+  it('keeps the approved roster hash when Sifliya source aliases consolidate', () => {
+    const policy = createOptimizationScenarioPolicyFromSource();
+    const sifliya = policy.candidateRoster.markProducerCharacters.find(
+      entry => entry.characterId === 107001
+    );
+
+    expect(policy.candidateRoster.rosterHash).toBe('a690b860f0967e3d');
+    expect(sifliya.productionEvidence).toHaveLength(10);
+    expect(
+      sifliya.productionEvidence.map(entry => entry.effectIdentity)
+    ).toEqual(
+      expect.arrayContaining([
+        '10700112|0|elements|5|1474042154774785480|element:1474042154774785480|10|0',
+        '10700112|0|elements|5|1474042154774785480|element:1474042154774785480|10|1',
+        '10700112|1|elements|5|1474042154774785480|element:1474042154774785480|10|0',
+        '10700112|1|elements|5|1474042154774785480|element:1474042154774785480|10|1',
       ])
     );
   });

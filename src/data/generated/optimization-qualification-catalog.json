@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "b3bb274e638433c1",
-  "manifestsHash": "f6aab7de4accdba6",
-  "gapLedgerHash": "3f1ee6e8e0af5ec4",
-  "bindingMatrixHash": "6cba81d337120c35",
-  "sourceSnapshotHash": "26db4986bce695fe",
+  "rosterHash": "3f1ad0ad5f380ad3",
+  "manifestsHash": "aff51f72a51a1ff3",
+  "gapLedgerHash": "a0a49abf7e301296",
+  "bindingMatrixHash": "0ca17643ccc30d33",
+  "sourceSnapshotHash": "da2700ab821c3f9a",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -26,7 +26,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "27e249bbbacedd75"
+      "manifestHash": "f796b26bb19a52af"
     },
     {
       "objectKind": "character",
@@ -49,19 +49,18 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "144c2883dbd1d0db"
+      "manifestHash": "bcf862a5ca690402"
     },
     {
       "objectKind": "character",
       "objectId": "107001",
       "displayName": "西芙莉雅",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "character-acceptance-not-published",
         "character-not-optimization-ready"
       ],
-      "manifestHash": "ebea1bbd8c579f57"
+      "manifestHash": "c5415e34ad579073"
     },
     {
       "objectKind": "character",
@@ -81,8 +80,10 @@
       "displayName": "米蒂",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [],
-      "manifestHash": "916846dc7178785a"
+      "blockerCodes": [
+        "character-not-optimization-ready"
+      ],
+      "manifestHash": "b6d92d8c7b987691"
     },
     {
       "objectKind": "character",
@@ -90,8 +91,10 @@
       "displayName": "末音",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [],
-      "manifestHash": "f7233fe8808b7ad6"
+      "blockerCodes": [
+        "character-not-optimization-ready"
+      ],
+      "manifestHash": "e951f3e9e00c2d60"
     },
     {
       "objectKind": "character",
@@ -2631,7 +2634,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "b3bb274e638433c1",
+    "rosterHash": "3f1ad0ad5f380ad3",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -20603,7 +20606,7 @@
       "setSkillThresholdQualifiedCount": 12,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "6cba81d337120c35"
+    "bindingMatrixHash": "0ca17643ccc30d33"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -23153,8 +23156,8 @@
                 "declarationStatus": "source-indexed-table-declaration",
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
-                "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:102001:skill:10200162:product-boundary",
+                "reason": null,
+                "productBoundaryIdentity": "actor:102001:skill:10200162:implemented",
                 "productDecision": "unimplemented-dead-config"
               },
               "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
@@ -38198,9 +38201,9 @@
   "summary": {
     "objectCount": 263,
     "maturityCounts": {
-      "extracted": 20,
+      "extracted": 19,
       "optimization-ready": 211,
-      "runtime-integrated": 32
+      "runtime-integrated": 33
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -38210,7 +38213,7 @@
       "set-skill": 12
     },
     "optimizationReadyTotal": 211,
-    "gameplayBlockingGapCount": 13,
+    "gameplayBlockingGapCount": 14,
     "bindingQualifiedEdgeCount": 12,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -38292,5 +38295,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "b8810086de37175e"
+  "catalogHash": "187d4ba9ac714ca2"
 }

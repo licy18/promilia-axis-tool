@@ -192,13 +192,31 @@ function createLilyMechanicsPackage() {
   const guardBinding = lilyProfile.contracts.runtimeEffectBindings.find(
     binding => binding.bindingIdentity === 'lily-star-carry-guard'
   );
-  mechanicsPackage.actionMappings.push(structuredClone(starCarryMapping));
+  if (
+    !mechanicsPackage.actionMappings.some(
+      mapping => mapping.identity === starCarryMapping.identity
+    )
+  ) {
+    mechanicsPackage.actionMappings.push(structuredClone(starCarryMapping));
+  }
   mechanicsPackage.summary.candidateActionCount =
     mechanicsPackage.actionMappings.length;
-  mechanicsPackage.controlBindings.push(structuredClone(starCarryControl));
-  mechanicsPackage.actionVariantGraph.runtimeEffectBindings.push(
-    structuredClone(guardBinding)
-  );
+  if (
+    !mechanicsPackage.controlBindings.some(
+      control => control.controlSkillId === starCarryControl.controlSkillId
+    )
+  ) {
+    mechanicsPackage.controlBindings.push(structuredClone(starCarryControl));
+  }
+  if (
+    !mechanicsPackage.actionVariantGraph.runtimeEffectBindings.some(
+      binding => binding.bindingIdentity === guardBinding.bindingIdentity
+    )
+  ) {
+    mechanicsPackage.actionVariantGraph.runtimeEffectBindings.push(
+      structuredClone(guardBinding)
+    );
+  }
   return mechanicsPackage;
 }
 

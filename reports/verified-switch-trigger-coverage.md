@@ -2,17 +2,17 @@
 
 - 包：`azpr-tc-2026-07-18`
 - 固定分母：20 名公开角色 / 11 个入场槽 / 9 个退场槽
-- 可确定派生：17/20
-- 静态证据缺口：3
+- 可确定派生：18/20
+- 静态证据缺口：2
 
 | 角色 | 阶段 | 技能槽 | 技能 | 触发绑定 | 机制状态 |
 | --- | --- | ---: | ---: | --- | --- |
 | 寒悠悠 (101003) | 退场 | 201 | 10100322 | applied | applied |
 | 芃芃 (101007) | 入场 | 203 | 10100721 | applied | applied |
 | 涂山小玉 (101010) | 入场 | 203 | 10101021 | applied | applied |
-| 莉莉 (102001) | 退场 | 201 | 10200122 | static-evidence-gap | unresolved |
+| 莉莉 (102001) | 退场 | 201 | 10200122 | applied | applied |
 | 红宝石 (103002) | 入场 | 203 | 10300221 | applied | applied |
-| 西芙莉雅 (107001) | 入场 | 203 | 10700121 | applied | unresolved |
+| 西芙莉雅 (107001) | 入场 | 203 | 10700121 | applied | applied |
 | 米砂 (107002) | 退场 | 201 | 10700222 | applied | applied |
 | 阿比 (107003) | 入场 | 203 | 10700321 | applied | applied |
 | 忒拉拉 (108001) | 入场 | 203 | 10800121 | applied | applied |
@@ -30,7 +30,6 @@
 
 ## 静态证据缺口
 
-- `actor:102001|switch-trigger:on-exit|skill:10200122`：star-carry-action-mapping-missing
 - `actor:199001|switch-trigger:on-exit|skill:19900122`：star-carry-action-mapping-missing
 - `actor:199002|switch-trigger:on-exit|skill:19900222`：star-carry-action-mapping-missing
 

@@ -6,7 +6,7 @@
   "ownerName": "西芙莉雅",
   "recipeIdentity": "actor:107001:character-combat-recipe:v1",
   "recipeHash": "d16218f6cf89209e6cd1fcd6c168ea4987d48693f3efd48a6168c2f5d49dc6e4",
-  "compilerInputHash": "1de516058868f89f77db2ca3596743a4b8ea64cfd07fea925d12c57d1272210c",
+  "compilerInputHash": "c30e0cb7ba512eaecf3ca06809aca507c4b7ea7b36c245ffbe1f895bf04ced5c",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": true,
   "reachableControlSkillIds": [
@@ -16757,6 +16757,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700103|0|projectile|107001186|107001103|0|0|control:10700103|sub:0|behavior:-5390864234131596105|config:0|bullet:107001103:0:0|element:107001186:0"
           },
@@ -16827,6 +16829,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700103|1|projectile|107001186|107001103|0|0|control:10700103|sub:1|behavior:-8878305569444811787|config:0|bullet:107001103:0:0|element:107001186:0"
           },
@@ -16897,6 +16901,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700103|2|projectile|107001186|107001103|0|0|control:10700103|sub:2|behavior:-1919578787309499194|config:0|bullet:107001103:0:0|element:107001186:0"
           },
@@ -16967,6 +16973,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700103|3|projectile|107001186|107001103|0|0|control:10700103|sub:3|behavior:1686867761537638572|config:0|bullet:107001103:0:0|element:107001186:0"
           },
@@ -17027,12 +17035,16 @@
               "targetSourceField": "character-combat-verified-hit-binding",
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001009|skill_control_10700103.asset#sub4:bullet=107001031@31F|Bullet/ast_bullet_107001031.asset#collisionElement=107001009",
               "conditionalGroupIdentity": null,
-              "runtimeCondition": null
+              "runtimeCondition": null,
+              "sourceBindingIdentity": "sifliya-a3-arrow-1",
+              "hitActivation": null
             },
             "sourceEvidenceStatus": "applied",
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": "sifliya-a3-arrow-1",
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700103|4|bulletElements|0|-1252307238009381040|31|1"
           },
@@ -17093,12 +17105,16 @@
               "targetSourceField": "character-combat-verified-hit-binding",
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001009|skill_control_10700103.asset#sub4:bullet=107001031@31F|Bullet/ast_bullet_107001031.asset#bulletCount=3#arrow=2",
               "conditionalGroupIdentity": null,
-              "runtimeCondition": null
+              "runtimeCondition": null,
+              "sourceBindingIdentity": "sifliya-a3-arrow-2",
+              "hitActivation": null
             },
             "sourceEvidenceStatus": "applied",
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": "sifliya-a3-arrow-2",
+            "hitActivation": null,
             "hitIndex": 2,
             "hitIdentity": "10700103|4|bulletElements|0|-1252307238009381040|31|2"
           },
@@ -17159,12 +17175,16 @@
               "targetSourceField": "character-combat-verified-hit-binding",
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001009|skill_control_10700103.asset#sub4:bullet=107001031@31F|Bullet/ast_bullet_107001031.asset#bulletCount=3#arrow=3",
               "conditionalGroupIdentity": null,
-              "runtimeCondition": null
+              "runtimeCondition": null,
+              "sourceBindingIdentity": "sifliya-a3-arrow-3",
+              "hitActivation": null
             },
             "sourceEvidenceStatus": "applied",
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": "sifliya-a3-arrow-3",
+            "hitActivation": null,
             "hitIndex": 3,
             "hitIdentity": "10700103|4|bulletElements|0|-1252307238009381040|31|3"
           }
@@ -22462,6 +22482,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700110|0|projectile|107001081|107001101|0|0|control:10700110|sub:0|behavior:3787279483560012043|config:0|bullet:107001101:0:0|element:107001081:0"
           },
@@ -22532,6 +22554,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 2,
             "hitIdentity": "10700110|0|projectile|107001081|107001101|0|0|control:10700110|sub:0|behavior:3116273160182376715|config:0|bullet:107001101:0:0|element:107001081:0"
           },
@@ -22602,6 +22626,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700110|1|projectile|107001081|107001101|0|0|control:10700110|sub:1|behavior:2143683595391905986|config:0|bullet:107001101:0:0|element:107001081:0"
           },
@@ -22672,6 +22698,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 2,
             "hitIdentity": "10700110|1|projectile|107001081|107001101|0|0|control:10700110|sub:1|behavior:-2106420387944746814|config:0|bullet:107001101:0:0|element:107001081:0"
           },
@@ -22742,6 +22770,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700110|2|projectile|107001081|107001101|0|0|control:10700110|sub:2|behavior:-211309303782043620|config:0|bullet:107001101:0:0|element:107001081:0"
           },
@@ -22812,6 +22842,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 2,
             "hitIdentity": "10700110|2|projectile|107001081|107001101|0|0|control:10700110|sub:2|behavior:-3900085254801321956|config:0|bullet:107001101:0:0|element:107001081:0"
           },
@@ -22882,6 +22914,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700110|3|projectile|107001081|107001101|0|0|control:10700110|sub:3|behavior:-3223266755001681116|config:0|bullet:107001101:0:0|element:107001081:0"
           },
@@ -22952,6 +22986,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 2,
             "hitIdentity": "10700110|3|projectile|107001081|107001101|0|0|control:10700110|sub:3|behavior:4301787949619968804|config:0|bullet:107001101:0:0|element:107001081:0"
           },
@@ -23022,6 +23058,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700110|4|projectile|107001081|107001101|0|0|control:10700110|sub:4|behavior:257549806221134127|config:0|bullet:107001101:0:0|element:107001081:0"
           },
@@ -23092,6 +23130,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 2,
             "hitIdentity": "10700110|4|projectile|107001081|107001101|0|0|control:10700110|sub:4|behavior:-8044036480902821585|config:0|bullet:107001101:0:0|element:107001081:0"
           }
@@ -23994,7 +24034,8 @@
               "status": "verified-tuning-profile-ready",
               "applied": true,
               "profileKey": "wind",
-              "stackDelta": 1
+              "stackDelta": 1,
+              "occurrenceIdentity": "action-effect-binding:sifliya-star-first-hit-wind-mark"
             },
             "tuningOverlimit": null,
             "directSpPresence": null,
@@ -24046,7 +24087,9 @@
               "hitIndex": 1,
               "sourceIdentity": "skill_control_10700112.asset#107001218-and-element750@10F"
             },
-            "targetStateActivationCondition": null
+            "targetStateActivationCondition": null,
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10700112|0|elements|5|1474042154774785480|element:-8148787786042882084|10|0",
@@ -31205,6 +31248,8 @@
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700126|0|elements|0|-2334153217899470392|40|1"
           },
@@ -31272,6 +31317,8 @@
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700126|1|elements|0|-7202743628247366655|40|1"
           }
@@ -31548,6 +31595,8 @@
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700113|1|elements|4|1184358978844764494|133|1"
           },
@@ -31615,6 +31664,8 @@
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 2,
             "hitIdentity": "10700113|1|elements|5|-5816042389131631778|141|2"
           },
@@ -31682,6 +31733,8 @@
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 3,
             "hitIdentity": "10700113|1|elements|5|-5816042389131631778|147|3"
           },
@@ -31749,6 +31802,8 @@
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 4,
             "hitIdentity": "10700113|1|elements|5|-5816042389131631778|153|4"
           },
@@ -31816,6 +31871,8 @@
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 5,
             "hitIdentity": "10700113|1|elements|5|-5816042389131631778|159|5"
           },
@@ -31883,6 +31940,8 @@
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 6,
             "hitIdentity": "10700113|1|elements|7|1548014815254838373|165|6"
           }
@@ -32439,7 +32498,8 @@
               "status": "verified-tuning-profile-ready",
               "applied": true,
               "profileKey": "wind",
-              "stackDelta": 1
+              "stackDelta": 1,
+              "occurrenceIdentity": "action-effect-binding:sifliya-ultimate-first-hit-wind-mark"
             },
             "tuningOverlimit": null,
             "directSpPresence": null,
@@ -32491,7 +32551,9 @@
               "hitIndex": 1,
               "sourceIdentity": "skill_control_10700113.asset#107001149-and-element750@133F"
             },
-            "targetStateActivationCondition": null
+            "targetStateActivationCondition": null,
+            "hitActivation": null,
+            "landedHitActivationCondition": null
           },
           {
             "effectIdentity": "10700113|0|elements|5|1474042154774785480|element:-8148787786042882084|133|0",
@@ -35182,12 +35244,16 @@
               "targetSourceField": "character-combat-verified-hit-binding",
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_-2567277590965607248#shoot107001154@60F#bulletCount=3#arrow=1|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
               "conditionalGroupIdentity": null,
-              "runtimeCondition": null
+              "runtimeCondition": null,
+              "sourceBindingIdentity": "sifliya-star-carry-arrow-1",
+              "hitActivation": null
             },
             "sourceEvidenceStatus": "applied",
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": "sifliya-star-carry-arrow-1",
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700121|0|bulletElements|0|-3874667740088165249|60|1"
           },
@@ -35248,12 +35314,16 @@
               "targetSourceField": "character-combat-verified-hit-binding",
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_-2567277590965607248#shoot107001154@60F#bulletCount=3#arrow=2|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
               "conditionalGroupIdentity": null,
-              "runtimeCondition": null
+              "runtimeCondition": null,
+              "sourceBindingIdentity": "sifliya-star-carry-arrow-2",
+              "hitActivation": null
             },
             "sourceEvidenceStatus": "applied",
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": "sifliya-star-carry-arrow-2",
+            "hitActivation": null,
             "hitIndex": 2,
             "hitIdentity": "10700121|0|bulletElements|0|-3874667740088165249|60|2"
           },
@@ -35314,12 +35384,16 @@
               "targetSourceField": "character-combat-verified-hit-binding",
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_-2567277590965607248#shoot107001154@60F#bulletCount=3#arrow=3|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
               "conditionalGroupIdentity": null,
-              "runtimeCondition": null
+              "runtimeCondition": null,
+              "sourceBindingIdentity": "sifliya-star-carry-arrow-3",
+              "hitActivation": null
             },
             "sourceEvidenceStatus": "applied",
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": "sifliya-star-carry-arrow-3",
+            "hitActivation": null,
             "hitIndex": 3,
             "hitIdentity": "10700121|0|bulletElements|0|-3874667740088165249|60|3"
           },
@@ -35380,12 +35454,16 @@
               "targetSourceField": "character-combat-verified-hit-binding",
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_-1306913445979315024#shoot107001154@60F#bulletCount=1#arrow=4|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
               "conditionalGroupIdentity": null,
-              "runtimeCondition": null
+              "runtimeCondition": null,
+              "sourceBindingIdentity": "sifliya-star-carry-arrow-4",
+              "hitActivation": null
             },
             "sourceEvidenceStatus": "applied",
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": "sifliya-star-carry-arrow-4",
+            "hitActivation": null,
             "hitIndex": 4,
             "hitIdentity": "10700121|0|bulletElements|0|-3874667740088165249|60|4"
           },
@@ -35446,12 +35524,16 @@
               "targetSourceField": "character-combat-verified-hit-binding",
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_7087024298710443184#shoot107001154@60F#bulletCount=1#arrow=5|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
               "conditionalGroupIdentity": null,
-              "runtimeCondition": null
+              "runtimeCondition": null,
+              "sourceBindingIdentity": "sifliya-star-carry-arrow-5",
+              "hitActivation": null
             },
             "sourceEvidenceStatus": "applied",
             "scenarioRuntimeStatus": "source-verified",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": "sifliya-star-carry-arrow-5",
+            "hitActivation": null,
             "hitIndex": 5,
             "hitIdentity": "10700121|0|bulletElements|0|-3874667740088165249|60|5"
           }
@@ -35686,6 +35768,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0"
           }
@@ -39591,6 +39675,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700102|0|projectile|107001186|107001103|0|0|control:10700102|sub:0|behavior:-7032389547728579854|config:0|bullet:107001103:0:0|element:107001186:0"
           },
@@ -39661,6 +39747,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700102|1|projectile|107001186|107001103|0|0|control:10700102|sub:1|behavior:7394904183794316451|config:0|bullet:107001103:0:0|element:107001186:0"
           },
@@ -39731,6 +39819,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700102|2|projectile|107001186|107001103|0|0|control:10700102|sub:2|behavior:5208218641655675353|config:0|bullet:107001103:0:0|element:107001186:0"
           },
@@ -39801,6 +39891,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700102|3|projectile|107001186|107001103|0|0|control:10700102|sub:3|behavior:-691045404384015001|config:0|bullet:107001103:0:0|element:107001186:0"
           },
@@ -39871,6 +39963,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 1,
             "hitIdentity": "10700102|4|projectile|107001010|107001021|0|0|control:10700102|sub:4|behavior:8100721922202346811|config:0|bullet:107001021:0:0|element:107001010:0"
           },
@@ -39941,6 +40035,8 @@
             "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
             "conditionalGroupIdentity": null,
             "runtimeCondition": null,
+            "sourceBindingIdentity": null,
+            "hitActivation": null,
             "hitIndex": 2,
             "hitIdentity": "10700102|4|projectile|107001010|107001021|0|0|control:10700102|sub:4|behavior:-2619384497358297797|config:0|bullet:107001021:0:0|element:107001010:0"
           }
@@ -50598,19 +50694,24 @@
           "status": "verified-tuning-profile-ready",
           "applied": true,
           "profileKey": "wind",
-          "stackDelta": 1
+          "stackDelta": 1,
+          "occurrenceIdentity": "action-effect-binding:sifliya-star-first-hit-wind-mark"
         },
         "lifecycleStackDelta": null,
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
         "targetStateActivationCondition": null,
+        "hitActivation": null,
+        "sourceReferenceKind": null,
         "hitGate": {
           "kind": "conditional-damage-group-hit",
           "groupIdentity": "sifliya-star-hit-1",
           "hitIndex": 1,
           "sourceIdentity": "skill_control_10700112.asset#107001218-and-element750@10F"
         },
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -50743,19 +50844,24 @@
           "status": "verified-tuning-profile-ready",
           "applied": true,
           "profileKey": "wind",
-          "stackDelta": 1
+          "stackDelta": 1,
+          "occurrenceIdentity": "action-effect-binding:sifliya-ultimate-first-hit-wind-mark"
         },
         "lifecycleStackDelta": null,
         "lifecycleMaxStacks": null,
         "durationMsOverride": null,
         "targetKindOverride": null,
         "targetStateActivationCondition": null,
+        "hitActivation": null,
+        "sourceReferenceKind": null,
         "hitGate": {
           "kind": "conditional-damage-group-hit",
           "groupIdentity": "sifliya-ultimate-hit-1",
           "hitIndex": 1,
           "sourceIdentity": "skill_control_10700113.asset#107001149-and-element750@133F"
         },
+        "landedHitActivationCondition": null,
+        "scenarioOutOfScope": null,
         "activationConditionScope": "matched-effect",
         "inheritance": null,
         "status": "applied",
@@ -50782,6 +50888,7 @@
         "targetKind": "enemy",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "hitActivation": null,
         "formulaNormalization": null,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_-2567277590965607248#shoot107001154@60F#bulletCount=3#arrow=1|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
         "status": "applied",
@@ -50806,6 +50913,7 @@
         "targetKind": "enemy",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "hitActivation": null,
         "formulaNormalization": null,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_-2567277590965607248#shoot107001154@60F#bulletCount=3#arrow=2|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
         "status": "applied",
@@ -50830,6 +50938,7 @@
         "targetKind": "enemy",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "hitActivation": null,
         "formulaNormalization": null,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_-2567277590965607248#shoot107001154@60F#bulletCount=3#arrow=3|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
         "status": "applied",
@@ -50854,6 +50963,7 @@
         "targetKind": "enemy",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "hitActivation": null,
         "formulaNormalization": null,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_-1306913445979315024#shoot107001154@60F#bulletCount=1#arrow=4|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
         "status": "applied",
@@ -50878,6 +50988,7 @@
         "targetKind": "enemy",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "hitActivation": null,
         "formulaNormalization": null,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_7087024298710443184#shoot107001154@60F#bulletCount=1#arrow=5|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
         "status": "applied",
@@ -50902,6 +51013,7 @@
         "targetKind": "enemy",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "hitActivation": null,
         "formulaNormalization": null,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001009|skill_control_10700103.asset#sub4:bullet=107001031@31F|Bullet/ast_bullet_107001031.asset#collisionElement=107001009",
         "status": "applied",
@@ -50926,6 +51038,7 @@
         "targetKind": "enemy",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "hitActivation": null,
         "formulaNormalization": null,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001009|skill_control_10700103.asset#sub4:bullet=107001031@31F|Bullet/ast_bullet_107001031.asset#bulletCount=3#arrow=2",
         "status": "applied",
@@ -50950,6 +51063,7 @@
         "targetKind": "enemy",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "hitActivation": null,
         "formulaNormalization": null,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001009|skill_control_10700103.asset#sub4:bullet=107001031@31F|Bullet/ast_bullet_107001031.asset#bulletCount=3#arrow=3",
         "status": "applied",
@@ -51547,6 +51661,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0",
         "controlSkillId": 10700101,
@@ -51619,6 +51735,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700102|0|projectile|107001186|107001103|0|0|control:10700102|sub:0|behavior:-7032389547728579854|config:0|bullet:107001103:0:0|element:107001186:0",
         "controlSkillId": 10700102,
@@ -51691,6 +51809,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700102|1|projectile|107001186|107001103|0|0|control:10700102|sub:1|behavior:7394904183794316451|config:0|bullet:107001103:0:0|element:107001186:0",
         "controlSkillId": 10700102,
@@ -51763,6 +51883,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700102|2|projectile|107001186|107001103|0|0|control:10700102|sub:2|behavior:5208218641655675353|config:0|bullet:107001103:0:0|element:107001186:0",
         "controlSkillId": 10700102,
@@ -51835,6 +51957,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700102|3|projectile|107001186|107001103|0|0|control:10700102|sub:3|behavior:-691045404384015001|config:0|bullet:107001103:0:0|element:107001186:0",
         "controlSkillId": 10700102,
@@ -51907,6 +52031,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 2,
         "hitIdentity": "10700102|4|projectile|107001010|107001021|0|0|control:10700102|sub:4|behavior:-2619384497358297797|config:0|bullet:107001021:0:0|element:107001010:0",
         "controlSkillId": 10700102,
@@ -51979,6 +52105,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700102|4|projectile|107001010|107001021|0|0|control:10700102|sub:4|behavior:8100721922202346811|config:0|bullet:107001021:0:0|element:107001010:0",
         "controlSkillId": 10700102,
@@ -52051,6 +52179,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700103|0|projectile|107001186|107001103|0|0|control:10700103|sub:0|behavior:-5390864234131596105|config:0|bullet:107001103:0:0|element:107001186:0",
         "controlSkillId": 10700103,
@@ -52123,6 +52253,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700103|1|projectile|107001186|107001103|0|0|control:10700103|sub:1|behavior:-8878305569444811787|config:0|bullet:107001103:0:0|element:107001186:0",
         "controlSkillId": 10700103,
@@ -52195,6 +52327,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700103|2|projectile|107001186|107001103|0|0|control:10700103|sub:2|behavior:-1919578787309499194|config:0|bullet:107001103:0:0|element:107001186:0",
         "controlSkillId": 10700103,
@@ -52267,6 +52401,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700103|3|projectile|107001186|107001103|0|0|control:10700103|sub:3|behavior:1686867761537638572|config:0|bullet:107001103:0:0|element:107001186:0",
         "controlSkillId": 10700103,
@@ -52329,12 +52465,16 @@
           "targetSourceField": "character-combat-verified-hit-binding",
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001009|skill_control_10700103.asset#sub4:bullet=107001031@31F|Bullet/ast_bullet_107001031.asset#collisionElement=107001009",
           "conditionalGroupIdentity": null,
-          "runtimeCondition": null
+          "runtimeCondition": null,
+          "sourceBindingIdentity": "sifliya-a3-arrow-1",
+          "hitActivation": null
         },
         "sourceEvidenceStatus": "applied",
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": "sifliya-a3-arrow-1",
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700103|4|bulletElements|0|-1252307238009381040|31|1",
         "controlSkillId": 10700103,
@@ -52397,12 +52537,16 @@
           "targetSourceField": "character-combat-verified-hit-binding",
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001009|skill_control_10700103.asset#sub4:bullet=107001031@31F|Bullet/ast_bullet_107001031.asset#bulletCount=3#arrow=2",
           "conditionalGroupIdentity": null,
-          "runtimeCondition": null
+          "runtimeCondition": null,
+          "sourceBindingIdentity": "sifliya-a3-arrow-2",
+          "hitActivation": null
         },
         "sourceEvidenceStatus": "applied",
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": "sifliya-a3-arrow-2",
+        "hitActivation": null,
         "hitIndex": 2,
         "hitIdentity": "10700103|4|bulletElements|0|-1252307238009381040|31|2",
         "controlSkillId": 10700103,
@@ -52465,12 +52609,16 @@
           "targetSourceField": "character-combat-verified-hit-binding",
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001009|skill_control_10700103.asset#sub4:bullet=107001031@31F|Bullet/ast_bullet_107001031.asset#bulletCount=3#arrow=3",
           "conditionalGroupIdentity": null,
-          "runtimeCondition": null
+          "runtimeCondition": null,
+          "sourceBindingIdentity": "sifliya-a3-arrow-3",
+          "hitActivation": null
         },
         "sourceEvidenceStatus": "applied",
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": "sifliya-a3-arrow-3",
+        "hitActivation": null,
         "hitIndex": 3,
         "hitIdentity": "10700103|4|bulletElements|0|-1252307238009381040|31|3",
         "controlSkillId": 10700103,
@@ -52543,6 +52691,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 2,
         "hitIdentity": "10700110|0|projectile|107001081|107001101|0|0|control:10700110|sub:0|behavior:3116273160182376715|config:0|bullet:107001101:0:0|element:107001081:0",
         "controlSkillId": 10700110,
@@ -52615,6 +52765,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700110|0|projectile|107001081|107001101|0|0|control:10700110|sub:0|behavior:3787279483560012043|config:0|bullet:107001101:0:0|element:107001081:0",
         "controlSkillId": 10700110,
@@ -52687,6 +52839,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 2,
         "hitIdentity": "10700110|1|projectile|107001081|107001101|0|0|control:10700110|sub:1|behavior:-2106420387944746814|config:0|bullet:107001101:0:0|element:107001081:0",
         "controlSkillId": 10700110,
@@ -52759,6 +52913,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700110|1|projectile|107001081|107001101|0|0|control:10700110|sub:1|behavior:2143683595391905986|config:0|bullet:107001101:0:0|element:107001081:0",
         "controlSkillId": 10700110,
@@ -52831,6 +52987,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700110|2|projectile|107001081|107001101|0|0|control:10700110|sub:2|behavior:-211309303782043620|config:0|bullet:107001101:0:0|element:107001081:0",
         "controlSkillId": 10700110,
@@ -52903,6 +53061,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 2,
         "hitIdentity": "10700110|2|projectile|107001081|107001101|0|0|control:10700110|sub:2|behavior:-3900085254801321956|config:0|bullet:107001101:0:0|element:107001081:0",
         "controlSkillId": 10700110,
@@ -52975,6 +53135,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700110|3|projectile|107001081|107001101|0|0|control:10700110|sub:3|behavior:-3223266755001681116|config:0|bullet:107001101:0:0|element:107001081:0",
         "controlSkillId": 10700110,
@@ -53047,6 +53209,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 2,
         "hitIdentity": "10700110|3|projectile|107001081|107001101|0|0|control:10700110|sub:3|behavior:4301787949619968804|config:0|bullet:107001101:0:0|element:107001081:0",
         "controlSkillId": 10700110,
@@ -53119,6 +53283,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 2,
         "hitIdentity": "10700110|4|projectile|107001081|107001101|0|0|control:10700110|sub:4|behavior:-8044036480902821585|config:0|bullet:107001101:0:0|element:107001081:0",
         "controlSkillId": 10700110,
@@ -53191,6 +53357,8 @@
         "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700110|4|projectile|107001081|107001101|0|0|control:10700110|sub:4|behavior:257549806221134127|config:0|bullet:107001101:0:0|element:107001081:0",
         "controlSkillId": 10700110,
@@ -53260,6 +53428,8 @@
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700113|1|elements|4|1184358978844764494|133|1",
         "controlSkillId": 10700113,
@@ -53329,6 +53499,8 @@
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 2,
         "hitIdentity": "10700113|1|elements|5|-5816042389131631778|141|2",
         "controlSkillId": 10700113,
@@ -53398,6 +53570,8 @@
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 3,
         "hitIdentity": "10700113|1|elements|5|-5816042389131631778|147|3",
         "controlSkillId": 10700113,
@@ -53467,6 +53641,8 @@
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 4,
         "hitIdentity": "10700113|1|elements|5|-5816042389131631778|153|4",
         "controlSkillId": 10700113,
@@ -53536,6 +53712,8 @@
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 5,
         "hitIdentity": "10700113|1|elements|5|-5816042389131631778|159|5",
         "controlSkillId": 10700113,
@@ -53605,6 +53783,8 @@
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 6,
         "hitIdentity": "10700113|1|elements|7|1548014815254838373|165|6",
         "controlSkillId": 10700113,
@@ -53667,12 +53847,16 @@
           "targetSourceField": "character-combat-verified-hit-binding",
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_-2567277590965607248#shoot107001154@60F#bulletCount=3#arrow=1|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
           "conditionalGroupIdentity": null,
-          "runtimeCondition": null
+          "runtimeCondition": null,
+          "sourceBindingIdentity": "sifliya-star-carry-arrow-1",
+          "hitActivation": null
         },
         "sourceEvidenceStatus": "applied",
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": "sifliya-star-carry-arrow-1",
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700121|0|bulletElements|0|-3874667740088165249|60|1",
         "controlSkillId": 10700121,
@@ -53735,12 +53919,16 @@
           "targetSourceField": "character-combat-verified-hit-binding",
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_-2567277590965607248#shoot107001154@60F#bulletCount=3#arrow=2|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
           "conditionalGroupIdentity": null,
-          "runtimeCondition": null
+          "runtimeCondition": null,
+          "sourceBindingIdentity": "sifliya-star-carry-arrow-2",
+          "hitActivation": null
         },
         "sourceEvidenceStatus": "applied",
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": "sifliya-star-carry-arrow-2",
+        "hitActivation": null,
         "hitIndex": 2,
         "hitIdentity": "10700121|0|bulletElements|0|-3874667740088165249|60|2",
         "controlSkillId": 10700121,
@@ -53803,12 +53991,16 @@
           "targetSourceField": "character-combat-verified-hit-binding",
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_-2567277590965607248#shoot107001154@60F#bulletCount=3#arrow=3|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
           "conditionalGroupIdentity": null,
-          "runtimeCondition": null
+          "runtimeCondition": null,
+          "sourceBindingIdentity": "sifliya-star-carry-arrow-3",
+          "hitActivation": null
         },
         "sourceEvidenceStatus": "applied",
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": "sifliya-star-carry-arrow-3",
+        "hitActivation": null,
         "hitIndex": 3,
         "hitIdentity": "10700121|0|bulletElements|0|-3874667740088165249|60|3",
         "controlSkillId": 10700121,
@@ -53871,12 +54063,16 @@
           "targetSourceField": "character-combat-verified-hit-binding",
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_-1306913445979315024#shoot107001154@60F#bulletCount=1#arrow=4|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
           "conditionalGroupIdentity": null,
-          "runtimeCondition": null
+          "runtimeCondition": null,
+          "sourceBindingIdentity": "sifliya-star-carry-arrow-4",
+          "hitActivation": null
         },
         "sourceEvidenceStatus": "applied",
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": "sifliya-star-carry-arrow-4",
+        "hitActivation": null,
         "hitIndex": 4,
         "hitIdentity": "10700121|0|bulletElements|0|-3874667740088165249|60|4",
         "controlSkillId": 10700121,
@@ -53939,12 +54135,16 @@
           "targetSourceField": "character-combat-verified-hit-binding",
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700121.asset/MonoBehaviour/skill_control_10700121__2393728164198043088.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107001209|skill_control_10700121.asset#MonoBehaviour_7087024298710443184#shoot107001154@60F#bulletCount=1#arrow=5|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209",
           "conditionalGroupIdentity": null,
-          "runtimeCondition": null
+          "runtimeCondition": null,
+          "sourceBindingIdentity": "sifliya-star-carry-arrow-5",
+          "hitActivation": null
         },
         "sourceEvidenceStatus": "applied",
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": "sifliya-star-carry-arrow-5",
+        "hitActivation": null,
         "hitIndex": 5,
         "hitIdentity": "10700121|0|bulletElements|0|-3874667740088165249|60|5",
         "controlSkillId": 10700121,
@@ -54014,6 +54214,8 @@
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700126|0|elements|0|-2334153217899470392|40|1",
         "controlSkillId": 10700126,
@@ -54083,6 +54285,8 @@
         "scenarioRuntimeStatus": "source-verified",
         "conditionalGroupIdentity": null,
         "runtimeCondition": null,
+        "sourceBindingIdentity": null,
+        "hitActivation": null,
         "hitIndex": 1,
         "hitIdentity": "10700126|1|elements|0|-7202743628247366655|40|1",
         "controlSkillId": 10700126,
@@ -69433,7 +69637,8 @@
             "status": "verified-tuning-profile-ready",
             "applied": true,
             "profileKey": "wind",
-            "stackDelta": 1
+            "stackDelta": 1,
+            "occurrenceIdentity": "action-effect-binding:sifliya-star-first-hit-wind-mark"
           },
           "tuningOverlimit": null,
           "directSpPresence": null,
@@ -69485,7 +69690,9 @@
             "hitIndex": 1,
             "sourceIdentity": "skill_control_10700112.asset#107001218-and-element750@10F"
           },
-          "targetStateActivationCondition": null
+          "targetStateActivationCondition": null,
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10700112|0|elements|14|1995917523683825037|element:1995917523683825037|39|0",
@@ -74441,7 +74648,8 @@
             "status": "verified-tuning-profile-ready",
             "applied": true,
             "profileKey": "wind",
-            "stackDelta": 1
+            "stackDelta": 1,
+            "occurrenceIdentity": "action-effect-binding:sifliya-ultimate-first-hit-wind-mark"
           },
           "tuningOverlimit": null,
           "directSpPresence": null,
@@ -74493,7 +74701,9 @@
             "hitIndex": 1,
             "sourceIdentity": "skill_control_10700113.asset#107001149-and-element750@133F"
           },
-          "targetStateActivationCondition": null
+          "targetStateActivationCondition": null,
+          "hitActivation": null,
+          "landedHitActivationCondition": null
         },
         {
           "effectIdentity": "10700113|0|elements|2|-7855064557830690379|element:1752797758134377124|133|0",
@@ -94052,7 +94262,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=107001].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107001162.asset/MonoBehaviour/ast_107001162__400549414081394249.json#elementConfigId=107001162|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/skill_control_10700101__636759246568854573.json#skillResourceMaps[0].bulletElements[7]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/skill_control_10700101__636759246568854573.json#skillResourceMaps[0].bulletElements[3]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/skill_control_10700101__636759246568854573.json#skillResourceMaps[0].bulletElements[6]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/skill_control_10700101__636759246568854573.json#skillResourceMaps[0].elements[4]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/skill_control_10700101__636759246568854573.json#skillResourceMaps[0].elements[7]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/skill_control_10700101__636759246568854573.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/skill_control_10700101__636759246568854573.json#skillResourceMaps[0].bulletElements[5]|battle-element-assets.jsonl#path_id=-5182582270181453340|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/skill_control_10700101__636759246568854573.json#skillResourceMaps[0].bulletElements[3]|battle-element-assets.jsonl#path_id=-5182582270181453340|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/skill_control_10700101__636759246568854573.json#skillResourceMaps[0].elements[4]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/skill_control_10700101__636759246568854573.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-5182582270181453340|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_-1248620457979526792__-1248620457979526792.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillResourceMaps[0].elements[24]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_588802666480550264__588802666480550264.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_-1248620457979526792__-1248620457979526792.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillResourceMaps[0].elements[24]|battle-element-assets.jsonl#path_id=-5182582270181453340|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/MonoBehaviour_-4555925827987686937__-4555925827987686937.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/skill_control_10700113__-4780504530561126012.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700125.asset/MonoBehaviour/skill_control_10700125__-1842072263179732239.json#skillResourceMaps[0].bulletElements[7]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700125.asset/MonoBehaviour/skill_control_10700125__-1842072263179732239.json#skillResourceMaps[0].bulletElements[3]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700125.asset/MonoBehaviour/skill_control_10700125__-1842072263179732239.json#skillResourceMaps[0].bulletElements[6]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700125.asset/MonoBehaviour/skill_control_10700125__-1842072263179732239.json#skillResourceMaps[0].elements[10]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700125.asset/MonoBehaviour/skill_control_10700125__-1842072263179732239.json#skillResourceMaps[0].elements[11]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700125.asset/MonoBehaviour/skill_control_10700125__-1842072263179732239.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700125.asset/MonoBehaviour/skill_control_10700125__-1842072263179732239.json#skillResourceMaps[0].bulletElements[5]|battle-element-assets.jsonl#path_id=-5182582270181453340|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700125.asset/MonoBehaviour/skill_control_10700125__-1842072263179732239.json#skillResourceMaps[0].bulletElements[3]|battle-element-assets.jsonl#path_id=-5182582270181453340|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700125.asset/MonoBehaviour/skill_control_10700125__-1842072263179732239.json#skillResourceMaps[0].elements[7]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700125.asset/MonoBehaviour/skill_control_10700125__-1842072263179732239.json#skillResourceMaps[0].elements[9]|battle-element-assets.jsonl#path_id=-5182582270181453340|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700127.asset/MonoBehaviour/MonoBehaviour_-839637409739840417__-839637409739840417.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700127.asset/MonoBehaviour/skill_control_10700127__8277644567552771477.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-6463235486804800651"
     }
   },
-  "contractHash": "7500b72e2fd2dfdf9ac00862931a4fad0533c32687a83e1983aacab777814c46",
+  "contractHash": "32b0ea1b3a370aa7e5a2ee21e1581c7396db8ad362640b255e2bdbf4116ba2f1",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 0,
@@ -94075,5 +94285,5 @@
     "thresholdTransitionCount": 1,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "38aa4166e689f91ac1d942b0dbffd89f9d45e7b22997a7dfaed112514f028658"
+  "recipeContractHash": "73f9107c84c3b6f1868b067f4007af746a129f9aa34d3633549a8dc4915db035"
 }
