@@ -63,10 +63,10 @@ describe('generated character acceptance manifests', () => {
     expect(generatedCatalog.summary).toMatchObject({
       ownerCount: 5,
       maturityCounts: {
-        'runtime-integrated': 4,
-        'optimization-ready': 1,
+        'runtime-integrated': 3,
+        'optimization-ready': 2,
       },
-      optimizationReadyCount: 1,
+      optimizationReadyCount: 2,
     });
     expect(generatedCatalog.manifestIndexHash).toBe(
       generatedManifestIndex.indexHash
@@ -139,7 +139,12 @@ describe('generated character acceptance manifests', () => {
         valid: true,
         issues: [],
       });
-      const productAccepted = ownerId === 109001;
+      const acceptanceCommit =
+        {
+          108003: 'fdaad80c9839ac8c9768427a9f48b1dcd2138cee',
+          109001: '4a5030a52bd51a118f579957bc449efa0c38cf3b',
+        }[ownerId] ?? null;
+      const productAccepted = acceptanceCommit !== null;
       expect(manifest.maturity).toMatchObject({
         currentState: productAccepted
           ? 'optimization-ready'
@@ -156,8 +161,7 @@ describe('generated character acceptance manifests', () => {
         productAccepted
           ? {
               status: 'accepted',
-              acceptanceCommit:
-                '4a5030a52bd51a118f579957bc449efa0c38cf3b',
+              acceptanceCommit,
               bindingStatus: 'verified',
             }
           : {
@@ -178,10 +182,6 @@ describe('generated character acceptance manifests', () => {
       ]);
       if (productAccepted) {
         expect(manifest.maturity.blockers).toEqual([]);
-      } else if (ownerId === 108003) {
-        expect(manifest.maturity.blockers).toEqual([
-          'acceptance-product-visual-signoff-pending',
-        ]);
       } else {
         expect(manifest.maturity.blockers).toEqual(
           expect.arrayContaining([

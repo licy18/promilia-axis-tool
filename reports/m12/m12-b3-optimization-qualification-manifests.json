@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "3cefe94ad6cdfc51",
+  "rosterHash": "b3bb274e638433c1",
   "records": [
     {
       "objectKind": "character",
@@ -158,23 +158,17 @@
       ],
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [
-        {
-          "code": "character-not-optimization-ready",
-          "category": "not-implemented",
-          "message": "Character acceptance maturity has not reached optimization-ready."
-        }
-      ],
+      "blockers": [],
       "evidence": {
         "sourceCharacterIds": [
           108003
         ],
         "mechanismHash": "bddf60c09a08e7f7",
         "characterAcceptanceManifestHashes": [
-          "7370660a0e36e669"
+          "8abf4e3d3794ce24"
         ]
       },
-      "manifestHash": "c975a179a9dc98d4"
+      "manifestHash": "916846dc7178785a"
     },
     {
       "objectKind": "character",
@@ -30907,5 +30901,5 @@
     },
     "optimizationReadyTotal": 211
   },
-  "manifestsHash": "d8b13f84544c3a6b"
+  "manifestsHash": "f6aab7de4accdba6"
 }

@@ -1103,12 +1103,13 @@ npm run test -- --run
 - batch/search/cycle/kill 统一统计 requested/effective healing、overhealing、effective HPS、settlement count，以及 source actor/action 贡献。护盾、suppressed 事件与生命伤害不混入治疗统计。
 - objective、target policy、enemy profile 与 settlement contract 进入 canonical input/data/trace/build hash。M12-C 与正式搜索继续锁定，本阶段只收口合同与组合运行时。
 
-## 14. M12-B3-E20-2-108003-S1 米蒂缩减动作面资格（2026-08-09，等待产品视觉签收）
+## 14. M12-B3-E20-2-108003-S1 米蒂缩减动作面资格（2026-08-09，产品验收通过）
 
 - 用户下发米蒂任务同时授权接受 109001 S3-R1。签收只通过生成器绑定到已集成提交 `4a5030a52bd51a118f579957bc449efa0c38cf3b`：末音已成为 `optimization-ready`，required/pass=`138/138`、blocker=`0`；没有手改汇总数字。
-- 米蒂已发布完整 source inventory、profile、golden、acceptance recipe、Machine Axis fixture、scenario cases/matrix、ledger/manifest 与 Workbench 证据。来源共 `510` 个 identity；requirement=`225`，required/pass/N/A/blocked=`139/139/86/0`，source/acceptance gap=`0/0`，2 个场景与 `1035/1035` assertion 全通过。当前 maturity=`runtime-integrated`，唯一门禁=`acceptance-product-visual-signoff-pending`。
+- 米蒂已发布完整 source inventory、profile、golden、acceptance recipe、Machine Axis fixture、scenario cases/matrix、ledger/manifest 与 Workbench 证据。来源共 `510` 个 identity；requirement=`225`，required/pass/N/A/blocked=`139/139/86/0`，source/acceptance gap=`0/0`，2 个场景与 `1035/1035` assertion 全通过。中央产品验收接受 `fdaad80c9839ac8c9768427a9f48b1dcd2138cee`，生成器已升级 maturity=`optimization-ready`、blocker=`[]`。
 - 正式动作面真实闭合：普攻 `2/3/4` 箭；短蓄 `1+6`；普通满蓄 `1+12`；蓄电满蓄 `3+36`。派生闪电球逐父箭 landed 门控，全 miss 不产包。单 Boss 星决只结算可达 `5` 包，250 镜像引用只产生一次 `+2`；离场星携为 `11` 击/`12F` cadence，37F 的 `+2` 根只发生一次。
 - 蓄电按 10 秒右开、刷新和一次合法重击消费；10800361 每次星鸣对三名队员各产生 10 个 1 秒 `+2 SP` tick，攻击 Buff 对三 actor 独立维持 24 秒；10800362 只在最后一击 landed 后给 source actor `+5 SP`。250 容器按共享上限 5、满层刷新、20 秒逐层衰减结算，未把声明或重复资源引用当成事务。
 - scenario policy/roster policy 继续冻结为 `967b0667f315db5b / a690b860f0967e3d`；反应/位移/空中动作保留来源行并结构化 N/A，不进入候选轴。108003 Machine Axis input/data/trace/evaluation/build=`ff0e5cfeb6204398/9e1c2699347eea59/9f2b9badd29cf1f2/3c2fb1d6fda5e7b9/320ddf8446ee4c92`。
-- 当前全局正式分母仍为 `9/43/62/137/12`，唯一 blocker=`14` 且全部为角色项；qualification source/roster/manifests/ledger/binding/catalog=`a05fb6ac9d69ef39/3cefe94ad6cdfc51/d8b13f84544c3a6b/e6a38a3d3698941e/347fd814cbf4bf3f/f0d43745d05e1472`。M12-C/formal search 继续锁定，Kibo DNA=`[]`。
-- 迭代期只运行一次 bounded `test:full`：首轮 `1511 passed / 16 failed`，失败均由聚焦复跑收口为 `242/242`，没有重复全量；所有相关确定性审计、Miti Workbench E2E、production build 与 diff check 通过。下一动作只能是产品视觉签收；未经签收不开始下一角色。
+- M10 与 M12 状态分栏：`reports/m10/108003` 仍诚实保持完整通用档案的 `runtime-applied / partial / runtime-ready 7/10`，继续追踪全场景原生证据；M12 `optimization-ready` 仅表示 frozen passive-boss 缩减动作面 `139/139` required 行已闭合，另 `86` 行有来源 scenario N/A。不得用 M12 签收覆盖或篡改 M10 的 full-profile 未闭事实。
+- 当前全局正式分母仍为 `9/43/62/137/12`，唯一 blocker=`13` 且全部为角色项；qualification source/roster/manifests/ledger/binding/catalog=`26db4986bce695fe/b3bb274e638433c1/f6aab7de4accdba6/3f1ee6e8e0af5ec4/6cba81d337120c35/b8810086de37175e`。M12-C/formal search 继续锁定，Kibo DNA=`[]`。
+- 迭代期只运行一次 bounded `test:full`：首轮 `1511 passed / 16 failed`，失败均由聚焦复跑收口为 `242/242`，没有重复全量；中央独立复验另有核心 `11 files/190 tests`、Workbench DOM `108/108`、十项 assert-clean 与 production build 全绿。closeout 后停住等待中央集成，不开始下一角色。

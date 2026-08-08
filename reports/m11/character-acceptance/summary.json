@@ -933,11 +933,9 @@
     {
       "ownerId": 108003,
       "ownerName": "米蒂",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -978,7 +976,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "7370660a0e36e669",
+      "manifestHash": "8abf4e3d3794ce24",
       "sourceOfTruthHash": "b2f33751d13cbb36",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1046,15 +1044,15 @@
       }
     }
   ],
-  "catalogHash": "de3fc18b9c5d1dc5",
-  "manifestIndexHash": "aadb3f58a802e87c",
+  "catalogHash": "2d5cf7bbbf53c7f9",
+  "manifestIndexHash": "bb65ad11069f650f",
   "summary": {
     "ownerCount": 5,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "runtimeIntegratedCount": 5,
-    "visuallyAcceptedCount": 1,
-    "optimizationReadyCount": 1,
+    "visuallyAcceptedCount": 2,
+    "optimizationReadyCount": 2,
     "machineScenarioPassCount": 5,
     "workbenchRoundTripPassCount": 5,
     "sourceGapCount": 156,

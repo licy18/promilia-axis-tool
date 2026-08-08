@@ -262,14 +262,15 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - 已 clean：verified-combat、character-combat、scenario-policy、character-acceptance、visual-acceptance、optimization-qualification、production-imports、Workbench data、action-status、applied-source-bindings、Kibo headless；production build 1878 modules 通过。全量串行 Vitest 最终 `192/192` 文件、`1472/1472` 用例通过；首轮暴露的 staging 300s 门限与 E21 派生哈希引用均已修复并纳入最终复跑。
 - 硬边界：不开始 108003/其他角色、E20-3、E22、M12-C 或正式搜索；Kibo DNA=`[]`；停在末音产品视觉复验点。
 
-## M12-B3-E20-2-108003-S1 当前检查点（2026-08-09，等待产品视觉签收）
+## M12-B3-E20-2-108003-S1 当前检查点（2026-08-09，产品验收通过）
 
 - 用户下发米蒂即授权 109001 S3-R1 产品签收；生成器已把 `4a5030a52bd51a118f579957bc449efa0c38cf3b` 绑定到 record `character-product-acceptance:109001:4a5030a52bd51a118f579957bc449efa0c38cf3b:c369c5382ad3b812`。末音 required/pass=`138/138`、blocker=`0`、maturity=`optimization-ready`。
-- 米蒂完整来源清单、profile、golden、acceptance、Machine Axis fixture、ledger/manifest 已发布。source identity=`510`；requirement=`225`，required/pass/N/A/blocked=`139/139/86/0`，source/acceptance gap=`0/0`，scenario=`2/2`、assertion=`1035/1035`。108003 当前仍是 `runtime-integrated`，唯一 blocker=`acceptance-product-visual-signoff-pending`。
+- 米蒂完整来源清单、profile、golden、acceptance、Machine Axis fixture、ledger/manifest 已发布。source identity=`510`；requirement=`225`，required/pass/N/A/blocked=`139/139/86/0`，source/acceptance gap=`0/0`，scenario=`2/2`、assertion=`1035/1035`。中央产品验收接受 `fdaad80c9839ac8c9768427a9f48b1dcd2138cee`；record=`character-product-acceptance:108003:fdaad80c9839ac8c9768427a9f48b1dcd2138cee:c5b361402a77ce3e`，108003 已为 `optimization-ready`、blocker=`[]`。
 - 真实结算：普攻 `2/3/4` 箭；短蓄 `1+6`；普通满蓄 `1+12`；蓄电满蓄 `3+36`，派生球按父箭 landed 门控；星决单 Boss `5` 包且 250 根只 `+2` 一次；离场星携 `11` 击/`12F` cadence 且 37F 根只应用一次。蓄电 10 秒右开、合法重击消费；250 上限 5、满层刷新、20 秒逐层衰减。
 - 10800361 每次合法星鸣对三 actor 各产生 10 个 `+2 SP`/1 秒 tick，攻击 Buff 各自 24 秒；10800362 仅最后一击 landed 时 `+5 SP`，最后一击 miss 不发。critical 0/100、non-crittable、pre-hit、主动输入窗、同帧星结合击正负例均进入 canonical/Machine Axis。
 - 通用实现用稳定 `sourceBindingIdentity + hitActivation` 驱动父子 hit，不写角色 ID 特判；duplicate source selector 只去重验收 assertion，不删除真实事务。Workbench 只显示 applied，suppressed/N/A 分栏。
 - package/profile/recipe/golden=`72301ce690c866fdcff7fc8df4d375333f810ff22e372c1eecd33a963fe2b287/54a68a920749a851ef5bf7466b8dffad74e861e4fd8f86af08b4a13d628e6b14/91c364d081ed4e4e955db984746e28133c09dfbe40b97c1e91264cd1529faa8f/2b5f91377e4252ff2d451b4a92507eef4712aab918a81f0d7880ec1659b472c1`；Machine Axis input/data/trace/evaluation/build=`ff0e5cfeb6204398/9e1c2699347eea59/9f2b9badd29cf1f2/3c2fb1d6fda5e7b9/320ddf8446ee4c92`。
-- qualification=`9/43/62/137/12`；source/roster/manifests/ledger/binding/catalog=`a05fb6ac9d69ef39/3cefe94ad6cdfc51/d8b13f84544c3a6b/e6a38a3d3698941e/347fd814cbf4bf3f/f0d43745d05e1472`；全局 blocker `16→14`，全部为角色项。M12-C/formal search 继续 locked，Kibo DNA=`[]`。
+- 范围分栏：M10 全机制档案仍为 `runtime-applied / partial / runtime-ready 7/10`，未伪装成全场景 complete；M12 ready 仅代表 passive-boss 缩减动作面 `139/139` required 通过、`86` 行结构化 N/A。二者不冲突。
+- qualification=`9/43/62/137/12`；source/roster/manifests/ledger/binding/catalog=`26db4986bce695fe/b3bb274e638433c1/f6aab7de4accdba6/3f1ee6e8e0af5ec4/6cba81d337120c35/b8810086de37175e`；全局 blocker `16→14→13`，全部为角色项。M12-C/formal search 继续 locked，Kibo DNA=`[]`。
 - 测试：仅一次 bounded `test:full` 为 `1511 passed / 16 failed`；失败文件经聚焦修订最终 `242/242` 通过，没有第二次 full。verified-combat/character-combat/scenario/acceptance/qualification/applied-source/production-imports/Workbench/action-status 审计、Miti E2E、production build `1885 modules`、diff check 全通过。
-- 下一步只允许精准提交本批并向验收任务回报；保留起始 281 个未跟踪 debug/disasm/staging。未经产品视觉签收不开始下一角色。
+- 下一步只允许提交窄 acceptance closeout 并向中央任务回报；保留全部 `281+14` 个未跟踪产物。不开始下一角色或中央集成。

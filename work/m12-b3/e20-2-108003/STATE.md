@@ -10,16 +10,22 @@
 
 ## 当前状态
 
-- 阶段：`M12-B3-E20-2-108003-S1` 实现与无头验收已闭合，等待产品视觉签收；米蒂不得由实现侧自行标为 visually-accepted/optimization-ready。
-- 108003 source/acceptance gap=`0/0`；requirement=`225`；required/pass/N/A/blocked=`139/139/86/0`；scenario=`2/2`，assertion=`1035/1035`；maturity=`runtime-integrated`；唯一门禁=`acceptance-product-visual-signoff-pending`。
+- 阶段：`M12-B3-E20-2-108003-S1` 已由中央产品验收通过；接受实现基线=`fdaad80c9839ac8c9768427a9f48b1dcd2138cee`。
+- 108003 source/acceptance gap=`0/0`；requirement=`225`；required/pass/N/A/blocked=`139/139/86/0`；scenario=`2/2`，assertion=`1035/1035`；maturity=`optimization-ready`；blocker=`[]`。
 - 来源清单共 `510` 个 identity：battle-element `25`、client-code `3`、NewTable `50`、other `54`、runtime-contract `25`、skill-control `353`。语义 ledger 的 `92` 条剩余记录全部 non-blocking、unreachable/not-applicable，gameplay-impacting=`0`；原始来源行没有删除。
-- 108003 `qualificationSubjectHash=c5b361402a77ce3e`、`scenarioSetHash=f96b380402aee6c1`、`manifestHash=7370660a0e36e669`。截图 `reports/m11-d-character-acceptance-108003-desktop.png` SHA-256=`3b346bbb606b74878c5011fdf18293d7a23879b672d83337aa574206c5342292`。
+- 108003 `qualificationSubjectHash=c5b361402a77ce3e`、运行场景 `scenarioSetHash=f96b380402aee6c1`、产品签收场景 `scenarioSetHash=20afc5b55b18557d`、`manifestHash=8abf4e3d3794ce24`。截图 `reports/m11-d-character-acceptance-108003-desktop.png` SHA-256=`3b346bbb606b74878c5011fdf18293d7a23879b672d83337aa574206c5342292`。
 - verified mechanics package hash=`72301ce690c866fdcff7fc8df4d375333f810ff22e372c1eecd33a963fe2b287`；108003 source package hash=`f1ab6bbbcbef6b9514261ed763d911b19d4340977627f4dfbcdb03f8ddb6cfc2`；profile=`54a68a920749a851ef5bf7466b8dffad74e861e4fd8f86af08b4a13d628e6b14`；recipe=`91c364d081ed4e4e955db984746e28133c09dfbe40b97c1e91264cd1529faa8f`；golden replay=`2b5f91377e4252ff2d451b4a92507eef4712aab918a81f0d7880ec1659b472c1`。
 
 ## 109001 产品签收同步
 
 - 用户下发本阶段已授权接受末音 S3-R1。生成器把接受记录绑定到已集成提交 `4a5030a52bd51a118f579957bc449efa0c38cf3b`，没有手改汇总数字。
 - 109001 当前 `qualificationSubjectHash=c369c5382ad3b812`、`scenarioSetHash=ec1be9f950fe0e50`、`manifestHash=8371d55c1a8195d1`，record=`character-product-acceptance:109001:4a5030a52bd51a118f579957bc449efa0c38cf3b:c369c5382ad3b812`；required/pass=`138/138`、blocker=`0`、maturity=`optimization-ready`。
+
+## 108003 产品签收记录与范围边界
+
+- acceptance record=`character-product-acceptance:108003:fdaad80c9839ac8c9768427a9f48b1dcd2138cee:c5b361402a77ce3e`；acceptance commit=`fdaad80c9839ac8c9768427a9f48b1dcd2138cee`；binding status=`verified`。
+- `reports/m10/108003` 的 `pipelineMaturity=runtime-applied / combatCoverage=partial / runtimeReadyActionCount=7/10 / runtimeCapture=10` 是**完整通用机制档案**状态：它持续追踪所有场景、隐藏/反应分支与仍需原生捕获的证据，未因本次签收改写或伪装成 full-profile complete。
+- M12 的 `optimization-ready` 只表示 `m12c-zero-distance-passive-boss-v1` 缩减动作面已经全部 pass 或有来源的 scenario N/A；它不宣称 M10 全场景档案已经 complete。两者分母和问题域不同，不构成状态冲突。
 
 ## 已真实闭合的米蒂机制
 
@@ -43,8 +49,8 @@
 ## 确定性与资格
 
 - 108003 Machine Axis：input/data/trace/evaluation/build=`ff0e5cfeb6204398/9e1c2699347eea59/9f2b9badd29cf1f2/3c2fb1d6fda5e7b9/320ddf8446ee4c92`；同输入两轮 replay、descriptor 重排、cycle boundary、Workbench import/export 均稳定。
-- 全局正式分母保持 `9/43/62/137/12`；qualification source/roster/manifests/ledger/binding/catalog=`a05fb6ac9d69ef39/3cefe94ad6cdfc51/d8b13f84544c3a6b/e6a38a3d3698941e/347fd814cbf4bf3f/f0d43745d05e1472`。
-- 全局唯一 blocker=`14`，全部为 character/not-implemented：`actor-static-profile-missing=1`、`character-acceptance-not-published=5`、`character-not-optimization-ready=8`。M12-C/formal search 保持 locked。
+- 全局正式分母保持 `9/43/62/137/12`；qualification source/roster/manifests/ledger/binding/catalog=`26db4986bce695fe/b3bb274e638433c1/f6aab7de4accdba6/3f1ee6e8e0af5ec4/6cba81d337120c35/b8810086de37175e`。
+- 全局唯一 blocker=`13`，全部为 character/not-implemented：`actor-static-profile-missing=1`、`character-acceptance-not-published=5`、`character-not-optimization-ready=7`。character acceptance 已有 `2` 个 optimization-ready owner；formal object-kind count 在九人全绿前仍为 `0`。M12-C/formal search 保持 locked。
 
 ## 测试与审计
 
@@ -55,6 +61,6 @@
 
 ## 下一步
 
-1. 精准暂存本批 tracked 变化与 108003 权威新文件，绝不纳入既有 debug/disasm/staging。
-2. 单一高内聚提交后确认 tracked/index clean、原 281 个未跟踪产物仍存在。
-3. 向验收任务回报并停在 `acceptance-product-visual-signoff-pending`；未经产品签收不开始下一角色。
+1. 只提交 acceptance record、生成器派生报告和四份权威状态文档；不改 runtime/gameplay/UI。
+2. 提交后确认 tracked/index clean、`281 + 14` 个未跟踪产物全部原样存在。
+3. 向中央验收任务回报 closeout commit 后停住；不开始下一角色或中央集成。

@@ -3,7 +3,7 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "aadb3f58a802e87c",
+  "manifestIndexHash": "bb65ad11069f650f",
   "optimizationScenarioPolicy": {
     "policyId": "m12c-zero-distance-passive-boss-v1",
     "policyHash": "967b0667f315db5b"
@@ -801,19 +801,19 @@
     {
       "ownerId": 108003,
       "ownerName": "米蒂",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 139,
       "matrixPassedCount": 139,
-      "manifestHash": "7370660a0e36e669",
+      "manifestHash": "8abf4e3d3794ce24",
       "qualificationSubjectHash": "c5b361402a77ce3e",
       "sourceOfTruthHash": "b2f33751d13cbb36",
       "profileHash": "54a68a920749a851ef5bf7466b8dffad74e861e4fd8f86af08b4a13d628e6b14",
@@ -850,10 +850,10 @@
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "maturityCounts": {
-      "optimization-ready": 1,
-      "runtime-integrated": 4
+      "optimization-ready": 2,
+      "runtime-integrated": 3
     },
-    "optimizationReadyCount": 1
+    "optimizationReadyCount": 2
   },
-  "catalogHash": "de3fc18b9c5d1dc5"
+  "catalogHash": "2d5cf7bbbf53c7f9"
 }
